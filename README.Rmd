@@ -21,7 +21,10 @@ knitr::opts_chunk$set(
 -->
 <!-- badges: end -->
   
-`ProCESS` is an R Wrapper for [RACES](https://github.com/albertocasagrande/RACES/), a C++ tumour evolution simulator.
+`ProCESS` stands for Programmable Cancer Evolution Spatial Simulator.
+It is an R wrapper for
+[RACES](https://github.com/albertocasagrande/RACES), a C++ tumour
+evolution simulator, and provides additional plotting functions.
 
 #### Help and support
 
