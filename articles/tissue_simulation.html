@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Tissue simulation • rRACES</title>
+<title>Tissue simulation • ProCESS</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -21,7 +21,7 @@
 ">
 <meta property="og:description" content="Learn how to simulate tumour evolution
 ">
-<meta property="og:image" content="https://caravagnalab.github.io/rRACES/logo.png">
+<meta property="og:image" content="https://caravagnalab.github.io/ProCESS/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -29,7 +29,7 @@
 
     <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
-    <a class="navbar-brand me-2" href="../index.html">rRACES</a>
+    <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
@@ -40,7 +40,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../articles/rRACES.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/ProCESS.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
@@ -58,7 +58,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/caravagnalab/rRACES/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/caravagnalab/ProCESS/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -74,14 +74,14 @@
       <img src="../logo.png" class="logo" alt=""><h1>Tissue simulation</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/caravagnalab/rRACES/vignettes/tissue_simulation.Rmd" class="external-link"><code>vignettes/tissue_simulation.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/caravagnalab/ProCESS/vignettes/tissue_simulation.Rmd" class="external-link"><code>vignettes/tissue_simulation.Rmd</code></a></small>
       <div class="d-none name"><code>tissue_simulation.Rmd</code></div>
     </div>
 
     
     
 <blockquote>
-<p><em>Disclaimer:</em> RACES/rRACES internally implements the
+<p><em>Disclaimer:</em> RACES/ProCESS internally implements the
 probability distributions using the C++11 random number distribution
 classes. The standard does not specify their algorithms, and the class
 implementations are left free for the compiler. Thus, the simulation
@@ -106,7 +106,7 @@ using <code>ggplot</code>-powered plots.</p>
 <p>To perform a simulation a new object of class
 <code>SpatialSimulation</code> must be created.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://caravagnalab.github.io/rRACES">rRACES</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://caravagnalab.github.io/ProCESS">ProCESS</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Default constructor</span></span>
 <span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SpatialSimulation.html">SpatialSimulation</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -116,7 +116,7 @@ million cells - and sets the name of the simulation to be
 <code>races_&lt;date&gt;_&lt;hour&gt;</code>.</p>
 <p>A simulation custom name can be specified as it follows.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://caravagnalab.github.io/rRACES">rRACES</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://caravagnalab.github.io/ProCESS">ProCESS</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># set the seed of the random number generator</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
@@ -140,7 +140,7 @@ directory whose name is the name of the simulation.</p>
 current object.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sim</span></span>
-<span><span class="co">#&gt; ── <span style="background-color: #BBBB00;"> rRACES </span> <span style="color: #BBBBBB; background-color: #BB0000;"> D </span> <span style="color: #BBBBBB; background-color: #BB0000;"> S </span> <span style="color: #BBBBBB; background-color: #BB0000;"> M </span> Test ──────────────────────────── <span style="color: #BB0000;">▣ </span> [1000x1000]<span style="color: #BB0000;">  ⏱ </span>0 ──</span></span>
+<span><span class="co">#&gt; ── <span style="background-color: #BBBB00;"> ProCESS </span> <span style="color: #BBBBBB; background-color: #BB0000;"> D </span> <span style="color: #BBBBBB; background-color: #BB0000;"> S </span> <span style="color: #BBBBBB; background-color: #BB0000;"> M </span> Test ─────────────────────────── <span style="color: #BB0000;">▣ </span> [1000x1000]<span style="color: #BB0000;">  ⏱ </span>0 ──</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> The simulation has no samples yet!</span></span></code></pre></div>
 <p>The <code>sim</code> object exposes also methods to get information
 about the simulation and control it.</p>
@@ -198,7 +198,7 @@ epistates), together with <code>B+</code> and <code>B-</code>.</p>
 <p>We use a notation common in linear birth-death processes. If a
 species <code>A</code> has no epistates then its stochastic behaviour is
 defined by the state-change rates</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><mtext mathvariant="normal">(growth)</mtext><mspace width="1.0em"></mspace><mi>A</mi></mtd><mtd columnalign="left" style="text-align: left"><msub><mo>→</mo><mi>λ</mi></msub><mn>2</mn><mi>A</mi></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mtext mathvariant="normal">(death)</mtext><mspace width="1.0em"></mspace><mi>A</mi></mtd><mtd columnalign="left" style="text-align: left"><msub><mo>→</mo><mi>δ</mi></msub><mi>∅</mi></mtd></mtr></mtable><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mtext mathvariant="normal">(growth)</mtext><mspace width="1.0em"></mspace><mi>A</mi></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><msub><mo>→</mo><mi>λ</mi></msub><mn>2</mn><mi>A</mi></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mtext mathvariant="normal">(death)</mtext><mspace width="1.0em"></mspace><mi>A</mi></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><msub><mo>→</mo><mi>δ</mi></msub><mi>∅</mi></mtd></mtr></mtable><annotation encoding="application/x-tex">
 \begin{align}
 \text{(growth)}\quad A &amp; \rightarrow_{\lambda} 2 A \\
 \text{(death)}\quad A &amp; \rightarrow_{\delta} \emptyset
@@ -218,7 +218,7 @@ is a death rate for cells that duplicate.</li>
 and <code>-</code> (denoted
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>A</mi><mo>⊖</mo></msub><annotation encoding="application/x-tex">A_\ominus</annotation></semantics></math>),
 then its stochastic behaviour is defined by the state-change rates</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><mtext mathvariant="normal">(growth +)</mtext><mspace width="1.0em"></mspace><msub><mi>A</mi><mo>⊕</mo></msub></mtd><mtd columnalign="left" style="text-align: left"><msub><mo>→</mo><msub><mi>λ</mi><mo>⊕</mo></msub></msub><mn>2</mn><msub><mi>A</mi><mo>⊕</mo></msub></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mtext mathvariant="normal">(death +)</mtext><mspace width="1.0em"></mspace><msub><mi>A</mi><mo>⊕</mo></msub></mtd><mtd columnalign="left" style="text-align: left"><msub><mo>→</mo><msub><mi>δ</mi><mo>⊕</mo></msub></msub><mi>∅</mi></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mtext mathvariant="normal">(growth -)</mtext><mspace width="1.0em"></mspace><msub><mi>A</mi><mo>⊖</mo></msub></mtd><mtd columnalign="left" style="text-align: left"><msub><mo>→</mo><msub><mi>λ</mi><mo>⊖</mo></msub></msub><mn>2</mn><msub><mi>A</mi><mo>⊖</mo></msub></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mtext mathvariant="normal">(death -)</mtext><mspace width="1.0em"></mspace><msub><mi>A</mi><mo>⊖</mo></msub></mtd><mtd columnalign="left" style="text-align: left"><msub><mo>→</mo><msub><mi>δ</mi><mo>⊖</mo></msub></msub><mi>∅</mi></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mtext mathvariant="normal">(switch +-)</mtext><mspace width="1.0em"></mspace><msub><mi>A</mi><mo>⊕</mo></msub></mtd><mtd columnalign="left" style="text-align: left"><msub><mo>→</mo><msub><mi>ϵ</mi><mrow><mi>+</mi><mo>−</mo></mrow></msub></msub><msub><mi>A</mi><mo>⊕</mo></msub><mo>+</mo><msub><mi>A</mi><mo>⊖</mo></msub></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mtext mathvariant="normal">(switch -+)</mtext><mspace width="1.0em"></mspace><msub><mi>A</mi><mo>⊖</mo></msub></mtd><mtd columnalign="left" style="text-align: left"><msub><mo>→</mo><msub><mi>ϵ</mi><mrow><mi>−</mi><mo>+</mo></mrow></msub></msub><msub><mi>A</mi><mo>⊖</mo></msub><mo>+</mo><msub><mi>A</mi><mo>⊕</mo></msub></mtd></mtr></mtable><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mtext mathvariant="normal">(growth +)</mtext><mspace width="1.0em"></mspace><msub><mi>A</mi><mo>⊕</mo></msub></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><msub><mo>→</mo><msub><mi>λ</mi><mo>⊕</mo></msub></msub><mn>2</mn><msub><mi>A</mi><mo>⊕</mo></msub></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mtext mathvariant="normal">(death +)</mtext><mspace width="1.0em"></mspace><msub><mi>A</mi><mo>⊕</mo></msub></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><msub><mo>→</mo><msub><mi>δ</mi><mo>⊕</mo></msub></msub><mi>∅</mi></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mtext mathvariant="normal">(growth -)</mtext><mspace width="1.0em"></mspace><msub><mi>A</mi><mo>⊖</mo></msub></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><msub><mo>→</mo><msub><mi>λ</mi><mo>⊖</mo></msub></msub><mn>2</mn><msub><mi>A</mi><mo>⊖</mo></msub></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mtext mathvariant="normal">(death -)</mtext><mspace width="1.0em"></mspace><msub><mi>A</mi><mo>⊖</mo></msub></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><msub><mo>→</mo><msub><mi>δ</mi><mo>⊖</mo></msub></msub><mi>∅</mi></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mtext mathvariant="normal">(switch +-)</mtext><mspace width="1.0em"></mspace><msub><mi>A</mi><mo>⊕</mo></msub></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><msub><mo>→</mo><msub><mi>ϵ</mi><mrow><mi>+</mi><mo>−</mo></mrow></msub></msub><msub><mi>A</mi><mo>⊕</mo></msub><mo>+</mo><msub><mi>A</mi><mo>⊖</mo></msub></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mtext mathvariant="normal">(switch -+)</mtext><mspace width="1.0em"></mspace><msub><mi>A</mi><mo>⊖</mo></msub></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><msub><mo>→</mo><msub><mi>ϵ</mi><mrow><mi>−</mi><mo>+</mo></mrow></msub></msub><msub><mi>A</mi><mo>⊖</mo></msub><mo>+</mo><msub><mi>A</mi><mo>⊕</mo></msub></mtd></mtr></mtable><annotation encoding="application/x-tex">
 \begin{align}
 \text{(growth +)}\quad A_\oplus &amp; \rightarrow_{\lambda_\oplus} 2 A_\oplus \\
 \text{(death +)}\quad A_\oplus &amp; \rightarrow_{\delta_\oplus} \emptyset \\
@@ -246,7 +246,7 @@ epigenetic marker of one of the progeny.</p>
 <span></span>
 <span><span class="co"># updated object (counts refer to number of cells of each species)</span></span>
 <span><span class="va">sim</span></span>
-<span><span class="co">#&gt; ── <span style="background-color: #BBBB00;"> rRACES </span> <span style="color: #BBBBBB; background-color: #BB0000;"> D </span> <span style="color: #BBBBBB; background-color: #BB0000;"> S </span> <span style="color: #BBBBBB; background-color: #BB0000;"> M </span> Test ───────────────────────────── <span style="color: #BB0000;">▣ </span> [1200x900]<span style="color: #BB0000;">  ⏱ </span>0 ──</span></span>
+<span><span class="co">#&gt; ── <span style="background-color: #BBBB00;"> ProCESS </span> <span style="color: #BBBBBB; background-color: #BB0000;"> D </span> <span style="color: #BBBBBB; background-color: #BB0000;"> S </span> <span style="color: #BBBBBB; background-color: #BB0000;"> M </span> Test ──────────────────────────── <span style="color: #BB0000;">▣ </span> [1200x900]<span style="color: #BB0000;">  ⏱ </span>0 ──</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Species: <span style="color: #00BB00;">2</span>, <span style="color: #00BB00;">with</span> epigenetics</span></span>
 <span><span class="co">#&gt;    </span></span>
@@ -462,7 +462,7 @@ getters accept parameters to subset the tissue.</p>
 <div class="section level3">
 <h3 id="evolving-new-species">Evolving new species<a class="anchor" aria-label="anchor" href="#evolving-new-species"></a>
 </h3>
-<p>rRACES can select cells from the tissue, randomly for every mutant,
+<p>ProCESS can select cells from the tissue, randomly for every mutant,
 or in a constrained tissue area.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Stochastic sampling from the whole tissue: it can return A+ or A-</span></span>
@@ -538,7 +538,7 @@ the populations.</p>
 <p><img src="tissue_simulation_files/figure-html/unnamed-chunk-24-1.png" width="576"></p>
 <p>If, at this point in the simulation, we generate a new mutant
 <code>C</code> from <code>A</code> in the rectangle
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">[</mo><mn>450</mn><mo>,</mo><mn>500</mn><mo stretchy="true" form="postfix">]</mo></mrow><mo>×</mo><mrow><mo stretchy="true" form="prefix">[</mo><mn>550</mn><mo>,</mo><mn>600</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">[450,500]\times [550, 600]</annotation></semantics></math>.</p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>450</mn><mo>,</mo><mn>500</mn><mo stretchy="false" form="postfix">]</mo><mo>×</mo><mo stretchy="false" form="prefix">[</mo><mn>550</mn><mo>,</mo><mn>600</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[450,500]\times [550, 600]</annotation></semantics></math>.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define evolutionary parameters</span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">add_mutant</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"C"</span>,</span>

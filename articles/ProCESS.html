@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>rRACES • rRACES</title>
+<title>ProCESS • ProCESS</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -16,7 +16,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="rRACES">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="ProCESS">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -24,7 +24,7 @@
 
     <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
-    <a class="navbar-brand me-2" href="../index.html">rRACES</a>
+    <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
@@ -35,7 +35,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="active nav-item"><a class="nav-link" href="../articles/rRACES.html">Get started</a></li>
+<li class="active nav-item"><a class="nav-link" href="../articles/ProCESS.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
@@ -53,7 +53,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/caravagnalab/rRACES/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/caravagnalab/ProCESS/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -66,29 +66,29 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>rRACES</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>ProCESS</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/caravagnalab/rRACES/vignettes/rRACES.Rmd" class="external-link"><code>vignettes/rRACES.Rmd</code></a></small>
-      <div class="d-none name"><code>rRACES.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/caravagnalab/ProCESS/vignettes/ProCESS.Rmd" class="external-link"><code>vignettes/ProCESS.Rmd</code></a></small>
+      <div class="d-none name"><code>ProCESS.Rmd</code></div>
     </div>
 
     
     
-<p>rRACES wraps the <a href="https://github.com/albertocasagrande/RACES" class="external-link">RACES</a> simulation
+<p>ProCESS wraps the <a href="https://github.com/albertocasagrande/RACES" class="external-link">RACES</a> simulation
 and data-generation engine by using the <a href="https://www.rcpp.org/" class="external-link">R/C++ Rcpp interface</a>, making it easy to
 “program” stochastic tumour evolution.</p>
 <div class="section level2">
 <h2 id="pipeline-overview">Pipeline overview<a class="anchor" aria-label="anchor" href="#pipeline-overview"></a>
 </h2>
 <p><img src="img%2Fbanner.png" alt="High-level pipeline" width="850"><br></p>
-<p>The high-level overview of pipeline of rRACES is a three-steps
+<p>The high-level overview of pipeline of ProCESS is a three-steps
 process, where:</p>
 <ol style="list-style-type: decimal">
 <li><p>a discrete tissue is first simulated, with distinct clones
 defined by stochastic rates of growth and death. These compete to
 colonise the tissue in a standard stochastic birth-death process, which
-in rRACES is empowered by a time-varying structure that allows weasily
+in ProCESS is empowered by a time-varying structure that allows weasily
 modelling of complex evolutionary forces that vary over time (e.g.,
 therapy-induced negative selection). The tissue can be sampled at
 multiple time-points and in multiple spatially-separated
@@ -96,7 +96,7 @@ positions.</p></li>
 <li><p>from the sampled cells, the simulated phylogenetic history of the
 tumour can be extracted. The distance among the involved cells will
 represent the lineage history of the simulated clones, and mutational
-processes can be used to attach genomes to each simulated cells. rRACES
+processes can be used to attach genomes to each simulated cells. ProCESS
 supports standard germline and somatic mutations, including
 single-nucleotide variants (SNVs), insertion-deletions (indels) and copy
 number alterations (CNAs). For SNVs and indels time-varying mutational
@@ -104,7 +104,7 @@ signatures can also be included.</p></li>
 <li><p>from the simulated phylogenetic history of the tumour it is
 possible to generate tumour-matched-normal synthetic data for
 benchmarking bioinformatics tools, or to infer parameters against real
-sequencing data. rRACES output include common VCF formats, as well as
+sequencing data. ProCESS output include common VCF formats, as well as
 low-level SAM outputs that can be used for aligment and downstream
 analysis. Every simulated sample can be assigned custom coverage and
 purity.</p></li>
@@ -112,7 +112,7 @@ purity.</p></li>
 <div class="section level3">
 <h3 id="main-features">Main features<a class="anchor" aria-label="anchor" href="#main-features"></a>
 </h3>
-<p>The rRACES engine has a number of features, the most relevant
+<p>The ProCESS engine has a number of features, the most relevant
 are:</p>
 <ol style="list-style-type: decimal">
 <li>cells are associated with species that proliferate in a stochastic
@@ -150,7 +150,7 @@ methods, mutation callers, etc.</li>
 <h2 id="detailed-pipeline">Detailed pipeline<a class="anchor" aria-label="anchor" href="#detailed-pipeline"></a>
 </h2>
 <p><img src="img%2Fshort.png" alt="High-level pipeline" width="850"><br></p>
-<p>A rRACES simulation follows the steps (some required, some optional)
+<p>A ProCESS simulation follows the steps (some required, some optional)
 that we disucssd below. The state of the simulation can be saved (and
 resumed) at several time-points.</p>
 <div class="section level3">
@@ -200,7 +200,7 @@ biorinformatics pipeline.</li>
 <div class="section level3">
 <h3 id="cheatsheet">Cheatsheet<a class="anchor" aria-label="anchor" href="#cheatsheet"></a>
 </h3>
-<p><a href="https://raw.githubusercontent.com/caravagnalab/rRACES/main/nobuild/rRACES-cheatsheet.pdf?raw=true" class="external-link"><img src="img%2Fcheatsheet.png" height="252" alt="thumbnail of rRACES cheatsheet"></a></p>
+<p><a href="https://raw.githubusercontent.com/caravagnalab/ProCESS/main/nobuild/ProCESS-cheatsheet.pdf?raw=true" class="external-link"><img src="img%2Fcheatsheet.png" height="252" alt="thumbnail of ProCESS cheatsheet"></a></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

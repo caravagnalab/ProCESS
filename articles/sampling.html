@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Tissue sampling • rRACES</title>
+<title>Tissue sampling • ProCESS</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -21,7 +21,7 @@
 ">
 <meta property="og:description" content="How to sample cells from a simulated tissue
 ">
-<meta property="og:image" content="https://caravagnalab.github.io/rRACES/logo.png">
+<meta property="og:image" content="https://caravagnalab.github.io/ProCESS/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -29,7 +29,7 @@
 
     <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
-    <a class="navbar-brand me-2" href="../index.html">rRACES</a>
+    <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
@@ -40,7 +40,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../articles/rRACES.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/ProCESS.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
@@ -58,7 +58,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/caravagnalab/rRACES/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/caravagnalab/ProCESS/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -74,22 +74,22 @@
       <img src="../logo.png" class="logo" alt=""><h1>Tissue sampling</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/caravagnalab/rRACES/vignettes/sampling.Rmd" class="external-link"><code>vignettes/sampling.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/caravagnalab/ProCESS/vignettes/sampling.Rmd" class="external-link"><code>vignettes/sampling.Rmd</code></a></small>
       <div class="d-none name"><code>sampling.Rmd</code></div>
     </div>
 
     
     
 <blockquote>
-<p><em>Disclaimer:</em> RACES/rRACES internally implements the
+<p><em>Disclaimer:</em> RACES/ProCESS internally implements the
 probability distributions using the C++11 random number distribution
 classes whose algorithms are not defined by the standard. Thus, the
-simulation depends on the compiler used to compile rRACES, and because
+simulation depends on the compiler used to compile ProCESS, and because
 of that, the results reported in this article may differ from those
 obtained by the reader.</p>
 </blockquote>
 <p>Once one has familiarised on how a tumour evolution simulation can be
-programmed using rRACES (see
+programmed using ProCESS (see
 <code><a href="../articles/tissue_simulation.html">vignette("tissue_simulation")</a></code>), the next step is to augment
 the simulation with sampling of tumour cells. This mimics a realistic
 experimental design where we gather tumour sequencing data.</p>
@@ -107,7 +107,7 @@ multiple time-points.</p></li>
 </h2>
 <p>We consider a simple monoclonal model, without epimutants.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://caravagnalab.github.io/rRACES">rRACES</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://caravagnalab.github.io/ProCESS">ProCESS</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># set the seed of the random number generator</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
@@ -119,13 +119,13 @@ multiple time-points.</p></li>
 <span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">place_cell</span><span class="op">(</span><span class="st">"A"</span>, <span class="fl">500</span>, <span class="fl">500</span><span class="op">)</span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"A"</span>, <span class="fl">60000</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [███████████████████████-----------------] 56% [00m:00s] Cells: 33743 [████████████████████████████████████████] 98% [00m:01s] Cells: 59384 [████████████████████████████████████████] 100% [00m:01s] Saving snapshot</span></span></code></pre></div>
+<span><span class="co">#&gt;  [████████████████████████████████████----] 88% [00m:00s] Cells: 53181 [████████████████████████████████████████] 100% [00m:00s] Saving snapshot</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">current</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_tissue.html">plot_tissue</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span>
 <span><span class="va">current</span></span></code></pre></div>
 <p><img src="sampling_files/figure-html/unnamed-chunk-3-1.png" width="288"></p>
 <p>A sample is defined by a name and a bounding box, which has a
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(x,y)</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(x,y)</annotation></semantics></math>
 coordinate for the bottom left point, and for the top right point.</p>
 <p>For this simulation, we define two samples with names
 <code>"S_1_2"</code> and <code>"S_1_2"</code>.</p>
@@ -285,7 +285,7 @@ as the sampling times, and the MRCAs of each sample in the tree.</p>
 <span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">place_cell</span><span class="op">(</span><span class="st">"A"</span>, <span class="fl">500</span>, <span class="fl">500</span><span class="op">)</span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"A"</span>, <span class="fl">60000</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [███████████████████████-----------------] 56% [00m:00s] Cells: 33636 [██████████████████████████████████████--] 93% [00m:01s] Cells: 56156 [████████████████████████████████████████] 100% [00m:01s] Saving snapshot</span></span></code></pre></div>
+<span><span class="co">#&gt;  [██████████████████████████████----------] 74% [00m:00s] Cells: 44811 [████████████████████████████████████████] 100% [00m:00s] Saving snapshot</span></span></code></pre></div>
 <p>We include a new mutant and let it grow. This new mutant has much
 higher growth rates than its ancestor.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
@@ -294,7 +294,7 @@ higher growth rates than its ancestor.</p>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">mutate_progeny</span><span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="fu">choose_cell_in</span><span class="op">(</span><span class="st">"A"</span><span class="op">)</span>, <span class="st">"B"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"B"</span>, <span class="fl">10000</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [████████████----------------------------] 29% [00m:00s] Cells: 86957 [████████████████████████████████████████] 100% [00m:00s] Saving snapshot</span></span>
+<span><span class="co">#&gt;  [██████████████████████████████----------] 74% [00m:00s] Cells: 100251 [████████████████████████████████████████] 100% [00m:00s] Saving snapshot</span></span>
 <span></span>
 <span><span class="va">current</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_tissue.html">plot_tissue</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span>
 <span><span class="va">current</span></span></code></pre></div>
@@ -305,7 +305,7 @@ of where to sample to obtain for example,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>100</mn><annotation encoding="application/x-tex">100</annotation></semantics></math>
 of its cells. We can look visually at the simulation, but this is
 slow.</p>
-<p>rRACES provides a <code>SpatialSimulation$search_sample()</code>
+<p>ProCESS provides a <code>SpatialSimulation$search_sample()</code>
 function to sample bounding boxes that contain a desired number of
 cells. The function takes in input:</p>
 <ul>
@@ -367,7 +367,7 @@ tissue conformation.</p>
 <div class="section level2">
 <h2 id="randomised-cell-sampling-liquid-biopsy">Randomised cell sampling (Liquid biopsy)<a class="anchor" aria-label="anchor" href="#randomised-cell-sampling-liquid-biopsy"></a>
 </h2>
-<p>rRACES supports randomized cell sampling over the full tissue or a
+<p>ProCESS supports randomized cell sampling over the full tissue or a
 rectangle thereof.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># collect up to 2500 tumour cells randomly selected over the whole tissue</span></span>
@@ -406,7 +406,7 @@ subclonal expansions.</p>
 <span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">place_cell</span><span class="op">(</span><span class="st">"A+"</span>, <span class="fl">500</span>, <span class="fl">500</span><span class="op">)</span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"A+"</span>, <span class="fl">1000</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [██████████████████████████████████████--] 94% [00m:00s] Cells: 24997 [████████████████████████████████████████] 100% [00m:00s] Saving snapshot</span></span>
+<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:00s] Saving snapshot</span></span>
 <span><span class="fu"><a href="../reference/plot_tissue.html">plot_tissue</a></span><span class="op">(</span><span class="va">sim</span>, num_of_bins <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></code></pre></div>
 <p><img src="sampling_files/figure-html/unnamed-chunk-24-1.png" width="288"></p>
 <p>We sample before introducing a new mutant.</p>
@@ -443,7 +443,7 @@ subclonal expansions.</p>
 <span></span>
 <span><span class="co"># let it grow more time units</span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"B+"</span>, <span class="fl">7000</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [████████████████------------------------] 38% [00m:00s] Cells: 51720 [████████████████████████████████████████] 100% [00m:00s] Saving snapshot</span></span>
+<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:00s] Saving snapshot</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plot_tissue.html">plot_tissue</a></span><span class="op">(</span><span class="va">sim</span>, num_of_bins <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></code></pre></div>
 <p><img src="sampling_files/figure-html/unnamed-chunk-27-1.png" width="288"></p>

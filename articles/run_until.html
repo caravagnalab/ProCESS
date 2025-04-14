@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Formula-based simulation constraints • rRACES</title>
+<title>Formula-based simulation constraints • ProCESS</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -21,7 +21,7 @@
 ">
 <meta property="og:description" content="Simulate a tissue evolution until a simulation state formula does not hold
 ">
-<meta property="og:image" content="https://caravagnalab.github.io/rRACES/logo.png">
+<meta property="og:image" content="https://caravagnalab.github.io/ProCESS/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -29,7 +29,7 @@
 
     <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
-    <a class="navbar-brand me-2" href="../index.html">rRACES</a>
+    <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
@@ -40,7 +40,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../articles/rRACES.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/ProCESS.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
@@ -58,7 +58,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/caravagnalab/rRACES/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/caravagnalab/ProCESS/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -74,7 +74,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Formula-based simulation constraints</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/caravagnalab/rRACES/vignettes/run_until.Rmd" class="external-link"><code>vignettes/run_until.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/caravagnalab/ProCESS/vignettes/run_until.Rmd" class="external-link"><code>vignettes/run_until.Rmd</code></a></small>
       <div class="d-none name"><code>run_until.Rmd</code></div>
     </div>
 
@@ -86,7 +86,7 @@ simulation. Refer to <code><a href="../articles/tissue_simulation.html">vignette
 introduction of the subject.</p>
 </blockquote>
 <blockquote>
-<p><em>Disclaimer:</em> RACES/rRACES internally implements the
+<p><em>Disclaimer:</em> RACES/ProCESS internally implements the
 probability distributions using the C++11 random number distribution
 classes. The standard does not specify their algorithms, and the class
 implementations are left free for the compiler. Thus, the simulation
@@ -94,7 +94,7 @@ output depends on the compiler used to compile RACES, and because of
 that, the results reported in this article may differ from those
 obtained by the reader.</p>
 </blockquote>
-<p>rRACES implements a first order unquantified logic having variables
+<p>ProCESS implements a first order unquantified logic having variables
 representing the cardinality of the species, the number of events fired
 in a species (being duplications, deaths, or switches), and the
 simulation time. These variables and reals values are summed by
@@ -124,7 +124,7 @@ species;</li>
 <code>"Time"</code>, the elapsed simulation time variable is
 returned.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://caravagnalab.github.io/rRACES">rRACES</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://caravagnalab.github.io/ProCESS">ProCESS</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># set the seed of the random number generator</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
@@ -245,7 +245,7 @@ does not hold.</p>
 <span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:00s] Saving snapshot</span></span>
 <span></span>
 <span><span class="va">sim</span></span>
-<span><span class="co">#&gt; ── <span style="background-color: #BBBB00;"> rRACES </span> <span style="color: #BBBBBB; background-color: #00BB00;"> D </span> <span style="color: #BBBBBB; background-color: #BB0000;"> S </span> <span style="color: #BBBBBB; background-color: #BB0000;"> M </span> /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/rRACES_</span></span>
+<span><span class="co">#&gt; ── <span style="background-color: #BBBB00;"> ProCESS </span> <span style="color: #BBBBBB; background-color: #00BB00;"> D </span> <span style="color: #BBBBBB; background-color: #BB0000;"> S </span> <span style="color: #BBBBBB; background-color: #BB0000;"> M </span> /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCES</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Species: <span style="color: #00BB00;">2</span>, <span style="color: #00BB00;">with</span> epigenetics</span></span>
 <span><span class="co">#&gt;    </span></span>

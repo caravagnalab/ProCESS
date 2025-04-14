@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Growth Models • rRACES</title>
+<title>Growth Models • ProCESS</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,11 +17,11 @@
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Growth Models">
-<meta name="description" content="What is a growth model and which growth models are implemented by rRACES
+<meta name="description" content="What is a growth model and which growth models are implemented by ProCESS
 ">
-<meta property="og:description" content="What is a growth model and which growth models are implemented by rRACES
+<meta property="og:description" content="What is a growth model and which growth models are implemented by ProCESS
 ">
-<meta property="og:image" content="https://caravagnalab.github.io/rRACES/logo.png">
+<meta property="og:image" content="https://caravagnalab.github.io/ProCESS/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -29,7 +29,7 @@
 
     <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
-    <a class="navbar-brand me-2" href="../index.html">rRACES</a>
+    <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
@@ -40,7 +40,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../articles/rRACES.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/ProCESS.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
@@ -58,7 +58,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/caravagnalab/rRACES/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/caravagnalab/ProCESS/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -74,14 +74,14 @@
       <img src="../logo.png" class="logo" alt=""><h1>Growth Models</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/caravagnalab/rRACES/vignettes/growth_models.Rmd" class="external-link"><code>vignettes/growth_models.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/caravagnalab/ProCESS/vignettes/growth_models.Rmd" class="external-link"><code>vignettes/growth_models.Rmd</code></a></small>
       <div class="d-none name"><code>growth_models.Rmd</code></div>
     </div>
 
     
     
 <blockquote>
-<p><em>Disclaimer:</em> RACES/rRACES internally implements the
+<p><em>Disclaimer:</em> RACES/ProCESS internally implements the
 probability distributions using the C++11 random number distribution
 classes. The standard does not specify their algorithms, and the class
 implementations are left free for the compiler. Thus, the simulation
@@ -89,7 +89,7 @@ output depends on the compiler used to compile RACES, and because of
 that, the results reported in this article may differ from those
 obtained by the reader.</p>
 </blockquote>
-<p>rRACES/RACES simulate the tumour growth according to two alternative
+<p>ProCESS/RACES simulate the tumour growth according to two alternative
 models: the “border”-growth model and the homogeneous-growth model.</p>
 <p>The former exclusively admits duplication of cells that have space to
 duplicate (i.e., cells on the cancer border or near by death cells). The
@@ -111,7 +111,7 @@ different evolutions of the very same cancer model.</p>
 object and set <code>border_growth_model</code> to
 <code>FALSE</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://caravagnalab.github.io/rRACES">rRACES</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://caravagnalab.github.io/ProCESS">ProCESS</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
 <span></span>
@@ -164,7 +164,7 @@ take again two samples.</p>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">mutate_progeny</span><span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="fu">choose_cell_in</span><span class="op">(</span><span class="st">"A"</span><span class="op">)</span>, <span class="st">"B"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"B+"</span>, <span class="fl">5000</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [██████████████████████████--------------] 64% [00m:00s] Cells: 77429 [████████████████████████████████████████] 100% [00m:00s] Saving snapshot</span></span>
+<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:00s] Saving snapshot</span></span>
 <span></span>
 <span><span class="va">ncells</span> <span class="op">&lt;-</span> <span class="fl">0.9</span> <span class="op">*</span> <span class="va">bbox_width</span> <span class="op">*</span> <span class="va">bbox_width</span></span>
 <span></span>
@@ -250,7 +250,7 @@ example.</p>
 <span></span>
 <span><span class="co"># Let the simulation evolve until "A+" consists of 1300 cells</span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"A+"</span>, <span class="fl">1300</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [████████████████████████████████--------] 79% [00m:00s] Cells: 28176 [████████████████████████████████████████] 100% [00m:00s] Saving snapshot</span></span>
+<span><span class="co">#&gt;  [████████████████████████████------------] 69% [00m:00s] Cells: 22848 [███████████████████████████████████████-] 96% [00m:01s] Cells: 33782 [████████████████████████████████████████] 100% [00m:01s] Saving snapshot</span></span>
 <span></span>
 <span><span class="va">bbox_width</span> <span class="op">&lt;-</span> <span class="fl">15</span></span>
 <span></span>
@@ -279,7 +279,7 @@ example.</p>
 <span></span>
 <span><span class="co"># Let the simulation evolve until "B+" consists of 5000 cells</span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"B+"</span>, <span class="fl">5000</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [███████████████████████-----------------] 55% [00m:00s] Cells: 64653 [████████████████████████████████████████] 100% [00m:00s] Saving snapshot</span></span>
+<span><span class="co">#&gt;  [█████████████████████████---------------] 61% [00m:00s] Cells: 65594 [████████████████████████████████████████] 100% [00m:00s] Saving snapshot</span></span>
 <span></span>
 <span><span class="va">ncells</span> <span class="op">&lt;-</span> <span class="fl">0.9</span> <span class="op">*</span> <span class="va">bbox_width</span> <span class="op">*</span> <span class="va">bbox_width</span></span>
 <span></span>

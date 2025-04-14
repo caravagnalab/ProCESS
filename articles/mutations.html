@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Simulating Mutations • rRACES</title>
+<title>Simulating Mutations • ProCESS</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -21,7 +21,7 @@
 ">
 <meta property="og:description" content="How to simulate mutations on sampled cells
 ">
-<meta property="og:image" content="https://caravagnalab.github.io/rRACES/logo.png">
+<meta property="og:image" content="https://caravagnalab.github.io/ProCESS/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -29,7 +29,7 @@
 
     <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
-    <a class="navbar-brand me-2" href="../index.html">rRACES</a>
+    <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
@@ -40,7 +40,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../articles/rRACES.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/ProCESS.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
@@ -58,7 +58,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/caravagnalab/rRACES/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/caravagnalab/ProCESS/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -74,14 +74,14 @@
       <img src="../logo.png" class="logo" alt=""><h1>Simulating Mutations</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/caravagnalab/rRACES/vignettes/mutations.Rmd" class="external-link"><code>vignettes/mutations.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/caravagnalab/ProCESS/vignettes/mutations.Rmd" class="external-link"><code>vignettes/mutations.Rmd</code></a></small>
       <div class="d-none name"><code>mutations.Rmd</code></div>
     </div>
 
     
     
 <blockquote>
-<p><em>Disclaimer:</em> RACES/rRACES internally implements the
+<p><em>Disclaimer:</em> RACES/ProCESS internally implements the
 probability distributions using the C++11 random number distribution
 classes. The standard does not specify their algorithms, and the class
 implementations are left free for the compiler. Thus, the simulation
@@ -89,7 +89,7 @@ output depends on the compiler used to compile RACES, and because of
 that, the results reported in this article may differ from those
 obtained by the reader.</p>
 </blockquote>
-<p>rRACES/RACES can simulate genomic mutations on the cells represented
+<p>ProCESS/RACES can simulate genomic mutations on the cells represented
 in a <code>SamplesForest</code> according to the specified SBS and indel
 mutational signatures (see <span class="citation">(Alexandrov et al.
 2020)</span>). This process is performed by the class
@@ -105,13 +105,13 @@ to build the corresponding two signature indices. The function
 <code><a href="../reference/MutationEngine.html">MutationEngine()</a></code> performs all these steps in a single
 call.</p>
 <p>This function is quite flexible and it allows to customize the
-mutation engine in many ways. However, the vast majority of rRACES users
-aim a standard setup for instance involving the human genome.</p>
-<p>Because of this, rRACES provides some predefined setups. Their list
+mutation engine in many ways. However, the vast majority of ProCESS
+users aim a standard setup for instance involving the human genome.</p>
+<p>Because of this, ProCESS provides some predefined setups. Their list
 can be obtained by invoking the function
 <code><a href="../reference/get_mutation_engine_codes.html">get_mutation_engine_codes()</a></code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://caravagnalab.github.io/rRACES">rRACES</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://caravagnalab.github.io/ProCESS">ProCESS</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/get_mutation_engine_codes.html">get_mutation_engine_codes</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;     name           description</span></span>
@@ -137,13 +137,13 @@ can be obtained by invoking the function
 <span><span class="co">#&gt; Downloading germline mutations...</span></span>
 <span><span class="co">#&gt; Germline mutations downloaded</span></span>
 <span><span class="co">#&gt; Building context index...</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [██████████------------------------------] 24% [00m:01s] Processing chr. 22 [████████████████████--------------------] 49% [00m:02s] Processing chr. 22 [██████████████████████████████----------] 73% [00m:03s] Processing chr. 22 [████████████████████████████████████████] 98% [00m:04s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:04s] Context index built</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█████████████---------------------------] 32% [00m:01s] Processing chr. 22 [███████████████████████-----------------] 57% [00m:02s] Processing chr. 22 [████████████████████████████████████----] 89% [00m:03s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:04s] Context index built</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving context index [████████████████████████████████████████] 100% [00m:00s] Context index saved</span></span>
 <span><span class="co">#&gt; done</span></span>
 <span><span class="co">#&gt; Building repeated sequence index...</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█---------------------------------------] 0% [00m:01s] Processing chr. 22 [█---------------------------------------] 0% [00m:05s] Processing chr. 22 [█---------------------------------------] 0% [00m:07s] Processing chr. 22 [█---------------------------------------] 0% [00m:08s] Processing chr. 22 [█---------------------------------------] 0% [00m:09s] Processing chr. 22 [█---------------------------------------] 0% [00m:11s] Processing chr. 22 [█---------------------------------------] 0% [00m:17s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:17s] RS index built</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 2% [00m:02s] Saving RS index [███████████████████████-----------------] 57% [00m:03s] Saving RS indexdone</span></span>
-<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:03s] RS index saved</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█---------------------------------------] 0% [00m:06s] Processing chr. 22 [█---------------------------------------] 0% [00m:07s] Processing chr. 22 [█---------------------------------------] 0% [00m:09s] Processing chr. 22 [█---------------------------------------] 0% [00m:10s] Processing chr. 22 [█---------------------------------------] 0% [00m:18s] Processing chr. 22 [█---------------------------------------] 0% [00m:22s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:22s] RS index built</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:01s] Saving RS index [█████████████████████████---------------] 61% [00m:02s] Saving RS indexdone</span></span>
+<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:02s] RS index saved</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving germline [████████████████████████████████████████] 100% [00m:00s] Germline saved</span></span>
 <span></span>
@@ -180,7 +180,7 @@ performs them.</p>
 <code class="sourceCode R"><span><span class="co"># building a mutation engine by using the "demo" set-up configuration</span></span>
 <span><span class="va">m_engine</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MutationEngine.html">MutationEngine</a></span><span class="op">(</span>setup_code <span class="op">=</span> <span class="st">"demo"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading context index [████████████████████████████████████████] 100% [00m:00s] Context index loaded</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading RS index [██████████------------------------------] 24% [00m:01s] Loading RS index [█████████████████████-------------------] 50% [00m:02s] Loading RS index [█████████████████████████████-----------] 72% [00m:03s] Loading RS index [███████████████████████████████████████-] 95% [00m:04s] Loading RS index [████████████████████████████████████████] 100% [00m:04s] RS index loaded</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading RS index [████████████████------------------------] 39% [00m:01s] Loading RS index [███████████████████████████████---------] 76% [00m:02s] Loading RS index [████████████████████████████████████████] 100% [00m:02s] RS index loaded</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded</span></span></code></pre></div>
 <div class="section level4">
 <h4 id="mutant-genetic-characterization">Mutant Genetic Characterization<a class="anchor" aria-label="anchor" href="#mutant-genetic-characterization"></a>
@@ -229,7 +229,7 @@ declared as it follows.</p>
 <span>                                   <span class="fu"><a href="../reference/CNA.html">CNA</a></span><span class="op">(</span><span class="st">"D"</span>, <span class="st">"22"</span>, <span class="fl">5010000</span>, <span class="fl">200000</span>,</span>
 <span>                                       allele <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
 <span>                                   <span class="va">WGD</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Retrieving "A" SNVs [█---------------------------------------] 0% [00m:00s] Found 22 [█---------------------------------------] 0% [00m:00s] Reading 22 [█---------------------------------------] 0% [00m:01s] Reading 22 [█---------------------------------------] 0% [00m:02s] Reading 22 [████████████████████████████████████████] 100% [00m:02s] "A" SNVs retrieved</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Retrieving "A" SNVs [█---------------------------------------] 0% [00m:00s] Found 22 [█---------------------------------------] 0% [00m:00s] Reading 22 [█---------------------------------------] 0% [00m:01s] Reading 22 [████████████████████████████████████████] 100% [00m:01s] "A" SNVs retrieved</span></span>
 <span></span>
 <span><span class="va">m_engine</span></span>
 <span><span class="co">#&gt; MutationEngine</span></span>
@@ -273,11 +273,11 @@ alleles producing a genome in which two alleles contain the placed SNV.
 Instead, the latter snippet requires a whole genome doubling event and,
 then, places the SNV yielding a single occurrence of the SNV in the
 final genome.</p>
-<p>As far as the SNVs and indels concern, rRACES provides the users with
-a more compact and, sometimes, convenient approach. The mutation engine
-stores a list of known driver mutations and labels each of them by a
-code which can be used during the mutant declaration. The corresponding
-data frame can be obtained by using the method
+<p>As far as the SNVs and indels concern, ProCESS provides the users
+with a more compact and, sometimes, convenient approach. The mutation
+engine stores a list of known driver mutations and labels each of them
+by a code which can be used during the mutant declaration. The
+corresponding data frame can be obtained by using the method
 <code>MutationEngine$get_known_drivers()</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -308,7 +308,7 @@ full specification as follows.</p>
 <span><span class="va">m_engine</span><span class="op">$</span><span class="fu">add_mutant</span><span class="op">(</span><span class="st">"B"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"+"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>SNV <span class="op">=</span> <span class="fl">8e-8</span><span class="op">)</span>, <span class="st">"-"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>SNV <span class="op">=</span> <span class="fl">5e-8</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"NF2 R221*"</span>, allele <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,   <span class="co"># the first SNV</span></span>
 <span>                         <span class="fu"><a href="../reference/SNV.html">SNV</a></span><span class="op">(</span><span class="st">"22"</span>, <span class="fl">12028576</span>, <span class="st">"G"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>       <span class="co"># the second SNV</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Retrieving "B" SNVs [█---------------------------------------] 0% [00m:00s] Found 22 [█---------------------------------------] 0% [00m:00s] Reading 22 [█---------------------------------------] 0% [00m:01s] Reading 22 [█---------------------------------------] 0% [00m:02s] Reading 22 [████████████████████████████████████████] 100% [00m:02s] "B" SNVs retrieved</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Retrieving "B" SNVs [█---------------------------------------] 0% [00m:00s] Found 22 [█---------------------------------------] 0% [00m:00s] Reading 22 [█---------------------------------------] 0% [00m:01s] Reading 22 [████████████████████████████████████████] 100% [00m:01s] "B" SNVs retrieved</span></span>
 <span></span>
 <span><span class="va">m_engine</span></span>
 <span><span class="co">#&gt; MutationEngine</span></span>
@@ -458,7 +458,7 @@ can be obtained by using the function
 <div class="section level4">
 <h4 id="germline-mutations">Germline Mutations<a class="anchor" aria-label="anchor" href="#germline-mutations"></a>
 </h4>
-<p>rRACES allows users to apply the germline mutations of one of the
+<p>ProCESS allows users to apply the germline mutations of one of the
 subjects available in the germline data provided in building the
 mutation engine. This feature will enable users to simulate a specific
 cancer type’s evolution on an individual with the desired gender and
@@ -545,10 +545,10 @@ the the active germline subject.</p>
 <span><span class="co">#&gt; 1 NA18941 JPT       EAS female</span></span></code></pre></div>
 <p>Users can change the germline subject using the method
 <code>MutationEngine$set_germline_subject()</code>.</p>
-<p>When a subject is selected for the first time, rRACES builds a binary
-representation of the subject genome, saving it for future use. This
-step may take a few minutes. However, all the successive selections of
-the same subject directly load the binary file.</p>
+<p>When a subject is selected for the first time, ProCESS builds a
+binary representation of the subject genome, saving it for future use.
+This step may take a few minutes. However, all the successive selections
+of the same subject directly load the binary file.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m_engine</span><span class="op">$</span><span class="fu">set_germline_subject</span><span class="op">(</span><span class="va">subjects</span><span class="op">[</span><span class="fl">2</span>, <span class="st">"sample"</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded</span></span>
@@ -575,7 +575,7 @@ that article.</p>
 <span><span class="co"># place mutations on the sample forest assuming 1000 pre-neoplastic SNVs and</span></span>
 <span><span class="co"># 500 indels</span></span>
 <span><span class="va">phylo_forest</span> <span class="op">&lt;-</span> <span class="va">m_engine</span><span class="op">$</span><span class="fu">place_mutations</span><span class="op">(</span><span class="va">samples_forest</span>, <span class="fl">1000</span>, <span class="fl">500</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Placing mutations [█████-----------------------------------] 12% [00m:01s] Placing mutations [██████████------------------------------] 24% [00m:02s] Placing mutations [███████████████-------------------------] 37% [00m:03s] Placing mutations [█████████████████████-------------------] 50% [00m:04s] Placing mutations [██████████████████████████--------------] 63% [00m:05s] Placing mutations [███████████████████████████████---------] 75% [00m:06s] Placing mutations [███████████████████████████████████-----] 86% [00m:07s] Placing mutations [██████████████████████████████████████--] 93% [00m:08s] Placing mutations [████████████████████████████████████████] 100% [00m:09s] Mutations placed</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Placing mutations [██████████------------------------------] 23% [00m:01s] Placing mutations [███████████████████---------------------] 47% [00m:02s] Placing mutations [█████████████████████████████-----------] 71% [00m:03s] Placing mutations [████████████████████████████████████----] 89% [00m:04s] Placing mutations [████████████████████████████████████████] 100% [00m:04s] Mutations placed</span></span>
 <span></span>
 <span><span class="va">phylo_forest</span></span>
 <span><span class="co">#&gt; PhylogeneticForest</span></span>
@@ -623,12 +623,12 @@ such data by using the methods
 <span><span class="co"># show the first of them</span></span>
 <span><span class="va">sampled_cells</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   cell_id ancestor mutant epistate sample birth_time</span></span>
-<span><span class="co">#&gt; 1    2790     2694      A        -  S_1_1   127.8854</span></span>
-<span><span class="co">#&gt; 2    5000     4671      A        -  S_1_2   152.6275</span></span>
-<span><span class="co">#&gt; 3    8774     8274      A        -  S_1_1   180.3081</span></span>
-<span><span class="co">#&gt; 4    9651     8069      A        -  S_1_1   185.6496</span></span>
-<span><span class="co">#&gt; 5   11533     7757      A        -  S_1_1   195.7661</span></span>
-<span><span class="co">#&gt; 6   12905    12464      A        -  S_1_1   202.1142</span></span>
+<span><span class="co">#&gt; 1    2790     2694      A        -  S_1_1   127,8854</span></span>
+<span><span class="co">#&gt; 2    5000     4671      A        -  S_1_2   152,6275</span></span>
+<span><span class="co">#&gt; 3    8774     8274      A        -  S_1_1   180,3081</span></span>
+<span><span class="co">#&gt; 4    9651     8069      A        -  S_1_1   185,6496</span></span>
+<span><span class="co">#&gt; 5   11533     7757      A        -  S_1_1   195,7661</span></span>
+<span><span class="co">#&gt; 6   12905    12464      A        -  S_1_1   202,1142</span></span>
 <span></span>
 <span><span class="co"># get the identifier of the 3rd cell in `sampled_cells`</span></span>
 <span><span class="va">cell_id</span> <span class="op">&lt;-</span> <span class="va">sampled_cells</span><span class="op">[</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">]</span></span>
@@ -663,15 +663,15 @@ normal cells that contain as much DNA as the sample tumoral cells.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">phylo_forest</span><span class="op">$</span><span class="fu">get_samples_info</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    name id xmin ymin xmax ymax tumour_cells tumour_cells_in_bbox     time</span></span>
-<span><span class="co">#&gt; 1 S_1_1  0  480  480  530  530         2588                 2588 365.9279</span></span>
-<span><span class="co">#&gt; 2 S_1_2  1  500  500  550  550         1632                 1632 365.9279</span></span>
-<span><span class="co">#&gt; 3 S_2_1  2  370  498  394  522          572                  572 421.2143</span></span>
-<span><span class="co">#&gt; 4 S_2_2  3  370  373  394  397          604                  604 421.2143</span></span>
+<span><span class="co">#&gt; 1 S_1_1  0  480  480  530  530         2588                 2588 365,9279</span></span>
+<span><span class="co">#&gt; 2 S_1_2  1  500  500  550  550         1632                 1632 365,9279</span></span>
+<span><span class="co">#&gt; 3 S_2_1  2  370  498  394  522          572                  572 421,2143</span></span>
+<span><span class="co">#&gt; 4 S_2_2  3  370  373  394  397          604                  604 421,2143</span></span>
 <span><span class="co">#&gt;   DNA_quantity equivalent_normal_cells</span></span>
-<span><span class="co">#&gt; 1 530855879155                5173.573</span></span>
-<span><span class="co">#&gt; 2 333071264048                3246.020</span></span>
-<span><span class="co">#&gt; 3 117255398095                1142.738</span></span>
-<span><span class="co">#&gt; 4 123951831456                1208.000</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 530855879155                5173,573</span></span>
+<span><span class="co">#&gt; 2 333071264048                3246,020</span></span>
+<span><span class="co">#&gt; 3 117255398095                1142,738</span></span>
+<span><span class="co">#&gt; 4 123951831456                1208,000</span></span></code></pre></div>
 <p>The method <code>PhylogeneticForest$get_germline_mutations()</code>
 returns the SNVs and the indels in the germline.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
@@ -707,19 +707,19 @@ phylogenetic forest can be obtained by using the method
 <code class="sourceCode R"><span><span class="co"># get the exposures used in placing the mutations</span></span>
 <span><span class="va">phylo_forest</span><span class="op">$</span><span class="fu">get_exposures</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    time signature exposure  type</span></span>
-<span><span class="co">#&gt; 1     0      SBS1      0.8   SNV</span></span>
-<span><span class="co">#&gt; 2     0     SBS13      0.2   SNV</span></span>
-<span><span class="co">#&gt; 3   100      SBS2      0.2   SNV</span></span>
-<span><span class="co">#&gt; 4   100      SBS3      0.5   SNV</span></span>
-<span><span class="co">#&gt; 5   100      SBS5      0.3   SNV</span></span>
-<span><span class="co">#&gt; 6   120      SBS2      0.2   SNV</span></span>
-<span><span class="co">#&gt; 7   120      SBS3      0.5   SNV</span></span>
-<span><span class="co">#&gt; 8   120      SBS5      0.3   SNV</span></span>
-<span><span class="co">#&gt; 9     0      ID13      0.2 indel</span></span>
-<span><span class="co">#&gt; 10    0       ID2      0.6 indel</span></span>
-<span><span class="co">#&gt; 11    0      ID21      0.2 indel</span></span>
-<span><span class="co">#&gt; 12  120       ID1      0.8 indel</span></span>
-<span><span class="co">#&gt; 13  120       ID9      0.2 indel</span></span></code></pre></div>
+<span><span class="co">#&gt; 1     0      SBS1      0,8   SNV</span></span>
+<span><span class="co">#&gt; 2     0     SBS13      0,2   SNV</span></span>
+<span><span class="co">#&gt; 3   100      SBS2      0,2   SNV</span></span>
+<span><span class="co">#&gt; 4   100      SBS3      0,5   SNV</span></span>
+<span><span class="co">#&gt; 5   100      SBS5      0,3   SNV</span></span>
+<span><span class="co">#&gt; 6   120      SBS2      0,2   SNV</span></span>
+<span><span class="co">#&gt; 7   120      SBS3      0,5   SNV</span></span>
+<span><span class="co">#&gt; 8   120      SBS5      0,3   SNV</span></span>
+<span><span class="co">#&gt; 9     0      ID13      0,2 indel</span></span>
+<span><span class="co">#&gt; 10    0       ID2      0,6 indel</span></span>
+<span><span class="co">#&gt; 11    0      ID21      0,2 indel</span></span>
+<span><span class="co">#&gt; 12  120       ID1      0,8 indel</span></span>
+<span><span class="co">#&gt; 13  120       ID9      0,2 indel</span></span></code></pre></div>
 <p>The method
 <code>MutationEngine$get_bulk_allelic_fragmentation()</code> returns a
 dataframe reporting the allelic type per genome fragment.</p>
@@ -730,12 +730,12 @@ dataframe reporting the allelic type per genome fragment.</p>
 <span><span class="co"># print the bulk allelic fragmentation</span></span>
 <span><span class="va">phylo_forest</span><span class="op">$</span><span class="fu">get_bulk_allelic_fragmentation</span><span class="op">(</span><span class="va">sample_name</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   chr   begin      end major minor       ratio</span></span>
-<span><span class="co">#&gt; 1  22       1  5009999     2     2 0.998840804</span></span>
-<span><span class="co">#&gt; 2  22       1  5009999     3     2 0.001159196</span></span>
-<span><span class="co">#&gt; 3  22 5010000  5209999     2     0 0.998840804</span></span>
-<span><span class="co">#&gt; 4  22 5010000  5209999     3     0 0.001159196</span></span>
-<span><span class="co">#&gt; 5  22 5210000 10303469     2     2 0.998840804</span></span>
-<span><span class="co">#&gt; 6  22 5210000 10303469     3     2 0.001159196</span></span></code></pre></div>
+<span><span class="co">#&gt; 1  22       1  5009999     2     2 0,998840804</span></span>
+<span><span class="co">#&gt; 2  22       1  5009999     3     2 0,001159196</span></span>
+<span><span class="co">#&gt; 3  22 5010000  5209999     2     0 0,998840804</span></span>
+<span><span class="co">#&gt; 4  22 5010000  5209999     3     0 0,001159196</span></span>
+<span><span class="co">#&gt; 5  22 5210000 10303469     2     2 0,998840804</span></span>
+<span><span class="co">#&gt; 6  22 5210000 10303469     3     2 0,001159196</span></span></code></pre></div>
 <p>Instead, the method
 <code>MutationEngine$get_cell_allelic_fragmentation()</code> returns the
 allelic fragmentation per cell.</p>
@@ -757,22 +757,22 @@ and <code>MutationEngine$get_indel_signatures()</code>.</p>
 <code class="sourceCode R"><span><span class="co"># get the SNV signatures used in placing the mutations</span></span>
 <span><span class="va">m_engine</span><span class="op">$</span><span class="fu">get_SNV_signatures</span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
 <span><span class="co">#&gt;      Type        SBS1        SBS2       SBS3        SBS4</span></span>
-<span><span class="co">#&gt; 1 A[C&gt;A]A 0.000886157 5.80000e-07 0.02080832 0.042196498</span></span>
-<span><span class="co">#&gt; 2 A[C&gt;A]C 0.002280405 1.48004e-04 0.01650660 0.033297236</span></span>
-<span><span class="co">#&gt; 3 A[C&gt;A]G 0.000177031 5.23000e-05 0.00175070 0.015598705</span></span>
-<span><span class="co">#&gt; 4 A[C&gt;A]T 0.001280227 9.78000e-05 0.01220488 0.029497552</span></span>
-<span><span class="co">#&gt; 5 A[C&gt;G]A 0.001860330 2.23000e-16 0.01970788 0.006889428</span></span>
-<span><span class="co">#&gt; 6 A[C&gt;G]C 0.001220217 1.33004e-04 0.01170468 0.002839764</span></span>
+<span><span class="co">#&gt; 1 A[C&gt;A]A 0,000886157 5,80000e-07 0,02080832 0,042196498</span></span>
+<span><span class="co">#&gt; 2 A[C&gt;A]C 0,002280405 1,48004e-04 0,01650660 0,033297236</span></span>
+<span><span class="co">#&gt; 3 A[C&gt;A]G 0,000177031 5,23000e-05 0,00175070 0,015598705</span></span>
+<span><span class="co">#&gt; 4 A[C&gt;A]T 0,001280227 9,78000e-05 0,01220488 0,029497552</span></span>
+<span><span class="co">#&gt; 5 A[C&gt;G]A 0,001860330 2,23000e-16 0,01970788 0,006889428</span></span>
+<span><span class="co">#&gt; 6 A[C&gt;G]C 0,001220217 1,33004e-04 0,01170468 0,002839764</span></span>
 <span></span>
 <span><span class="co"># get the indel signatures used in placing the mutations</span></span>
 <span><span class="va">m_engine</span><span class="op">$</span><span class="fu">get_indel_signatures</span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
 <span><span class="co">#&gt;        Type          ID1         ID2        ID3         ID4</span></span>
-<span><span class="co">#&gt; 1 1:Del:C:0 1.598890e-04 0.004824116 0.12472711 0.007249717</span></span>
-<span><span class="co">#&gt; 2 1:Del:C:1 7.735230e-04 0.000022100 0.20887617 0.002734869</span></span>
-<span><span class="co">#&gt; 3 1:Del:C:2 3.310000e-18 0.000003110 0.17632422 0.002041063</span></span>
-<span><span class="co">#&gt; 4 1:Del:C:3 1.907613e-03 0.002472076 0.06404276 0.001112283</span></span>
-<span><span class="co">#&gt; 5 1:Del:C:4 7.059900e-04 0.003856976 0.04398981 0.001075684</span></span>
-<span><span class="co">#&gt; 6 1:Del:C:5 3.370115e-03 0.014615424 0.02241749 0.002246178</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 1:Del:C:0 1,598890e-04 0,004824116 0,12472711 0,007249717</span></span>
+<span><span class="co">#&gt; 2 1:Del:C:1 7,735230e-04 0,000022100 0,20887617 0,002734869</span></span>
+<span><span class="co">#&gt; 3 1:Del:C:2 3,310000e-18 0,000003110 0,17632422 0,002041063</span></span>
+<span><span class="co">#&gt; 4 1:Del:C:3 1,907613e-03 0,002472076 0,06404276 0,001112283</span></span>
+<span><span class="co">#&gt; 5 1:Del:C:4 7,059900e-04 0,003856976 0,04398981 0,001075684</span></span>
+<span><span class="co">#&gt; 6 1:Del:C:5 3,370115e-03 0,014615424 0,02241749 0,002246178</span></span></code></pre></div>
 <p>Finally, the data of the subject whose germline corresponds to
 wild-type genome in the phylogenetic forest can be obtained by the
 method <code>Phylogenetic$get_germline_subject()</code>.</p>
@@ -790,11 +790,11 @@ load by the function <code><a href="../reference/load_phylogenetic_forest.html">
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># save the phylogenetic forest in the file "phylo_forest.sff"</span></span>
 <span><span class="va">phylo_forest</span><span class="op">$</span><span class="fu">save</span><span class="op">(</span><span class="st">"phylo_forest.sff"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving forest [█---------------------------------------] 0% [00m:00s] Saving forest [█---------------------------------------] 0% [00m:01s] Saving forest [█---------------------------------------] 0% [00m:02s] Saving forest [█---------------------------------------] 0% [00m:03s] Saving forest [█---------------------------------------] 0% [00m:04s] Saving forest [█---------------------------------------] 0% [00m:06s] Saving forest [█---------------------------------------] 0% [00m:07s] Saving forest [█---------------------------------------] 0% [00m:08s] Saving forest [█---------------------------------------] 0% [00m:09s] Saving forest [█---------------------------------------] 0% [00m:10s] Saving forest [█---------------------------------------] 0% [00m:11s] Saving forest [█---------------------------------------] 0% [00m:12s] Saving forest [█---------------------------------------] 0% [00m:13s] Saving forest [█---------------------------------------] 0% [00m:14s] Saving forest [█---------------------------------------] 0% [00m:15s] Saving forest [█---------------------------------------] 0% [00m:16s] Saving forest [█---------------------------------------] 1% [00m:17s] Saving forest [█████-----------------------------------] 11% [00m:18s] Saving forest [████████--------------------------------] 18% [00m:19s] Saving forest [███████████-----------------------------] 25% [00m:20s] Saving forest [█████████████---------------------------] 30% [00m:21s] Saving forest [███████████████-------------------------] 35% [00m:22s] Saving forest [█████████████████-----------------------] 42% [00m:23s] Saving forest [████████████████████--------------------] 49% [00m:24s] Saving forest [███████████████████████-----------------] 56% [00m:25s] Saving forest [██████████████████████████--------------] 63% [00m:27s] Saving forest [█████████████████████████████-----------] 70% [00m:28s] Saving forest [███████████████████████████████---------] 77% [00m:29s] Saving forest [██████████████████████████████████------] 84% [00m:30s] Saving forest [█████████████████████████████████████---] 90% [00m:31s] Saving forest [███████████████████████████████████████-] 96% [00m:32s] Saving forest [████████████████████████████████████████] 100% [00m:33s] Forest saved</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving forest [█---------------------------------------] 0% [00m:01s] Saving forest [█---------------------------------------] 0% [00m:02s] Saving forest [█---------------------------------------] 0% [00m:03s] Saving forest [█---------------------------------------] 0% [00m:04s] Saving forest [█---------------------------------------] 0% [00m:05s] Saving forest [█---------------------------------------] 0% [00m:06s] Saving forest [█---------------------------------------] 0% [00m:07s] Saving forest [█---------------------------------------] 0% [00m:08s] Saving forest [█---------------------------------------] 0% [00m:09s] Saving forest [██████----------------------------------] 13% [00m:10s] Saving forest [██████████------------------------------] 23% [00m:11s] Saving forest [█████████████---------------------------] 30% [17m:02s] Saving forest [█████████████████-----------------------] 40% [17m:03s] Saving forest [█████████████████████-------------------] 50% [17m:04s] Saving forest [█████████████████████████---------------] 61% [17m:05s] Saving forest [████████████████████████████------------] 69% [17m:06s] Saving forest [████████████████████████████████--------] 79% [17m:07s] Saving forest [█████████████████████████████████████---] 90% [17m:08s] Saving forest [████████████████████████████████████████] 100% [17m:09s] Forest saved</span></span>
 <span></span>
 <span><span class="co"># loading the saved forest</span></span>
 <span><span class="va">loaded_phylo_forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_phylogenetic_forest.html">load_phylogenetic_forest</a></span><span class="op">(</span><span class="st">"phylo_forest.sff"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading forest [███-------------------------------------] 7% [00m:01s] Loading forest [█████-----------------------------------] 11% [00m:02s] Loading forest [███████---------------------------------] 15% [00m:03s] Loading forest [████████--------------------------------] 19% [00m:04s] Loading forest [██████████------------------------------] 23% [00m:05s] Loading forest [███████████-----------------------------] 27% [00m:06s] Loading forest [█████████████---------------------------] 31% [00m:07s] Loading forest [███████████████-------------------------] 35% [00m:08s] Loading forest [████████████████------------------------] 39% [00m:09s] Loading forest [██████████████████----------------------] 43% [00m:10s] Loading forest [███████████████████---------------------] 47% [00m:11s] Loading forest [█████████████████████-------------------] 51% [00m:12s] Loading forest [███████████████████████-----------------] 55% [00m:13s] Loading forest [████████████████████████----------------] 58% [00m:14s] Loading forest [██████████████████████████--------------] 63% [00m:15s] Loading forest [███████████████████████████-------------] 67% [00m:16s] Loading forest [█████████████████████████████-----------] 71% [00m:17s] Loading forest [███████████████████████████████---------] 75% [00m:19s] Loading forest [████████████████████████████████--------] 79% [00m:20s] Loading forest [██████████████████████████████████------] 83% [00m:21s] Loading forest [███████████████████████████████████-----] 87% [00m:22s] Loading forest [█████████████████████████████████████---] 91% [00m:23s] Loading forest [███████████████████████████████████████-] 95% [00m:24s] Loading forest [████████████████████████████████████████] 99% [00m:25s] Loading forest [████████████████████████████████████████] 100% [00m:26s] Forest loaded</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading forest [█████-----------------------------------] 10% [00m:01s] Loading forest [███████---------------------------------] 17% [00m:02s] Loading forest [██████████------------------------------] 23% [00m:03s] Loading forest [█████████████---------------------------] 30% [00m:04s] Loading forest [███████████████-------------------------] 37% [00m:05s] Loading forest [██████████████████----------------------] 44% [00m:06s] Loading forest [█████████████████████-------------------] 51% [00m:07s] Loading forest [████████████████████████----------------] 58% [00m:08s] Loading forest [██████████████████████████--------------] 64% [00m:09s] Loading forest [█████████████████████████████-----------] 71% [00m:10s] Loading forest [████████████████████████████████--------] 78% [00m:12s] Loading forest [███████████████████████████████████-----] 85% [00m:13s] Loading forest [█████████████████████████████████████---] 91% [00m:14s] Loading forest [███████████████████████████████████████-] 97% [00m:15s] Loading forest [████████████████████████████████████████] 100% [00m:15s] Forest loaded</span></span>
 <span></span>
 <span><span class="va">loaded_phylo_forest</span></span>
 <span><span class="co">#&gt; PhylogeneticForest</span></span>
@@ -816,12 +816,12 @@ file path. The methods
 the path and set it, respectively.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">phylo_forest</span><span class="op">$</span><span class="fu">get_reference_path</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "/Users/alberto/Library/CloudStorage/Dropbox/Lavoro/Code/rRACES/rRACES/vignettes/demo/reference.fasta"</span></span>
+<span><span class="co">#&gt; [1] "/Users/alberto/sign/ProCESS/vignettes/demo/reference.fasta"</span></span>
 <span></span>
 <span><span class="va">phylo_forest</span><span class="op">$</span><span class="fu">set_reference_path</span><span class="op">(</span><span class="st">"demo/reference.fasta"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">phylo_forest</span><span class="op">$</span><span class="fu">get_reference_path</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "/Users/alberto/Library/CloudStorage/Dropbox/Lavoro/Code/rRACES/rRACES/vignettes/demo/reference.fasta"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "/Users/alberto/sign/ProCESS/vignettes/demo/reference.fasta"</span></span></code></pre></div>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-alexandrov2020repertoire" class="csl-entry">
 Alexandrov, Ludmil B, Jaegil Kim, Nicholas J Haradhvala, Mi Ni Huang,

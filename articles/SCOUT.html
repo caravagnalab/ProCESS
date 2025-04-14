@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>SCOUT • rRACES</title>
+<title>SCOUT • ProCESS</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -21,7 +21,7 @@
 ">
 <meta property="og:description" content="The Simulated Cohort of Universal Tumours (SCOUT)
 ">
-<meta property="og:image" content="https://caravagnalab.github.io/rRACES/logo.png">
+<meta property="og:image" content="https://caravagnalab.github.io/ProCESS/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -29,7 +29,7 @@
 
     <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
-    <a class="navbar-brand me-2" href="../index.html">rRACES</a>
+    <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
@@ -40,7 +40,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../articles/rRACES.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/ProCESS.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
@@ -58,7 +58,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/caravagnalab/rRACES/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/caravagnalab/ProCESS/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -74,16 +74,16 @@
       <img src="../logo.png" class="logo" alt=""><h1>SCOUT</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/caravagnalab/rRACES/vignettes/SCOUT.Rmd" class="external-link"><code>vignettes/SCOUT.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/caravagnalab/ProCESS/vignettes/SCOUT.Rmd" class="external-link"><code>vignettes/SCOUT.Rmd</code></a></small>
       <div class="d-none name"><code>SCOUT.Rmd</code></div>
     </div>
 
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://caravagnalab.github.io/rRACES">rRACES</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://caravagnalab.github.io/ProCESS">ProCESS</a></span><span class="op">)</span></span></code></pre></div>
 <p>The Simulated Cohort of Universal Tumours (SCOUT) is a cohort
-generated with rRACES, containing prototypical tumours with matched
+generated with ProCESS, containing prototypical tumours with matched
 sequencing data. As in other fields of Machine Learning, the intent of
 SCOUT is to become a standard to benchmark algorithms for:</p>
 <ul>
@@ -201,7 +201,9 @@ biopsies (b).</p>
 <div class="section level3">
 <h3 id="spn01">SPN01<a class="anchor" aria-label="anchor" href="#spn01"></a>
 </h3>
-<p><img src="img%2FSCOUT%2FSPN01.png" alt="SPN01" width="850"><br></p>
+<div class="figure">
+<img src="img/SCOUT/SPN01.png" alt="SPN01" width="850px"><br/>
+</div>
 <p>SPN01 is a prototype micro-satellite stable (MSS) colorectal cancer
 composed of 4 clones, with one dominant clone at sampling. The dominant
 clone harbours a full inactivation of the APC gene by point mutation and
@@ -213,7 +215,9 @@ same time-point.</p>
 <div class="section level3">
 <h3 id="spn02">SPN02<a class="anchor" aria-label="anchor" href="#spn02"></a>
 </h3>
-<p><img src="img%2FSCOUT%2FSPN02.png" alt="SPN02" width="850"><br></p>
+<div class="figure">
+<img src="img/SCOUT/SPN02.png" alt="SPN02" width="850px"><br/>
+</div>
 <p>SPN02 is a prototype micro-satellite instable (MSI) colorectal cancer
 composed of 3 clones, with one dominant clone at sampling. The dominant
 clone harbours a mutant BRAF, PIK3CA and MSH6. The MSH6 mutation makes
@@ -224,7 +228,9 @@ same time-point.</p>
 <div class="section level3">
 <h3 id="spn03">SPN03<a class="anchor" aria-label="anchor" href="#spn03"></a>
 </h3>
-<p><img src="img%2FSCOUT%2FSPN03.png" alt="SPN03" width="850"><br></p>
+<div class="figure">
+<img src="img/SCOUT/SPN03.png" alt="SPN03" width="850px"><br/>
+</div>
 <p>SPN03 is a prototype chronic lymphocitic leukemia composed of 3
 clones, with eventually one largely dominant but one still expanding.
 The largest clone harbours activating mutations in NOTCH1 and KRAS, and
@@ -239,7 +245,9 @@ ongoing dynamics.</p>
 <div class="section level3">
 <h3 id="spn04">SPN04<a class="anchor" aria-label="anchor" href="#spn04"></a>
 </h3>
-<p><img src="img%2FSCOUT%2FSPN04.png" alt="SPN04" width="850"><br></p>
+<div class="figure">
+<img src="img/SCOUT/SPN04.png" alt="SPN04" width="850px"><br/>
+</div>
 <p>SPN02 is a prototype acute myeloyd leukemia composed of 3 clones,
 with one becoming dominant at every sampling. The dominant clone
 harbours a mutant IDH1, a copy number gain of KRAS and a mutant
@@ -251,7 +259,9 @@ generates a mutational signature specific during its exposure.</p>
 <div class="section level3">
 <h3 id="spn05">SPN05<a class="anchor" aria-label="anchor" href="#spn05"></a>
 </h3>
-<p><img src="img%2FSCOUT%2FSPN05.png" alt="SPN05" width="850"><br></p>
+<div class="figure">
+<img src="img/SCOUT/SPN05.png" alt="SPN05" width="850px"><br/>
+</div>
 <p>SPN05 is a prototype mismatch-repair deficient breast cancer composed
 of 5 clones, with three detectable at sampling. The ancestral clone
 harbours a mutant TP53, and a full BRCA2 inactivation by joint mutation
@@ -265,7 +275,9 @@ distribution.</p>
 <div class="section level3">
 <h3 id="spn06">SPN06<a class="anchor" aria-label="anchor" href="#spn06"></a>
 </h3>
-<p><img src="img%2FSCOUT%2FSPN06.png" alt="SPN06" width="850"><br></p>
+<div class="figure">
+<img src="img/SCOUT/SPN06.png" alt="SPN06" width="850px"><br/>
+</div>
 <p>SPN06 is a prototype smoking-associated lung adenocarcinoma, with 6
 clones that compete over time during two lines of treatment. The main
 clonal population is driven by mutant TP53 and STK11, but manifests two
@@ -282,7 +294,9 @@ whereas relapse biopsies are monoclonal.</p>
 <div class="section level3">
 <h3 id="spn07">SPN07<a class="anchor" aria-label="anchor" href="#spn07"></a>
 </h3>
-<p><img src="img%2FSCOUT%2FSPN07.png" alt="SPN07" width="850"><br></p>
+<div class="figure">
+<img src="img/SCOUT/SPN07.png" alt="SPN07" width="850px"><br/>
+</div>
 <p>SPN06 is a prototype glioblastoma with 6 clones that compete over
 time during a single line of treatment. The main clonal population is
 driven by inactivated PTEN (mutation and LOH), but manifests two

@@ -1,4 +1,4 @@
-pandoc: 3.6.3
+pandoc: 3.6.4
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
@@ -6,7 +6,7 @@ articles:
   growth_models: growth_models.html
   infinite_site_model: infinite_site_model.html
   mutations: mutations.html
-  rRACES: rRACES.html
+  ProCESS: ProCESS.html
   run_until: run_until.html
   sample_partition: sample_partition.html
   sampling: sampling.html
@@ -15,7 +15,7 @@ articles:
   three_sampling: three_sampling.html
   time_series: time_series.html
   tissue_simulation: tissue_simulation.html
-last_built: 2025-03-12T19:18Z
+last_built: 2025-04-14T18:33Z
 urls:
-  reference: https://caravagnalab.github.io/rRACES/reference
-  article: https://caravagnalab.github.io/rRACES/articles
+  reference: https://caravagnalab.github.io/ProCESS/reference
+  article: https://caravagnalab.github.io/ProCESS/articles

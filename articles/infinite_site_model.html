@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Infinite Site Model • rRACES</title>
+<title>Infinite Site Model • ProCESS</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -21,7 +21,7 @@
 ">
 <meta property="og:description" content="How to enable/disable the infinite site model
 ">
-<meta property="og:image" content="https://caravagnalab.github.io/rRACES/logo.png">
+<meta property="og:image" content="https://caravagnalab.github.io/ProCESS/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -29,7 +29,7 @@
 
     <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
-    <a class="navbar-brand me-2" href="../index.html">rRACES</a>
+    <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
@@ -40,7 +40,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../articles/rRACES.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/ProCESS.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
@@ -58,7 +58,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/caravagnalab/rRACES/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/caravagnalab/ProCESS/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -74,14 +74,14 @@
       <img src="../logo.png" class="logo" alt=""><h1>Infinite Site Model</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/caravagnalab/rRACES/vignettes/infinite_site_model.Rmd" class="external-link"><code>vignettes/infinite_site_model.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/caravagnalab/ProCESS/vignettes/infinite_site_model.Rmd" class="external-link"><code>vignettes/infinite_site_model.Rmd</code></a></small>
       <div class="d-none name"><code>infinite_site_model.Rmd</code></div>
     </div>
 
     
     
 <blockquote>
-<p><em>Disclaimer:</em> RACES/rRACES internally implements the
+<p><em>Disclaimer:</em> RACES/ProCESS internally implements the
 probability distributions using the C++11 random number distribution
 classes. The standard does not specify their algorithms, and the class
 implementations are left free for the compiler. Thus, the simulation
@@ -168,7 +168,7 @@ that are not each other ancestors.</p>
 <span></span>
 <span><span class="co"># place the mutations on the same samples forest used above</span></span>
 <span><span class="va">phylo_forest2</span> <span class="op">&lt;-</span> <span class="va">m_engine</span><span class="op">$</span><span class="fu">place_mutations</span><span class="op">(</span><span class="va">samples_forest</span>, <span class="fl">1000</span>, <span class="fl">500</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Placing mutations [███████████-----------------------------] 27% [00m:01s] Placing mutations [█████████████████████-------------------] 52% [00m:02s] Placing mutations [█████████████████████████████████-------] 82% [00m:03s] Placing mutations [███████████████████████████████████-----] 86% [00m:04s] Placing mutations [████████████████████████████████████----] 89% [00m:05s] Placing mutations [██████████████████████████████████████--] 93% [00m:06s] Placing mutations [████████████████████████████████████████] 100% [00m:06s] Mutations placed</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Placing mutations [█████████████████████-------------------] 51% [00m:01s] Placing mutations [███████████████████████████████████-----] 86% [00m:02s] Placing mutations [█████████████████████████████████████---] 92% [00m:03s] Placing mutations [████████████████████████████████████████] 100% [00m:03s] Mutations placed</span></span>
 <span></span>
 <span><span class="co"># test whether the infinite sites conditions hold in the new forest</span></span>
 <span><span class="fu">test_infinite_sites_model</span><span class="op">(</span><span class="va">phylo_forest2</span><span class="op">)</span></span>
