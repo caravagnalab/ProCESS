@@ -21,10 +21,10 @@ knitr::opts_chunk$set(
 ```
 
 ```{r, echo=FALSE, results='hide', message=FALSE}
-unlink("rRACES_SAM", recursive = TRUE)
+unlink("ProCESS_SAM", recursive = TRUE)
 ```
 
-> *Disclaimer:* RACES/rRACES internally implements the
+> *Disclaimer:* RACES/ProCESS internally implements the
 > probability distributions using the C++11 random number
 > distribution classes. The standard does not specify their
 > algorithms, and the class implementations are left free
@@ -34,7 +34,7 @@ unlink("rRACES_SAM", recursive = TRUE)
 > those obtained by the reader.
 
 Once a phylogenetic forest has been computed, as detailed in
-`vignette("mutations")`, rRACES can simulate the sequencing of the
+`vignette("mutations")`, ProCESS can simulate the sequencing of the
 samples in the forest and return the observed data.
 
 ### Sequencing Simulation
@@ -43,7 +43,7 @@ Let us reload the phylogenetic forest produced in
 `vignette("mutations")`.
 
 ```{r}
-library(rRACES)
+library(ProCESS)
 
 phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
 
@@ -89,7 +89,7 @@ and `<sample name> VAF`, respectively).
 
 ### Plotting Sequencing Data
 
-rRACES/RACE provides functions to plot the Variant Allele
+ProCESS/RACE provides functions to plot the Variant Allele
 Frequency (VAF), the B-Allele Frequency (BAF),
 and the Depth Ratio (DR) of a sample.
 
@@ -136,25 +136,25 @@ plot_VAF_marginals(f_seq, samples = c("S_1_1", "S_1_2", "S_2_2"),
 
 ### Saving the Simulated Reads
 
-rRACES/RACE can also save the simulated reads in the SAM format
+ProCESS/RACE can also save the simulated reads in the SAM format
 (see [@10.1093/bioinformatics/btp352]). By setting the optional
 parameter `write_SAM` to `TRUE`, the function `simulate_seq()`
-creates the directory `rRACES_SAM` and saves the SAM files in it.
+creates the directory `ProCESS_SAM` and saves the SAM files in it.
 Each file is named after one of the reference genome chromosomes
 and contains the simulated reads. The reads are split into read
 groups corresponding to the collected samples.
 
 ```{r, echo=FALSE, results='hide', message=FALSE}
 unlink("SAM_0.7", recursive = TRUE)
-unlink("rRACES_SAM", recursive = TRUE)
+unlink("ProCESS_SAM", recursive = TRUE)
 ```
 
 ```{r}
 seq_results <- simulate_seq(phylo_forest, coverage = 2.5, write_SAM = TRUE)
 
-sam_files <- list.files("rRACES_SAM/")
+sam_files <- list.files("ProCESS_SAM/")
 
-ex_file <- paste("rRACES_SAM/", sam_files[1], sep = "")
+ex_file <- paste("ProCESS_SAM/", sam_files[1], sep = "")
 for (line in readLines(ex_file, n = 10)) {
   cat(paste(line, "\n"))
 }
@@ -165,7 +165,7 @@ of *all* the samples. The command-line tools [`samtools`](http://www.htslib.org)
 split the reads by sample.
 
 ```{bash, eval = FALSE}
-foo@bar % samtools split  -f "%*_%\!.sam" rRACES_SAM/chr_22.sam
+foo@bar % samtools split  -f "%*_%\!.sam" ProCESS_SAM/chr_22.sam
 foo@bar % ls chr_22_*
 chr_22_S_1_1.sam        chr_22_S_1_2.sam        chr_22_S_2_1.sam        chr_22_S_2_2.sam
 ```
@@ -186,7 +186,7 @@ More formally, it is the ratio between the number of tumour cells in the sample
 and that of all the sample cells, either tumour or normal (i.e., cells
 having germline and pre-neoplastic mutations).
 
-rRACES can simulate different sample purity in sequencing
+ProCESS can simulate different sample purity in sequencing
 simulations.
 
 ```{r}
@@ -274,13 +274,13 @@ seq_results <- simulate_seq(phylo_forest, chromosomes = c("22", "X"),
 Users may want to simulate sequencing in multiple steps,
 for instance, by splitting it by chromosome or reaching
 the aimed coverage with different simulations.
-However, rRACES prevents successive writing in the same
+However, ProCESS prevents successive writing in the same
 directory by default. The Boolean parameter `update_SAM`
 allows multiple writing in the same directory.
 
 ```{r}
 # the default SAM directory already exists
-sam_files <- list.files("rRACES_SAM/")
+sam_files <- list.files("ProCESS_SAM/")
 
 # since the default save directory already exists, any call to
 # `simulate_seq` throws an error
@@ -305,12 +305,12 @@ in a file whose name is the first available, having the format
 `"chr_{chromosome name}_{natural number}.sam"`.
 
 ```{r}
-list.files("rRACES_SAM/")
+list.files("ProCESS_SAM/")
 ```
 
 ```{r, echo=FALSE, results='hide', message=FALSE}
 unlink("SAM_0.7", recursive = TRUE)
-unlink("rRACES_SAM", recursive = TRUE)
+unlink("ProCESS_SAM", recursive = TRUE)
 unlink("demo", recursive = TRUE)
 unlink("phylo_forest.sff")
 unlink("samples_forest.sff")

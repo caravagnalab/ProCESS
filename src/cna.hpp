@@ -1,5 +1,5 @@
 /*
- * This file is part of the rRACES (https://github.com/caravagnalab/rRACES/).
+ * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
  * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,8 +15,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __RRACES_CNA__
-#define __RRACES_CNA__
+#ifndef __PROCESS_CNA__
+#define __PROCESS_CNA__
 
 #include <string>
 
@@ -95,4 +95,4 @@ public:
 
 RCPP_EXPOSED_CLASS(CNA)
 
-#endif // __RRACES_CNA__
+#endif // __PROCESS_CNA__

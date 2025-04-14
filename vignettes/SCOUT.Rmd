@@ -17,10 +17,10 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(rRACES)
+library(ProCESS)
 ```
 
-The Simulated Cohort of Universal Tumours (SCOUT) is a cohort generated with rRACES, containing prototypical tumours with matched sequencing data. As in other fields of Machine Learning, the intent of SCOUT is to become a standard to benchmark algorithms for:
+The Simulated Cohort of Universal Tumours (SCOUT) is a cohort generated with ProCESS, containing prototypical tumours with matched sequencing data. As in other fields of Machine Learning, the intent of SCOUT is to become a standard to benchmark algorithms for:
 
 -   mutation calling;
 -   copy number alteration calling;

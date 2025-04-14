@@ -1,5 +1,5 @@
 /*
- * This file is part of the rRACES (https://github.com/caravagnalab/rRACES/).
+ * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
  * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,8 +15,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __RRACES_UTILITY__
-#define __RRACES_UTILITY__
+#ifndef __PROCESS_UTILITY__
+#define __PROCESS_UTILITY__
 
 #include <string>
 #include <filesystem>
@@ -26,7 +26,7 @@
 #include <allele.hpp>
 #include <archive.hpp>
 
-std::filesystem::path get_tmp_dir_path(const std::string& base_name="rRACES");
+std::filesystem::path get_tmp_dir_path(const std::string& base_name="ProCESS");
 
 RACES::Mutations::AlleleId get_allele_id(const SEXP allele_id,
                                          const std::string& parameter_name);
@@ -69,4 +69,4 @@ void raise_error(const RACES::Archive::WrongFileFormatDescr& exception,
 void raise_error(const RACES::Archive::WrongFileFormatVersion& exception,
                  const std::string& file_description);
 
-#endif // __RRACES_UTILITY__
+#endif // __PROCESS_UTILITY__

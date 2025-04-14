@@ -1,4 +1,4 @@
-## This file is part of the rRACES (https://github.com/caravagnalab/rRACES/).
+## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
 ## Copyright (C) 2023 - Giulio Caravagna <gcaravagna@units.it>
 ##
 ## This program is free software: you can redistribute it and/or modify

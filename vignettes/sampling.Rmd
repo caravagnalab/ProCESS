@@ -19,15 +19,15 @@ knitr::opts_chunk$set(
 )
 ```
 
-> *Disclaimer:* RACES/rRACES internally implements the probability
+> *Disclaimer:* RACES/ProCESS internally implements the probability
 > distributions using the C++11 random number distribution classes whose
 > algorithms are not defined by the standard. Thus, the simulation
-> depends on the compiler used to compile rRACES, and because of that,
+> depends on the compiler used to compile ProCESS, and because of that,
 > the results reported in this article may differ from those obtained by
 > the reader.
 
 Once one has familiarised on how a tumour evolution simulation can be
-programmed using rRACES (see `vignette("tissue_simulation")`), the next
+programmed using ProCESS (see `vignette("tissue_simulation")`), the next
 step is to augment the simulation with sampling of tumour cells. This
 mimics a realistic experimental design where we gather tumour sequencing
 data.
@@ -47,7 +47,7 @@ consider:
 We consider a simple monoclonal model, without epimutants.
 
 ```{r, eval=TRUE}
-library(rRACES)
+library(ProCESS)
 
 # set the seed of the random number generator
 set.seed(0)
@@ -233,7 +233,7 @@ Since mutant start has been randomised by `SpatialSimulation$choose_cell_in()`,
 we have no exact idea of where to sample to obtain for example, $100$ of
 its cells. We can look visually at the simulation, but this is slow.
 
-rRACES provides a `SpatialSimulation$search_sample()` function to sample
+ProCESS provides a `SpatialSimulation$search_sample()` function to sample
 bounding boxes that contain a desired number of cells. The function
 takes in input:
 
@@ -303,7 +303,7 @@ plot_forest(forest) %>%
 
 ## Randomised cell sampling (Liquid biopsy)
 
-rRACES supports randomized cell sampling over the full tissue or a
+ProCESS supports randomized cell sampling over the full tissue or a
 rectangle thereof.
 
 ```{r}

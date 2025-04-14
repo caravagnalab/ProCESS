@@ -1,5 +1,5 @@
 /*
- * This file is part of the rRACES (https://github.com/caravagnalab/rRACES/).
+ * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
  * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,8 +15,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __RRACES_SAMPLED_CELL__
-#define __RRACES_SAMPLED_CELL__
+#ifndef __PROCESS_SAMPLED_CELL__
+#define __PROCESS_SAMPLED_CELL__
 
 #include <string>
 
@@ -57,4 +57,4 @@ public:
 
 RCPP_EXPOSED_CLASS(SampledCell)
 
-#endif // __RRACES_SAMPLED_CELL__
+#endif // __PROCESS_SAMPLED_CELL__

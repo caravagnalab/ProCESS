@@ -1,5 +1,5 @@
 /*
- * This file is part of the rRACES (https://github.com/caravagnalab/rRACES/).
+ * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
  * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,8 +15,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __RRACES_LOGICS_IMPL__
-#define __RRACES_LOGICS_IMPL__
+#ifndef __PROCESS_LOGICS_IMPL__
+#define __PROCESS_LOGICS_IMPL__
 
 #include <Rcpp.h>
 
@@ -86,4 +86,4 @@ RCPP_EXPOSED_WRAP(Logics::Relation);
 RCPP_EXPOSED_WRAP(Logics::Formula);
 RCPP_EXPOSED_AS(Logics::Formula);
 
-#endif // __RRACES_LOGICS_IMPL__
+#endif // __PROCESS_LOGICS_IMPL__

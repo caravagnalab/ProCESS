@@ -1,5 +1,5 @@
 /*
- * This file is part of the rRACES (https://github.com/caravagnalab/rRACES/).
+ * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
  * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -130,7 +130,7 @@ get_position_in_tissue(const std::vector<RACES::Mutants::Evolutions::AxisPositio
     return {position[0], position[1]};
   }
 
-  ::Rf_error("rRACES supports only 2 dimensional space so far");
+  ::Rf_error("ProCESS supports only 2 dimensional space so far");
 }
 
 RACES::Mutants::RectangleSet
@@ -743,7 +743,7 @@ Rcpp::List SpatialSimulation::get_species() const
         switch_rates[i] = species_switch_rates.begin()->second;
         break;
       default:
-        ::Rf_error("rRACES does not support multiple promoters");
+        ::Rf_error("ProCESS does not support multiple promoters");
     }
 
     ++i;

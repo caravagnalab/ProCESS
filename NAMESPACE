@@ -1,4 +1,4 @@
-useDynLib(rRACES, .registration=TRUE)
+useDynLib(ProCESS, .registration=TRUE)
 importFrom("dplyr", "%>%", "bind_rows")
 #importFrom("stats", "time")
 importFrom("rlang", ".data")

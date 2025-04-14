@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-> *Disclaimer:* RACES/rRACES internally implements the
+> *Disclaimer:* RACES/ProCESS internally implements the
 > probability distributions using the C++11 random number
 > distribution classes. The standard does not specify their
 > algorithms, and the class implementations are left free
@@ -31,7 +31,7 @@ knitr::opts_chunk$set(
 We build a tumour with three populations branching.
 
 ```{r, fig.height=4, fig.width=3}
-library(rRACES)
+library(ProCESS)
 
 # set the seed of the random number generator
 set.seed(0)

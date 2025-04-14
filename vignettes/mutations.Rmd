@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-> *Disclaimer:* RACES/rRACES internally implements the
+> *Disclaimer:* RACES/ProCESS internally implements the
 > probability distributions using the C++11 random number
 > distribution classes. The standard does not specify their
 > algorithms, and the class implementations are left free
@@ -29,7 +29,7 @@ knitr::opts_chunk$set(
 > the results reported in this article may differ from
 > those obtained by the reader.
 
-rRACES/RACES can simulate genomic mutations on the cells represented in
+ProCESS/RACES can simulate genomic mutations on the cells represented in
 a `SamplesForest` according to the specified SBS and indel mutational
 signatures (see [@alexandrov2020repertoire]).
 This process is performed by the class `MutationEngine` which also takes
@@ -44,14 +44,14 @@ corresponding two signature indices. The function `MutationEngine()`
 performs all these steps in a single call.
 
 This function is quite flexible and it allows to customize the mutation
-engine in many ways. However, the vast majority of rRACES users aim a
+engine in many ways. However, the vast majority of ProCESS users aim a
 standard setup for instance involving the human genome.
 
-Because of this, rRACES provides some predefined setups.
+Because of this, ProCESS provides some predefined setups.
 Their list can be obtained by invoking the function `get_mutation_engine_codes()`.
 
 ```{r}
-library(rRACES)
+library(ProCESS)
 
 get_mutation_engine_codes()
 ```
@@ -176,7 +176,7 @@ producing a genome in which two alleles contain the placed SNV. Instead, the
 latter snippet requires a whole genome doubling event and, then, places the
 SNV yielding a single occurrence of the SNV in the final genome.
 
-As far as the SNVs and indels concern, rRACES provides the users with a more
+As far as the SNVs and indels concern, ProCESS provides the users with a more
 compact and, sometimes, convenient approach. The mutation engine stores a list
 of known driver mutations and labels each of them by a code which can be used
 during the mutant declaration. The corresponding data frame can be obtained
@@ -278,7 +278,7 @@ get_available_tumours_in(setup_code = "demo") %>% head()
 
 #### Germline Mutations
 
-rRACES allows users to apply the germline mutations of one of
+ProCESS allows users to apply the germline mutations of one of
 the subjects available in the germline data provided in building
 the mutation engine. This feature will enable users to simulate
 a specific cancer type's evolution on an individual with the
@@ -316,7 +316,7 @@ m_engine$get_active_germline()
 Users can change the germline subject using the method
 `MutationEngine$set_germline_subject()`.
 
-When a subject is selected for the first time, rRACES builds
+When a subject is selected for the first time, ProCESS builds
 a binary representation of the subject genome, saving
 it for future use. This step may take a few minutes. However,
 all the successive selections of the same subject directly

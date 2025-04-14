@@ -1,5 +1,5 @@
 /*
- * This file is part of the rRACES (https://github.com/caravagnalab/rRACES/).
+ * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
  * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -146,7 +146,7 @@ RCPP_MODULE(Sequencing){
 //' @param insert_size_stddev The insert size standard deviation.
 //'   (default: `10`).
 //' @param output_dir The SAM output directory (default:
-//'   `"rRACES_SAM"`).
+//'   `"ProCESS_SAM"`).
 //' @param write_SAM A Boolean flag to enable/disable SAM generation
 //'   (default: `FALSE`).
 //' @param update_SAM Update the output directory (default: `FALSE`).
@@ -194,7 +194,7 @@ RCPP_MODULE(Sequencing){
                         _["coverage"] = 10,
                         _["read_size"] = 150, _["insert_size_mean"] = 0,
                         _["insert_size_stddev"] = 10,
-                        _["output_dir"] = "rRACES_SAM",
+                        _["output_dir"] = "ProCESS_SAM",
                         _["write_SAM"] = false, _["update_SAM"] = false,
                         _["cell_labelling"] = R_NilValue, _["purity"] = 1,
                         _["with_normal_sample"] = true,
@@ -226,7 +226,7 @@ RCPP_MODULE(Sequencing){
 //' @param insert_size_stddev The insert size standard deviation.
 //'   (default: `10`).
 //' @param output_dir The SAM output directory (default:
-//'   `"rRACES_normal_SAM"`).
+//'   `"ProCESS_normal_SAM"`).
 //' @param write_SAM A Boolean flag to enable/disable SAM generation
 //'   (default: `TRUE`).
 //' @param update_SAM Update the output directory (default: `FALSE`).
@@ -268,7 +268,7 @@ RCPP_MODULE(Sequencing){
                         _["coverage"] = 10,
                         _["read_size"] = 150, _["insert_size_mean"] = 0,
                         _["insert_size_stddev"] = 10,
-                        _["output_dir"] = "rRACES_normal_SAM",
+                        _["output_dir"] = "ProCESS_normal_SAM",
                         _["write_SAM"] = true, _["update_SAM"] = false,
                         _["with_preneoplastic"] = true,
                         _["filename_prefix"] = "chr_",

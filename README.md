@@ -1,24 +1,25 @@
 
-# rRACES <a href="caravagnalab.github.io/rRACES"><img src="man/figures/logo.png" align="right" height="120" alt="" /></a>
+# ProCESS <a href="caravagnalab.github.io/ProCESS"><img src="man/figures/logo.png" align="right" height="120" alt="" /></a>
 
 <!-- badges: start -->
 <!--
-[![R-CMD-check](https://github.com/caravagnalab/rRACES/workflows/R-CMD-check/badge.svg)](https://github.com/caravagnalab/rRACES/actions)
-[![pkgdown](https://github.com/caravagnalab/rRACES/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/caravagnalab/rRACES/actions/workflows/pkgdown.yaml)
+[![R-CMD-check](https://github.com/caravagnalab/ProCESS/workflows/R-CMD-check/badge.svg)](https://github.com/caravagnalab/ProCESS/actions)
+[![pkgdown](https://github.com/caravagnalab/ProCESS/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/caravagnalab/ProCESS/actions/workflows/pkgdown.yaml)
 -->
 <!-- badges: end -->
 
-`rRACES` is the R wrapper for
+`ProCESS` stands for Programmable Cancer Evolution Spatial Simulator.
+It is an R wrapper for
 [RACES](https://github.com/albertocasagrande/RACES), a C++ tumour
-evolution simulator.
+evolution simulator, and provides additional plotting functions. 
 
 #### Help and support
 
-## [![rRACES GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-https://caravagnalab.github.io/rRACES/-yellow.svg)](https://caravagnalab.github.io/rRACES/)
+## [![ProCESS GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-https://caravagnalab.github.io/ProCESS/-yellow.svg)](https://caravagnalab.github.io/ProCESS/)
 
 ### Installation
 
-In order to install the development version of `rRACES`, you need:
+In order to install the development version of `ProCESS`, you need:
 
 * [R and Rtools](https://cran.r-project.org)
 
@@ -29,7 +30,7 @@ In order to install the development version of `rRACES`, you need:
 When the requirements have been satisfied, issue the R command:
 
 ``` r
-devtools::install_github("caravagnalab/rRACES")
+devtools::install_github("caravagnalab/ProCESS")
 ```
 
 

@@ -7,8 +7,11 @@
    viewBox="0 0 210 297"
    version="1.1"
    id="svg1"
-   inkscape:version="1.3-alpha (95f74fb, 2023-03-31)"
+   inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
    sodipodi:docname="logo.svg"
+   inkscape:export-filename="logo.png"
+   inkscape:export-xdpi="600"
+   inkscape:export-ydpi="600"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -24,12 +27,12 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      inkscape:zoom="1.0305351"
-     inkscape:cx="98.492519"
+     inkscape:cx="98.977706"
      inkscape:cy="206.68874"
-     inkscape:window-width="1419"
+     inkscape:window-width="1424"
      inkscape:window-height="735"
-     inkscape:window-x="0"
-     inkscape:window-y="25"
+     inkscape:window-x="376"
+     inkscape:window-y="100"
      inkscape:window-maximized="0"
      inkscape:current-layer="layer1" />
   <defs
@@ -50,7 +53,7 @@
     <text
        id="text2905"
        y="29.848736"
-       x="30.536617"
+       x="29.509644"
        style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:10.6247px;line-height:1.25;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.872772;shape-rendering:crispEdges"
        xml:space="preserve"
        inkscape:export-xdpi="300"
@@ -58,9 +61,9 @@
        inkscape:export-filename="/Users/gcaravagna/GitHub/TAPACLOTH/logo.png"><tspan
          style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:10.6247px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Light';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.872772"
          y="29.848736"
-         x="30.536617"
+         x="29.509644"
          id="tspan2903"
-         sodipodi:role="line">rRACES</tspan></text>
+         sodipodi:role="line">ProCESS</tspan></text>
     <path
        style="opacity:0.235294;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.00700551;stroke-dasharray:none"
        d="m 25.419542,49.83699 -0.38219,-0.764657 0.38701,-0.773785 0.38701,-0.77378 h 1.112037 1.112043 l 0.38701,0.77378 0.387011,0.773785 -0.382191,0.764657 -0.38219,0.764662 h -1.121607 -1.1216 z"

@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 > Refer to `vignette("tissue_simulation")` for an introduction of the
 > subject.
 
-> *Disclaimer:* RACES/rRACES internally implements the
+> *Disclaimer:* RACES/ProCESS internally implements the
 > probability distributions using the C++11 random number
 > distribution classes. The standard does not specify their
 > algorithms, and the class implementations are left free
@@ -33,7 +33,7 @@ knitr::opts_chunk$set(
 > the results reported in this article may differ from
 > those obtained by the reader.
 
-rRACES implements a first order unquantified logic having variables
+ProCESS implements a first order unquantified logic having variables
 representing the cardinality of the species, the number of events
 fired in a species (being duplications, deaths, or switches), and
 the simulation time. These variables and reals values are summed by
@@ -61,7 +61,7 @@ When the parameter is the string `"Time"`, the elapsed simulation time
 variable is returned.
 
 ```{r}
-library(rRACES)
+library(ProCESS)
 
 # set the seed of the random number generator
 set.seed(0)

@@ -3,7 +3,7 @@ title: "Growth Models"
 output: rmarkdown::html_vignette
 description: >
   What is a growth model and which growth models are
-  implemented by rRACES
+  implemented by ProCESS
 vignette: >
   %\VignetteIndexEntry{Growth Models}
   %\VignetteEncoding{UTF-8}
@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-> *Disclaimer:* RACES/rRACES internally implements the
+> *Disclaimer:* RACES/ProCESS internally implements the
 > probability distributions using the C++11 random number
 > distribution classes. The standard does not specify their
 > algorithms, and the class implementations are left free
@@ -29,7 +29,7 @@ knitr::opts_chunk$set(
 > the results reported in this article may differ from
 > those obtained by the reader.
 
-rRACES/RACES simulate the tumour growth according to two alternative models:
+ProCESS/RACES simulate the tumour growth according to two alternative models:
 the "border"-growth model and the homogeneous-growth model.
 
 The former exclusively admits duplication of cells that have space to duplicate
@@ -52,7 +52,7 @@ First of all we need to create a new `SpatialSimulation` object and
 set `border_growth_model` to `FALSE`.
 
 ```{r}
-library(rRACES)
+library(ProCESS)
 
 set.seed(0)
 

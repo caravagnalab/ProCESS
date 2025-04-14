@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 > *Note:* This article presents advanced topics on sequencing simulation.
 > Refer to `vignette("sequencing")` for an introduction on the subject.
 
-> *Disclaimer:* RACES/rRACES internally implements the
+> *Disclaimer:* RACES/ProCESS internally implements the
 > probability distributions using the C++11 random number
 > distribution classes. The standard does not specify their
 > algorithms, and the class implementations are left free
@@ -48,7 +48,7 @@ Let us assume to have built the phylogenetic forest `phylo_forest`
 as detailed in `vignette("mutations")`.
 
 ```{r, echo=FALSE, results='hide', message=FALSE}
-library(rRACES)
+library(ProCESS)
 
 phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
 ```

@@ -1,4 +1,4 @@
-## This file is part of the rRACES (https://github.com/caravagnalab/rRACES/).
+## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
 ## Copyright (C) 2023-2024 - Alberto Casagrande <alberto.casagrande@uniud.it>
 ##
 ## This program is free software: you can redistribute it and/or modify
@@ -372,7 +372,7 @@
 
     cli::cli_rule(
       left = paste(
-        crayon::bgYellow(" rRACES "),
+        crayon::bgYellow(" ProCESS "),
         sim_status, sam_status, mut_status,
         object$get_name()
       ),

@@ -1,5 +1,5 @@
 /*
- * This file is part of the rRACES (https://github.com/caravagnalab/rRACES/).
+ * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
  * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -845,10 +845,10 @@ RCPP_MODULE(Mutations){
 //' indel_url <- paste0("https://cancer.sanger.ac.uk/signatures/documents/",
 //'                     "2121/COSMIC_v3.4_ID_GRCh37.txt")
 //' drivers_url <- paste0("https://raw.githubusercontent.com/",
-//'                       "caravagnalab/rRACES/main/inst/extdata/",
+//'                       "caravagnalab/ProCESS/main/inst/extdata/",
 //'                       "driver_mutations_hg19.csv")
 //' passenger_CNAs_url <- paste0("https://raw.githubusercontent.com/",
-//'                              "caravagnalab/rRACES/main/inst/extdata/",
+//'                              "caravagnalab/ProCESS/main/inst/extdata/",
 //'                              "passenger_CNAs_hg19.csv")
 //' germline_url <- paste0("https://zenodo.org/records/13166780/files/",
 //'                        "germline_data_demo.tar.gz")

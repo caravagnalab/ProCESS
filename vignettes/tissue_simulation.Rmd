@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-> *Disclaimer:* RACES/rRACES internally implements the
+> *Disclaimer:* RACES/ProCESS internally implements the
 > probability distributions using the C++11 random number
 > distribution classes. The standard does not specify their
 > algorithms, and the class implementations are left free
@@ -47,7 +47,7 @@ To perform a simulation a new object of class `SpatialSimulation` must be
 created.
 
 ```{r, eval=FALSE}
-library(rRACES)
+library(ProCESS)
 
 # Default constructor
 sim <- SpatialSimulation()
@@ -60,7 +60,7 @@ million cells - and sets the name of the simulation to be
 A simulation custom name can be specified as it follows.
 
 ```{r, eval = TRUE}
-library(rRACES)
+library(ProCESS)
 
 # set the seed of the random number generator
 set.seed(0)
@@ -341,7 +341,7 @@ sim$get_cells(c(500, 500), c(505, 505), c("A", "B"), c("-"))  %>% head()
 
 ### Evolving new species
 
-rRACES can select cells from the tissue, randomly for every mutant, or
+ProCESS can select cells from the tissue, randomly for every mutant, or
 in a constrained tissue area.
 
 ```{r}

@@ -1,5 +1,5 @@
 /*
- * This file is part of the rRACES (https://github.com/caravagnalab/rRACES/).
+ * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
  * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,8 +15,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __RRACES_SEQ_SIMULATION__
-#define __RRACES_SEQ_SIMULATION__
+#ifndef __PROCESS_SEQ_SIMULATION__
+#define __PROCESS_SEQ_SIMULATION__
 
 #include <Rcpp.h>
 
@@ -52,4 +52,4 @@ Rcpp::List  simulate_normal_seq(const PhylogeneticForest& forest, SEXP& sequence
                                 const bool& include_non_sequenced_mutations,
                                 const SEXP& seed);
 
-#endif // __RRACES_SEQ_SIMULATION__
+#endif // __PROCESS_SEQ_SIMULATION__

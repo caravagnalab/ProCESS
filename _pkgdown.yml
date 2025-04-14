@@ -1,12 +1,12 @@
-url: https://caravagnalab.github.io/rRACES/
+url: https://caravagnalab.github.io/ProCESS/
 template:
   bootstrap: 5
 
 repo:
   url:
-    home: https://github.com/caravagnalab/rRACES/
-    source: https://github.com/caravagnalab/rRACES
-    issue: https://github.com/caravagnalab/rRACES/issues
+    home: https://github.com/caravagnalab/ProCESS/
+    source: https://github.com/caravagnalab/ProCESS
+    issue: https://github.com/caravagnalab/ProCESS/issues
     user: https://github.com/caravagnalab
 
 authors:

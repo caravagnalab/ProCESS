@@ -1,8 +1,8 @@
 ---
-title: "rRACES"
+title: "ProCESS"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{rRACES}
+  %\VignetteIndexEntry{ProCESS}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-rRACES wraps the [RACES](https://github.com/albertocasagrande/RACES) simulation
+ProCESS wraps the [RACES](https://github.com/albertocasagrande/RACES) simulation
 and data-generation engine by using the
 [R/C++ Rcpp interface](https://www.rcpp.org/), making it easy to "program"
 stochastic tumour evolution.
@@ -23,11 +23,11 @@ stochastic tumour evolution.
 
 <img src="img/banner.png" alt="High-level pipeline" width="850"/><br>
 
-The high-level overview of pipeline of rRACES is a three-steps process, where:
+The high-level overview of pipeline of ProCESS is a three-steps process, where:
 
 1. a discrete tissue is first simulated, with distinct clones defined by
    stochastic rates of growth and death. These compete to colonise the tissue
-   in a standard stochastic birth-death process, which in rRACES is empowered
+   in a standard stochastic birth-death process, which in ProCESS is empowered
    by a time-varying structure that allows weasily modelling of complex
    evolutionary forces that vary over time (e.g., therapy-induced negative
    selection). The tissue can be sampled at multiple time-points and in
@@ -36,7 +36,7 @@ The high-level overview of pipeline of rRACES is a three-steps process, where:
 2. from the sampled cells, the simulated phylogenetic history of the tumour
    can be extracted. The distance among the involved cells will represent the
    lineage history of the simulated clones, and mutational processes can be
-   used to attach genomes to each simulated cells. rRACES supports standard
+   used to attach genomes to each simulated cells. ProCESS supports standard
    germline and somatic mutations, including single-nucleotide variants (SNVs),
    insertion-deletions (indels) and copy number alterations (CNAs). For SNVs
    and indels time-varying mutational signatures can also be included.
@@ -44,13 +44,13 @@ The high-level overview of pipeline of rRACES is a three-steps process, where:
 3. from the simulated phylogenetic history of the tumour it is possible to
    generate tumour-matched-normal synthetic data for benchmarking
    bioinformatics tools, or to infer parameters against real sequencing data.
-   rRACES output include common VCF formats, as well as low-level SAM
+   ProCESS output include common VCF formats, as well as low-level SAM
    outputs that can be used for aligment and downstream analysis. Every
    simulated sample can be assigned custom coverage and purity.
 
 ## Main features
 
-The rRACES engine has a number of features, the most relevant are:
+The ProCESS engine has a number of features, the most relevant are:
 
 1. cells are associated with species that proliferate in a stochastic fashion
    on a 2D lattice;
@@ -84,7 +84,7 @@ The rRACES engine has a number of features, the most relevant are:
 
 <img src="img/short.png" alt="High-level pipeline" width="850"/><br>
 
-A rRACES simulation follows the steps (some required, some optional) that we
+A ProCESS simulation follows the steps (some required, some optional) that we
 disucssd below. The state of the simulation can be saved (and resumed) at
 several time-points.
 
@@ -123,4 +123,4 @@ that gives the user the flexibility to code a custom evolutionary process.
 
 ## Cheatsheet
 
-<a href="https://raw.githubusercontent.com/caravagnalab/rRACES/main/nobuild/rRACES-cheatsheet.pdf?raw=true"><img src="img/cheatsheet.png" height="252" alt="thumbnail of rRACES cheatsheet"/></a>
+<a href="https://raw.githubusercontent.com/caravagnalab/ProCESS/main/nobuild/ProCESS-cheatsheet.pdf?raw=true"><img src="img/cheatsheet.png" height="252" alt="thumbnail of ProCESS cheatsheet"/></a>

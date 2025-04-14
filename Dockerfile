@@ -10,4 +10,4 @@ RUN apt-get update && apt-get upgrade -y \
 
 RUN R -e 'install.packages(c("ggmuller"))'
 
-RUN R -e 'devtools::install_github("caravagnalab/rRACES")'
+RUN R -e 'devtools::install_github("caravagnalab/ProCESS")'

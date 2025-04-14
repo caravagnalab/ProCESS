@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-> *Disclaimer:* RACES/rRACES internally implements the
+> *Disclaimer:* RACES/ProCESS internally implements the
 > probability distributions using the C++11 random number
 > distribution classes. The standard does not specify their
 > algorithms, and the class implementations are left free
@@ -29,7 +29,7 @@ knitr::opts_chunk$set(
 > the results reported in this article may differ from
 > those obtained by the reader.
 
-rRACES/RACES can simulate genomic mutations on the cells represented in
+ProCESS/RACES can simulate genomic mutations on the cells represented in
 a `SamplesForest` according to the specified SBS and indel mutational signatures
 (see `vignette["mutations"]`).
 This task is achieved by the mutation engine which uses two indices on the
@@ -50,7 +50,7 @@ signature files, the driver mutation file, the passenger CNAs file, and
 the germline data directory.
 
 ```{r}
-library("rRACES")
+library("ProCESS")
 
 reference_url <- paste0("https://ftp.ensembl.org/pub/grch37/release-111/",
                         "fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.",
@@ -63,11 +63,11 @@ indel_url <- paste0("https://cancer.sanger.ac.uk/signatures/documents/",
                     "2121/COSMIC_v3.4_ID_GRCh37.txt")
 
 drivers_url <- paste0("https://raw.githubusercontent.com/",
-                      "caravagnalab/rRACES/main/inst/extdata/",
+                      "caravagnalab/ProCESS/main/inst/extdata/",
                       "driver_mutations_hg19.csv")
 
 passenger_cnas_url <- paste0("https://raw.githubusercontent.com/",
-                             "caravagnalab/rRACES/main/inst/extdata/",
+                             "caravagnalab/ProCESS/main/inst/extdata/",
                              "passenger_CNAs_hg19.csv")
 
 germline_url <- paste0("https://zenodo.org/records/13166780/files/",

@@ -1,5 +1,5 @@
 /*
- * This file is part of the rRACES (https://github.com/caravagnalab/rRACES/).
+ * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
  * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,8 +15,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __RRACES_PHYLOGENETIC_FOREST__
-#define __RRACES_PHYLOGENETIC_FOREST__
+#ifndef __PROCESS_PHYLOGENETIC_FOREST__
+#define __PROCESS_PHYLOGENETIC_FOREST__
 
 #include <map>
 #include <vector>
@@ -143,4 +143,4 @@ public:
 
 RCPP_EXPOSED_CLASS(PhylogeneticForest)
 
-#endif // __RRACES_PHYLOGENETIC_FOREST__
+#endif // __PROCESS_PHYLOGENETIC_FOREST__
