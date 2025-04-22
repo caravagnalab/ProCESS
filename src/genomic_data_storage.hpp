@@ -56,7 +56,7 @@ struct GermlineSubject
             & germline_subject.population
             & germline_subject.super_population
             & germline_subject.gender;
-    
+
     return germline_subject;
   }
 };
@@ -115,9 +115,9 @@ public:
                                                  const bool quiet) const;
 
   Rcpp::List get_subject_df(const std::string& subject_name) const;
-  
+
   Rcpp::List get_population_df() const;
-  
+
   Rcpp::List get_population_descriptions_df() const;
 };
 
@@ -149,55 +149,55 @@ class GenomicDataStorage
   std::filesystem::path download_file(const std::string& url) const;
 
   std::filesystem::path retrieve_reference();
-  
+
   static bool is_an_URL(const std::string& reference)
   {
     std::set<std::string> protocols{"ftp", "http"};
-  
+
     for (const auto& protocol : protocols) {
       if (reference.find(protocol)==0) {
         return true;
       }
     }
-  
+
     return false;
   }
 
   template<typename MUTATION_TYPE>
-  std::filesystem::path retrieve_file(const std::string& name)
+  std::filesystem::path retrieve_file(const std::string& name, bool& downloaded)
   {
     auto source = get_signatures_path<MUTATION_TYPE>();
     if (std::filesystem::exists(source)) {
       return source;
     }
-    
+
     source = get_signatures_path<MUTATION_TYPE>(false);
 
-    auto downloaded = is_an_URL(source);
+    downloaded = is_an_URL(source);
     if (!downloaded && !std::filesystem::exists(source)) {
       throw std::runtime_error("Designed " + name + " file \""
                                + to_string(source)
                                + "\" does not exists.");
     }
-  
+
     auto filename = get_signatures_path<MUTATION_TYPE>(downloaded);
     if (std::filesystem::exists(filename)) {
       return filename;
     }
-  
+
     using namespace Rcpp;
-  
+
     Rcout << "Downloading " + name + " file..." << std::endl << std::flush;
-  
+
     auto downloaded_file = download_file(source);
-  
+
     Rcout << name << " file downloaded" << std::endl;
-  
+
     std::filesystem::rename(downloaded_file, filename);
-  
+
     return filename;
   }
-  
+
   std::filesystem::path retrieve_indel_signatures();
 
   std::filesystem::path retrieve_drivers();

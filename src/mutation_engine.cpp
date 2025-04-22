@@ -573,11 +573,11 @@ MutationEngine::build_MutationEngine(const std::string& directory,
 {
   if (setup_code!="") {
     if (directory!="" || reference_source!="" || SBS_signatures_source!=""
-         || drivers_source!="" || passenger_CNAs_source !=""
-         || germline_source !="") {
+         || indel_signatures_source!="" || drivers_source!=""
+         || passenger_CNAs_source !="" || germline_source !="") {
       throw std::domain_error("when \"setup_code\" is NOT provided, the parameters "
                               "\"directory\", \"reference_src\", \"SBS_signatures_src\", "
-                              "\"SBS_signatures_src\", \"passenger_CNAs_src\", and "
+                              "\"indel_signatures_src\", \"passenger_CNAs_src\", and "
                               "\"germline_src\" must be avoided.");
     }
 
@@ -591,7 +591,7 @@ MutationEngine::build_MutationEngine(const std::string& directory,
       || germline_source== "") {
     throw std::domain_error("when \"setup_code\" is NOT provided, the parameters "
                             "\"directory\", \"reference_src\", \"SBS_signatures_src\", "
-                            "\"SBS_signatures_src\", \"passenger_CNAs_src\", and "
+                            "\"indel_signatures_src\", \"passenger_CNAs_src\", and "
                             "\"germline_src\" are mandatory.");
   }
 
@@ -631,7 +631,7 @@ Rcpp::List MutationEngine::get_available_tumour_type(const std::string& setup_co
 
         ++i;
     }
-    
+
     return DataFrame::create(_["type"]=types, _["study"]=studies);
 }
 
@@ -1082,7 +1082,7 @@ std::ostream& show_list(std::ostream& os, ITERATOR it, ITERATOR last, const std:
 
 std::ostream&
 show_driver_mutations(std::ostream& os,
-                      const RACES::Mutations::DriverMutations& driver_mutations, 
+                      const RACES::Mutations::DriverMutations& driver_mutations,
                       const std::string& indent="")
 {
     using namespace RACES::Mutations;
@@ -1111,7 +1111,7 @@ show_driver_mutations(std::ostream& os,
                 throw std::runtime_error("Unsupported driver mutation type.");
         }
     }
-   
+
     return os;
 }
 

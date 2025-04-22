@@ -243,10 +243,8 @@ GenomicDataStorage::GenomicDataStorage(const std::string& directory,
   std::filesystem::create_directory(directory);
 
   retrieve_reference();
-  retrieve_file<RACES::Mutations::SBSType>("SBS");
-  SBS_signatures_downloaded = true;
-  retrieve_file<RACES::Mutations::IDType>("indel");
-  indel_signatures_downloaded = true;
+  retrieve_file<RACES::Mutations::SBSType>("SBS", SBS_signatures_downloaded);
+  retrieve_file<RACES::Mutations::IDType>("indel", indel_signatures_downloaded);
 
   retrieve_drivers();
   retrieve_passenger_CNAs();
@@ -346,7 +344,7 @@ std::filesystem::path GenomicDataStorage::retrieve_reference()
     Environment pkg = Environment::namespace_env("R.utils");
     Function decompress_f = pkg[decomp_found->second];
 
-    decompress_f(_["filename"] = downloaded_file, 
+    decompress_f(_["filename"] = downloaded_file,
                  _["destname"] = to_string(reference_filename));
 
     Rcout << "done" << std::endl;
@@ -363,7 +361,7 @@ std::filesystem::path GenomicDataStorage::retrieve_drivers()
 
   drivers_downloaded = is_an_URL(drivers_src);
   if (!drivers_downloaded && !std::filesystem::exists(drivers_src)) {
-    throw std::runtime_error("Designed driver mutations file \"" 
+    throw std::runtime_error("Designed driver mutations file \""
                              + drivers_src + "\" does not exists.");
   }
 
@@ -389,7 +387,7 @@ std::filesystem::path GenomicDataStorage::retrieve_drivers()
 std::filesystem::path GenomicDataStorage::retrieve_passenger_CNAs()
 {
   passenger_CNAs_downloaded = is_an_URL(passenger_CNAs_src);
-  if (!passenger_CNAs_downloaded 
+  if (!passenger_CNAs_downloaded
        && !std::filesystem::exists(passenger_CNAs_src)) {
     throw std::runtime_error("Designed passenger CNAs file \"" + SBS_signatures_src
                              + "\" does not exists.");
@@ -476,7 +474,7 @@ std::filesystem::path GenomicDataStorage::get_driver_mutations_path() const
 void GenomicDataStorage::save_sources() const
 {
   std::filesystem::path param_file(directory/"sources.csv");
- 
+
   std::ofstream of(directory/"sources.csv");
 
   of << "reference\t" << reference_src << std::endl
