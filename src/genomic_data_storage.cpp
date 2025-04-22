@@ -480,6 +480,7 @@ void GenomicDataStorage::save_sources() const
   std::ofstream of(directory/"sources.csv");
 
   of << "reference\t" << reference_src << std::endl
+     << "indel\t" << indel_signatures_src << std::endl
      << "SBS\t" << SBS_signatures_src << std::endl
      << "drivers\t" << drivers_src << std::endl
      << "passenger_CNAs\t" << passenger_CNAs_src << std::endl
