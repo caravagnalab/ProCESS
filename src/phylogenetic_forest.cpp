@@ -783,24 +783,27 @@ get_bulk_allelic_fragmentation(const RACES::Mutations::PhylogeneticForest::Allel
     size_t row_idx{0};
     for (const auto& [chr_id, chr_allelic_count] : allelic_count) {
         auto a_count_it = chr_allelic_count.begin();
-        auto next_a_count_it = a_count_it;
-        while (++next_a_count_it != chr_allelic_count.end()) {
+        
+        if (a_count_it != chr_allelic_count.end()) {
+            auto next_a_count_it = a_count_it;
+            while (++next_a_count_it != chr_allelic_count.end()) {
+                fill_allelic_bulk_data(a_count_it->second, chr_id,
+                                    a_count_it->first,
+                                    next_a_count_it->first-1, num_of_cells,
+                                    chromosomes, fragment_begins,
+                                    fragment_ends, major_counts,
+                                    minor_counts, ratios, row_idx);
+
+                a_count_it = next_a_count_it;
+            }
+
             fill_allelic_bulk_data(a_count_it->second, chr_id,
-                                   a_count_it->first,
-                                   next_a_count_it->first-1, num_of_cells,
-                                   chromosomes, fragment_begins,
-                                   fragment_ends, major_counts,
-                                   minor_counts, ratios, row_idx);
-
-            a_count_it = next_a_count_it;
+                                a_count_it->first,
+                                chr_map.at(chr_id).size(), num_of_cells,
+                                chromosomes, fragment_begins,
+                                fragment_ends, major_counts,
+                                minor_counts, ratios, row_idx);
         }
-
-        fill_allelic_bulk_data(a_count_it->second, chr_id,
-                               a_count_it->first,
-                               chr_map.at(chr_id).size(), num_of_cells,
-                               chromosomes, fragment_begins,
-                               fragment_ends, major_counts,
-                               minor_counts, ratios, row_idx);
     }
 
     return DataFrame::create(_["chr"]=chromosomes, _["begin"]=fragment_begins,
