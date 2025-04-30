@@ -37,6 +37,9 @@
 
 #include "genomic_data_storage.hpp"
 
+#define ZENODO_ID "15307992"
+
+
 using SIDSpec = RACES::Mutations::MutationSpec<RACES::Mutations::SID>;
 using SID_iterator = std::list<std::list<SIDSpec>::iterator>;
 
@@ -71,13 +74,13 @@ std::map<std::string, MutationEngineSetup> supported_setups{
   {
     "demo",
     {
-      "A demostative set-up", "demo",
+      "A demonstrative set-up", "demo",
       "https://ftp.ensembl.org/pub/grch37/release-111/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.chromosome.22.fa.gz",
       "https://cancer.sanger.ac.uk/signatures/documents/2123/COSMIC_v3.4_SBS_GRCh37.txt",
       "https://cancer.sanger.ac.uk/signatures/documents/2121/COSMIC_v3.4_ID_GRCh37.txt",
       "https://raw.githubusercontent.com/caravagnalab/ProCESS/" GIT_HASH "/inst/extdata/driver_mutations_hg19.csv",
       "https://raw.githubusercontent.com/caravagnalab/ProCESS/" GIT_HASH "/inst/extdata/passenger_CNAs_hg19.csv",
-      "https://zenodo.org/records/13166780/files/germline_data_demo.tar.gz"
+      "https://zenodo.org/records/" ZENODO_ID "/files/germline_data_demo.tar.gz"
     }
   },
   {
@@ -89,7 +92,7 @@ std::map<std::string, MutationEngineSetup> supported_setups{
       "https://cancer.sanger.ac.uk/signatures/documents/2121/COSMIC_v3.4_ID_GRCh37.txt",
       "https://raw.githubusercontent.com/caravagnalab/ProCESS/" GIT_HASH "/inst/extdata/driver_mutations_hg38.csv",
       "https://raw.githubusercontent.com/caravagnalab/ProCESS/" GIT_HASH "/inst/extdata/passenger_CNAs_hg38.csv",
-      "https://zenodo.org/records/13166780/files/germline_data_hg38.tar.gz"
+      "https://zenodo.org/records/" ZENODO_ID "/files/germline_data_hg38.tar.gz"
     }
   },
   {
@@ -101,7 +104,7 @@ std::map<std::string, MutationEngineSetup> supported_setups{
       "https://cancer.sanger.ac.uk/signatures/documents/2121/COSMIC_v3.4_ID_GRCh37.txt",
       "https://raw.githubusercontent.com/caravagnalab/ProCESS/" GIT_HASH "/inst/extdata/driver_mutations_hg19.csv",
       "https://raw.githubusercontent.com/caravagnalab/ProCESS/" GIT_HASH "/inst/extdata/passenger_CNAs_hg19.csv",
-      "https://zenodo.org/records/13166780/files/germline_data_hg19.tar.gz"
+      "https://zenodo.org/records/" ZENODO_ID "/files/germline_data_hg19.tar.gz"
     }
   }
 };
