@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -158,6 +158,9 @@ RCPP_MODULE(Sequencing){
 //'   (default: `1`).
 //' @param with_normal_sample A Boolean flag to enable/disable the
 //'   analysis of a normal sample (default: `TRUE`).
+//' @param preneoplastic_in_normal A Boolean flag to add/remove
+//'   pre-neoplastic mutations in both normal sample and normal
+//'   contaminant cells (default: `FALSE`).
 //' @param filename_prefix The prefix of the output SAM file name
 //'   (default: `"chr_"`).
 //' @param template_name_prefix The template name prefix (default:
@@ -198,6 +201,7 @@ RCPP_MODULE(Sequencing){
                         _["write_SAM"] = false, _["update_SAM"] = false,
                         _["cell_labelling"] = R_NilValue, _["purity"] = 1,
                         _["with_normal_sample"] = true,
+                        _["preneoplastic_in_normal"] = false,
                         _["filename_prefix"] = "chr_",
                         _["template_name_prefix"] = "r",
                         _["include_non_sequenced_mutations"] = false,
@@ -231,7 +235,7 @@ RCPP_MODULE(Sequencing){
 //'   (default: `TRUE`).
 //' @param update_SAM Update the output directory (default: `FALSE`).
 //' @param with_preneoplastic Add the forest pre-neoplastic mutations
-//'   to the sample cells. (default: `TRUE`).
+//'   to the sample cells. (default: `FALSE`).
 //' @param filename_prefix The prefix of the output SAM file name
 //'   (default: `"chr_"`).
 //' @param template_name_prefix The template name prefix (default:
@@ -270,7 +274,7 @@ RCPP_MODULE(Sequencing){
                         _["insert_size_stddev"] = 10,
                         _["output_dir"] = "ProCESS_normal_SAM",
                         _["write_SAM"] = true, _["update_SAM"] = false,
-                        _["with_preneoplastic"] = true,
+                        _["with_preneoplastic"] = false,
                         _["filename_prefix"] = "chr_",
                         _["template_name_prefix"] = "r",
                         _["include_non_sequenced_mutations"] = false,

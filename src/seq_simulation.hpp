@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@ Rcpp::List  simulate_seq(const PhylogeneticForest& forest, SEXP& sequencer,
                          const bool& update_SAM_dir,
                          const SEXP& FACS_labelling_function,
                          const double& purity, const bool& with_normal_sample,
+                         const bool& preneoplastic_in_normal,
                          const std::string& filename_prefix,
                          const std::string& template_name_prefix,
                          const bool& include_non_sequenced_mutations,
