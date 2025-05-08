@@ -396,7 +396,7 @@ simulate_seq(RACES::Mutations::SequencingSimulations::ReadSimulator<>& simulator
 
         if (sequencer_ptr->producing_random_scores()) {
             return simulate_seq<QualityScoreModel>(simulator, sequencer_ptr, mutations_list,
-                                                   chromosome_ids, coverage, normal_sample, 
+                                                   chromosome_ids, coverage, normal_sample,
                                                    purity, base_name, progress_bar_stream,
                                                    seed);
         } else {
@@ -428,8 +428,8 @@ simulate_seq(RACES::Mutations::SequencingSimulations::ReadSimulator<>& simulator
   }
 }
 
-std::binomial_distribution<u_int32_t> get_bin_dist(const int& insert_size_mean,
-                                                   const int& insert_size_stddev)
+std::binomial_distribution<uint32_t> get_bin_dist(const int& insert_size_mean,
+                                                  const int& insert_size_stddev)
 {
     double q = static_cast<double>(insert_size_stddev*insert_size_stddev)/insert_size_mean;
     double p = 1-q;
@@ -445,9 +445,9 @@ std::binomial_distribution<u_int32_t> get_bin_dist(const int& insert_size_mean,
                                  + "the optional parameter \"insert_size_stddev\".");
     }
 
-    u_int32_t t = static_cast<u_int32_t>(insert_size_mean/p);
+    uint32_t t = static_cast<uint32_t>(insert_size_mean/p);
 
-    return std::binomial_distribution<u_int32_t>(t, p);
+    return std::binomial_distribution<uint32_t>(t, p);
 }
 
 template<typename SEQUENCER_CLASS>
