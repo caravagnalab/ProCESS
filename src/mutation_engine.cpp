@@ -722,7 +722,7 @@ get_mutation_spec(std::list<SIDSpec>& c_sids,
             {
                 Rcpp::S4 s4obj( rcpp_list[index] );
                 if ( s4obj.is("Rcpp_Mutation")) {
-                    const auto sid = Rcpp::as<SID>(rcpp_list[index]);
+                    const auto sid = Rcpp::as<SIDMut>(rcpp_list[index]);
 
                     c_sids.push_back(static_cast<SIDSpec>(sid));
 
@@ -873,7 +873,8 @@ struct FilterNonChromosomeSequence : public RACES::IO::FASTA::SequenceFilter
     }
 };
 
-void check_wrong_chromosome_SNV(const std::map<RACES::Mutations::ChromosomeId, SID_iterator>& SNV_partition)
+void check_wrong_chromosome_SNV(const std::map<RACES::Mutations::ChromosomeId,
+                                SID_iterator>& SNV_partition)
 {
   if (SNV_partition.size()>0) {
     std::ostringstream oss;

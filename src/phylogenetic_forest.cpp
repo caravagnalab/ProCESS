@@ -605,7 +605,7 @@ Rcpp::List PhylogeneticForest::get_first_occurrence(const SEXP& mutation) const
     Rcpp::S4 s4obj( mutation );
     if ( s4obj.is("Rcpp_Mutation" ) ) {
       Rcpp::Environment env( s4obj );
-      Rcpp::XPtr<SID> snv_ptr( env.get(".pointer") );
+      Rcpp::XPtr<SIDMut> snv_ptr( env.get(".pointer") );
 
       return ::get_first_occurrence(get_mutation_first_cells(), get_germline_mutations(),
                                     *snv_ptr);
@@ -927,14 +927,14 @@ PhylogeneticForest::get_cell_allelic_fragmentation() const
 }
 
 
-void PhylogeneticForest::set_reference_path(const std::string reference_path)
+void PhylogeneticForest::set_reference_path(const std::filesystem::path reference_path)
 {
   if (!std::filesystem::exists(reference_path)) {
-    throw std::runtime_error("The reference genome file \""+ reference_path
+    throw std::runtime_error("The reference genome file \"" + to_string(reference_path)
                              + "\" does not exists.");
   }
 
-  this->reference_path = std::filesystem::absolute(std::filesystem::path(reference_path));
+  this->reference_path = std::filesystem::absolute(reference_path);
 }
 
 void PhylogeneticForest::save(const std::string& filename,

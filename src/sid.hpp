@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,17 +25,17 @@
 
 #include <Rcpp.h>
 
-class SID : public RACES::Mutations::MutationSpec<RACES::Mutations::SID>
+class SIDMut : public RACES::Mutations::MutationSpec<RACES::Mutations::SID>
 {
 
-    SID(const RACES::Mutations::ChromosomeId& chromosome_id,
-        const RACES::Mutations::ChrPosition& chromosomic_position,
-        const RACES::Mutations::AlleleId allele_id,
-        const std::string& ref, const std::string& alt,
-        const std::string& cause="");
+    SIDMut(const RACES::Mutations::ChromosomeId& chromosome_id,
+           const RACES::Mutations::ChrPosition& chromosomic_position,
+           const RACES::Mutations::AlleleId allele_id,
+           const std::string& ref, const std::string& alt,
+           const std::string& cause="");
 
 public:
-    SID();
+    SIDMut();
 
     inline std::string get_chromosome() const
     {
@@ -64,18 +64,18 @@ public:
     void show() const;
 
     static
-    SID build_SNV(const SEXP chromosome_name,
-                  const SEXP position_in_chromosome,
-                  const SEXP alt_base, const SEXP ref_base,
-                  const SEXP allele_id, const SEXP cause);
+    SIDMut build_SNV(const SEXP chromosome_name,
+                     const SEXP position_in_chromosome,
+                     const SEXP alt_base, const SEXP ref_base,
+                     const SEXP allele_id, const SEXP cause);
 
     static
-    SID build_SID(const SEXP chromosome_name,
-                  const SEXP position_in_chromosome,
-                  const SEXP alt_base, const SEXP ref_base,
-                  const SEXP allele_id, const SEXP cause);
+    SIDMut build_SID(const SEXP chromosome_name,
+                     const SEXP position_in_chromosome,
+                     const SEXP alt_base, const SEXP ref_base,
+                     const SEXP allele_id, const SEXP cause);
 };
 
-RCPP_EXPOSED_CLASS(SID);
+RCPP_EXPOSED_CLASS(SIDMut);
 
 #endif // __PROCESS_SID__

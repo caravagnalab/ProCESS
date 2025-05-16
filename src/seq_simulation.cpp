@@ -242,7 +242,7 @@ apply_FACS_labels(std::list<RACES::Mutations::SampleGenomeMutations>& sample_mut
     }
 }
 
-std::string
+std::filesystem::path
 get_reference_genome(const PhylogeneticForest& forest,
                      const SEXP& reference_genome)
 {
