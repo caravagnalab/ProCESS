@@ -18,10 +18,12 @@
 #include <fstream>
 #include <filesystem>
 #include <sstream>
+#include <map>
+#include <set>
 
 #include <Rcpp.h>
 
-
+#include <fasta_chr_reader.hpp>
 #include <context_index.hpp>
 #include <csv_reader.hpp>
 #include <read_simulator.hpp>
@@ -749,7 +751,7 @@ get_mutation_spec(std::list<SIDSpec>& c_sids,
         default:
             break;
     }
-    std::cout << TYPEOF(rcpp_list[index]) << std::endl;
+
     throw std::domain_error("The " + ordtostr(index+1)
                             + " element in the driver mutation list"
                             + " is not an mutation specification");
@@ -863,31 +865,27 @@ get_epistate_passenger_rates(const Rcpp::List& list)
   return ep_rates;
 }
 
-struct FilterNonChromosomeSequence : public RACES::IO::FASTA::SequenceFilter
+void check_wrong_chromosome_SNV(const std::set<RACES::Mutations::ChromosomeId>& missing_chr,
+                                const std::map<RACES::Mutations::ChromosomeId, SID_iterator>& SNV_partition)
 {
-    RACES::Mutations::ChromosomeId last_chr_id;
-
-    inline bool operator()(const std::string& header)
-    {
-        return !RACES::IO::FASTA::is_chromosome_header(header, last_chr_id);
-    }
-};
-
-void check_wrong_chromosome_SNV(const std::map<RACES::Mutations::ChromosomeId, SID_iterator>& SNV_partition)
-{
-  if (SNV_partition.size()>0) {
+  if (missing_chr.size()>0) {
     std::ostringstream oss;
 
     std::string sep="";
     size_t counter{0};
-    for (const auto& [chr, SNV_class] : SNV_partition) {
-      for (auto& SNV_it : SNV_class) {
-        oss << sep << *SNV_it;
+    for (const auto& chr: missing_chr) {
+      auto found = SNV_partition.find(chr);
 
-        if (sep.size()==0) {
-          sep = ", ";
+      if (found != SNV_partition.end()) {
+        const auto& SNVs = found->second;
+        for (auto& SNV_it : SNVs) {
+          oss << sep << *SNV_it;
+
+          if (sep.size()==0) {
+            sep = ", ";
+          }
+          ++counter;
         }
-        ++counter;
       }
     }
 
@@ -921,43 +919,43 @@ void retrieve_missing_references(const std::string& mutant_name,
     }
   }
 
-  RACES::IO::FASTA::Sequence chr_seq;
+  const size_t total_SNV{SNV_to_check};
 
-  FilterNonChromosomeSequence filter;
+  using namespace RACES::IO::FASTA;
 
   progress_bar.set_message("Retrieving \""+ mutant_name + "\" SNVs");
 
-  const auto fasta_size = filesize(fasta_filename);
-  std::ifstream fasta_stream(fasta_filename);
-  while (SNV_to_check>0 && RACES::IO::FASTA::Sequence::read(fasta_stream, chr_seq, filter, progress_bar)) {
-    auto chr_id = filter.last_chr_id;
+  std::set<RACES::Mutations::ChromosomeId> missing_chr;
 
-    progress_bar.set_progress((100*fasta_stream.tellg())/fasta_size);
+  std::string alt_base;
+  IndexedReader<ChromosomeData<Sequence>> chr_reader(fasta_filename,
+                                                     progress_bar);
+  for (const auto& [chr_id, incomplete_SNVs]: SNV_partition) {
+    const auto chr_name = RACES::Mutations::GenomicPosition::chrtos(chr_id);
 
-    auto found = SNV_partition.find(chr_id);
-    if (found != SNV_partition.end()) {
-      for (auto& SNV_it : found->second) {
-        if (SNV_it->position >= chr_seq.nucleotides.size()) {
-          std::ostringstream oss;
+    for (auto& SNV_it : incomplete_SNVs) {
+        if (chr_reader.read(alt_base, chr_name, SNV_it->position-1, 1)) {
+            if (alt_base.size() == 0) {
+                std::ostringstream oss;
 
-          oss << "The SNV context of " << *SNV_it
-              << " does not lay into the chromosome." << std::endl;
-          throw std::out_of_range(oss.str());
+                oss << "The SNV context of " << *SNV_it
+                    << " does not lay into the chromosome." << std::endl;
+                throw std::out_of_range(oss.str());
+            }
+
+            if (SNV_it->ref == "?") {
+                SNV_it->ref = alt_base[0];
+            }
+            --SNV_to_check;
+
+            progress_bar.set_progress((100*SNV_to_check)/total_SNV);
+        } else {
+            missing_chr.insert(chr_id);
         }
-
-        if (SNV_it->ref == "?") {
-          const auto& candidate_ref = chr_seq.nucleotides[SNV_it->position-1];
-
-          SNV_it->ref = std::string(1, candidate_ref);
-        }
-        --SNV_to_check;
-      }
-
-      SNV_partition.erase(found);
     }
   }
 
-  check_wrong_chromosome_SNV(SNV_partition);
+  check_wrong_chromosome_SNV(missing_chr, SNV_partition);
 
   progress_bar.set_progress(100, "\"" + mutant_name + "\" SNVs retrieved");
 }
