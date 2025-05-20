@@ -724,7 +724,7 @@ get_mutation_spec(std::list<SIDSpec>& c_sids,
             {
                 Rcpp::S4 s4obj( rcpp_list[index] );
                 if ( s4obj.is("Rcpp_Mutation")) {
-                    const auto sid = Rcpp::as<SID>(rcpp_list[index]);
+                    const auto sid = Rcpp::as<SIDMut>(rcpp_list[index]);
 
                     c_sids.push_back(static_cast<SIDSpec>(sid));
 

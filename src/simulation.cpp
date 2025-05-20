@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -816,11 +816,9 @@ Rcpp::List SpatialSimulation::get_cell(const RACES::Mutants::Evolutions::Tissue&
                                        const RACES::Mutants::Evolutions::AxisPosition& x,
                                        const RACES::Mutants::Evolutions::AxisPosition& y) const
 {
-  namespace RS = RACES::Mutants::Evolutions;
+  const auto cell_proxy = tissue({x,y});
 
-  const RS::CellInTissue& cell = tissue({x,y});
-
-  return wrap_a_cell(cell);
+  return wrap_a_cell(cell_proxy);
 }
 
 Rcpp::List SpatialSimulation::get_cells(const RACES::Mutants::Evolutions::Tissue& tissue,

@@ -31,7 +31,7 @@ RCPP_MODULE(Mutations){
 
 //' @name Mutation
 //' @title A single nucleotide variation
-  class_<SID>("Mutation")
+  class_<SIDMut>("Mutation")
     .constructor()
 
 //' @name Mutation$get_chromosome
@@ -44,7 +44,8 @@ RCPP_MODULE(Mutations){
 //'
 //' # get the chromosome in which `snv` occurs (i.e., "X")
 //' snv$get_chromosome()
-    .method("get_chromosome",&SID::get_chromosome, "Get the chromosome of the mutation")
+    .method("get_chromosome",&SIDMut::get_chromosome,
+            "Get the chromosome of the mutation")
 
 //' @name Mutation$get_position_in_chromosome
 //' @title Getting the mutation chromosome position
@@ -56,7 +57,7 @@ RCPP_MODULE(Mutations){
 //'
 //' # get the position in chromosome where `snv` occurs (i.e., 20002)
 //' snv$get_position_in_chromosome()
-    .method("get_position_in_chromosome",&SID::get_position_in_chromosome,
+    .method("get_position_in_chromosome",&SIDMut::get_position_in_chromosome,
             "Get the mutation position in the chromosome")
 
 //' @name Mutation$get_ref
@@ -69,7 +70,8 @@ RCPP_MODULE(Mutations){
 //'
 //' # get the reference base in which `snv` occurs (i.e., "A")
 //' snv$get_ref()
-    .method("get_ref",&SID::get_ref, "Get the mutation reference sequence")
+    .method("get_ref", &SIDMut::get_ref,
+            "Get the mutation reference sequence")
 
 //' @name Mutation$get_alt
 //' @title Getting the mutation altered sequence
@@ -80,7 +82,8 @@ RCPP_MODULE(Mutations){
 //'
 //' # get the sequence after `snv` occurs (i.e., "T")
 //' snv$get_alt()
-    .method("get_alt",&SID::get_alt, "Get the mutation altered sequence")
+    .method("get_alt", &SIDMut::get_alt,
+            "Get the mutation altered sequence")
 
 //' @name Mutation$get_cause
 //' @title Getting the mutation cause
@@ -102,7 +105,7 @@ RCPP_MODULE(Mutations){
 //'
 //' # get the cause of `snv` (i.e., "SBS13")
 //' snv$get_cause()
-    .method("get_cause",&SID::get_cause, "Get the cause of the mutation")
+    .method("get_cause", &SIDMut::get_cause, "Get the cause of the mutation")
 
 //' @name Mutation$get_dataframe
 //' @title Getting the mutation dataframe
@@ -113,9 +116,9 @@ RCPP_MODULE(Mutations){
 //' snv <- SNV("X", 20002, "T", "A")
 //'
 //' snv$get_dataframe()
-    .method("get_dataframe",&SID::get_dataframe,
+    .method("get_dataframe", &SIDMut::get_dataframe,
             "Get a dataframe representing the mutation")
-    .method("show",&SID::show);
+    .method("show", &SIDMut::show);
 
 //' @name SNV
 //' @title Creating a SNV
@@ -143,7 +146,7 @@ RCPP_MODULE(Mutations){
 //' # create a SNV with a cause
 //' snv <- SNV("X", 20002, "T", cause = "SBS1")
 //' snv
-  function("SNV", &SID::build_SNV,
+  function("SNV",  &SIDMut::build_SNV,
            List::create(_["chr"], _["chr_pos"], _["alt"],
                         _["ref"] = "?", _["allele"] = R_NilValue,
                         _["cause"] = ""),
@@ -182,7 +185,7 @@ RCPP_MODULE(Mutations){
 //' # create an insertion with a cause
 //' mutation <- Mutation("X", 20002, "A", "AT", cause = "SBS1")
 //' mutation
-  function("Mutation", &SID::build_SID,
+  function("Mutation",  &SIDMut::build_SID,
            List::create(_["chr"], _["chr_pos"], _["ref"],
                         _["alt"], _["allele"] = R_NilValue,
                         _["cause"] = ""),

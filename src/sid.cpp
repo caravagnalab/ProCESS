@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,11 +19,11 @@
 
 #include "utility.hpp"
 
-SID::SID(const RACES::Mutations::ChromosomeId& chromosome_id,
-         const RACES::Mutations::ChrPosition& chromosomic_position,
-         const RACES::Mutations::AlleleId allele_id,
-         const std::string& ref, const std::string& alt, 
-         const std::string& cause):
+SIDMut::SIDMut(const RACES::Mutations::ChromosomeId& chromosome_id,
+               const RACES::Mutations::ChrPosition& chromosomic_position,
+               const RACES::Mutations::AlleleId allele_id,
+               const std::string& ref, const std::string& alt,
+               const std::string& cause):
     RACES::Mutations::MutationSpec<RACES::Mutations::SID>(allele_id, chromosome_id,
                                                           chromosomic_position,
                                                           ref, alt, cause)
@@ -47,10 +47,10 @@ SEXP wrap_allele(const RACES::Mutations::AlleleId& allele_id)
     return allele_v;
 }
 
-SID::SID()
+SIDMut::SIDMut()
 {}
 
-SEXP SID::get_cause() const
+SEXP SIDMut::get_cause() const
 {
     Rcpp::StringVector cause_v(1);
 
@@ -63,7 +63,7 @@ SEXP SID::get_cause() const
     return cause_v;
 }
 
-Rcpp::List SID::get_dataframe() const
+Rcpp::List SIDMut::get_dataframe() const
 {
     using namespace Rcpp;
     using namespace RACES::Mutations;
@@ -77,7 +77,7 @@ Rcpp::List SID::get_dataframe() const
                              _["cause"]=get_cause());
 }
 
-void SID::show() const
+void SIDMut::show() const
 {
     using namespace Rcpp;
 
@@ -99,13 +99,13 @@ void SID::show() const
     Rcout << ")" << std::endl;
 }
 
-SID SID::build_SNV(const SEXP chromosome_name,
-                   const SEXP position_in_chromosome,
-                   const SEXP alt_base, const SEXP ref_base,
-                   const SEXP allele_id, const SEXP cause)
+SIDMut SIDMut::build_SNV(const SEXP chromosome_name,
+                         const SEXP position_in_chromosome,
+                         const SEXP alt_base, const SEXP ref_base,
+                         const SEXP allele_id, const SEXP cause)
 {
-    SID mutation = build_SID(chromosome_name, position_in_chromosome,
-                             ref_base, alt_base, allele_id, cause);
+    SIDMut mutation = build_SID(chromosome_name, position_in_chromosome,
+                                ref_base, alt_base, allele_id, cause);
 
     if (mutation.ref.size() != 1) {
         throw std::domain_error("The reference base must be a single "
@@ -120,10 +120,10 @@ SID SID::build_SNV(const SEXP chromosome_name,
     return mutation;
 }
 
-SID SID::build_SID(const SEXP chromosome_name,
-                   const SEXP position_in_chromosome,
-                   const SEXP ref_base, const SEXP alt_base,
-                   const SEXP allele_id, const SEXP cause)
+SIDMut SIDMut::build_SID(const SEXP chromosome_name,
+                         const SEXP position_in_chromosome,
+                         const SEXP ref_base, const SEXP alt_base,
+                         const SEXP allele_id, const SEXP cause)
 {
     using namespace Rcpp;
     using namespace RACES::Mutations;
@@ -141,7 +141,7 @@ SID SID::build_SID(const SEXP chromosome_name,
     auto alt_base_str = Rcpp::as<std::string>(alt_base);
 
     auto cause_str = Rcpp::as<std::string>(cause);
-    return SID(chr_id, static_cast<RACES::Mutations::ChrPosition>(pos),
-               get_allele_id(allele_id, "allele"), ref_base_str,
-               alt_base_str, cause_str);
+    return SIDMut(chr_id, static_cast<RACES::Mutations::ChrPosition>(pos),
+                  get_allele_id(allele_id, "allele"), ref_base_str,
+                  alt_base_str, cause_str);
 }

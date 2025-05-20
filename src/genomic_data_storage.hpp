@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 
 #include <Rcpp.h>
 
+#include <utils.hpp>
 #include <mutation_engine.hpp>
 
 struct GermlineSubject
@@ -150,7 +151,7 @@ class GenomicDataStorage
 
   std::filesystem::path retrieve_reference();
 
-  static bool is_an_URL(const std::string& reference)
+  static bool is_an_URL(const std::string reference)
   {
     std::set<std::string> protocols{"ftp", "http"};
 
@@ -223,11 +224,11 @@ public:
 
   template<typename MUTATION_TYPE,
            std::enable_if_t<std::is_base_of_v<RACES::Mutations::MutationType, MUTATION_TYPE>, bool> = true>
-  std::filesystem::path get_signatures_path(const bool& downloaded) const
+  std::string get_signatures_path(const bool& downloaded) const
   {
     if constexpr(std::is_base_of_v<MUTATION_TYPE, RACES::Mutations::SBSType>) {
       if (downloaded) {
-        return directory/std::string("SBS_signatures.txt");
+        return to_string(directory/std::string("SBS_signatures.txt"));
       } else {
         return SBS_signatures_src;
       }
@@ -235,7 +236,7 @@ public:
 
     if constexpr(std::is_base_of_v<MUTATION_TYPE, RACES::Mutations::IDType>) {
       if (downloaded) {
-        return directory/std::string("indel_signatures.txt");
+        return to_string(directory/std::string("indel_signatures.txt"));
       } else {
         return indel_signatures_src;
       }
@@ -246,7 +247,7 @@ public:
 
   template<typename MUTATION_TYPE,
            std::enable_if_t<std::is_base_of_v<RACES::Mutations::MutationType, MUTATION_TYPE>, bool> = true>
-  std::filesystem::path get_signatures_path() const
+  std::string get_signatures_path() const
   {
     if constexpr(std::is_base_of_v<MUTATION_TYPE, RACES::Mutations::SBSType>) {
       return get_signatures_path<MUTATION_TYPE>(SBS_signatures_downloaded);
