@@ -78,8 +78,8 @@ std::map<std::string, MutationEngineSetup> supported_setups{
     {
       "A demonstrative set-up", "demo",
       "https://ftp.ensembl.org/pub/grch37/release-111/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.chromosome.22.fa.gz",
-      "https://cancer.sanger.ac.uk/signatures/documents/2123/COSMIC_v3.4_SBS_GRCh37.txt",
-      "https://cancer.sanger.ac.uk/signatures/documents/2121/COSMIC_v3.4_ID_GRCh37.txt",
+      "https://raw.githubusercontent.com/caravagnalab/ProCESS/" GIT_HASH "/inst/extdata/SBS_demo_signatures.txt",
+      "https://raw.githubusercontent.com/caravagnalab/ProCESS/" GIT_HASH "/inst/extdata/indel_demo_signatures.txt",
       "https://raw.githubusercontent.com/caravagnalab/ProCESS/" GIT_HASH "/inst/extdata/driver_mutations_hg19.csv",
       "https://raw.githubusercontent.com/caravagnalab/ProCESS/" GIT_HASH "/inst/extdata/passenger_CNAs_hg19.csv",
       "https://zenodo.org/records/" ZENODO_ID "/files/germline_data_demo.tar.gz"
@@ -117,9 +117,10 @@ GenomicDataStorage setup_storage(const std::string& directory,
                                  const std::string& indel_signatures_source,
                                  const std::string& drivers_source,
                                  const std::string& passengers_CNA_source,
-                                 const std::string& germline_source)
+                                 const std::string& germline_source,
+                                 std::shared_ptr<Account> COSMIC_account=nullptr)
 {
-  GenomicDataStorage storage(directory, reference_source, SBS_signatures_source,
+  GenomicDataStorage storage(COSMIC_account, directory, reference_source, SBS_signatures_source,
                              indel_signatures_source,
                              drivers_source, passengers_CNA_source,
                              germline_source);
@@ -129,7 +130,21 @@ GenomicDataStorage setup_storage(const std::string& directory,
   return storage;
 }
 
-GenomicDataStorage setup_storage(const std::string& setup_code)
+inline const std::string& first_if_empty(const std::string& dst,
+                                         const std::string& value)
+{
+    return (dst.size()>0?dst:value);
+}
+
+GenomicDataStorage setup_storage(const std::string& setup_code,
+                                 const std::string& directory,
+                                 const std::string& reference_source,
+                                 const std::string& SBS_signatures_source,
+                                 const std::string& indel_signatures_source,
+                                 const std::string& drivers_source,
+                                 const std::string& passengers_CNA_source,
+                                 const std::string& germline_source,
+                                 std::shared_ptr<Account> COSMIC_account=nullptr)
 {
   using namespace Rcpp;
 
@@ -147,15 +162,26 @@ GenomicDataStorage setup_storage(const std::string& setup_code)
     throw std::domain_error(oss.str());
   }
 
-  auto directory = to_string(code_it->second.directory);
+  const auto code_directory = to_string(code_it->second.directory);
 
-  return setup_storage(directory,
-                       code_it->second.reference_url,
-                       code_it->second.SBS_signatures_url,
-                       code_it->second.indel_signatures_url,
-                       code_it->second.drivers_url,
-                       code_it->second.passenger_CNAs_url,
-                       code_it->second.germline_url);
+  return setup_storage(first_if_empty(directory, code_directory),
+                       first_if_empty(reference_source,
+                                      code_it->second.reference_url),
+                       first_if_empty(SBS_signatures_source,
+                                      code_it->second.SBS_signatures_url),
+                       first_if_empty(indel_signatures_source,
+                                      code_it->second.indel_signatures_url),
+                       first_if_empty(drivers_source, code_it->second.drivers_url),
+                       first_if_empty(passengers_CNA_source,
+                                      code_it->second.passenger_CNAs_url),
+                       first_if_empty(germline_source, code_it->second.germline_url),
+                       COSMIC_account);
+}
+
+inline GenomicDataStorage setup_storage(const std::string& setup_code,
+                                        std::shared_ptr<Account> COSMIC_account=nullptr)
+{
+    return setup_storage(setup_code, "", "", "", "", "", "", "", COSMIC_account);
 }
 
 Rcpp::List MutationEngine::get_supported_setups()
@@ -469,26 +495,9 @@ void MutationEngine::init_mutation_engine(const bool& quiet)
   reset();
 }
 
-MutationEngine::MutationEngine(const std::string& setup_name,
-                               const std::string& germline_subject,
-                               const size_t& context_sampling,
-                               const size_t& max_motif_size,
-                               const size_t& max_repetition_storage,
-                               const std::string& tumour_type,
-                               const std::string& tumor_study,
-                               const bool& avoid_homozygous_losses,
-                               const bool& quiet):
-  storage(setup_storage(setup_name)), germline_subject(germline_subject),
-  context_sampling(context_sampling), max_motif_size(max_motif_size),
-  max_repetition_storage(max_repetition_storage), tumour_type(tumour_type),
-  tumor_study(tumor_study), avoid_homozygous_losses(avoid_homozygous_losses)
-{
-  auto setup_cfg = supported_setups.at(setup_name);
-
-  init_mutation_engine(quiet);
-}
-
-MutationEngine::MutationEngine(const std::string& directory,
+MutationEngine::MutationEngine(const std::shared_ptr<Account>& COSMIC_account,
+                               const std::string& setup_name,
+                               const std::string& directory,
                                const std::string& reference_source,
                                const std::string& SBS_signatures_source,
                                const std::string& indel_signatures_source,
@@ -503,9 +512,39 @@ MutationEngine::MutationEngine(const std::string& directory,
                                const std::string& tumor_study,
                                const bool& avoid_homozygous_losses,
                                const bool& quiet):
-  storage(setup_storage(directory, reference_source, SBS_signatures_source,
-                        indel_signatures_source, drivers_source,
-                        passenger_CNAs_source, germline_source)),
+  storage(setup_storage(setup_name, directory, reference_source,
+                        SBS_signatures_source, indel_signatures_source,
+                        drivers_source, passenger_CNAs_source,
+                        germline_source, COSMIC_account)),
+  germline_subject(germline_subject), context_sampling(context_sampling),
+  max_motif_size(max_motif_size),
+  max_repetition_storage(max_repetition_storage),
+  tumour_type(tumour_type), tumor_study(tumor_study),
+  avoid_homozygous_losses(avoid_homozygous_losses)
+{
+  init_mutation_engine(quiet);
+}
+
+MutationEngine::MutationEngine(const std::shared_ptr<Account>& COSMIC_account,
+                               const std::string& directory,
+                               const std::string& reference_source,
+                               const std::string& SBS_signatures_source,
+                               const std::string& indel_signatures_source,
+                               const std::string& drivers_source,
+                               const std::string& passenger_CNAs_source,
+                               const std::string& germline_source,
+                               const std::string& germline_subject,
+                               const size_t& context_sampling,
+                               const size_t& max_motif_size,
+                               const size_t& max_repetition_storage,
+                               const std::string& tumour_type,
+                               const std::string& tumor_study,
+                               const bool& avoid_homozygous_losses,
+                               const bool& quiet):
+  storage(setup_storage(directory, reference_source,
+                        SBS_signatures_source, indel_signatures_source,
+                        drivers_source, passenger_CNAs_source,
+                        germline_source, COSMIC_account)),
   germline_subject(germline_subject), context_sampling(context_sampling),
   max_motif_size(max_motif_size),
   max_repetition_storage(max_repetition_storage),
@@ -558,6 +597,59 @@ get_map(const Rcpp::List& list)
   return c_map;
 }
 
+bool is_COSMIC_account(const SEXP& COSMIC_account_data)
+{
+    if (TYPEOF(COSMIC_account_data)!=VECSXP) {
+        return false;
+    }
+
+    Rcpp::List list_account_data( COSMIC_account_data );
+
+    Rcpp::CharacterVector names = list_account_data.names();
+
+    std::set<std::string> needed_names{"email", "password"};
+    for (size_t i=0; i<list_account_data.size(); ++i) {
+        needed_names.extract(Rcpp::as<std::string>(names[i]));
+    }
+
+    return needed_names.size()==0;
+}
+
+std::shared_ptr<Account> extract_COSMIC_account(const SEXP& COSMIC_account_data)
+{
+    if (TYPEOF(COSMIC_account_data)==NILSXP) {
+        return nullptr;
+    }
+
+    if (TYPEOF(COSMIC_account_data)!=VECSXP) {
+        Rcpp::stop("The parameter \"COSMIC_account\" must be a named list "
+                   "containing \"email\" and \"password\".");
+    }
+
+    Rcpp::List list_account_data( COSMIC_account_data );
+    Rcpp::CharacterVector names = list_account_data.names();
+
+    std::set<std::string> needed_names{"email", "password"};
+    for (size_t i=0; i<list_account_data.size()&&needed_names.size()>0; ++i) {
+        needed_names.extract(Rcpp::as<std::string>(names[i]));
+    }
+
+    std::ostringstream oss;
+    if (needed_names.size()>0) {
+        oss << "The parameter \"COSMIC_account\" must be a named list "
+               "containing \"email\" and \"password\", but misses ";
+        if (needed_names.size()>1) {
+            oss << "both the parameters.";
+        } else {
+            oss << "the parameter \"" << *(needed_names.begin()) << "\".";
+        }
+        Rcpp::stop(oss.str());
+    }
+
+    return std::make_shared<Account>(Rcpp::as<std::string>(list_account_data["email"]),
+                                     Rcpp::as<std::string>(list_account_data["password"]));
+}
+
 MutationEngine
 MutationEngine::build_MutationEngine(const std::string& directory,
                                      const std::string& reference_source,
@@ -567,6 +659,7 @@ MutationEngine::build_MutationEngine(const std::string& directory,
                                      const std::string& passenger_CNAs_source,
                                      const std::string& germline_source,
                                      const std::string& setup_code,
+                                     const SEXP& COSMIC_account_data,
                                      const std::string& germline_subject,
                                      const size_t& context_sampling,
                                      const size_t& max_motif_size,
@@ -576,17 +669,13 @@ MutationEngine::build_MutationEngine(const std::string& directory,
                                      const bool avoid_homozygous_losses,
                                      const bool quiet)
 {
-  if (setup_code!="") {
-    if (directory!="" || reference_source!="" || SBS_signatures_source!=""
-         || indel_signatures_source!="" || drivers_source!=""
-         || passenger_CNAs_source !="" || germline_source !="") {
-      throw std::domain_error("when \"setup_code\" is NOT provided, the parameters "
-                              "\"directory\", \"reference_src\", \"SBS_signatures_src\", "
-                              "\"indel_signatures_src\", \"passenger_CNAs_src\", and "
-                              "\"germline_src\" must be avoided.");
-    }
+  auto COSMIC_account = extract_COSMIC_account(COSMIC_account_data);
 
-    return MutationEngine(setup_code, germline_subject, context_sampling,
+  if (setup_code!="") {
+    return MutationEngine(COSMIC_account, setup_code, directory, reference_source,
+                          SBS_signatures_source,
+                          indel_signatures_source, drivers_source, passenger_CNAs_source,
+                          germline_source,  germline_subject, context_sampling,
                           max_motif_size, max_repetition_storage, tumour_type,
                           tumor_study, avoid_homozygous_losses, quiet);
   }
@@ -600,7 +689,8 @@ MutationEngine::build_MutationEngine(const std::string& directory,
                             "\"germline_src\" are mandatory.");
   }
 
-  return MutationEngine(directory, reference_source, SBS_signatures_source,
+  return MutationEngine(COSMIC_account, directory, reference_source,
+                        SBS_signatures_source,
                         indel_signatures_source, drivers_source,
                         passenger_CNAs_source, germline_source, germline_subject,
                         context_sampling, max_motif_size, max_repetition_storage,
