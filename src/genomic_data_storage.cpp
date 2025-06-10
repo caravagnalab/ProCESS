@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 
 #include <fstream>
 #include <filesystem>
+#include <regex>
 
 #include <Rcpp.h>
 
@@ -56,6 +57,10 @@ Rcpp::List GermlineSubject::get_dataframe() const
                            _["super_pop"] = super_pop,
                            _["gender"] = gender);
 }
+
+Account::Account(std::string username, std::string password):
+  username(username), password(password)
+{}
 
 GermlineStorage::GermlineStorage()
 {}
@@ -227,7 +232,146 @@ GermlineStorage::get_germline(const std::string& subject_name, const bool quiet)
   return germline;
 }
 
-GenomicDataStorage::GenomicDataStorage(const std::string& directory,
+bool signatures_from_COSMIC(const std::list<std::pair<std::string, std::filesystem::path>>& download_list)
+{
+    std::regex COSMIC_site_regex("^https://([a-zA-Z0-9_-]*).sanger.ac.uk");
+
+    for (const auto& [src, dst]: download_list) {
+      if (std::regex_search(src, COSMIC_site_regex)) {
+        return true;
+      }
+    }
+
+    return false;
+}
+
+inline Rcpp::Function get_function(const std::string& fun_str)
+{
+    using namespace Rcpp;
+
+    // Get base R functions
+    Function parse("parse");
+    Function eval("eval");
+
+    // Evaluate it in the global environment
+    return eval(parse(_["text"] = fun_str));
+}
+
+Rcpp::List
+Rcpp_wrap_download_list(const std::list<std::pair<std::string, std::filesystem::path>>& download_list)
+{
+    using namespace Rcpp;
+
+    List wrapped_list(download_list.size());
+    size_t i=0;
+    for (const auto& [url, dest_filename]: download_list) {
+        wrapped_list[i] = List::create(_["url"] = url,
+                                       _["dest_filename"] = to_string(dest_filename));
+        ++i;
+    }
+
+    return wrapped_list;
+}
+
+void download_COSMIC(const std::shared_ptr<Account>& COSMIC_account,
+                     const std::list<std::pair<std::string, std::filesystem::path>>& download_list)
+{
+    using namespace Rcpp;
+
+    if (COSMIC_account.get() == nullptr) {
+        stop("Since April 2nd, 2025, COSMIC site (https://cancer.sanger.ac.uk/cosmic/)\n"
+             "requires an account. Create an account, download SBS and ID mutation signature\n"
+             "files, and pass them as parameters to `MutationEngine()` call. In alternative,\n"
+             "provide COSMIC account details to `MutationEngine()` and let ProCESS download\n"
+             "the signature files.\n");
+    }
+
+    const std::string r_code = "function(username, password, d_list) {\n"
+                               "  if (!requireNamespace(\"rvest\", quietly = TRUE)) {\n"
+                               "     stop(\"The package \\\"rvest\\\" is mandatory to download "
+                               " signatures from COSMIC.\")\n  }\n"
+                               "  cosmic_page <- \"https://cancer.sanger.ac.uk/cosmic/login\"\n"
+                               "  cosmic_session <- rvest::session(cosmic_page)\n"
+                               "  login_form <- rvest::html_form(cosmic_session)[[2]]\n"
+                               "  filled_form <- rvest::html_form_set(login_form, email = username,\n"
+                               "                                      pass = password)\n"
+                               "  filled_form$action <- cosmic_page\n"
+                               "  post_login_page <- rvest::session_submit(cosmic_session,"
+                               " filled_form)\n  if (grepl(\"error while logging\",\n"
+                               "            httr::content(post_login_page$response,"
+                               " as=\"text\"))) {\n   stop(\"Wrong COSMIC username/password\")\n  }\n"
+                               "  for (i in seq_along(d_list)) {\n"
+                               "    url <- d_list[[i]]$url\n"
+                               "    signature <- rvest::session_jump_to(cosmic_session, url)\n"
+                               "    if (signature$response$status_code != 200) {\n"
+                               "      stop(paste0(\"Cannot download file at \\\"\",\n"
+                               "                  url,\"\\\".\"))\n"
+                               "    }\ndest_filename <- d_list[[i]]$dest_filename\n"
+                               "    writeBin(signature$response$content, dest_filename)\n}\n}\n";
+
+    List d_list = Rcpp_wrap_download_list(download_list);
+
+    Function rfunc = get_function(r_code);
+
+    rfunc(COSMIC_account->get_username(), COSMIC_account->get_password(), d_list);
+}
+
+void download_file(const std::string& url, const std::filesystem::path dest_filename)
+{
+  if (!std::filesystem::exists(dest_filename.parent_path())) {
+    std::filesystem::create_directory(dest_filename.parent_path());
+  }
+
+  using namespace Rcpp;
+
+  // get default timeout option
+  Function getOption_f("getOption");
+  auto timeout = as<int>(getOption_f("timeout"));
+
+  // raise the timeout to 1000 at least
+  Function options_f("options");
+  options_f(_["timeout"] = std::max(1000, timeout));
+
+  // download the file
+  Function download_f("download.file");
+  download_f(_["url"] = url, _["destfile"] = to_string(dest_filename),
+             _["mode"]="wb");
+
+  // revert to the default timeout
+  options_f(_["timeout"] = timeout);
+}
+
+std::filesystem::path GenomicDataStorage::download_file(const std::string& url) const
+{
+  const auto dest_filename = to_string(get_destination_path(url));
+
+  ::download_file(url, dest_filename);
+
+  return dest_filename;
+}
+
+void GenomicDataStorage::retrieve_signatures(const std::shared_ptr<Account>& COSMIC_account) const
+{
+    std::list<std::pair<std::string, std::filesystem::path>> download_list;
+
+    collect_signatures_download_list<RACES::Mutations::SBSType>(download_list);
+    collect_signatures_download_list<RACES::Mutations::IDType>(download_list);
+
+    Rcpp::Rcout << "Downloading signature files..." << std::endl << std::flush;
+
+    if (signatures_from_COSMIC(download_list)) {
+        download_COSMIC(COSMIC_account, download_list);
+    } else {
+        for (const auto& [src, dst]: download_list) {
+            ::download_file(src, dst);
+        }
+    }
+
+    Rcpp::Rcout << "Signature file downloaded" << std::endl;
+}
+
+GenomicDataStorage::GenomicDataStorage(const std::shared_ptr<Account> COSMIC_account,
+                                       const std::string& directory,
                                        const std::string& reference_source,
                                        const std::string& SBS_signatures_source,
                                        const std::string& indel_signatures_source,
@@ -235,23 +379,36 @@ GenomicDataStorage::GenomicDataStorage(const std::string& directory,
                                        const std::string& passenger_CNAs_source,
                                        const std::string& germline_source):
   directory{std::filesystem::absolute(directory)}, reference_src{reference_source},
-  SBS_signatures_downloaded{false}, SBS_signatures_src{SBS_signatures_source},
-  indel_signatures_downloaded{false}, indel_signatures_src{indel_signatures_source},
+  SBS_signatures_src{SBS_signatures_source}, indel_signatures_src{indel_signatures_source},
   drivers_src{driver_mutations_source}, passenger_CNAs_src{passenger_CNAs_source},
   germline_src{germline_source}
 {
   std::filesystem::create_directory(directory);
 
   retrieve_reference();
-  retrieve_file<RACES::Mutations::SBSType>("SBS", SBS_signatures_downloaded);
-  retrieve_file<RACES::Mutations::IDType>("indel", indel_signatures_downloaded);
+
+  retrieve_signatures(COSMIC_account);
 
   retrieve_drivers();
   retrieve_passenger_CNAs();
-  const auto germline_path = retrieve_germline();
+  retrieve_germline();
+
+  const auto germline_path = get_germline_path();
 
   germline_storage = GermlineStorage(germline_path);
 }
+
+GenomicDataStorage::GenomicDataStorage(const std::string& directory,
+                                       const std::string& reference_source,
+                                       const std::string& SBS_signatures_source,
+                                       const std::string& indel_signatures_source,
+                                       const std::string& driver_mutations_source,
+                                       const std::string& passenger_CNAs_source,
+                                       const std::string& germline_source):
+    GenomicDataStorage(nullptr, directory, reference_source, SBS_signatures_source,
+                       indel_signatures_source, driver_mutations_source,
+                       passenger_CNAs_source, germline_source)
+{}
 
 std::filesystem::path GenomicDataStorage::get_destination_path(const std::string& url) const
 {
@@ -266,40 +423,11 @@ std::filesystem::path GenomicDataStorage::get_destination_path(const std::string
       filename = filename.substr(0, question_occurrence);
     }
 
-    return directory/filename;
+    return get_directory()/filename;
 
   } catch (std::exception& e) {
     throw std::domain_error("\""+url+"\" is not a valid URL.");
   }
-}
-
-std::filesystem::path GenomicDataStorage::download_file(const std::string& url) const
-{
-  if (!std::filesystem::exists(directory)) {
-    std::filesystem::create_directory(directory);
-  }
-
-  using namespace Rcpp;
-
-  auto dest_filename = to_string(get_destination_path(url));
-
-  // get default timeout option
-  Function getOption_f("getOption");
-  auto timeout = as<int>(getOption_f("timeout"));
-
-  // raise the timeout to 1000 at least
-  Function options_f("options");
-  options_f(_["timeout"] = std::max(1000, timeout));
-
-  // download the file
-  Function download_f("download.file");
-  download_f(_["url"] = url, _["destfile"] = dest_filename,
-             _["mode"]="wb");
-
-  // revert to the default timeout
-  options_f(_["timeout"] = timeout);
-
-  return dest_filename;
 }
 
 std::map<std::string, std::string> decompressors{
@@ -307,10 +435,9 @@ std::map<std::string, std::string> decompressors{
   {"bz2", "bunzip2"}
 };
 
-std::filesystem::path GenomicDataStorage::retrieve_reference()
+std::filesystem::path GenomicDataStorage::retrieve_reference() const
 {
-  reference_downloaded = is_an_URL(reference_src);
-  if (!reference_downloaded && !std::filesystem::exists(reference_src)) {
+  if (!is_an_URL(reference_src) && !std::filesystem::exists(reference_src)) {
     throw std::runtime_error("Designed reference genome file \""
                         + reference_src + "\" does not exists.");
   }
@@ -353,14 +480,13 @@ std::filesystem::path GenomicDataStorage::retrieve_reference()
   return reference_filename;
 }
 
-std::filesystem::path GenomicDataStorage::retrieve_drivers()
+void GenomicDataStorage::retrieve_drivers() const
 {
-  if (drivers_src == "") {
-    return drivers_src;
+  if (std::filesystem::exists(drivers_src)) {
+    return;
   }
 
-  drivers_downloaded = is_an_URL(drivers_src);
-  if (!drivers_downloaded && !std::filesystem::exists(drivers_src)) {
+  if (!is_an_URL(drivers_src) && !std::filesystem::exists(drivers_src)) {
     throw std::runtime_error("Designed driver mutations file \""
                              + drivers_src + "\" does not exists.");
   }
@@ -368,65 +494,61 @@ std::filesystem::path GenomicDataStorage::retrieve_drivers()
   const auto mutations_filename = get_driver_mutations_path();
 
   if (std::filesystem::exists(mutations_filename)) {
-    return mutations_filename;
+    return;
   }
 
   using namespace Rcpp;
 
   Rcout << "Downloading driver mutation file..." << std::endl << std::flush;
 
-  auto downloaded_file = download_file(drivers_src);
+  ::download_file(drivers_src, mutations_filename);
 
   Rcout << "Driver mutation file downloaded" << std::endl;
-
-  std::filesystem::rename(downloaded_file, mutations_filename);
-
-  return mutations_filename;
 }
 
-std::filesystem::path GenomicDataStorage::retrieve_passenger_CNAs()
+void GenomicDataStorage::retrieve_passenger_CNAs() const
 {
-  passenger_CNAs_downloaded = is_an_URL(passenger_CNAs_src);
-  if (!passenger_CNAs_downloaded
-       && !std::filesystem::exists(passenger_CNAs_src)) {
-    throw std::runtime_error("Designed passenger CNAs file \"" + SBS_signatures_src
-                             + "\" does not exists.");
+  if (std::filesystem::exists(passenger_CNAs_src)) {
+    return;
   }
 
-  const auto passenger_CNAs_filename = get_passenger_CNAs_path();
-
-  if (std::filesystem::exists(passenger_CNAs_filename)) {
-    return passenger_CNAs_filename;
+  if (!is_an_URL(passenger_CNAs_src)) {
+    throw std::runtime_error("Designed passenger CNAs file \""
+                             + passenger_CNAs_src
+                             + "\" does not exists.");
   }
 
   using namespace Rcpp;
 
-  Rcout << "Downloading passenger CNAs file..." << std::endl << std::flush;
+  const auto passenger_CNAs_filename = passenger_CNAs_storage_path();
 
-  auto downloaded_file = download_file(passenger_CNAs_src);
-
-  Rcout << "Passenger CNAs file downloaded" << std::endl;
-
-  std::filesystem::rename(downloaded_file, passenger_CNAs_filename);
-
-  return passenger_CNAs_filename;
-}
-
-std::filesystem::path GenomicDataStorage::retrieve_germline()
-{
-  germline_downloaded = is_an_URL(germline_src);
-  if (!germline_downloaded) {
-    if (!std::filesystem::exists(germline_src)) {
-      throw std::runtime_error("Designed germline mutations directory \""
-                               + germline_src + "\" does not exists.");
-    }
-    return germline_src;
+  if (std::filesystem::exists(passenger_CNAs_filename)) {
+    return;
   }
 
-  const auto germline_path = directory/"germline_data";
+  Rcout << "Downloading passenger CNAs file..." << std::endl << std::flush;
+
+  ::download_file(passenger_CNAs_src, passenger_CNAs_filename);
+
+  Rcout << "Passenger CNAs file downloaded" << std::endl;
+}
+
+void GenomicDataStorage::retrieve_germline() const
+{
+  if (std::filesystem::exists(germline_src)) {
+    return;
+  }
+
+  if (!is_an_URL(germline_src)) {
+    throw std::runtime_error("Designed germline directory \""
+                             + germline_src
+                             + "\" does not exists.");
+  }
+
+  const auto germline_path = germline_storage_path();
 
   if (std::filesystem::exists(germline_path/"germlines.csv")) {
-    return germline_path;
+    return;
   }
 
   using namespace Rcpp;
@@ -440,42 +562,47 @@ std::filesystem::path GenomicDataStorage::retrieve_germline()
   Function untar("untar");
   untar(_["tarfile"] = to_string(downloaded_file),
         _["exdir"] = to_string(directory));
-
-  return germline_path;
 }
 
 std::filesystem::path GenomicDataStorage::get_reference_path() const
 {
-  if (reference_downloaded) {
-    return directory/std::string("reference.fasta");
-  } else {
-    return reference_src;
-  }
+    if (std::filesystem::exists(reference_src)) {
+        return reference_src;
+    }
+
+    return reference_storage_path();
 }
 
 std::filesystem::path GenomicDataStorage::get_passenger_CNAs_path() const
 {
-  if (passenger_CNAs_downloaded) {
-    return directory/std::string("passenger_CNAs.txt");
-  } else {
-    return passenger_CNAs_src;
-  }
+    if (std::filesystem::exists(passenger_CNAs_src)) {
+        return passenger_CNAs_src;
+    }
+
+    return passenger_CNAs_storage_path();
 }
 
 std::filesystem::path GenomicDataStorage::get_driver_mutations_path() const
 {
-  if (drivers_downloaded) {
-    return directory/std::string("drivers.txt");
-  } else {
-    return drivers_src;
-  }
+    if (std::filesystem::exists(drivers_src)) {
+        return drivers_src;
+    }
+
+    return driver_mutations_storage_path();
+}
+
+std::filesystem::path GenomicDataStorage::get_germline_path() const
+{
+    if (std::filesystem::exists(germline_src)) {
+        return germline_src;
+    }
+
+    return germline_storage_path();
 }
 
 void GenomicDataStorage::save_sources() const
 {
-  std::filesystem::path param_file(directory/"sources.csv");
-
-  std::ofstream of(directory/"sources.csv");
+  std::ofstream of(get_directory()/"sources.csv");
 
   of << "reference\t" << reference_src << std::endl
      << "indel\t" << indel_signatures_src << std::endl

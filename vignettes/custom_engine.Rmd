@@ -56,11 +56,13 @@ reference_url <- paste0("https://ftp.ensembl.org/pub/grch37/release-111/",
                         "fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.",
                         "dna.chromosome.22.fa.gz")
 
-sbs_url <- paste0("https://cancer.sanger.ac.uk/signatures/documents/2123/",
-                  "COSMIC_v3.4_SBS_GRCh37.txt")
+sbs_url <- paste0("https://raw.githubusercontent.com/",
+                  "caravagnalab/ProCESS/refs/heads/1.0/",
+                  "inst/extdata/SBS_demo_signatures.txt")
 
-indel_url <- paste0("https://cancer.sanger.ac.uk/signatures/documents/",
-                    "2121/COSMIC_v3.4_ID_GRCh37.txt")
+indel_url <- paste0("https://raw.githubusercontent.com/",
+                    "caravagnalab/ProCESS/refs/heads/1.0/",
+                    "inst/extdata/indel_demo_signatures.txt")
 
 drivers_url <- paste0("https://raw.githubusercontent.com/",
                       "caravagnalab/ProCESS/main/inst/extdata/",

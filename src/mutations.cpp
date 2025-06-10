@@ -372,23 +372,22 @@ RCPP_MODULE(Mutations){
 //'   factors:
 //'     - the mutational rates of the species involved in the descendants
 //'       forest
-//'     - the genotypical characterization of the mutants involved in the
-//'       descendants forest, i.e., the SVNs and CNAs characterizing the
-//'       mutant genotypes
-//'     - the SBS signature coefficients active along the species
-//'       simulation
+//'     - the genotypical characterisation of the mutants involved in the
+//'       descendants forest, i.e., the somatic mutations characterising
+//'       the mutant genotypes
+//'     - the SBS and ID signatures active along the species simulation
 //'
 //'   These data are provided to a mutation engine by using the methods
 //'   [MutationEngine$add_exposure()] and [MutationEngine$add_exposure()]
 //'   These data are provided by means of the [MutationEngine$add_mutant()].
 //'
-//'   The construction of a `MutationEngine` object requires a reference
-//'   sequence and an SBS file which are downloaded from the Internet.
-//'   After the download a context index of the reference sequence is then
-//'   automatically built. Thess processes may take time depending on the
-//'   size of the reference sequence. Because of this, the downloaded files
-//'   together with the context index are saved in a directory on the disk
-//'   and they are available for successive `MutationEngine` constructions.
+//'   The initialisation of a `MutationEngine` object requires a reference
+//'   sequence and the SBS and ID mutational signatures. An SBS index and
+//'   a ID index of the reference sequence are then automatically built.
+//'   Thess processes may take time depending on the size of the reference
+//'   sequence. Because of this, the downloaded files together with the
+//'   context index are saved in a directory on the disk and they are
+//'   available for successive `MutationEngine` constructions.
 //'
   class_<MutationEngine>("MutationEngine")
 
@@ -764,19 +763,23 @@ RCPP_MODULE(Mutations){
 //'
 //' @details There are two building modalities: the first one is more
 //'   general, but it requires to specify all the data sources; the
-//'   second one adopts some pre-set configurations, but it is more
-//'   suitable than the former in many cases.
+//'   second one adopts some pre-set configurations, but it is
+//'   sufficient in many cases.
 //'
 //'   The first building modality requires to specify the directory in
 //'   which the data must be saved, the path or URL of the reference
-//'   sequence, the SBS file, the driver SNVs file, the passenger CNAs
-//'   file, and the germline data directory through the parameters
+//'   sequence, the mutational signatures, the driver SNVs file, the
+//'   passenger CNAs file, and the germline data directory through the
 //'   `directory`, `reference_src`, `SBS_src`, `drivers_src`,
 //'   `passenger_CNAs_src`, and `germline_src`, respectively.
 //'
 //'   The second building modality exclusively requires a set-up code
 //'   (parameter `setup_code`). The list of supported set-up codes can
 //'   be obtained by using the function [get_mutation_engine_codes()].
+//'
+//'   Whenever the mutational signatures are meant to be downloaded from
+//'   the COSMIC site, a valid COSMIC account is needed and can be
+//'   provided by the parameter `COSMIC_account`.
 //'
 //'   The number of context sampling is an optional parameter that allows
 //'   sampling the reference contexts while building the context index.
@@ -796,23 +799,27 @@ RCPP_MODULE(Mutations){
 //' @seealso [get_mutation_engine_codes()] provides a list of the supported
 //'   set-up codes.
 //' @export
-//' @param setup_code The set-up code (alternative to `directory`).
-//' @param directory The set-up directory (alternative to `setup_code`).
+//' @param setup_code The set-up code (optional).
+//' @param directory The set-up directory (mandatory when `setup_code` is
+//'   *not* provided).
 //' @param reference_src The reference genome path or URL (mandatory when
-//'   `directory` is provided).
+//'   `setup_code` is *not* provided).
 //' @param SBS_signatures_src The SBS signature file path or URL (mandatory
-//'   when `directory` is provided).
+//'   when `setup_code` is *not* provided).
 //' @param indel_signatures_src The indel signature file path or URL (mandatory
-//'   when `directory` is provided).
-//' @param drivers_src The driver mutation file path or URL (mandatory when
-//'   `directory` is provided).
+//'   when `setup_code` is *not* provided).
+//' @param drivers_src The driver mutation file path or URL (mandatory
+//'   when `setup_code` is *not* provided).
 //' @param passenger_CNAs_src The passenger CNAs file path or URL (mandatory
-//'   when `directory` is provided).
+//'   when `setup_code` is *not* provided).
 //' @param germline_src The germline directory path or URL (mandatory when
-//'   `directory` is provided).
+//'   `setup_code` is *not* provided).
 //' @param germline_subject The germline subject (optional).
 //' @param context_sampling The number of reference contexts per context in
 //'   the index (optional: default value is 100).
+//' @param COSMIC_account A named list containing "email" and "password" of
+//'   a valid COSMIC account (required to download mutational signatures
+//'   from COSMIC site).
 //' @param max_index_size The maximum size of an admitted indel and, as a
 //'   consequence, the maximum size of a motif stored in the repeated
 //'   sequence index (optional: default value is 50).
@@ -843,16 +850,18 @@ RCPP_MODULE(Mutations){
 //' reference_url <- paste0("https://ftp.ensembl.org/pub/grch37/release-111/",
 //'                         "fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.",
 //'                         "dna.chromosome.22.fa.gz")
-//' sbs_url <- paste0("https://cancer.sanger.ac.uk/signatures/documents/",
-//'                   "2123/COSMIC_v3.4_SBS_GRCh37.txt")
-//' indel_url <- paste0("https://cancer.sanger.ac.uk/signatures/documents/",
-//'                     "2121/COSMIC_v3.4_ID_GRCh37.txt")
+//' sbs_url <- paste0("https://raw.githubusercontent.com/",
+//'                   "caravagnalab/ProCESS/refs/heads/1.0/inst/extdata/",
+//'                   "SBS_demo_signatures.txt")
+//' indel_url <- paste0("https://raw.githubusercontent.com/",
+//'                     "caravagnalab/ProCESS/refs/heads/1.0/inst/extdata/",
+//'                     "indel_demo_signatures.txt")
 //' drivers_url <- paste0("https://raw.githubusercontent.com/",
-//'                       "caravagnalab/ProCESS/main/inst/extdata/",
+//'                       "caravagnalab/ProCESS/refs/heads/1.0/inst/extdata/",
 //'                       "driver_mutations_hg19.csv")
 //' passenger_CNAs_url <- paste0("https://raw.githubusercontent.com/",
-//'                              "caravagnalab/ProCESS/main/inst/extdata/",
-//'                              "passenger_CNAs_hg19.csv")
+//'                              "caravagnalab/ProCESS/refs/heads/1.0/inst/",
+//'                              "extdata/passenger_CNAs_hg19.csv")
 //' germline_url <- paste0("https://zenodo.org/records/13166780/files/",
 //'                        "germline_data_demo.tar.gz")
 //'
@@ -860,35 +869,32 @@ RCPP_MODULE(Mutations){
 //' # directory "Test". The `drivers_url` parameter is optional, but
 //' # it is suggested to avoid passenger mutations on driver loci.
 //' m_engine <- MutationEngine(directory = "Test",
-//'                                   reference_src = reference_url,
-//'                                   SBS_signatures_src = sbs_url,
-//'                                   indel_signatures_src = indel_url,
-//'                                   drivers_src = drivers_url,
-//'                                   passenger_CNAs_src = passenger_CNAs_url,
-//'                                   germline_src = germline_url)
+//'                            reference_src = reference_url,
+//'                            SBS_signatures_src = sbs_url,
+//'                            indel_signatures_src = indel_url,
+//'                            drivers_src = drivers_url,
+//'                            passenger_CNAs_src = passenger_CNAs_url,
+//'                            germline_src = germline_url)
 //'
 //' # if the parameters of a mutation engine construction match those of a
 //' # previous construction, then the corresponding reference sequence,
 //' # the SBS file, and the previously built context index are loaded from
 //' # the set-up directory avoiding further computations.
-//' m_engine <- MutationEngine("Test", reference_url, sbs_url,
-//'                                   indel_url, drivers_url,
-//'                                   passenger_CNAs_url, germline_url)
+//' m_engine <- MutationEngine("Test", reference_url, sbs_url, indel_url,
+//'                            drivers_url, passenger_CNAs_url, germline_url)
 //'
 //' # if the `context_sampling` parameter changes, a new context index is
 //' # built, while neither the reference sequence nor the SBS file are
 //' # downloaded again.
-//' m_engine <- MutationEngine("Test", reference_url, sbs_url,
-//'                                   indel_url, drivers_url,
-//'                                   passenger_CNAs_url, germline_url,
-//'                                   context_sampling = 50)
+//' m_engine <- MutationEngine("Test", reference_url, sbs_url, indel_url,
+//'                            drivers_url, passenger_CNAs_url, germline_url,
+//'                            context_sampling = 50)
 //'
 //' # a further construction with the same parameters avoids both
 //' # downloads and context index construction.
-//' m_engine <- MutationEngine("Test", reference_url, sbs_url,
-//'                                   indel_url, drivers_url,
-//'                                   passenger_CNAs_url, germline_url,
-//'                                   context_sampling = 50)
+//' m_engine <- MutationEngine("Test", reference_url, sbs_url, indel_url,
+//'                            drivers_url, passenger_CNAs_url, germline_url,
+//'                            context_sampling = 50)
 //'
 //' m_engine
 //'
@@ -900,9 +906,30 @@ RCPP_MODULE(Mutations){
 //'
 //' # the `context_sampling` can be used also when a pre-defined set-up
 //' # configuration is adopted.
-//' m_engine <- MutationEngine(setup_code = "demo",
-//'                                   context_sampling = 50)
+//' m_engine <- MutationEngine(setup_code = "demo", context_sampling = 50)
 //'
+//' m_engine
+//'
+//' # remove the "demo" directory
+//' unlink("demo", recursive = TRUE)
+//'
+//' # Some of the pre-defined configurations requires to download the mutational
+//' # signatures from the COSMIC site which requires an account (e.g., "GRCh37"
+//' # and "GRCh38"). The COSMIC account can be passed to `MutationEngine()` as
+//' # follows
+//' m_engine <- MutationEngine(setup_code = "demo",
+//'                            COSMIC_account = list(email = "foo@bar.org",
+//'                                                  password = "********"))
+//' m_engine
+//'
+//' # remove the "demo" directory
+//' unlink("demo", recursive = TRUE)
+//'
+//' # In alternative, pre-download the mutational signatures and pass their
+//' # paths to `MutationEngine()` as parameters.
+//' m_engine <- MutationEngine(setup_code = "demo",
+//'                            SBS_signatures_src = "Test/SBS_signatures.txt",
+//'                            indel_signatures_src = "Test/indel_signatures.txt")
 //' m_engine
 //'
 //' # remove the "Test" and "demo" directories
@@ -914,6 +941,7 @@ RCPP_MODULE(Mutations){
                         _["indel_signatures_src"] = "",
                         _["drivers_src"] = "", _["passenger_CNAs_src"] = "",
                         _["germline_src"] = "", _["setup_code"] = "",
+                        _["COSMIC_account"] = R_NilValue,
                         _["germline_subject"] = "", _["context_sampling"] = 100,
                         _["max_motif_size"] = 50,
                         _["max_repetition_storage"] = 500000,
@@ -1142,22 +1170,22 @@ RCPP_MODULE(Mutations){
 //' @name PhylogeneticForest$get_driver_mutations
 //' @title Getting the driver mutations
 //' @description This method returns the applied driver mutations.
-//' @return A dataframe consisting in eight columns `mutant`, `order`, `type`, 
+//' @return A dataframe consisting in eight columns `mutant`, `order`, `type`,
 //'    `CNA_type`, `chr`, `start`, `end`, `ref`, `alt`, `allele`, and
 //'    `allele_srd`. Each row in the dataframe reports one driver mutations.
 //'    The fields `mutant` and `order` report the name of the mutant and the
 //'    application order among the mutant driver mutations, respectively.
 //'    The column `type` declares the mutation type and contains "`SID`",
-//'    "`CNA`", or "`WGD`" when the mutation is an SNV/indel, a CNA, or 
+//'    "`CNA`", or "`WGD`" when the mutation is an SNV/indel, a CNA, or
 //'    a whole genome duplication, respectively. When the mutation is a CNA,
 //'    the `CNA_type` can either be "`A`" (i.e., amplification) or "`D`"
-//'    (i.e., deletion). When the mutation is not a WGD, the fields `chr`, 
+//'    (i.e., deletion). When the mutation is not a WGD, the fields `chr`,
 //'    `start`, and `end` contains the mutation chromosome, the initial and
 //'    the final position on the chromosome, respectively. When the mutation
 //'    is a SID , the fields `ref` and `alt` contains the mutation reference
 //'    genome and alternate sequences, respectively. When the mutation is a
 //'    SID or a CNA deletion, the field `allele` stores the allele in which
-//'    the mutation was applied. When instead the mutation is a CNA 
+//'    the mutation was applied. When instead the mutation is a CNA
 //'    amplification, the fields `allele` and `src_allele` reports the
 //'    identifiers of the new allele and of the original allele, respectively.
 //'    In all the remaining cases, the fields contains the value `NA`.

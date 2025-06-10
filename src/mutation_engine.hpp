@@ -77,31 +77,40 @@ class MutationEngine
         }
     }
 public:
-    MutationEngine(const std::string& setup_code,
-                   const std::string& germline_subject="",
-                   const size_t& context_sampling=100,
-                   const size_t& max_motif_size=50,
-                   const size_t& max_repetition_storage=500000,
-                   const std::string& tumour_type="",
-                   const std::string& tumor_study="",
-                   const bool& avoid_homozygous_losses=true,
-                   const bool& quiet=false);
-
-    MutationEngine(const std::string& directory,
+    MutationEngine(const std::shared_ptr<Account>& COSMIC_account,
+                   const std::string& setup_code,
+                   const std::string& directory,
                    const std::string& reference_source,
                    const std::string& SBS_signatures_source,
                    const std::string& indel_signatures_source,
                    const std::string& drivers_source,
                    const std::string& passenger_CNAs_source,
                    const std::string& germline_source,
-                   const std::string& germline_subject="",
-                   const size_t& context_sampling=100,
-                   const size_t& max_motif_size=50,
-                   const size_t& max_repetition_storage=500000,
-                   const std::string& tumour_type="",
-                   const std::string& tumor_study="",
-                   const bool& avoid_homozygous_losses=true,
-                   const bool& quiet=false);
+                   const std::string& germline_subject,
+                   const size_t& context_sampling,
+                   const size_t& max_motif_size,
+                   const size_t& max_repetition_storage,
+                   const std::string& tumour_type,
+                   const std::string& tumor_study,
+                   const bool& avoid_homozygous_losses,
+                   const bool& quiet);
+
+    MutationEngine(const std::shared_ptr<Account>& COSMIC_account,
+                   const std::string& directory,
+                   const std::string& reference_source,
+                   const std::string& SBS_signatures_source,
+                   const std::string& indel_signatures_source,
+                   const std::string& drivers_source,
+                   const std::string& passenger_CNAs_source,
+                   const std::string& germline_source,
+                   const std::string& germline_subject,
+                   const size_t& context_sampling,
+                   const size_t& max_motif_size,
+                   const size_t& max_repetition_storage,
+                   const std::string& tumour_type,
+                   const std::string& tumor_study,
+                   const bool& avoid_homozygous_losses,
+                   const bool& quiet);
 
     static Rcpp::List get_supported_setups();
 
@@ -213,6 +222,7 @@ public:
                          const std::string& passenger_CNAs_source,
                          const std::string& germline_source,
                          const std::string& setup_code,
+                         const SEXP& COSMIC_account_data,
                          const std::string& germline_subject,
                          const size_t& context_sampling,
                          const size_t& max_motif_size,
@@ -226,7 +236,7 @@ public:
 
     inline void set_context_sampling(const size_t& context_sampling)
     {
-        set_context_sampling(context_sampling, false); 
+        set_context_sampling(context_sampling, false);
     }
 
     void set_context_sampling(const size_t& context_sampling,

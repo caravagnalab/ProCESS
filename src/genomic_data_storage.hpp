@@ -62,6 +62,43 @@ struct GermlineSubject
   }
 };
 
+/**
+ * @brief A generic username/password account
+ */
+class Account
+{
+    std::string username;   //!< account username
+    std::string password;   //!< account password
+
+public:
+    /**
+     * @brief A constructor
+     *
+     * @param username the account username
+     * @param password the account password
+     */
+    Account(std::string username, std::string password);
+
+    /**
+     * @brief Get the account username
+     *
+     * @return The account username
+     */
+    inline const std::string& get_username() const
+    {
+        return username;
+    }
+    /**
+     * @brief Get the account password
+     *
+     * @return The account password
+     */
+    inline const std::string& get_password() const
+    {
+        return password;
+    }
+};
+
 class GermlineStorage
 {
   std::filesystem::path directory;
@@ -127,33 +164,27 @@ class GenomicDataStorage
   std::filesystem::path directory;
   GermlineStorage germline_storage;
 
-  bool reference_downloaded;
   std::string reference_src;
 
-  bool SBS_signatures_downloaded;
   std::string SBS_signatures_src;
 
-  bool indel_signatures_downloaded;
   std::string indel_signatures_src;
 
-  bool drivers_downloaded;
   std::string drivers_src;
 
-  bool passenger_CNAs_downloaded;
   std::string passenger_CNAs_src;
 
-  bool germline_downloaded;
   std::string germline_src;
 
   std::filesystem::path get_destination_path(const std::string& url) const;
 
   std::filesystem::path download_file(const std::string& url) const;
 
-  std::filesystem::path retrieve_reference();
+  std::filesystem::path retrieve_reference() const;
 
   static bool is_an_URL(const std::string reference)
   {
-    std::set<std::string> protocols{"ftp", "http"};
+    std::set<std::string> protocols{"ftp://", "http://", "https://"};
 
     for (const auto& protocol : protocols) {
       if (reference.find(protocol)==0) {
@@ -164,49 +195,48 @@ class GenomicDataStorage
     return false;
   }
 
-  template<typename MUTATION_TYPE>
-  std::filesystem::path retrieve_file(const std::string& name, bool& downloaded)
+  template<typename MUTATION_TYPE,
+           std::enable_if_t<std::is_base_of_v<RACES::Mutations::MutationType, MUTATION_TYPE>, bool> = true>
+  std::list<std::pair<std::string, std::filesystem::path>>&
+  collect_signatures_download_list(std::list<std::pair<std::string, std::filesystem::path>>& download_list) const
   {
-    auto source = get_signatures_path<MUTATION_TYPE>();
-    if (std::filesystem::exists(source)) {
-      return source;
+    const auto dst_filename = signatures_storage_path<MUTATION_TYPE>();
+    if (std::filesystem::exists(dst_filename)) {
+        return download_list;
     }
 
-    source = get_signatures_path<MUTATION_TYPE>(false);
+    const auto source = get_signatures_src<MUTATION_TYPE>();
+    if (std::filesystem::exists(source)) {
+        return download_list;
+    }
 
-    downloaded = is_an_URL(source);
-    if (!downloaded && !std::filesystem::exists(source)) {
-      throw std::runtime_error("Designed " + name + " file \""
-                               + to_string(source)
+    if (!is_an_URL(source)) {
+      throw std::runtime_error("Signature file \"" + to_string(source)
                                + "\" does not exists.");
     }
 
-    auto filename = get_signatures_path<MUTATION_TYPE>(downloaded);
-    if (std::filesystem::exists(filename)) {
-      return filename;
-    }
+    download_list.push_back({source, dst_filename});
 
-    using namespace Rcpp;
-
-    Rcout << "Downloading " + name + " file..." << std::endl << std::flush;
-
-    auto downloaded_file = download_file(source);
-
-    Rcout << name << " file downloaded" << std::endl;
-
-    std::filesystem::rename(downloaded_file, filename);
-
-    return filename;
+    return download_list;
   }
 
-  std::filesystem::path retrieve_indel_signatures();
+  void retrieve_drivers() const;
 
-  std::filesystem::path retrieve_drivers();
+  void retrieve_signatures(const std::shared_ptr<Account>& COSMIC_account) const;
 
-  std::filesystem::path retrieve_passenger_CNAs();
+  void retrieve_passenger_CNAs() const;
 
-  std::filesystem::path retrieve_germline();
+  void retrieve_germline() const;
 public:
+  GenomicDataStorage(const std::shared_ptr<Account> COSMIC_account,
+                     const std::string& directory,
+                     const std::string& reference_source,
+                     const std::string& SBS_signatures_source,
+                     const std::string& indel_signatures_source,
+                     const std::string& driver_mutations_source,
+                     const std::string& passenger_CNAs_source,
+                     const std::string& germline_source);
+
   GenomicDataStorage(const std::string& directory,
                      const std::string& reference_source,
                      const std::string& SBS_signatures_source,
@@ -222,24 +252,32 @@ public:
 
   std::filesystem::path get_reference_path() const;
 
+  inline std::filesystem::path reference_storage_path() const
+  {
+      return get_directory()/std::string("reference.fasta");
+  }
+
   template<typename MUTATION_TYPE,
            std::enable_if_t<std::is_base_of_v<RACES::Mutations::MutationType, MUTATION_TYPE>, bool> = true>
-  std::string get_signatures_path(const bool& downloaded) const
+  std::string get_signatures_path() const
+  {
+    if (std::filesystem::exists(get_signatures_src<MUTATION_TYPE>())) {
+        return get_signatures_src<MUTATION_TYPE>();
+    }
+
+    return to_string(signatures_storage_path<MUTATION_TYPE>());
+  }
+
+  template<typename MUTATION_TYPE,
+           std::enable_if_t<std::is_base_of_v<RACES::Mutations::MutationType, MUTATION_TYPE>, bool> = true>
+  std::string get_signatures_src() const
   {
     if constexpr(std::is_base_of_v<MUTATION_TYPE, RACES::Mutations::SBSType>) {
-      if (downloaded) {
-        return to_string(directory/std::string("SBS_signatures.txt"));
-      } else {
-        return SBS_signatures_src;
-      }
+      return SBS_signatures_src;
     }
 
     if constexpr(std::is_base_of_v<MUTATION_TYPE, RACES::Mutations::IDType>) {
-      if (downloaded) {
-        return to_string(directory/std::string("indel_signatures.txt"));
-      } else {
-        return indel_signatures_src;
-      }
+      return indel_signatures_src;
     }
 
     throw std::runtime_error("Unsupported mutation type.");
@@ -247,14 +285,14 @@ public:
 
   template<typename MUTATION_TYPE,
            std::enable_if_t<std::is_base_of_v<RACES::Mutations::MutationType, MUTATION_TYPE>, bool> = true>
-  std::string get_signatures_path() const
+  std::filesystem::path signatures_storage_path() const
   {
     if constexpr(std::is_base_of_v<MUTATION_TYPE, RACES::Mutations::SBSType>) {
-      return get_signatures_path<MUTATION_TYPE>(SBS_signatures_downloaded);
+      return get_directory()/"SBS_signatures.txt";
     }
 
     if constexpr(std::is_base_of_v<MUTATION_TYPE, RACES::Mutations::IDType>) {
-      return get_signatures_path<MUTATION_TYPE>(indel_signatures_downloaded);
+      return get_directory()/"indel_signatures.txt";
     }
 
     throw std::runtime_error("Unsupported mutation type.");
@@ -262,7 +300,24 @@ public:
 
   std::filesystem::path get_driver_mutations_path() const;
 
+  inline std::filesystem::path driver_mutations_storage_path() const
+  {
+      return get_directory()/"drivers.txt";
+  }
+
   std::filesystem::path get_passenger_CNAs_path() const;
+
+  inline std::filesystem::path passenger_CNAs_storage_path() const
+  {
+      return get_directory()/"passenger_CNAs.txt";
+  }
+
+  std::filesystem::path get_germline_path() const;
+
+  inline std::filesystem::path germline_storage_path() const
+  {
+      return get_directory()/"germline_data";
+  }
 
   inline const GermlineStorage& get_germline_storage() const
   {
