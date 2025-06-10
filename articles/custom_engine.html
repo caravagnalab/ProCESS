@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Customizing mutation engine">
 <meta name="description" content="How to customize the mutation engine and its indices
 ">
@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -116,11 +116,13 @@ the germline data directory.</p>
 <span>                        <span class="st">"fasta/homo_sapiens/dna/Homo_sapiens.GRCh37."</span>,</span>
 <span>                        <span class="st">"dna.chromosome.22.fa.gz"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">sbs_url</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"https://cancer.sanger.ac.uk/signatures/documents/2123/"</span>,</span>
-<span>                  <span class="st">"COSMIC_v3.4_SBS_GRCh37.txt"</span><span class="op">)</span></span>
+<span><span class="va">sbs_url</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/"</span>,</span>
+<span>                  <span class="st">"caravagnalab/ProCESS/refs/heads/1.0/"</span>,</span>
+<span>                  <span class="st">"inst/extdata/SBS_demo_signatures.txt"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">indel_url</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"https://cancer.sanger.ac.uk/signatures/documents/"</span>,</span>
-<span>                    <span class="st">"2121/COSMIC_v3.4_ID_GRCh37.txt"</span><span class="op">)</span></span>
+<span><span class="va">indel_url</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/"</span>,</span>
+<span>                    <span class="st">"caravagnalab/ProCESS/refs/heads/1.0/"</span>,</span>
+<span>                    <span class="st">"inst/extdata/indel_demo_signatures.txt"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">drivers_url</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/"</span>,</span>
 <span>                      <span class="st">"caravagnalab/ProCESS/main/inst/extdata/"</span>,</span>
@@ -141,13 +143,8 @@ the germline data directory.</p>
 <span>                           drivers_src <span class="op">=</span> <span class="va">drivers_url</span>,</span>
 <span>                           passenger_CNAs_src <span class="op">=</span> <span class="va">passenger_cnas_url</span>,</span>
 <span>                           germline_src <span class="op">=</span> <span class="va">germline_url</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Downloading reference genome...</span></span>
-<span><span class="co">#&gt; Reference genome downloaded</span></span>
-<span><span class="co">#&gt; Decompressing reference file...done</span></span>
-<span><span class="co">#&gt; Downloading SBS file...</span></span>
-<span><span class="co">#&gt; SBS file downloaded</span></span>
-<span><span class="co">#&gt; Downloading indel file...</span></span>
-<span><span class="co">#&gt; indel file downloaded</span></span>
+<span><span class="co">#&gt; Downloading signature files...</span></span>
+<span><span class="co">#&gt; Signature file downloaded</span></span>
 <span><span class="co">#&gt; Downloading driver mutation file...</span></span>
 <span><span class="co">#&gt; Driver mutation file downloaded</span></span>
 <span><span class="co">#&gt; Downloading passenger CNAs file...</span></span>
@@ -155,13 +152,13 @@ the germline data directory.</p>
 <span><span class="co">#&gt; Downloading germline mutations...</span></span>
 <span><span class="co">#&gt; Germline mutations downloaded</span></span>
 <span><span class="co">#&gt; Building context index...</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█████████████---------------------------] 32% [00m:01s] Processing chr. 22 [███████████████████████-----------------] 57% [00m:03s] Processing chr. 22 [████████████████████████████████████----] 89% [00m:04s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:04s] Context index built</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [██████████------------------------------] 24% [00m:01s] Processing chr. 22 [████████████████████--------------------] 49% [00m:02s] Processing chr. 22 [██████████████████████████████----------] 73% [00m:03s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:04s] Context index built</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving context index [████████████████████████████████████████] 100% [00m:00s] Context index saved</span></span>
 <span><span class="co">#&gt; done</span></span>
 <span><span class="co">#&gt; Building repeated sequence index...</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█---------------------------------------] 0% [00m:04s] Processing chr. 22 [█---------------------------------------] 0% [00m:07s] Processing chr. 22 [█---------------------------------------] 0% [00m:09s] Processing chr. 22 [█---------------------------------------] 0% [00m:11s] Processing chr. 22 [█---------------------------------------] 0% [00m:13s] Processing chr. 22 [█---------------------------------------] 0% [00m:17s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:17s] RS index built</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:01s] Saving RS index [████████████████████████████------------] 68% [00m:02s] Saving RS indexdone</span></span>
-<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:02s] RS index saved</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█---------------------------------------] 0% [00m:05s] Processing chr. 22 [█---------------------------------------] 0% [00m:07s] Processing chr. 22 [█---------------------------------------] 0% [00m:09s] Processing chr. 22 [█---------------------------------------] 0% [00m:10s] Processing chr. 22 [█---------------------------------------] 0% [00m:12s] Processing chr. 22 [█---------------------------------------] 0% [00m:17s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:17s] RS index built</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:01s] Saving RS index [█---------------------------------------] 0% [00m:01s] Saving RS index [███████████████-------------------------] 37% [00m:03s] Saving RS index [█████████████████████████████████████---] 92% [00m:04s] Saving RS indexdone</span></span>
+<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:04s] RS index saved</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving germline [████████████████████████████████████████] 100% [00m:00s] Germline saved</span></span>
 <span></span>
@@ -196,10 +193,8 @@ default, but it can be specified during the
 <span><span class="co">#&gt; Downloading reference genome...</span></span>
 <span><span class="co">#&gt; Reference genome downloaded</span></span>
 <span><span class="co">#&gt; Decompressing reference file...done</span></span>
-<span><span class="co">#&gt; Downloading SBS file...</span></span>
-<span><span class="co">#&gt; SBS file downloaded</span></span>
-<span><span class="co">#&gt; Downloading indel file...</span></span>
-<span><span class="co">#&gt; indel file downloaded</span></span>
+<span><span class="co">#&gt; Downloading signature files...</span></span>
+<span><span class="co">#&gt; Signature file downloaded</span></span>
 <span><span class="co">#&gt; Downloading driver mutation file...</span></span>
 <span><span class="co">#&gt; Driver mutation file downloaded</span></span>
 <span><span class="co">#&gt; Downloading passenger CNAs file...</span></span>
@@ -207,29 +202,31 @@ default, but it can be specified during the
 <span><span class="co">#&gt; Downloading germline mutations...</span></span>
 <span><span class="co">#&gt; Germline mutations downloaded</span></span>
 <span><span class="co">#&gt; Building context index...</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█████████████████-----------------------] 40% [00m:01s] Processing chr. 22 [█████████████████████████████████-------] 81% [00m:02s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:02s] Context index built</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [██████████------------------------------] 24% [00m:01s] Processing chr. 22 [████████████████████--------------------] 49% [00m:02s] Processing chr. 22 [██████████████████████████████----------] 73% [00m:04s] Processing chr. 22 [█████████████████████████████████-------] 81% [00m:05s] Processing chr. 22 [████████████████████████████████████████] 98% [00m:06s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:06s] Context index built</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving context index [████████████████████████████████████████] 100% [00m:00s] Context index saved</span></span>
 <span><span class="co">#&gt; done</span></span>
 <span><span class="co">#&gt; Building repeated sequence index...</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█---------------------------------------] 0% [00m:03s] Processing chr. 22 [█---------------------------------------] 0% [00m:04s] Processing chr. 22 [█---------------------------------------] 0% [00m:05s] Processing chr. 22 [█---------------------------------------] 0% [00m:06s] Processing chr. 22 [█---------------------------------------] 0% [00m:08s] Processing chr. 22 [█---------------------------------------] 0% [00m:11s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:11s] RS index built</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:01s] Saving RS index [█████████████████████████████-----------] 71% [00m:02s] Saving RS indexdone</span></span>
-<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:02s] RS index saved</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█---------------------------------------] 0% [00m:01s] Processing chr. 22 [█---------------------------------------] 0% [00m:05s] Processing chr. 22 [█---------------------------------------] 0% [00m:07s] Processing chr. 22 [█---------------------------------------] 0% [00m:10s] Processing chr. 22 [█---------------------------------------] 0% [00m:14s] Processing chr. 22 [█---------------------------------------] 0% [00m:17s] Processing chr. 22 [█---------------------------------------] 0% [00m:23s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:23s] RS index built</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:01s] Saving RS index [█---------------------------------------] 0% [00m:02s] Saving RS index [███████████████-------------------------] 36% [00m:04s] Saving RS index [████████████████████████████████--------] 78% [00m:05s] Saving RS indexdone</span></span>
+<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:05s] RS index saved</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading germline [█████████████████████████---------------] 62% [00m:01s] Loading germline [████████████████████████████████████████] 100% [00m:01s] Germline loaded</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving germline [████████████████████████████████████████] 100% [00m:00s] Germline saved</span></span>
 <span></span>
 <span><span class="co"># get the size of the context index when `context_sampling` is 100</span></span>
 <span><span class="fu">utils</span><span class="fu">:::</span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">format.object_size</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.info.html" class="external-link">file.size</a></span><span class="op">(</span><span class="st">"demo/context_index_100.cif"</span><span class="op">)</span>, <span class="st">"auto"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "1,3 Mb"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "1.3 Mb"</span></span></code></pre></div>
 <p>Let us rebuild the context index sampling one context every 50.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># building a mutation engine by using the "demo" set-up configuration</span></span>
 <span><span class="co"># and setting context_sampling to 50</span></span>
 <span><span class="va">m_engine</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MutationEngine.html">MutationEngine</a></span><span class="op">(</span>setup_code <span class="op">=</span> <span class="st">"demo"</span>, context_sampling <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Downloading signature files...</span></span>
+<span><span class="co">#&gt; Signature file downloaded</span></span>
 <span><span class="co">#&gt; Building context index...</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█████████████████-----------------------] 40% [00m:01s] Processing chr. 22 [█████████████████████████████████-------] 81% [00m:02s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:02s] Context index built</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [███████---------------------------------] 16% [00m:01s] Processing chr. 22 [█████████████---------------------------] 32% [00m:02s] Processing chr. 22 [████████████████████--------------------] 49% [00m:03s] Processing chr. 22 [███████████████████████████-------------] 65% [00m:04s] Processing chr. 22 [█████████████████████████████████-------] 81% [00m:05s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:06s] Context index built</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving context index [████████████████████████████████████████] 100% [00m:00s] Context index saved</span></span>
 <span><span class="co">#&gt; done</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading RS index [█████████████████-----------------------] 41% [00m:01s] Loading RS index [████████████████████████████████--------] 79% [00m:02s] Loading RS index [████████████████████████████████████████] 100% [00m:02s] RS index loaded</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading RS index [███-------------------------------------] 7% [00m:01s] Loading RS index [█████████-------------------------------] 20% [00m:02s] Loading RS index [█████████████---------------------------] 31% [00m:03s] Loading RS index [███████████████████████-----------------] 55% [00m:04s] Loading RS index [███████████████████████████████---------] 76% [00m:05s] Loading RS index [███████████████████████████████████████-] 96% [00m:06s] Loading RS index [████████████████████████████████████████] 100% [00m:06s] RS index loaded</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded</span></span></code></pre></div>
 <p>Above call uses the already downloaded data in the directory
 <code>"demo"</code> to build the context and produces the file
@@ -237,7 +234,7 @@ default, but it can be specified during the
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get the size of the context index when `context_sampling` is 50</span></span>
 <span><span class="fu">utils</span><span class="fu">:::</span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">format.object_size</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.info.html" class="external-link">file.size</a></span><span class="op">(</span><span class="st">"demo/context_index_50.cif"</span><span class="op">)</span>, <span class="st">"auto"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "2,7 Mb"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "2.7 Mb"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="the-repeated-sequence-index">The Repeated Sequence Index<a class="anchor" aria-label="anchor" href="#the-repeated-sequence-index"></a>
@@ -263,18 +260,20 @@ can be specified during the <code><a href="../reference/MutationEngine.html">Mut
 <code class="sourceCode R"><span><span class="co"># get the size of the repeated index when the default parameter values</span></span>
 <span><span class="co"># are used</span></span>
 <span><span class="fu">utils</span><span class="fu">:::</span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">format.object_size</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.info.html" class="external-link">file.size</a></span><span class="op">(</span><span class="st">"demo/rs_index_50_500000.rsif"</span><span class="op">)</span>, <span class="st">"auto"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "212,5 Mb"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "212.5 Mb"</span></span></code></pre></div>
 <p>Let us rebuild the context index sampling one context every 50.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># building a mutation engine by using the "demo" set-up configuration</span></span>
 <span><span class="co"># and setting max_repetition_storage to 10,000,000</span></span>
 <span><span class="va">m_engine</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MutationEngine.html">MutationEngine</a></span><span class="op">(</span>setup_code <span class="op">=</span> <span class="st">"demo"</span>,</span>
 <span>                           max_repetition_storage <span class="op">=</span> <span class="fl">10000000</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Downloading signature files...</span></span>
+<span><span class="co">#&gt; Signature file downloaded</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading context index [████████████████████████████████████████] 100% [00m:00s] Context index loaded</span></span>
 <span><span class="co">#&gt; Building repeated sequence index...</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█---------------------------------------] 0% [00m:03s] Processing chr. 22 [█---------------------------------------] 0% [00m:06s] Processing chr. 22 [█---------------------------------------] 0% [00m:07s] Processing chr. 22 [█---------------------------------------] 0% [00m:09s] Processing chr. 22 [█---------------------------------------] 0% [00m:12s] Processing chr. 22 [█---------------------------------------] 0% [00m:16s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:16s] RS index built</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:01s] Saving RS index [█---------------------------------------] 0% [00m:02s] Saving RS index [█---------------------------------------] 0% [00m:03s] Saving RS index [███-------------------------------------] 5% [00m:05s] Saving RS index [█████████████---------------------------] 31% [00m:06s] Saving RS index [████████████████████████----------------] 58% [00m:07s] Saving RS index [██████████████████████████████████------] 83% [00m:08s] Saving RS indexdone</span></span>
-<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:08s] RS index saved</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█---------------------------------------] 0% [00m:04s] Processing chr. 22 [█---------------------------------------] 0% [00m:05s] Processing chr. 22 [█---------------------------------------] 0% [00m:07s] Processing chr. 22 [█---------------------------------------] 0% [00m:08s] Processing chr. 22 [█---------------------------------------] 0% [00m:10s] Processing chr. 22 [█---------------------------------------] 0% [00m:13s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:13s] RS index built</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:01s] Saving RS index [█---------------------------------------] 0% [00m:02s] Saving RS index [█---------------------------------------] 0% [00m:03s] Saving RS index [█---------------------------------------] 0% [00m:04s] Saving RS index [█---------------------------------------] 0% [00m:05s] Saving RS index [█---------------------------------------] 0% [00m:07s] Saving RS index [█---------------------------------------] 0% [00m:08s] Saving RS index [██████----------------------------------] 14% [00m:09s] Saving RS index [█████████████---------------------------] 31% [00m:10s] Saving RS index [████████████████████--------------------] 48% [00m:11s] Saving RS index [██████████████████████████--------------] 64% [00m:12s] Saving RS index [█████████████████████████████████-------] 80% [00m:13s] Saving RS index [███████████████████████████████████████-] 96% [00m:14s] Saving RS indexdone</span></span>
+<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:14s] RS index saved</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded</span></span></code></pre></div>
 <p>Above call uses the already downloaded data in the directory
 <code>"demo"</code> to build the repeated sequence index and produces
@@ -283,7 +282,7 @@ the file <code>"demo/rs_index_50_10000000.rsif"</code>.</p>
 <code class="sourceCode R"><span><span class="co"># get the size of the context index when `context_sampling` is 50</span></span>
 <span><span class="fu">utils</span><span class="fu">:::</span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">format.object_size</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.info.html" class="external-link">file.size</a></span><span class="op">(</span><span class="st">"demo/rs_index_50_10000000.rsif"</span><span class="op">)</span>,</span>
 <span>                           <span class="st">"auto"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "732,1 Mb"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "732.1 Mb"</span></span></code></pre></div>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-alexandrov2020repertoire" class="csl-entry">
 Alexandrov, Ludmil B, Jaegil Kim, Nicholas J Haradhvala, Mi Ni Huang,

@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Infinite Site Model">
 <meta name="description" content="How to enable/disable the infinite site model
 ">
@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -168,11 +168,11 @@ that are not each other ancestors.</p>
 <span></span>
 <span><span class="co"># place the mutations on the same samples forest used above</span></span>
 <span><span class="va">phylo_forest2</span> <span class="op">&lt;-</span> <span class="va">m_engine</span><span class="op">$</span><span class="fu">place_mutations</span><span class="op">(</span><span class="va">samples_forest</span>, <span class="fl">1000</span>, <span class="fl">500</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Placing mutations [█████████████████████-------------------] 51% [00m:01s] Placing mutations [███████████████████████████████████-----] 86% [00m:02s] Placing mutations [█████████████████████████████████████---] 92% [00m:03s] Placing mutations [████████████████████████████████████████] 100% [00m:03s] Mutations placed</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Placing mutations [██████████████--------------------------] 33% [00m:01s] Placing mutations [████████████████████████████------------] 68% [00m:02s] Placing mutations [███████████████████████████████████-----] 85% [00m:03s] Placing mutations [████████████████████████████████████----] 89% [00m:04s] Placing mutations [██████████████████████████████████████--] 93% [00m:05s] Placing mutations [████████████████████████████████████████] 100% [00m:05s] Mutations placed</span></span>
 <span></span>
 <span><span class="co"># test whether the infinite sites conditions hold in the new forest</span></span>
 <span><span class="fu">test_infinite_sites_model</span><span class="op">(</span><span class="va">phylo_forest2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "SNV('22'',16055119,'C','T') independently arises in cells 177596 and 189688"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "SNV('22'',16055123,'C','A') independently arises in cells 212657 and 214729"</span></span></code></pre></div>
   </main>
 </div>
 

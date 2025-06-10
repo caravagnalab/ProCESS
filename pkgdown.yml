@@ -1,4 +1,4 @@
-pandoc: 3.6.4
+pandoc: 3.7.0.1
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
@@ -15,7 +15,7 @@ articles:
   three_sampling: three_sampling.html
   time_series: time_series.html
   tissue_simulation: tissue_simulation.html
-last_built: 2025-04-14T18:33Z
+last_built: 2025-06-10T15:15Z
 urls:
   reference: https://caravagnalab.github.io/ProCESS/reference
   article: https://caravagnalab.github.io/ProCESS/articles
