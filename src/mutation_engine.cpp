@@ -37,7 +37,7 @@
 
 #include "genomic_data_storage.hpp"
 
-#define ZENODO_ID "15307992"
+#define ZENODO_ID "15656740"
 
 
 using SIDSpec = RACES::Mutations::MutationSpec<RACES::Mutations::SID>;
@@ -76,10 +76,10 @@ std::map<std::string, MutationEngineSetup> supported_setups{
     {
       "A demonstrative set-up", "demo",
       "https://ftp.ensembl.org/pub/grch37/release-111/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.chromosome.22.fa.gz",
-      "https://raw.githubusercontent.com/caravagnalab/ProCESS/" GIT_HASH "/inst/extdata/SBS_demo_signatures.txt",
-      "https://raw.githubusercontent.com/caravagnalab/ProCESS/" GIT_HASH "/inst/extdata/indel_demo_signatures.txt",
-      "https://raw.githubusercontent.com/caravagnalab/ProCESS/" GIT_HASH "/inst/extdata/driver_mutations_hg19.csv",
-      "https://raw.githubusercontent.com/caravagnalab/ProCESS/" GIT_HASH "/inst/extdata/passenger_CNAs_hg19.csv",
+      "https://zenodo.org/records/" ZENODO_ID "/files/SBS_demo_signatures.txt",
+      "https://zenodo.org/records/" ZENODO_ID "/files/indel_demo_signatures.txt",
+      "https://zenodo.org/records/" ZENODO_ID "/files/driver_mutations_hg19.csv",
+      "https://zenodo.org/records/" ZENODO_ID "/files/passenger_CNAs_hg19.csv",
       "https://zenodo.org/records/" ZENODO_ID "/files/germline_data_demo.tar.gz"
     }
   },
@@ -90,8 +90,8 @@ std::map<std::string, MutationEngineSetup> supported_setups{
       "https://ftp.ensembl.org/pub/release-112/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz",
       "https://cancer.sanger.ac.uk/signatures/documents/2124/COSMIC_v3.4_SBS_GRCh38.txt",
       "https://cancer.sanger.ac.uk/signatures/documents/2121/COSMIC_v3.4_ID_GRCh37.txt",
-      "https://raw.githubusercontent.com/caravagnalab/ProCESS/" GIT_HASH "/inst/extdata/driver_mutations_hg38.csv",
-      "https://raw.githubusercontent.com/caravagnalab/ProCESS/" GIT_HASH "/inst/extdata/passenger_CNAs_hg38.csv",
+      "https://zenodo.org/records/" ZENODO_ID "/files/driver_mutations_hg38.csv",
+      "https://zenodo.org/records/" ZENODO_ID "/files/passenger_CNAs_hg38.csv",
       "https://zenodo.org/records/" ZENODO_ID "/files/germline_data_hg38.tar.gz"
     }
   },
@@ -102,8 +102,8 @@ std::map<std::string, MutationEngineSetup> supported_setups{
       "https://ftp.ensembl.org/pub/grch37/release-111/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz",
       "https://cancer.sanger.ac.uk/signatures/documents/2123/COSMIC_v3.4_SBS_GRCh37.txt",
       "https://cancer.sanger.ac.uk/signatures/documents/2121/COSMIC_v3.4_ID_GRCh37.txt",
-      "https://raw.githubusercontent.com/caravagnalab/ProCESS/" GIT_HASH "/inst/extdata/driver_mutations_hg19.csv",
-      "https://raw.githubusercontent.com/caravagnalab/ProCESS/" GIT_HASH "/inst/extdata/passenger_CNAs_hg19.csv",
+      "https://zenodo.org/records/" ZENODO_ID "/files/driver_mutations_hg19.csv",
+      "https://zenodo.org/records/" ZENODO_ID "/files/passenger_CNAs_hg19.csv",
       "https://zenodo.org/records/" ZENODO_ID "/files/germline_data_hg19.tar.gz"
     }
   }
