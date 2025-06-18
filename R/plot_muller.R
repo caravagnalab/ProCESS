@@ -1,5 +1,5 @@
 ## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
-## Copyright (C) 2023 - Giulio Caravagna <gcaravagna@units.it>
+## Copyright (C) 2023-2025 - Giulio Caravagna <gcaravagna@units.it>
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -107,6 +107,8 @@ plot_muller <- function(simulation, color_map = NULL) {
     color_map <- get_species_colors(simulation$get_species())
   }
 
+  group_name <- get_group_cell_name(simulation)
+
   suppressWarnings({
     muller_df <- ggmuller::get_Muller_df(df_edges, t_wt_dynamics)
 
@@ -114,7 +116,7 @@ plot_muller <- function(simulation, color_map = NULL) {
                                       palette = c(`Wild-type` = "gainsboro",
                                                   color_map)) +
       my_theme() +
-      ggplot2::guides(fill = ggplot2::guide_legend("Species")) #+
+      ggplot2::guides(fill = ggplot2::guide_legend(group_name)) #+
     #ggplot2::scale_fill_manual(values = c(`Wild-type` = "gainsboro",
     #                                      color_map))
   })

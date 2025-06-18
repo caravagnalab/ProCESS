@@ -1,5 +1,5 @@
 ## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
-## Copyright (C) 2023 - Giulio Caravagna <gcaravagna@units.it>
+## Copyright (C) 2023-2025 - Giulio Caravagna <gcaravagna@units.it>
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -122,6 +122,8 @@ plot_forest <- function(forest, highlight_sample = NULL, color_map = NULL) {
                                                               "indianred3",
                                                               "black")))
 
+    group_name <- get_group_cell_name(forest)
+
     graph_plot +
       ggraph::geom_node_point(ggplot2::aes(color = .data$species,
                                            shape = ifelse(is.na(.data$sample),
@@ -133,14 +135,14 @@ plot_forest <- function(forest, highlight_sample = NULL, color_map = NULL) {
       ggplot2::theme_minimal() +
       ggplot2::theme(legend.position = "bottom") +
       ggplot2::labs(
-        color = "Species",
+        color = group_name,
         shape = "Sample",
         x = NULL,
-        y = "Cell division"
+        y = "Time"
       ) +
       ggplot2::guides(size = "none",
                       shape = ggplot2::guide_legend("Sample"),
-                      color = ggplot2::guide_legend("Species")) +
+                      color = ggplot2::guide_legend(group_name)) +
       ggplot2::scale_size_manual(
         values = point_size
       ) +

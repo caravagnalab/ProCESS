@@ -1,5 +1,5 @@
 ## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
-## Copyright (C) 2023 - Giulio Caravagna <gcaravagna@units.it>
+## Copyright (C) 2023-2025 - Giulio Caravagna <gcaravagna@units.it>
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -163,7 +163,7 @@ plot_tissue <- function(simulation, num_of_bins = 100,
                                drop = !list_all_species) +
     my_theme() +
     ggplot2::labs(x = NULL, y = NULL,
-                  fill = "Species") +
+                  fill = get_group_cell_name(simulation)) +
     # ggplot2::scale_alpha_manual(values = c(`+` = 1, `-` = .5)) +
     ggplot2::theme(legend.position = "bottom") +
     ggplot2::xlim(-1, simulation$get_tissue_size()[1] + 1) +
@@ -199,4 +199,23 @@ plot_tissue <- function(simulation, num_of_bins = 100,
   return(pl)
 }
 
+with_epistate <- function(data) {
+  if (inherits(data, "Rcpp_SamplesForest")) {
+    epistates <- unique(data$get_nodes()[["epistate"]])
+  } else if (inherits(data, "Rcpp_SpatialSimulation")) {
+    epistates <- unique(data$get_species()[["epistate"]])
+  } else {
+    stop(paste0("with_epistate(): Unsupported type \"",
+                class(data), "\"."))
+  }
 
+  return(length(epistates)>1 || epistates[1] != "")
+}
+
+get_group_cell_name <- function(data) {
+  if (with_epistate(data)) {
+    return("Species")
+  } else {
+    return("Mutants")
+  }
+}

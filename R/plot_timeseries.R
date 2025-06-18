@@ -1,5 +1,5 @@
 ## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
-## Copyright (C) 2023 - Giulio Caravagna <gcaravagna@units.it>
+## Copyright (C) 2023-2025 - Giulio Caravagna <gcaravagna@units.it>
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@ plot_timeseries <- function(simulation, color_map = NULL) {
                                      color = .data$species)) +
     ggplot2::labs(
       x = "Time", y = "Cell count",
-      color = "Species",
+      color = get_group_cell_name(simulation),
       alpha = "Epistate"
     ) +
     my_theme() +

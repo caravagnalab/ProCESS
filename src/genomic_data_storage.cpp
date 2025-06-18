@@ -357,6 +357,10 @@ void GenomicDataStorage::retrieve_signatures(const std::shared_ptr<Account>& COS
     collect_signatures_download_list<RACES::Mutations::SBSType>(download_list);
     collect_signatures_download_list<RACES::Mutations::IDType>(download_list);
 
+    if (download_list.size() == 0) {
+        return;
+    }
+
     Rcpp::Rcout << "Downloading signature files..." << std::endl << std::flush;
 
     if (signatures_from_COSMIC(download_list)) {
