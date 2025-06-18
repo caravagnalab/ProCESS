@@ -1,3 +1,19 @@
+## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
+## Copyright (C) 2023-2025 - Alberto Casagrande <alberto.casagrande@uniud.it>
+##
+## This program is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 #' Annotate a plot of cell divisions.
 #'
 #' @description
@@ -7,7 +23,7 @@
 #' @param forest The original forest object has been derived.
 #' @param labels A data frame annotating the sticks (it can be the output of
 #'   `get_relevant_branches()`).
-#' @param cls A custom list of colors for any stick. If NULL a deafult palette
+#' @param cls A custom list of colors for any stick. If NULL a default palette
 #'   is chosen.
 #'
 #' @return A `ggraph` tree plot.
@@ -121,7 +137,7 @@ plot_sticks = function(forest, labels, cls = NULL) {
       ) + ggplot2::guides(
         size = "none",
         shape = ggplot2::guide_legend("Sample"),
-        fill = ggplot2::guide_legend("Species")
+        fill = ggplot2::guide_legend(get_group_cell_name(forest))
       ) +
       ggplot2::scale_size_manual(values = point_size) +
       ggplot2::scale_y_continuous(labels = seq(0, max_Y, labels_every) %>%

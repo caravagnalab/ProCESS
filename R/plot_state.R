@@ -1,5 +1,5 @@
 ## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
-## Copyright (C) 2023 - Giulio Caravagna <gcaravagna@units.it>
+## Copyright (C) 2023-2025 - Giulio Caravagna <gcaravagna@units.it>
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -27,7 +27,12 @@
 #' @export
 #'
 #' @examples
+#' set.seed(0)
+#'
 #' sim <- SpatialSimulation()
+#'
+#' sim$death_activation_level <- 50
+#'
 #' sim$add_mutant(name = "A",
 #'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.02),
 #'                growth_rates = c("+" = 0.2, "-" = 0.08),
@@ -61,5 +66,5 @@ plot_state <- function(simulation, color_map = NULL) {
     ggplot2::theme_void(base_size = 10) +
     ggplot2::scale_fill_manual(values = color_map) +
     ggplot2::theme(legend.position = "bottom") +
-    ggplot2::labs(fill = "Species")
+    ggplot2::labs(fill = get_group_cell_name(simulation))
 }
