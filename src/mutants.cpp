@@ -338,7 +338,7 @@ RCPP_MODULE(Mutants){
           "Randomly choose one cell having a specified mutant in a rectangular selection")
 
 //' @name SpatialSimulation$schedule_mutation
-//' @title Schedule a mutation
+//' @title Scheduling a mutation
 //' @description This method schedules a mutant mutation
 //' @details The mutation can occur from any of the species of
 //'   the source mutant to the species of the destination mutant

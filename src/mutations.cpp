@@ -1411,7 +1411,7 @@ RCPP_MODULE(Mutations){
             "Get the cell allelic fragmentation data frame")
 
 //' @name PhylogeneticForest$get_first_occurrences
-//' @title Getting the mutation first occurrences
+//' @title Getting the cell in which a mutation emerged
 //' @description This method returns the identifier of the cell in which a mutation occurs
 //'   for the first time.
 //' @param mutation A mutation being a SNV, a indel, or a CNA.

@@ -33,16 +33,16 @@ collapse_loops <- function(df_edges) {
   collapsed_graph
 }
 
-#' Plot a muller plot
+#' Draw a Muller plot of the simulation
 #'
 #' @description
 #' Plots a muller plot of the simulation, using the store time-series data
-#' and package ggmuller.
+#' and package `ggmuller`.
 #'
 #' @param simulation A simulation object.
 #' @param color_map A named vector representing the simulation species color
 #'   map (optional).
-#' @return An editable ggplot plot.
+#' @return An editable `ggplot` plot.
 #' @export
 #'
 #' @examples

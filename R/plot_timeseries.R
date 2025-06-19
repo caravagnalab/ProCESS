@@ -14,7 +14,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#' Plot the number of cells along a simulation.
+#' Plot the number of cells along a simulation
 #'
 #' @description
 #' A pie chart with population counts, split by mutants and epistate. It
