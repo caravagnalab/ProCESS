@@ -30,7 +30,7 @@ knitr::opts_chunk$set(
 
 We build a tumour with three populations branching.
 
-```{r, fig.height=4, fig.width=3}
+```{r, fig.height=4, fig.width=3, fig.alt=c("The tissue of a tumour having one mutant/species.")}
 library(ProCESS)
 
 # set the seed of the random number generator
@@ -49,7 +49,7 @@ plot_tissue(sim)
 
 We sample
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The tissue of a tumour having one mutant/species after two samples have been collected.")}
 n_w <- n_h <- 7
 ncells <- 0.8 * n_w * n_h
 
@@ -69,7 +69,7 @@ plot_muller(sim)
 
 Second mutant starts.
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The tissue of the tumour after a second mutant arises.", "The Muller plot of the tumour after a second mutant arises.")}
 # New submutant
 sim$add_mutant(name = "B", growth_rates = 0.13, death_rates = 0.01)
 sim$mutate_progeny(sim$choose_cell_in("A"), "B")
@@ -81,7 +81,7 @@ plot_muller(sim)
 
 Random sampling of cells from both mutant `A` and `B`.
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("Two further samples have been collected from the tissue of the biclonal tumour.")}
 # Sampling with random box sampling
 bbox <- sim$search_sample(c("A" = ncells), n_w, n_h)
 sim$sample_cells("S_2_1", bbox$lower_corner, bbox$upper_corner)
@@ -94,7 +94,7 @@ plot_tissue(sim)
 
 Finally, a third mutant branching from `A`.
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The tissue of the tumour after a third mutant arises.", "The Muller plot of the tumour after a third mutant arises.")}
 # New submutant
 sim$add_mutant(name = "C", growth_rates = 0.6, death_rates = 0.01)
 sim$mutate_progeny(sim$choose_cell_in("A"), "C")
@@ -106,7 +106,7 @@ plot_muller(sim)
 
 With sampling of mutants `B` and `C`.
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The tumour just after two further samples have been collected.")}
 # Sampling with random box sampling
 bbox <- sim$search_sample(c("B" = ncells), n_w, n_h)
 sim$sample_cells("S_3_1", bbox$lower_corner, bbox$upper_corner)
@@ -121,7 +121,7 @@ plot_muller(sim)
 Finally, the tree plot where we annotate samples and MRCAs of each
 sample.
 
-```{r,  fig.height=12, fig.width=17}
+```{r,  fig.height=12, fig.width=17, fig.alt=c("The sample forest of the samples.")}
 # Tree data
 forest <- sim$get_samples_forest()
 
