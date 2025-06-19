@@ -61,7 +61,7 @@ follows.
 epi_labelling <- function(cell) {
 
   # epigenetic state is "+", "-", "". However, "+" and "-"
-  # are not supported in R dataframe column names, so, we
+  # are not supported in R data frame column names, so, we
   # can replace them by "P" and "N", respectively
   if (cell$epistate == "+") {
     return("P")

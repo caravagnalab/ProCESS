@@ -32,7 +32,7 @@ The main features of SCOUT are:
 -   a cohort that contains realistic tumours inspired from adenocarcinomas (colorectal and lung), leukemias (chronic lymphocitic and acute myeloid), breast cancer and glioblastoma;
 -   for each simulated tumour, both multi-region and/or longitudinal data, with different configurations of sample purity and sequencing coverage;
 -   for some tumours, the simulated effect of treatment following typical patterns for each tumour type, including resistance caused by pre-existing or de novo tumour clones;
--   data available in the format of simulated read counts format, or as raw seqeuncing reads (FASTq) to be streamlined in any bioinformatic pipeline, with raw data in the format of whole-genome or whole-exome sequencing.
+-   data available in the format of simulated read counts format, or as raw sequencing reads (FASTq) to be streamlined in any bioinformatics pipeline, with raw data in the format of whole-genome or whole-exome sequencing.
 
 With a total of 30 TB of data, SCOUT samples can be used to benchmark pretty much most standard computational methods commonly used in the cancer genomics field.
 

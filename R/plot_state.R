@@ -14,7 +14,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#' Plot the current state of the simulation.
+#' Plot the current number of cells in a tissue
 #'
 #' @description
 #' A pie chart with population counts, split by species and epigentic state. It

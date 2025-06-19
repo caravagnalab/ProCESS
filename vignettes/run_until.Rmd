@@ -2,7 +2,7 @@
 title: "Formula-based simulation constraints"
 output: rmarkdown::html_vignette
 description: >
-  Simulate a tissue evolution until a simulation state formula
+  Simulating a tissue evolution until a simulation state formula
   does not hold
 vignette: >
   %\VignetteIndexEntry{Formula-based simulation constraints}
@@ -33,7 +33,7 @@ knitr::opts_chunk$set(
 > the results reported in this article may differ from
 > those obtained by the reader.
 
-ProCESS implements a first order unquantified logic having variables
+ProCESS implements a first-order unquantified logic having variables
 representing the cardinality of the species, the number of events
 fired in a species (being duplications, deaths, or switches), and
 the simulation time. These variables and reals values are summed by
@@ -149,7 +149,7 @@ c2 <- va_p + va_m > 1e5
 c2
 
 # build a condition that holds when less than 4000
-# epigenetic switches from the species A+ have occured
+# epigenetic switches from the species A+ have occurred
 c3 <- va_ps < 4000
 c3
 

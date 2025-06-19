@@ -121,14 +121,14 @@ sim$sample_cells("S_2_2", bbox$lower_corner, bbox$upper_corner)
 
 Let us have a look at the simulated tissue and plot the simulation Muller plot.
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt = c("The tissue plot of a tumour grown according the uniform growth model.","The Muller plot of a tumour grown according the uniform growth model.")}
 plot_tissue(sim, num_of_bins = 500)
 plot_muller(sim)
 ```
 
 Finally, let us build the ancestor forest of the samples.
 
-```{r, fig.width=14}
+```{r, fig.width=14, fig.alt="The samples forest of a tumour grown according the uniform growth model."}
 library(dplyr)
 
 forest <- sim$get_samples_forest()
@@ -138,7 +138,7 @@ plot_forest(forest) %>%
 ```
 
 We use a special `highlight` parameter to add the edges connecting cells in each sample.
-```{r, fig.width=14}
+```{r, fig.width=14, fig.alt = c("The samples forest of a tumour grown according the uniform growth model. The sub-forest of sample S_1_1 is highlighted.", "The samples forest of a tumour grown according the uniform growth model. The sub-forest of sample S_1_2 is highlighted.", "The samples forest of a tumour grown according the uniform growth model. The sub-forest of sample S_2_1 is highlighted.", "The samples forest of a tumour grown according the uniform growth model. The sub-forest of sample S_2_2 is highlighted.")}
 plot_forest(forest, highlight = "S_1_1") %>%
   annotate_forest(forest)
 
@@ -224,14 +224,14 @@ sim$sample_cells("S_2_2", bbox$lower_corner, bbox$upper_corner)
 
 Let us have a look at the simulated tissue and plot the simulation Muller plot.
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt = c("The tissue plot of the above tumour grown according the border-driven growth model.", "The Muller plot of the above tumour grown according the border-driven growth model.")}
 plot_tissue(sim, num_of_bins = 500)
 plot_muller(sim)
 ```
 
 Once more, let us build the ancestor forest of the samples.
 
-```{r, fig.width=14}
+```{r, fig.width=14, fig.alt = c("The samples forest of the tumour grown according the border-driven growth model.")}
 forest <- sim$get_samples_forest()
 
 plot_forest(forest) %>%
@@ -239,7 +239,7 @@ plot_forest(forest) %>%
 ```
 
 We use a special `highlight` parameter to add the edges connecting cells in each sample.
-```{r, fig.width=14}
+```{r, fig.width=14, fig.alt = c("The samples forest of the tumour grown according the border-driven growth model. The sub-forest of sample S_1_1 is highlighted.", "The samples forest of the tumour grown according the border-driven growth model. The sub-forest of sample S_1_2 is highlighted.", "The samples forest of the tumour grown according the border-driven growth model. The sub-forest of sample S_2_1 is highlighted.", "The samples forest of the tumour grown according the border-driven growth model. The sub-forest of sample S_2_2 is highlighted.")}
 plot_forest(forest, highlight = "S_1_1") %>%
   annotate_forest(forest)
 
@@ -253,7 +253,7 @@ plot_forest(forest, highlight = "S_2_2") %>%
   annotate_forest(forest)
 ```
 
-It is easy to see the differences in the analoguous plots of the above examples.
+It is easy to see the differences in the analogous plots of the above examples.
 
 First of all, the cancer growth is slower when subject to the "border"-growth model
 than when the homogeneous-growth model is used. This is due to the fact that

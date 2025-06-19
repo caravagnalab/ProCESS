@@ -37,7 +37,7 @@ To simulate a tissue the following steps are required:
 3.  actual simulation.
 
 The simulation is managed by an object of the S4 class `SpatialSimulation`,
-wich allows to program the tissue evolution over time, adding new cells
+which allows to program the tissue evolution over time, adding new cells
 as far as the simulation progresses. The state of the simulation and
 tissue can be visualised using `ggplot`-powered plots.
 
@@ -87,8 +87,8 @@ sim <- SpatialSimulation("Test", save_snapshots = TRUE)
 sim$death_activation_level <- 50
 ```
 
-Class `SpatialSimulation` exports a `SpatialSimulation$show()` method to get information on the
-current object.
+Class `SpatialSimulation` exports a `SpatialSimulation$show()` method to get 
+information on the current object.
 
 ```{r, eval}
 sim
@@ -113,7 +113,7 @@ the parameters `width` and `height`.
 ```{r}
 # build a spatial simulation whose tissue has width 1200 and
 # height 900
-sim <- SpatialSimulation("Test", width=1200, height=900)
+sim <- SpatialSimulation("Test", width = 1200, height = 900)
 
 # Get the tissue size, i.e., c(1200,900)
 sim$get_tissue_size()
@@ -226,11 +226,11 @@ sim$get_cells()
 ```
 
 These information can be plot. Note that the tissue visualisation uses
-hexagonal bins to avoid rastering delays when the simulation uses
+hexagonal bins to avoid plotting delays when the simulation uses
 thousands of cells.
 
-```{r,  fig.height=4, fig.width=3}
-# Piechar for counts
+```{r,  fig.height=4, fig.width=3, fig.alt=c("A pie-chart of the species cell count of a tumour consisting of a single cell.", "A representation of the tissue consisting of a single cell.")}
+# Pie-chart for counts
 plot_state(sim)
 
 # Spatial distribution for the whole tissue (hexagonal bins)
@@ -257,7 +257,7 @@ There are 4 ways to let the simulation evolve:
 We can run the simulation up to when we have $\theta > 0$; cells of
 species `A+`
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The tissue of a tumour with one mutant \"A\" and two species \"A+\" and \"A-\". The species \"A+\" consists of 500 cells.")}
 # Counts per species is now 0
 sim$get_counts()
 
@@ -288,7 +288,7 @@ sim$run_up_to_event("death", "A-", 100)
 sim$get_firings()
 ```
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The tumour tissue after letting the simulation evolves until 100 deaths occurred to \"A-\" cells.")}
 # Plot the tissue by using 200 bins
 plot_tissue(sim, num_of_bins = 200)
 ```
@@ -309,7 +309,7 @@ sim$run_up_to_time(sim$get_clock() + 15)
 sim$get_clock()
 ```
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The tumour tissue after letting the simulation evolves until 100 deaths occurred to \"A-\" cells.")}
 plot_tissue(sim)
 ```
 
@@ -399,12 +399,12 @@ At this point, we can inspect in more details the tissue. It can help to
 facet on the species to clearly appreciate the spatial diffusion of the
 populations.
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The species count after the new mutant \"B\" arose.", "The tumour tissue after the new mutant \"B\" arose.")}
 plot_state(sim)
 plot_tissue(sim, num_of_bins = 250)
 ```
 
-```{r,  fig.height=6, fig.width=6}
+```{r,  fig.height=6, fig.width=6, fig.alt=c("The tumour tissue in which cells are split by species.")}
 # Facet on species via ggplot
 library(ggplot2)
 
@@ -427,7 +427,7 @@ sim$mutate_progeny(sim$choose_cell_in("A",  c(450, 550), c(500, 600)), "C")
 sim$run_up_to_time(sim$get_clock() + 7)
 ```
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The species count after the third mutant \"C\" arose.", "The tumour tissue after the third mutant \"C\" mutant arose.")}
 plot_state(sim)
 plot_tissue(sim, num_of_bins = 250)
 ```

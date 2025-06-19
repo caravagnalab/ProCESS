@@ -57,7 +57,7 @@ We can simulate the sequencing of these samples with coverage
 of 2.5X by as it follows.
 
 ```{r}
-# let us simulate a 50x sequencing of the four sample
+# let us simulate a 30x sequencing of the four sample
 seq_results <- simulate_seq(phylo_forest, coverage = 30)
 
 # let us load the dplyr library to filter the `simulate_seq` output
@@ -93,7 +93,7 @@ ProCESS/RACE provides functions to plot the Variant Allele
 Frequency (VAF), the B-Allele Frequency (BAF),
 and the Depth Ratio (DR) of a sample.
 
-```{r}
+```{r, fig.alt=c("A plot depicting the Variant Allele Frequency (VAF) of a sequenced sample.", "A plot depicting the B-Allele Frequency (BAF) of a sequenced sample.", "A plot depicting the Depth Ratio (DR) of a sequenced sample.")}
 library(dplyr)
 
 # filter germinal mutations
@@ -115,7 +115,7 @@ plot_DR(f_seq, sample = "S_2_2")
 The VAF and the VAF marginal distributions can be
 plot too.
 
-```{r}
+```{r, fig.alt=c("The VAF histogram of all samples.", "The VAF marginal distribution \"S_1_1\" vs \"S_1_2\".", "The VAF marginal distribution \"S_1_1\" vs \"S_2_2\".", "The VAF marginal distribution \"S_1_2\" vs \"S_2_2\".")}
 # plotting the VAF histogram
 plot_VAF_histogram(f_seq, cuts = c(0.02, 1))
 
@@ -125,7 +125,7 @@ plot_VAF_marginals(f_seq, samples = c("S_1_1", "S_1_2", "S_2_2"))
 
 The VAF and the VAF marginal plots can be labelled.
 
-```{r}
+```{r, fig.alt=c("The VAF histogram labelled by mutation class.", "The VAF marginal distribution \"S_1_1\" vs \"S_1_2\" labelled by mutation class.", "The VAF marginal distribution \"S_1_1\" vs \"S_2_2\" labelled by mutation class.", "The VAF marginal distribution \"S_1_2\" vs \"S_2_2\" labelled by mutation class.")}
 # plotting the VAF histogram with labels
 plot_VAF_histogram(f_seq, labels = f_seq["classes"], cuts = c(0.02, 1))
 
@@ -230,11 +230,11 @@ The following code simulates the sequencing by using this
 kind of sequencer.
 
 ```{r, eval=FALSE}
-# build an error-less Illumina sequencer
+# build an error-free Illumina sequencer
 no_error_seq <- ErrorlessIlluminaSequencer()
 
 # let us simulate a 2.5x sequencing of the four sample
-# on the error-less sequencer
+# on the error-free sequencer
 seq_results <- simulate_seq(phylo_forest, sequencer = no_error_seq,
                             coverage = 2.5)
 ```
@@ -251,7 +251,7 @@ in the read and from the position of the read on the genome.
 basic_seq <- BasicIlluminaSequencer(4e-3)
 
 # let us simulate a 2.5x sequencing of the four sample
-# on the error-less sequencer
+# on the error-free sequencer
 seq_results <- simulate_seq(phylo_forest, sequencer = basic_seq,
                             coverage = 2.5, write_SAM = TRUE)
 ```

@@ -112,7 +112,7 @@ sim$get_count_history() %>% head()
 
 The time-series can be plot using `plot_timeseries()`
 
-```{r,  fig.height=4, fig.width=4}
+```{r,  fig.height=4, fig.width=4, fig.alt=c("A time-series plot. It presents the cell count per species along the simulation.")}
 # Time-series plot
 plot_timeseries(sim)
 ```
@@ -123,7 +123,7 @@ If the default time-series is not enough coarse-grained, one can set
 `SpatialSimulation$history_delta` to increase the sampling rate of
 the state (by default, `SpatialSimulation$history_delta` is set to $0$).
 
-We show this by re-simulating a tumour with two submutants.
+We show this by re-simulating a tumour with two sub-mutants.
 
 ```{r}
 # Example time-series on a new simulation, with coarse-grained time-series
@@ -172,7 +172,7 @@ sim$run_up_to_size("D+", 1000)
 
 The time-series can be plot using `plot_timeseries()`.
 
-```{r,  fig.height=4, fig.width=4}
+```{r,  fig.height=4, fig.width=4, fig.alt=c("A more accurate time-series plot. The count sampling time is configurable.", "The same time-series plot can be presented by using a log-scale.")}
 # Time-series plot
 plot_timeseries(sim)
 
@@ -185,13 +185,13 @@ plot_timeseries(sim) + ggplot2::scale_y_log10()
 We can also get a Muller plot of the evolution using
 [ggmuller](https://CRAN.R-project.org/package=ggmuller).
 
-```{r,  fig.height=4, fig.width=6, message=FALSE, warning=FALSE}
+```{r,  fig.height=4, fig.width=6, message=FALSE, warning=FALSE, fig.alt=c("A Muller plot of the simulation. It depicts the ratios between species along the simulation.")}
 # default Muller plot
 plot_muller(sim)
 ```
 
 In this case every population is annotated as a descendant of the
-ancestor mutant. Note however that reversible espistates do not fit a
+ancestor mutant. Note however that reversible epistates do not fit a
 traditional Muller plot because they violate the no-back mutation model.
 
 In this case, _ProCESS_ will show first the epistate that was randomly
@@ -199,7 +199,7 @@ injected in the simulation, and the second will result by linear. This
 is not a completely correct perspective of the simulation time-series;
 still, it help understand trends.
 
-```{r,  fig.height=4, fig.width=6, message=FALSE, warning=FALSE}
+```{r,  fig.height=4, fig.width=6, message=FALSE, warning=FALSE, fig.alt=c("The Muller plot for the last quater of the simulation.", "The Muller plot in log-scale for the last quater of the simulation.")}
 # Custom Mullers
 clock <- sim$get_clock()
 
@@ -219,7 +219,7 @@ Considering the example above, where `C` and `D` have the same rates, we
 increase the death rate of both `C+` and `C-` species, as well as `B+`
 and `B-`.
 
-```{r,  fig.height=4, fig.width=6, message=FALSE, warning=FALSE}
+```{r,  fig.height=4, fig.width=6, message=FALSE, warning=FALSE, fig.alt=c("The Muller plot for the last quater of the simulation after changing the death rates of B and C species.", "The Muller plot in log-scale  for the last quater of the simulation after changing the death rates of B and C species.")}
 # Current rates
 sim
 

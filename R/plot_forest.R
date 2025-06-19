@@ -14,10 +14,10 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#' Plot samples cell division forest.
+#' Plot a sample forest
 #'
 #' @description
-#' Plot the samples cell division forest. This plot is carried out using
+#' Plot a sample forest. This plot is carried out using
 #' `ggraph` and for simplicity of visualisation the forest is plot as a
 #' set of trees connected to a generic wildtype cell.
 #'

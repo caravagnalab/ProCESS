@@ -158,7 +158,7 @@ a genomic event that simultaneously duplicates all the chromosome alleles.
 
 The driver mutations are applied according to their specification order.
 For instance, the following two pieces of code specify two different
-genomic characterizations for the same mutant `E`.
+genomic characterisations for the same mutant `E`.
 ```{r, eval=FALSE}
 m_engine$add_mutant("E", passenger_rates,
                     drivers = list(SNV("22", 10510210, "C", allele = 1),
@@ -221,7 +221,7 @@ than one signature may be active at the same time with different probabilities.
 An _mutational exposure_ (or _exposure_) is a discrete probability distribution
 among signatures.
 
-In order to simulate passeger mutations of a given type, we need to specify a
+In order to simulate passenger mutations of a given type, we need to specify a
 default exposure for that type. This can be achieved as it follows.
 
 ```{r}
@@ -244,7 +244,7 @@ m_engine
 ```
 
 The default exposures and the simultaneous changes in SNV and ID exposures
-can be specified by a sigle call to the function
+can be specified by a single call to the function
 `MutationEngine$add_exposure()` as it follows.
 
 ```{r}
@@ -330,11 +330,11 @@ m_engine$get_active_germline()
 
 ### Building Phylogenetic Forests
 
-The configurated mutation engine can be used to label each node in a
+The configured mutation engine can be used to label each node in a
 samples forest by mutations.
 
-Since the mutation engine has be configurated to deal with the
-simulation peformed in Section "_Two populations with
+Since the mutation engine has be configured to deal with the
+simulation performed in Section "_Two populations with
 epigenetic state_" of `vignette("sampling")`,
 we can load its samples forest from the file `"samples_forest.sff"`
 in saved that article.
@@ -358,11 +358,11 @@ Users can retrieve such data by using the methods
 ```{r}
 library(dplyr)
 
-# select the first mutations among all the mutations occuring in
+# select the first mutations among all the mutations occurring in
 # the genomes of the sampled cells
 phylo_forest$get_sampled_cell_mutations() %>% head()
 
-# select the first CNAs among all the mutations occuring in
+# select the first CNAs among all the mutations occurring in
 # the genomes of the sampled cells
 phylo_forest$get_sampled_cell_CNAs() %>% head()
 
@@ -384,7 +384,7 @@ phylo_forest$get_sampled_cell_CNAs(cell_id) %>% head()
 ```
 
 The method `PhylogeneticForest$get_samples_info()` is analogous to
-`DescendantForest$get_samples_info()`: it returns a dataframe containing
+`DescendantForest$get_samples_info()`: it returns a data frame containing
 information about the forest samples. However, the former method adds two
 columns to the result of the latter: "`DNA_quantity`" and
 "`equivalent_normal_cells`". The former column reports the overall quantity
@@ -433,7 +433,7 @@ phylogenetic forest can be obtained by using the method
 phylo_forest$get_exposures()
 ```
 
-The method `MutationEngine$get_bulk_allelic_fragmentation()` returns a dataframe
+The method `MutationEngine$get_bulk_allelic_fragmentation()` returns a data frame
 reporting the allelic type per genome fragment.
 
 ```{r}
@@ -444,8 +444,8 @@ sample_name <- phylo_forest$get_samples_info()[["name"]][1]
 phylo_forest$get_bulk_allelic_fragmentation(sample_name) %>% head()
 ```
 
-Instead, the method `MutationEngine$get_cell_allelic_fragmentation()` returns the allelic 
-fragmentation per cell.
+Instead, the method `MutationEngine$get_cell_allelic_fragmentation()` returns
+the allelic fragmentation per cell.
 
 ```{r}
 # print the cell allelic fragmentation

@@ -44,7 +44,7 @@ consider:
 
 ## Custom multi-region sampling
 
-We consider a simple monoclonal model, without epimutants.
+We consider a simple monoclonal model, without epigenetic state.
 
 ```{r, eval=TRUE}
 library(ProCESS)
@@ -52,7 +52,7 @@ library(ProCESS)
 # set the seed of the random number generator
 set.seed(0)
 
-# Monoclonal model, no epimutants
+# Monoclonal model, no epigenetic state
 sim <- SpatialSimulation("Monoclonal")
 
 sim$add_mutant(name = "A", growth_rates = 0.1, death_rates = 0.01)
@@ -61,7 +61,7 @@ sim$place_cell("A", 500, 500)
 sim$run_up_to_size("A", 60000)
 ```
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt = c("A monoclonal tumour consisting of 60000 cells.")}
 current <- plot_tissue(sim)
 current
 ```
@@ -69,10 +69,10 @@ current
 A sample is defined by a name and a bounding box, which has a $(x,y)$
 coordinate for the bottom left point, and for the top right point.
 
-For this simulation, we define two samples with names `"S_1_2"` and
+For this simulation, we define two samples with names `"S_1_1"` and
 `"S_1_2"`.
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The rectangular regions corresponding to the samples \"S_1_1\" and \"S_1_2\".")}
 # We collect a squared box of (bbox_width x bbox_width) cells
 bbox_width <- 50
 
@@ -108,7 +108,7 @@ sim$sample_cells("S_1_2", bottom_left = bbox2_p, top_right = bbox2_q)
 A new call to `plot_tissue()` will show the box where the cells have
 been removed to be white.
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The sampled tissue.")}
 plot_tissue(sim)
 ```
 
@@ -173,16 +173,16 @@ forest$get_samples_info()
 We can visualise the forest. This plot reports the cells and, on the
 y-axis, their time of birth.
 
-```{r,  fig.height=6, fig.width=11}
+```{r,  fig.height=6, fig.width=11, fig.alt=c("The samples forest of \"S_1_1\" and \"S_1_2\".")}
 plot_forest(forest)
 ```
 
 The plot shows also samples annotations and species but, for a large
 number of cells, it might be complicated to view the full tree, unless a
-very large canvas is used. For this reaason, it is possible to subset
+very large canvas is used. For this reason, it is possible to subset
 the tree.
 
-```{r,  fig.height=6, fig.width=11}
+```{r,  fig.height=6, fig.width=11, fig.alt=c("The sub-forest of sample \"S_1_1\".")}
 # Extract the subforest linked to sample
 S_1_1_forest <- forest$get_subforest_for("S_1_1")
 
@@ -192,7 +192,7 @@ plot_forest(S_1_1_forest)
 In general, these plots can be annotated with extra information, such as
 the sampling times, and the MRCAs of each sample in the tree.
 
-```{r,  fig.height=6, fig.width=11}
+```{r,  fig.height=6, fig.width=11, fig.alt=c("The annotated forest of \"S_1_1\" and \"S_1_2\".","The annotated sub-forest of the sample \"S_1_1\".")}
 # Full plot
 plot_forest(forest) %>%
   annotate_forest(forest)
@@ -218,7 +218,7 @@ sim$run_up_to_size("A", 60000)
 We include a new mutant and let it grow. This new mutant has much higher
 growth rates than its ancestor.
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("A tumour having two mutants/species with different rates.")}
 # Add a new mutant
 sim$add_mutant(name = "B", growth_rates = 1, death_rates = 0.01)
 sim$mutate_progeny(sim$choose_cell_in("A"), "B")
@@ -249,7 +249,7 @@ returned.
 This allows to program sampling without having a clear idea of the
 tissue conformation.
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The rectangle delimiting the sample \"S_2_1\" containing 2000 cells of mutant \"B\" at least.")}
 # A bounding box 50x50 with at least 100 cells of species B
 n_w <- n_h <- 50
 ncells <- 0.8 * n_w * n_h
@@ -271,7 +271,7 @@ sim$sample_cells("S_2_1", bbox$lower_corner, bbox$upper_corner)
 
 Something similar with species `A`.
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The rectangle delimiting the sample \"S_2_2\" containing 2000 cells of mutant \"A\" at least.")}
 bbox <- sim$search_sample(c("A" = ncells), n_w, n_h)
 
 # plot the bounding box
@@ -288,13 +288,13 @@ sim$sample_cells("S_2_2", bbox$lower_corner, bbox$upper_corner)
 
 The two samples have been extracted.
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The tissue of the biclonal tumour after the two samples have been collected.")}
 plot_tissue(sim)
 ```
 
 Cell division tree.
 
-```{r,  fig.height=6, fig.width=11}
+```{r,  fig.height=6, fig.width=11, fig.alt=c("The tissue of the biclonal tumour after the collection of the two samples.")}
 forest <- sim$get_samples_forest()
 
 plot_forest(forest) %>%
@@ -306,7 +306,7 @@ plot_forest(forest) %>%
 ProCESS supports randomized cell sampling over the full tissue or a
 rectangle thereof.
 
-```{r}
+```{r, fig.alt=c("Two further samples \"S_2_3\" and \"S_2_4\" are collected. Their cells are randomly picked-up (like in liquid biopsy) from the whole tissue and from a bounding box, respectively. The figure depicts the samples forest of all the samples.")}
 # collect up to 2500 tumour cells randomly selected over the whole tissue
 sim$sample_cells("S_2_3", num_of_cells = 2500)
 
@@ -325,9 +325,9 @@ plot_forest(forest) %>%
 ## Two populations with epigenetic state
 
 We are now ready to simulate a model with epigenetic switches and
-subclonal expansions.
+sub-clonal expansions.
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.alt=c("A tumour having one mutants and two species with different rates.")}
 # set the seed of the random number generator
 set.seed(0)
 
@@ -348,7 +348,7 @@ plot_tissue(sim, num_of_bins = 500)
 
 We sample before introducing a new mutant.
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The sampled tumour.")}
 bbox_width <- 10
 
 sim$sample_cells("S_1_1",
@@ -362,7 +362,7 @@ sim$sample_cells("S_1_2",
 plot_tissue(sim, num_of_bins = 500)
 ```
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The same tumour after 15 simulated time units have been elapsed.")}
 # Let it grow a bit more
 sim$run_up_to_time(sim$get_clock() + 15)
 
@@ -371,7 +371,7 @@ plot_tissue(sim, num_of_bins = 500)
 
 Add a new submutant.
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("A new mutant with epigenetic state arose.")}
 cell <- sim$choose_cell_in("A")
 
 sim$add_mutant(name = "B",
@@ -389,7 +389,7 @@ plot_tissue(sim, num_of_bins = 500)
 
 Sample again and plot the tissue
 
-```{r,  fig.height=4, fig.width=3}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The tumour tissue after two samples have been collected.","The Muller plot of the biclonal tumour with epigenetic states.")}
 n_w <- n_h <- 25
 ncells <- 0.9 * n_w * n_h
 
@@ -406,7 +406,7 @@ plot_muller(sim)
 Now we show the cell division tree, which starts being rather
 complicated
 
-```{r,  fig.height=12, fig.width=17}
+```{r,  fig.height=12, fig.width=17, fig.alt=c("The sample forest of the biclonal tumour with epigenetic states.")}
 forest <- sim$get_samples_forest()
 
 plot_forest(forest) %>%
