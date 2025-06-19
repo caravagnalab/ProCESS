@@ -34,7 +34,7 @@ a `SamplesForest` according to the specified SBS and indel mutational signatures
 (see `vignette["mutations"]`).
 This task is achieved by the mutation engine which uses two indices on the
 reference genome to place the most probable mutations according to
-signatures: the _context index_ and the _repeted sequence index_.
+signatures: the _context index_ and the _repeated sequence index_.
 
 The function `MutationEngine()` builds the mutation engine and
 these two indices.
@@ -56,23 +56,19 @@ reference_url <- paste0("https://ftp.ensembl.org/pub/grch37/release-111/",
                         "fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.",
                         "dna.chromosome.22.fa.gz")
 
-sbs_url <- paste0("https://raw.githubusercontent.com/",
-                  "caravagnalab/ProCESS/refs/heads/1.0/",
-                  "inst/extdata/SBS_demo_signatures.txt")
+sbs_url <- paste0("https://zenodo.org/records/15656740/files/",
+                  "SBS_demo_signatures.txt")
 
-indel_url <- paste0("https://raw.githubusercontent.com/",
-                    "caravagnalab/ProCESS/refs/heads/1.0/",
-                    "inst/extdata/indel_demo_signatures.txt")
+indel_url <- paste0("https://zenodo.org/records/15656740/files/",
+                    "indel_demo_signatures.txt")
 
-drivers_url <- paste0("https://raw.githubusercontent.com/",
-                      "caravagnalab/ProCESS/main/inst/extdata/",
+drivers_url <- paste0("https://zenodo.org/records/15656740/files/",
                       "driver_mutations_hg19.csv")
 
-passenger_cnas_url <- paste0("https://raw.githubusercontent.com/",
-                             "caravagnalab/ProCESS/main/inst/extdata/",
+passenger_cnas_url <- paste0("https://zenodo.org/records/15656740/files/",
                              "passenger_CNAs_hg19.csv")
 
-germline_url <- paste0("https://zenodo.org/records/13166780/files/",
+germline_url <- paste0("https://zenodo.org/records/15656740/files/",
                        "germline_data_demo.tar.gz")
 
 # build a mutation engine and place all the files in the directory "Test"
@@ -94,22 +90,22 @@ unlink("Test", recursive = TRUE)
 ### The Context Index
 
 The SBS signatures fixes, for every possible context
-(i.e., a triplet of consetutive nucleotides), the probability for a SNV
+(i.e., a triplet of consecutive nucleotides), the probability for a SNV
 to occur in such a context (see [@alexandrov2020repertoire]). Hence, the
 function `MutationEngine()` builds
 a context index of the reference sequence to place SNVs on the forest
 cells. The complete context index of a sequence whose size is up to 4Gbps
 takes 4 times the length of the sequence itself both in memory and on the disk
 because 4 bytes per nucleotide are required to store the context position.
-For instance, the complete contex index of a human genome takes about 12GBytes.
+For instance, the complete context index of a human genome takes about 12GBytes.
 In order to avoid such requirement in memory and disk space,
 `MutationEngine()` allows to sample the reference genome contexts and
 to stores only some of the them in the context index. This is achieved by
 the optional parameter `context_sampling` which specifies how many
-occurences of the same context must be identified before adding one of
+occurrences of the same context must be identified before adding one of
 them to the context index. The larger the number of context sampling,
 the larger the context index. On the other side, the lower the number
-of context sampling, the lower the number of sites in the refernce
+of context sampling, the lower the number of sites in the reference
 genome that can be affected by simulated mutations.
 The `context_sampling` is set to 100 by default, but it can
 be specified during the `MutationEngine()` call.
@@ -139,7 +135,7 @@ utils:::format.object_size(file.size("demo/context_index_50.cif"), "auto")
 
 ### The Repeated Sequence Index
 
-Analoguosly to the SBS signatures, the ID (indel) signatures fixes, for
+Analogously to the SBS signatures, the ID (indel) signatures fixes, for
 some kinds of repeated sequences, the probability for an indel
 to occur in them (see [@alexandrov2020repertoire]). Thus, the `MutationEngine`
 function also builds an index for the repeated sequences in the reference.

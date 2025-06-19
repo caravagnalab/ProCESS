@@ -850,18 +850,14 @@ RCPP_MODULE(Mutations){
 //' reference_url <- paste0("https://ftp.ensembl.org/pub/grch37/release-111/",
 //'                         "fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.",
 //'                         "dna.chromosome.22.fa.gz")
-//' sbs_url <- paste0("https://raw.githubusercontent.com/",
-//'                   "caravagnalab/ProCESS/refs/heads/1.0/inst/extdata/",
+//' sbs_url <- paste0("https://zenodo.org/records/15656740/files/",
 //'                   "SBS_demo_signatures.txt")
-//' indel_url <- paste0("https://raw.githubusercontent.com/",
-//'                     "caravagnalab/ProCESS/refs/heads/1.0/inst/extdata/",
+//' indel_url <- paste0("https://zenodo.org/records/15656740/files/",
 //'                     "indel_demo_signatures.txt")
-//' drivers_url <- paste0("https://raw.githubusercontent.com/",
-//'                       "caravagnalab/ProCESS/refs/heads/1.0/inst/extdata/",
+//' drivers_url <- paste0("https://zenodo.org/records/15656740/files/",
 //'                       "driver_mutations_hg19.csv")
-//' passenger_CNAs_url <- paste0("https://raw.githubusercontent.com/",
-//'                              "caravagnalab/ProCESS/refs/heads/1.0/inst/",
-//'                              "extdata/passenger_CNAs_hg19.csv")
+//' passenger_CNAs_url <- paste0("https://zenodo.org/records/15656740/",
+//'                              "files/passenger_CNAs_hg19.csv")
 //' germline_url <- paste0("https://zenodo.org/records/13166780/files/",
 //'                        "germline_data_demo.tar.gz")
 //'
