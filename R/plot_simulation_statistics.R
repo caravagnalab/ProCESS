@@ -1,5 +1,5 @@
 ## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
-## Copyright (C) 2023 - Giulio Caravagna <gcaravagna@units.it>
+## Copyright (C) 2023-2025 - Giulio Caravagna <gcaravagna@units.it>
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#' Plot the number of stochastic events in the simulation.
+#' Plot the number of stochastic events in the simulation
 #'
 #' @description
 #' A pie chart with events split by type, mutant and epigentic state

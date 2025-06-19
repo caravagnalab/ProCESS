@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ using namespace Rcpp;
 RCPP_MODULE(Sequencing){
 
 //' @name ErrorlessIlluminaSequencer
-//' @title An error-less Illumina sequencer class
+//' @title An error-free Illumina sequencer class
 //' @description This class implements a perfect Illumina sequencers that
 //'   does not commit errors.
 //' @seealso `simulate_seq()`, `simulate_normal_seq()`, and
@@ -39,16 +39,16 @@ RCPP_MODULE(Sequencing){
             "Show a description for the sequencer");
 
 //' @name ErrorlessIlluminaSequencer
-//' @description This method builds an error-less Illumina
+//' @description This method builds an error-free Illumina
 //'   sequencer model.
-//' @return A new error-less Illumina sequencer.
+//' @return A new error-free Illumina sequencer.
 //' @examples
 //' # build a sequencer model
 //' sequencer <- ErrorlessIlluminaSequencer()
 //' sequencer
     function("ErrorlessIlluminaSequencer",
              &ErrorlessIlluminaSequencer::build_sequencer,
-             "Build a new error-less Illumina sequencer");
+             "Build a new error-free Illumina sequencer");
 
 //' @name BasicIlluminaSequencer
 //' @title A basic Illumina sequencer class
@@ -62,7 +62,7 @@ RCPP_MODULE(Sequencing){
             "Show a description for the sequencer")
 
 //' @name BasicIlluminaSequencer$error_rate
-//' @title Getting error rate
+//' @title Getting the error rate
 //' @description This method returns the sequencing error rate of the
 //'   simulated illumina sequencer.
 //' @return The sequencing error rate of the simulated sequencer.
@@ -84,7 +84,7 @@ RCPP_MODULE(Sequencing){
               "The sequencer error rate")
 
 //' @name BasicIlluminaSequencer$random_quality_scores
-//' @title Check non-constant quality score model.
+//' @title Check the non-constant quality score model
 //' @description This method returns `TRUE` if and only if the sequencers
 //'    implements a non-constant quality score model.
 //' @return `TRUE` if and only if the sequencers sequencers implements
@@ -128,7 +128,7 @@ RCPP_MODULE(Sequencing){
              "Create a basic Illumina sequencer model");
 
 //' @name simulate_seq
-//' @title Simulating the sequencing
+//' @title Simulating the sequencing of sampled cells
 //' @description This method simulates the sequencing of the samples in a phylogenetic
 //'   forest.
 //' @param phylo_forest A phylogenetic forest.
@@ -175,7 +175,7 @@ RCPP_MODULE(Sequencing){
 //'   The sequencing output data frame reports, for each of the
 //'   observed SNVs and indels, the chromosome and the position in
 //'   which it occurs (columns `chr` and `chr_pos`), the reference
-//'   and alterate sequences (columns `ref` and `alt`, respectively),
+//'   and alternative sequences (columns `ref` and `alt`, respectively),
 //'   its cause and class (columns `causes`, and `classes`,
 //'   respectively).
 //'   Moreover, for each of the sequenced samples `<sample name>`,
@@ -202,7 +202,7 @@ RCPP_MODULE(Sequencing){
                         _["template_name_prefix"] = "r",
                         _["include_non_sequenced_mutations"] = false,
                         _["seed"] = R_NilValue),
-           "Simulate the sequencing of the samples in a phylogenetic forest");
+           "Simulating the sequencing of the samples in a phylogenetic forest");
 
 //' @name simulate_normal_seq
 //' @title Simulating wild-type sequencing
@@ -275,7 +275,7 @@ RCPP_MODULE(Sequencing){
                         _["template_name_prefix"] = "r",
                         _["include_non_sequenced_mutations"] = false,
                         _["seed"] = R_NilValue),
-           "Simulate the sequencing of a normal sample");
+           "Simulating the sequencing of a normal sample");
 
 //' @name SampledCell
 //' @title A sampled cell

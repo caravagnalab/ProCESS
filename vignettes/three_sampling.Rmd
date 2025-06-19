@@ -36,7 +36,7 @@ library(ProCESS)
 # set the seed of the random number generator
 set.seed(0)
 
-sim <- SpatialSimulation("Three Populations", width=250, height=250)
+sim <- SpatialSimulation("Three Populations", width = 250, height = 250)
 
 sim$death_activation_level <- 20
 

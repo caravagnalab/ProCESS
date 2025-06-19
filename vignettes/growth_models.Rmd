@@ -253,7 +253,7 @@ plot_forest(forest, highlight = "S_2_2") %>%
   annotate_forest(forest)
 ```
 
-It is easy to see the differences in the analoguous plots of the above examples.
+It is easy to see the differences in the analogous plots of the above examples.
 
 First of all, the cancer growth is slower when subject to the "border"-growth model
 than when the homogeneous-growth model is used. This is due to the fact that

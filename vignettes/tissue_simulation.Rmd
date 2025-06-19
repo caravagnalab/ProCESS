@@ -37,7 +37,7 @@ To simulate a tissue the following steps are required:
 3.  actual simulation.
 
 The simulation is managed by an object of the S4 class `SpatialSimulation`,
-wich allows to program the tissue evolution over time, adding new cells
+which allows to program the tissue evolution over time, adding new cells
 as far as the simulation progresses. The state of the simulation and
 tissue can be visualised using `ggplot`-powered plots.
 
@@ -87,8 +87,8 @@ sim <- SpatialSimulation("Test", save_snapshots = TRUE)
 sim$death_activation_level <- 50
 ```
 
-Class `SpatialSimulation` exports a `SpatialSimulation$show()` method to get information on the
-current object.
+Class `SpatialSimulation` exports a `SpatialSimulation$show()` method to get 
+information on the current object.
 
 ```{r, eval}
 sim
@@ -113,7 +113,7 @@ the parameters `width` and `height`.
 ```{r}
 # build a spatial simulation whose tissue has width 1200 and
 # height 900
-sim <- SpatialSimulation("Test", width=1200, height=900)
+sim <- SpatialSimulation("Test", width = 1200, height = 900)
 
 # Get the tissue size, i.e., c(1200,900)
 sim$get_tissue_size()
@@ -226,7 +226,7 @@ sim$get_cells()
 ```
 
 These information can be plot. Note that the tissue visualisation uses
-hexagonal bins to avoid rastering delays when the simulation uses
+hexagonal bins to avoid plotting delays when the simulation uses
 thousands of cells.
 
 ```{r,  fig.height=4, fig.width=3}

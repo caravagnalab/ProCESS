@@ -14,7 +14,7 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#' Annotate a plot of cell divisions.
+#' Annotate a plot of cell divisions
 #'
 #' @description
 #' It annotates a plot of cell divisions where branches containing relevant

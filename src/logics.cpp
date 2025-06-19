@@ -124,7 +124,7 @@ RCPP_MODULE(Logics){
            "Builds an \"greater than\" relation");
 
 //' @name Formula
-//' @title First order formulas about simulations
+//' @title First-order formulas about simulations
 //' @description The objects of this class describes properties of the
 //'   simulation status.
 //'

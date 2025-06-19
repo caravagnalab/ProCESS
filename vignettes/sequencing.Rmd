@@ -230,11 +230,11 @@ The following code simulates the sequencing by using this
 kind of sequencer.
 
 ```{r, eval=FALSE}
-# build an error-less Illumina sequencer
+# build an error-free Illumina sequencer
 no_error_seq <- ErrorlessIlluminaSequencer()
 
 # let us simulate a 2.5x sequencing of the four sample
-# on the error-less sequencer
+# on the error-free sequencer
 seq_results <- simulate_seq(phylo_forest, sequencer = no_error_seq,
                             coverage = 2.5)
 ```
@@ -251,7 +251,7 @@ in the read and from the position of the read on the genome.
 basic_seq <- BasicIlluminaSequencer(4e-3)
 
 # let us simulate a 2.5x sequencing of the four sample
-# on the error-less sequencer
+# on the error-free sequencer
 seq_results <- simulate_seq(phylo_forest, sequencer = basic_seq,
                             coverage = 2.5, write_SAM = TRUE)
 ```

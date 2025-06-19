@@ -1,4 +1,20 @@
-#' Plot Histogram of Variant Allele Frequency (VAF)
+## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
+## Copyright (C) 2023-2025 - Giulio Caravagna <gcaravagna@units.it>
+##
+## This program is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#' Plot a Variant Allele Frequency (VAF) histogram
 #'
 #' This function generates a histogram showing the distribution of Variant
 #' Allele Frequency (VAF) across samples and chromosomes.
@@ -12,8 +28,8 @@
 #' @param colour_by A character indicating whether to color the histogram
 #'   bars by "causes" or "classes" (default: "causes").
 #' @param binwidth The width of the plot bins. When set to `NULL`, the
-#'   function computes the most convinient bin width according to the
-#'   maximum coverage reported in the dataframe (default: `NULL`).
+#'   function computes the most convenient bin width according to the
+#'   maximum coverage reported in the data frame (default: `NULL`).
 #' @param cuts A numeric vector specifying the range of VAF values to
 #'   include in the plot (default: `c(0, 1)`).
 #' @return A ggplot2 object showing the VAF histogram.

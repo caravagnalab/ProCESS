@@ -14,10 +14,10 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#' Plot the current state of the simulation.
+#' Plot the number of cells along a simulation.
 #'
 #' @description
-#' A pie chart with population counts, split by species and epigentic state. It
+#' A pie chart with population counts, split by mutants and epistate. It
 #' also provides annotations for the simulation data.
 #'
 #' @param simulation A simulation.

@@ -41,7 +41,7 @@ these two indices.
 
 ## Customizing the mutation engine
 
-While the most convient way to invoke `MutationEngine()` is by using
+While the most convenient way to invoke `MutationEngine()` is by using
 the parameter `setup_code` (see `vignette["mutations"]`), the are cases
 in which a custom set-up is required. In these cases,
 the function `MutationEngine()` can be called by specifying the name

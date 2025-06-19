@@ -44,7 +44,7 @@ consider:
 
 ## Custom multi-region sampling
 
-We consider a simple monoclonal model, without epimutants.
+We consider a simple monoclonal model, without epigenetic state.
 
 ```{r, eval=TRUE}
 library(ProCESS)
@@ -52,7 +52,7 @@ library(ProCESS)
 # set the seed of the random number generator
 set.seed(0)
 
-# Monoclonal model, no epimutants
+# Monoclonal model, no epigenetic state
 sim <- SpatialSimulation("Monoclonal")
 
 sim$add_mutant(name = "A", growth_rates = 0.1, death_rates = 0.01)
@@ -179,7 +179,7 @@ plot_forest(forest)
 
 The plot shows also samples annotations and species but, for a large
 number of cells, it might be complicated to view the full tree, unless a
-very large canvas is used. For this reaason, it is possible to subset
+very large canvas is used. For this reason, it is possible to subset
 the tree.
 
 ```{r,  fig.height=6, fig.width=11}
@@ -325,7 +325,7 @@ plot_forest(forest) %>%
 ## Two populations with epigenetic state
 
 We are now ready to simulate a model with epigenetic switches and
-subclonal expansions.
+sub-clonal expansions.
 
 ```{r,  fig.height=4, fig.width=3}
 # set the seed of the random number generator

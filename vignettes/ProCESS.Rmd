@@ -28,7 +28,7 @@ The high-level overview of pipeline of ProCESS is a three-steps process, where:
 1. a discrete tissue is first simulated, with distinct clones defined by
    stochastic rates of growth and death. These compete to colonise the tissue
    in a standard stochastic birth-death process, which in ProCESS is empowered
-   by a time-varying structure that allows weasily modelling of complex
+   by a time-varying structure that allows easily modelling of complex
    evolutionary forces that vary over time (e.g., therapy-induced negative
    selection). The tissue can be sampled at multiple time-points and in
    multiple spatially-separated positions.
@@ -45,7 +45,7 @@ The high-level overview of pipeline of ProCESS is a three-steps process, where:
    generate tumour-matched-normal synthetic data for benchmarking
    bioinformatics tools, or to infer parameters against real sequencing data.
    ProCESS output include common VCF formats, as well as low-level SAM
-   outputs that can be used for aligment and downstream analysis. Every
+   outputs that can be used for alignment and downstream analysis. Every
    simulated sample can be assigned custom coverage and purity.
 
 ## Main features
@@ -68,7 +68,7 @@ The ProCESS engine has a number of features, the most relevant are:
    to realistic mutational processes. All their rates of accumulation can
    change over time, mimicking the emergence of time-varying mutational
    forces (e.g., to model treatment). Moreover, realistic germline samples
-   can be simulated by interfacing with the UK biobank database.
+   can be simulated by interfacing with the UK bio-bank database.
 4. arbitrary tissue sampling schema can be simulated, including multi-region
    and longitudinal datasets with any number of samples and time-points;
 6. realistic read-counts based bulk sequencing data can be generated, both
@@ -85,15 +85,15 @@ The ProCESS engine has a number of features, the most relevant are:
 <img src="img/short.png" alt="High-level pipeline" width="850"/><br>
 
 A ProCESS simulation follows the steps (some required, some optional) that we
-disucssd below. The state of the simulation can be saved (and resumed) at
+discussed below. The state of the simulation can be saved (and resumed) at
 several time-points.
 
 ## Tissue simulation
 
 
-1. Initialise: a squared tissue is initialised, a species is defined and a
-   single cell placed onto it;
-2. Evolve tissue: all the cells on the tissue are left to grow stochastically;
+1. Initialisation: a rectangular tissue is initialised, some species are defined, and a
+   few cells placed onto it;
+2. Tissue evolution: all the cells on the tissue are left to grow stochastically;
 3. Sample cells: cells can be sampled from the tissue to mimic a measurement;
 4. Updates/add species: the parameters of each species can be modified, and
    cells from new species can be defined and added to the tissue (subclones).
@@ -109,7 +109,7 @@ that gives the user the flexibility to code a custom evolutionary process.
    temporal-evolution of the process.
 3. Mutational engine: an engine to simulate mutations is built using a real
    reference genome.
-4. Map mutations: mutations are stochatically attached to the simulated
+4. Map mutations: mutations are stochastically attached to the simulated
    phylogeny.
 
 ## Sequencing data generation
@@ -118,7 +118,7 @@ that gives the user the flexibility to code a custom evolutionary process.
    purity, a VCF can be simulated to mimic variant-calling with Beta-Binomial
    noise.
 2. SAM: from the same mutations it is possible to generate reads for a tumour
-   matched-normal assay, and fed that data to a custom biorinformatics
+   matched-normal assay, and fed that data to a custom bioinformatics
    pipeline.
 
 ## Cheatsheet

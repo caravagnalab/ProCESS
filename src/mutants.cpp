@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ RCPP_MODULE(Mutants){
 //' @field get_upper_corner Get the rectangle upper corner
   class_<TissueRectangle>("TissueRectangle")
 //' @name TissueRectangle$new
-//' @title Build a new rectangle of tissue.
+//' @title Build a new rectangle of tissue
 //' @examples
 //' # build the rectangle [500,550]x[450,475]
 //' rect <- new(TissueRectangle, c(500, 450), c(550, 475))
@@ -73,7 +73,7 @@ RCPP_MODULE(Mutants){
   .method("show",&TissueRectangle::show);
 
 //' @name SpatialSimulation
-//' @title Simulating the cell evolution on a tissue
+//' @title Simulating the cell evolution in a tissue
 //' @description This class simulates the cell evolution on a tissue.
 //' @details The objects of this class can simulate the evolution
 //'   of many cells belonging to different *species* on a tissue. Each
@@ -82,7 +82,7 @@ RCPP_MODULE(Mutants){
 //'
 //'   `Simulation` supports epigenetic evolutions, and it lets users
 //'   define species pairs that belong to the same mutant (even though,
-//'   its genomic characterization is unknown) and differ because
+//'   its genomic characterisation is unknown) and differ because
 //'   of their epigenetic state (i.e., either "+" or "-").
 //'
 //'   `Simulation` models epigenetic mutations and allows a cell in
@@ -107,11 +107,11 @@ RCPP_MODULE(Mutants){
 //' @field death_activation_level The number of cells that activates cell death in a species.
 //' @field border_growth_model Switch between homogeneous and border driven growth models.
 //' @field get_added_cells Gets the cells manually added to the simulation \itemize{
-//' \item \emph{Returns:} A dataframe reporting "`mutant`", "`epistate`", "`position_x`",
+//' \item \emph{Returns:} A data frame reporting "`mutant`", "`epistate`", "`position_x`",
 //'   "`position_y`", and "`time`" for each cells manually added to
 //'   the simulation.
 //' }
-//' @field search_sample Seach a rectangular sample having a minimum number of cells\itemize{
+//' @field search_sample Searches a rectangular sample having a minimum number of cells\itemize{
 //' \item \emph{Parameter:} \code{mutant_name} - The mutant of the searched cells.
 //' \item \emph{Parameter:} \code{num_of_cells} - The number of cells in the searched sample.
 //' \item \emph{Parameter:} \code{width} - The width of the searched sample.
@@ -122,7 +122,7 @@ RCPP_MODULE(Mutants){
 //' @field get_cell Gets one the tissue cells \itemize{
 //' \item \emph{Parameter:} \code{x} - The position of the aimed cell on the x axis.
 //' \item \emph{Parameter:} \code{y} - The position of the aimed cell on the y axis.
-//' \item \emph{Returns:} A dataframe reporting "`cell_id`", "`mutant`", "`epistate`", "`position_x`",
+//' \item \emph{Returns:} A data frame reporting "`cell_id`", "`mutant`", "`epistate`", "`position_x`",
 //'   and "`position_y`" of the aimed cell.
 //' }
 //' @field get_cells Gets the tissue cells \itemize{
@@ -130,7 +130,7 @@ RCPP_MODULE(Mutants){
 //' \item \emph{Parameter:} \code{upper_corner} - The upper-right corner of the selection frame (optional).
 //' \item \emph{Parameter:} \code{mutant_filter} - The vector of the to-be-selected mutant names (optional).
 //' \item \emph{Parameter:} \code{epigenetic_filter} - The vector of the to-be-selected epigenetic states (optional).
-//' \item \emph{Returns:} A dataframe reporting "`cell_id`", "`mutant`", "`epistate`", "`position_x`",
+//' \item \emph{Returns:} A data frame reporting "`cell_id`", "`mutant`", "`epistate`", "`position_x`",
 //'   and "`position_y`" for each cells satisfying the provided filters and laying
 //'   in the input frame.
 //' }
@@ -138,19 +138,19 @@ RCPP_MODULE(Mutants){
 //' \item \emph{Returns:} The time simulated by the simulation.
 //' }
 //' @field get_count_history Gets the history of the number of cells per species \itemize{
-//' \item \emph{Returns:} A dataframe reporting "`mutant`", "`epistate`", "`counts`",
+//' \item \emph{Returns:} A data frame reporting "`mutant`", "`epistate`", "`counts`",
 //'   and "`time`" for each species and for each sampled time.
 //' }
 //' @field get_counts Counts the number of cells per species\itemize{
-//' \item \emph{Returns:} A dataframe reporting "`mutant`", "`epistate`", "`counts`", and
+//' \item \emph{Returns:} A data frame reporting "`mutant`", "`epistate`", "`counts`", and
 //'   "`overall`" for each species in the simulation.
 //' }
 //' @field get_firing_history Gets the history of the number of fired events \itemize{
-//' \item \emph{Returns:} A dataframe reporting "event", "`mutant`", "`epistate`", "`fired`",
+//' \item \emph{Returns:} A data frame reporting "event", "`mutant`", "`epistate`", "`fired`",
 //'   and "`time`" for each event type, for each species, and for each sampled time.
 //' }
 //' @field get_firings Gets the number of fired events \itemize{
-//' \item \emph{Returns:} A dataframe reporting "event", "`mutant`", "`epistate`", and "`fired`"
+//' \item \emph{Returns:} A data frame reporting "event", "`mutant`", "`epistate`", and "`fired`"
 //'   for each event type and for each species.
 //' }
 //' @field get_name Gets the simulation name \itemize{
@@ -158,18 +158,18 @@ RCPP_MODULE(Mutants){
 //'   in which the simulation is saving its progresses.
 //' }
 //' @field get_lineage_graph Gets the simulation lineage graph\itemize{
-//' \item \emph{Returns:} A dataframe reporting "`ancestor`", "`progeny`", and "`first_occurrence`"
+//' \item \emph{Returns:} A data frame reporting "`ancestor`", "`progeny`", and "`first_occurrence`"
 //'   of each species-to-species transition.
 //' }
 //' @field get_rates Gets the rates of a species\itemize{
 //' \item \emph{Parameter:} \code{species} - The species whose rates are aimed.
 //' \item \emph{Returns:} The list of the species names.
 //' }
-//' @field get_samples_forest Get the samples forest\itemize{
+//' @field get_samples_forest Gets the samples forest\itemize{
 //' \item \emph{Returns:} The descendants forest having as leaves the sampled cells.
 //' }
-//' @field get_samples_info Retrieve information about the samples \itemize{
-//' \item \emph{Returns:} A dataframe containing, for each sample collected
+//' @field get_samples_info Retrieves information about the samples \itemize{
+//' \item \emph{Returns:} A data frame containing, for each sample collected
 //'   during the simulation, the columns "`name`", "`time`", "`ymin`",
 //'   "`xmin`", "`ymax`", "`xmax`", "`tumour_cells`", and
 //'   "`tumour_cells_in_bbox`". The columns "`ymin`", "`xmin`", "`ymax`",
@@ -178,12 +178,12 @@ RCPP_MODULE(Mutants){
 //'   cells in the sample and in the bounding box, respectively.
 //' }
 //' @field get_species Gets the species \itemize{
-//' \item \emph{Returns:} A dataframe describing the registered species.
+//' \item \emph{Returns:} A data frame describing the registered species.
 //' }
 //' @field get_tissue_size Gets the size of the simulated tissue \itemize{
 //' \item \emph{Returns:} The vector `c(x_size, y_size)` of the simulated tissue.
 //' }
-//' @field mutate_progeny Generate a mutated offspring \itemize{
+//' @field mutate_progeny Generates a mutated offspring \itemize{
 //' \item \emph{Parameter:} \code{cell_position} - The position of the cell whose offspring will mutate.
 //' \item \emph{Parameter:} \code{mutated_mutant} - The mutant of the mutated cell.
 //' }
@@ -193,12 +193,12 @@ RCPP_MODULE(Mutants){
 //' \item \emph{Parameter:} \code{y} - The position of the cell whose progeny will mutate on the y axis.
 //' \item \emph{Parameter:} \code{mutated_mutant} - The mutant of the mutated cell.
 //' }
-//' @field place_cell Place one cell in the tissue \itemize{
+//' @field place_cell Places one cell in the tissue \itemize{
 //' \item \emph{Parameter:} \code{species} - The name of the new cell species.
 //' \item \emph{Parameter:} \code{x} - The position on the x axis of the cell.
 //' \item \emph{Parameter:} \code{y} - The position on the y axis of the cell.
 //' }
-//' @field schedule_mutation Schedules a mutant mutation \itemize{
+//' @field schedule_mutation Schedules a mutation \itemize{
 //' \item \emph{Parameter:} \code{src} - The name of the mutant from which the mutation occurs.
 //' \item \emph{Parameter:} \code{dest} - The name of the mutant to which the mutation leads.
 //' \item \emph{Parameter:} \code{time} - The simulated time at which the mutation will occurs.
@@ -218,12 +218,12 @@ RCPP_MODULE(Mutants){
 //' \item \emph{Parameter:} \code{time} - The final simulation time.
 //' \item \emph{Parameter:} \code{quiet} - A Boolean flag to avoid progress bar (optional).
 //' }
-//' @field run_until Simulating cell evolution \itemize{
+//' @field run_until Simulates cell evolution \itemize{
 //' \item \emph{Parameter:} \code{formula} - The formula that will be satisfied at the
 //'    end of the simulation.
 //' \item \emph{Parameter:} \code{quiet} - A Boolean flag to avoid progress bar (optional).
 //' }
-//' @field sample_cells Sample a tissue rectangle region \itemize{
+//' @field sample_cells Samples a tissue rectangle region \itemize{
 //' \item \emph{Parameter:} \code{name} - The sample name.
 //' \item \emph{Parameter:} \code{lower_corner} - The bottom-left corner of the rectangle.
 //' \item \emph{Parameter:} \code{upper_corner} - The top-right corner of the rectangle.
@@ -261,7 +261,7 @@ RCPP_MODULE(Mutants){
 //' # add into the tissue a cell of species "A+" in position (500,500)
 //' sim$place_cell("A+", 500, 500)
   .method("place_cell", &SpatialSimulation::place_cell,
-          "Place a cell in the tissue")
+          "Placing a cell in the tissue")
 
 //' @name SpatialSimulation$add_mutant
 //' @title Adding a mutant and its species
@@ -338,7 +338,7 @@ RCPP_MODULE(Mutants){
           "Randomly choose one cell having a specified mutant in a rectangular selection")
 
 //' @name SpatialSimulation$schedule_mutation
-//' @title Scheduling a mutant mutation
+//' @title Schedule a mutation
 //' @description This method schedules a mutant mutation
 //' @details The mutation can occur from any of the species of
 //'   the source mutant to the species of the destination mutant
@@ -381,7 +381,7 @@ RCPP_MODULE(Mutants){
 //' @name SpatialSimulation$get_species
 //' @title Getting the species
 //' @description This method returns the simulated species.
-//' @return A dataframe reporting `mutant`, `epistate`, `growth_rate`,
+//' @return A data frame reporting `mutant`, `epistate`, `growth_rate`,
 //'   `death_rate`, and `switch_rate` for each registered species.
 //' @examples
 //' # set the seed of the random number generator
@@ -507,7 +507,7 @@ RCPP_MODULE(Mutants){
 //'   the tissue.
 //' @param x The position of the aimed cell on the x axis.
 //' @param y The position of the aimed cell on the y axis.
-//' @return A dataframe reporting `cell_id`, `mutant`, `epistate`, `position_x`,
+//' @return A data frame reporting `cell_id`, `mutant`, `epistate`, `position_x`,
 //'   and `position_y` of the aimed cell.
 //' @examples
 //' # set the seed of the random number generator
@@ -550,7 +550,7 @@ RCPP_MODULE(Mutants){
 //'   (optional).
 //' @param epigenetic_filter The vector of the to-be-selected epigenetic states
 //'   (optional).
-//' @return A dataframe reporting "`cell_id`", "`mutant`", "`epistate`",
+//' @return A data frame reporting "`cell_id`", "`mutant`", "`epistate`",
 //'   "`position_x`", and "`position_y`" for each cells satisfying the provided
 //'   filters and laying in the input frame.
 //' @examples
@@ -628,7 +628,7 @@ RCPP_MODULE(Mutants){
 //'   species arise as a consequence of either mutant mutations or epigenetic
 //'   switches. The *lineage graph* stores these species evolutions and it
 //'   reports the first occurrence time of any species-to-species transition.
-//' @return A dataframe reporting `ancestor`, `progeny`, and `first_occurrence`
+//' @return A data frame reporting `ancestor`, `progeny`, and `first_occurrence`
 //'   of each species-to-species transition.
 //' @examples
 //' # set the seed of the random number generator
@@ -671,7 +671,7 @@ RCPP_MODULE(Mutants){
 //' @title Getting the cells manually added to the simulation
 //' @description This method returns the cells manually added to
 //'   the simulation.
-//' @return A dataframe reporting `mutant`, `epistate`, `position_x`,
+//' @return A data frame reporting `mutant`, `epistate`, `position_x`,
 //'   `position_y`, and `time` for each cells manually added to
 //'   the simulation.
 //' @examples
@@ -701,7 +701,7 @@ RCPP_MODULE(Mutants){
 //' @title Counting the cell number
 //' @description This method returns the current number of cells per
 //'   species and that since the simulation began.
-//' @return A dataframe reporting `mutant`, `epistate`, `counts`, and
+//' @return A data frame reporting `mutant`, `epistate`, `counts`, and
 //'   `overall` for each species in the simulation.
 //' @examples
 //' # set the seed of the random number generator
@@ -723,9 +723,9 @@ RCPP_MODULE(Mutants){
 
 //' @name SpatialSimulation$get_count_history
 //' @title Getting the history of the number of cells per species
-//' @description This method returns a dataframe reporting the number of
+//' @description This method returns a data frame reporting the number of
 //'   species cells in each sampled simulation time.
-//' @return A dataframe reporting `mutant`, `epistate`, `counts`,
+//' @return A data frame reporting `mutant`, `epistate`, `counts`,
 //'   and `time` for each species, and for each sampled time.
 //' @examples
 //' # set the seed of the random number generator
@@ -747,9 +747,9 @@ RCPP_MODULE(Mutants){
 
 //' @name SpatialSimulation$get_firings
 //' @title Getting the number of fired events
-//' @description This method returns a dataframe reporting the current
+//' @description This method returns a data frame reporting the current
 //'   number of simulated events per species.
-//' @return A dataframe reporting `event`, `mutant`, `epistate`, and `fired`
+//' @return A data frame reporting `event`, `mutant`, `epistate`, and `fired`
 //'   for each event type, mutant, and epigenetic states.
 //' @examples
 //' # set the seed of the random number generator
@@ -771,9 +771,9 @@ RCPP_MODULE(Mutants){
 
 //' @name SpatialSimulation$get_firing_history
 //' @title Getting the fired event history
-//' @description This method returns a dataframe reporting the number of
+//' @description This method returns a data frame reporting the number of
 //'   events fired up to each sampled simulation time.
-//' @return A dataframe reporting `event`, `mutant`, `epistate`, `fired`,
+//' @return A data frame reporting `event`, `mutant`, `epistate`, `fired`,
 //'   and `time` for each event type, for each species, and for each
 //'   sampled time.
 //' @examples
@@ -822,7 +822,7 @@ RCPP_MODULE(Mutants){
 //' @title Retrieving the rates update history
 //' @description This method retrieves the simulation rates
 //'   update history.
-//' @return A dataframe containing the event rates updates. The dataframe
+//' @return A data frame containing the event rates updates. The data frame
 //'   contains the columns "`time`", "`mutant`", "`epistate`", "`event`",
 //'   and "`rate`". Each row reports an update in the rate of an event
 //'   in a species.
@@ -862,7 +862,7 @@ RCPP_MODULE(Mutants){
 //' @title Retrieving sample information
 //' @description This method retrieves information about
 //'   the samples collected along the simulation.
-//' @return A dataframe containing, for each sample collected
+//' @return A data frame containing, for each sample collected
 //'   during the simulation, the columns "`name`", "`time`", "`id`",
 //'   "`ymin`", "`xmin`", "`ymax`", "`xmax`", "`tumour_cells`", and
 //'   "`tumour_cells_in_bbox`". The columns "`ymin`", "`xmin`", "`ymax`",
@@ -967,7 +967,7 @@ RCPP_MODULE(Mutants){
           "Duplicate a cell and mutate one of its children")
 
 //' @name SpatialSimulation$run_up_to_time
-//' @title Simulates cell evolution
+//' @title Simulating cell evolution
 //' @param time The final simulation time.
 //' @param quiet An optional  Boolean flag to avoid the progress bar
 //'   (default: FALSE).
@@ -987,11 +987,11 @@ RCPP_MODULE(Mutants){
   .method("run_up_to_time",
           (void (SpatialSimulation::*)(const RACES::Time&, const bool))
           &SpatialSimulation::run_up_to_time,
-          "Simulate the system up to the specified simulation time")
+          "Simulating the system up to the specified simulation time")
   .method("run_up_to_time",
           (void (SpatialSimulation::*)(const RACES::Time&))
           &SpatialSimulation::run_up_to_time,
-          "Simulate the system up to the specified simulation time")
+          "Simulating the system up to the specified simulation time")
 
 //' @name SpatialSimulation$run_up_to_event
 //' @title Simulating cell evolution
@@ -1023,12 +1023,12 @@ RCPP_MODULE(Mutants){
           (void (SpatialSimulation::*)(const std::string&, const std::string&,
                                        const size_t&, const bool))
           &SpatialSimulation::run_up_to_event,
-          "Simulate the system up to the specified number of events")
+          "Simulating the system up to the specified number of events")
   .method("run_up_to_event",
           (void (SpatialSimulation::*)(const std::string&, const std::string&,
                                        const size_t&))
           &SpatialSimulation::run_up_to_event,
-          "Simulate the system up to the specified number of events")
+          "Simulating the system up to the specified number of events")
 
 //' @name SpatialSimulation$run_up_to_size
 //' @title Simulating cell evolution
@@ -1059,11 +1059,11 @@ RCPP_MODULE(Mutants){
           (void (SpatialSimulation::*)(const std::string&, const size_t&,
                                        const bool))
           &SpatialSimulation::run_up_to_size,
-          "Simulate the system up to the specified number of cells in the species")
+          "Simulating the system up to the specified number of cells in the species")
   .method("run_up_to_size",
           (void (SpatialSimulation::*)(const std::string&, const size_t&))
           &SpatialSimulation::run_up_to_size,
-          "Simulate the system up to the specified number of cells in the species")
+          "Simulating the system up to the specified number of cells in the species")
 
 //' @name SpatialSimulation$run_until
 //' @title Simulating cell evolution
@@ -1130,11 +1130,11 @@ RCPP_MODULE(Mutants){
           (void (SpatialSimulation::*)(const Logics::Formula&,
                                        const bool))
           &SpatialSimulation::run_until,
-          "Simulate the system until a formula is *not* satisfied")
+          "Simulating the system until a formula is *not* satisfied")
   .method("run_until",
           (void (SpatialSimulation::*)(const Logics::Formula&))
           &SpatialSimulation::run_until,
-          "Simulate the system until a formula is *not* satisfied")
+          "Simulating the system until a formula is *not* satisfied")
 
 //' @name SpatialSimulation$sample_cells
 //' @title Sampling a set of cells
@@ -1213,7 +1213,7 @@ RCPP_MODULE(Mutants){
           "Update the rates of a species")
 
 //' @name SpatialSimulation$search_sample
-//' @title Searching a rectangular tissue sample
+//' @title Searching for a rectangular tissue sample
 //' @description This method searches a rectangular tissue sample.
 //' @details The aimed sample mush satisfy the specified number of cells.
 //'   The sizes of the samples are also provided a parameter of the method.
@@ -1469,7 +1469,7 @@ RCPP_MODULE(Mutants){
 //' @field get_coalescent_cells Retrieve most recent common ancestors\itemize{
 //' \item \emph{Parameter:} \code{cell_ids} - The list of the identifiers of the
 //'   cells whose most recent common ancestors are aimed (optional).
-//' \item \emph{Return:} A dataframe representing, for each of the identified
+//' \item \emph{Return:} A data frame representing, for each of the identified
 //'   cells, the identified (column "`cell_id`"), whenever the
 //'   node is not a root, the ancestor identifier (column
 //'   "`ancestor`"), whenever the node was sampled, i.e., it is
@@ -1479,7 +1479,7 @@ RCPP_MODULE(Mutants){
 //'   and the birth time (column "`birth_time`").
 //' }
 //' @field get_nodes Get the forest nodes \itemize{
-//' \item \emph{Return:} A dataframe representing, for each node
+//' \item \emph{Return:} A data frame representing, for each node
 //'   in the forest, the identified (column "`cell_id`"),
 //'   whenever the node is not a root, the ancestor
 //'   identifier (column "`ancestor`"), whenever the node
@@ -1490,7 +1490,7 @@ RCPP_MODULE(Mutants){
 //'   and the birth time (column "`birth_time`").
 //' }
 //' @field get_samples_info Retrieve information about the samples \itemize{
-//' \item \emph{Returns:} A dataframe containing, for each sample collected
+//' \item \emph{Returns:} A data frame containing, for each sample collected
 //'   during the simulation, the columns "`name`", "`time`", "`ymin`",
 //'   "`xmin`", "`ymax`", "`xmax`", "`tumour_cells`", and
 //'   "`tumour_cells_in_bbox`". The columns "`ymin`", "`xmin`", "`ymax`",
@@ -1499,7 +1499,7 @@ RCPP_MODULE(Mutants){
 //'   cells in the sample and in the bounding box, respectively.
 //' }
 //' @field get_species_info Gets the species data\itemize{
-//' \item \emph{Returns:} A dataframe reporting "`mutant`" and "`epistate`"
+//' \item \emph{Returns:} A data frame reporting "`mutant`" and "`epistate`"
 //'   for each registered species.
 //' }
 //' @field get_sticks Compute the forest sticks \itemize{
@@ -1520,8 +1520,8 @@ RCPP_MODULE(Mutants){
 
 //' @name SamplesForest$get_nodes
 //' @title Getting forest nodes
-//' @description This method builds a dataframe containing forest nodes.
-//' @return A dataframe representing, for each node
+//' @description This method builds a data frame containing forest nodes.
+//' @return A data frame representing, for each node
 //'   in the forest, the identified (column "`cell_id`"),
 //'   whenever the node is not a root, the ancestor
 //'   identifier (column "`ancestor`"), whenever the
@@ -1568,7 +1568,7 @@ RCPP_MODULE(Mutants){
 //'   leaves.
 //' @param cell_ids The list of the identifiers of the cells whose
 //'   most recent common ancestors are aimed (optional).
-//' @return A dataframe representing, for each of the identified
+//' @return A data frame representing, for each of the identified
 //'   cells, the identified (column "`cell_id`"), whenever the
 //'   node is not a root, the ancestor identifier (column
 //'   "`ancestor`"), whenever the node was sampled, i.e., it is
@@ -1642,11 +1642,11 @@ RCPP_MODULE(Mutants){
             "Get the sub-forest for some of the original samples")
 
 //' @name SamplesForest$get_samples_info
-//' @title Retrieving samples' information
+//' @title Retrieving the samples' information
 //' @description This method retrieves information about
 //'   the samples whose cells were used as leaves
 //'   of the samples forest.
-//' @return A dataframe containing, for each sample collected
+//' @return A data frame containing, for each sample collected
 //'   during the simulation, the columns "`name`", "`time`", "`id`",
 //'   "`ymin`", "`xmin`", "`ymax`", "`xmax`", "`tumour_cells`", and
 //'   "`tumour_cells_in_bbox`". The columns "`ymin`", "`xmin`", "`ymax`",
@@ -1682,9 +1682,9 @@ RCPP_MODULE(Mutants){
 
 //' @name SamplesForest$get_species_info
 //' @title Getting forest species
-//' @description This method builds a dataframe containing information
+//' @description This method builds a data frame containing information
 //'      about the simulated species.
-//' @return A dataframe reporting `mutant` and `epistate`
+//' @return A data frame reporting `mutant` and `epistate`
 //'   for each registered species.
     .method("get_species_info", &SamplesForest::get_species_info,
             "Get the recorded species")
