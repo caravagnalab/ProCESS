@@ -66,9 +66,9 @@ SamplesForest SamplesForest::load(const std::string& filename)
   try {
     static_cast<RACES::Mutants::DescendantsForest&>(forest) = RACES::Mutants::DescendantsForest::load(in_archive);
   } catch (RACES::Archive::WrongFileFormatDescr& ex) {
-    raise_error(ex, "descendants forest");
+    raise_error(ex, "samples forest");
   } catch (RACES::Archive::WrongFileFormatVersion& ex) {
-    raise_error(ex, "descendants forest");
+    raise_error(ex, "samples forest");
   }
 
   return forest;

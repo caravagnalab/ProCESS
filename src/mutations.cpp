@@ -366,14 +366,14 @@ RCPP_MODULE(Mutations){
 
 //' @name MutationEngine
 //' @title Generating phylogenetic forests
-//' @description A mutation engine can label every node of a descendants
+//' @description A mutation engine can label every node of a samples
 //'   forest by mutations and produce a consistent phylogenetic forest.
 //' @details The mutations are randomly generated according to three
 //'   factors:
-//'     - the mutational rates of the species involved in the descendants
+//'     - the mutational rates of the species involved in the samples
 //'       forest
 //'     - the genotypical characterisation of the mutants involved in the
-//'       descendants forest, i.e., the somatic mutations characterising
+//'       samples forest, i.e., the somatic mutations characterising
 //'       the mutant genotypes
 //'     - the SBS and ID signatures active along the species simulation
 //'

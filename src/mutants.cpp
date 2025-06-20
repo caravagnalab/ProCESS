@@ -166,7 +166,7 @@ RCPP_MODULE(Mutants){
 //' \item \emph{Returns:} The list of the species names.
 //' }
 //' @field get_samples_forest Gets the samples forest\itemize{
-//' \item \emph{Returns:} The descendants forest having as leaves the sampled cells.
+//' \item \emph{Returns:} The samples forest having as leaves the sampled cells.
 //' }
 //' @field get_samples_info Retrieves information about the samples \itemize{
 //' \item \emph{Returns:} A data frame containing, for each sample collected
@@ -424,7 +424,7 @@ RCPP_MODULE(Mutants){
 //'
 //' forest
   .method("get_samples_forest", &SpatialSimulation::get_samples_forest,
-          "Get the descendants forest having as leaves the sampled cells")
+          "Get the samples forest having as leaves the sampled cells")
 
 //' @name SpatialSimulation$death_activation_level
 //' @title Death activation level
