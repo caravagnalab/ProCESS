@@ -1,0 +1,243 @@
+---
+title: "A four-mutants example"
+output: rmarkdown::html_vignette
+description: >
+  Sampling a four-mutants simulation
+vignette: >
+  %\VignetteIndexEntry{A four-mutants example}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+> *Disclaimer:* RACES/ProCESS internally implements the
+> probability distributions using the C++11 random number
+> distribution classes. The standard does not specify their
+> algorithms, and the class implementations are left free
+> for the compiler. Thus, the simulation output depends on
+> the compiler used to compile RACES, and because of that,
+> the results reported in this article may differ from
+> those obtained by the reader.
+
+We build a tumour with a single mutant "A" and grow it up to 
+10 cells.
+
+```{r}
+library(ProCESS)
+
+# set the seed of the random number generator for repeatability
+set.seed(0)
+
+sim <- SpatialSimulation(width = 600, height = 600)
+
+# avoid drift
+sim$death_activation_level <- 50
+
+sim$add_mutant(name = "A", growth_rates = 0.12, death_rates = 0.05)
+
+sim$place_cell("A", 300, 300)
+sim$run_up_to_size("A", 10)
+```
+
+We add a new mutant "B" as sub-clone of "A" and let the simulation
+evolve until "B" reaches 30 cells.
+```{r}
+sim$add_mutant(name = "B", growth_rates = 0.145, death_rates = 0.06)
+sim$mutate_progeny(sim$choose_cell_in("A"), "B")
+
+sim$run_up_to_size("B", 30)
+```
+
+We add a further mutants "C" as sub-clones for "A" and let the tumour
+grow again up to the point in which "C" consists of 25000 cells.
+```{r}
+sim$add_mutant(name = "C", growth_rates = 0.15, death_rates = 0.06)
+sim$mutate_progeny(sim$choose_cell_in("A"), "C")
+
+sim$run_up_to_size("C", 25000)
+```
+
+Then, we plot the tissue.
+
+```{r, fig.width=3, fig.height=3, fig.alt=c("The tissue of a tumour having three mutants: A, B, and C. Both B, and C are sub-clones of A. The three mutants have different grow rates and appears at different simulated time.")}
+plot_tissue(sim)
+```
+
+## Tissue sampling level
+
+
+We can collect three samples: "S1" and "S2". 
+
+```{r}
+sim$sample_cells("S1", c(145, 230), c(215, 300))
+sim$sample_cells("S2", c(350, 300), c(420, 370))
+```
+
+We can plot the spatial simulation after the sampling. We label the sampled
+region to improve readability, but it is not mandatory.
+
+```{r, fig.width=3, fig.height=3, fig.alt=c("The three-mutants tumour just after collecting two samples: S1 and S2. The former mainly contains C cells; the latter A cells.")}
+plot_tissue(sim) +
+  ggplot2::annotate("text", x = (145 + 215) / 2, y = (230 + 300) / 2,
+                    label = "S1", parse = TRUE) +
+  ggplot2::annotate("text", x = (350 + 420) / 2, y = (300 + 370) / 2,
+                    label = "S2", parse = TRUE)
+```
+
+After the sampling, we can add a new mutant "D" as sub-clone of "B", let the
+simulation further evolve until the sum of the cardinalities of the mutants "C"
+and "D" is 100000, and sample the tissue again.
+
+```{r, fig.width=3, fig.height=3, fig.alt=c("After collecting the samples S1 and S2, a more aggressive mutant D arises from B and a further sample S3, containing both D and C cells, is collected.")}
+sim$add_mutant(name = "D", growth_rates = 0.8, death_rates = 0.01)
+sim$mutate_progeny(sim$choose_cell_in("B", c(240, 130), c(250, 150)), "D")
+
+sim$run_until(sim$var("C") + sim$var("D") == 100000)
+
+sim$sample_cells("S3", c(360, 80), c(430, 150))
+
+plot_tissue(sim) +
+  ggplot2::annotate("text", x = (360 + 430) / 2, y = (80 + 150) / 2,
+                    label = "S3", parse = TRUE)
+```
+
+The Muller plot overviews the species cardinalities over the simulation
+evolution.
+
+```{r, fig.width=4, fig.alt=c("The Muller plot of the overall tumour simulation.")}
+plot_muller(sim)
+```
+
+We can build the samples forest and plot it.
+
+```{r, fig.width=7, fig.alt=c("The Muller plot of the overall tumour simulation.")}
+samples_forest <- sim$get_samples_forest()
+
+library(dplyr)
+
+plot_forest(samples_forest) %>%
+  annotate_forest(samples_forest)
+```
+
+## Cell genetic characterisation level
+
+We first build the mutation engine to label each cell in the samples forest.
+The mutation engine pre-defined setups automatically download all the needed
+file. All the pre-configured setups, but "demo" requires a COSMIC account to
+download the signature files from the COSMIC site.
+
+```{r}
+# build the mutation engine according to the pre-defined setup "demo"
+m_engine <- MutationEngine(setup_code="demo",
+                           COSMIC_account = list(email = "foo@bar.com",
+                                                 password = "#########"))
+
+```
+
+We must genomically characterise the spatial simulation mutants providing
+passenger mutation rates and the list of driver mutations.
+
+```{r}
+# genetically characterise the mutants
+m_engine$add_mutant("A", passenger_rates = c(SNV = 2e-9, indel = 2e-8),
+                    drivers = list(Mutation("22", 15220157, "GTTTTTTTT", "G"),
+                                   CNA("D", "22", 22453799, 200000,
+                                       allele = 1)))
+
+m_engine$add_mutant("B", passenger_rates = c(SNV = 2e-9, indel = 2e-8,
+                                             CNA = 1e-9),
+                    drivers = list(SNV("22", 16050185, "C", allele = 1),
+                                   CNA(type = "A", chr = "22",
+                                       chr_pos = 16485130, len = 200000)))
+
+m_engine$add_mutant("C", passenger_rates = list(SNV = 2e-8, indel = 2e-8),
+                    drivers = list(SNV("22", 32786322, "G"),
+                                   list("NF2 R221*", allele = 1)))
+
+m_engine$add_mutant("D", passenger_rates = list(SNV = 2e-9, indel = 2e-8),
+                    drivers = list(SNV("22", 51240420, "T")))
+```
+
+We also need to declare the exposures along the simulation.
+
+```{r}
+# add SNV and indel default exposures. This will be used from simulated time 0
+# up to the successive exposure change.
+m_engine$add_exposure(coefficients = c(SBS13 = 0.2, SBS1 = 0.8))
+m_engine$add_exposure(c(ID2 = 0.6, ID13 = 0.2, ID21 = 0.2))
+
+# add a new SNV exposure that will be used from simulated
+# time 100 up to the successive exposure change.
+m_engine$add_exposure(time = 100, c(SBS5 = 0.3, SBS2 = 0.2, SBS3 = 0.5))
+m_engine$add_exposure(time = 120, c(SBS5 = 0.3, SBS2 = 0.2, SBS3 = 0.5,
+                                    ID1 = 0.8, ID9 = 0.2))
+
+m_engine
+```
+
+We are now ready to build the phylogenetic forest.
+
+```{r}
+# place mutations on the sample forest assuming 1000 pre-neoplastic SNVs and
+# 500 indels
+phylo_forest <- m_engine$place_mutations(samples_forest, 1000, 500)
+```
+
+The phylogenetic forest maintains the genome mutations (SBSs, indels, and CNAs)
+of all the sampled cells.
+
+```{r}
+mutations <- phylo_forest$get_sampled_cell_mutations()
+
+head(mutations)
+
+CNAs <- phylo_forest$get_sampled_cell_CNAs()
+
+head(CNAs)
+```
+
+## Sequencing level
+
+We can simulate the sequencing of the collected samples by using the
+phylogenetic forest. For each SBS and indel mutation in the phylogenetic
+forest, the output reports the number of occurrences in the simulated reads,
+the coverage of each mutation locus, and the corresponding VAF in each of the
+samples.
+
+```{r}
+seq_results <- simulate_seq(phylo_forest, coverage = 30,
+                            with_normal_sample = FALSE)
+
+head(seq_results$mutations)
+```
+
+ProCESS allows to visualise the sequencing results.
+
+```{r, fig.width=4, fig.height=7, fig.alt=c("The VAF histogram labelled by mutation class.")}
+f_seq <- seq_results$mutations %>% filter(classes != "germinal")
+
+plot_VAF_histogram(f_seq, labels = f_seq["classes"], cuts = c(0.02, 1))
+```
+
+Marginal distributions can also be plotted.
+
+```{r, fig.width=4, fig.height=4, fig.alt=c("The VAF marginal distribution S1 vs S2 labelled by mutation class.", "The VAF marginal distribution S1 vs S3 labelled by mutation class.", "The VAF marginal distribution S2 vs S3 labelled by mutation class.")}
+plot_VAF_marginals(f_seq, samples = c("S1", "S2", "S3"),
+                   labels = f_seq["classes"])
+```
+
+From S1 vs S3 figure, we can see that few passenger mutations occur both in S1
+and S3. Let us identify these mutations.
+
+```{r}
+f_seq %>% filter(classes == "passenger" & S1.VAF > 0 &  S3.VAF > 0)
+```

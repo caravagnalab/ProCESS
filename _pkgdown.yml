@@ -32,7 +32,7 @@ articles:
   - time_series
 - title: Tests and Examples
   contents:
-  - three_sampling
+  - four_mutants
   - SCOUT
 
 reference:
