@@ -39,6 +39,9 @@ set.seed(0)
 
 sim <- SpatialSimulation(width = 600, height = 600)
 
+# set the delta time between two time series samples
+sim$history_delta <- 10
+
 # avoid drift
 sim$death_activation_level <- 50
 
@@ -66,10 +69,12 @@ sim$mutate_progeny(sim$choose_cell_in("A"), "C")
 sim$run_up_to_size("C", 25000)
 ```
 
-Then, we plot the tissue.
+Then, we plot the tissue and the simulation state.
 
-```{r, fig.width=3, fig.height=3, fig.alt=c("The tissue of a tumour having three mutants: A, B, and C. Both B, and C are sub-clones of A. The three mutants have different grow rates and appears at different simulated time.")}
+```{r, fig.width=3, fig.height=3, fig.alt=c("The tissue of a tumour having three mutants: A, B, and C. Both B, and C are sub-clones of A. The three mutants have different grow rates and appears at different simulated time.", "The current ratio of cells per species over all tumour cells.")}
 plot_tissue(sim)
+
+plot_state(sim)
 ```
 
 ## Tissue sampling level
@@ -97,7 +102,7 @@ After the sampling, we can add a new mutant "D" as sub-clone of "B", let the
 simulation further evolve until the sum of the cardinalities of the mutants "C"
 and "D" is 100000, and sample the tissue again.
 
-```{r, fig.width=3, fig.height=3, fig.alt=c("After collecting the samples S1 and S2, a more aggressive mutant D arises from B and a further sample S3, containing both D and C cells, is collected.")}
+```{r, fig.width=3, fig.height=3, fig.alt=c("After collecting the samples S1 and S2, a more aggressive mutant D arises from B and a further sample S3, containing both D and C cells, is collected.", "The simulation state after collecting S3.")}
 sim$add_mutant(name = "D", growth_rates = 0.8, death_rates = 0.01)
 sim$mutate_progeny(sim$choose_cell_in("B", c(240, 130), c(250, 150)), "D")
 
@@ -108,18 +113,27 @@ sim$sample_cells("S3", c(360, 80), c(430, 150))
 plot_tissue(sim) +
   ggplot2::annotate("text", x = (360 + 430) / 2, y = (80 + 150) / 2,
                     label = "S3", parse = TRUE)
+
+plot_state(sim)
 ```
 
-The Muller plot overviews the species cardinalities over the simulation
+The time-series plot represents the species cardinalities along the simulation.
+
+```{r, fig.width=4, fig.alt=c("The time series plot represent the species cardinalities along the simulation.")}
+plot_timeseries(sim)
+```
+
+The Muller plot, instead, overviews the percentage of cells in each species along the simulation
 evolution.
 
-```{r, fig.width=4, fig.alt=c("The Muller plot of the overall tumour simulation.")}
+```{r, fig.width=4, fig.alt=c("The Muller plot overviews the percentage of cells in each species along the simulation
+evolution.")}
 plot_muller(sim)
 ```
 
 We can build the samples forest and plot it.
 
-```{r, fig.width=7, fig.alt=c("The Muller plot of the overall tumour simulation.")}
+```{r, fig.width=7, fig.alt=c("The samples forest of the collected samples.")}
 samples_forest <- sim$get_samples_forest()
 
 library(dplyr)
