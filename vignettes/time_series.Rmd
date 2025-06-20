@@ -219,7 +219,7 @@ Considering the example above, where `C` and `D` have the same rates, we
 increase the death rate of both `C+` and `C-` species, as well as `B+`
 and `B-`.
 
-```{r,  fig.height=4, fig.width=6, message=FALSE, warning=FALSE, fig.alt=c("The Muller plot for the last quater of the simulation after changing the death rates of B and C species.", "The Muller plot in log-scale  for the last quater of the simulation after changing the death rates of B and C species.")}
+```{r,  fig.height=4, fig.width=6, message=FALSE, warning=FALSE, fig.alt=c("The Muller plot for the last quarter of the simulation after changing the death rates of B and C species.", "The Muller plot in log-scale  for the last quater of the simulation after changing the death rates of B and C species.")}
 # Current rates
 sim
 
