@@ -72,7 +72,7 @@ coordinate for the bottom left point, and for the top right point.
 For this simulation, we define two samples with names `"S_1_1"` and
 `"S_1_2"`.
 
-```{r,  fig.height=4, fig.width=3, fig.alt=c("The rectangular regions corresponding to the samples \"S_1_1\" and \"S_1_2\".")}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The rectangular regions corresponding to the samples S_1_1 and S_1_2.")}
 # We collect a squared box of (bbox_width x bbox_width) cells
 bbox_width <- 50
 
@@ -173,7 +173,7 @@ forest$get_samples_info()
 We can visualise the forest. This plot reports the cells and, on the
 y-axis, their time of birth.
 
-```{r,  fig.height=6, fig.width=11, fig.alt=c("The samples forest of \"S_1_1\" and \"S_1_2\".")}
+```{r,  fig.height=6, fig.width=11, fig.alt=c("The samples forest of S_1_1 and S_1_2.")}
 plot_forest(forest)
 ```
 
@@ -182,7 +182,7 @@ number of cells, it might be complicated to view the full tree, unless a
 very large canvas is used. For this reason, it is possible to subset
 the tree.
 
-```{r,  fig.height=6, fig.width=11, fig.alt=c("The sub-forest of sample \"S_1_1\".")}
+```{r,  fig.height=6, fig.width=11, fig.alt=c("The sub-forest of sample S_1_1.")}
 # Extract the subforest linked to sample
 S_1_1_forest <- forest$get_subforest_for("S_1_1")
 
@@ -192,7 +192,7 @@ plot_forest(S_1_1_forest)
 In general, these plots can be annotated with extra information, such as
 the sampling times, and the MRCAs of each sample in the tree.
 
-```{r,  fig.height=6, fig.width=11, fig.alt=c("The annotated forest of \"S_1_1\" and \"S_1_2\".","The annotated sub-forest of the sample \"S_1_1\".")}
+```{r,  fig.height=6, fig.width=11, fig.alt=c("The annotated forest of S_1_1 and S_1_2.","The annotated sub-forest of the sample S_1_1.")}
 # Full plot
 plot_forest(forest) %>%
   annotate_forest(forest)
@@ -249,7 +249,7 @@ returned.
 This allows to program sampling without having a clear idea of the
 tissue conformation.
 
-```{r,  fig.height=4, fig.width=3, fig.alt=c("The rectangle delimiting the sample \"S_2_1\" containing 2000 cells of mutant \"B\" at least.")}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The rectangle delimiting the sample S_2_1 containing 2000 cells of mutant B at least.")}
 # A bounding box 50x50 with at least 100 cells of species B
 n_w <- n_h <- 50
 ncells <- 0.8 * n_w * n_h
@@ -271,7 +271,7 @@ sim$sample_cells("S_2_1", bbox$lower_corner, bbox$upper_corner)
 
 Something similar with species `A`.
 
-```{r,  fig.height=4, fig.width=3, fig.alt=c("The rectangle delimiting the sample \"S_2_2\" containing 2000 cells of mutant \"A\" at least.")}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The rectangle delimiting the sample S_2_2 containing 2000 cells of mutant A at least.")}
 bbox <- sim$search_sample(c("A" = ncells), n_w, n_h)
 
 # plot the bounding box
@@ -306,7 +306,7 @@ plot_forest(forest) %>%
 ProCESS supports randomized cell sampling over the full tissue or a
 rectangle thereof.
 
-```{r, fig.alt=c("Two further samples \"S_2_3\" and \"S_2_4\" are collected. Their cells are randomly picked-up (like in liquid biopsy) from the whole tissue and from a bounding box, respectively. The figure depicts the samples forest of all the samples.")}
+```{r, fig.alt=c("Two further samples S_2_3 and S_2_4 are collected. Their cells are randomly picked-up (like in liquid biopsy) from the whole tissue and from a bounding box, respectively. The figure depicts the samples forest of all the samples.")}
 # collect up to 2500 tumour cells randomly selected over the whole tissue
 sim$sample_cells("S_2_3", num_of_cells = 2500)
 

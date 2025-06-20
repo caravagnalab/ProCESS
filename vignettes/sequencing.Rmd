@@ -115,7 +115,7 @@ plot_DR(f_seq, sample = "S_2_2")
 The VAF and the VAF marginal distributions can be
 plot too.
 
-```{r, fig.alt=c("The VAF histogram of all samples.", "The VAF marginal distribution \"S_1_1\" vs \"S_1_2\".", "The VAF marginal distribution \"S_1_1\" vs \"S_2_2\".", "The VAF marginal distribution \"S_1_2\" vs \"S_2_2\".")}
+```{r, fig.alt=c("The VAF histogram of all samples.", "The VAF marginal distribution S_1_1 vs S_1_2.", "The VAF marginal distribution S_1_1 vs S_2_2.", "The VAF marginal distribution S_1_2 vs S_2_2.")}
 # plotting the VAF histogram
 plot_VAF_histogram(f_seq, cuts = c(0.02, 1))
 
@@ -125,7 +125,7 @@ plot_VAF_marginals(f_seq, samples = c("S_1_1", "S_1_2", "S_2_2"))
 
 The VAF and the VAF marginal plots can be labelled.
 
-```{r, fig.alt=c("The VAF histogram labelled by mutation class.", "The VAF marginal distribution \"S_1_1\" vs \"S_1_2\" labelled by mutation class.", "The VAF marginal distribution \"S_1_1\" vs \"S_2_2\" labelled by mutation class.", "The VAF marginal distribution \"S_1_2\" vs \"S_2_2\" labelled by mutation class.")}
+```{r, fig.alt=c("The VAF histogram labelled by mutation class.", "The VAF marginal distribution S_1_1 vs S_1_2 labelled by mutation class.", "The VAF marginal distribution S_1_1 vs S_2_2 labelled by mutation class.", "The VAF marginal distribution S_1_2 vs S_2_2 labelled by mutation class.")}
 # plotting the VAF histogram with labels
 plot_VAF_histogram(f_seq, labels = f_seq["classes"], cuts = c(0.02, 1))
 
