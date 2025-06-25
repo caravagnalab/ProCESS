@@ -55,10 +55,11 @@ get_exposure_ends <- function(phylo_forest) {
 #'
 #' @param phylogenetic_forest A phylogenetic forest.
 #' @param linewidth The width of the lines in the plot.
-#' @param emphatize_switches A Boolean flag to emphatize the
+#' @param emphasize_switches A Boolean flag to emphasize the
 #'   exposure switches.
+#' @param pal_name The name of a `RColorBrewer` palette.
 #'
-#' @return An editable ggplot plot.
+#' @return A `ggplot2` plot.
 #' @examples
 #' sim <- SpatialSimulation()
 #'
@@ -96,19 +97,20 @@ get_exposure_ends <- function(phylo_forest) {
 #' plot_exposure_timeline(phylo_forest)
 #'
 #' # plotting the phylogenetic forest emphatizing the exposure switches
-#' plot_exposure_timeline(phylo_forest, emphatize_switches=TRUE)
+#' plot_exposure_timeline(phylo_forest, emphasize_switches=TRUE)
 #'
 #' # deleting the mutation engine directory
 #' unlink("demo", recursive=TRUE)
 #' @export
 plot_exposure_timeline <- function(phylogenetic_forest, linewidth = 0.8,
-                                   emphatize_switches = FALSE) {
+                                   emphasize_switches = FALSE,
+                                   pal_name = "Dark2") {
   stopifnot(inherits(phylogenetic_forest, "Rcpp_PhylogeneticForest"))
 
   exposure_df <- get_exposure_ends(phylogenetic_forest)
 
   signames <- exposure_df %>% dplyr::pull(signature) %>% unique
-  colors <- get_colors_for(signames)
+  colors <- get_colors_for(signames, pal_name = pal_name)
 
   line_shift <- 0.005 * linewidth
 
@@ -128,7 +130,7 @@ plot_exposure_timeline <- function(phylogenetic_forest, linewidth = 0.8,
     ggplot2::scale_colour_manual(name = "Signatures", values = colors) +
     ggplot2::theme_minimal()  # Apply a minimal theme
 
-  if (emphatize_switches) {
+  if (emphasize_switches) {
     switching_times <- exposure_df["time"] %>% filter(time != 0)
     for (switching_time in switching_times) {
       p <- p +
