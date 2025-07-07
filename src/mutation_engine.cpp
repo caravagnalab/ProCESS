@@ -15,6 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <iostream>
 #include <fstream>
 #include <filesystem>
 #include <sstream>
@@ -955,35 +956,29 @@ get_epistate_passenger_rates(const Rcpp::List& list)
   return ep_rates;
 }
 
-void check_wrong_chromosome_SNV(const std::set<RACES::Mutations::ChromosomeId>& missing_chr,
-                                const std::map<RACES::Mutations::ChromosomeId, SID_iterator>& SNV_partition)
+void error_if_chr_missing(const std::map<RACES::Mutations::ChromosomeId, std::list<SIDSpec>>& missing_chr)
 {
   if (missing_chr.size()>0) {
     std::ostringstream oss;
 
     std::string sep="";
     size_t counter{0};
-    for (const auto& chr: missing_chr) {
-      auto found = SNV_partition.find(chr);
-
-      if (found != SNV_partition.end()) {
-        const auto& SNVs = found->second;
-        for (auto& SNV_it : SNVs) {
-          oss << sep << *SNV_it;
+    for (const auto& [chr_id, SIDs]: missing_chr) {
+      for (const auto& sid: SIDs) {
+          oss << sep << sid;
 
           if (sep.size()==0) {
             sep = ", ";
           }
           ++counter;
-        }
       }
     }
 
-    throw std::runtime_error((counter>1?"SNVs ":"SNV ")
+    throw std::runtime_error((counter>1?"SIDs ":"SID ")
                             + oss.str()
                             + (counter>1?" belong":" belongs")
-                            + (SNV_partition.size()>1?" to unknown chromosomes":
-                                                      " to an unknown chromosome"));
+                            + (missing_chr.size()>1?" to unknown chromosomes":
+                                                    " to an unknown chromosome"));
   }
 }
 
@@ -995,62 +990,61 @@ inline std::ifstream::pos_type filesize(const std::filesystem::path& fasta_filen
 
 void retrieve_missing_references(const std::string& mutant_name,
                                  const std::filesystem::path fasta_filename,
-                                 std::list<SIDSpec>& SNVs)
+                                 std::list<SIDSpec>& SIDs)
 {
   RACES::UI::ProgressBar progress_bar(Rcpp::Rcout);
 
-  std::map<RACES::Mutations::ChromosomeId, SID_iterator> SNV_partition;
-
-  size_t SNV_to_check{0};
-  for (auto it=SNVs.begin(); it != SNVs.end(); ++it) {
-    if (it->ref == "?") {
-      SNV_partition[it->chr_id].push_back(it);
-      ++SNV_to_check;
-    }
-  }
-
-  const size_t total_SNV{SNV_to_check};
-
   using namespace RACES::IO::FASTA;
 
-  progress_bar.set_message("Retrieving \""+ mutant_name + "\" SNVs");
+  progress_bar.set_message("Retrieving \""+ mutant_name + "\" SIDs");
 
-  std::set<RACES::Mutations::ChromosomeId> missing_chr;
+  std::map<RACES::Mutations::ChromosomeId, std::list<SIDSpec>> missing_chr;
 
-  std::string alt_base;
+  std::string ref_str;
+
+  size_t checked{0};
   IndexedReader<ChromosomeData<Sequence>> chr_reader(fasta_filename,
                                                      progress_bar);
-  for (const auto& [chr_id, incomplete_SNVs]: SNV_partition) {
-    const auto chr_name = RACES::Mutations::GenomicPosition::chrtos(chr_id);
 
-    for (auto& SNV_it : incomplete_SNVs) {
-        if (chr_reader.read(alt_base, chr_name, SNV_it->position-1, 1)) {
-            if (alt_base.size() == 0) {
-                std::ostringstream oss;
+  for (auto& sid : SIDs) {
+      const auto chr_name = RACES::Mutations::GenomicPosition::chrtos(sid.chr_id);
+      if (chr_reader.read(ref_str, chr_name, sid.position-1,
+                          sid.ref.size())) {
+          if (ref_str.size() == 0) {
+              std::ostringstream oss;
 
-                oss << "The SNV context of " << *SNV_it
-                    << " does not lay into the chromosome." << std::endl;
-                throw std::out_of_range(oss.str());
-            }
+              oss << "The SID context of " << sid
+                  << " does not lay into the chromosome." << std::endl;
+              throw std::out_of_range(oss.str());
+          }
 
-            if (SNV_it->ref == "?") {
-                SNV_it->ref = alt_base[0];
-            }
-            --SNV_to_check;
+          if (sid.ref == "?") {
+              sid.ref = ref_str[0];
+          } else {
+              if (sid.ref != ref_str) {
+                  std::ostringstream oss;
+                  oss << "The specified reference of " << sid
+                      << " does not match the reference sequence ("
+                      << ref_str << ")." << std::endl;
+                  throw std::out_of_range(oss.str());
+              }
+          }
 
-            progress_bar.set_progress((100*SNV_to_check)/total_SNV);
-        } else {
-            missing_chr.insert(chr_id);
-        }
-    }
+          progress_bar.set_progress(static_cast<unsigned int>((100*(++checked))/SIDs.size()));
+      } else {
+          auto found = missing_chr.find(sid.chr_id);
+          if (found != missing_chr.end()) {
+            found->second.push_back(sid);
+          } else {
+            missing_chr[sid.chr_id] = {sid};
+          }
+      }
   }
 
-  check_wrong_chromosome_SNV(missing_chr, SNV_partition);
+  error_if_chr_missing(missing_chr);
 
-  progress_bar.set_progress(100, "\"" + mutant_name + "\" SNVs retrieved");
+  progress_bar.set_progress(100, "\"" + mutant_name + "\" SIDs retrieved");
 }
-
-#include <iostream>
 
 void MutationEngine::add_mutant(const std::string& mutant_name,
                                 const Rcpp::List& epistate_passenger_rates,
@@ -1303,6 +1297,12 @@ void MutationEngine::set_context_sampling(const size_t& context_sampling,
   reset();
 }
 
+void warning_function(const std::string message)
+{
+    Rcpp::warning(message + " Decreasing the MutationEngine's "
+                  "parameter `context_sampling` *may* avoid this warning.");
+}
+
 void MutationEngine::reset(const bool full, const bool quiet)
 {
   using namespace RACES::Mutations;
@@ -1345,7 +1345,8 @@ void MutationEngine::reset(const bool full, const bool quiet)
                                               SBS_signatures,
                                               indel_signatures,
                                               mutational_properties, germline,
-                                              driver_storage, passenger_CNAs);
+                                              driver_storage, passenger_CNAs,
+                                              warning_function);
 
   for (const auto& [type, mutation_timed_exposures] : timed_exposures) {
     for (const auto& [time, exposure] : mutation_timed_exposures) {
