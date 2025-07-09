@@ -47,7 +47,7 @@ public:
 
     inline const RACES::Mutations::ChrPosition& get_position_in_chromosome() const
     {
-        return get_initial_position();
+        return begin();
     }
 
     inline size_t get_length() const

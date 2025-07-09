@@ -826,6 +826,8 @@ RCPP_MODULE(Mutations){
 //' @param max_repetition_storage The maximum number of repetitions per type
 //'   stored in the repeated sequence index (optional: default value is
 //'   500000).
+//' @param driver_CNA_min_distance The minimum distance between a driver
+//'   mutation and a passenger CNA.
 //' @param tumour_type The type of tumour. This is currently used to select
 //'   the admissible passenger CNAs. If any passenger CNA in the dataset is
 //'   admissible, use the the empty string `""` (optional: default value is
@@ -941,6 +943,7 @@ RCPP_MODULE(Mutations){
                         _["germline_subject"] = "", _["context_sampling"] = 100,
                         _["max_motif_size"] = 50,
                         _["max_repetition_storage"] = 500000,
+                        _["driver_CNA_min_distance"] = 10000,
                         _["tumour_type"] = "", _["tumour_study"] = "",
                         _["avoid_homozygous_losses"] = true,
                         _["quiet"] = false),

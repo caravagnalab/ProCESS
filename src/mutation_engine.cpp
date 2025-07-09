@@ -459,7 +459,7 @@ std::vector<RACES::Mutations::CNA> load_passenger_CNAs(const std::filesystem::pa
       const auto major = row.get_field(3);
       try {
         if (major=="NA" || (stoi(major)>1)) {
-          CNAs.emplace(region.get_begin(), region.size(),
+          CNAs.emplace(region.get_initial_position(), region.size(),
                        CNA::Type::AMPLIFICATION);
         }
       } catch (std::invalid_argument const&) {
@@ -471,7 +471,7 @@ std::vector<RACES::Mutations::CNA> load_passenger_CNAs(const std::filesystem::pa
       const auto minor = row.get_field(4);
       try {
         if (minor=="NA" || (stoi(minor)<1)) {
-          CNAs.emplace(region.get_begin(), region.size(),
+          CNAs.emplace(region.get_initial_position(), region.size(),
                        CNA::Type::DELETION);
         }
       } catch (std::invalid_argument const&) {
@@ -509,6 +509,7 @@ MutationEngine::MutationEngine(const std::shared_ptr<Account>& COSMIC_account,
                                const size_t& context_sampling,
                                const size_t& max_motif_size,
                                const size_t& max_repetition_storage,
+                               const size_t& driver_CNA_min_distance,
                                const std::string& tumour_type,
                                const std::string& tumor_study,
                                const bool& avoid_homozygous_losses,
@@ -520,6 +521,7 @@ MutationEngine::MutationEngine(const std::shared_ptr<Account>& COSMIC_account,
   germline_subject(germline_subject), context_sampling(context_sampling),
   max_motif_size(max_motif_size),
   max_repetition_storage(max_repetition_storage),
+  driver_CNA_min_distance(driver_CNA_min_distance),
   tumour_type(tumour_type), tumor_study(tumor_study),
   avoid_homozygous_losses(avoid_homozygous_losses)
 {
@@ -538,6 +540,7 @@ MutationEngine::MutationEngine(const std::shared_ptr<Account>& COSMIC_account,
                                const size_t& context_sampling,
                                const size_t& max_motif_size,
                                const size_t& max_repetition_storage,
+                               const size_t& driver_CNA_min_distance,
                                const std::string& tumour_type,
                                const std::string& tumor_study,
                                const bool& avoid_homozygous_losses,
@@ -549,6 +552,7 @@ MutationEngine::MutationEngine(const std::shared_ptr<Account>& COSMIC_account,
   germline_subject(germline_subject), context_sampling(context_sampling),
   max_motif_size(max_motif_size),
   max_repetition_storage(max_repetition_storage),
+  driver_CNA_min_distance(driver_CNA_min_distance),
   tumour_type(tumour_type), tumor_study(tumor_study),
   avoid_homozygous_losses(avoid_homozygous_losses)
 {
@@ -665,6 +669,7 @@ MutationEngine::build_MutationEngine(const std::string& directory,
                                      const size_t& context_sampling,
                                      const size_t& max_motif_size,
                                      const size_t& max_repetition_storage,
+                                     const size_t& driver_CNA_min_distance,
                                      const std::string& tumour_type,
                                      const std::string& tumor_study,
                                      const bool avoid_homozygous_losses,
@@ -677,8 +682,8 @@ MutationEngine::build_MutationEngine(const std::string& directory,
                           SBS_signatures_source,
                           indel_signatures_source, drivers_source, passenger_CNAs_source,
                           germline_source,  germline_subject, context_sampling,
-                          max_motif_size, max_repetition_storage, tumour_type,
-                          tumor_study, avoid_homozygous_losses, quiet);
+                          max_motif_size, max_repetition_storage, driver_CNA_min_distance,
+                          tumour_type, tumor_study, avoid_homozygous_losses, quiet);
   }
 
   if (directory=="" || reference_source=="" || SBS_signatures_source==""
@@ -695,7 +700,8 @@ MutationEngine::build_MutationEngine(const std::string& directory,
                         indel_signatures_source, drivers_source,
                         passenger_CNAs_source, germline_source, germline_subject,
                         context_sampling, max_motif_size, max_repetition_storage,
-                        tumour_type, tumor_study, avoid_homozygous_losses, quiet);
+                        driver_CNA_min_distance, tumour_type, tumor_study,
+                        avoid_homozygous_losses, quiet);
 
 }
 
@@ -1299,8 +1305,7 @@ void MutationEngine::set_context_sampling(const size_t& context_sampling,
 
 void warning_function(const std::string message)
 {
-    Rcpp::warning(message + " Decreasing the MutationEngine's "
-                  "parameter `context_sampling` *may* avoid this warning.");
+    Rcpp::warning(message);
 }
 
 void MutationEngine::reset(const bool full, const bool quiet)
@@ -1346,6 +1351,7 @@ void MutationEngine::reset(const bool full, const bool quiet)
                                               indel_signatures,
                                               mutational_properties, germline,
                                               driver_storage, passenger_CNAs,
+                                              driver_CNA_min_distance,
                                               warning_function);
 
   for (const auto& [type, mutation_timed_exposures] : timed_exposures) {

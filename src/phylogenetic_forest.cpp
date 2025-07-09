@@ -361,8 +361,8 @@ void fill_CNA_lists(const RACES::Mutations::CellGenomeMutations& cell_mutations,
     for (const auto& cna_ptr: chromosome.get_CNAs()) {
       cell_ids[index] = cell_mutations.get_id();
       chr_names[index] = RACES::Mutations::GenomicPosition::chrtos(chr_id);
-      CNA_begins[index] = cna_ptr->get_initial_position();
-      CNA_ends[index] = cna_ptr->get_final_position();
+      CNA_begins[index] = cna_ptr->begin();
+      CNA_ends[index] = cna_ptr->end();
       bool is_amp = cna_ptr->type == RACES::Mutations::CNA::Type::AMPLIFICATION;
       src_alleles[index] = (is_amp? cna_ptr->source: NA_INTEGER);
       dst_alleles[index] = cna_ptr->dest;
