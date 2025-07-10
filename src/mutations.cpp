@@ -468,20 +468,21 @@ RCPP_MODULE(Mutations){
 //' # create a demonstrative mutation engine
 //' m_engine <- MutationEngine(setup_code = "demo")
 //'
-//' # add the mutant "A" characterized by one driver SNV on chromosome 22, an
+//' # add the mutant "A" characterized by two driver SNV on chromosome 22, an
 //' # indel on the same chromosome, a whole genome doubling event, and finally
 //' # two CNAs: an amplification and a deletion. The mutant has two epigenetic
 //' # states and its species "A+" and "A-" have passenger SNV rates 1e-9 and
 //' # 3e-8, respectively, and passenger CNA rates 0 and 1e-11, respectively.
 //' m_engine$add_mutant("A", list("+" = c(SNV = 1e-9, indel = 1e-10),
 //'                               "-" = c(SNV = 3e-8, CNA = 1e-11)),
-//'                     drivers = list(SNV("22", 23657587, "C"),
+//'                     drivers = list("NF2 R221*",
 //'                                    Mutation("22", 16085675, "GCCTCCCGA",
 //'                                             "G"),
 //'                                    WGD,
 //'                                    CNA(type = "A", chr = "22",
 //'                                        chr_pos = 10303470,
 //'                                        len = 200000),
+//'                                    SNV("22", 23657587, "C"),
 //'                                    CNA("D", "22", 5010000, 200000)))
 //'
 //' m_engine
@@ -735,12 +736,12 @@ RCPP_MODULE(Mutations){
 //'   and the final position, respectively. The next three
 //'   columns ("`ref`", "`alt`", and "`mutation_type`")
 //'   describe the reference sequence, the altered sequence,
-//'   and the type of the mutation. The last three columns
-//'   ("`tumour_type`", "`driver_gene`", and "`driver_code`")
-//'   detail the tumour type associated to the mutation, the
-//'   affected gene, and the driver code, which can be used
-//'   to specify the mutation when adding mutants to the
-//'   mutation engine.
+//'   and the type of the mutation. The last four columns
+//'   ("`driver_gene`", "`driver_code`", "`driver_CDS`", and 
+//'   "`tumour_type`") detail the affected gene, the driver
+//'   code, which can be used to specify the mutation when
+//'   adding a mutant to the mutation engine, the variant code,
+//'   and the tumour type associated to the mutation.
 //' @return A data frame containing the known driver.
 //' @seealso [MutationEngine$add_mutant()]
 //' @examples

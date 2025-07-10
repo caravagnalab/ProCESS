@@ -1174,6 +1174,7 @@ std::ostream& show_list(std::ostream& os, ITERATOR it, ITERATOR last, const std:
 std::ostream&
 show_driver_mutations(std::ostream& os,
                       const RACES::Mutations::DriverMutations& driver_mutations,
+                      const std::map<RACES::Mutations::SID, std::string>& driver_reverse_map,
                       const std::string& indent="")
 {
     using namespace RACES::Mutations;
@@ -1186,7 +1187,27 @@ show_driver_mutations(std::ostream& os,
 
         switch(*order_it) {
             case DriverMutations::SID_TURN:
-                os << indent << *SID_it << std::endl;
+                {
+                    const auto found = driver_reverse_map.find(*SID_it);
+
+                    os << indent;
+                    if (found != driver_reverse_map.end()) {
+                        os << found->second << " ("
+                           << static_cast<RACES::Mutations::SID>(*SID_it)
+                           << ")";
+                    } else {
+                        os << static_cast<RACES::Mutations::SID>(*SID_it);
+                    }
+
+                    os << " on ";
+                    if (SID_it->allele_id==RANDOM_ALLELE) {
+                        os << "random allele";
+                    } else {
+                        os << "allele " << SID_it->allele_id;
+                    }
+                    os << std::endl;
+
+                }
                 ++SID_it;
 
                 break;
@@ -1259,10 +1280,12 @@ void MutationEngine::show() const
     Rcout << "}";
   }
 
+  const auto driver_reverse_map = m_engine.get_driver_storage().get_reverse_map();
+
   Rcout << std::endl << std::endl << " Driver mutations" << std::endl;
   for (const auto&[mutant_name, driver_mutations]: m_properties.get_driver_mutations()) {
     Rcout << "   \"" << mutant_name << "\":" << std::endl;
-    show_driver_mutations(Rcout, driver_mutations, "       ");
+    show_driver_mutations(Rcout, driver_mutations, driver_reverse_map, "       ");
     if (driver_mutations.application_order.size()==0) {
       Rcout << "   No driver mutations for \"" << mutant_name << "\"" << std::endl;
     }
