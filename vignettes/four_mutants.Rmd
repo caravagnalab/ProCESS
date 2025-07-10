@@ -28,7 +28,7 @@ knitr::opts_chunk$set(
 > the results reported in this article may differ from
 > those obtained by the reader.
 
-We build a tumour with a single mutant "A" and grow it up to 
+We build a tumour with a single mutant "A" and grow it up to
 10 cells.
 
 ```{r}
@@ -80,7 +80,7 @@ plot_state(sim)
 ## Tissue sampling level
 
 
-We can collect three samples: "S1" and "S2". 
+We can collect three samples: "S1" and "S2".
 
 ```{r}
 sim$sample_cells("S1", c(145, 230), c(215, 300))
@@ -163,7 +163,7 @@ passenger mutation rates and the list of driver mutations.
 ```{r}
 # genetically characterise the mutants
 m_engine$add_mutant("A", passenger_rates = c(SNV = 2e-9, indel = 2e-8),
-                    drivers = list(Mutation("22", 15220157, "GTTTTTTTT", "G"),
+                    drivers = list(Mutation("22", 16085675, "GCCTCCCGA", "G"),
                                    CNA("D", "22", 22453799, 200000,
                                        allele = 1)))
 

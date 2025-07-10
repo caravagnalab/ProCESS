@@ -476,7 +476,7 @@ RCPP_MODULE(Mutations){
 //' m_engine$add_mutant("A", list("+" = c(SNV = 1e-9, indel = 1e-10),
 //'                               "-" = c(SNV = 3e-8, CNA = 1e-11)),
 //'                     drivers = list(SNV("22", 23657587, "C"),
-//'                                    Mutation("22", 15220157, "GTTTTTTTT",
+//'                                    Mutation("22", 16085675, "GCCTCCCGA",
 //'                                             "G"),
 //'                                    WGD,
 //'                                    CNA(type = "A", chr = "22",

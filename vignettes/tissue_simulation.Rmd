@@ -39,7 +39,7 @@ To simulate a tissue the following steps are required:
 The simulation is managed by an object of the S4 class `SpatialSimulation`,
 which allows to program the tissue evolution over time, adding new cells
 as far as the simulation progresses. The state of the simulation and
-tissue can be visualised using `ggplot`-powered plots.
+tissue can be visualised using `ggplot2`-powered plots.
 
 ## Tissue specification
 
@@ -87,7 +87,7 @@ sim <- SpatialSimulation("Test", save_snapshots = TRUE)
 sim$death_activation_level <- 50
 ```
 
-Class `SpatialSimulation` exports a `SpatialSimulation$show()` method to get 
+Class `SpatialSimulation` exports a `SpatialSimulation$show()` method to get
 information on the current object.
 
 ```{r, eval}
@@ -237,7 +237,7 @@ plot_state(sim)
 plot_tissue(sim)
 ```
 
-> **Note:** since the plots are done with `ggplot` they can be assembled
+> **Note:** since the plots are done with `ggplot2` they can be assembled
 > and customised.
 
 ## Species Evolution
