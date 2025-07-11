@@ -37,7 +37,7 @@ library(ProCESS)
 # set the seed of the random number generator for repeatability
 set.seed(0)
 
-sim <- SpatialSimulation(width = 600, height = 600)
+sim <- TissueSimulation(width = 600, height = 600)
 
 # set the delta time between two time series samples
 sim$history_delta <- 10
@@ -87,7 +87,7 @@ sim$sample_cells("S1", c(145, 230), c(215, 300))
 sim$sample_cells("S2", c(350, 300), c(420, 370))
 ```
 
-We can plot the spatial simulation after the sampling. We label the sampled
+We can plot the tissue simulation after the sampling. We label the sampled
 region to improve readability, but it is not mandatory.
 
 ```{r, fig.width=3, fig.height=3, fig.alt=c("The three-mutants tumour just after collecting two samples: S1 and S2. The former mainly contains C cells; the latter A cells.")}
@@ -131,20 +131,20 @@ evolution.")}
 plot_muller(sim)
 ```
 
-We can build the samples forest and plot it.
+We can build the sample forest and plot it.
 
-```{r, fig.width=7, fig.alt=c("The samples forest of the collected samples.")}
-samples_forest <- sim$get_samples_forest()
+```{r, fig.width=7, fig.alt=c("The sample forest of the collected samples.")}
+sample_forest <- sim$get_sample_forest()
 
 library(dplyr)
 
-plot_forest(samples_forest) %>%
-  annotate_forest(samples_forest)
+plot_forest(sample_forest) %>%
+  annotate_forest(sample_forest)
 ```
 
 ## Cell genetic characterisation level
 
-We first build the mutation engine to label each cell in the samples forest.
+We first build the mutation engine to label each cell in the sample forest.
 The mutation engine pre-defined setups automatically download all the needed
 file. All the pre-configured setups, but "demo" requires a COSMIC account to
 download the signature files from the COSMIC site.
@@ -157,7 +157,7 @@ m_engine <- MutationEngine(setup_code="demo",
 
 ```
 
-We must genomically characterise the spatial simulation mutants providing
+We must genomically characterise the tissue simulation mutants providing
 passenger mutation rates and the list of driver mutations.
 
 ```{r}
@@ -203,7 +203,7 @@ We are now ready to build the phylogenetic forest.
 ```{r}
 # place mutations on the sample forest assuming 1000 pre-neoplastic SNVs and
 # 500 indels
-phylo_forest <- m_engine$place_mutations(samples_forest, 1000, 500)
+phylo_forest <- m_engine$place_mutations(sample_forest, 1000, 500)
 ```
 
 The phylogenetic forest maintains the genome mutations (SBSs, indels, and CNAs)

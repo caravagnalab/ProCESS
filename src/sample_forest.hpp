@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,14 +28,14 @@
 
 class MutationEngine;
 
-class SamplesForest : protected RACES::Mutants::DescendantsForest
+class SampleForest : protected RACES::Mutants::DescendantsForest
 {
-  SamplesForest();
+  SampleForest();
 
   Rcpp::List get_nodes(const std::vector<RACES::Mutants::CellId>& cell_ids) const;
 
 public:
-  SamplesForest(const RACES::Mutants::Evolutions::Simulation& simulation);
+  SampleForest(const RACES::Mutants::Evolutions::Simulation& simulation);
 
   inline Rcpp::List get_nodes() const
   {
@@ -70,19 +70,25 @@ public:
     return RACES::Mutants::DescendantsForest::get_sticks(birth_threshold);
   }
 
-  SamplesForest get_subforest_for(const std::vector<std::string>& sample_names) const;
+  SampleForest get_subforest_for(const std::vector<std::string>& sample_names) const;
 
   void save(const std::string& filename) const;
 
-  static SamplesForest load(const std::string& filename);
+  static SampleForest load(const std::string& filename);
 
   void show() const;
 
   friend class MutationEngine;
 };
 
+inline SampleForest load_samples_forest(const std::string& filename)
+{
+  Rcpp::warning("`load_samples_forest()` is deprecated. "
+                "Please use `load_sample_forest()` instead.");
 
+  return SampleForest::load(filename);
+}
 
-RCPP_EXPOSED_CLASS(SamplesForest)
+RCPP_EXPOSED_CLASS(SampleForest)
 
 #endif // __PROCESS_SAMPLES_FOREST__

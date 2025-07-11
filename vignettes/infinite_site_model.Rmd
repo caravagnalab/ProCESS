@@ -43,7 +43,7 @@ library(ProCESS)
 set.seed(0)
 
 # create a simulation
-sim <- SpatialSimulation()
+sim <- TissueSimulation()
 
 sim$death_activation_level <- 20
 
@@ -88,10 +88,10 @@ sim$sample_cells("S_2_1", bbox$lower_corner, bbox$upper_corner)
 bbox <- sim$search_sample(c("B" = ncells), n_w, n_h)
 sim$sample_cells("S_2_2", bbox$lower_corner, bbox$upper_corner)
 
-forest <- sim$get_samples_forest()
+forest <- sim$get_sample_forest()
 
-# save the samples forest in the file "samples_forest.sff"
-forest$save("samples_forest.sff")
+# save the sample forest in the file "sample_forest.sff"
+forest$save("sample_forest.sff")
 
 # building a mutation engine by using the "demo" setup
 m_engine <- MutationEngine(setup_code = "demo")
@@ -139,11 +139,11 @@ subjects <- m_engine$get_germline_subjects()
 
 m_engine$set_germline_subject(subjects[2, "sample"])
 
-samples_forest <- load_samples_forest("samples_forest.sff")
+sample_forest <- load_sample_forest("sample_forest.sff")
 
 # place mutations on the sample forest assuming 1000 pre-neoplastic SNVs and
 # 500 indels
-phylo_forest <- m_engine$place_mutations(samples_forest, 1000, 500)
+phylo_forest <- m_engine$place_mutations(sample_forest, 1000, 500)
 ```
 
 ```{r}
@@ -211,8 +211,8 @@ of the genomes of two cells that are not each other ancestors.
 # test whether the infinite sites model is enable
 m_engine$infinite_sites_model
 
-# place the mutations on the same samples forest used above
-phylo_forest2 <- m_engine$place_mutations(samples_forest, 1000, 500)
+# place the mutations on the same sample forest used above
+phylo_forest2 <- m_engine$place_mutations(sample_forest, 1000, 500)
 
 # test whether the infinite sites conditions hold in the new forest
 test_infinite_sites_model(phylo_forest2)

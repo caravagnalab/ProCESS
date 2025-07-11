@@ -53,7 +53,7 @@ library(ProCESS)
 set.seed(0)
 
 # Monoclonal model, no epigenetic state
-sim <- SpatialSimulation("Monoclonal")
+sim <- TissueSimulation("Monoclonal")
 
 sim$add_mutant(name = "A", growth_rates = 0.1, death_rates = 0.01)
 
@@ -102,7 +102,7 @@ sim$sample_cells("S_1_2", bottom_left = bbox2_p, top_right = bbox2_q)
 
 > *Note:* Sampling removes cells from the tissue, as if the tissue was
 > surgically resected. Therefore, cells that are mapped to the bounding
-> box after application of `SpatialSimulation$sample_cells()` are no longer
+> box after application of `TissueSimulation$sample_cells()` are no longer
 > part of the simulation.
 
 A new call to `plot_tissue()` will show the box where the cells have
@@ -112,7 +112,7 @@ been removed to be white.
 plot_tissue(sim)
 ```
 
-This is also reflected by `SpatialSimulation$get_cells()`, which now will not
+This is also reflected by `TissueSimulation$get_cells()`, which now will not
 find any tumour cell in the sampled region.
 
 ```{r}
@@ -125,16 +125,16 @@ sim$get_cells(c(400, 400), c(400 + bbox_width, 400 + bbox_width)) %>% head
 It should also be remarked that the sampling process exclusively
 collects tumour cells, while it excludes wild-type cells.
 
-### The samples forest
+### The sample forest
 
 Every sampled cell is linked, at the evolutionary level, to the other
 cells that originate from the same initial cell. It helps to visualise
 the evolutionary information on the cells that we have sampled as a
 forest of trees (if one seeded multiple initial cells). The forest is an
-object of the S4 class `SamplesForest`.
+object of the S4 class `SampleForest`.
 
 ```{r}
-forest <- sim$get_samples_forest()
+forest <- sim$get_sample_forest()
 
 forest
 ```
@@ -173,7 +173,7 @@ forest$get_samples_info()
 We can visualise the forest. This plot reports the cells and, on the
 y-axis, their time of birth.
 
-```{r,  fig.height=6, fig.width=11, fig.alt=c("The samples forest of S_1_1 and S_1_2.")}
+```{r,  fig.height=6, fig.width=11, fig.alt=c("The sample forest of S_1_1 and S_1_2.")}
 plot_forest(forest)
 ```
 
@@ -207,7 +207,7 @@ plot_forest(S_1_1_forest) %>%
 # set the seed of the random number generator
 set.seed(0)
 
-sim <- SpatialSimulation("Randomised")
+sim <- TissueSimulation("Randomised")
 
 sim$add_mutant(name = "A", growth_rates = 0.1, death_rates = 0.01)
 
@@ -229,18 +229,18 @@ current <- plot_tissue(sim)
 current
 ```
 
-Since mutant start has been randomised by `SpatialSimulation$choose_cell_in()`,
+Since mutant start has been randomised by `TissueSimulation$choose_cell_in()`,
 we have no exact idea of where to sample to obtain for example, $100$ of
 its cells. We can look visually at the simulation, but this is slow.
 
-ProCESS provides a `SpatialSimulation$search_sample()` function to sample
+ProCESS provides a `TissueSimulation$search_sample()` function to sample
 bounding boxes that contain a desired number of cells. The function
 takes in input:
 
 -   a bounding box size;
 -   the number $n$ of cells to sample for a species of interest.
 
-`SpatialSimulation$search_sample()` will attempt a fixed number of times to
+`TissueSimulation$search_sample()` will attempt a fixed number of times to
 sample the box, starting from positions occupied by the species of
 interest. If a box that contains at least $n$ cells is not found within
 a number of attempts, then the one with the largest number of samples is
@@ -292,10 +292,10 @@ The two samples have been extracted.
 plot_tissue(sim)
 ```
 
-We can build the samples forest.
+We can build the sample forest.
 
 ```{r,  fig.height=6, fig.width=11, fig.alt=c("The tissue of the biclonal tumour after the collection of the two samples.")}
-forest <- sim$get_samples_forest()
+forest <- sim$get_sample_forest()
 
 plot_forest(forest) %>%
   annotate_forest(forest)
@@ -306,7 +306,7 @@ plot_forest(forest) %>%
 ProCESS supports randomized cell sampling over the full tissue or a
 rectangle thereof.
 
-```{r, fig.alt=c("Two further samples S_2_3 and S_2_4 are collected. Their cells are randomly picked-up (like in liquid biopsy) from the whole tissue and from a bounding box, respectively. The figure depicts the samples forest of all the samples.")}
+```{r, fig.alt=c("Two further samples S_2_3 and S_2_4 are collected. Their cells are randomly picked-up (like in liquid biopsy) from the whole tissue and from a bounding box, respectively. The figure depicts the sample forest of all the samples.")}
 # collect up to 2500 tumour cells randomly selected over the whole tissue
 sim$sample_cells("S_2_3", num_of_cells = 2500)
 
@@ -316,7 +316,7 @@ bbox <- sim$search_sample(c("A" = ncells), n_w, n_h)
 # bounding box
 sim$sample_cells("S_2_4", bbox$lower_corner, bbox$upper_corner, 200)
 
-forest <- sim$get_samples_forest()
+forest <- sim$get_sample_forest()
 
 plot_forest(forest) %>%
   annotate_forest(forest)
@@ -331,7 +331,7 @@ sub-clonal expansions.
 # set the seed of the random number generator
 set.seed(0)
 
-sim <- SpatialSimulation("Two Populations")
+sim <- TissueSimulation("Two Populations")
 
 sim$death_activation_level <- 20
 
@@ -403,11 +403,11 @@ plot_tissue(sim, num_of_bins = 500)
 plot_muller(sim)
 ```
 
-Now we show the samples forest, which starts being rather
+Now we show the sample forest, which starts being rather
 complicated
 
 ```{r,  fig.height=12, fig.width=17, fig.alt=c("The sample forest of the biclonal tumour with epigenetic states.")}
-forest <- sim$get_samples_forest()
+forest <- sim$get_sample_forest()
 
 plot_forest(forest) %>%
   annotate_forest(forest)
@@ -415,32 +415,32 @@ plot_forest(forest) %>%
 
 ### Storing Samples Forests
 
-A samples forest can be saved in a file by using the method
-`SamplesForest$save()`.
+A sample forest can be saved in a file by using the method
+`SampleForest$save()`.
 
 ```{r, echo=FALSE,  results='hide', message=FALSE}
-unlink("samples_forest.sff")
+unlink("sample_forest.sff")
 ```
 
 ```{r}
 # check the file existence. It should not exists.
-file.exists("samples_forest.sff")
+file.exists("sample_forest.sff")
 
-# save the samples forest in the file "samples_forest.sff"
-forest$save("samples_forest.sff")
+# save the sample forest in the file "sample_forest.sff"
+forest$save("sample_forest.sff")
 
 # check the file existence. It now exists.
-file.exists("samples_forest.sff")
+file.exists("sample_forest.sff")
 ```
 
-The saved samples forest can successively be load by using the function
-`load_samples_forest()`.
+The saved sample forest can successively be load by using the function
+`load_sample_forest()`.
 
 ```{r}
-# load the samples forest from "samples_forest.sff" and store it in `forest2`
-forest2 <- load_samples_forest("samples_forest.sff")
+# load the sample forest from "sample_forest.sff" and store it in `forest2`
+forest2 <- load_sample_forest("sample_forest.sff")
 
-# let us now compare the samples forests stored in `forest` and `forest2`;
+# let us now compare the sample forests stored in `forest` and `forest2`;
 # they should be the same.
 forest
 forest2

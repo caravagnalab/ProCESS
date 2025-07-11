@@ -52,7 +52,7 @@ get_seq_data <- function(seq_res, sample, chromosomes)
 #' # set the seed of the random number generator
 #' set.seed(0)
 #'
-#' sim <- SpatialSimulation()
+#' sim <- TissueSimulation()
 #' sim$add_mutant(name = "A",
 #'                growth_rates = 0.2,
 #'                death_rates = 0.0)
@@ -65,7 +65,7 @@ get_seq_data <- function(seq_res, sample, chromosomes)
 #'
 #' sim$sample_cells("Sample", bbox$lower_corner, bbox$upper_corner)
 #'
-#' forest <- sim$get_samples_forest()
+#' forest <- sim$get_sample_forest()
 #' m_engine <- MutationEngine(setup_code = "demo")
 #'
 #' m_engine$add_mutant(mutant_name="A", passenger_rates=c(SNV=5e-8))
@@ -169,7 +169,7 @@ plot_DR <- function(
 #' # set the seed of the random number generator
 #' set.seed(0)
 #'
-#' sim <- SpatialSimulation()
+#' sim <- TissueSimulation()
 #' sim$add_mutant(name = "A",
 #'                growth_rates = 0.2,
 #'                death_rates = 0.0)
@@ -182,7 +182,7 @@ plot_DR <- function(
 #'
 #' sim$sample_cells("Sample", bbox$lower_corner, bbox$upper_corner)
 #'
-#' forest <- sim$get_samples_forest()
+#' forest <- sim$get_sample_forest()
 #' m_engine <- MutationEngine(setup_code = "demo")
 #'
 #' m_engine$add_mutant(mutant_name="A", passenger_rates=c(SNV=5e-8))
@@ -279,7 +279,7 @@ plot_BAF <- function(
 #' # set the seed of the random number generator
 #' set.seed(0)
 #'
-#' sim <- SpatialSimulation()
+#' sim <- TissueSimulation()
 #' sim$add_mutant(name = "A",
 #'                growth_rates = 0.2,
 #'                death_rates = 0.0)
@@ -292,7 +292,7 @@ plot_BAF <- function(
 #'
 #' sim$sample_cells("Sample", bbox$lower_corner, bbox$upper_corner)
 #'
-#' forest <- sim$get_samples_forest()
+#' forest <- sim$get_sample_forest()
 #' m_engine <- MutationEngine(setup_code = "demo")
 #'
 #' m_engine$add_mutant(mutant_name="A", passenger_rates=c(SNV=5e-8))

@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,43 +15,43 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "samples_forest.hpp"
+#include "sample_forest.hpp"
 
 #include "simulation.hpp"
 #include "utility.hpp"
 
-SamplesForest::SamplesForest():
+SampleForest::SampleForest():
   RACES::Mutants::DescendantsForest()
 {}
 
-SamplesForest::SamplesForest(const RACES::Mutants::Evolutions::Simulation& simulation):
+SampleForest::SampleForest(const RACES::Mutants::Evolutions::Simulation& simulation):
   RACES::Mutants::DescendantsForest(simulation)
 {}
 
-Rcpp::List SamplesForest::get_samples_info() const
+Rcpp::List SampleForest::get_samples_info() const
 {
- return SpatialSimulation::get_samples_info(get_samples());
+ return TissueSimulation::get_samples_info(get_samples());
 }
 
-SamplesForest SamplesForest::get_subforest_for(const std::vector<std::string>& sample_names) const
+SampleForest SampleForest::get_subforest_for(const std::vector<std::string>& sample_names) const
 {
-  SamplesForest forest;
+  SampleForest forest;
 
   static_cast< RACES::Mutants::DescendantsForest&>(forest) = RACES::Mutants::DescendantsForest::get_subforest_for(sample_names);
 
   return forest;
 }
 
-void SamplesForest::save(const std::string& filename) const
+void SampleForest::save(const std::string& filename) const
 {
   RACES::Archive::Binary::Out out_archive(filename);
 
   RACES::Mutants::DescendantsForest::save(out_archive);
 }
 
-SamplesForest SamplesForest::load(const std::string& filename)
+SampleForest SampleForest::load(const std::string& filename)
 {
-  SamplesForest forest;
+  SampleForest forest;
 
   if (!std::filesystem::exists(filename)) {
     throw std::domain_error("The file \"" + filename + "\" does not exist.");
@@ -66,15 +66,15 @@ SamplesForest SamplesForest::load(const std::string& filename)
   try {
     static_cast<RACES::Mutants::DescendantsForest&>(forest) = RACES::Mutants::DescendantsForest::load(in_archive);
   } catch (RACES::Archive::WrongFileFormatDescr& ex) {
-    raise_error(ex, "samples forest");
+    raise_error(ex, "sample forest");
   } catch (RACES::Archive::WrongFileFormatVersion& ex) {
-    raise_error(ex, "samples forest");
+    raise_error(ex, "sample forest");
   }
 
   return forest;
 }
 
-void SamplesForest::show() const
+void SampleForest::show() const
 {
   using namespace Rcpp;
 
@@ -83,7 +83,7 @@ void SamplesForest::show() const
     num_of_leaves += sample.get_cell_ids().size();
   }
 
-  Rcout << "SamplesForest" << std::endl
+  Rcout << "SampleForest" << std::endl
         << "  # of trees: " << get_roots().size() << std::endl
         << "  # of nodes: " << num_of_nodes() << std::endl
         << "  # of leaves: " << num_of_leaves << std::endl

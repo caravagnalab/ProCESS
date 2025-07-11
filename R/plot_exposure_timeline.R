@@ -61,7 +61,7 @@ get_exposure_ends <- function(phylo_forest) {
 #'
 #' @return A `ggplot2` plot.
 #' @examples
-#' sim <- SpatialSimulation()
+#' sim <- TissueSimulation()
 #'
 #' sim$add_mutant(name = "A",
 #'                growth_rates = 0.2,
@@ -78,7 +78,7 @@ get_exposure_ends <- function(phylo_forest) {
 #'
 #' sim$sample_cells("Sampling", bbox$lower_corner, bbox$upper_corner)
 #'
-#' forest <- sim$get_samples_forest()
+#' forest <- sim$get_sample_forest()
 #'
 #' # placing mutations
 #'

@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ RCPP_MODULE(Logics){
 //' set.seed(0)
 //'
 //' # create a simulation
-//' sim <- SpatialSimulation()
+//' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
 //'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
 //'                growth_rates = c("+" = 0.2, "-" = 0.08),
@@ -83,7 +83,7 @@ RCPP_MODULE(Logics){
 //' set.seed(0)
 //'
 //' # create a simulation
-//' sim <- SpatialSimulation()
+//' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
 //'                growth_rates = 0.2,
 //'                death_rates = 0.1)
@@ -141,7 +141,7 @@ RCPP_MODULE(Logics){
 //' set.seed(0)
 //'
 //' # create a simulation
-//' sim <- SpatialSimulation()
+//' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
 //'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
 //'                growth_rates = c("+" = 0.2, "-" = 0.08),

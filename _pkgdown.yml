@@ -42,9 +42,11 @@ reference:
   - annotate_forest
   - bbox_sampler
   - load_samples_forest
+  - load_sample_forest
   - starts_with("TissueRectangle")
-  - starts_with("SamplesForest")
-  - starts_with("SpatialSimulation")
+  - starts_with("SampleForest")
+  - SpatialSimulation
+  - starts_with("TissueSimulation")
   - plot_firings
   - plot_muller
   - plot_state

@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 
 #include <logics.hpp>
 
-class SpatialSimulation;
+class TissueSimulation;
 
 namespace Logics
 {
@@ -34,7 +34,7 @@ public:
 
   void show() const;
 
-  friend class SpatialSimulation;
+  friend class TissueSimulation;
 };
 
 class Expression : public RACES::Mutants::Logics::Expression

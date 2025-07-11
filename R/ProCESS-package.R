@@ -342,7 +342,7 @@
 
 
   #' @importFrom rlang .data
-  setMethod("show", "Rcpp_SpatialSimulation", function(object) {
+  setMethod("show", "Rcpp_TissueSimulation", function(object) {
     # If it can be simulated
     sim_status <- (nrow(object$get_species())
                    & nrow(object$get_cells()))

@@ -30,7 +30,7 @@ knitr::opts_chunk$set(
 > those obtained by the reader.
 
 ProCESS/RACES can simulate genomic mutations on the cells represented in
-a `SamplesForest` according to the specified SBS and indel mutational
+a `SampleForest` according to the specified SBS and indel mutational
 signatures (see [@alexandrov2020repertoire]).
 This process is performed by the class `MutationEngine` which also takes
 into account the mutation rate of the simulated species and gives the
@@ -102,7 +102,7 @@ mutants `A` and
 "B". Both of them has two possible epigenetic states, `+` and `-`, leading
 to the four the species `A+`, `A-`, `B+`, and `B-`, respectively.
 Each of these species has a passenger mutation rate that must be
-declated to the mutation engine before labeling the samples forest.
+declated to the mutation engine before labeling the sample forest.
 Let 1e-9, 3e-8, 8e-7, and 5e-8 be the passenger SNV rates for the
 species `A+`, `A-`, `B+`, and `B-`, respectively. Let the indel
 rates be 0 for all the species, but `A+` which has indel rate 1e-8.
@@ -331,20 +331,20 @@ m_engine$get_active_germline()
 ### Building Phylogenetic Forests
 
 The configured mutation engine can be used to label each node in a
-samples forest by mutations.
+sample forest by mutations.
 
 Since the mutation engine has be configured to deal with the
 simulation performed in Section "_Two populations with
 epigenetic state_" of `vignette("sampling")`,
-we can load its samples forest from the file `"samples_forest.sff"`
+we can load its sample forest from the file `"sample_forest.sff"`
 in saved that article.
 
 ```{r}
-samples_forest <- load_samples_forest("samples_forest.sff")
+sample_forest <- load_sample_forest("sample_forest.sff")
 
 # place mutations on the sample forest assuming 1000 pre-neoplastic SNVs and
 # 500 indels
-phylo_forest <- m_engine$place_mutations(samples_forest, 1000, 500)
+phylo_forest <- m_engine$place_mutations(sample_forest, 1000, 500)
 
 phylo_forest
 ```
@@ -475,7 +475,7 @@ phylo_forest$get_germline_subject()
 
 ### Storing Phylogenetic Forests
 
-As in the case of the samples forests, the phylogenetic forests
+As in the case of the sample forests, the phylogenetic forests
 can be saved by using the method `PhylogeneticForest$save()` and
 load by the function `load_phylogenetic_forest()`.
 

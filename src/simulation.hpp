@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 
 #include "logics_impl.hpp"
 #include "tissue_rectangle.hpp"
-#include "samples_forest.hpp"
+#include "sample_forest.hpp"
 
 struct PlainChooser
 {
@@ -62,7 +62,7 @@ struct RectangularChooser : public PlainChooser
 };
 
 
-class SpatialSimulation
+class TissueSimulation
 {
   std::shared_ptr<RACES::Mutants::Evolutions::Simulation> sim_ptr;  //!< The pointer to a RACES simulation object
   std::string name;      //!< The simulation name
@@ -155,19 +155,19 @@ public:
                              _["time"]=time);
   }
 
-  SpatialSimulation();
+  TissueSimulation();
 
-  SpatialSimulation(const SEXP& sexp);
+  TissueSimulation(const SEXP& sexp);
 
-  SpatialSimulation(const SEXP& first_param, const SEXP& second_param);
+  TissueSimulation(const SEXP& first_param, const SEXP& second_param);
 
-  SpatialSimulation(const std::string& simulation_name, const SEXP& seed,
+  TissueSimulation(const std::string& simulation_name, const SEXP& seed,
                     const bool& save_snapshots);
 
-  SpatialSimulation(const std::string& simulation_name, const int& seed,
+  TissueSimulation(const std::string& simulation_name, const int& seed,
                     const bool& save_snapshots);
 
-  ~SpatialSimulation();
+  ~TissueSimulation();
 
   inline void update_tissue(const std::string& name,
                             const RACES::Mutants::Evolutions::AxisSize& width,
@@ -423,9 +423,20 @@ public:
     sim_ptr->get_statistics().set_history_delta(history_time_delta);
   }
 
-  static SpatialSimulation load(const std::string& directory_name);
+  static TissueSimulation load(const std::string& directory_name);
 
-  SamplesForest get_samples_forest() const;
+  inline SampleForest get_sample_forest() const
+  {
+    return SampleForest(*sim_ptr);
+  }
+
+  inline SampleForest get_samples_forest() const
+  {
+    Rcpp::warning("`TissueSimulation$get_sample_forest()` is deprecated. "
+                  "Please use `TissueSimulation$get_sample_forest()` instead.");
+    
+    return get_sample_forest();
+  }
 
   TissueRectangle get_tumour_bounding_box() const;
 
@@ -448,7 +459,7 @@ public:
 
   Logics::Variable get_var(const std::string& name) const;
 
-  static SpatialSimulation build_simulation(const SEXP& simulation_name, const SEXP& width,
+  static TissueSimulation build_simulation(const SEXP& simulation_name, const SEXP& width,
                                             const SEXP& height, const SEXP& save_snapshots,
                                             const SEXP& seed);
 
@@ -467,6 +478,17 @@ public:
   }
 };
 
-RCPP_EXPOSED_CLASS(SpatialSimulation)
+inline TissueSimulation SpatialSimulation(const SEXP& simulation_name, const SEXP& width,
+                                          const SEXP& height, const SEXP& save_snapshots,
+                                          const SEXP& seed)
+{
+  Rcpp::warning("`SpatialSimulation()` is deprecated. "
+                "Please use `TissueSimulation()` instead.");
+
+  return TissueSimulation::build_simulation(simulation_name, width, height, 
+                                            save_snapshots, seed);
+}
+
+RCPP_EXPOSED_CLASS(TissueSimulation)
 
 #endif // __PROCESS_SIMULATION__

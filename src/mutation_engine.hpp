@@ -27,7 +27,7 @@
 #include "cna.hpp"
 #include "sid.hpp"
 #include "phylogenetic_forest.hpp"
-#include "samples_forest.hpp"
+#include "sample_forest.hpp"
 
 #include "genomic_data_storage.hpp"
 #include "utility.hpp"
@@ -160,14 +160,14 @@ public:
 
     void set_germline_subject(const std::string& germline_subject);
 
-    PhylogeneticForest place_mutations(const SamplesForest& forest,
+    PhylogeneticForest place_mutations(const SampleForest& forest,
                                        const size_t& num_of_preneoplatic_SNVs,
                                        const std::string& preneoplatic_SNV_signature_name,
                                        const size_t& num_of_preneoplatic_indels,
                                        const std::string& preneoplatic_indel_signature_name,
                                        const int seed);
 
-    inline PhylogeneticForest place_mutations(const SamplesForest& forest,
+    inline PhylogeneticForest place_mutations(const SampleForest& forest,
                                               const size_t& num_of_preneoplatic_SNVs,
                                               const std::string& preneoplatic_SNV_signature_name,
                                               const size_t& num_of_preneoplatic_indels,
@@ -179,7 +179,7 @@ public:
                                get_random_seed<int>(seed));
     }
 
-    inline PhylogeneticForest place_mutations(const SamplesForest& forest,
+    inline PhylogeneticForest place_mutations(const SampleForest& forest,
                                               const size_t& num_of_preneoplatic_SNVs,
                                               const std::string& preneoplatic_SNV_signature_name,
                                               const size_t& num_of_preneoplatic_indels,
@@ -190,7 +190,7 @@ public:
                                get_random_seed<int>(R_NilValue));
     }
 
-    inline PhylogeneticForest place_mutations(const SamplesForest& forest,
+    inline PhylogeneticForest place_mutations(const SampleForest& forest,
                                               const size_t& num_of_preneoplatic_SNVs,
                                               const size_t& num_of_preneoplatic_indels,
                                               const SEXP& seed)
@@ -199,7 +199,7 @@ public:
                                num_of_preneoplatic_indels, "ID1", seed);
     }
 
-    inline PhylogeneticForest place_mutations(const SamplesForest& forest,
+    inline PhylogeneticForest place_mutations(const SampleForest& forest,
                                               const size_t& num_of_preneoplatic_SNVs,
                                               const size_t& num_of_preneoplatic_indels)
     {

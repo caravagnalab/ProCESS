@@ -38,7 +38,7 @@
 #' @export
 #'
 #' @examples
-#' sim <- SpatialSimulation()
+#' sim <- TissueSimulation()
 #' sim$add_mutant(name = "A", growth_rates = 0.08, death_rates = 0.01)
 #' sim$place_cell("A", 500, 500)
 #' sim$run_up_to_time(60)
@@ -53,7 +53,7 @@
 #' m_engine$add_exposure(coefficients = c(SBS13 = 0.2, SBS1 = 0.8))
 #' m_engine$add_exposure(time=50, coefficients = c(SBS17b = 0.2, SBS3 = 0.8))
 #'
-#' forest = sim$get_samples_forest()
+#' forest = sim$get_sample_forest()
 #' forest$get_samples_info()
 #' forest_muts = m_engine$place_mutations(forest, 1000, 500)
 #' tree_plot = plot_forest(forest)

@@ -51,7 +51,7 @@
 #'
 #' @examples
 #' set.seed(0)
-#' sim <- SpatialSimulation()
+#' sim <- TissueSimulation()
 #' sim$add_mutant(name = "A",
 #'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
 #'                growth_rates = c("+" = 0.2, "-" = 0.08),
@@ -103,7 +103,7 @@ plot_tissue <- function(simulation, num_of_bins = 100,
                         plot_sample_region = TRUE,
                         color_map = NULL,
                         list_all_species = FALSE) {
-  stopifnot(inherits(simulation, "Rcpp_SpatialSimulation"))
+  stopifnot(inherits(simulation, "Rcpp_TissueSimulation"))
 
   sample_info <- NULL
 
@@ -200,9 +200,9 @@ plot_tissue <- function(simulation, num_of_bins = 100,
 }
 
 with_epistate <- function(data) {
-  if (inherits(data, "Rcpp_SamplesForest")) {
+  if (inherits(data, "Rcpp_SampleForest")) {
     epistates <- unique(data$get_nodes()[["epistate"]])
-  } else if (inherits(data, "Rcpp_SpatialSimulation")) {
+  } else if (inherits(data, "Rcpp_TissueSimulation")) {
     epistates <- unique(data$get_species()[["epistate"]])
   } else {
     stop(paste0("with_epistate(): Unsupported type \"",

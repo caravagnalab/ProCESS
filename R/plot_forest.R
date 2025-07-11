@@ -21,7 +21,7 @@
 #' `ggraph` and for simplicity of visualisation the forest is plot as a
 #' set of trees connected to a generic wildtype cell.
 #'
-#' @param forest The samples forest to be plot.
+#' @param forest The sample forest to be plot.
 #' @param highlight_sample If a sample name, the path from root to the sampled
 #'   cells in the sample is highlighted. If `NULL` (default), nothing is
 #'   highlighted.
@@ -31,12 +31,12 @@
 #' @export
 #'
 #' @examples
-#' sim <- SpatialSimulation()
+#' sim <- TissueSimulation()
 #' sim$add_mutant(name = "A", growth_rates = 0.08, death_rates = 0.0)
 #' sim$place_cell("A", 500, 500)
 #' sim$run_up_to_time(60)
 #' sim$sample_cells("MySample", c(500, 500), c(510, 510))
-#' forest <- sim$get_samples_forest()
+#' forest <- sim$get_sample_forest()
 #'
 #' plot_forest(forest)
 #'
@@ -46,7 +46,7 @@
 #'
 #' plot_forest(forest, color_map=color_map)
 plot_forest <- function(forest, highlight_sample = NULL, color_map = NULL) {
-  stopifnot(inherits(forest, "Rcpp_SamplesForest"))
+  stopifnot(inherits(forest, "Rcpp_SampleForest"))
 
   nodes <- forest$get_nodes()
 

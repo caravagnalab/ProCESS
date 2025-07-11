@@ -56,7 +56,7 @@ PhylogeneticForest::PhylogeneticForest(RACES::Mutations::PhylogeneticForest&& or
 
 Rcpp::List PhylogeneticForest::get_samples_info() const
 {
-    auto info = SpatialSimulation::get_samples_info(get_samples());
+    auto info = TissueSimulation::get_samples_info(get_samples());
 
     const auto& samples = get_samples();
     std::vector<size_t> DNA(samples.size(), 0);

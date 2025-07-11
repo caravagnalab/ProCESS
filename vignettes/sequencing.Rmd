@@ -313,5 +313,5 @@ unlink("SAM_0.7", recursive = TRUE)
 unlink("ProCESS_SAM", recursive = TRUE)
 unlink("demo", recursive = TRUE)
 unlink("phylo_forest.sff")
-unlink("samples_forest.sff")
+unlink("sample_forest.sff")
 ```

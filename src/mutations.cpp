@@ -373,7 +373,7 @@ RCPP_MODULE(Mutations){
 //'     - the mutational rates of the species involved in the samples
 //'       forest
 //'     - the genotypical characterisation of the mutants involved in the
-//'       samples forest, i.e., the somatic mutations characterising
+//'       sample forest, i.e., the somatic mutations characterising
 //'       the mutant genotypes
 //'     - the SBS and ID signatures active along the species simulation
 //'
@@ -496,11 +496,11 @@ RCPP_MODULE(Mutations){
 
 //' @name MutationEngine$place_mutations
 //' @title Placing the mutations
-//' @description This methods places mutations on a samples forest.
-//' @details Each node of a samples forest is labelled by the
+//' @description This methods places mutations on a sample forest.
+//' @details Each node of a sample forest is labelled by the
 //'   mutations occurring in the cell represented by the node itself
 //'   and produces a phylogenetic forest.
-//' @param samples_forest A samples forest.
+//' @param sample_forest A sample forest.
 //' @param num_of_preneoplatic_SNVs The number of pre-neoplastic SNVs.
 //' @param preneoplatic_SNV_signature_name The name of the SNV signature
 //'   for the preneoplastic SNV generation (optional).
@@ -509,13 +509,13 @@ RCPP_MODULE(Mutations){
 //'   for the preneoplastic indel generation.
 //' @param seed The seed for random number generator (optional).
 //' @return A phylogenetic forest whose structure corresponds to
-//'   `samples_forest`.
+//'   `sample_forest`.
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
 //'
 //' # create a simulation
-//' sim <- SpatialSimulation()
+//' sim <- TissueSimulation()
 //' sim$add_mutant("A", c(SNV = 0.2), 0.01)
 //' sim$place_cell("A", 500, 500)
 //'
@@ -526,8 +526,8 @@ RCPP_MODULE(Mutations){
 //' sim$sample_cells("S1", lower_corner = c(450, 475),
 //'                        upper_corner = c(500, 550))
 //'
-//' # build the samples forest
-//' samples_forest <- sim$get_samples_forest()
+//' # build the sample forest
+//' sample_forest <- sim$get_sample_forest()
 //'
 //' # build a mutation engine
 //' m_engine <- MutationEngine(setup_code = "demo")
@@ -539,39 +539,39 @@ RCPP_MODULE(Mutations){
 //' m_engine$add_exposure(c(SBS13 = 0.3, SBS1 = 0.7, ID2 = 0.3, ID21 = 0.5,
 //'                         ID3 = 0.2))
 //'
-//' # place the mutations on the samples forest assuming 1000 pre-neoplastic
+//' # place the mutations on the sample forest assuming 1000 pre-neoplastic
 //' # SNVs and 500 indels
-//' phylogenetic_forest <- m_engine$place_mutations(samples_forest, 1000, 500)
+//' phylogenetic_forest <- m_engine$place_mutations(sample_forest, 1000, 500)
 //'
 //' phylogenetic_forest
     .method("place_mutations",
-            (PhylogeneticForest (MutationEngine::*)(const SamplesForest& forest,
+            (PhylogeneticForest (MutationEngine::*)(const SampleForest& forest,
                                                     const size_t& num_of_preneoplatic_SNVs,
                                                     const size_t& num_of_preneoplatic_indels))(
                                                         &MutationEngine::place_mutations),
-            "Placing mutations on a SamplesForest")
+            "Placing mutations on a SampleForest")
     .method("place_mutations",
-            (PhylogeneticForest (MutationEngine::*)(const SamplesForest& forest,
+            (PhylogeneticForest (MutationEngine::*)(const SampleForest& forest,
                                                     const size_t& num_of_preneoplatic_SNVs,
                                                     const size_t& num_of_preneoplatic_indels,
                                                     const SEXP& seed))(&MutationEngine::place_mutations),
-            "Placing mutations on a SamplesForest")
+            "Placing mutations on a SampleForest")
     .method("place_mutations",
-            (PhylogeneticForest (MutationEngine::*)(const SamplesForest& forest,
+            (PhylogeneticForest (MutationEngine::*)(const SampleForest& forest,
                                                     const size_t& num_of_preneoplatic_SNVs,
                                                     const std::string& preneoplatic_SNV_signature_name,
                                                     const size_t& num_of_preneoplatic_indels,
                                                     const std::string& preneoplatic_indel_signature_name))(
                                                         &MutationEngine::place_mutations),
-            "Placing mutations on a SamplesForest")
+            "Placing mutations on a SampleForest")
     .method("place_mutations",
-            (PhylogeneticForest (MutationEngine::*)(const SamplesForest& forest,
+            (PhylogeneticForest (MutationEngine::*)(const SampleForest& forest,
                                                     const size_t& num_of_preneoplatic_SNVs,
                                                     const std::string& preneoplatic_SNV_signature_name,
                                                     const size_t& num_of_preneoplatic_indels,
                                                     const std::string& preneoplatic_indel_signature_name,
                                                     const SEXP& seed))(&MutationEngine::place_mutations),
-            "Placing mutations on a SamplesForest")
+            "Placing mutations on a SampleForest")
 
 //' @name MutationEngine$get_genome_info
 //' @title Getting the genome information
@@ -986,7 +986,7 @@ RCPP_MODULE(Mutations){
 //' @description This class represents the phylogenetic forest of the
 //'   cells sampled during the computation.
 //' @details The leaves of his forest are the sampled cells.
-//'   This class is analogous to the class [SamplesForest],
+//'   This class is analogous to the class [SampleForest],
 //'   but each node is labelled with the mutations occurring
 //'   for the first time on the cell represented by the node
 //'   itself. Moreover each leaf is also associated with the
@@ -1074,7 +1074,7 @@ RCPP_MODULE(Mutations){
 //' @field get_subforest_for Builds a sub-forest using as leaves some of the original samples \itemize{
 //' \item \emph{Parameter:} \code{sample_names} - The names of the samples whose cells will be used
 //'   as leaves of the new forest.
-//' \item \emph{Returns:} A samples forest built on the samples mentioned in `sample_names`.
+//' \item \emph{Returns:} A sample forest built on the samples mentioned in `sample_names`.
 //' }
 //' @field get_absolute_chromosome_positions Gets the absolute chromosome positions \itemize{
 //' \item \emph{Returns:} A data frame reporting the name (column "`chr`"), the length
@@ -1099,7 +1099,7 @@ RCPP_MODULE(Mutations){
 //'   node, (column `sample`), the mutant (column
 //'   `mutant`), the epistate (column `epistate`),
 //'   and the birth time (column `birth_time`).
-//' @seealso [SamplesForest$get_nodes()] for usage examples
+//' @seealso [SampleForest$get_nodes()] for usage examples
     .method("get_nodes", (List (PhylogeneticForest::*)() const)(&PhylogeneticForest::get_nodes),
             "Get the nodes of the forest")
 
@@ -1123,7 +1123,7 @@ RCPP_MODULE(Mutations){
 //'   containing the node, (column `sample`), the mutant
 //'   (column `mutant`), the epistate (column `epistate`),
 //'   and the birth time (column `birth_time`).
-//' @seealso [SamplesForest$get_coalescent_cells()] for usage examples
+//' @seealso [SampleForest$get_coalescent_cells()] for usage examples
     .method("get_coalescent_cells",
             (List (PhylogeneticForest::*)(const std::list<RACES::Mutants::CellId>&) const)
                 (&PhylogeneticForest::get_coalescent_cells),
@@ -1138,8 +1138,8 @@ RCPP_MODULE(Mutations){
 //'   of the original samples.
 //' @param sample_names The names of the samples whose cells will be used
 //'   as leaves of the new forest
-//' @return A samples forest built on the samples mentioned in `sample_names`
-//' @seealso [SamplesForest$get_subforest_for()] for usage examples
+//' @return A sample forest built on the samples mentioned in `sample_names`
+//' @seealso [SampleForest$get_subforest_for()] for usage examples
     .method("get_subforest_for", &PhylogeneticForest::get_subforest_for,
             "Get the sub-forest for some of the original samples")
 
@@ -1147,7 +1147,7 @@ RCPP_MODULE(Mutations){
 //' @title Retrieving sample information
 //' @description This method retrieves information about
 //'   the samples whose cells were used as leaves
-//'   of the samples forest.
+//'   of the sample forest.
 //' @return A data frame containing, for each sample collected during the
 //'   simulation, the columns "`name`", "`time`", "`id`", "`ymin`", "`xmin`",
 //'    "`ymax`", "`ymax`", "`xmax`", "`tumour_cells`", "`tumour_cells_in_bbox`",
@@ -1162,7 +1162,7 @@ RCPP_MODULE(Mutations){
 //'   The "`DNA_quantity`" is stored as a real number despite being a natural
 //'   number as it usually exceeds the largest natural number that can be
 //'   natively represented by R.
-//' @seealso [SamplesForest$get_samples_info()] for usage examples,
+//' @seealso [SampleForest$get_samples_info()] for usage examples,
 //'   [Simulation$get_samples_info()]
     .method("get_samples_info", &PhylogeneticForest::get_samples_info,
             "Get some pieces of information about the samples")
@@ -1224,7 +1224,7 @@ RCPP_MODULE(Mutations){
 //'   deletions), and `class` (i.e., `"driver"`, `"passenger"`, `"germinal"`
 //'   or `"preneoplastic"`).
 //' @examples
-//' sim <- SpatialSimulation()
+//' sim <- TissueSimulation()
 //'
 //' sim$add_mutant(name = "Clone_1",
 //'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
@@ -1234,7 +1234,7 @@ RCPP_MODULE(Mutations){
 //' sim$run_up_to_size("Clone_1-", 1000)
 //'
 //' sim$sample_cells("Sample_A", c(475, 475), c(525, 525))
-//' sample_forest <- sim$get_samples_forest()
+//' sample_forest <- sim$get_sample_forest()
 //'
 //' m_engine <- MutationEngine(setup_code = "demo")
 //'
@@ -1276,7 +1276,7 @@ RCPP_MODULE(Mutations){
 //'   `"passenger"`, `"germinal"` or `"preneoplastic"`) for each mutation
 //'   in the sampled cell genomes.
 //' @examples
-//' sim <- SpatialSimulation()
+//' sim <- TissueSimulation()
 //'
 //' sim$add_mutant(name = "Clone_1",
 //'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
@@ -1286,7 +1286,7 @@ RCPP_MODULE(Mutations){
 //' sim$run_up_to_size("Clone_1-", 1000)
 //'
 //' sim$sample_cells("Sample_A", c(475, 475), c(525, 525))
-//' sample_forest <- sim$get_samples_forest()
+//' sample_forest <- sim$get_sample_forest()
 //'
 //' m_engine <- MutationEngine(setup_code = "demo")
 //'
@@ -1359,7 +1359,7 @@ RCPP_MODULE(Mutations){
 //'   birth time smaller than or equal to `birth_threshold`. Each stick is
 //'   represented as the list of cell identifiers labelling the nodes in the
 //'   stick from the higher to the deeper in the forest.
-//' @seealso [SamplesForest$get_sticks()] for usage examples
+//' @seealso [SampleForest$get_sticks()] for usage examples
     .method("get_sticks", (std::list<std::list<RACES::Mutants::CellId>> (PhylogeneticForest::*)(const double) const)(&PhylogeneticForest::get_sticks),
             "Get the forest sticks")
     .method("get_sticks", (std::list<std::list<RACES::Mutants::CellId>> (PhylogeneticForest::*)() const)(&PhylogeneticForest::get_sticks),

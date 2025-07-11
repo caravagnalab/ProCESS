@@ -27,7 +27,7 @@
 #' @export
 #'
 #' @examples
-#' sim <- SpatialSimulation()
+#' sim <- TissueSimulation()
 #' sim$history_delta <- 1
 #' sim$add_mutant(name = "A",
 #'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.02),
@@ -44,7 +44,7 @@
 #'
 #' plot_timeseries(sim, color_map=color_map)
 plot_timeseries <- function(simulation, color_map = NULL) {
-  stopifnot(inherits(simulation, "Rcpp_SpatialSimulation"))
+  stopifnot(inherits(simulation, "Rcpp_TissueSimulation"))
 
   counts <- simulation$get_count_history() %>%
     dplyr::mutate(species = paste0(.data$mutant, .data$epistate))

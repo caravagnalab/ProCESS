@@ -1083,7 +1083,7 @@ void MutationEngine::add_mutant(const std::string& mutant_name,
 }
 
 PhylogeneticForest
-MutationEngine::place_mutations(const SamplesForest& forest,
+MutationEngine::place_mutations(const SampleForest& forest,
                                 const size_t& num_of_preneoplatic_SNVs,
                                 const std::string& preneoplatic_SNV_signature_name,
                                 const size_t& num_of_preneoplatic_indels,

@@ -29,7 +29,7 @@
 #' @examples
 #' set.seed(0)
 #'
-#' sim <- SpatialSimulation()
+#' sim <- TissueSimulation()
 #'
 #' sim$death_activation_level <- 50
 #'
@@ -48,7 +48,7 @@
 #'
 #' plot_state(sim, color_map=color_map)
 plot_state <- function(simulation, color_map = NULL) {
-  stopifnot(inherits(simulation, "Rcpp_SpatialSimulation"))
+  stopifnot(inherits(simulation, "Rcpp_TissueSimulation"))
 
   counts <- simulation$get_counts() %>%
     dplyr::mutate(species = paste0(.data$mutant, .data$epistate))

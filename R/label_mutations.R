@@ -35,7 +35,7 @@
 #' set.seed(0)
 #'
 #' # simulate a tissue
-#' sim <- SpatialSimulation()
+#' sim <- TissueSimulation()
 #'
 #' sim$add_mutant(name = "A",
 #'                growth_rates = 1,
@@ -52,7 +52,7 @@
 #' # sample the tissue and build the sample forest
 #' bbox <- sim$search_sample(c("A" = 100,"B" = 100), 50, 50)
 #' sim$sample_cells("Sampling", bbox$lower_corner, bbox$upper_corner)
-#' forest = sim$get_samples_forest()
+#' forest = sim$get_sample_forest()
 #'
 #' # place the mutations
 #' m_engine = MutationEngine(setup_code = "demo")

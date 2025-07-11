@@ -30,7 +30,7 @@ knitr::opts_chunk$set(
 > those obtained by the reader.
 
 ProCESS/RACES can simulate genomic mutations on the cells represented in
-a `SamplesForest` according to the specified SBS and indel mutational signatures
+a `SampleForest` according to the specified SBS and indel mutational signatures
 (see `vignette["mutations"]`).
 This task is achieved by the mutation engine which uses two indices on the
 reference genome to place the most probable mutations according to

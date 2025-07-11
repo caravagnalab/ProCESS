@@ -38,7 +38,7 @@
 #' # set the seed of the random number generator
 #' set.seed(0)
 #'
-#' sim <- SpatialSimulation()
+#' sim <- TissueSimulation()
 #' sim$add_mutant(name = "A",
 #'                growth_rates = 0.1,
 #'                death_rates = 0.0)
@@ -62,7 +62,7 @@
 #' bbox <- sim$search_sample(c("B" = ncells), n_w, n_h)
 #' sim$sample_cells("SampleB", bbox$lower_corner, bbox$upper_corner)
 #'
-#' forest <- sim$get_samples_forest()
+#' forest <- sim$get_sample_forest()
 #'
 #' # placing mutations
 #' m_engine <- MutationEngine(setup_code = "demo")
