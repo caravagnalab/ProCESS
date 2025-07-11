@@ -14,6 +14,17 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+# compute the bin width for a set of data according to the 
+# Freedman-Diaconis rule
+freedman_diaconis_binwidth <- function(data) {
+  q1 <- quantile(data, 0.25)[[1]]
+  q3 <- quantile(data, 0.75)[[1]]
+
+  IQR <- q3-q1
+
+  return(2 * (IQR/((length(data))^(1/3))))
+}
+
 #' Plot a Variant Allele Frequency (VAF) histogram
 #'
 #' This function generates a histogram showing the distribution of Variant
@@ -155,7 +166,7 @@ plot_VAF_histogram <- function(
   }
 
   if (is.null(binwidth)) {
-    binwidth <- 1 / max(data$DP)
+    binwidth <- freedman_diaconis_binwidth(data$VAF)
   }
 
   plot +
