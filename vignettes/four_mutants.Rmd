@@ -71,9 +71,11 @@ sim$run_up_to_size("C", 25000)
 
 Then, we plot the tissue and the simulation state.
 
-```{r, fig.width=3, fig.height=3, fig.alt=c("The tissue of a tumour having three mutants: A, B, and C. Both B, and C are sub-clones of A. The three mutants have different grow rates and appears at different simulated time.", "The current ratio of cells per species over all tumour cells.")}
+```{r, fig.width=3, fig.height=3, fig.alt=c("The tissue of a tumour having three mutants: A, B, and C. Both B, and C are sub-clones of A. The three mutants have different grow rates and appears at different simulated time.")}
 plot_tissue(sim)
+```
 
+```{r, fig.width=3, fig.height=3, fig.alt=c("The current ratio of cells per species over all tumour cells.")}
 plot_state(sim)
 ```
 
@@ -126,8 +128,7 @@ plot_timeseries(sim)
 The Muller plot, instead, overviews the percentage of cells in each species along the simulation
 evolution.
 
-```{r, fig.width=4, fig.alt=c("The Muller plot overviews the percentage of cells in each species along the simulation
-evolution.")}
+```{r, fig.width=4, fig.alt=c("The Muller plot overviews the percentage of cells in each species along the simulation evolution.")}
 plot_muller(sim)
 ```
 
@@ -162,22 +163,22 @@ passenger mutation rates and the list of driver mutations.
 
 ```{r}
 # genetically characterise the mutants
-m_engine$add_mutant("A", passenger_rates = c(SNV = 2e-9, indel = 2e-8),
+m_engine$add_mutant("A", passenger_rates = c(SNV = 2e-9, indel = 2e-9),
                     drivers = list(Mutation("22", 16085675, "GCCTCCCGA", "G"),
                                    CNA("D", "22", 22453799, 200000,
                                        allele = 1)))
 
-m_engine$add_mutant("B", passenger_rates = c(SNV = 2e-9, indel = 2e-8,
+m_engine$add_mutant("B", passenger_rates = c(SNV = 1e-9, indel = 2e-9,
                                              CNA = 1e-9),
                     drivers = list(SNV("22", 16050185, "C", allele = 1),
                                    CNA(type = "A", chr = "22",
                                        chr_pos = 16485130, len = 200000)))
 
-m_engine$add_mutant("C", passenger_rates = list(SNV = 2e-8, indel = 2e-8),
+m_engine$add_mutant("C", passenger_rates = list(SNV = 2e-8, indel = 2e-9),
                     drivers = list(SNV("22", 32786322, "G"),
                                    list("NF2 R221*", allele = 1)))
 
-m_engine$add_mutant("D", passenger_rates = list(SNV = 2e-9, indel = 2e-8),
+m_engine$add_mutant("D", passenger_rates = list(SNV = 2e-9, indel = 2e-9),
                     drivers = list(SNV("22", 51240420, "T")))
 ```
 
@@ -249,9 +250,9 @@ plot_VAF_marginals(f_seq, samples = c("S1", "S2", "S3"),
                    labels = f_seq["classes"])
 ```
 
-From S1 vs S3 figure, we can see that few passenger mutations occur both in S1
+In S1 vs S3 figure, we can some spot passenger mutations occurring in both S1
 and S3. Let us identify these mutations.
 
 ```{r}
-f_seq %>% filter(classes == "passenger" & S1.VAF > 0 &  S3.VAF > 0)
+f_seq %>% filter(classes == "passenger" & S1.VAF > 0 & S3.VAF > 0)
 ```

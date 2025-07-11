@@ -1290,8 +1290,8 @@ RCPP_MODULE(Mutations){
 //'
 //' m_engine <- MutationEngine(setup_code = "demo")
 //'
-//' m_engine$add_mutant("Clone_1", list("+" = c(SNV = 1e-7, indel = 1e-8),
-//'                                     "-" = c(SNV = 3e-7, CNA = 1e-11)),
+//' m_engine$add_mutant("Clone_1", list("+" = c(SNV = 1e-8, indel = 1e-8),
+//'                                     "-" = c(SNV = 3e-8, CNA = 1e-11)),
 //'                     list(SNV("22", 10510210, "C", allele = 1),
 //'                          CNA("D", "22", 5010000, 200000,
 //'                                    allele = 1)))
