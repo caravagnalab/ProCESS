@@ -36,6 +36,8 @@ class PhylogeneticForest : public RACES::Mutations::PhylogeneticForest
   GermlineSubject germline_subject;
   std::filesystem::path reference_path;
 
+  std::map<RACES::Mutations::SID, std::string> driver_codes;
+
   using TimedMutationalExposure = std::map<RACES::Time, RACES::Mutations::MutationalExposure>;
 
   std::map<RACES::Mutations::MutationType::Type, TimedMutationalExposure> timed_exposures;
@@ -43,12 +45,14 @@ class PhylogeneticForest : public RACES::Mutations::PhylogeneticForest
   PhylogeneticForest(const RACES::Mutations::PhylogeneticForest& orig,
                      const GermlineSubject& germline_subject,
                      const std::filesystem::path reference_path,
+                     const std::map<RACES::Mutations::SID, std::string>& driver_codes,
                      const TimedMutationalExposure& timed_SBS_exposures,
                      const TimedMutationalExposure& timed_indel_exposures);
 
   PhylogeneticForest(RACES::Mutations::PhylogeneticForest&& orig,
                      const GermlineSubject& germline_subject,
                      const std::filesystem::path reference_path,
+                     const std::map<RACES::Mutations::SID, std::string>& driver_codes,
                      const TimedMutationalExposure& timed_SBS_exposures,
                      const TimedMutationalExposure& timed_indel_exposures);
 public:

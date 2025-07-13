@@ -248,9 +248,10 @@ build_contex_index(const GenomicDataStorage& storage, const size_t context_sampl
   if (std::filesystem::exists(drivers_path)) {
     auto driver_storage = DriverStorage::load(drivers_path);
 
-    for (const auto& [name, mutation] : driver_storage.get_mutations()) {
-        regions_to_avoid.emplace(mutation, std::max(static_cast<size_t>(1),
-                                                    mutation.ref.size()));
+    for (const auto& [name, mutation_entry] : driver_storage.get_code2mutation_map()) {
+        regions_to_avoid.emplace(mutation_entry.mutation,
+                                 std::max(static_cast<size_t>(1),
+                                          mutation_entry.mutation.ref.size()));
     }
   }
 
@@ -745,23 +746,35 @@ void MutationEngine::add_exposure(const double& time, const Rcpp::List& exposure
   m_engine.add(time, c_exposure);
 }
 
-const RACES::Mutations::SID&
-get_mutation_from_name(const std::map<std::string, RACES::Mutations::SID>& driver_code_map,
-                       const Rcpp::CharacterVector& R_mutation_code)
+const RACES::Mutations::DriverStorage::MutationEntry&
+get_mutation_from_name(const RACES::Mutations::DriverStorage& driver_storage,
+                       const std::string& tumour_type,
+                       const std::string& mutation_code)
 {
-    const auto mutation_code = Rcpp::as<std::string>(R_mutation_code);
-
+    const auto& driver_code_map = driver_storage.get_code2mutation_map();
     const auto found = driver_code_map.find(mutation_code);
 
     if (found == driver_code_map.end()) {
         throw std::domain_error("Unknown mutation code " + mutation_code + ".");
     }
 
+    if (tumour_type != "") {
+        if (found->second.tumour_types.count(tumour_type)==0) {
+            std::ostringstream oss;
+
+            oss << "\"" << mutation_code << "\" is not a driver for "
+                << "the specified tumor type \"" << tumour_type
+                << "\"." << std::endl;
+            Rcpp::warning(oss.str());
+        }
+    }
+
     return found->second;
 }
 
-SIDSpec get_mutation_from_list(const std::map<std::string, RACES::Mutations::SID>& driver_code_map,
-                               const Rcpp::List& SID_spec, const size_t index)
+std::pair<RACES::Mutations::AlleleId, std::string>
+get_mutation_spec_from_list(const RACES::Mutations::DriverStorage& driver_storage,
+                            const Rcpp::List& SID_spec, const size_t index)
 {
     const size_t spec_size = static_cast<size_t>(SID_spec.size());
     if (spec_size > 2 || spec_size == 0) {
@@ -789,48 +802,111 @@ SIDSpec get_mutation_from_list(const std::map<std::string, RACES::Mutations::SID
         allele_id = Rcpp::as<RACES::Mutations::AlleleId>(SID_spec[1]);
     }
 
-    return SIDSpec(allele_id, get_mutation_from_name(driver_code_map,
-			                                         SID_spec[0]));
+    return {allele_id, Rcpp::as<std::string>(SID_spec[0])};
 }
 
 void
-get_mutation_spec(std::list<SIDSpec>& c_sids,
+insert_mutant_driver_code(const SIDSpec mut_spec, const std::string& mutation_code,
+                          const std::string& mutant_name,
+                          std::map<SIDSpec, std::string>& mutant_drivers)
+{
+    const auto found = mutant_drivers.find(mut_spec);
+
+    if (found != mutant_drivers.end()) {
+        std::ostringstream oss;
+
+        oss << mut_spec;
+        if (mutation_code != "") {
+            oss << " (" << mutation_code << ")";
+        }
+        oss << " has been declared as driver of mutant "
+            << mutant_name << " more than once." << std::endl;
+        Rcpp::stop(oss.str());
+    } else {
+        mutant_drivers[mut_spec] = mutation_code;
+    }
+}
+
+void
+insert_among_drivers(const SIDSpec mut_spec, const std::string& mutation_code,
+                     const std::string& mutant_name,
+                     std::list<SIDSpec>& c_sids,
+                     std::list<RACES::Mutations::DriverMutations::MutationType>& application_order,
+                     std::map<SIDSpec, std::string>& mutant_drivers)
+{
+    if (mut_spec.ref != "?") {
+        insert_mutant_driver_code(mut_spec, mutation_code, mutant_name, mutant_drivers);
+    }
+
+    c_sids.emplace_back(mut_spec);
+    application_order.push_back(RACES::Mutations::DriverMutations::SID_TURN);
+}
+
+void
+get_mutation_spec(const std::string& mutant_name,
+                  std::list<SIDSpec>& c_sids,
                   std::list<RACES::Mutations::CNA>& c_cnas,
                   std::list<RACES::Mutations::DriverMutations::MutationType>& application_order,
-                  const std::map<std::string, RACES::Mutations::SID>& driver_code_map,
-                  const Rcpp::List& rcpp_list, const size_t& index)
+                  std::map<SIDSpec, std::string>& mutant_drivers,
+                  const RACES::Mutations::DriverStorage& driver_storage,
+                  const std::map<RACES::Mutations::SID, std::string>& reverse_driver_storage,
+                  const std::string& tumour_type, const Rcpp::List& rcpp_list,
+                  const size_t& index)
 {
-    switch (TYPEOF(rcpp_list[index])) {
+    const auto& mutation = rcpp_list[index];
+
+    switch (TYPEOF(mutation)) {
         case STRSXP:
-            c_sids.emplace_back(RANDOM_ALLELE,
-                                get_mutation_from_name(driver_code_map,
-                                                       rcpp_list[index]));
+        {
+            const auto mutation_code = Rcpp::as<std::string>(mutation);
+    
+            auto mutation_entry = get_mutation_from_name(driver_storage, tumour_type, mutation_code);
 
-            application_order.push_back(RACES::Mutations::DriverMutations::SID_TURN);
+            insert_among_drivers({RANDOM_ALLELE, mutation_entry.mutation}, mutation_code,
+                                 mutant_name, c_sids, application_order, mutant_drivers);
 
             return;
+        }
         case VECSXP:
-            c_sids.push_back(get_mutation_from_list(driver_code_map,
-                                                    rcpp_list[index],
-                                                    index+1));
+        {
+            auto mutation_data = get_mutation_spec_from_list(driver_storage, mutation, index+1);
 
-            application_order.push_back(RACES::Mutations::DriverMutations::SID_TURN);
+            auto mutation_entry = get_mutation_from_name(driver_storage, tumour_type,
+                                                         mutation_data.second);
+
+            insert_among_drivers({mutation_data.first, mutation_entry.mutation},
+                                 mutation_data.second, mutant_name, c_sids,
+                                 application_order, mutant_drivers);
 
             return;
+        }
         case S4SXP:
             {
-                Rcpp::S4 s4obj( rcpp_list[index] );
+                Rcpp::S4 s4obj( mutation );
                 if ( s4obj.is("Rcpp_Mutation")) {
-                    const auto sid = Rcpp::as<SIDMut>(rcpp_list[index]);
+                    const auto sid = Rcpp::as<SIDMut>(mutation);
 
-                    c_sids.push_back(static_cast<SIDSpec>(sid));
+                    const auto sid_spec = static_cast<SIDSpec>(sid);
 
-                    application_order.push_back(RACES::Mutations::DriverMutations::SID_TURN);
+                    if (sid_spec.ref != "?") {
+                        const auto found = reverse_driver_storage.find(sid_spec);
+
+                        std::string mutation_code;
+                        if (found != reverse_driver_storage.end()) {
+                            mutation_code = found->second;
+                        }
+
+                        insert_among_drivers(sid_spec, mutation_code, mutant_name,
+                                            c_sids, application_order, mutant_drivers);
+                    } else {
+                        c_sids.emplace_back(sid_spec);
+                        application_order.push_back(RACES::Mutations::DriverMutations::SID_TURN);
+                    }
 
                     return;
                 }
                 if ( s4obj.is("Rcpp_CNA")) {
-                    const auto cna = Rcpp::as<CNA>(rcpp_list[index]);
+                    const auto cna = Rcpp::as<CNA>(mutation);
 
                     c_cnas.push_back(static_cast<const RACES::Mutations::CNA&>(cna));
 
@@ -854,18 +930,26 @@ get_mutation_spec(std::list<SIDSpec>& c_sids,
                             + " is not an mutation specification");
 }
 
-void
-get_mutation_lists(std::list<SIDSpec>& c_sids,
+std::map<SIDSpec, std::string>
+get_mutation_lists(const std::string& mutant_name,
+                   std::list<SIDSpec>& c_sids,
                    std::list<RACES::Mutations::CNA>& c_cnas,
                    std::list<RACES::Mutations::DriverMutations::MutationType>& application_order,
-                   const std::map<std::string, RACES::Mutations::SID>& driver_code_map,
+                   const RACES::Mutations::DriverStorage& driver_storage,
+                   const std::map<RACES::Mutations::SID, std::string>& reverse_driver_storage,
+                   const std::string& tumour_type,
                    const Rcpp::List& rcpp_list)
 {
     const size_t list_size = static_cast<size_t>(rcpp_list.size());
+
+    std::map<SIDSpec, std::string> mutant_drivers;
     for (size_t i=0; i<list_size; ++i) {
-        get_mutation_spec(c_sids, c_cnas, application_order,
-                          driver_code_map, rcpp_list, i);
+        get_mutation_spec(mutant_name, c_sids, c_cnas, application_order, 
+                          mutant_drivers, driver_storage, reverse_driver_storage,
+                          tumour_type, rcpp_list, i);
     }
+
+    return mutant_drivers;
 }
 
 void MutationEngine::add_mutant(const std::string& mutant_name,
@@ -995,8 +1079,10 @@ inline std::ifstream::pos_type filesize(const std::filesystem::path& fasta_filen
 }
 
 void retrieve_missing_references(const std::string& mutant_name,
+                                 const std::map<RACES::Mutations::SID, std::string>& reverse_driver_storage,
                                  const std::filesystem::path fasta_filename,
-                                 std::list<SIDSpec>& SIDs)
+                                 std::list<SIDSpec>& SIDs,
+                                 std::map<SIDSpec, std::string>& mutant_drivers)
 {
   RACES::UI::ProgressBar progress_bar(Rcpp::Rcout);
 
@@ -1026,6 +1112,15 @@ void retrieve_missing_references(const std::string& mutant_name,
 
           if (sid.ref == "?") {
               sid.ref = ref_str[0];
+
+              const auto found = reverse_driver_storage.find(sid);
+
+              std::string mutation_code;
+              if (found != reverse_driver_storage.end()) {
+                 mutation_code = found->second;
+              }
+
+              insert_mutant_driver_code(sid, mutation_code, mutant_name, mutant_drivers);
           } else {
               if (sid.ref != ref_str) {
                   std::ostringstream oss;
@@ -1049,7 +1144,7 @@ void retrieve_missing_references(const std::string& mutant_name,
 
   error_if_chr_missing(missing_chr);
 
-  progress_bar.set_progress(100, "\"" + mutant_name + "\" SIDs retrieved");
+  progress_bar.set_progress(100, "\"" + mutant_name + "\"'s SIDs validated");
 }
 
 void MutationEngine::add_mutant(const std::string& mutant_name,
@@ -1063,10 +1158,20 @@ void MutationEngine::add_mutant(const std::string& mutant_name,
 
   std::list<RACES::Mutations::DriverMutations::MutationType> application_order;
 
-  get_mutation_lists(c_sids, c_cnas, application_order,
-                     driver_storage.get_mutations(), drivers);
+  const auto reverse_driver_storage = driver_storage.get_reverse_map();
+  auto mutant_drivers = get_mutation_lists(mutant_name, c_sids, c_cnas,
+                                           application_order, driver_storage, 
+                                           reverse_driver_storage, tumour_type,
+                                           drivers);
 
-  retrieve_missing_references(mutant_name, storage.get_reference_path(), c_sids);
+  retrieve_missing_references(mutant_name, reverse_driver_storage,
+                              storage.get_reference_path(), c_sids,
+                              mutant_drivers);
+
+  // reverse mutant drivers in driver codes
+  for (const auto& [sid_spec, code] : mutant_drivers) {
+    driver_codes[static_cast<RACES::Mutations::SID>(sid_spec)] = code;
+  }
 
   if (contains_passenger_rates(epistate_passenger_rates)) {
     auto p_rates = get_passenger_rates(epistate_passenger_rates);
@@ -1108,6 +1213,7 @@ MutationEngine::place_mutations(const SampleForest& forest,
   const auto subject = storage.get_germline_storage().get_subject(germline_subject);
 
   return {std::move(phylo_forest), subject, storage.get_reference_path(),
+          driver_codes,
           const_m_engine.get_timed_exposures(MutationType::Type::SBS),
           const_m_engine.get_timed_exposures(MutationType::Type::INDEL)};
 }
@@ -1285,7 +1391,7 @@ void MutationEngine::show() const
   Rcout << std::endl << std::endl << " Driver mutations" << std::endl;
   for (const auto&[mutant_name, driver_mutations]: m_properties.get_driver_mutations()) {
     Rcout << "   \"" << mutant_name << "\":" << std::endl;
-    show_driver_mutations(Rcout, driver_mutations, driver_reverse_map, "       ");
+    show_driver_mutations(Rcout, driver_mutations, driver_codes, "       ");
     if (driver_mutations.application_order.size()==0) {
       Rcout << "   No driver mutations for \"" << mutant_name << "\"" << std::endl;
     }

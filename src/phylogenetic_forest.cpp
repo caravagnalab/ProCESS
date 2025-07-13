@@ -31,10 +31,11 @@ PhylogeneticForest::PhylogeneticForest():
 PhylogeneticForest::PhylogeneticForest(const RACES::Mutations::PhylogeneticForest& orig,
                                        const GermlineSubject& germline_subject,
                                        const std::filesystem::path reference_path,
+                                       const std::map<RACES::Mutations::SID, std::string>& driver_codes,
                                        const TimedMutationalExposure& timed_SBS_exposures,
                                        const TimedMutationalExposure& timed_indel_exposures):
-    RACES::Mutations::PhylogeneticForest(orig), germline_subject(germline_subject),
-    reference_path(reference_path)
+    RACES::Mutations::PhylogeneticForest{orig}, germline_subject{germline_subject},
+    reference_path{reference_path}, driver_codes{driver_codes}
 {
     using namespace RACES::Mutations;
     timed_exposures[MutationType::Type::SBS] = timed_SBS_exposures;
@@ -44,10 +45,11 @@ PhylogeneticForest::PhylogeneticForest(const RACES::Mutations::PhylogeneticFores
 PhylogeneticForest::PhylogeneticForest(RACES::Mutations::PhylogeneticForest&& orig,
                                        const GermlineSubject& germline_subject,
                                        const std::filesystem::path reference_path,
+                                       const std::map<RACES::Mutations::SID, std::string>& driver_codes,
                                        const TimedMutationalExposure& timed_SBS_exposures,
                                        const TimedMutationalExposure& timed_indel_exposures):
-   RACES::Mutations::PhylogeneticForest(std::move(orig)), germline_subject(germline_subject),
-   reference_path(reference_path)
+   RACES::Mutations::PhylogeneticForest{std::move(orig)}, germline_subject{germline_subject},
+   reference_path{reference_path}, driver_codes{driver_codes}
 {
     using namespace RACES::Mutations;
     timed_exposures[MutationType::Type::SBS] = timed_SBS_exposures;
@@ -98,13 +100,32 @@ Rcpp::List PhylogeneticForest::get_samples_info() const
                              _["equivalent_normal_cells"]=equivalent_normal_cells);
 }
 
+std::string
+find_code(const RACES::Mutations::MutationSpec<RACES::Mutations::SID>& sid,
+          const std::map<RACES::Mutations::SID, std::string>& driver_codes)
+{
+    const auto found = driver_codes.find(static_cast<RACES::Mutations::SID>(sid));
+    if (found != driver_codes.end()) {
+        return(found->second);
+    }  
+
+    std::ostringstream oss;
+
+    oss << "Unknown driver mutation " << sid << std::endl;
+    Rcpp::warning(oss.str());
+
+    return "";
+}
+
 inline
 void fill_SID_row(const RACES::Mutations::MutationSpec<RACES::Mutations::SID>& sid,
+                  const std::map<RACES::Mutations::SID, std::string>& driver_codes,
                   Rcpp::CharacterVector& types, Rcpp::CharacterVector& CNA_types,
                   Rcpp::CharacterVector& chrs, Rcpp::CharacterVector& refs,
                   Rcpp::CharacterVector& alts, Rcpp::IntegerVector& starts,
                   Rcpp::IntegerVector& ends, Rcpp::IntegerVector& alleles,
-                  Rcpp::IntegerVector& src_alleles, const size_t& i)
+                  Rcpp::IntegerVector& src_alleles, Rcpp::CharacterVector& codes,
+                  const size_t& i)
 {
     using namespace Rcpp;
     using namespace RACES::Mutations;
@@ -118,6 +139,14 @@ void fill_SID_row(const RACES::Mutations::MutationSpec<RACES::Mutations::SID>& s
     ends[i] = sid.position+sid.ref.size()-1;
     alleles[i] = sid.allele_id;
     src_alleles[i] = NA_INTEGER;
+
+    const auto code = find_code(sid, driver_codes);
+
+    if (code == "") {
+        codes[i] = NA_STRING;
+    } else {
+        codes[i] = code;
+    }
 }
 
 inline
@@ -126,7 +155,8 @@ void fill_CNA_row(const RACES::Mutations::CNA& cna,
                   Rcpp::CharacterVector& chrs, Rcpp::CharacterVector& refs,
                   Rcpp::CharacterVector& alts, Rcpp::IntegerVector& starts,
                   Rcpp::IntegerVector& ends, Rcpp::IntegerVector& alleles,
-                  Rcpp::IntegerVector& src_alleles, const size_t& i)
+                  Rcpp::IntegerVector& src_alleles, Rcpp::CharacterVector& codes,
+                  const size_t& i)
 {
     using namespace Rcpp;
     using namespace RACES::Mutations;
@@ -137,7 +167,7 @@ void fill_CNA_row(const RACES::Mutations::CNA& cna,
     chrs[i] = GenomicPosition::chrtos(cna.chr_id);
     starts[i] = cna.position;
     ends[i] = cna.position+cna.length-1;
-    alleles[i] = cna.dest;
+    alleles[i] = (cna.dest==RANDOM_ALLELE?NA_INTEGER:cna.dest);
 
     if (cna.type==RACES::Mutations::CNA::Type::AMPLIFICATION) {
         src_alleles[i] = cna.source;
@@ -146,6 +176,7 @@ void fill_CNA_row(const RACES::Mutations::CNA& cna,
         src_alleles[i] = NA_INTEGER;
         CNA_types[i] = "D";
     }
+    codes[i] = NA_STRING;
 }
 
 inline
@@ -153,7 +184,8 @@ void fill_WGD_row(Rcpp::CharacterVector& types, Rcpp::CharacterVector& CNA_types
                   Rcpp::CharacterVector& chrs, Rcpp::CharacterVector& refs,
                   Rcpp::CharacterVector& alts, Rcpp::IntegerVector& starts,
                   Rcpp::IntegerVector& ends, Rcpp::IntegerVector& alleles,
-                  Rcpp::IntegerVector& src_alleles, const size_t& i)
+                  Rcpp::IntegerVector& src_alleles, Rcpp::CharacterVector& codes,
+                  const size_t& i)
 {
     using namespace Rcpp;
     using namespace RACES::Mutations;
@@ -167,6 +199,7 @@ void fill_WGD_row(Rcpp::CharacterVector& types, Rcpp::CharacterVector& CNA_types
     ends[i] = NA_INTEGER;
     alleles[i] = NA_INTEGER;
     src_alleles[i] = NA_INTEGER;
+    codes[i] = NA_STRING;
 }
 
 Rcpp::List PhylogeneticForest::get_driver_mutations() const
@@ -183,7 +216,8 @@ Rcpp::List PhylogeneticForest::get_driver_mutations() const
 
     CharacterVector mutant_names(num_of_rows), chrs(num_of_rows),
                     types(num_of_rows), CNA_types(num_of_rows),
-                    refs(num_of_rows), alts(num_of_rows);
+                    refs(num_of_rows), alts(num_of_rows),
+                    codes(num_of_rows);
     IntegerVector starts(num_of_rows), ends(num_of_rows),
                   application_order(num_of_rows), alleles(num_of_rows),
                   src_alleles(num_of_rows);
@@ -197,18 +231,18 @@ Rcpp::List PhylogeneticForest::get_driver_mutations() const
             application_order[i] = mut_i;
             switch(dm_it.get_type()) {
                 case MutationList::MutationType::SID_TURN:
-                    fill_SID_row(dm_it.get_last_SID(), types, CNA_types,
+                    fill_SID_row(dm_it.get_last_SID(), driver_codes, types, CNA_types,
                                  chrs, refs, alts, starts, ends, alleles,
-                                 src_alleles, i);
+                                 src_alleles, codes, i);
                     break;
                 case MutationList::MutationType::CNA_TURN:
                     fill_CNA_row(dm_it.get_last_CNA(), types, CNA_types,
                                  chrs, refs, alts, starts, ends, alleles,
-                                 src_alleles, i);
+                                 src_alleles, codes, i);
                     break;
                 case MutationList::MutationType::WGD_TURN:
                     fill_WGD_row(types, CNA_types, chrs, refs, alts,
-                                 starts, ends, alleles, src_alleles, i);
+                                 starts, ends, alleles, src_alleles, codes, i);
                     break;
                 default:
                     throw std::runtime_error("Unsupported mutation type "
@@ -223,7 +257,8 @@ Rcpp::List PhylogeneticForest::get_driver_mutations() const
                              _["start"] = starts, _["end"] = ends,
                              _["ref"] = refs, _["alt"] = alts,
                              _["allele"] = alleles,
-                             _["src_allele"] = src_alleles);
+                             _["src_allele"] = src_alleles,
+                             _["code"] = codes);
 }
 
 Rcpp::List PhylogeneticForest::get_species_info() const
@@ -946,6 +981,7 @@ void PhylogeneticForest::save(const std::string& filename,
 
   out_archive & germline_subject
               & ref_str
+              & driver_codes
               & timed_exposures;
 
   RACES::UI::ProgressBar progress_bar(Rcpp::Rcout, quiet);
@@ -975,7 +1011,8 @@ PhylogeneticForest PhylogeneticForest::load(const std::string& filename,
   in_archive & reference_path;
   forest.reference_path = reference_path;
 
-  in_archive & forest.timed_exposures;
+  in_archive & forest.driver_codes
+             & forest.timed_exposures;
 
   try {
     RACES::UI::ProgressBar progress_bar(Rcpp::Rcout, quiet);

@@ -1060,7 +1060,7 @@ RCPP_MODULE(Mutations){
 //' @field get_driver_mutations Gets the driver mutations\itemize{
 //' \item \emph{Returns:} A data frame reporting `mutant`, `order`,
 //'   `type`, `CNA_type`, `chr`, `start`, `end`, `ref`, `alt`,
-//'   `allele`, and `src_allele` for each driver mutations.
+//'   `allele`, `src_allele`, and `code` for each driver mutations.
 //' }
 //' @field get_species_info Gets the species data\itemize{
 //' \item \emph{Returns:} A data frame reporting `mutant`, `epistate`,
@@ -1171,8 +1171,8 @@ RCPP_MODULE(Mutations){
 //' @title Getting the driver mutations
 //' @description This method returns the applied driver mutations.
 //' @return A data frame consisting in eight columns `mutant`, `order`, `type`,
-//'    `CNA_type`, `chr`, `start`, `end`, `ref`, `alt`, `allele`, and
-//'    `allele_srd`. Each row in the data frame reports one driver mutations.
+//'    `CNA_type`, `chr`, `start`, `end`, `ref`, `alt`, `allele`, `allele_srd`
+//'    and `code`. Each row in the data frame reports one driver mutations.
 //'    The fields `mutant` and `order` report the name of the mutant and the
 //'    application order among the mutant driver mutations, respectively.
 //'    The column `type` declares the mutation type and contains "`SID`",
@@ -1189,6 +1189,7 @@ RCPP_MODULE(Mutations){
 //'    amplification, the fields `allele` and `src_allele` reports the
 //'    identifiers of the new allele and of the original allele, respectively.
 //'    In all the remaining cases, the fields contains the value `NA`.
+//'    Finally, the column `code` reports the mutation code.
     .method("get_driver_mutations", &PhylogeneticForest::get_driver_mutations,
             "Get the applied driver mutations")
 

@@ -46,6 +46,8 @@ class MutationEngine
     std::string tumour_type;
     std::string tumor_study;
 
+    std::map<SIDMut::SID, std::string> driver_codes;
+
     RACES::Mutations::ContextIndex<AbsGenotypePosition> context_index;
     RACES::Mutations::RSIndex rs_index;
     RACES::Mutations::MutationEngine<AbsGenotypePosition, std::mt19937_64> m_engine;
