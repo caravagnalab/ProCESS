@@ -1,13 +1,12 @@
-FROM r-base:4.4.0
+FROM rhub/r-minimal:4.5.0
 
-RUN apt-get update && apt-get upgrade -y \
-    && apt-get install -y build-essential cmake git \
-       ssh g++ r-cran-dplyr r-cran-crayon r-cran-rcpp \
-       r-cran-devtools r-cran-ggplot2 r-cran-ggraph \
-       r-cran-knitr r-cran-r.utils r-cran-tidygraph \
-       r-cran-hexbin r-cran-rcolorbrewer r-cran-cli \
-    && apt-get clean
+RUN installr -d -a neofetch -t "gfortran git cmake" \
+	     codetools caravagnalab/ProCESS@1.1
 
-RUN R -e 'install.packages(c("ggmuller"))'
+ARG USER_ID=ProCESS
+RUN adduser $USER_ID -D
+USER $USER_ID
+WORKDIR /home/$USER_ID
+ENV HOME=/home/$USER_ID
 
-RUN R -e 'devtools::install_github("caravagnalab/ProCESS")'
+CMD ["neofetch"]
