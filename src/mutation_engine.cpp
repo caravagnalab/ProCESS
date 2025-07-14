@@ -1426,9 +1426,21 @@ void MutationEngine::set_context_sampling(const size_t& context_sampling,
   reset();
 }
 
-void warning_function(const std::string message)
+void warning_function(const RACES::WarningType type, const std::string message)
 {
-    Rcpp::warning(message);
+    std::ostringstream oss;
+
+    switch(type) {
+        case RACES::WarningType::NO_MUT_FOR_CONTEXT:
+            oss << " Decrease `MutationEngine`'s "
+                << "parameter `context_sampling`." << std::endl;
+            break;
+        case RACES::WarningType::NO_MUT_FOR_RPATTERN:
+            oss << " Decrease `MutationEngine`'s "
+                << "parameter `max_repetition_storage`." << std::endl;
+            break;
+    }
+    Rcpp::warning(message + oss.str());
 }
 
 void MutationEngine::reset(const bool full, const bool quiet)
