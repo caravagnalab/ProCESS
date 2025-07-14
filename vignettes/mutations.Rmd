@@ -193,12 +193,12 @@ specification as follows.
 
 ```{r}
 # add the mutant "B" characterized by two driver SNVs on chromosome 22 (no
-# CNA) and two epigenetic states. The first SNV is "NF2 R221*" and it must
+# CNA) and two epigenetic states. The first SNV is "DGCR8 P26L" and it must
 # lay in the allele 1. The remaining SNV is specified by using the SNV function
 # as done above. The species "B+" and "B-" have passenger SNV rates 8e-9
 # and 2e-8, respectively, and CNA rates 0 for both species.
 m_engine$add_mutant("B", list("+" = c(SNV = 8e-9), "-" = c(SNV = 2e-8)),
-                    list(list("NF2 R221*", allele = 1),   # the first SNV
+                    list(list("DGCR8 P26L", allele = 1),  # the first SNV
                          SNV("22", 12028576, "G")))       # the second SNV
 
 m_engine
@@ -269,7 +269,7 @@ m_engine <- MutationEngine(setup_code = "demo",
                            tumour_study = "UK")
 ```
 
-The complete list of available tumour types and studies in a set-up
+The complete list of available tumour types in a set-up
 can be obtained by using the function `get_available_tumours_in()`.
 
 ```{r}

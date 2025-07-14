@@ -44,7 +44,6 @@ class MutationEngine
     size_t max_repetition_storage;
     size_t driver_CNA_min_distance;
     std::string tumour_type;
-    std::string tumor_study;
 
     std::map<SIDMut::SID, std::string> driver_codes;
 
@@ -95,7 +94,6 @@ public:
                    const size_t& max_repetition_storage,
                    const size_t& driver_CNA_min_distance,
                    const std::string& tumour_type,
-                   const std::string& tumor_study,
                    const bool& avoid_homozygous_losses,
                    const bool& quiet);
 
@@ -113,7 +111,6 @@ public:
                    const size_t& max_repetition_storage,
                    const size_t& driver_CNA_min_distance,
                    const std::string& tumour_type,
-                   const std::string& tumor_study,
                    const bool& avoid_homozygous_losses,
                    const bool& quiet);
 
@@ -234,7 +231,6 @@ public:
                          const size_t& max_repetition_storage,
                          const size_t& driver_CNA_min_distance,
                          const std::string& tumour_type,
-                         const std::string& tumour_study,
                          const bool avoid_homozygous_losses,
                          const bool quiet);
 

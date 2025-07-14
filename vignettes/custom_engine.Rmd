@@ -56,20 +56,20 @@ reference_url <- paste0("https://ftp.ensembl.org/pub/grch37/release-111/",
                         "fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.",
                         "dna.chromosome.22.fa.gz")
 
-sbs_url <- paste0("https://zenodo.org/records/15656740/files/",
+sbs_url <- paste0("https://zenodo.org/records/15875185/files/",
                   "SBS_demo_signatures.txt")
 
-indel_url <- paste0("https://zenodo.org/records/15656740/files/",
+indel_url <- paste0("https://zenodo.org/records/15875185/files/",
                     "indel_demo_signatures.txt")
 
-drivers_url <- paste0("https://zenodo.org/records/15656740/files/",
-                      "driver_mutations_hg19.csv")
+drivers_url <- paste0("https://zenodo.org/records/15875185/files/",
+                      "driver_mutations_hg19.csv.bz2")
 
-passenger_cnas_url <- paste0("https://zenodo.org/records/15656740/files/",
-                             "passenger_CNAs_hg19.csv")
+passenger_cnas_url <- paste0("https://zenodo.org/records/15875185/files/",
+                             "passenger_CNAs_hg19.csv.bz2")
 
-germline_url <- paste0("https://zenodo.org/records/15656740/files/",
-                       "germline_data_demo.tar.gz")
+germline_url <- paste0("https://zenodo.org/records/15875185/files/",
+                       "germline_data_demo.tar.bz2")
 
 # build a mutation engine and place all the files in the directory "Test"
 m_engine <- MutationEngine(directory = "Test",

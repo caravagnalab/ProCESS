@@ -40,7 +40,7 @@
 
 #include "genomic_data_storage.hpp"
 
-#define ZENODO_ID "15656740"
+#define ZENODO_ID "15875185"
 
 
 using SIDSpec = RACES::Mutations::MutationSpec<RACES::Mutations::SID>;
@@ -81,9 +81,9 @@ std::map<std::string, MutationEngineSetup> supported_setups{
       "https://ftp.ensembl.org/pub/grch37/release-111/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.chromosome.22.fa.gz",
       "https://zenodo.org/records/" ZENODO_ID "/files/SBS_demo_signatures.txt",
       "https://zenodo.org/records/" ZENODO_ID "/files/indel_demo_signatures.txt",
-      "https://zenodo.org/records/" ZENODO_ID "/files/driver_mutations_hg19.csv",
-      "https://zenodo.org/records/" ZENODO_ID "/files/passenger_CNAs_hg19.csv",
-      "https://zenodo.org/records/" ZENODO_ID "/files/germline_data_demo.tar.gz"
+      "https://zenodo.org/records/" ZENODO_ID "/files/driver_mutations_hg19.csv.bz2",
+      "https://zenodo.org/records/" ZENODO_ID "/files/passenger_CNAs_hg19.csv.bz2",
+      "https://zenodo.org/records/" ZENODO_ID "/files/germline_data_demo.tar.bz2"
     }
   },
   {
@@ -93,9 +93,9 @@ std::map<std::string, MutationEngineSetup> supported_setups{
       "https://ftp.ensembl.org/pub/release-112/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz",
       "https://cancer.sanger.ac.uk/signatures/documents/2124/COSMIC_v3.4_SBS_GRCh38.txt",
       "https://cancer.sanger.ac.uk/signatures/documents/2121/COSMIC_v3.4_ID_GRCh37.txt",
-      "https://zenodo.org/records/" ZENODO_ID "/files/driver_mutations_hg38.csv",
-      "https://zenodo.org/records/" ZENODO_ID "/files/passenger_CNAs_hg38.csv",
-      "https://zenodo.org/records/" ZENODO_ID "/files/germline_data_hg38.tar.gz"
+      "https://zenodo.org/records/" ZENODO_ID "/files/driver_mutations_hg38.csv.bz2",
+      "https://zenodo.org/records/" ZENODO_ID "/files/passenger_CNAs_hg38.csv.bz2",
+      "https://zenodo.org/records/" ZENODO_ID "/files/germline_data_hg38.tar.bz2"
     }
   },
   {
@@ -105,9 +105,9 @@ std::map<std::string, MutationEngineSetup> supported_setups{
       "https://ftp.ensembl.org/pub/grch37/release-111/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.primary_assembly.fa.gz",
       "https://cancer.sanger.ac.uk/signatures/documents/2123/COSMIC_v3.4_SBS_GRCh37.txt",
       "https://cancer.sanger.ac.uk/signatures/documents/2121/COSMIC_v3.4_ID_GRCh37.txt",
-      "https://zenodo.org/records/" ZENODO_ID "/files/driver_mutations_hg19.csv",
-      "https://zenodo.org/records/" ZENODO_ID "/files/passenger_CNAs_hg19.csv",
-      "https://zenodo.org/records/" ZENODO_ID "/files/germline_data_hg19.tar.gz"
+      "https://zenodo.org/records/" ZENODO_ID "/files/driver_mutations_hg19.csv.bz2",
+      "https://zenodo.org/records/" ZENODO_ID "/files/passenger_CNAs_hg19.csv.bz2",
+      "https://zenodo.org/records/" ZENODO_ID "/files/germline_data_hg19.tar.bz2"
     }
   }
 };
@@ -406,8 +406,8 @@ RACES::Mutations::GenomicRegion get_CNA_region(const RACES::IO::CSVReader::CSVRo
   try {
     chr_id = GenomicPosition::stochr(row.get_field(0));
   } catch (std::invalid_argument const&) {
-    throw std::domain_error("Unknown chromosome specification " + row.get_field(1)
-                            + " in row number " + std::to_string(row_num)
+    throw std::domain_error("Unknown chromosome specification \"" + row.get_field(0)
+                            + "\" in row number " + std::to_string(row_num)
                             + ".");
   }
 
@@ -441,8 +441,7 @@ RACES::Mutations::GenomicRegion get_CNA_region(const RACES::IO::CSVReader::CSVRo
 
 
 std::vector<RACES::Mutations::CNA> load_passenger_CNAs(const std::filesystem::path& CNAs_csv,
-                                                       const std::string& tumour_type,
-                                                       const std::string& tumour_study)
+                                                       const std::string& tumour_type)
 {
   std::set<RACES::Mutations::CNA> CNAs;
 
@@ -450,11 +449,10 @@ std::vector<RACES::Mutations::CNA> load_passenger_CNAs(const std::filesystem::pa
 
   size_t row_num{2};
   for (const auto& row : csv_reader) {
-    if (row.size()<7) {
-      throw std::runtime_error("The CNA CSV must contains at least 7 columns");
+    if (row.size()<6) {
+      throw std::runtime_error("The CNA CSV must contains at least 6 columns");
     }
-    if (((tumour_type=="") || (row.get_field(5) == tumour_type))
-        && ((tumour_study=="") || (row.get_field(6) == tumour_study))) {
+    if ((tumour_type=="") || (row.get_field(5) == tumour_type)) {
       const auto region = get_CNA_region(row, row_num);
 
       const auto major = row.get_field(3);
@@ -512,7 +510,6 @@ MutationEngine::MutationEngine(const std::shared_ptr<Account>& COSMIC_account,
                                const size_t& max_repetition_storage,
                                const size_t& driver_CNA_min_distance,
                                const std::string& tumour_type,
-                               const std::string& tumor_study,
                                const bool& avoid_homozygous_losses,
                                const bool& quiet):
   storage(setup_storage(setup_name, directory, reference_source,
@@ -523,7 +520,7 @@ MutationEngine::MutationEngine(const std::shared_ptr<Account>& COSMIC_account,
   max_motif_size(max_motif_size),
   max_repetition_storage(max_repetition_storage),
   driver_CNA_min_distance(driver_CNA_min_distance),
-  tumour_type(tumour_type), tumor_study(tumor_study),
+  tumour_type(tumour_type),
   avoid_homozygous_losses(avoid_homozygous_losses)
 {
   init_mutation_engine(quiet);
@@ -543,7 +540,6 @@ MutationEngine::MutationEngine(const std::shared_ptr<Account>& COSMIC_account,
                                const size_t& max_repetition_storage,
                                const size_t& driver_CNA_min_distance,
                                const std::string& tumour_type,
-                               const std::string& tumor_study,
                                const bool& avoid_homozygous_losses,
                                const bool& quiet):
   storage(setup_storage(directory, reference_source,
@@ -554,7 +550,7 @@ MutationEngine::MutationEngine(const std::shared_ptr<Account>& COSMIC_account,
   max_motif_size(max_motif_size),
   max_repetition_storage(max_repetition_storage),
   driver_CNA_min_distance(driver_CNA_min_distance),
-  tumour_type(tumour_type), tumor_study(tumor_study),
+  tumour_type(tumour_type),
   avoid_homozygous_losses(avoid_homozygous_losses)
 {
   init_mutation_engine(quiet);
@@ -672,7 +668,6 @@ MutationEngine::build_MutationEngine(const std::string& directory,
                                      const size_t& max_repetition_storage,
                                      const size_t& driver_CNA_min_distance,
                                      const std::string& tumour_type,
-                                     const std::string& tumor_study,
                                      const bool avoid_homozygous_losses,
                                      const bool quiet)
 {
@@ -684,7 +679,7 @@ MutationEngine::build_MutationEngine(const std::string& directory,
                           indel_signatures_source, drivers_source, passenger_CNAs_source,
                           germline_source,  germline_subject, context_sampling,
                           max_motif_size, max_repetition_storage, driver_CNA_min_distance,
-                          tumour_type, tumor_study, avoid_homozygous_losses, quiet);
+                          tumour_type, avoid_homozygous_losses, quiet);
   }
 
   if (directory=="" || reference_source=="" || SBS_signatures_source==""
@@ -701,7 +696,7 @@ MutationEngine::build_MutationEngine(const std::string& directory,
                         indel_signatures_source, drivers_source,
                         passenger_CNAs_source, germline_source, germline_subject,
                         context_sampling, max_motif_size, max_repetition_storage,
-                        driver_CNA_min_distance, tumour_type, tumor_study,
+                        driver_CNA_min_distance, tumour_type,
                         avoid_homozygous_losses, quiet);
 
 }
@@ -712,30 +707,29 @@ Rcpp::List MutationEngine::get_available_tumour_type(const std::string& setup_co
 
     auto storage = setup_storage(setup_code);
 
-    std::set<std::pair<std::string, std::string>> CNA_type_study;
+    std::set<std::string> CNA_types;
 
     RACES::IO::CSVReader csv_reader(storage.get_passenger_CNAs_path(), true, '\t');
     for (const auto& row : csv_reader) {
-        if (row.size()<7) {
-            throw std::runtime_error("The CNA CSV must contains at least 7 columns");
+        if (row.size()<6) {
+            throw std::runtime_error("The CNA CSV must contains at least 6 columns");
         }
 
-        CNA_type_study.insert({row.get_field(5), row.get_field(6)});
+        CNA_types.insert(row.get_field(5));
     }
 
     using namespace Rcpp;
 
-    StringVector types(CNA_type_study.size()), studies(CNA_type_study.size());
+    StringVector types(CNA_types.size()), studies(CNA_types.size());
 
     size_t i{0};
-    for (const auto& [type, study] : CNA_type_study) {
+    for (const auto& type : CNA_types) {
         types[i] = type;
-        studies[i] = study;
 
         ++i;
     }
 
-    return DataFrame::create(_["type"]=types, _["study"]=studies);
+    return DataFrame::create(_["type"]=types);
 }
 
 
@@ -1457,7 +1451,7 @@ void MutationEngine::reset(const bool full, const bool quiet)
   auto indel_signatures = load_signature<IDType>(storage);
 
   auto passenger_CNAs = load_passenger_CNAs(storage.get_passenger_CNAs_path(),
-                                            tumour_type, tumor_study);
+                                            tumour_type);
 
   auto driver_storage = DriverStorage::load(storage.get_driver_mutations_path());
 

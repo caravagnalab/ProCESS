@@ -434,10 +434,48 @@ std::filesystem::path GenomicDataStorage::get_destination_path(const std::string
   }
 }
 
-std::map<std::string, std::string> decompressors{
-  {"gz", "gunzip"},
-  {"bz2", "bunzip2"}
-};
+std::string get_file_extension(const std::string& filename) {
+    const size_t dotPos = filename.find_last_of('.');
+    if (dotPos != std::string::npos) {
+        return filename.substr(dotPos+1);
+    }
+
+    return "";
+}
+
+void setup_downloaded_file(const std::string& downloaded_filename,
+                           const std::string destination,
+                           const std::string& description="")
+{  
+  const std::map<std::string, std::string> decompressors{
+    {"gz", "gunzip"},
+    {"bz2", "bunzip2"}
+  };
+
+  const auto ext = get_file_extension(downloaded_filename);
+
+  const auto decomp_it = decompressors.find(ext);
+  if (decomp_it != decompressors.end()) {
+    using namespace Rcpp;
+
+    Environment pkg = Environment::namespace_env("R.utils");
+    Function decompressFile = pkg[decomp_it->second];
+
+    Rcout << "Decompressing " << description << "..." << std::flush;
+    decompressFile(_["filename"] = downloaded_filename,
+                   _["destname"] = destination);
+    Rcout << "done" << std::endl << std::flush;
+  } else {
+    std::filesystem::rename(downloaded_filename, destination);
+  }
+}
+
+inline void setup_downloaded_file(const std::string& downloaded_filename,
+                                  const std::filesystem::path& destination,
+                                  const std::string& description="")
+{
+  setup_downloaded_file(downloaded_filename, to_string(destination), description);
+}
 
 std::filesystem::path GenomicDataStorage::retrieve_reference() const
 {
@@ -456,30 +494,12 @@ std::filesystem::path GenomicDataStorage::retrieve_reference() const
 
   Rcout << "Downloading reference genome..." << std::endl << std::flush;
 
-  auto downloaded_file = to_string(download_file(reference_src));
+  const auto downloaded_file = to_string(download_file(reference_src));
 
   Rcout << "Reference genome downloaded" << std::endl;
 
-  auto suffix = downloaded_file.substr(downloaded_file.find_last_of('.')+1);
-
-  if (suffix == "fa" && suffix == "fasta") {
-    std::filesystem::rename(downloaded_file, reference_filename);
-  } else {
-    Rcout << "Decompressing reference file...";
-    auto decomp_found = decompressors.find(suffix);
-
-    if (decomp_found == decompressors.end()) {
-      throw std::runtime_error("Unknown suffix \""+suffix+"\"");
-    }
-
-    Environment pkg = Environment::namespace_env("R.utils");
-    Function decompress_f = pkg[decomp_found->second];
-
-    decompress_f(_["filename"] = downloaded_file,
-                 _["destname"] = to_string(reference_filename));
-
-    Rcout << "done" << std::endl;
-  }
+  setup_downloaded_file(downloaded_file, reference_filename, 
+                        "reference genome");
 
   return reference_filename;
 }
@@ -505,9 +525,12 @@ void GenomicDataStorage::retrieve_drivers() const
 
   Rcout << "Downloading driver mutation file..." << std::endl << std::flush;
 
-  ::download_file(drivers_src, mutations_filename);
+  const auto downloaded_file = to_string(download_file(drivers_src));
 
   Rcout << "Driver mutation file downloaded" << std::endl;
+
+  setup_downloaded_file(downloaded_file, mutations_filename,
+                        "driver mutation file");
 }
 
 void GenomicDataStorage::retrieve_passenger_CNAs() const
@@ -532,9 +555,12 @@ void GenomicDataStorage::retrieve_passenger_CNAs() const
 
   Rcout << "Downloading passenger CNAs file..." << std::endl << std::flush;
 
-  ::download_file(passenger_CNAs_src, passenger_CNAs_filename);
+  const auto downloaded_file = to_string(download_file(passenger_CNAs_src));
 
   Rcout << "Passenger CNAs file downloaded" << std::endl;
+
+  setup_downloaded_file(downloaded_file, passenger_CNAs_filename,
+                        "passenger CNAs file");
 }
 
 void GenomicDataStorage::retrieve_germline() const
@@ -557,15 +583,20 @@ void GenomicDataStorage::retrieve_germline() const
 
   using namespace Rcpp;
 
-  Rcout << "Downloading germline mutations..." << std::endl << std::flush;
+  Rcout << "Downloading germline..." << std::endl << std::flush;
 
   auto downloaded_file = download_file(germline_src);
 
-  Rcout << "Germline mutations downloaded" << std::endl;
+  Rcout << "Germline downloaded" << std::endl;
 
   Function untar("untar");
+
+  Rcout << "Decompressing mutations..." << std::endl << std::flush;
   untar(_["tarfile"] = to_string(downloaded_file),
         _["exdir"] = to_string(directory));
+  Rcout << "done" << std::endl;
+
+  std::filesystem::remove(downloaded_file);
 }
 
 std::filesystem::path GenomicDataStorage::get_reference_path() const

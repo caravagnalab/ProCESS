@@ -176,7 +176,7 @@ m_engine$add_mutant("B", passenger_rates = c(SNV = 1e-9, indel = 2e-9,
 
 m_engine$add_mutant("C", passenger_rates = list(SNV = 2e-8, indel = 2e-9),
                     drivers = list(SNV("22", 32786322, "G"),
-                                   list("NF2 R221*", allele = 1)))
+                                   list("DGCR8 P26L", allele = 1)))
 
 m_engine$add_mutant("D", passenger_rates = list(SNV = 2e-9, indel = 2e-9),
                     drivers = list(SNV("22", 51240420, "T")))

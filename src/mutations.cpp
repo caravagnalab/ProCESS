@@ -468,16 +468,17 @@ RCPP_MODULE(Mutations){
 //' # create a demonstrative mutation engine
 //' m_engine <- MutationEngine(setup_code = "demo")
 //'
-//' # add the mutant "A" characterized by two driver SNV on chromosome 22, an
-//' # indel on the same chromosome, a whole genome doubling event, and finally
+//' # add the mutant "A" characterized by two driver SNV on chromosome 22, two
+//' # indels on the same chromosome, a whole genome doubling event, and finally
 //' # two CNAs: an amplification and a deletion. The mutant has two epigenetic
 //' # states and its species "A+" and "A-" have passenger SNV rates 1e-9 and
 //' # 3e-8, respectively, and passenger CNA rates 0 and 1e-11, respectively.
 //' m_engine$add_mutant("A", list("+" = c(SNV = 1e-9, indel = 1e-10),
 //'                               "-" = c(SNV = 3e-8, CNA = 1e-11)),
-//'                     drivers = list("NF2 R221*",
+//'                     drivers = list("DGCR8 P26L",
 //'                                    Mutation("22", 16085675, "GCCTCCCGA",
 //'                                             "G"),
+//'                                    "EP300 S2346del",
 //'                                    WGD,
 //'                                    CNA(type = "A", chr = "22",
 //'                                        chr_pos = 10303470,
@@ -737,7 +738,7 @@ RCPP_MODULE(Mutations){
 //'   columns ("`ref`", "`alt`", and "`mutation_type`")
 //'   describe the reference sequence, the altered sequence,
 //'   and the type of the mutation. The last four columns
-//'   ("`driver_gene`", "`driver_code`", "`driver_CDS`", and 
+//'   ("`driver_gene`", "`driver_code`", "`driver_CDS`", and
 //'   "`tumour_type`") detail the affected gene, the driver
 //'   code, which can be used to specify the mutation when
 //'   adding a mutant to the mutation engine, the variant code,
@@ -833,10 +834,6 @@ RCPP_MODULE(Mutations){
 //'   the admissible passenger CNAs. If any passenger CNA in the dataset is
 //'   admissible, use the the empty string `""` (optional: default value is
 //'   `""`).
-//' @param tumour_study The nationality code of the tumour study. This is
-//'   used to select the admissible passenger CNAs. If any tumor study in
-//'   the dataset is admissible, use the the empty string `""` (optional:
-//'   default value is `""`).
 //' @param avoid_homozygous_losses An optional Boolean flag to avoid
 //'   homozygous losses. When set to `TRUE`, passenger CNAs will be
 //'   exclusively applied to regions covered by two alleles at least.
@@ -853,16 +850,16 @@ RCPP_MODULE(Mutations){
 //' reference_url <- paste0("https://ftp.ensembl.org/pub/grch37/release-111/",
 //'                         "fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.",
 //'                         "dna.chromosome.22.fa.gz")
-//' sbs_url <- paste0("https://zenodo.org/records/15656740/files/",
+//' sbs_url <- paste0("https://zenodo.org/records/15875185/files/",
 //'                   "SBS_demo_signatures.txt")
-//' indel_url <- paste0("https://zenodo.org/records/15656740/files/",
+//' indel_url <- paste0("https://zenodo.org/records/15875185/files/",
 //'                     "indel_demo_signatures.txt")
-//' drivers_url <- paste0("https://zenodo.org/records/15656740/files/",
-//'                       "driver_mutations_hg19.csv")
-//' passenger_CNAs_url <- paste0("https://zenodo.org/records/15656740/",
-//'                              "files/passenger_CNAs_hg19.csv")
-//' germline_url <- paste0("https://zenodo.org/records/13166780/files/",
-//'                        "germline_data_demo.tar.gz")
+//' drivers_url <- paste0("https://zenodo.org/records/15875185/files/",
+//'                       "driver_mutations_hg19.csv.bz2")
+//' passenger_CNAs_url <- paste0("https://zenodo.org/records/15875185/",
+//'                              "files/passenger_CNAs_hg19.csv.bz2")
+//' germline_url <- paste0("https://zenodo.org/records/15875185/files/",
+//'                        "germline_data_demo.tar.bz2")
 //'
 //' # build a mutation engine and save the required files into the
 //' # directory "Test". The `drivers_url` parameter is optional, but
@@ -945,28 +942,27 @@ RCPP_MODULE(Mutations){
                         _["max_motif_size"] = 50,
                         _["max_repetition_storage"] = 500000,
                         _["driver_CNA_min_distance"] = 10000,
-                        _["tumour_type"] = "", _["tumour_study"] = "",
+                        _["tumour_type"] = "",
                         _["avoid_homozygous_losses"] = true,
                         _["quiet"] = false),
            "Create a MutationEngine");
 
 //' @name get_available_tumours_in
-//' @title Getting the tumour types and studies available in a setup
-//' @description This method returns the tumour types and studies available
-//'   for a set-up code.
-//' @param setup_code The set-up code whose available tumour types and studies
-//'   are requested.
-//' @return A data frame reporting the types and the studies available for a
+//' @title Getting the tumour types available in a setup
+//' @description This method returns the tumour types available for a
 //'   set-up code.
+//' @param setup_code The set-up code whose available tumour types are
+//'   requested.
+//' @return A data frame reporting the types available for a set-up code.
 //' @seealso [MutationEngine()] to build a mutation engine
 //' @export
 //' @examples
-//' # get the types and studies available for the "demo" set-up code
+//' # get the types available for the "demo" set-up code
 //' get_available_tumours_in("demo")
   function("get_available_tumours_in",
            &MutationEngine::get_available_tumour_type,
            List::create(_["setup_code"]),
-           "Get the set of tumour types and studies for a set-up code.");
+           "Get the set of tumour types for a set-up code.");
 
 //' @name get_mutation_engine_codes
 //' @title Getting the supported setups
