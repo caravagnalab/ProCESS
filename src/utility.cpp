@@ -116,7 +116,7 @@ get_allele_id(const SEXP allele_id, const std::string& parameter_name)
             break;
     }
 
-    throw std::domain_error("The parameter \"" + parameter_name
+    Rcpp::stop("The parameter \"" + parameter_name
                             + "\" must be either a "
                             + "non-negative number or NILL.");
 }

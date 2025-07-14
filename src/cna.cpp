@@ -108,16 +108,14 @@ CNA CNA::build_CNA(const std::string type, const SEXP chromosome, const SEXP pos
 
     auto pos = Rcpp::as<long int>(pos_in_chr);
     if (pos < 0) {
-        throw std::domain_error("Position in chromosome must be a "
-                                "non-negative number");
+        Rcpp::stop("Positions in chromosome must be non-negative numbers.");
     }
 
     GenomicPosition gen_pos(chr_id, pos);
 
     auto len = Rcpp::as<long int>(length);
     if (len < 0) {
-        throw std::domain_error("Region lengths must be "
-                                "non-negative numbers");
+        Rcpp::stop("Region lengths must be non-negative numbers.");
     }
 
     AlleleId allele_id = get_allele_id(allele, "allele");
@@ -132,7 +130,7 @@ CNA CNA::build_CNA(const std::string type, const SEXP chromosome, const SEXP pos
         return CNA(gen_pos, len, allele_id, src_allele_id);
     }
 
-    throw std::domain_error("Unknown CNA type \"" + type
-                            + "\". Supported types are \"A\" and \"D\" for "
-                            + "amplification and deletion, respectively");
+    Rcpp::stop("Unknown CNA type \"" + type
+              + "\". Supported types are \"A\" and \"D\" for "
+              + "amplification and deletion, respectively");
 }

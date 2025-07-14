@@ -84,19 +84,19 @@ BasicIlluminaSequencer::build_sequencer(const SEXP error_rate,
     using namespace Rcpp;
 
     if (TYPEOF(error_rate) != INTSXP && TYPEOF(error_rate) != REALSXP) {
-        throw std::domain_error("The parameter \"error_rate\""
+        Rcpp::stop("The parameter \"error_rate\""
                                 " must be a positive real number.");
     }
 
     const auto c_error_rate = as<double>(error_rate);
 
     if (c_error_rate<0) {
-        throw std::domain_error("The parameter \"error_rate\""
+        Rcpp::stop("The parameter \"error_rate\""
                                 " must be a positive real number.");
     }
 
     if (TYPEOF(random_quality_scores) != LGLSXP) {
-        throw std::domain_error("The parameter \"random_quality_scores\""
+        Rcpp::stop("The parameter \"random_quality_scores\""
                                 " must be a Boolean value.");
     }
 

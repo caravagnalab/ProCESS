@@ -69,32 +69,32 @@ GermlineStorage::GermlineStorage(const std::filesystem::path& directory):
   directory(directory)
 {
   if (!std::filesystem::exists(directory)) {
-    throw std::runtime_error("Designed germline mutations directory \""
+    Rcpp::stop("Designed germline mutations directory \""
                              + to_string(directory) + "\" does not exist.");
   }
   if (!std::filesystem::is_directory(directory)) {
-    throw std::runtime_error("Designed germline mutations directory \""
+    Rcpp::stop("Designed germline mutations directory \""
                              + to_string(directory) + "\" is not a "
                              + "directory.");
   }
   if (!std::filesystem::exists(get_file())) {
-    throw std::runtime_error("Designed germline mutations directory \""
+    Rcpp::stop("Designed germline mutations directory \""
                              + to_string(directory) + "\" does not "
                              + "contains the file \"germline.csv\".");
   }
   if (!std::filesystem::exists(get_population_file())) {
-    throw std::runtime_error("Designed germline mutations directory \""
+    Rcpp::stop("Designed germline mutations directory \""
                              + to_string(directory) + "\" does not "
                              + "contains the file \"population.csv\".");
   }
   if (!std::filesystem::exists(get_population_descriptions_file())) {
-    throw std::runtime_error("Designed germline mutations directory \""
+    Rcpp::stop("Designed germline mutations directory \""
                              + to_string(directory) + "\" does not "
                              + "contains the file \"population_descr"
                              + "iptions.csv\".");
   }
   if (!std::filesystem::exists(get_alleles_file())) {
-    throw std::runtime_error("Designed germline mutations directory \""
+    Rcpp::stop("Designed germline mutations directory \""
                              + to_string(directory) + "\" does not "
                              + "contains the file \"alleles_per_chr."
                              + "csv\".");
@@ -148,7 +148,7 @@ GermlineStorage::get_alleles_per_chromosome(const std::string& gender) const
   auto found = find(header.begin(), header.end(), gender);
 
   if (found == header.end()) {
-    throw std::runtime_error("Unknown gender " + gender + ".");
+    Rcpp::stop("Unknown gender " + gender + ".");
   }
 
   size_t index = found-header.begin();
@@ -172,7 +172,7 @@ GermlineSubject GermlineStorage::get_subject(const std::string& subject_name) co
     }
   }
 
-  throw std::runtime_error("Germline subject \"" + subject_name
+  Rcpp::stop("Germline subject \"" + subject_name
                            + "\" not available.");
 }
 
@@ -430,7 +430,7 @@ std::filesystem::path GenomicDataStorage::get_destination_path(const std::string
     return get_directory()/filename;
 
   } catch (std::exception& e) {
-    throw std::domain_error("\""+url+"\" is not a valid URL.");
+    Rcpp::stop("\""+url+"\" is not a valid URL.");
   }
 }
 
@@ -480,7 +480,7 @@ inline void setup_downloaded_file(const std::string& downloaded_filename,
 std::filesystem::path GenomicDataStorage::retrieve_reference() const
 {
   if (!is_an_URL(reference_src) && !std::filesystem::exists(reference_src)) {
-    throw std::runtime_error("Designed reference genome file \""
+    Rcpp::stop("Designed reference genome file \""
                         + reference_src + "\" does not exists.");
   }
 
@@ -511,7 +511,7 @@ void GenomicDataStorage::retrieve_drivers() const
   }
 
   if (!is_an_URL(drivers_src) && !std::filesystem::exists(drivers_src)) {
-    throw std::runtime_error("Designed driver mutations file \""
+    Rcpp::stop("Designed driver mutations file \""
                              + drivers_src + "\" does not exists.");
   }
 
@@ -540,7 +540,7 @@ void GenomicDataStorage::retrieve_passenger_CNAs() const
   }
 
   if (!is_an_URL(passenger_CNAs_src)) {
-    throw std::runtime_error("Designed passenger CNAs file \""
+    Rcpp::stop("Designed passenger CNAs file \""
                              + passenger_CNAs_src
                              + "\" does not exists.");
   }
@@ -570,7 +570,7 @@ void GenomicDataStorage::retrieve_germline() const
   }
 
   if (!is_an_URL(germline_src)) {
-    throw std::runtime_error("Designed germline directory \""
+    Rcpp::stop("Designed germline directory \""
                              + germline_src
                              + "\" does not exists.");
   }

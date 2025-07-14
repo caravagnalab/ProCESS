@@ -59,7 +59,7 @@ RESULT_TYPE get_random_seed(const SEXP seed)
             break;
     }
 
-    throw std::domain_error("The seed must be either a "
+    Rcpp::stop("The seed must be either a "
                             "number or NILL.");
 }
 

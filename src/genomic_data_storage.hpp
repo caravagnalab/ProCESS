@@ -211,7 +211,7 @@ class GenomicDataStorage
     }
 
     if (!is_an_URL(source)) {
-      throw std::runtime_error("Signature file \"" + to_string(source)
+      Rcpp::stop("Signature file \"" + to_string(source)
                                + "\" does not exists.");
     }
 
@@ -280,7 +280,7 @@ public:
       return indel_signatures_src;
     }
 
-    throw std::runtime_error("Unsupported mutation type.");
+    Rcpp::stop("Unsupported mutation type.");
   }
 
   template<typename MUTATION_TYPE,
@@ -295,7 +295,7 @@ public:
       return get_directory()/"indel_signatures.txt";
     }
 
-    throw std::runtime_error("Unsupported mutation type.");
+    Rcpp::stop("Unsupported mutation type.");
   }
 
   std::filesystem::path get_driver_mutations_path() const;

@@ -100,7 +100,7 @@ void add_sample_statistics(Rcpp::DataFrame& df,
   size_t num_of_mutations = mutations.size();
 
   if (num_of_mutations != static_cast<size_t>(df.nrows())) {
-    throw std::runtime_error("SeqSimResults are not canonical!!!");
+    Rcpp::stop("SeqSimResults are not canonical!!!");
   }
 
   using namespace Rcpp;
@@ -238,7 +238,7 @@ apply_FACS_labels(std::list<RACES::Mutations::SampleGenomeMutations>& sample_mut
             break;
         }
         default:
-            throw std::domain_error("The FACs_labelling_function must be a function.");
+            Rcpp::stop("The FACs_labelling_function must be a function.");
     }
 }
 
@@ -251,7 +251,7 @@ get_reference_genome(const PhylogeneticForest& forest,
         {
             const auto ref_genome = forest.get_reference_path();
             if (!std::filesystem::exists(ref_genome)) {
-                throw std::runtime_error("The reference genome file \""
+                Rcpp::stop("The reference genome file \""
                                          + to_string(ref_genome)
                                          + "\" does not exists anymore. "
                                          + "Please, re-build the mutation "
@@ -266,7 +266,7 @@ get_reference_genome(const PhylogeneticForest& forest,
             const auto ref_genome = Rcpp::as<std::string>(reference_genome);
 
             if (!std::filesystem::exists(ref_genome)) {
-                throw std::runtime_error("The reference genome file \""
+                Rcpp::stop("The reference genome file \""
                                         + to_string(ref_genome)
                                         + "\" does not exists.");
             }
@@ -274,7 +274,7 @@ get_reference_genome(const PhylogeneticForest& forest,
             return ref_genome;
         }
         default:
-            throw std::domain_error("The parameter \"reference_genome\" must be "
+            Rcpp::stop("The parameter \"reference_genome\" must be "
                                     "either NULL or a string.");
     }
 }
@@ -328,7 +328,7 @@ get_relevant_chr_set(std::list<RACES::Mutations::SampleGenomeMutations> mutation
         for (const auto& chr_name : chr_names) {
             ++i;
             if (TYPEOF(chr_name) != STRSXP) {
-                throw std::domain_error("Expected a list of string: the "
+                Rcpp::stop("Expected a list of string: the "
                                         + ordtostr(i)
                                         + " element of the list is not "
                                         + "a string.");
@@ -336,7 +336,7 @@ get_relevant_chr_set(std::list<RACES::Mutations::SampleGenomeMutations> mutation
 
             Rcpp::CharacterVector name{chr_name};
             if (name.length()>1) {
-                throw std::domain_error("Expected a list of string: the "
+                Rcpp::stop("Expected a list of string: the "
                                         + ordtostr(i)
                                         + " element of the list is not "
                                         + "a string.");
@@ -347,7 +347,7 @@ get_relevant_chr_set(std::list<RACES::Mutations::SampleGenomeMutations> mutation
         return chr_ids;
     }
     default:
-        throw std::domain_error("Unsupported chromosome list type");
+        Rcpp::stop("Unsupported chromosome list type");
   }
 }
 
@@ -414,7 +414,7 @@ simulate_seq(RACES::Mutations::SequencingSimulations::ReadSimulator<>& simulator
                          purity, base_name, progress_bar_stream);
       }
 
-      throw std::domain_error("Unsupported sequencer type");
+      Rcpp::stop("Unsupported sequencer type");
     }
     case NILSXP:
     {
@@ -424,7 +424,7 @@ simulate_seq(RACES::Mutations::SequencingSimulations::ReadSimulator<>& simulator
                          purity, base_name, progress_bar_stream);
     }
     default:
-        throw std::domain_error("Unsupported sequencer type");
+        Rcpp::stop("Unsupported sequencer type");
   }
 }
 
@@ -434,7 +434,7 @@ std::binomial_distribution<uint32_t> get_bin_dist(const int& insert_size_mean,
     double q = static_cast<double>(insert_size_stddev*insert_size_stddev)/insert_size_mean;
     double p = 1-q;
     if (p<0) {
-        throw std::runtime_error("The insert size mean ("
+        Rcpp::stop("The insert size mean ("
                                  + std::to_string(insert_size_mean) + ") must"
                                  + " be greater than or equal to its variance ("
                                  + std::to_string(insert_size_stddev) + "*"
@@ -471,7 +471,7 @@ Rcpp::List extract_sequencer_data(SEXP& sequencer, const std::string& seq_class_
                         _["error_rate"] = rel_ptr->get_error_rate());
   }
 
-  throw std::domain_error("Unsupported sequencer type");
+  Rcpp::stop("Unsupported sequencer type");
 }
 
 Rcpp::List get_sequencer_data(SEXP& sequencer)
@@ -501,7 +501,7 @@ Rcpp::List get_sequencer_data(SEXP& sequencer)
 
         oss << "Unsupported sequencer class \"" << seq_class_name << "\"";
 
-        throw std::domain_error(oss.str());
+        Rcpp::stop(oss.str());
     }
     default:
     {
@@ -511,7 +511,7 @@ Rcpp::List get_sequencer_data(SEXP& sequencer)
     }
   }
 
-  throw std::domain_error("Unsupported sequencer type");
+  Rcpp::stop("Unsupported sequencer type");
 }
 
 Rcpp::List simulate_seq(const PhylogeneticForest& forest, SEXP& sequencer,

@@ -245,7 +245,7 @@ Rcpp::List PhylogeneticForest::get_driver_mutations() const
                                  starts, ends, alleles, src_alleles, codes, i);
                     break;
                 default:
-                    throw std::runtime_error("Unsupported mutation type "
+                    Rcpp::stop("Unsupported mutation type "
                                              + std::to_string(dm_it.get_type()));
             }
         }
@@ -283,7 +283,7 @@ Rcpp::List PhylogeneticForest::get_species_info() const
     const auto found = p_rates.find(m_name+epi_state);
 
     if (found == p_rates.end()) {
-        throw std::runtime_error("Unknown species \""+m_name+epi_state+"\"");
+        Rcpp::stop("Unknown species \""+m_name+epi_state+"\"");
     }
 
     mutant_names[i] = m_name;
@@ -513,7 +513,7 @@ Rcpp::List PhylogeneticForest::get_sampled_cell_SIDs(const RACES::Mutants::CellI
   auto mutation_it = get_leaves_mutations().find(cell_id);
 
   if (mutation_it == get_leaves_mutations().end()) {
-    throw std::domain_error("Cell \""+std::to_string(cell_id)+"\" is not a leaf");
+    Rcpp::stop("Cell \""+std::to_string(cell_id)+"\" is not a leaf");
   }
 
   return get_SID_dataframe(*(mutation_it->second));
@@ -571,7 +571,7 @@ Rcpp::List PhylogeneticForest::get_sampled_cell_CNAs(const RACES::Mutants::CellI
   auto mutation_it = get_leaves_mutations().find(cell_id);
 
   if (mutation_it == get_leaves_mutations().end()) {
-    throw std::domain_error("Cell \""+std::to_string(cell_id)+"\" is not a leaf");
+    Rcpp::stop("Cell \""+std::to_string(cell_id)+"\" is not a leaf");
   }
 
   const auto& cell_mutations = *(mutation_it->second);
@@ -619,7 +619,7 @@ Rcpp::List get_first_occurrence(const std::map<MUTATION_TYPE, std::set<RACES::Mu
       oss << "The mutation " << mutation << " does not occurs in the sampled cells.";
     }
 
-    throw std::domain_error(oss.str());
+    Rcpp::stop(oss.str());
   }
 
   const auto& cell_ids = first_cell_it->second;
@@ -796,7 +796,7 @@ PhylogeneticForest::get_cell_ids_in(const std::string& sample_name) const
         }
     }
 
-    throw std::domain_error("Unknown sample \"" + sample_name +"\".");
+    Rcpp::stop("Unknown sample \"" + sample_name +"\".");
 }
 
 Rcpp::List
@@ -965,7 +965,7 @@ PhylogeneticForest::get_cell_allelic_fragmentation() const
 void PhylogeneticForest::set_reference_path(const std::filesystem::path reference_path)
 {
   if (!std::filesystem::exists(reference_path)) {
-    throw std::runtime_error("The reference genome file \"" + to_string(reference_path)
+    Rcpp::stop("The reference genome file \"" + to_string(reference_path)
                              + "\" does not exists.");
   }
 
@@ -994,11 +994,11 @@ PhylogeneticForest PhylogeneticForest::load(const std::string& filename,
                                             const bool quiet)
 {
   if (!std::filesystem::exists(filename)) {
-    throw std::domain_error("The file \"" + filename + "\" does not exist.");
+    Rcpp::stop("The file \"" + filename + "\" does not exist.");
   }
 
   if (!std::filesystem::is_regular_file(filename)) {
-    throw std::domain_error("The file \"" + filename + "\" is not a regular file.");
+    Rcpp::stop("The file \"" + filename + "\" is not a regular file.");
   }
 
   RACES::Archive::Binary::In in_archive(filename);

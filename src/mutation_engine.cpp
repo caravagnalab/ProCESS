@@ -160,7 +160,7 @@ GenomicDataStorage setup_storage(const std::string& setup_code,
       oss << " - \""+s_code+"\": " << setting.description << std::endl;
     }
 
-    throw std::domain_error(oss.str());
+    Rcpp::stop(oss.str());
   }
 
   const auto code_directory = to_string(code_it->second.directory);
@@ -406,18 +406,18 @@ RACES::Mutations::GenomicRegion get_CNA_region(const RACES::IO::CSVReader::CSVRo
   try {
     chr_id = GenomicPosition::stochr(row.get_field(0));
   } catch (std::invalid_argument const&) {
-    throw std::domain_error("Unknown chromosome specification \"" + row.get_field(0)
-                            + "\" in row number " + std::to_string(row_num)
-                            + ".");
+    Rcpp::stop("Unknown chromosome specification \"" + row.get_field(0)
+                + "\" in row number " + std::to_string(row_num)
+                + ".");
   }
 
   uint32_t begin_pos;
   try {
     begin_pos = stoul(row.get_field(1));
   } catch (std::invalid_argument const&) {
-    throw std::domain_error("Unknown begin specification " + row.get_field(1)
-                            + " in row number " + std::to_string(row_num)
-                            + ".");
+    Rcpp::stop("Unknown begin specification " + row.get_field(1)
+                + " in row number " + std::to_string(row_num)
+                + ".");
   }
 
   GenomicPosition pos(chr_id, begin_pos);
@@ -426,14 +426,14 @@ RACES::Mutations::GenomicRegion get_CNA_region(const RACES::IO::CSVReader::CSVRo
   try {
     end_pos = stoul(row.get_field(2));
   } catch (std::invalid_argument const&) {
-    throw std::domain_error("Unknown end specification " + row.get_field(2)
-                            + " in row number " + std::to_string(row_num)
-                            + ".");
+    Rcpp::stop("Unknown end specification " + row.get_field(2)
+                + " in row number " + std::to_string(row_num)
+                + ".");
   }
 
   if (begin_pos>end_pos) {
-    throw std::domain_error("The CNA begin lays after the end in row number "
-                            + std::to_string(row_num));
+    Rcpp::stop("The CNA begin lays after the end in row number "
+                + std::to_string(row_num));
   }
 
   return {pos, end_pos+1-begin_pos};
@@ -450,7 +450,7 @@ std::vector<RACES::Mutations::CNA> load_passenger_CNAs(const std::filesystem::pa
   size_t row_num{2};
   for (const auto& row : csv_reader) {
     if (row.size()<6) {
-      throw std::runtime_error("The CNA CSV must contains at least 6 columns");
+      Rcpp::stop("The CNA CSV must contains at least 6 columns");
     }
     if ((tumour_type=="") || (row.get_field(5) == tumour_type)) {
       const auto region = get_CNA_region(row, row_num);
@@ -462,7 +462,7 @@ std::vector<RACES::Mutations::CNA> load_passenger_CNAs(const std::filesystem::pa
                        CNA::Type::AMPLIFICATION);
         }
       } catch (std::invalid_argument const&) {
-        throw std::domain_error("Unknown major specification " + major
+        Rcpp::stop("Unknown major specification " + major
                                 + " in row number " + std::to_string(row_num)
                                 + ".");
       }
@@ -474,7 +474,7 @@ std::vector<RACES::Mutations::CNA> load_passenger_CNAs(const std::filesystem::pa
                        CNA::Type::DELETION);
         }
       } catch (std::invalid_argument const&) {
-        throw std::domain_error("Unknown minor specification " + major
+        Rcpp::stop("Unknown minor specification " + major
                                 + " in row number " + std::to_string(row_num)
                                 + ".");
       }
@@ -571,7 +571,7 @@ struct TestNonNegative
     auto c_value = Rcpp::as<double>(value);
 
     if (c_value<0) {
-      throw std::runtime_error(std::to_string(c_value) + " should be non negative");
+      Rcpp::stop(std::to_string(c_value) + " should be non negative");
     }
   }
 };
@@ -685,7 +685,7 @@ MutationEngine::build_MutationEngine(const std::string& directory,
   if (directory=="" || reference_source=="" || SBS_signatures_source==""
       || indel_signatures_source== "" || passenger_CNAs_source== ""
       || germline_source== "") {
-    throw std::domain_error("when \"setup_code\" is NOT provided, the parameters "
+    Rcpp::stop("when \"setup_code\" is NOT provided, the parameters "
                             "\"directory\", \"reference_src\", \"SBS_signatures_src\", "
                             "\"indel_signatures_src\", \"passenger_CNAs_src\", and "
                             "\"germline_src\" are mandatory.");
@@ -712,7 +712,7 @@ Rcpp::List MutationEngine::get_available_tumour_type(const std::string& setup_co
     RACES::IO::CSVReader csv_reader(storage.get_passenger_CNAs_path(), true, '\t');
     for (const auto& row : csv_reader) {
         if (row.size()<6) {
-            throw std::runtime_error("The CNA CSV must contains at least 6 columns");
+            Rcpp::stop("The CNA CSV must contains at least 6 columns");
         }
 
         CNA_types.insert(row.get_field(5));
@@ -749,7 +749,7 @@ get_mutation_from_name(const RACES::Mutations::DriverStorage& driver_storage,
     const auto found = driver_code_map.find(mutation_code);
 
     if (found == driver_code_map.end()) {
-        throw std::domain_error("Unknown mutation code " + mutation_code + ".");
+        Rcpp::stop("Unknown mutation code " + mutation_code + ".");
     }
 
     if (tumour_type != "") {
@@ -772,13 +772,13 @@ get_mutation_spec_from_list(const RACES::Mutations::DriverStorage& driver_storag
 {
     const size_t spec_size = static_cast<size_t>(SID_spec.size());
     if (spec_size > 2 || spec_size == 0) {
-        throw std::domain_error("The " + ordtostr(index)
+        Rcpp::stop("The " + ordtostr(index)
                                 + " element in the driver mutation list"
                                 + " is not an mutation specification");
     }
 
     if (TYPEOF(SID_spec[0])!=STRSXP) {
-        throw std::domain_error("The " + ordtostr(index)
+        Rcpp::stop("The " + ordtostr(index)
                                 + " element in the driver mutation list"
                                 + " is not an mutation specification");
     }
@@ -788,7 +788,7 @@ get_mutation_spec_from_list(const RACES::Mutations::DriverStorage& driver_storag
     if (spec_size>1) {
         const auto SID_spec_type = TYPEOF(SID_spec[1]);
         if (SID_spec_type != REALSXP && SID_spec_type != INTSXP) {
-            throw std::domain_error("The " + ordtostr(index)
+            Rcpp::stop("The " + ordtostr(index)
                                 + " element in the driver mutation list"
                                 + " is not an mutation specification");
         }
@@ -919,7 +919,7 @@ get_mutation_spec(const std::string& mutant_name,
             break;
     }
 
-    throw std::domain_error("The " + ordtostr(index+1)
+    Rcpp::stop("The " + ordtostr(index+1)
                             + " element in the driver mutation list"
                             + " is not an mutation specification");
 }
@@ -958,13 +958,13 @@ double get_non_negative(const Rcpp::List& values,
                         const std::string& message=": expected non-negative value")
 {
   if (values.size()!=1) {
-    throw std::runtime_error("Expected one non-negative value. Got a list of "
+    Rcpp::stop("Expected one non-negative value. Got a list of "
                              + std::to_string(values.size()) + " values.");
   }
   auto c_value = Rcpp::as<double>(values[0]);
 
   if (c_value<0) {
-    throw std::runtime_error(std::to_string(c_value) + message);
+    Rcpp::stop(std::to_string(c_value) + message);
   }
 
   return c_value;
@@ -989,7 +989,7 @@ get_passenger_rates(const Rcpp::List& list)
   RACES::Mutations::PassengerRates p_rates;
 
   if (!list.hasAttribute("names")) {
-    throw std::runtime_error("Passenger rates list must be a named list whose names "
+    Rcpp::stop("Passenger rates list must be a named list whose names "
                              "are in the set {\"SNV\", \"indel\", \"CNA\"}.");
   }
 
@@ -1003,7 +1003,7 @@ get_passenger_rates(const Rcpp::List& list)
     } else if (names[i]=="indel") {
       p_rates.indel = get_non_negative(list[i], ": indel rates must be non-negative");
     } else {
-        throw std::runtime_error("\"" + names[i] + "\" is an unsupported name in "
+        Rcpp::stop("\"" + names[i] + "\" is an unsupported name in "
                                  + "passenger rates list.");
     }
   }
@@ -1017,7 +1017,7 @@ get_epistate_passenger_rates(const Rcpp::List& list)
   std::map<std::string, RACES::Mutations::PassengerRates> ep_rates;
 
   if (!list.hasAttribute("names")) {
-    throw std::runtime_error("Epistate passenger rates list must be a "
+    Rcpp::stop("Epistate passenger rates list must be a "
                              "named list whose names are epistates, "
                              "i.e., either \"+\" or \"-\".");
   }
@@ -1031,7 +1031,7 @@ get_epistate_passenger_rates(const Rcpp::List& list)
       if (names[i]=="-") {
         ep_rates["-"] = get_passenger_rates(list[i]);
       } else {
-        throw std::runtime_error("\"" + names[i] + "\" is an unsupported name in "
+        Rcpp::stop("\"" + names[i] + "\" is an unsupported name in "
                                  + "epistate passenger rate list.");
       }
     }
@@ -1058,7 +1058,7 @@ void error_if_chr_missing(const std::map<RACES::Mutations::ChromosomeId, std::li
       }
     }
 
-    throw std::runtime_error((counter>1?"SIDs ":"SID ")
+    Rcpp::stop((counter>1?"SIDs ":"SID ")
                             + oss.str()
                             + (counter>1?" belong":" belongs")
                             + (missing_chr.size()>1?" to unknown chromosomes":
@@ -1320,7 +1320,7 @@ show_driver_mutations(std::ostream& os,
                 os << indent << "Whole genome duplication" << std::endl;
                 break;
             default:
-                throw std::runtime_error("Unsupported driver mutation type.");
+                Rcpp::stop("Unsupported driver mutation type.");
         }
     }
 
@@ -1473,7 +1473,7 @@ void MutationEngine::reset(const bool full, const bool quiet)
     auto germline_subjects = germline_storage.get_population();
 
     if (germline_subjects.size() == 0) {
-      throw std::runtime_error("No germline subject available.");
+      Rcpp::stop("No germline subject available.");
     }
 
     germline_subject = germline_subjects[0].name;

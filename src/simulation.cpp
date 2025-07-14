@@ -105,7 +105,7 @@ void handle_unknown_event(const std::string& event)
 
   oss << ".";
 
-  throw std::domain_error(oss.str());
+  Rcpp::stop(oss.str());
 }
 
 std::set<RACES::Mutants::SpeciesId>
@@ -356,11 +356,11 @@ TissueSimulation TissueSimulation::load(const std::string& directory_name)
   simulation.name = directory_name;
 
   if (!std::filesystem::exists(directory_name)) {
-    throw std::domain_error("The directory \"" + directory_name + "\" does not exist.");
+    Rcpp::stop("The directory \"" + directory_name + "\" does not exist.");
   }
 
   if (!std::filesystem::is_directory(directory_name)) {
-    throw std::domain_error("\"" + directory_name + "\" is not a directory.");
+    Rcpp::stop("\"" + directory_name + "\" is not a directory.");
   }
 
   auto snapshot_path = BinaryLogger::find_last_snapshot_in(directory_name);
@@ -445,7 +445,7 @@ void TissueSimulation::init(const SEXP& sexp)
       oss << "Invalid type for the first parameter: "
           << type2name(sexp);
 
-      throw std::domain_error(oss.str());
+      Rcpp::stop(oss.str());
     }
   }
 }
@@ -499,7 +499,7 @@ TissueSimulation::TissueSimulation(const SEXP& first_param, const SEXP& second_p
         << ". If the last parameter is not a Boolean value (save on disk"
         << " parameter), it must be a string (the name of the simulation).";
 
-    throw std::domain_error(oss.str());
+    Rcpp::stop(oss.str());
   }
 
   if (TYPEOF(second_param) != INTSXP && TYPEOF(second_param) != REALSXP) {
@@ -510,7 +510,7 @@ TissueSimulation::TissueSimulation(const SEXP& first_param, const SEXP& second_p
         << ". If the last parameter is not a Boolean value (save on disk"
         << " parameter), it must be an integer value (the random seed).";
 
-    throw std::domain_error(oss.str());
+    Rcpp::stop(oss.str());
   }
 
   name = as<std::string>(first_param);
@@ -549,7 +549,7 @@ std::string get_string(const SEXP& parameter, const std::string parameter_name)
   using namespace Rcpp;
 
   if (TYPEOF(parameter) != STRSXP) {
-    throw std::domain_error("The parameter \"" + parameter_name
+    Rcpp::stop("The parameter \"" + parameter_name
                             + "\" must be a string.");
   }
 
@@ -561,7 +561,7 @@ bool get_bool(const SEXP& parameter, const std::string parameter_name)
   using namespace Rcpp;
 
   if (TYPEOF(parameter) != LGLSXP) {
-    throw std::domain_error("The parameter \"" + parameter_name
+    Rcpp::stop("The parameter \"" + parameter_name
                            + "\" must be a Boolean value.");
   }
 
@@ -573,14 +573,14 @@ size_t get_size(const SEXP& parameter, const std::string parameter_name)
   using namespace Rcpp;
 
   if (TYPEOF(parameter) != INTSXP && TYPEOF(parameter) != REALSXP) {
-    throw std::domain_error("The parameter \"" + parameter_name
+    Rcpp::stop("The parameter \"" + parameter_name
                             + "\" must be a positive integer.");
   }
 
   auto c_value = as<long>(parameter); 
 
   if (c_value <= 0) {
-    throw std::domain_error("The parameter \"" + parameter_name
+    Rcpp::stop("The parameter \"" + parameter_name
                             + "\" must be a positive integer.");
   }
 
@@ -845,7 +845,7 @@ Rcpp::List TissueSimulation::get_cells(const SEXP& first_param, const SEXP& seco
     oss << "The two parameters have different types: " << type2name(first_param)
         << " != " << type2name(second_param);
 
-    throw std::domain_error(oss.str());
+    Rcpp::stop(oss.str());
   }
 
   switch (TYPEOF(first_param)) {
@@ -864,7 +864,7 @@ Rcpp::List TissueSimulation::get_cells(const SEXP& first_param, const SEXP& seco
 
         oss << "Invalid parameter type " << type2name(first_param);
 
-        throw std::domain_error(oss.str());
+        Rcpp::stop(oss.str());
       }
   }
 }
@@ -1266,7 +1266,7 @@ get_switched_species(const RACES::Mutants::Evolutions::Tissue& tissue,
     }
   }
 
-  throw std::domain_error("The species \"" + species.get_name()
+  Rcpp::stop("The species \"" + species.get_name()
                           + "\" does not have an epigenetic status.");
 }
 
@@ -1298,7 +1298,7 @@ void TissueSimulation::update_rates(const std::string& species_name, const Rcpp:
   auto& species = sim_ptr->tissue().get_species(species_name);
 
   if (!rates.hasAttribute("names")) {
-    throw std::domain_error("update_rates: The second parameter must be a Rcpp::List "
+    Rcpp::stop("update_rates: The second parameter must be a Rcpp::List "
                             "with the names attribute");
   }
 
@@ -1642,7 +1642,7 @@ get_species_constraints(const RACES::Mutants::Evolutions::Simulation& simulation
           const auto& threshold = minimum_cell_vector[i];
 
           if (minimum_cell_vector[i] < 0) {
-            throw std::domain_error("The minimum number of cells must be "
+            Rcpp::stop("The minimum number of cells must be "
                                     "a non-negative number. Specified "
                                     + std::to_string(threshold)
                                     + " for species \"" + name + "\".");
@@ -1715,7 +1715,7 @@ get_mutant_constraints(const RACES::Mutants::Evolutions::Simulation& simulation,
       const auto& threshold = minimum_cell_vector[i];
 
       if (threshold < 0) {
-        throw std::domain_error("The minimum number of cells must be "
+        Rcpp::stop("The minimum number of cells must be "
                                 "a non-negative number. Specified "
                                 + std::to_string(threshold)
                                 + " for species \"" + name + "\".");
@@ -1798,7 +1798,7 @@ TissueSimulation::search_samples(const Rcpp::IntegerVector& minimum_cell_vector,
             oss << "Only " << rectangles.size()
                 << " samples satisfy";
         }
-        throw std::runtime_error(oss.str()+" the constraints.");
+        Rcpp::stop(oss.str()+" the constraints.");
     }
 
     std::vector<TissueRectangle> output;
@@ -1884,7 +1884,7 @@ TissueRectangle TissueSimulation::search_sample(const Rcpp::IntegerVector& minim
       }
     }
   }
-  throw std::runtime_error("No bounding box found!");
+  Rcpp::stop("No bounding box found!");
 }
 
 Logics::Variable TissueSimulation::get_var(const std::string& name) const

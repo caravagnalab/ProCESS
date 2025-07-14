@@ -372,7 +372,7 @@ public:
       }
     }
 
-    throw std::domain_error("Missed to find a border cell");
+    Rcpp::stop("Missed to find a border cell");
   }
 
   Rcpp::List choose_border_cell_in(const std::string& mutant_name);

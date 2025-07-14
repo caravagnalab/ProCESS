@@ -108,12 +108,12 @@ SIDMut SIDMut::build_SNV(const SEXP chromosome_name,
                                 ref_base, alt_base, allele_id, cause);
 
     if (mutation.ref.size() != 1) {
-        throw std::domain_error("The reference base must be a single "
+        Rcpp::stop("The reference base must be a single "
                                 "nucleotide.");
     }
 
     if (mutation.alt.size() != 1) {
-        throw std::domain_error("The altered base must be a single "
+        Rcpp::stop("The altered base must be a single "
                                 "nucleotide.");
     }
 
@@ -133,7 +133,7 @@ SIDMut SIDMut::build_SID(const SEXP chromosome_name,
 
     auto pos = Rcpp::as<long int>(position_in_chromosome);
     if (pos < 0) {
-        throw std::domain_error("Position in chromosome must be a "
+        Rcpp::stop("Position in chromosome must be a "
                                 "non-negative number");
     }
 
