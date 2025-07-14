@@ -42,7 +42,7 @@ collapse_loops <- function(df_edges) {
 #' @param simulation A simulation object.
 #' @param color_map A named vector representing the simulation species color
 #'   map (optional).
-#' @return An editable `ggplot` plot.
+#' @return A `ggplot2` plot.
 #' @export
 #'
 #' @examples
