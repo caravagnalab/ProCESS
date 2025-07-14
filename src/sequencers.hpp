@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,13 +24,10 @@
 
 class ErrorlessIlluminaSequencer
 {
-public:
+  public:
     ErrorlessIlluminaSequencer();
 
-    inline double get_error_rate() const
-    {
-        return 0;
-    }
+    inline double get_error_rate() const { return 0; }
 
     void show() const;
 
@@ -41,28 +38,19 @@ class BasicIlluminaSequencer
 {
     double error_rate;
     bool random_quality_scores;
-public:
 
-    BasicIlluminaSequencer(const double error_rate, const bool& random_quality_scores);
+  public:
+    BasicIlluminaSequencer(const double error_rate, const bool &random_quality_scores);
 
     void show() const;
 
-    const double& get_error_rate() const
-    {
-        return error_rate;
-    }
+    const double &get_error_rate() const { return error_rate; }
 
-    void set_error_rate(const double& error_rate)
-    {
-        this->error_rate = error_rate;
-    }
+    void set_error_rate(const double &error_rate) { this->error_rate = error_rate; }
 
-    inline const bool& producing_random_scores() const
-    {
-        return random_quality_scores;
-    }
+    inline const bool &producing_random_scores() const { return random_quality_scores; }
 
-    void set_random_scores(const bool& random_quality_scores)
+    void set_random_scores(const bool &random_quality_scores)
     {
         this->random_quality_scores = random_quality_scores;
     }

@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,20 +24,20 @@
 
 #include <Rcpp.h>
 
-
 class CNA : public RACES::Mutations::CNA
 {
     // amplification
-    CNA(const RACES::Mutations::GenomicPosition& initial_position,
-        const RACES::Mutations::CNA::Length& length,
-        const RACES::Mutations::AlleleId& allele,
-        const RACES::Mutations::AlleleId& src_allele);
+    CNA(const RACES::Mutations::GenomicPosition &initial_position,
+        const RACES::Mutations::CNA::Length &length,
+        const RACES::Mutations::AlleleId &allele,
+        const RACES::Mutations::AlleleId &src_allele);
 
     // deleletion
-    CNA(const RACES::Mutations::GenomicPosition& initial_position,
-        const RACES::Mutations::CNA::Length& length,
-        const RACES::Mutations::AlleleId& allele);
-public:
+    CNA(const RACES::Mutations::GenomicPosition &initial_position,
+        const RACES::Mutations::CNA::Length &length,
+        const RACES::Mutations::AlleleId &allele);
+
+  public:
     CNA();
 
     inline std::string get_chromosome() const
@@ -45,15 +45,12 @@ public:
         return RACES::Mutations::GenomicPosition::chrtos(chr_id);
     }
 
-    inline const RACES::Mutations::ChrPosition& get_position_in_chromosome() const
+    inline const RACES::Mutations::ChrPosition &get_position_in_chromosome() const
     {
         return begin();
     }
 
-    inline size_t get_length() const
-    {
-        return length;
-    }
+    inline size_t get_length() const { return length; }
 
     SEXP get_src_allele() const;
 
@@ -71,27 +68,21 @@ public:
 
     void show() const;
 
-    static
-    CNA build_CNA(const std::string type,
-                  const SEXP chr, const SEXP pos_in_chr,
-                  const SEXP length, const SEXP allele,
-                  const SEXP src_allele);
+    static CNA build_CNA(const std::string type, const SEXP chr, const SEXP pos_in_chr,
+                         const SEXP length, const SEXP allele, const SEXP src_allele);
 
-    static
-    inline CNA build_amplification(const SEXP chr, const SEXP pos_in_chr,
-                                   const SEXP length, const SEXP allele,
-                                   const SEXP src_allele)
+    static inline CNA build_amplification(const SEXP chr, const SEXP pos_in_chr,
+                                          const SEXP length, const SEXP allele,
+                                          const SEXP src_allele)
     {
         return build_CNA("A", chr, pos_in_chr, length, allele, src_allele);
     }
-    static
-    inline CNA build_deletion(const SEXP chr, const SEXP pos_in_chr,
-                              const SEXP length, const SEXP allele)
+    static inline CNA build_deletion(const SEXP chr, const SEXP pos_in_chr,
+                                     const SEXP length, const SEXP allele)
     {
         return build_CNA("D", chr, pos_in_chr, length, allele, allele);
     }
 };
-
 
 RCPP_EXPOSED_CLASS(CNA)
 

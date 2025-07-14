@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,28 +20,26 @@
 #include "utility.hpp"
 
 // amplification
-CNA::CNA(const RACES::Mutations::GenomicPosition& initial_position,
-         const RACES::Mutations::CNA::Length& length,
-         const RACES::Mutations::AlleleId& allele,
-         const RACES::Mutations::AlleleId& src_allele):
-    RACES::Mutations::CNA(initial_position, length,
-                          RACES::Mutations::CNA::Type::AMPLIFICATION,
-                          src_allele, allele)
+CNA::CNA(const RACES::Mutations::GenomicPosition &initial_position,
+         const RACES::Mutations::CNA::Length &length,
+         const RACES::Mutations::AlleleId &allele,
+         const RACES::Mutations::AlleleId &src_allele)
+    : RACES::Mutations::CNA(initial_position, length,
+                            RACES::Mutations::CNA::Type::AMPLIFICATION, src_allele,
+                            allele)
 {}
 
 // deleletion
-CNA::CNA(const RACES::Mutations::GenomicPosition& initial_position,
-         const RACES::Mutations::CNA::Length& length,
-         const RACES::Mutations::AlleleId& allele):
-    RACES::Mutations::CNA(initial_position, length,
-                          RACES::Mutations::CNA::Type::DELETION,
-                          allele, allele)
+CNA::CNA(const RACES::Mutations::GenomicPosition &initial_position,
+         const RACES::Mutations::CNA::Length &length,
+         const RACES::Mutations::AlleleId &allele)
+    : RACES::Mutations::CNA(initial_position, length,
+                            RACES::Mutations::CNA::Type::DELETION, allele, allele)
 {}
 
-CNA::CNA()
-{}
+CNA::CNA() {}
 
-SEXP wrap_allele_id(const RACES::Mutations::AlleleId& allele_id)
+SEXP wrap_allele_id(const RACES::Mutations::AlleleId &allele_id)
 {
     if (allele_id == RANDOM_ALLELE) {
         return Rcpp::wrap(NA_INTEGER);
@@ -57,30 +55,24 @@ SEXP CNA::get_src_allele() const
     return Rcpp::wrap(NA_INTEGER);
 }
 
-SEXP CNA::get_allele() const
-{
-    return wrap_allele_id(dest);
-}
+SEXP CNA::get_allele() const { return wrap_allele_id(dest); }
 
 Rcpp::List CNA::get_dataframe() const
 {
     using namespace Rcpp;
     using namespace RACES::Mutations;
 
-    return DataFrame::create(_["chr"]=get_chromosome(),
-                             _["chr_pos"]=get_position_in_chromosome(),
-                             _["length"]=get_length(),
-                             _["allele"]=get_allele(),
-                             _["src_allele"]=get_src_allele(),
-                             _["type"]=get_type());
+    return DataFrame::create(_["chr"] = get_chromosome(),
+                             _["chr_pos"] = get_position_in_chromosome(),
+                             _["length"] = get_length(), _["allele"] = get_allele(),
+                             _["src_allele"] = get_src_allele(), _["type"] = get_type());
 }
 
 void CNA::show() const
 {
     using namespace Rcpp;
 
-    Rcout << "CNA(type: \"" << get_type()
-          << "\", chr: \"" <<  get_chromosome()
+    Rcout << "CNA(type: \"" << get_type() << "\", chr: \"" << get_chromosome()
           << "\", chr_pos: " << get_position_in_chromosome()
           << ", length: " << get_length();
 
@@ -88,7 +80,7 @@ void CNA::show() const
         Rcout << ", allele: " << dest;
     }
 
-    if (get_type()=="A") {
+    if (get_type() == "A") {
         if (dest != RANDOM_ALLELE) {
             Rcout << ", src_allele: " << source;
         }
@@ -130,7 +122,7 @@ CNA CNA::build_CNA(const std::string type, const SEXP chromosome, const SEXP pos
         return CNA(gen_pos, len, allele_id, src_allele_id);
     }
 
-    Rcpp::stop("Unknown CNA type \"" + type
-              + "\". Supported types are \"A\" and \"D\" for "
-              + "amplification and deletion, respectively");
+    Rcpp::stop("Unknown CNA type \"" + type +
+               "\". Supported types are \"A\" and \"D\" for " +
+               "amplification and deletion, respectively");
 }

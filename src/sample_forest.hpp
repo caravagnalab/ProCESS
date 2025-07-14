@@ -30,63 +30,68 @@ class MutationEngine;
 
 class SampleForest : protected RACES::Mutants::DescendantsForest
 {
-  SampleForest();
+    SampleForest();
 
-  Rcpp::List get_nodes(const std::vector<RACES::Mutants::CellId>& cell_ids) const;
+    Rcpp::List get_nodes(const std::vector<RACES::Mutants::CellId> &cell_ids) const;
 
-public:
-  SampleForest(const RACES::Mutants::Evolutions::Simulation& simulation);
+  public:
+    SampleForest(const RACES::Mutants::Evolutions::Simulation &simulation);
 
-  inline Rcpp::List get_nodes() const
-  {
-    return ForestCore::get_nodes(static_cast<const RACES::Mutants::DescendantsForest&>(*this));
-  }
+    inline Rcpp::List get_nodes() const
+    {
+        return ForestCore::get_nodes(
+            static_cast<const RACES::Mutants::DescendantsForest &>(*this));
+    }
 
-  Rcpp::List get_samples_info() const;
+    Rcpp::List get_samples_info() const;
 
-  inline Rcpp::List get_species_info() const
-  {
-    return ForestCore::get_species_info(static_cast<const RACES::Mutants::DescendantsForest&>(*this));
-  }
+    inline Rcpp::List get_species_info() const
+    {
+        return ForestCore::get_species_info(
+            static_cast<const RACES::Mutants::DescendantsForest &>(*this));
+    }
 
-  inline Rcpp::List get_coalescent_cells() const
-  {
-    return ForestCore::get_coalescent_cells(static_cast<const RACES::Mutants::DescendantsForest&>(*this));
-  }
+    inline Rcpp::List get_coalescent_cells() const
+    {
+        return ForestCore::get_coalescent_cells(
+            static_cast<const RACES::Mutants::DescendantsForest &>(*this));
+    }
 
-  inline Rcpp::List get_coalescent_cells(const std::list<RACES::Mutants::CellId>& cell_ids) const
-  {
-    return ForestCore::get_coalescent_cells(static_cast<const RACES::Mutants::DescendantsForest&>(*this), 
-                                            cell_ids);
-  }
+    inline Rcpp::List
+    get_coalescent_cells(const std::list<RACES::Mutants::CellId> &cell_ids) const
+    {
+        return ForestCore::get_coalescent_cells(
+            static_cast<const RACES::Mutants::DescendantsForest &>(*this), cell_ids);
+    }
 
-  inline std::list<std::list<RACES::Mutants::CellId>> get_sticks() const
-  {
-    return RACES::Mutants::DescendantsForest::get_sticks();
-  }
+    inline std::list<std::list<RACES::Mutants::CellId>> get_sticks() const
+    {
+        return RACES::Mutants::DescendantsForest::get_sticks();
+    }
 
-  inline std::list<std::list<RACES::Mutants::CellId>> get_sticks(const double birth_threshold) const
-  {
-    return RACES::Mutants::DescendantsForest::get_sticks(birth_threshold);
-  }
+    inline std::list<std::list<RACES::Mutants::CellId>>
+    get_sticks(const double birth_threshold) const
+    {
+        return RACES::Mutants::DescendantsForest::get_sticks(birth_threshold);
+    }
 
-  SampleForest get_subforest_for(const std::vector<std::string>& sample_names) const;
+    SampleForest get_subforest_for(const std::vector<std::string> &sample_names) const;
 
-  void save(const std::string& filename) const;
+    void save(const std::string &filename) const;
 
-  static SampleForest load(const std::string& filename);
+    static SampleForest load(const std::string &filename);
 
-  void show() const;
+    void show() const;
 
-  friend class MutationEngine;
+    friend class MutationEngine;
 };
 
-inline SampleForest load_samples_forest(const std::string& filename)
+inline SampleForest load_samples_forest(const std::string &filename)
 {
-  Rcpp::warning("`load_samples_forest()` is deprecated. "
-                "Please use `load_sample_forest()` instead.");
+    Rcpp::warning("`load_samples_forest()` is deprecated. "
+                  "Please use `load_sample_forest()` instead.");
 
-  return SampleForest::load(filename);
+    return SampleForest::load(filename);
 }
 
 RCPP_EXPOSED_CLASS(SampleForest)

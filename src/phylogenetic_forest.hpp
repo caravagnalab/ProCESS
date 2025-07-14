@@ -23,126 +23,128 @@
 
 #include <Rcpp.h>
 
-#include <phylogenetic_forest.hpp>
 #include <mutation_engine.hpp>
+#include <phylogenetic_forest.hpp>
 
-#include "genomic_data_storage.hpp"
 #include "forest.hpp"
+#include "genomic_data_storage.hpp"
 
 class MutationEngine;
 
 class PhylogeneticForest : public RACES::Mutations::PhylogeneticForest
 {
-  GermlineSubject germline_subject;
-  std::filesystem::path reference_path;
+    GermlineSubject germline_subject;
+    std::filesystem::path reference_path;
 
-  std::map<RACES::Mutations::SID, std::string> driver_codes;
+    std::map<RACES::Mutations::SID, std::string> driver_codes;
 
-  using TimedMutationalExposure = std::map<RACES::Time, RACES::Mutations::MutationalExposure>;
+    using TimedMutationalExposure =
+        std::map<RACES::Time, RACES::Mutations::MutationalExposure>;
 
-  std::map<RACES::Mutations::MutationType::Type, TimedMutationalExposure> timed_exposures;
+    std::map<RACES::Mutations::MutationType::Type, TimedMutationalExposure>
+        timed_exposures;
 
-  PhylogeneticForest(const RACES::Mutations::PhylogeneticForest& orig,
-                     const GermlineSubject& germline_subject,
-                     const std::filesystem::path reference_path,
-                     const std::map<RACES::Mutations::SID, std::string>& driver_codes,
-                     const TimedMutationalExposure& timed_SBS_exposures,
-                     const TimedMutationalExposure& timed_indel_exposures);
+    PhylogeneticForest(const RACES::Mutations::PhylogeneticForest &orig,
+                       const GermlineSubject &germline_subject,
+                       const std::filesystem::path reference_path,
+                       const std::map<RACES::Mutations::SID, std::string> &driver_codes,
+                       const TimedMutationalExposure &timed_SBS_exposures,
+                       const TimedMutationalExposure &timed_indel_exposures);
 
-  PhylogeneticForest(RACES::Mutations::PhylogeneticForest&& orig,
-                     const GermlineSubject& germline_subject,
-                     const std::filesystem::path reference_path,
-                     const std::map<RACES::Mutations::SID, std::string>& driver_codes,
-                     const TimedMutationalExposure& timed_SBS_exposures,
-                     const TimedMutationalExposure& timed_indel_exposures);
-public:
-  PhylogeneticForest();
+    PhylogeneticForest(RACES::Mutations::PhylogeneticForest &&orig,
+                       const GermlineSubject &germline_subject,
+                       const std::filesystem::path reference_path,
+                       const std::map<RACES::Mutations::SID, std::string> &driver_codes,
+                       const TimedMutationalExposure &timed_SBS_exposures,
+                       const TimedMutationalExposure &timed_indel_exposures);
 
-  inline Rcpp::List get_nodes() const
-  {
-    return ForestCore::get_nodes(static_cast<const RACES::Mutations::PhylogeneticForest&>(*this));
-  }
+  public:
+    PhylogeneticForest();
 
-  const std::list<RACES::Mutants::CellId>&
-  get_cell_ids_in(const std::string& sample_name) const;
+    inline Rcpp::List get_nodes() const
+    {
+        return ForestCore::get_nodes(
+            static_cast<const RACES::Mutations::PhylogeneticForest &>(*this));
+    }
 
-  Rcpp::List get_samples_info() const;
+    const std::list<RACES::Mutants::CellId> &
+    get_cell_ids_in(const std::string &sample_name) const;
 
-  Rcpp::List get_driver_mutations() const;
+    Rcpp::List get_samples_info() const;
 
-  Rcpp::List get_species_info() const;
+    Rcpp::List get_driver_mutations() const;
 
-  inline Rcpp::List get_coalescent_cells() const
-  {
-    return ForestCore::get_coalescent_cells(static_cast<const RACES::Mutations::PhylogeneticForest&>(*this));
-  }
+    Rcpp::List get_species_info() const;
 
-  inline Rcpp::List get_coalescent_cells(const std::list<RACES::Mutants::CellId>& cell_ids) const
-  {
-    return ForestCore::get_coalescent_cells(static_cast<const RACES::Mutations::PhylogeneticForest&>(*this),
-                                            cell_ids);
-  }
+    inline Rcpp::List get_coalescent_cells() const
+    {
+        return ForestCore::get_coalescent_cells(
+            static_cast<const RACES::Mutations::PhylogeneticForest &>(*this));
+    }
 
-  PhylogeneticForest get_subforest_for(const std::vector<std::string>& sample_names) const;
+    inline Rcpp::List
+    get_coalescent_cells(const std::list<RACES::Mutants::CellId> &cell_ids) const
+    {
+        return ForestCore::get_coalescent_cells(
+            static_cast<const RACES::Mutations::PhylogeneticForest &>(*this), cell_ids);
+    }
 
-  Rcpp::List get_absolute_chromosome_positions() const;
+    PhylogeneticForest
+    get_subforest_for(const std::vector<std::string> &sample_names) const;
 
-  Rcpp::List get_germline_SIDs() const;
+    Rcpp::List get_absolute_chromosome_positions() const;
 
-  Rcpp::List get_sampled_cell_SIDs() const;
+    Rcpp::List get_germline_SIDs() const;
 
-  Rcpp::List get_sampled_cell_SIDs(const RACES::Mutants::CellId& cell_ids) const;
+    Rcpp::List get_sampled_cell_SIDs() const;
 
-  Rcpp::List get_sampled_cell_CNAs() const;
+    Rcpp::List get_sampled_cell_SIDs(const RACES::Mutants::CellId &cell_ids) const;
 
-  Rcpp::List get_sampled_cell_CNAs(const RACES::Mutants::CellId& cell_ids) const;
+    Rcpp::List get_sampled_cell_CNAs() const;
 
-  Rcpp::List get_first_occurrence(const SEXP& mutation) const;
+    Rcpp::List get_sampled_cell_CNAs(const RACES::Mutants::CellId &cell_ids) const;
 
-  Rcpp::List get_timed_exposures() const;
+    Rcpp::List get_first_occurrence(const SEXP &mutation) const;
 
-  Rcpp::List get_bulk_allelic_fragmentation() const;
+    Rcpp::List get_timed_exposures() const;
 
-  Rcpp::List get_bulk_allelic_fragmentation(const std::string& sample_name) const;
+    Rcpp::List get_bulk_allelic_fragmentation() const;
 
-  Rcpp::List get_cell_allelic_fragmentation() const;
+    Rcpp::List get_bulk_allelic_fragmentation(const std::string &sample_name) const;
 
-  inline std::filesystem::path get_reference_path() const
-  {
-    return reference_path;
-  }
+    Rcpp::List get_cell_allelic_fragmentation() const;
 
-  void set_reference_path(const std::filesystem::path reference_path);
+    inline std::filesystem::path get_reference_path() const { return reference_path; }
 
-  inline const GermlineSubject& get_germline_subject() const
-  {
-    return germline_subject;
-  }
+    void set_reference_path(const std::filesystem::path reference_path);
 
-  inline Rcpp::List get_germline_subject_df() const
-  {
-    return germline_subject.get_dataframe();
-  }
+    inline const GermlineSubject &get_germline_subject() const
+    {
+        return germline_subject;
+    }
 
-  inline void save(const std::string& filename) const
-  {
-    save(filename, false);
-  }
+    inline Rcpp::List get_germline_subject_df() const
+    {
+        return germline_subject.get_dataframe();
+    }
 
-  void save(const std::string& filename, const bool quiet) const;
+    inline void save(const std::string &filename) const { save(filename, false); }
 
-  inline static PhylogeneticForest load(const std::string& filename)
-  {
-    return load(filename, false);
-  }
+    void save(const std::string &filename, const bool quiet) const;
 
-  static PhylogeneticForest load(const std::string& filename, const bool quiet);
+    inline static PhylogeneticForest load(const std::string &filename)
+    {
+        return load(filename, false);
+    }
 
-  static Rcpp::List get_SID_dataframe(const RACES::Mutations::CellGenomeMutations& cell_mutations);
+    static PhylogeneticForest load(const std::string &filename, const bool quiet);
 
-  void show() const;
+    static Rcpp::List
+    get_SID_dataframe(const RACES::Mutations::CellGenomeMutations &cell_mutations);
 
-  friend class MutationEngine;
+    void show() const;
+
+    friend class MutationEngine;
 };
 
 RCPP_EXPOSED_CLASS(PhylogeneticForest)

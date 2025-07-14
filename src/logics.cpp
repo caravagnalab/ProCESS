@@ -15,8 +15,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <vector>
 #include <string>
+#include <vector>
 
 #include <Rcpp.h>
 
@@ -24,7 +24,8 @@
 
 using namespace Rcpp;
 
-RCPP_MODULE(Logics){
+RCPP_MODULE(Logics)
+{
 
 //' @name Variable
 //' @title Represent a simulation quantity
@@ -59,9 +60,8 @@ RCPP_MODULE(Logics){
 //' va_p <- sim$var("A+")
 //' va_p
 //' @seealso [Simulation$var()] to build a variable
-  class_<Logics::Variable>("Variable")
-    .method("show", &Logics::Variable::show,
-            "Show a variable");
+    class_<Logics::Variable>("Variable")
+        .method("show", &Logics::Variable::show, "Show a variable");
 
 //' @name Expression
 //' @title Represent an expression of value and variable
@@ -99,29 +99,28 @@ RCPP_MODULE(Logics){
 //' v_exp <- sim$var("A") - 2 * v_time * sim$var("A.duplications") + 3.4
 //' v_exp
 //' @seealso [Variable]
-  class_<Logics::Expression>("Expression")
-    .method("show", &Logics::Expression::show,
-            "Show an expression");
+    class_<Logics::Expression>("Expression")
+        .method("show", &Logics::Expression::show, "Show an expression");
 
-  function("logics_sum", (SEXP (*)(const SEXP&, const SEXP&))&Logics::sum,
-           "Sums two expressions");
-  function("logics_subtract", (SEXP (*)(const SEXP&, const SEXP&))&Logics::subtract,
-           "Sums two expressions");
-  function("logics_multiply", (SEXP (*)(const SEXP&, const SEXP&))&Logics::multiply,
-           "Multiplies two expressions");
+    function("logics_sum", (SEXP (*)(const SEXP &, const SEXP &))&Logics::sum,
+             "Sums two expressions");
+    function("logics_subtract", (SEXP (*)(const SEXP &, const SEXP &))&Logics::subtract,
+             "Sums two expressions");
+    function("logics_multiply", (SEXP (*)(const SEXP &, const SEXP &))&Logics::multiply,
+             "Multiplies two expressions");
 
-  function("logics_lt", (SEXP (*)(const SEXP&, const SEXP&))&Logics::lt,
-           "Builds a \"less than\" relation");
-  function("logics_le", (SEXP (*)(const SEXP&, const SEXP&))&Logics::le,
-           "Builds a \"less than or equal to\" relation");
-  function("logics_eq", (SEXP (*)(const SEXP&, const SEXP&))&Logics::eq,
-           "Builds an \"equal to\" relation");
-  function("logics_ne", (SEXP (*)(const SEXP&, const SEXP&))&Logics::ne,
-           "Builds an \"not equal to\" relation");
-  function("logics_ge", (SEXP (*)(const SEXP&, const SEXP&))&Logics::ge,
-           "Builds an \"greater than or equal to\" relation");
-  function("logics_gt", (SEXP (*)(const SEXP&, const SEXP&))&Logics::gt,
-           "Builds an \"greater than\" relation");
+    function("logics_lt", (SEXP (*)(const SEXP &, const SEXP &))&Logics::lt,
+             "Builds a \"less than\" relation");
+    function("logics_le", (SEXP (*)(const SEXP &, const SEXP &))&Logics::le,
+             "Builds a \"less than or equal to\" relation");
+    function("logics_eq", (SEXP (*)(const SEXP &, const SEXP &))&Logics::eq,
+             "Builds an \"equal to\" relation");
+    function("logics_ne", (SEXP (*)(const SEXP &, const SEXP &))&Logics::ne,
+             "Builds an \"not equal to\" relation");
+    function("logics_ge", (SEXP (*)(const SEXP &, const SEXP &))&Logics::ge,
+             "Builds an \"greater than or equal to\" relation");
+    function("logics_gt", (SEXP (*)(const SEXP &, const SEXP &))&Logics::gt,
+             "Builds an \"greater than\" relation");
 
 //' @name Formula
 //' @title First-order simulation state formulas
@@ -161,14 +160,14 @@ RCPP_MODULE(Logics){
 //' # combine above formulas by using Boolean operators `&` and `|`
 //' f1 & (f2 | f3)
 //' @seealso [Variable], [Simulation$var()], [vignette("tissue_simulation")]
-  class_<Logics::Formula>("Formula")
-    .method("show", &Logics::Formula::show,
-            "Show a formula");
+    class_<Logics::Formula>("Formula").method("show", &Logics::Formula::show,
+                                              "Show a formula");
 
-  function("not", (SEXP (*)(const SEXP&))&Logics::logics_not,
-           "Builds the negation of a formula");
-  function("logics_and", (SEXP (*)(const SEXP& lhs, const SEXP& rhs))&Logics::logics_and,
-           "Builds the logical conjunction of two formulas");
-  function("logics_or", (SEXP (*)(const SEXP&, const SEXP&))&Logics::logics_or,
-           "Builds the logical disjunction of two formulas");
+    function("not", (SEXP (*)(const SEXP &))&Logics::logics_not,
+             "Builds the negation of a formula");
+    function("logics_and",
+             (SEXP (*)(const SEXP &lhs, const SEXP &rhs))&Logics::logics_and,
+             "Builds the logical conjunction of two formulas");
+    function("logics_or", (SEXP (*)(const SEXP &, const SEXP &))&Logics::logics_or,
+             "Builds the logical disjunction of two formulas");
 }

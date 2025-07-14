@@ -20,80 +20,81 @@
 #include "simulation.hpp"
 #include "utility.hpp"
 
-SampleForest::SampleForest():
-  RACES::Mutants::DescendantsForest()
-{}
+SampleForest::SampleForest() : RACES::Mutants::DescendantsForest() {}
 
-SampleForest::SampleForest(const RACES::Mutants::Evolutions::Simulation& simulation):
-  RACES::Mutants::DescendantsForest(simulation)
+SampleForest::SampleForest(const RACES::Mutants::Evolutions::Simulation &simulation)
+    : RACES::Mutants::DescendantsForest(simulation)
 {}
 
 Rcpp::List SampleForest::get_samples_info() const
 {
- return TissueSimulation::get_samples_info(get_samples());
+    return TissueSimulation::get_samples_info(get_samples());
 }
 
-SampleForest SampleForest::get_subforest_for(const std::vector<std::string>& sample_names) const
+SampleForest
+SampleForest::get_subforest_for(const std::vector<std::string> &sample_names) const
 {
-  SampleForest forest;
+    SampleForest forest;
 
-  static_cast< RACES::Mutants::DescendantsForest&>(forest) = RACES::Mutants::DescendantsForest::get_subforest_for(sample_names);
+    static_cast<RACES::Mutants::DescendantsForest &>(forest) =
+        RACES::Mutants::DescendantsForest::get_subforest_for(sample_names);
 
-  return forest;
+    return forest;
 }
 
-void SampleForest::save(const std::string& filename) const
+void SampleForest::save(const std::string &filename) const
 {
-  RACES::Archive::Binary::Out out_archive(filename);
+    RACES::Archive::Binary::Out out_archive(filename);
 
-  RACES::Mutants::DescendantsForest::save(out_archive);
+    RACES::Mutants::DescendantsForest::save(out_archive);
 }
 
-SampleForest SampleForest::load(const std::string& filename)
+SampleForest SampleForest::load(const std::string &filename)
 {
-  SampleForest forest;
+    SampleForest forest;
 
-  if (!std::filesystem::exists(filename)) {
-    Rcpp::stop("The file \"" + filename + "\" does not exist.");
-  }
+    if (!std::filesystem::exists(filename)) {
+        Rcpp::stop("The file \"" + filename + "\" does not exist.");
+    }
 
-  if (!std::filesystem::is_regular_file(filename)) {
-    Rcpp::stop("The file \"" + filename + "\" is not a regular file.");
-  }
+    if (!std::filesystem::is_regular_file(filename)) {
+        Rcpp::stop("The file \"" + filename + "\" is not a regular file.");
+    }
 
-  RACES::Archive::Binary::In in_archive(filename);
+    RACES::Archive::Binary::In in_archive(filename);
 
-  try {
-    static_cast<RACES::Mutants::DescendantsForest&>(forest) = RACES::Mutants::DescendantsForest::load(in_archive);
-  } catch (RACES::Archive::WrongFileFormatDescr& ex) {
-    raise_error(ex, "sample forest");
-  } catch (RACES::Archive::WrongFileFormatVersion& ex) {
-    raise_error(ex, "sample forest");
-  }
+    try {
+        static_cast<RACES::Mutants::DescendantsForest &>(forest) =
+            RACES::Mutants::DescendantsForest::load(in_archive);
+    } catch (RACES::Archive::WrongFileFormatDescr &ex) {
+        raise_error(ex, "sample forest");
+    } catch (RACES::Archive::WrongFileFormatVersion &ex) {
+        raise_error(ex, "sample forest");
+    }
 
-  return forest;
+    return forest;
 }
 
 void SampleForest::show() const
 {
-  using namespace Rcpp;
+    using namespace Rcpp;
 
-  size_t num_of_leaves{0};
-  for (const auto& sample: get_samples()) {
-    num_of_leaves += sample.get_cell_ids().size();
-  }
+    size_t num_of_leaves{0};
+    for (const auto &sample : get_samples()) {
+        num_of_leaves += sample.get_cell_ids().size();
+    }
 
-  Rcout << "SampleForest" << std::endl
-        << "  # of trees: " << get_roots().size() << std::endl
-        << "  # of nodes: " << num_of_nodes() << std::endl
-        << "  # of leaves: " << num_of_leaves << std::endl
-        << "  samples: {";
+    Rcout << "SampleForest" << std::endl
+          << "  # of trees: " << get_roots().size() << std::endl
+          << "  # of nodes: " << num_of_nodes() << std::endl
+          << "  # of leaves: " << num_of_leaves << std::endl
+          << "  samples: {";
 
-  std::string sep = "";
-  for (const auto& sample: get_samples()) {
-    Rcout << sep << "\"" << sample.get_name() << "\"";
-    sep = ", ";
-  }
+    std::string sep = "";
+    for (const auto &sample : get_samples()) {
+        Rcout << sep << "\"" << sample.get_name() << "\"";
+        sep = ", ";
+    }
 
-  Rcout << "}" << std::endl << std::endl;
+    Rcout << "}" << std::endl << std::endl;
 }

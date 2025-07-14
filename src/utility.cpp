@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,17 +17,16 @@
 
 #include <iostream>
 
-#include <sstream>
-#include <random>
 #include <cstdint>
+#include <random>
+#include <sstream>
 
 #include <utils.hpp>
 
-
-#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
-#include <unistd.h>
+#if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
 #include <pwd.h>
-#elif defined (__WIN32__) || defined(__WIN64__)
+#include <unistd.h>
+#elif defined(__WIN32__) || defined(__WIN64__)
 #include <Windows.h>
 #endif
 
@@ -35,13 +34,13 @@
 
 std::string get_user_name()
 {
-#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
+#if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
 
     auto userid = getuid();
     auto pwd = getpwuid(userid);
     return pwd->pw_name;
 
-#elif defined (__WIN32__) || defined(__WIN64__)
+#elif defined(__WIN32__) || defined(__WIN64__)
 
     const int MAX_LEN = 100;
     char szBuffer[MAX_LEN];
@@ -59,103 +58,99 @@ std::string get_user_name()
 #endif
 }
 
-template<typename T, typename std::enable_if_t<std::is_integral_v<T>, bool> = true>
+template <typename T, typename std::enable_if_t<std::is_integral_v<T>, bool> = true>
 std::string int2hex(const T value)
 {
-  std::ostringstream oss;
+    std::ostringstream oss;
 
-  oss << std::setfill('0') << std::setw(8) << std::hex << value;
+    oss << std::setfill('0') << std::setw(8) << std::hex << value;
 
-  return oss.str();
+    return oss.str();
 }
 
-std::filesystem::path get_tmp_dir_path(const std::string& base_name)
+std::filesystem::path get_tmp_dir_path(const std::string &base_name)
 {
-  int i{0};
+    int i{0};
 
-  std::mt19937 r_gen((unsigned) time(NULL));
+    std::mt19937 r_gen((unsigned)time(NULL));
 
-  std::uniform_int_distribution<uint32_t> dist;
+    std::uniform_int_distribution<uint32_t> dist;
 
-  auto base_path = to_string(std::filesystem::temp_directory_path()/
+    auto base_path = to_string(std::filesystem::temp_directory_path() /
                                (base_name + "_" + get_user_name()));
 
-  std::filesystem::path output_path = base_path + "_" + int2hex(dist(r_gen));
+    std::filesystem::path output_path = base_path + "_" + int2hex(dist(r_gen));
 
-  while (std::filesystem::exists(output_path)) {
-    output_path = base_path + "_" + int2hex(dist(r_gen)+(++i));
-  }
+    while (std::filesystem::exists(output_path)) {
+        output_path = base_path + "_" + int2hex(dist(r_gen) + (++i));
+    }
 
-  return output_path;
+    return output_path;
 }
 
-RACES::Mutations::AlleleId
-get_allele_id(const SEXP allele_id, const std::string& parameter_name)
+RACES::Mutations::AlleleId get_allele_id(const SEXP allele_id,
+                                         const std::string &parameter_name)
 {
     switch (TYPEOF(allele_id)) {
-        case INTSXP:
-        case REALSXP:
-        {
-            long int allele_l;
-            try {
-                allele_l = Rcpp::as<long int>(allele_id);
-            } catch (std::invalid_argument& ex) {
-                allele_l = -1;
-            }
+    case INTSXP:
+    case REALSXP:
+    {
+        long int allele_l;
+        try {
+            allele_l = Rcpp::as<long int>(allele_id);
+        } catch (std::invalid_argument &ex) {
+            allele_l = -1;
+        }
 
-            if (allele_l >= 0) {
-                return allele_l;
-            }
-            break;
+        if (allele_l >= 0) {
+            return allele_l;
         }
-        case NILSXP:
-        {
-            return RANDOM_ALLELE;
-        }
-        default:
-            break;
+        break;
+    }
+    case NILSXP:
+    {
+        return RANDOM_ALLELE;
+    }
+    default:
+        break;
     }
 
-    Rcpp::stop("The parameter \"" + parameter_name
-                            + "\" must be either a "
-                            + "non-negative number or NILL.");
+    Rcpp::stop("The parameter \"" + parameter_name + "\" must be either a " +
+               "non-negative number or NILL.");
 }
 
-std::string ordinal_suffix(const size_t& ord)
+std::string ordinal_suffix(const size_t &ord)
 {
-    if ((ord%100)/10==1) {
+    if ((ord % 100) / 10 == 1) {
         return "th";
     }
-    switch(ord%10) {
-        case 1:
-            return "st";
-        case 2:
-            return "nd";
-        case 3:
-            return "rd";
-        default:
-            return "th";
+    switch (ord % 10) {
+    case 1:
+        return "st";
+    case 2:
+        return "nd";
+    case 3:
+        return "rd";
+    default:
+        return "th";
     }
 }
 
-void raise_error(const RACES::Archive::WrongFileFormatDescr& exception,
-                 const std::string& file_description)
+void raise_error(const RACES::Archive::WrongFileFormatDescr &exception,
+                 const std::string &file_description)
 {
-    const auto err_msg = "Wrong file format for the " + file_description 
-                            + " file \"" + to_string(exception.filepath)
-                            + "\". Remove it and retry.";
+    const auto err_msg = "Wrong file format for the " + file_description + " file \"" +
+                         to_string(exception.filepath) + "\". Remove it and retry.";
     ::Rf_error("%s", err_msg.c_str());
 }
 
-void raise_error(const RACES::Archive::WrongFileFormatVersion& exception,
-                 const std::string& file_description)
+void raise_error(const RACES::Archive::WrongFileFormatVersion &exception,
+                 const std::string &file_description)
 {
-    const auto err_msg = "The " + file_description + " file \"" 
-                            + to_string(exception.filepath)
-                            + "\" is in the file format version "
-                            + std::to_string(exception.read_version)
-                            + ", expected version "
-                            + std::to_string(exception.expected_version)
-                            + ". Remove it and retry.";
+    const auto err_msg =
+        "The " + file_description + " file \"" + to_string(exception.filepath) +
+        "\" is in the file format version " + std::to_string(exception.read_version) +
+        ", expected version " + std::to_string(exception.expected_version) +
+        ". Remove it and retry.";
     ::Rf_error("%s", err_msg.c_str());
 }

@@ -19,13 +19,14 @@
 
 #include <Rcpp.h>
 
-#include "sequencers.hpp"
-#include "seq_simulation.hpp"
 #include "sampled_cell.hpp"
+#include "seq_simulation.hpp"
+#include "sequencers.hpp"
 
 using namespace Rcpp;
 
-RCPP_MODULE(Sequencing){
+RCPP_MODULE(Sequencing)
+{
 
 //' @name ErrorlessIlluminaSequencer
 //' @title An error-free Illumina sequencer class
@@ -33,10 +34,10 @@ RCPP_MODULE(Sequencing){
 //'   does not commit errors.
 //' @seealso `simulate_seq()`, `simulate_normal_seq()`, and
 //'   `vignette("sequencing")` for usage examples
-  class_<ErrorlessIlluminaSequencer>("ErrorlessIlluminaSequencer")
+    class_<ErrorlessIlluminaSequencer>("ErrorlessIlluminaSequencer")
 
-    .method("show", &ErrorlessIlluminaSequencer::show,
-            "Show a description for the sequencer");
+        .method("show", &ErrorlessIlluminaSequencer::show,
+                "Show a description for the sequencer");
 
 //' @name ErrorlessIlluminaSequencer
 //' @description This method builds an error-free Illumina
@@ -46,8 +47,7 @@ RCPP_MODULE(Sequencing){
 //' # build a sequencer model
 //' sequencer <- ErrorlessIlluminaSequencer()
 //' sequencer
-    function("ErrorlessIlluminaSequencer",
-             &ErrorlessIlluminaSequencer::build_sequencer,
+    function("ErrorlessIlluminaSequencer", &ErrorlessIlluminaSequencer::build_sequencer,
              "Build a new error-free Illumina sequencer");
 
 //' @name BasicIlluminaSequencer
@@ -57,9 +57,9 @@ RCPP_MODULE(Sequencing){
 //'   sequencing errors will occurs according to that rate.
 //' @seealso `simulate_seq()`, `simulate_normal_seq()`, and
 //'   `vignette("sequencing")` for usage examples
-  class_<BasicIlluminaSequencer>("BasicIlluminaSequencer")
-    .method("show", &BasicIlluminaSequencer::show,
-            "Show a description for the sequencer")
+    class_<BasicIlluminaSequencer>("BasicIlluminaSequencer")
+        .method("show", &BasicIlluminaSequencer::show,
+                "Show a description for the sequencer")
 
 //' @name BasicIlluminaSequencer$error_rate
 //' @title Getting the error rate
@@ -76,12 +76,12 @@ RCPP_MODULE(Sequencing){
 //' sequencer$error_rate <- 5e-2
 //'
 //' sequencer$error_rate
-    .property("error_rate",
-              (const double& (BasicIlluminaSequencer::*)() const)(
-                &BasicIlluminaSequencer::get_error_rate),
-              (void (BasicIlluminaSequencer::*)(const double&))(
-                &BasicIlluminaSequencer::set_error_rate),
-              "The sequencer error rate")
+        .property("error_rate",
+                  (const double &(BasicIlluminaSequencer::*)()
+                       const)(&BasicIlluminaSequencer::get_error_rate),
+                  (void (BasicIlluminaSequencer::*)(const double &))(
+                      &BasicIlluminaSequencer::set_error_rate),
+                  "The sequencer error rate")
 
 //' @name BasicIlluminaSequencer$random_quality_scores
 //' @title Check the non-constant quality score model
@@ -99,12 +99,12 @@ RCPP_MODULE(Sequencing){
 //' sequencer$random_quality_scores <- FALSE
 //'
 //' sequencer$random_quality_scores
-    .property("random_quality_scores",
-              (const bool& (BasicIlluminaSequencer::*)() const)(
-                &BasicIlluminaSequencer::producing_random_scores),
-              (void (BasicIlluminaSequencer::*)(const bool&))(
-                &BasicIlluminaSequencer::set_random_scores),
-              "A Boolean flag enabling non-constant quality score model");
+        .property("random_quality_scores",
+                  (const bool &(BasicIlluminaSequencer::*)()
+                       const)(&BasicIlluminaSequencer::producing_random_scores),
+                  (void (BasicIlluminaSequencer::*)(const bool &))(
+                      &BasicIlluminaSequencer::set_random_scores),
+                  "A Boolean flag enabling non-constant quality score model");
 
 //' @name BasicIlluminaSequencer
 //' @description This method builds a basic Illumina sequencer model.
@@ -190,23 +190,18 @@ RCPP_MODULE(Sequencing){
 //' @seealso `BasicIlluminaSequencer` and
 //'   `ErrorlessIlluminaSequencer` as sequencer types, and
 //'   `vignette("sequencing")` for usage examples
-  function("simulate_seq", &simulate_seq,
-           List::create(_["phylo_forest"], _["sequencer"] = R_NilValue,
-                        _["reference_genome"] = R_NilValue,
-                        _["chromosomes"] = R_NilValue,
-                        _["coverage"] = 10,
-                        _["read_size"] = 150, _["insert_size_mean"] = 0,
-                        _["insert_size_stddev"] = 10,
-                        _["output_dir"] = "ProCESS_SAM",
-                        _["write_SAM"] = false, _["update_SAM"] = false,
-                        _["cell_labelling"] = R_NilValue, _["purity"] = 1,
-                        _["with_normal_sample"] = true,
-                        _["preneoplastic_in_normal"] = false,
-                        _["filename_prefix"] = "chr_",
-                        _["template_name_prefix"] = "r",
-                        _["include_non_sequenced_mutations"] = false,
-                        _["seed"] = R_NilValue),
-           "Simulating the sequencing of the samples in a phylogenetic forest");
+    function("simulate_seq", &simulate_seq,
+             List::create(
+                 _["phylo_forest"], _["sequencer"] = R_NilValue,
+                 _["reference_genome"] = R_NilValue, _["chromosomes"] = R_NilValue,
+                 _["coverage"] = 10, _["read_size"] = 150, _["insert_size_mean"] = 0,
+                 _["insert_size_stddev"] = 10, _["output_dir"] = "ProCESS_SAM",
+                 _["write_SAM"] = false, _["update_SAM"] = false,
+                 _["cell_labelling"] = R_NilValue, _["purity"] = 1,
+                 _["with_normal_sample"] = true, _["preneoplastic_in_normal"] = false,
+                 _["filename_prefix"] = "chr_", _["template_name_prefix"] = "r",
+                 _["include_non_sequenced_mutations"] = false, _["seed"] = R_NilValue),
+             "Simulating the sequencing of the samples in a phylogenetic forest");
 
 //' @name simulate_normal_seq
 //' @title Simulating wild-type sequencing
@@ -265,21 +260,17 @@ RCPP_MODULE(Sequencing){
 //' @seealso `BasicIlluminaSequencer` and
 //'   `ErrorlessIlluminaSequencer` as sequencer types, and
 //'   `vignette("sequencing")` for usage examples
-  function("simulate_normal_seq", &simulate_normal_seq,
-           List::create(_["phylo_forest"], _["sequencer"] = R_NilValue,
-                        _["reference_genome"] = R_NilValue,
-                        _["chromosomes"] = R_NilValue,
-                        _["coverage"] = 10,
-                        _["read_size"] = 150, _["insert_size_mean"] = 0,
-                        _["insert_size_stddev"] = 10,
-                        _["output_dir"] = "ProCESS_normal_SAM",
-                        _["write_SAM"] = true, _["update_SAM"] = false,
-                        _["with_preneoplastic"] = false,
-                        _["filename_prefix"] = "chr_",
-                        _["template_name_prefix"] = "r",
-                        _["include_non_sequenced_mutations"] = false,
-                        _["seed"] = R_NilValue),
-           "Simulating the sequencing of a normal sample");
+    function("simulate_normal_seq", &simulate_normal_seq,
+             List::create(
+                 _["phylo_forest"], _["sequencer"] = R_NilValue,
+                 _["reference_genome"] = R_NilValue, _["chromosomes"] = R_NilValue,
+                 _["coverage"] = 10, _["read_size"] = 150, _["insert_size_mean"] = 0,
+                 _["insert_size_stddev"] = 10, _["output_dir"] = "ProCESS_normal_SAM",
+                 _["write_SAM"] = true, _["update_SAM"] = false,
+                 _["with_preneoplastic"] = false, _["filename_prefix"] = "chr_",
+                 _["template_name_prefix"] = "r",
+                 _["include_non_sequenced_mutations"] = false, _["seed"] = R_NilValue),
+             "Simulating the sequencing of a normal sample");
 
 //' @name SampledCell
 //' @title A sampled cell
@@ -287,7 +278,7 @@ RCPP_MODULE(Sequencing){
 //' @details There is no public constructor for this class as it is
 //'   exclusively used by `simulate_seq()` to label sampled cells.
 //' @seealso `simulate_seq()` and `vignette("sample_partition")`
-  class_<SampledCell>("SampledCell")
+    class_<SampledCell>("SampledCell")
 
 //' @name SampledCell$epistate
 //' @title Getting the sampled cell epigenetic state
@@ -295,32 +286,28 @@ RCPP_MODULE(Sequencing){
 //' @details This property is the epigenetic state of the sampled cell.
 //'   It can be one among "`+`", "`-`", or "".
 //' @seealso `simulate_seq()` and `vignette("sample_partition")`
-    .property("epistate", &SampledCell::epistate,
-              "The cell epistate")
+        .property("epistate", &SampledCell::epistate, "The cell epistate")
 
 //' @name SampledCell$mutant
 //' @title Getting the sampled cell mutant
 //' @description The mutant name of the sampled cell.
 //' @details This property is the mutant name of the sampled cell.
 //' @seealso `simulate_seq()` and `vignette("sample_partition")`
-    .property("mutant", &SampledCell::mutant,
-              "The cell mutant name")
+        .property("mutant", &SampledCell::mutant, "The cell mutant name")
 
 //' @name SampledCell$species
 //' @title Getting the sampled cell species
 //' @description The species name of the sampled cell.
 //' @details This property is the species name of the sampled cell.
 //' @seealso `simulate_seq()` and `vignette("sample_partition")`
-    .property("species", &SampledCell::species,
-              "The cell species name")
+        .property("species", &SampledCell::species, "The cell species name")
 
 //' @name SampledCell$birth_time
 //' @title Getting the sampled cell birth time
 //' @description The birth time of the sampled cell.
 //' @details This property is the birth time of the sampled cell.
 //' @seealso `simulate_seq()` and `vignette("sample_partition")`
-    .property("birth_time", &SampledCell::birth_time,
-              "The cell birth time")
+        .property("birth_time", &SampledCell::birth_time, "The cell birth time")
 
 //' @name SampledCell$mutations
 //' @title Getting the sampled cell mutations
@@ -334,6 +321,5 @@ RCPP_MODULE(Sequencing){
 //'   `class` (i.e., `"driver"`, `"passenger"`, `"germinal"` or
 //'   `"preneoplastic"`).
 //' @seealso `simulate_seq()` and `vignette("sample_partition")`
-    .property("mutations", &SampledCell::mutations,
-              "The cell mutation data frame");
+        .property("mutations", &SampledCell::mutations, "The cell mutation data frame");
 }

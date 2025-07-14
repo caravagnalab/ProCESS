@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2024 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,12 +24,10 @@
 
 #include <Rcpp.h>
 
-
 class WholeGenomeDoubling
 {
-public:
-    inline WholeGenomeDoubling()
-    {}
+  public:
+    inline WholeGenomeDoubling() {}
 
     inline void show() const
     {

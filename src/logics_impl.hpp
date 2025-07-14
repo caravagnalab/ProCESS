@@ -27,58 +27,58 @@ class TissueSimulation;
 namespace Logics
 {
 
-class Variable: public RACES::Mutants::Logics::Variable
+class Variable : public RACES::Mutants::Logics::Variable
 {
-public: 
-  Variable(RACES::Mutants::Logics::Variable&& variable);
+  public:
+    Variable(RACES::Mutants::Logics::Variable &&variable);
 
-  void show() const;
+    void show() const;
 
-  friend class TissueSimulation;
+    friend class TissueSimulation;
 };
 
 class Expression : public RACES::Mutants::Logics::Expression
 {
-public:
-  Expression(RACES::Mutants::Logics::Expression&& expression);
+  public:
+    Expression(RACES::Mutants::Logics::Expression &&expression);
 
-  void show() const;
+    void show() const;
 };
 
-SEXP sum(const SEXP& lhs, const SEXP& rhs);
-SEXP subtract(const SEXP& lhs, const SEXP& rhs);
-SEXP multiply(const SEXP& lhs, const SEXP& rhs);
+SEXP sum(const SEXP &lhs, const SEXP &rhs);
+SEXP subtract(const SEXP &lhs, const SEXP &rhs);
+SEXP multiply(const SEXP &lhs, const SEXP &rhs);
 
 class Relation : public RACES::Mutants::Logics::Relation
 {
-public:
-  Relation(RACES::Mutants::Logics::Relation&& relation);
+  public:
+    Relation(RACES::Mutants::Logics::Relation &&relation);
 
-  void show() const;
+    void show() const;
 };
 
-SEXP gt(const SEXP& lhs, const SEXP& rhs);
-SEXP ge(const SEXP& lhs, const SEXP& rhs);
+SEXP gt(const SEXP &lhs, const SEXP &rhs);
+SEXP ge(const SEXP &lhs, const SEXP &rhs);
 
-SEXP eq(const SEXP& lhs, const SEXP& rhs);
-SEXP ne(const SEXP& lhs, const SEXP& rhs);
+SEXP eq(const SEXP &lhs, const SEXP &rhs);
+SEXP ne(const SEXP &lhs, const SEXP &rhs);
 
-SEXP lt(const SEXP& lhs, const SEXP& rhs);
-SEXP le(const SEXP& lhs, const SEXP& rhs);
+SEXP lt(const SEXP &lhs, const SEXP &rhs);
+SEXP le(const SEXP &lhs, const SEXP &rhs);
 
-class Formula: public RACES::Mutants::Logics::Formula
+class Formula : public RACES::Mutants::Logics::Formula
 {
-public:
-  Formula(RACES::Mutants::Logics::Formula&& Formula);
+  public:
+    Formula(RACES::Mutants::Logics::Formula &&Formula);
 
-  void show() const;
+    void show() const;
 };
 
-SEXP logics_not(const SEXP& subformula);
-SEXP logics_and(const SEXP& lhs, const SEXP& rhs);
-SEXP logics_or(const SEXP& lhs, const SEXP& rhs);
+SEXP logics_not(const SEXP &subformula);
+SEXP logics_and(const SEXP &lhs, const SEXP &rhs);
+SEXP logics_or(const SEXP &lhs, const SEXP &rhs);
 
-}
+} // namespace Logics
 
 RCPP_EXPOSED_WRAP(Logics::Variable);
 RCPP_EXPOSED_WRAP(Logics::Expression);

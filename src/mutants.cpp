@@ -15,13 +15,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <vector>
 #include <string>
+#include <vector>
 
 #include <Rcpp.h>
 
-#include "simulation.hpp"
 #include "sample_forest.hpp"
+#include "simulation.hpp"
 #include "tissue_rectangle.hpp"
 
 using namespace Rcpp;
@@ -29,13 +29,14 @@ using namespace Rcpp;
 namespace RE = RACES::Mutants::Evolutions;
 namespace RC = RACES::Mutants;
 
-RCPP_MODULE(Mutants){
+RCPP_MODULE(Mutants)
+{
 
 //' @name TissueRectangle
 //' @title A rectangle in the tissue
 //' @field get_lower_corner Get the rectangle lower corner
 //' @field get_upper_corner Get the rectangle upper corner
-  class_<TissueRectangle>("TissueRectangle")
+    class_<TissueRectangle>("TissueRectangle")
 //' @name TissueRectangle$new
 //' @title Build a new rectangle of tissue
 //' @examples
@@ -48,18 +49,20 @@ RCPP_MODULE(Mutants){
 //' rect <- new(TissueRectangle, c(500, 450), 50, 25)
 //'
 //' rect
-  .constructor<std::vector<uint16_t>, std::vector<uint16_t>>("Create a new rectangle")
-  .constructor<std::vector<uint16_t>, RE::AxisSize, RE::AxisSize>("Create a new rectangle")
+        .constructor<std::vector<uint16_t>, std::vector<uint16_t>>(
+            "Create a new rectangle")
+        .constructor<std::vector<uint16_t>, RE::AxisSize, RE::AxisSize>(
+            "Create a new rectangle")
 
 //' @name TissueRectangle$lower_corner
 //' @title The tissue rectangle lower corner
-//' @description This is the vector of the minima among all the rectangle dimensions.
-//' @examples
-//' rect <- new(TissueRectangle, c(500, 500), c(550, 550))
+//' @description This is the vector of the minima among all the rectangle
+        //dimensions. ' @examples ' rect <- new(TissueRectangle, c(500, 500), c(550, 550))
 //'
 //' # get the simulation death activation level
 //' rect$lower_corner
-  .property("lower_corner",&TissueRectangle::get_lower_corner, "The rectangle lower corner")
+        .property("lower_corner", &TissueRectangle::get_lower_corner,
+                  "The rectangle lower corner")
 
 //' @name TissueRectangle$upper_corner
 //' @title The tissue rectangle upper corner
@@ -69,8 +72,9 @@ RCPP_MODULE(Mutants){
 //'
 //' # get the simulation death activation level
 //' rect$upper_corner
-  .property("upper_corner",&TissueRectangle::get_upper_corner, "The rectangle upper corner")
-  .method("show",&TissueRectangle::show);
+        .property("upper_corner", &TissueRectangle::get_upper_corner,
+                  "The rectangle upper corner")
+        .method("show", &TissueRectangle::show);
 
 //' @name TissueSimulation
 //' @title Simulating the cell evolution in a tissue
@@ -239,7 +243,7 @@ RCPP_MODULE(Mutants){
 //' \item \emph{Returns:} A variable representing the simulation quantity
 //'   according to the parameter `variable_description`.
 //' }
-  class_<TissueSimulation>("TissueSimulation")
+    class_<TissueSimulation>("TissueSimulation")
 
 //' @name TissueSimulation$place_cell
 //' @title Placing one cell in the tissue
@@ -260,8 +264,8 @@ RCPP_MODULE(Mutants){
 //'
 //' # add into the tissue a cell of species "A+" in position (500,500)
 //' sim$place_cell("A+", 500, 500)
-  .method("place_cell", &TissueSimulation::place_cell,
-          "Placing a cell in the tissue")
+        .method("place_cell", &TissueSimulation::place_cell,
+                "Placing a cell in the tissue")
 
 //' @name TissueSimulation$add_mutant
 //' @title Adding a mutant and its species
@@ -291,12 +295,16 @@ RCPP_MODULE(Mutants){
 //'
 //' # create the species "C" its mutant is "C".
 //' sim$add_mutant(name = "C", growth_rate = 0.2, death_rate = 0.1)
-  .method("add_mutant", (void (TissueSimulation::*)(const std::string&, const List&, const List&,
-                                                const List&))(&TissueSimulation::add_mutant),
-          "Add a new species with epigenetic status")
-  .method("add_mutant", (void (TissueSimulation::*)(const std::string&, const double&,
-                                                const double&))(&TissueSimulation::add_mutant),
-          "Add a new species")
+        .method(
+            "add_mutant",
+            (void (TissueSimulation::*)(const std::string &, const List &, const List &,
+                                        const List &))(&TissueSimulation::add_mutant),
+            "Add a new species with epigenetic status")
+        .method(
+            "add_mutant",
+            (void (TissueSimulation::*)(const std::string &, const double &,
+                                        const double &))(&TissueSimulation::add_mutant),
+            "Add a new species")
 
 //' @name TissueSimulation$choose_cell_in
 //' @title Picking one cell in a mutant
@@ -330,12 +338,17 @@ RCPP_MODULE(Mutants){
 //'
 //' # Randomly choose one cell in "B" in the tissue
 //' sim$choose_cell_in(mutant = "B")
-  .method("choose_cell_in", (List (TissueSimulation::*)(const std::string&))(&TissueSimulation::choose_cell_in),
-          "Randomly choose one cell in a mutant")
-  .method("choose_cell_in", (List (TissueSimulation::*)(const std::string&,
-                                                  const std::vector<RE::AxisPosition>&,
-                                                  const std::vector<RE::AxisPosition>&))(&TissueSimulation::choose_cell_in),
-          "Randomly choose one cell having a specified mutant in a rectangular selection")
+        .method("choose_cell_in",
+                (List (TissueSimulation::*)(const std::string &))(
+                    &TissueSimulation::choose_cell_in),
+                "Randomly choose one cell in a mutant")
+        .method("choose_cell_in",
+                (List (TissueSimulation::*)(const std::string &,
+                                            const std::vector<RE::AxisPosition> &,
+                                            const std::vector<RE::AxisPosition> &))(
+                    &TissueSimulation::choose_cell_in),
+                "Randomly choose one cell having a specified mutant in a rectangular "
+                "selection")
 
 //' @name TissueSimulation$schedule_mutation
 //' @title Scheduling a mutation
@@ -375,8 +388,8 @@ RCPP_MODULE(Mutants){
 //'
 //' # schedule an evolution from mutant "A" to mutant "B" at time 50
 //' sim$schedule_mutation(src = "A", dst = "B", time = 50)
-  .method("schedule_mutation", &TissueSimulation::schedule_mutation,
-          "Add a timed mutation between two different species")
+        .method("schedule_mutation", &TissueSimulation::schedule_mutation,
+                "Add a timed mutation between two different species")
 
 //' @name TissueSimulation$get_species
 //' @title Getting the species
@@ -395,8 +408,8 @@ RCPP_MODULE(Mutants){
 //' # get the added species and their rates. In this case, "A"
 //' # and "B"
 //' sim$get_species()
-  .method("get_species", &TissueSimulation::get_species,
-          "Get the species added to the simulation")
+        .method("get_species", &TissueSimulation::get_species,
+                "Get the species added to the simulation")
 
 //' @name TissueSimulation$get_sample_forest
 //' @title Getting the sample forest
@@ -423,16 +436,16 @@ RCPP_MODULE(Mutants){
 //' forest <- sim$get_sample_forest()
 //'
 //' forest
-  .method("get_sample_forest", &TissueSimulation::get_sample_forest,
-          "Get the sample forest having as leaves the sampled cells")
+        .method("get_sample_forest", &TissueSimulation::get_sample_forest,
+                "Get the sample forest having as leaves the sampled cells")
 
 //' @name TissueSimulation$get_samples_forest
 //' @title Getting the sample forest
 //' @description This method is deprecated. Please use `TissueSimulation$get_sample_forest()` instead.
 //' @return The sample forest having as leaves the sampled cells
 //' @seealso `TissueSimulation$get_sample_forest()`
-  .method("get_samples_forest", &TissueSimulation::get_samples_forest,
-          "Get the sample forest having as leaves the sampled cells")
+        .method("get_samples_forest", &TissueSimulation::get_samples_forest,
+                "Get the sample forest having as leaves the sampled cells")
 
 //' @name TissueSimulation$death_activation_level
 //' @title Death activation level
@@ -453,9 +466,9 @@ RCPP_MODULE(Mutants){
 //'
 //' # set the death activation level to 50
 //' sim$death_activation_level <- 50
-  .property("death_activation_level", &TissueSimulation::get_death_activation_level,
-                                      &TissueSimulation::set_death_activation_level,
-            "The number of cells in a species that activates cell death" )
+        .property("death_activation_level", &TissueSimulation::get_death_activation_level,
+                  &TissueSimulation::set_death_activation_level,
+                  "The number of cells in a species that activates cell death")
 
 //' @name TissueSimulation$border_growth_model
 //' @title Internal cells duplication
@@ -484,9 +497,9 @@ RCPP_MODULE(Mutants){
 //'
 //' # switch back to the border-growth model
 //' sim$border_growth_model <- FALSE
-  .property("border_growth_model", &TissueSimulation::is_border_growth_model,
-                                   &TissueSimulation::set_border_growth_model,
-            "Switch between homogeneous and border driven growth models." )
+        .property("border_growth_model", &TissueSimulation::is_border_growth_model,
+                  &TissueSimulation::set_border_growth_model,
+                  "Switch between homogeneous and border driven growth models.")
 
 //' @name TissueSimulation$get_clock
 //' @title Getting the simulated time
@@ -507,7 +520,8 @@ RCPP_MODULE(Mutants){
 //'
 //' # get the simulated time
 //' sim$get_clock()
-  .method("get_clock", &TissueSimulation::get_clock, "Get the current simulation time")
+        .method("get_clock", &TissueSimulation::get_clock,
+                "Get the current simulation time")
 
 //' @name TissueSimulation$get_cell
 //' @title Getting one of the tissue cells
@@ -537,9 +551,11 @@ RCPP_MODULE(Mutants){
 //'
 //' # collect all the cells in the tissue
 //' sim$get_cell(501, 502)
-  .method("get_cell", (List (TissueSimulation::*)(const RE::AxisPosition&,
-                                            const RE::AxisPosition&) const)(&TissueSimulation::get_cell),
-          "Get one cell from the simulated tissue")
+        .method("get_cell",
+                (List (TissueSimulation::*)(const RE::AxisPosition &,
+                                            const RE::AxisPosition &)
+                     const)(&TissueSimulation::get_cell),
+                "Get one cell from the simulated tissue")
 
 //' @name TissueSimulation$get_cells
 //' @title Getting the tissue cells
@@ -594,23 +610,24 @@ RCPP_MODULE(Mutants){
 //' # cells can be filtered by frame, mutant, and epigenetic states
 //' sim$get_cells(lower_corner=c(495,495), upper_corner=c(505,505),
 //'               mutant_filter=c("A"),epigenetic_filter=c("+","-"))
-  .method("get_cells",
-          (List (TissueSimulation::*)(const std::vector<RE::AxisPosition>&,
-                                const std::vector<RE::AxisPosition>&,
-                                const std::vector<std::string>&,
-                                const std::vector<std::string>&) const)
-                    (&TissueSimulation::get_cells),
-          "Get cells from the simulated tissue")
-  .method("get_cells",
-          (List (TissueSimulation::*)(const SEXP&, const SEXP&) const)
-                    (&TissueSimulation::get_cells),
-          "Get cells from the simulated tissue")
-  .method("get_cells",
-          (List (TissueSimulation::*)(const std::string&) const)(
-            &TissueSimulation::get_cells),
-          "Get cells from what was the simulated tissue status before a sampling")
-  .method("get_cells", (List (TissueSimulation::*)() const)(&TissueSimulation::get_cells),
-          "Get cells from the simulated tissue")
+        .method("get_cells",
+                (List (TissueSimulation::*)(const std::vector<RE::AxisPosition> &,
+                                            const std::vector<RE::AxisPosition> &,
+                                            const std::vector<std::string> &,
+                                            const std::vector<std::string> &)
+                     const)(&TissueSimulation::get_cells),
+                "Get cells from the simulated tissue")
+        .method("get_cells",
+                (List (TissueSimulation::*)(const SEXP &, const SEXP &)
+                     const)(&TissueSimulation::get_cells),
+                "Get cells from the simulated tissue")
+        .method("get_cells",
+                (List (TissueSimulation::*)(const std::string &)
+                     const)(&TissueSimulation::get_cells),
+                "Get cells from what was the simulated tissue status before a sampling")
+        .method("get_cells",
+                (List (TissueSimulation::*)() const)(&TissueSimulation::get_cells),
+                "Get cells from the simulated tissue")
 
 //' @name TissueSimulation$get_name
 //' @title Getting the simulation name
@@ -626,7 +643,7 @@ RCPP_MODULE(Mutants){
 //'
 //' # Expecting "test"
 //' sim$get_name()
-  .method("get_name", &TissueSimulation::get_name, "Get the simulation name")
+        .method("get_name", &TissueSimulation::get_name, "Get the simulation name")
 
 //' @name TissueSimulation$get_lineage_graph
 //' @title Getting the simulation lineage graph
@@ -656,8 +673,8 @@ RCPP_MODULE(Mutants){
 //' sim$run_up_to_time(50)
 //'
 //' sim$get_lineage_graph()
-  .method("get_lineage_graph", &TissueSimulation::get_lineage_graph,
-          "Get the simulation lineage graph")
+        .method("get_lineage_graph", &TissueSimulation::get_lineage_graph,
+                "Get the simulation lineage graph")
 
 //' @name TissueSimulation$get_tissue_size
 //' @title Getting the simulated tissue size
@@ -673,7 +690,8 @@ RCPP_MODULE(Mutants){
 //' # get the tissue size, i.e., expecting c(1200,900)
 //' sim$get_tissue_size()
 //' @seealso `TissueSimulation()`
-  .method("get_tissue_size", &TissueSimulation::get_tissue_size, "Get the simulation tissue size")
+        .method("get_tissue_size", &TissueSimulation::get_tissue_size,
+                "Get the simulation tissue size")
 
 //' @name TissueSimulation$get_added_cells
 //' @title Getting the cells manually added to the simulation
@@ -702,8 +720,8 @@ RCPP_MODULE(Mutants){
 //'
 //' # counts the number of cells per species
 //' sim$get_added_cells()
-  .method("get_added_cells", &TissueSimulation::get_added_cells,
-          "Get the cells manually added to the simulation")
+        .method("get_added_cells", &TissueSimulation::get_added_cells,
+                "Get the cells manually added to the simulation")
 
 //' @name TissueSimulation$get_counts
 //' @title Counting the cell number
@@ -725,9 +743,9 @@ RCPP_MODULE(Mutants){
 //'
 //' # counts the number of cells per species
 //' sim$get_counts()
-  .method("get_counts", &TissueSimulation::get_counts,
-          "Get the current number of cells and that "
-          "throughout the entire simulation")
+        .method("get_counts", &TissueSimulation::get_counts,
+                "Get the current number of cells and that "
+                "throughout the entire simulation")
 
 //' @name TissueSimulation$get_count_history
 //' @title Getting the history of the number of cells per species
@@ -750,8 +768,10 @@ RCPP_MODULE(Mutants){
 //'
 //' # get the history of species counts
 //' sim$get_count_history()
-  .method("get_count_history", (List (TissueSimulation::*)() const)&TissueSimulation::get_count_history,
-          "Get the number of simulated events per species along the computation")
+        .method("get_count_history",
+                (List (TissueSimulation::*)() const) &
+                    TissueSimulation::get_count_history,
+                "Get the number of simulated events per species along the computation")
 
 //' @name TissueSimulation$get_firings
 //' @title Getting the number of fired events
@@ -774,8 +794,8 @@ RCPP_MODULE(Mutants){
 //'
 //' # get the number of event fired per event and species
 //' sim$get_firings()
-  .method("get_firings", &TissueSimulation::get_firings,
-          "Get the current number of simulated events per species")
+        .method("get_firings", &TissueSimulation::get_firings,
+                "Get the current number of simulated events per species")
 
 //' @name TissueSimulation$get_firing_history
 //' @title Getting the fired event history
@@ -800,9 +820,10 @@ RCPP_MODULE(Mutants){
 //'
 //' # get the number of event fired per event and species
 //' sim$get_firing_history()
-  .method("get_firing_history",
-          (List (TissueSimulation::*)() const)&TissueSimulation::get_firing_history,
-          "Get the number of simulated events per species along the computation")
+        .method("get_firing_history",
+                (List (TissueSimulation::*)() const) &
+                    TissueSimulation::get_firing_history,
+                "Get the number of simulated events per species along the computation")
 
 //' @name TissueSimulation$get_rates
 //' @title Getting the species rates
@@ -823,8 +844,7 @@ RCPP_MODULE(Mutants){
 //' # Get the rates of "A-". In this case c("growth"=0.08, "death"=0.01,
 //' # "switch"=0.02) is expected
 //' sim$get_rates("A-")
-  .method("get_rates", &TissueSimulation::get_rates,
-          "Get the rates of a species")
+        .method("get_rates", &TissueSimulation::get_rates, "Get the rates of a species")
 
 //' @name TissueSimulation$get_rates_update_history
 //' @title Retrieving the rates update history
@@ -863,8 +883,8 @@ RCPP_MODULE(Mutants){
 //'
 //' # get the rates update history
 //' sim$get_rates_update_history()
-  .method("get_rates_update_history", &TissueSimulation::get_rates_update_history,
-          "Get the rates update history")
+        .method("get_rates_update_history", &TissueSimulation::get_rates_update_history,
+                "Get the rates update history")
 
 //' @name TissueSimulation$get_samples_info
 //' @title Retrieving sample information
@@ -906,9 +926,9 @@ RCPP_MODULE(Mutants){
 //' # get information about all the collected
 //' # samples, i.e, S1 and S2
 //' sim$get_samples_info()
-  .method("get_samples_info",
-          (List (TissueSimulation::*)() const)&TissueSimulation::get_samples_info,
-          "Get some pieces of information about the collected samples")
+        .method("get_samples_info",
+                (List (TissueSimulation::*)() const) & TissueSimulation::get_samples_info,
+                "Get some pieces of information about the collected samples")
 
 //' @name TissueSimulation$history_delta
 //' @title The delta time between time series samples
@@ -927,9 +947,9 @@ RCPP_MODULE(Mutants){
 //'
 //' # set the delta time between two time series samples
 //' sim$death_activation_level <- 20
-  .property("history_delta", &TissueSimulation::get_history_delta,
-                             &TissueSimulation::set_history_delta,
-            "The sampling delta for the get_*_history functions" )
+        .property("history_delta", &TissueSimulation::get_history_delta,
+                  &TissueSimulation::set_history_delta,
+                  "The sampling delta for the get_*_history functions")
 
 //' @name TissueSimulation$mutate_progeny
 //' @title Generating a mutated progeny
@@ -966,13 +986,15 @@ RCPP_MODULE(Mutants){
 //' # the output of `choose_cell_in` and `get_cell` can also be used
 //' # as input for `mutate_progeny`
 //' sim$mutate_progeny(sim$choose_cell_in("A"), "B")
-  .method("mutate_progeny",  (void (TissueSimulation::*)(const List&, const std::string&))
-                                                  (&TissueSimulation::mutate_progeny),
-          "Duplicate a cell and mutate one of its children")
-  .method("mutate_progeny",  (void (TissueSimulation::*)(const RE::AxisPosition&,
-                                                   const RE::AxisPosition&, const std::string&))
-                                                  (&TissueSimulation::mutate_progeny),
-          "Duplicate a cell and mutate one of its children")
+        .method("mutate_progeny",
+                (void (TissueSimulation::*)(const List &, const std::string &))(
+                    &TissueSimulation::mutate_progeny),
+                "Duplicate a cell and mutate one of its children")
+        .method("mutate_progeny",
+                (void (TissueSimulation::*)(
+                    const RE::AxisPosition &, const RE::AxisPosition &,
+                    const std::string &))(&TissueSimulation::mutate_progeny),
+                "Duplicate a cell and mutate one of its children")
 
 //' @name TissueSimulation$run_up_to_time
 //' @title Simulating cell evolution
@@ -992,14 +1014,14 @@ RCPP_MODULE(Mutants){
 //'
 //' # simulate the tissue up to simulate timed 100
 //' sim$run_up_to_time(40)
-  .method("run_up_to_time",
-          (void (TissueSimulation::*)(const RACES::Time&, const bool))
-          &TissueSimulation::run_up_to_time,
-          "Simulating the system up to the specified simulation time")
-  .method("run_up_to_time",
-          (void (TissueSimulation::*)(const RACES::Time&))
-          &TissueSimulation::run_up_to_time,
-          "Simulating the system up to the specified simulation time")
+        .method("run_up_to_time",
+                (void (TissueSimulation::*)(const RACES::Time &,
+                                            const bool))&TissueSimulation::run_up_to_time,
+                "Simulating the system up to the specified simulation time")
+        .method("run_up_to_time",
+                (void (TissueSimulation::*)(
+                    const RACES::Time &))&TissueSimulation::run_up_to_time,
+                "Simulating the system up to the specified simulation time")
 
 //' @name TissueSimulation$run_up_to_event
 //' @title Simulating cell evolution
@@ -1027,16 +1049,16 @@ RCPP_MODULE(Mutants){
 //' # simulate the cell evolution until the number of epigenetic events from
 //' # the species "A+" is less than 100.
 //' sim$run_up_to_event(event = "switch", species = "A+", num_of_events = 100)
-  .method("run_up_to_event",
-          (void (TissueSimulation::*)(const std::string&, const std::string&,
-                                       const size_t&, const bool))
-          &TissueSimulation::run_up_to_event,
-          "Simulating the system up to the specified number of events")
-  .method("run_up_to_event",
-          (void (TissueSimulation::*)(const std::string&, const std::string&,
-                                       const size_t&))
-          &TissueSimulation::run_up_to_event,
-          "Simulating the system up to the specified number of events")
+        .method("run_up_to_event",
+                (void (TissueSimulation::*)(
+                    const std::string &, const std::string &, const size_t &,
+                    const bool))&TissueSimulation::run_up_to_event,
+                "Simulating the system up to the specified number of events")
+        .method("run_up_to_event",
+                (void (TissueSimulation::*)(
+                    const std::string &, const std::string &,
+                    const size_t &))&TissueSimulation::run_up_to_event,
+                "Simulating the system up to the specified number of events")
 
 //' @name TissueSimulation$run_up_to_size
 //' @title Simulating cell evolution
@@ -1063,15 +1085,16 @@ RCPP_MODULE(Mutants){
 //' # simulate the tissue until the species "A+" account for 100
 //' # contemporary cells
 //' sim$run_up_to_size(species = "A+", num_of_cells = 100)
-  .method("run_up_to_size",
-          (void (TissueSimulation::*)(const std::string&, const size_t&,
-                                       const bool))
-          &TissueSimulation::run_up_to_size,
-          "Simulating the system up to the specified number of cells in the species")
-  .method("run_up_to_size",
-          (void (TissueSimulation::*)(const std::string&, const size_t&))
-          &TissueSimulation::run_up_to_size,
-          "Simulating the system up to the specified number of cells in the species")
+        .method(
+            "run_up_to_size",
+            (void (TissueSimulation::*)(const std::string &, const size_t &,
+                                        const bool))&TissueSimulation::run_up_to_size,
+            "Simulating the system up to the specified number of cells in the species")
+        .method(
+            "run_up_to_size",
+            (void (TissueSimulation::*)(const std::string &,
+                                        const size_t &))&TissueSimulation::run_up_to_size,
+            "Simulating the system up to the specified number of cells in the species")
 
 //' @name TissueSimulation$run_until
 //' @title Simulating cell evolution
@@ -1134,15 +1157,14 @@ RCPP_MODULE(Mutants){
 //'
 //' sim
 //' sim$get_clock()
-  .method("run_until",
-          (void (TissueSimulation::*)(const Logics::Formula&,
-                                       const bool))
-          &TissueSimulation::run_until,
-          "Simulating the system until a formula is *not* satisfied")
-  .method("run_until",
-          (void (TissueSimulation::*)(const Logics::Formula&))
-          &TissueSimulation::run_until,
-          "Simulating the system until a formula is *not* satisfied")
+        .method("run_until",
+                (void (TissueSimulation::*)(const Logics::Formula &,
+                                            const bool))&TissueSimulation::run_until,
+                "Simulating the system until a formula is *not* satisfied")
+        .method("run_until",
+                (void (TissueSimulation::*)(
+                    const Logics::Formula &))&TissueSimulation::run_until,
+                "Simulating the system until a formula is *not* satisfied")
 
 //' @name TissueSimulation$sample_cells
 //' @title Sampling a set of cells
@@ -1183,21 +1205,27 @@ RCPP_MODULE(Mutants){
 //'                  num_of_cells=50)
 //'
 //' sim$get_samples_info()
-  .method("sample_cells",
-          (void (TissueSimulation::*)(const std::string&,
-                                const std::vector<RACES::Mutants::Evolutions::AxisPosition>& lower_corner,
-                                const std::vector<RACES::Mutants::Evolutions::AxisPosition>& upper_corner,
-                                const size_t& num_of_cells) const)(&TissueSimulation::sample_cells),
-          "Sample a rectangular region of the tissue")
-  .method("sample_cells",
-          (void (TissueSimulation::*)(const std::string&,
-                                const std::vector<RACES::Mutants::Evolutions::AxisPosition>& lower_corner,
-                                const std::vector<RACES::Mutants::Evolutions::AxisPosition>& upper_corner) const)(&TissueSimulation::sample_cells),
-          "Sample a rectangular region of the tissue")
-  .method("sample_cells",
-          (void (TissueSimulation::*)(const std::string&,
-                                const size_t& num_of_cells) const)(&TissueSimulation::sample_cells),
-          "Sample a rectangular region of the tissue")
+        .method(
+            "sample_cells",
+            (void (TissueSimulation::*)(
+                const std::string &,
+                const std::vector<RACES::Mutants::Evolutions::AxisPosition> &lower_corner,
+                const std::vector<RACES::Mutants::Evolutions::AxisPosition> &upper_corner,
+                const size_t &num_of_cells) const)(&TissueSimulation::sample_cells),
+            "Sample a rectangular region of the tissue")
+        .method(
+            "sample_cells",
+            (void (TissueSimulation::*)(
+                const std::string &,
+                const std::vector<RACES::Mutants::Evolutions::AxisPosition> &lower_corner,
+                const std::vector<RACES::Mutants::Evolutions::AxisPosition> &upper_corner)
+                 const)(&TissueSimulation::sample_cells),
+            "Sample a rectangular region of the tissue")
+        .method(
+            "sample_cells",
+            (void (TissueSimulation::*)(const std::string &, const size_t &num_of_cells)
+                 const)(&TissueSimulation::sample_cells),
+            "Sample a rectangular region of the tissue")
 
 //' @name TissueSimulation$update_rates
 //' @title Updating species rates
@@ -1217,8 +1245,8 @@ RCPP_MODULE(Mutants){
 //'
 //' # Set the death and epigenetic switch rates of "A-" to 0
 //' sim$update_rates("A-", c(switch=0, death=0))
-  .method("update_rates", &TissueSimulation::update_rates,
-          "Update the rates of a species")
+        .method("update_rates", &TissueSimulation::update_rates,
+                "Update the rates of a species")
 
 //' @name TissueSimulation$search_sample
 //' @title Searching for a rectangular tissue sample
@@ -1252,8 +1280,8 @@ RCPP_MODULE(Mutants){
 //'
 //' # find a 50x50 sample containing 80 "B" cells and 10 "A" cells at least
 //' sim$search_sample(c("A" = 10, "B" = 80), 50, 50)
-  .method("search_sample", &TissueSimulation::search_sample,
-          "Search a rectangular sample containing a given number of cells")
+        .method("search_sample", &TissueSimulation::search_sample,
+                "Search a rectangular sample containing a given number of cells")
 
 //' @name TissueSimulation$search_samples
 //' @title Searching rectangular tissue samples
@@ -1307,14 +1335,16 @@ RCPP_MODULE(Mutants){
 //' }
 //'
 //' plot
-  .method("search_samples", (std::vector<TissueRectangle> (TissueSimulation::*)(const Rcpp::IntegerVector&,
-                                                                          const uint16_t&, const uint16_t&,
-                                                                          const size_t) const)(&TissueSimulation::search_samples),
-          "Search rectangular samples containing a given number of cells")
-  .method("search_samples", (std::vector<TissueRectangle> (TissueSimulation::*)(const Rcpp::IntegerVector&,
-                                                                          const uint16_t&, const uint16_t&,
-                                                                          const size_t, int) const)(&TissueSimulation::search_samples),
-          "Search rectangular samples containing a given number of cells")
+        .method("search_samples",
+                (std::vector<TissueRectangle> (TissueSimulation::*)(
+                    const Rcpp::IntegerVector &, const uint16_t &, const uint16_t &,
+                    const size_t) const)(&TissueSimulation::search_samples),
+                "Search rectangular samples containing a given number of cells")
+        .method("search_samples",
+                (std::vector<TissueRectangle> (TissueSimulation::*)(
+                    const Rcpp::IntegerVector &, const uint16_t &, const uint16_t &,
+                    const size_t, int) const)(&TissueSimulation::search_samples),
+                "Search rectangular samples containing a given number of cells")
 
 //' @name TissueSimulation$var
 //' @title Building a simulation status variable
@@ -1366,8 +1396,8 @@ RCPP_MODULE(Mutants){
 //'
 //' # get the variable representing the number of deaths in A+
 //' sim$var("A+.deaths")
-  .method("var", &TissueSimulation::get_var,
-          "Get a variable representing a simulation quantity");
+        .method("var", &TissueSimulation::get_var,
+                "Get a variable representing a simulation quantity");
 
 //' @name recover_simulation
 //' @title Loading a simulation
@@ -1407,8 +1437,7 @@ RCPP_MODULE(Mutants){
 //'
 //' # delete dump directory
 //' unlink("recover_simulation_test", recursive = TRUE)
-  function("recover_simulation", &TissueSimulation::load,
-           "Recover a simulation");
+    function("recover_simulation", &TissueSimulation::load, "Recover a simulation");
 
 //' @name TissueSimulation
 //' @title Building a new simulation
@@ -1464,10 +1493,10 @@ RCPP_MODULE(Mutants){
 //' # finally we can also specify the size of the simulated space
 //' # by using the optional parameters `width` and `height`
 //' sim <- TissueSimulation(width=1200, height=900)
-  function("TissueSimulation", &TissueSimulation::build_simulation,
-           List::create(_["name"] = R_NilValue, _["width"]=1000, _["height"]=1000,
-                        _["save_snapshots"] = false, _["seed"] = R_NilValue),
-            "Create a tissue simulation");
+    function("TissueSimulation", &TissueSimulation::build_simulation,
+             List::create(_["name"] = R_NilValue, _["width"] = 1000, _["height"] = 1000,
+                          _["save_snapshots"] = false, _["seed"] = R_NilValue),
+             "Create a tissue simulation");
 
 //' @name SpatialSimulation
 //' @title Building a new simulation
@@ -1480,10 +1509,10 @@ RCPP_MODULE(Mutants){
 //'   (default: `FALSE`).
 //' @param seed The seed for the pseudo-random generator (optional).
 //' @seealso `TissueSimulation`
-  function("SpatialSimulation", &SpatialSimulation,
-           List::create(_["name"] = R_NilValue, _["width"]=1000, _["height"]=1000,
-                        _["save_snapshots"] = false, _["seed"] = R_NilValue),
-            "Create a spatial simulation");
+    function("SpatialSimulation", &SpatialSimulation,
+             List::create(_["name"] = R_NilValue, _["width"] = 1000, _["height"] = 1000,
+                          _["save_snapshots"] = false, _["seed"] = R_NilValue),
+             "Create a spatial simulation");
 
 //' @name SampleForest
 //' @title The sample cell ancestor forest
@@ -1540,7 +1569,7 @@ RCPP_MODULE(Mutants){
 //' \item \emph{Parameter:} \code{filename} - The path of the file in which the samples
 //'   forest must be saved.
 //' }
-  class_<SampleForest>("SampleForest")
+    class_<SampleForest>("SampleForest")
 
 //' @name SampleForest$get_nodes
 //' @title Getting forest nodes
@@ -1577,8 +1606,8 @@ RCPP_MODULE(Mutants){
 //' nodes <- forest$get_nodes()
 //'
 //' head(nodes, 5)
-    .method("get_nodes", (List (SampleForest::*)() const)(&SampleForest::get_nodes),
-            "Get the nodes of the forest")
+        .method("get_nodes", (List (SampleForest::*)() const)(&SampleForest::get_nodes),
+                "Get the nodes of the forest")
 
 //' @name SampleForest$get_coalescent_cells
 //' @title Retrieving the most recent common ancestors
@@ -1621,24 +1650,21 @@ RCPP_MODULE(Mutants){
 //' forest <- sim$get_sample_forest()
 //'
 //' forest$get_coalescent_cells()
-    .method("get_coalescent_cells",
-            (List (SampleForest::*)(const std::list<RACES::Mutants::CellId>&) const)
-                (&SampleForest::get_coalescent_cells),
-            "Get the most recent common ancestor of some cells")
-    .method("get_coalescent_cells",
-            (List (SampleForest::*)() const)(&SampleForest::get_coalescent_cells),
-            "Get the most recent common ancestor of all the forest trees")
+        .method("get_coalescent_cells",
+                (List (SampleForest::*)(const std::list<RACES::Mutants::CellId> &)
+                     const)(&SampleForest::get_coalescent_cells),
+                "Get the most recent common ancestor of some cells")
+        .method("get_coalescent_cells",
+                (List (SampleForest::*)() const)(&SampleForest::get_coalescent_cells),
+                "Get the most recent common ancestor of all the forest trees")
 
 //' @name SampleForest$get_subforest_for
 //' @title Building sub-forests
-//' @description This method builds a sub-forest using as leaves some of the original
-//'   samples.
-//' @param sample_names The names of the samples whose cells will be used
-//'   as leaves of the new forest
-//' @return A sample forest built on the samples mentioned in `sample_names`
-//' @examples
-//' # set the seed of the random number generator
-//' set.seed(0)
+//' @description This method builds a sub-forest using as leaves some of the
+        //original '   samples. ' @param sample_names The names of the samples whose cells
+        //will be used '   as leaves of the new forest ' @return A sample forest built on
+        //the samples mentioned in `sample_names` ' @examples ' # set the seed of the
+        //random number generator ' set.seed(0)
 //'
 //' # create a simulation
 //' sim <- TissueSimulation()
@@ -1662,8 +1688,8 @@ RCPP_MODULE(Mutants){
 //' forest <- sim$get_sample_forest()
 //'
 //' forest$get_subforest_for("S2")
-    .method("get_subforest_for", &SampleForest::get_subforest_for,
-            "Get the sub-forest for some of the original samples")
+        .method("get_subforest_for", &SampleForest::get_subforest_for,
+                "Get the sub-forest for some of the original samples")
 
 //' @name SampleForest$get_samples_info
 //' @title Retrieving the samples' information
@@ -1701,8 +1727,8 @@ RCPP_MODULE(Mutants){
 //' # get information about the sampled whose cells
 //' # are the forest leaves, i.e, S1 and S2
 //' forest$get_samples_info()
-    .method("get_samples_info", &SampleForest::get_samples_info,
-            "Get some pieces of information about the samples")
+        .method("get_samples_info", &SampleForest::get_samples_info,
+                "Get some pieces of information about the samples")
 
 //' @name SampleForest$get_species_info
 //' @title Getting forest species
@@ -1710,8 +1736,8 @@ RCPP_MODULE(Mutants){
 //'      about the simulated species.
 //' @return A data frame reporting `mutant` and `epistate`
 //'   for each registered species.
-    .method("get_species_info", &SampleForest::get_species_info,
-            "Get the recorded species")
+        .method("get_species_info", &SampleForest::get_species_info,
+                "Get the recorded species")
 
 //' @name SampleForest$get_sticks
 //' @title Computing the forest sticks
@@ -1777,21 +1803,23 @@ RCPP_MODULE(Mutants){
 //' # search for the forest sticks whose corresponding cells have
 //' # birth times 40 time units at most
 //' forest$get_sticks(40)
-    .method("get_sticks", (std::list<std::list<RACES::Mutants::CellId>> (SampleForest::*)(const double) const)(&SampleForest::get_sticks),
-            "Get the forest sticks")
-    .method("get_sticks", (std::list<std::list<RACES::Mutants::CellId>> (SampleForest::*)() const)(&SampleForest::get_sticks),
-            "Get the forest sticks")
+        .method("get_sticks",
+                (std::list<std::list<RACES::Mutants::CellId>> (SampleForest::*)(
+                    const double) const)(&SampleForest::get_sticks),
+                "Get the forest sticks")
+        .method("get_sticks",
+                (std::list<std::list<RACES::Mutants::CellId>> (SampleForest::*)()
+                     const)(&SampleForest::get_sticks),
+                "Get the forest sticks")
 
 //' @name SampleForest$save
 //' @title Saving sample forests
 //' @description This method saves a sample forest in a file.
 //' @param filename The path of the file in which the samples
 //'   forest must be saved.
-    .method("save", &SampleForest::save,
-            "Save a sample forest")
+        .method("save", &SampleForest::save, "Save a sample forest")
 
-    .method("show", &SampleForest::show,
-            "Describe the SampleForest");
+        .method("show", &SampleForest::show, "Describe the SampleForest");
 
 //' @name load_sample_forest
 //' @title Loading sample forests
@@ -1799,8 +1827,7 @@ RCPP_MODULE(Mutants){
 //' @param filename The path of the file from which the samples
 //'   forest must be load.
 //' @return The load sample forest
-  function("load_sample_forest", &SampleForest::load,
-           "Load a sample forest");
+    function("load_sample_forest", &SampleForest::load, "Load a sample forest");
 
 //' @name load_samples_forest
 //' @title Loading sample forests
@@ -1809,6 +1836,6 @@ RCPP_MODULE(Mutants){
 //'   forest must be load.
 //' @return The load samples forest
 //' @seealso `load_sample_forest()`
-  function("load_samples_forest", &load_samples_forest,
-           "Load a sample forest");
+    function("load_samples_forest", &load_samples_forest,
+             "Load a sample forest");
 }

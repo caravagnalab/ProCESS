@@ -23,34 +23,33 @@
 
 #include <Rcpp.h>
 
-#include <position_set.hpp>
 #include <position.hpp>
-
+#include <position_set.hpp>
 
 class TissueRectangle : public RACES::Mutants::RectangleSet
 {
-public:
-  TissueRectangle();
+  public:
+    TissueRectangle();
 
-  TissueRectangle(const RACES::Mutants::Evolutions::PositionInTissue& lower_corner, 
-                  const RACES::Mutants::Evolutions::PositionInTissue& upper_corner);
+    TissueRectangle(const RACES::Mutants::Evolutions::PositionInTissue &lower_corner,
+                    const RACES::Mutants::Evolutions::PositionInTissue &upper_corner);
 
-  TissueRectangle(const RACES::Mutants::Evolutions::PositionInTissue& lower_corner, 
-                  const RACES::Mutants::Evolutions::AxisSize& x_size, 
-                  const RACES::Mutants::Evolutions::AxisSize& y_size);
+    TissueRectangle(const RACES::Mutants::Evolutions::PositionInTissue &lower_corner,
+                    const RACES::Mutants::Evolutions::AxisSize &x_size,
+                    const RACES::Mutants::Evolutions::AxisSize &y_size);
 
-  TissueRectangle(const std::vector<uint16_t>& lower_corner, 
-                  const std::vector<uint16_t>& upper_corner);
+    TissueRectangle(const std::vector<uint16_t> &lower_corner,
+                    const std::vector<uint16_t> &upper_corner);
 
-  TissueRectangle(const std::vector<uint16_t>& lower_corner, 
-                  const RACES::Mutants::Evolutions::AxisSize& x_size, 
-                  const RACES::Mutants::Evolutions::AxisSize& y_size);
+    TissueRectangle(const std::vector<uint16_t> &lower_corner,
+                    const RACES::Mutants::Evolutions::AxisSize &x_size,
+                    const RACES::Mutants::Evolutions::AxisSize &y_size);
 
-  Rcpp::IntegerVector get_lower_corner() const;
+    Rcpp::IntegerVector get_lower_corner() const;
 
-  Rcpp::IntegerVector get_upper_corner() const;
+    Rcpp::IntegerVector get_upper_corner() const;
 
-  void show() const;
+    void show() const;
 };
 
 RCPP_EXPOSED_CLASS(TissueRectangle)
