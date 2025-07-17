@@ -418,7 +418,7 @@ class TissueSimulation
 
     inline SampleForest get_samples_forest() const
     {
-        Rcpp::warning("`TissueSimulation$get_sample_forest()` is deprecated. "
+        Rcpp::warning("`TissueSimulation$get_samples_forest()` is deprecated. "
                       "Please use `TissueSimulation$get_sample_forest()` instead.");
 
         return get_sample_forest();

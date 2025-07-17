@@ -1341,7 +1341,7 @@ void warning_function(const RACES::WarningType type, const std::string message)
             << "parameter `context_sampling`." << std::endl;
         break;
     case RACES::WarningType::NO_MUT_FOR_RPATTERN:
-        oss << " Decrease `MutationEngine`'s "
+        oss << " Increase `MutationEngine`'s "
             << "parameter `max_repetition_storage`." << std::endl;
         break;
     }
