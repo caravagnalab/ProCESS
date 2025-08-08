@@ -1,6 +1,7 @@
 url: https://caravagnalab.github.io/ProCESS/
 template:
   bootstrap: 5
+  math-rendering: katex
 
 repo:
   url:
