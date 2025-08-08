@@ -56,10 +56,12 @@ RCPP_MODULE(Mutants)
 
 //' @name TissueRectangle$lower_corner
 //' @title The tissue rectangle lower corner
-//' @description This is the vector of the minima among all the rectangle
-        //dimensions. ' @examples ' rect <- new(TissueRectangle, c(500, 500), c(550, 550))
+//' @description This is the vector of the minima among all the rectangle dimensions.
+//' @examples
+//' # create a 51x51-rectangle from (500, 500) to (550, 550)
+//' rect <- new(TissueRectangle, c(500, 500), c(550, 550))
 //'
-//' # get the simulation death activation level
+//' # get the rectangle lower corner, i.e., (500, 500)
 //' rect$lower_corner
         .property("lower_corner", &TissueRectangle::get_lower_corner,
                   "The rectangle lower corner")
@@ -70,7 +72,7 @@ RCPP_MODULE(Mutants)
 //' @examples
 //' rect <- new(TissueRectangle, c(500, 500), c(550, 550))
 //'
-//' # get the simulation death activation level
+//' # get the rectangle upper corner, i.e., (550, 550)
 //' rect$upper_corner
         .property("upper_corner", &TissueRectangle::get_upper_corner,
                   "The rectangle upper corner")
@@ -1251,8 +1253,8 @@ RCPP_MODULE(Mutants)
 //' @name TissueSimulation$search_sample
 //' @title Searching for a rectangular tissue sample
 //' @description This method searches a rectangular tissue sample.
-//' @details The aimed sample mush satisfy the specified number of cells.
-//'   The sizes of the samples are also provided a parameter of the method.
+//' @details The aimed sample must satisfy the specified number of cells.
+//'   The size of the sample is also provided a parameter of the method.
 //'   The complexity of this method is
 //'   \eqn{O(|\textrm{tissue width}|*|\textrm{tissue height}|)}.
 //' @param min_num_of_cells A named integer vector reporting the minimum number
@@ -1289,7 +1291,7 @@ RCPP_MODULE(Mutants)
 //' @details The aimed samples mush satisfy the specified number of cells.
 //'   The sizes of the samples are also provided a parameter of the method.
 //'   This method takes asymptotic time
-//'   \eqn{\Theta(|\textrm{tissue width}|*|\textrm{tissue height}|)}.
+//'   \eqn{O(|\textrm{tissue width}|*|\textrm{tissue height}|)}.
 //' @param min_num_of_cells A named integer vector reporting the minimum number
 //'   of cells per species or mutant.
 //' @param num_of_cells The number of cells in the searched sample.
@@ -1661,10 +1663,13 @@ RCPP_MODULE(Mutants)
 //' @name SampleForest$get_subforest_for
 //' @title Building sub-forests
 //' @description This method builds a sub-forest using as leaves some of the
-        //original '   samples. ' @param sample_names The names of the samples whose cells
-        //will be used '   as leaves of the new forest ' @return A sample forest built on
-        //the samples mentioned in `sample_names` ' @examples ' # set the seed of the
-        //random number generator ' set.seed(0)
+//'    original samples.
+//' @param sample_names The names of the samples whose cells will be used
+//'    as leaves of the new forest
+//' @return A sample forest built on the samples mentioned in `sample_names`
+//' @examples
+//' # set the seed of the random number generator
+//' set.seed(0)
 //'
 //' # create a simulation
 //' sim <- TissueSimulation()
