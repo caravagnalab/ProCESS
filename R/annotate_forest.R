@@ -135,23 +135,25 @@ annotate_forest <- function(tree_plot, forest, samples = TRUE, MRCAs = TRUE,
       exposures <- forest$get_exposures()
 
       exposure_colors <- get_colors_for(exposures %>%
-                                         dplyr::pull(signature) %>%
-                                         unique)
+                                          dplyr::pull(signature) %>%
+                                          unique)
 
       # Add exposures start and end times for each signature
       times <- exposures$time %>%  unique() %>%  sort()
 
       exposures <- exposures %>%
         dplyr::rowwise() %>%
-        dplyr::mutate(t_end = dplyr::case_when(
-          time == max(times) ~ Inf,
-          .default = min(times[times >= time]))
+        dplyr::mutate(
+          t_end = dplyr::case_when(time == max(times) ~ Inf,
+                                   .default = min(times[times >= time]))
         ) %>%
         dplyr::mutate(signature = factor(signature,
-                                  levels = exposures %>%
-                                    dplyr::arrange(time) %>%
-                                    dplyr::pull(signature) %>%
-                                    unique()))
+                                         levels = exposures %>%
+                                           dplyr::arrange(time) %>%
+                                           dplyr::pull(signature) %>%
+                                           unique()))
+
+      breaks <- sort(unique(exposures$exposure))
 
       # Annotate exposures on tree
       tree_plot <- tree_plot +
@@ -168,14 +170,17 @@ annotate_forest <- function(tree_plot, forest, samples = TRUE, MRCAs = TRUE,
         ) +
         ggplot2::scale_fill_manual(values = exposure_colors) +
         ggplot2::scale_alpha_continuous(range = c(0.25, 0.75),
-                                        breaks = sort(unique(exposures$exposure))) +
+                                        breaks = breaks) +
         ggplot2::guides(fill = ggplot2::guide_legend(title = "Signature"),
                         alpha = ggplot2::guide_legend(title = "Exposure"))
 
-      if (facet_signatures) tree_plot <- tree_plot + ggplot2::facet_wrap( ~ signature)
+      if (facet_signatures) {
+        tree_plot <- tree_plot + ggplot2::facet_wrap(~ signature)
+      }
       # Push exposure rectangles to the back
       layers_new <- list(tree_plot$layers[[length(tree_plot$layers)]])
-      layers_new <- c(layers_new, tree_plot$layers[1:length(tree_plot$layers)-1])
+      layers_new <- c(layers_new,
+                      tree_plot$layers[1:(length(tree_plot$layers) - 1)])
 
       tree_plot$layers <- layers_new
     }
@@ -187,13 +192,16 @@ annotate_forest <- function(tree_plot, forest, samples = TRUE, MRCAs = TRUE,
       try(expr = {
         drivers_mutations <- forest$get_sampled_cell_mutations() %>%
           dplyr::filter(class == "driver") %>%
-          dplyr::mutate(driver_id = paste0(chr, ":", chr_pos, ":", ref, ">", alt),
+          dplyr::mutate(driver_id = paste0(chr, ":", chr_pos, ":",
+                                           ref, ">", alt),
                         driver_type = type) %>%
           dplyr::select(cell_id, driver_id, driver_type)
       })
       try(expr = {
         drivers_CNAs <- forest$get_sampled_cell_CNAs() %>%
-          dplyr::mutate(driver_id = paste0(chr, ":", begin, "-", end, ":", allele),
+          dplyr::filter(class == "driver") %>%
+          dplyr::mutate(driver_id = paste0(chr, ":", begin, "-",
+                                           end, ":", allele),
                         driver_type = "CNA") %>%
           dplyr::select(cell_id, driver_id, driver_type)
       })
@@ -201,11 +209,16 @@ annotate_forest <- function(tree_plot, forest, samples = TRUE, MRCAs = TRUE,
       drivers <- dplyr::bind_rows(drivers_mutations, drivers_CNAs)
 
       drivers_start_nodes <- lapply(unique(drivers$driver_id), function(d) {
-        nodes_with_driver = drivers %>% dplyr::filter(driver_id==d) %>% dplyr::pull(cell_id)
-        d_type = drivers %>% dplyr::filter(driver_id==d) %>% dplyr::pull(driver_type) %>% unique()
+        nodes_with_driver <- drivers %>%
+          dplyr::filter(driver_id == d) %>%
+          dplyr::pull(cell_id)
+        d_type <- drivers %>%
+          dplyr::filter(driver_id == d) %>%
+          dplyr::pull(driver_type) %>%
+          unique()
 
         forest$get_coalescent_cells(nodes_with_driver) %>%
-          dplyr::mutate(driver_id=d, driver_type=d_type)
+          dplyr::mutate(driver_id = d, driver_type = d_type)
       }) %>%
         dplyr::bind_rows() %>%
         dplyr::mutate(cell_id = as.character(cell_id)) %>%
@@ -214,7 +227,7 @@ annotate_forest <- function(tree_plot, forest, samples = TRUE, MRCAs = TRUE,
 
       layout <- tree_plot$data %>%
         dplyr::select(x, y, name) %>%
-        dplyr::mutate(cell_id = paste(name), has_driver=TRUE) %>%
+        dplyr::mutate(cell_id = paste(name), has_driver = TRUE) %>%
         dplyr::filter(name %in% drivers_start_nodes$cell_id) %>%
         dplyr::left_join(drivers_start_nodes, by = "cell_id")
 
@@ -229,7 +242,7 @@ annotate_forest <- function(tree_plot, forest, samples = TRUE, MRCAs = TRUE,
         )
 
       if (add_driver_label) {
-        nudge_x = (max(tree_plot$data$x) - min(tree_plot$data$x)) * .15
+        nudge_x <- (max(tree_plot$data$x) - min(tree_plot$data$x)) * .15
         tree_plot <- tree_plot +
           ggrepel::geom_label_repel(
             data = layout,
