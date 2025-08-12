@@ -185,7 +185,7 @@ by using the method `MutationEngine$get_known_drivers()`.
 ```{r}
 library(dplyr)
 
-m_engine$get_known_drivers() %>% filter(chr == "22")
+m_engine$get_known_drivers() %>% filter(chr == "22") %>% head()
 ```
 
 The code of the known driver mutations can be used in place of the full
