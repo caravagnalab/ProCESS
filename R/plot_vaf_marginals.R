@@ -147,10 +147,9 @@ plot_VAF_marginals <- function(seq_result, chromosomes = NULL, samples = NULL,
     d1 <- data %>% dplyr::filter(sample_name == couple[1])
     d2 <- data %>% dplyr::filter(sample_name == couple[2])
 
-    djoin <- dplyr::full_join(d1, d2, by = c("chr", "from", "ref", "alt"))
-    #djoin$col <- djoin[["labels.x"]]
-
-    plot <- djoin %>% dplyr::filter(!is.na(sample_name.y))
+    djoin <- dplyr::full_join(d1, d2, by = c("chr", "from", "ref", "alt")) %>%
+      dplyr::mutate(VAF.x = ifelse(is.na(.data$VAF.x), 0, .data$VAF.x)) %>%
+      dplyr::mutate(VAF.y = ifelse(is.na(.data$VAF.y), 0, .data$VAF.y))
 
     if (!is.null(labels)) {
       plot <- djoin %>%
