@@ -105,13 +105,18 @@ add_driver_mutation_labels <- function(plot, data, driver_mutations) {
   return(plot)
 }
 
+# filter germinal mutations from data
+filter_germinal <- function(data) {
+  data %>% dplyr::filter(.data$classes != "germinal")
+}
 
 #' Plot a Variant Allele Frequency (VAF) histogram
 #'
 #' This function generates a histogram showing the distribution of Variant
 #' Allele Frequency (VAF) across samples and chromosomes.
 #'
-#' @param seq_result A data frame containing sequencing results.
+#' @param seq_result Either the output of `simulate_seq()` or a data
+#'   frame containing sequencing results.
 #' @param chromosomes A character vector specifying the chromosomes to
 #'   include in the plot (default: all the chromosomes in `seq_res`).
 #' @param samples A character vector specifying the sample names to include
@@ -122,6 +127,9 @@ add_driver_mutation_labels <- function(plot, data, driver_mutations) {
 #' @param binwidth The width of the plot bins. When set to `NULL`, the
 #'   function computes the most convenient bin width according to the
 #'   maximum coverage reported in the data frame (default: `NULL`).
+#' @param mutation_filter A function filtering mutations from the input
+#'   data (default: a function filtering out "germinal" mutations, e.g.,
+#'   `function(x) x %>% dplyr::filter(classes != "germinal")`).
 #' @param driver_mutations The data frame of the driver mutations as
 #'   returned by `PhylogeneticForest$get_driver_mutations()`.
 #'   This parameter can be avoided when `seq_result` if the result
@@ -180,16 +188,38 @@ add_driver_mutation_labels <- function(plot, data, driver_mutations) {
 #' seq_results <- simulate_seq(phylo_forest, coverage = 10, write_SAM = F,
 #'                             with_normal_sample = FALSE)
 #'
-#' # plotting the VAF histogram of all the mutations
+#' # plotting the VAF histogram without germinal mutations
 #' plot_VAF_histogram(seq_results)
 #'
+#' # let us define a function to filter germinal and pre-neoplastic
+#' # from the input data
+#' filter_data <- function(data) {
+#'   data %>% dplyr::filter(!classes %in% list("germinal",
+#'                                             "pre-neoplastic"))
+#' }
+#'
+#' # plotting the VAF histogram without germinal and pre-neoplastic
+#' plot_VAF_histogram(seq_results, mutation_filter=filter_data)
+#'
+#' # plotting the VAF histogram filtering out VAFs below 0.02
+#' plot_VAF_histogram(seq_results, cuts = c(0.02, 1))
+#'
+#' # plotting the VAF histogram with labels
+#' plot_VAF_histogram(seq_results, cuts = c(0.02, 1),
+#'                    labels = seq_results$mutations["causes"])
+#'
+#' # avoid the driver mutation labels
+#' plot_VAF_histogram(seq_results, cuts = c(0.02, 1),
+#'                    labels = seq_results$mutations["causes"],
+#'                    driver_mutation_labels = FALSE)
+#'
+#' # the same plots can be drawn by using the mutations data frame
+#' # in place of the `simulate_seq()` output
 #' library(dplyr)
 #'
 #' # filter germinal mutations
-#' f_seq <- seq_results$mutations %>% dplyr::filter(classes!="germinal")
-#'
-#' # plotting the VAF histogram
-#' plot_VAF_histogram(f_seq)
+#' f_seq <- seq_results$mutations %>%
+#'    dplyr::filter(classes!="germinal")
 #'
 #' # plotting the VAF histogram filtering out VAFs below 0.02
 #' plot_VAF_histogram(f_seq, cuts = c(0.02, 1))
@@ -213,6 +243,7 @@ plot_VAF_histogram <- function(
   samples = NULL,
   labels = NULL,
   binwidth = NULL,
+  mutation_filter = filter_germinal,
   driver_mutations = NULL,
   driver_mutation_labels = TRUE,
   cuts = c(0, 1)
@@ -245,13 +276,18 @@ plot_VAF_histogram <- function(
     }
 
     if (nrow(labels) != nrow(seq_res)) {
-      stop(paste0("The parameters \"seq_res\" and \"labels\"",
+      stop(paste0("The parameters \"seq_result\" and \"labels\"",
                   " must have the same number of rows."))
     }
 
     data["labels"] <- labels
     label_name <- names(labels)
   }
+
+  if (!is.function(mutation_filter)) {
+    stop("The parameter \"mutation_filter\" must be a function.")
+  }
+  data <- mutation_filter(data)
 
   chromosomes <- validate_chromosomes(seq_res, chromosomes)
 
