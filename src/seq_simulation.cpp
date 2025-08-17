@@ -586,7 +586,8 @@ Rcpp::List simulate_seq(const PhylogeneticForest &forest, SEXP &sequencer,
         _["filename_prefix"] = filename_prefix,
         _["template_name_prefix"] = template_name_prefix,
         _["include_non_sequenced_mutations"] = include_non_sequenced_mutations,
-        _["seed"] = c_seed);
+        _["seed"] = c_seed,
+        _["driver_mutations"] = forest.get_driver_mutations());
 
     return List::create(_["mutations"] =
                             get_result_dataframe(result, include_non_sequenced_mutations),

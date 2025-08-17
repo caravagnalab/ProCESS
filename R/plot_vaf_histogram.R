@@ -14,16 +14,97 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# compute the bin width for a set of data according to the 
+# compute the bin width for a set of data according to the
 # Freedman-Diaconis rule
 freedman_diaconis_binwidth <- function(data) {
   q1 <- quantile(data, 0.25)[[1]]
   q3 <- quantile(data, 0.75)[[1]]
 
-  IQR <- q3-q1
+  IQR <- q3 - q1
 
-  return(2 * (IQR/((length(data))^(1/3))))
+  return(2 * (IQR / ((length(data))^(1 / 3))))
 }
+
+# compute a string representation for a mutation row
+mutation_string <- function(mutation) {
+  paste0(mutation[["chr"]], ":", mutation[["from"]], "[",
+         mutation[["ref"]], ">", mutation[["alt"]], "]")
+}
+
+# add labels for driver mutations
+add_driver_mutation_labels <- function(plot, data, driver_mutations) {
+
+  ggb <- ggplot2::ggplot_build(plot)
+
+  facet_p <- ggb$layout$layout %>% dplyr::mutate(y_max = NA)
+  for (i in seq_len(nrow(facet_p))) {
+    facet_p$y_max[i] <- ggb$layout$panel_params[[i]]$y.range[2]
+  }
+
+  drivers <- data %>% dplyr::filter(.data$classes == "driver") %>%
+    dplyr::left_join(facet_p %>% dplyr::select(.data$sample_name,
+                                               .data$y_max,
+                                               .data$PANEL),
+                     by = c("sample_name"))
+
+  if (!is.null(driver_mutations)) {
+    drivers <- dplyr::left_join(drivers, driver_mutations,
+                                by = c("chr" = "chr",
+                                       "from" = "start",
+                                       "ref" = "ref",
+                                       "alt" = "alt"))
+  } else {
+    drivers$code <- rep(NA, times = nrow(drivers))
+  }
+
+  for (i in seq_len(nrow(drivers))) {
+    driver <- drivers[i,]
+    if (is.na(driver[["code"]])) {
+      driver[["code"]] <- mutation_string(driver)
+    }
+    drivers[i,] <- driver
+  }
+
+  panels <- unique(drivers$PANEL)
+
+  for (panel in panels) {
+    drivers_in_panel <- drivers %>% dplyr::filter(PANEL == panel)
+
+    y_max_count <- drivers_in_panel[["y_max"]][1]
+
+    plot <- plot +
+      ggrepel::geom_label_repel(
+        data = drivers_in_panel,
+        ggplot2::aes(
+          x = VAF,
+          y = 0,
+          label = code,
+          fill = causes
+        ),
+        color = 'black',
+        ylim = c(y_max_count * 0.5,
+                 y_max_count * 0.9),
+        size = 2,
+        min.segment.length = 0,
+        #max.overlaps = Inf,
+        #force = 1000,
+        #force_pull = 100,
+        #max.iter = 1000,
+        segment.color = "grey50", # Color of the connecting segment
+        segment.linetype = "dashed", # Line type of the segment
+        #nudge_x = 0,
+        show.legend = FALSE,
+        segment.curvature = 1,
+        segment.ncp = 1,
+        segment.square = TRUE,
+        segment.inflect = TRUE,
+        direction = "both"
+      )
+  }
+
+  return(plot)
+}
+
 
 #' Plot a Variant Allele Frequency (VAF) histogram
 #'
@@ -36,11 +117,17 @@ freedman_diaconis_binwidth <- function(data) {
 #' @param samples A character vector specifying the sample names to include
 #'   in the plot. When set to `NULL`, the function includes all samples
 #'   except the "normal_sample" (default: `NULL`).
-#' @param colour_by A character indicating whether to color the histogram
-#'   bars by "causes" or "classes" (default: "causes").
+#' @param labels A data frame column labelling each mutation. Each label
+#'   is associated to a different colour in the plot (default: `NULL`).
 #' @param binwidth The width of the plot bins. When set to `NULL`, the
 #'   function computes the most convenient bin width according to the
 #'   maximum coverage reported in the data frame (default: `NULL`).
+#' @param driver_mutations The data frame of the driver mutations as
+#'   returned by `PhylogeneticForest$get_driver_mutations()`.
+#'   This parameter can be avoided when `seq_result` if the result
+#'   of the function `simulate_seq()` (default: `NULL`).
+#' @param driver_mutation_labels A Boolean value to enable/disable
+#'   driver mutation labels in the returned plot (default: TRUE).
 #' @param cuts A numeric vector specifying the range of VAF values to
 #'   include in the plot (default: `c(0, 1)`).
 #' @return A ggplot2 object showing the VAF histogram.
@@ -80,8 +167,11 @@ freedman_diaconis_binwidth <- function(data) {
 #' # placing mutations
 #' m_engine <- MutationEngine(setup_code = "demo")
 #'
-#' m_engine$add_mutant(mutant_name="A", passenger_rates=c(SNV=5e-8))
-#' m_engine$add_mutant(mutant_name="B", passenger_rates=c(SNV=5e-9))
+#' m_engine$add_mutant(mutant_name="A", passenger_rates=c(SNV=5e-8),
+#'                     drivers = list(SNV("22", 16510210, "C", "T", allele = 1),
+#'                                    "DGCR8 P26L")
+#' m_engine$add_mutant(mutant_name="B", passenger_rates=c(SNV=5e-9),
+#'                     drivers = list("DGCR8 A18V", allele = 1))
 #' m_engine$add_exposure(c(SBS1 = 0.2, SBS5 = 0.8))
 #'
 #' phylo_forest <- m_engine$place_mutations(forest, 10, 10)
@@ -90,32 +180,54 @@ freedman_diaconis_binwidth <- function(data) {
 #' seq_results <- simulate_seq(phylo_forest, coverage = 10, write_SAM = F,
 #'                             with_normal_sample = FALSE)
 #'
+#' # plotting the VAF histogram of all the mutations
+#' plot_VAF_histogram(seq_results)
+#'
 #' library(dplyr)
 #'
 #' # filter germinal mutations
 #' f_seq <- seq_results$mutations %>% dplyr::filter(classes!="germinal")
 #'
 #' # plotting the VAF histogram
+#' plot_VAF_histogram(f_seq)
+#'
+#' # plotting the VAF histogram filtering out VAFs below 0.02
 #' plot_VAF_histogram(f_seq, cuts = c(0.02, 1))
 #'
 #' # plotting the VAF histogram with labels
 #' plot_VAF_histogram(f_seq, labels = f_seq["causes"], cuts = c(0.02, 1))
 #'
+#' # use the driver codes in the driver mutation labels
+#' plot_VAF_histogram(f_seq, labels = f_seq["causes"], cuts = c(0.02, 1),
+#'                    driver_mutations = phylo_forest$get_driver_mutations())
+#'
+#' # avoid the driver mutation labels
+#' plot_VAF_histogram(f_seq, labels = f_seq["causes"], cuts = c(0.02, 1),
+#'                    driver_mutation_labels = FALSE)
+#'
 #' # deleting the mutation engine directory
 #' unlink('demo', recursive = T)
 plot_VAF_histogram <- function(
-    seq_result,
-    chromosomes = NULL,
-    samples = NULL,
-    labels = NULL,
-    binwidth = NULL,
-    cuts = c(0, 1)
+  seq_result,
+  chromosomes = NULL,
+  samples = NULL,
+  labels = NULL,
+  binwidth = NULL,
+  driver_mutations = NULL,
+  driver_mutation_labels = TRUE,
+  cuts = c(0, 1)
 ) {
   # if the type of seq_res is a list and seq_res contains a field "mutations"
   if (is.list(seq_result) && ("mutations" %in% names(seq_result))) {
 
     # extract the field
-    seq_res <- seq_result["mutations"]
+    seq_res <- seq_result$mutations
+
+    if (is.null(driver_mutations) && "parameters" %in% names(seq_result)) {
+      if ("driver_mutations" %in% names(seq_result$parameters)) {
+        driver_mutations <- seq_result$parameters$driver_mutations
+      }
+    }
   } else {
     seq_res <- seq_result
   }
@@ -146,6 +258,7 @@ plot_VAF_histogram <- function(
   data <- data %>%
     dplyr::mutate(chr = factor(chr, levels = chromosomes)) %>%
     dplyr::filter(chr %in% chromosomes) %>%
+    dplyr::filter(VAF > 0) %>%
     dplyr::filter(VAF <= max(cuts), VAF >= min(cuts))
 
   if (!is.null(samples)) {
@@ -169,10 +282,18 @@ plot_VAF_histogram <- function(
     binwidth <- freedman_diaconis_binwidth(data$VAF)
   }
 
-  plot +
+  plot <- plot +
     ggplot2::geom_histogram(binwidth = binwidth, alpha = 0.5) +
     ggplot2::facet_grid(sample_name ~ chr, scales = "free_y") +
+    ggplot2::coord_cartesian(ylim = c(0, NA), xlim = c(0, 1)) +
+    ggplot2::ylab("count") +
     ggplot2::theme_bw() +
     ggplot2::scale_x_continuous(labels = scales::label_number(accuracy = 0.1)) +
     ggplot2::theme(legend.position = "bottom")
+
+  if (driver_mutation_labels) {
+    plot <- add_driver_mutation_labels(plot, data, driver_mutations)
+  }
+
+  return(plot)
 }
