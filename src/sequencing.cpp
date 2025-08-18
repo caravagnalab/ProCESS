@@ -171,6 +171,8 @@ RCPP_MODULE(Sequencing)
 //'   samples at least (default: `FALSE`).
 //' @param seed The random seed for the internal random generator
 //'   (optional).
+//' @param quiet A Boolean flag to enable/disable the progress bar
+//'   (default: FALSE).
 //' @return A named list of two elements: the sequencing output data
 //'   frame (name "`mutations`") and the calling parameters (name
 //'   "`parameters`").
@@ -200,7 +202,8 @@ RCPP_MODULE(Sequencing)
                  _["cell_labelling"] = R_NilValue, _["purity"] = 1,
                  _["with_normal_sample"] = true, _["preneoplastic_in_normal"] = false,
                  _["filename_prefix"] = "chr_", _["template_name_prefix"] = "r",
-                 _["include_non_sequenced_mutations"] = false, _["seed"] = R_NilValue),
+                 _["include_non_sequenced_mutations"] = false, _["seed"] = R_NilValue,
+                 _["quiet"] = false),
              "Simulating the sequencing of the samples in a phylogenetic forest");
 
 //' @name simulate_normal_seq
@@ -241,6 +244,8 @@ RCPP_MODULE(Sequencing)
 //'   samples at least (default: `FALSE`).
 //' @param seed The random seed for the internal random generator
 //'   (optional).
+//' @param quiet A Boolean flag to enable/disable the progress bar
+//'   (default: FALSE).
 //' @return A named list of two elements: the sequencing output data
 //'   frame (name "`mutations`") and the calling parameters
 //'   (name "`parameters`").
@@ -269,7 +274,8 @@ RCPP_MODULE(Sequencing)
                  _["write_SAM"] = true, _["update_SAM"] = false,
                  _["with_preneoplastic"] = false, _["filename_prefix"] = "chr_",
                  _["template_name_prefix"] = "r",
-                 _["include_non_sequenced_mutations"] = false, _["seed"] = R_NilValue),
+                 _["include_non_sequenced_mutations"] = false, _["seed"] = R_NilValue,
+                 _["quiet"] = false),
              "Simulating the sequencing of a normal sample");
 
 //' @name SampledCell

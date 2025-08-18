@@ -35,7 +35,8 @@ Rcpp::List simulate_seq(const PhylogeneticForest &forest, SEXP &sequencer,
                         const bool &preneoplastic_in_normal,
                         const std::string &filename_prefix,
                         const std::string &template_name_prefix,
-                        const bool &include_non_sequenced_mutations, const SEXP &seed);
+                        const bool &include_non_sequenced_mutations, const SEXP &seed,
+                        const bool quiet);
 
 Rcpp::List simulate_normal_seq(const PhylogeneticForest &forest, SEXP &sequencer,
                                SEXP &reference_genome, SEXP &chromosome_ids,
@@ -46,6 +47,6 @@ Rcpp::List simulate_normal_seq(const PhylogeneticForest &forest, SEXP &sequencer
                                const std::string &filename_prefix,
                                const std::string &template_name_prefix,
                                const bool &include_non_sequenced_mutations,
-                               const SEXP &seed);
+                               const SEXP &seed, const bool quiet);
 
 #endif // __PROCESS_SEQ_SIMULATION__

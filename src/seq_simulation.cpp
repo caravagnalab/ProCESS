@@ -359,7 +359,7 @@ simulate_seq(RACES::Mutations::SequencingSimulations::ReadSimulator<> &simulator
              const double &coverage,
              RACES::Mutations::SampleGenomeMutations &normal_sample, const double purity,
              const std::string &base_name, std::ostream &progress_bar_stream,
-             const int &seed)
+             const int &seed, const bool quiet)
 {
     using namespace RACES::Sequencers;
 
@@ -367,7 +367,7 @@ simulate_seq(RACES::Mutations::SequencingSimulations::ReadSimulator<> &simulator
                                                             seed);
 
     return simulator(sequencer, mutations_list, chromosome_ids, coverage, normal_sample,
-                     purity, base_name, progress_bar_stream);
+                     purity, base_name, progress_bar_stream, quiet);
 }
 
 RACES::Mutations::SequencingSimulations::SampleSetStatistics simulate_seq(
@@ -376,7 +376,7 @@ RACES::Mutations::SequencingSimulations::SampleSetStatistics simulate_seq(
     const std::set<RACES::Mutations::ChromosomeId> &chromosome_ids,
     const double &coverage, RACES::Mutations::SampleGenomeMutations &normal_sample,
     const double purity, const std::string &base_name, std::ostream &progress_bar_stream,
-    const int &seed)
+    const int &seed, const bool quiet)
 {
     switch (TYPEOF(sequencer)) {
     case S4SXP:
@@ -392,18 +392,18 @@ RACES::Mutations::SequencingSimulations::SampleSetStatistics simulate_seq(
             if (sequencer_ptr->producing_random_scores()) {
                 return simulate_seq<QualityScoreModel>(
                     simulator, sequencer_ptr, mutations_list, chromosome_ids, coverage,
-                    normal_sample, purity, base_name, progress_bar_stream, seed);
+                    normal_sample, purity, base_name, progress_bar_stream, seed, quiet);
             } else {
                 return simulate_seq<ConstantQualityScoreModel>(
                     simulator, sequencer_ptr, mutations_list, chromosome_ids, coverage,
-                    normal_sample, purity, base_name, progress_bar_stream, seed);
+                    normal_sample, purity, base_name, progress_bar_stream, seed, quiet);
             }
         }
         if (s4obj.is("Rcpp_ErrorlessIlluminaSequencer")) {
             RACES::Sequencers::Illumina::ErrorLessSequencer seq;
 
             return simulator(seq, mutations_list, chromosome_ids, coverage, normal_sample,
-                             purity, base_name, progress_bar_stream);
+                             purity, base_name, progress_bar_stream, quiet);
         }
 
         Rcpp::stop("Unsupported sequencer type");
@@ -413,7 +413,7 @@ RACES::Mutations::SequencingSimulations::SampleSetStatistics simulate_seq(
         RACES::Sequencers::Illumina::ErrorLessSequencer seq;
 
         return simulator(seq, mutations_list, chromosome_ids, coverage, normal_sample,
-                         purity, base_name, progress_bar_stream);
+                         purity, base_name, progress_bar_stream, quiet);
     }
     default:
         Rcpp::stop("Unsupported sequencer type");
@@ -517,7 +517,8 @@ Rcpp::List simulate_seq(const PhylogeneticForest &forest, SEXP &sequencer,
                         const bool &preneoplastic_in_normal,
                         const std::string &filename_prefix,
                         const std::string &template_name_prefix,
-                        const bool &include_non_sequenced_mutations, const SEXP &seed)
+                        const bool &include_non_sequenced_mutations, const SEXP &seed,
+                        const bool quiet)
 {
     using namespace RACES::Mutations::SequencingSimulations;
 
@@ -566,7 +567,8 @@ Rcpp::List simulate_seq(const PhylogeneticForest &forest, SEXP &sequencer,
 
     auto result =
         simulate_seq(simulator, sequencer, mutations_list, chr_ids, coverage,
-                     normal_sample, purity, filename_prefix, Rcpp::Rcout, c_seed);
+                     normal_sample, purity, filename_prefix, Rcpp::Rcout, c_seed,
+                     quiet);
 
     if (remove_output_path) {
         std::filesystem::remove_all(output_path);
@@ -586,7 +588,7 @@ Rcpp::List simulate_seq(const PhylogeneticForest &forest, SEXP &sequencer,
         _["filename_prefix"] = filename_prefix,
         _["template_name_prefix"] = template_name_prefix,
         _["include_non_sequenced_mutations"] = include_non_sequenced_mutations,
-        _["seed"] = c_seed,
+        _["seed"] = c_seed, _["quiet"] = quiet, 
         _["driver_mutations"] = forest.get_driver_mutations());
 
     return List::create(_["mutations"] =
@@ -603,7 +605,7 @@ Rcpp::List simulate_normal_seq(const PhylogeneticForest &forest, SEXP &sequencer
                                const std::string &filename_prefix,
                                const std::string &template_name_prefix,
                                const bool &include_non_sequenced_mutations,
-                               const SEXP &seed)
+                               const SEXP &seed, const bool quiet)
 {
     using namespace RACES::Mutations::SequencingSimulations;
 
@@ -646,7 +648,8 @@ Rcpp::List simulate_normal_seq(const PhylogeneticForest &forest, SEXP &sequencer
 
     auto result =
         simulate_seq(simulator, sequencer, mutations_list, chr_ids, coverage,
-                     mutations_list.front(), 1, filename_prefix, Rcpp::Rcout, c_seed);
+                     mutations_list.front(), 1, filename_prefix, Rcpp::Rcout,
+                     c_seed, quiet);
 
     if (remove_output_path) {
         std::filesystem::remove_all(output_path);
@@ -665,7 +668,7 @@ Rcpp::List simulate_normal_seq(const PhylogeneticForest &forest, SEXP &sequencer
         _["filename_prefix"] = filename_prefix,
         _["template_name_prefix"] = template_name_prefix,
         _["include_non_sequenced_mutations"] = include_non_sequenced_mutations,
-        _["seed"] = c_seed);
+        _["seed"] = c_seed, _["quiet"] = quiet);
 
     return List::create(_["mutations"] =
                             get_result_dataframe(result, include_non_sequenced_mutations),
