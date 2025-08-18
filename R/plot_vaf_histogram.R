@@ -32,7 +32,7 @@ mutation_string <- function(mutation) {
 }
 
 # add labels for driver mutations
-add_driver_mutation_labels <- function(plot, data, driver_mutations) {
+add_VAF_driver_mutation_labels <- function(plot, data, driver_mutations) {
 
   ggb <- ggplot2::ggplot_build(plot)
 
@@ -86,15 +86,10 @@ add_driver_mutation_labels <- function(plot, data, driver_mutations) {
                  y_max_count * 0.9),
         size = 2,
         min.segment.length = 0,
-        #max.overlaps = Inf,
-        #force = 1000,
-        #force_pull = 100,
-        #max.iter = 1000,
         segment.color = "grey50", # Color of the connecting segment
         segment.linetype = "dashed", # Line type of the segment
-        #nudge_x = 0,
         show.legend = FALSE,
-        segment.curvature = 1,
+        segment.curvature = 0,
         segment.ncp = 1,
         segment.square = TRUE,
         segment.inflect = TRUE,
@@ -108,6 +103,81 @@ add_driver_mutation_labels <- function(plot, data, driver_mutations) {
 # filter germinal mutations from data
 filter_germinal <- function(data) {
   data %>% dplyr::filter(.data$classes != "germinal")
+}
+
+# setup input data for plotting
+setup_VAF_data_for_plotting <- function(
+    seq_result,
+    chromosomes,
+    samples,
+    labels,
+    mutation_filter,
+    driver_mutations,
+    cuts)
+{
+  # if the type of seq_res is a list and seq_res contains a field "mutations"
+  if (is.list(seq_result) && ("mutations" %in% names(seq_result))) {
+
+    # extract the field
+    seq_res <- seq_result$mutations
+
+    if (is.null(driver_mutations) && "parameters" %in% names(seq_result)) {
+      if ("driver_mutations" %in% names(seq_result$parameters)) {
+        driver_mutations <- seq_result$parameters$driver_mutations
+      }
+    }
+  } else {
+    seq_res <- seq_result
+  }
+
+  data <- seq_to_long(seq_res)
+
+  if (!is.null(labels)) {
+    if (!is(labels, "data.frame")) {
+      stop("The parameter \"labels\" must be a data frame when non-NULL.")
+    }
+
+    if (length(labels) != 1) {
+      stop(paste0("The parameters \"labels\" must be a data frame ",
+                  "with one column when non-NULL."))
+    }
+
+    if (nrow(labels) != nrow(seq_res)) {
+      stop(paste0("The parameters \"seq_result\" and \"labels\"",
+                  " must have the same number of rows."))
+    }
+
+    data["labels"] <- labels
+    label_name <- names(labels)
+  }
+
+  if (!is.function(mutation_filter)) {
+    stop("The parameter \"mutation_filter\" must be a function.")
+  }
+  data <- mutation_filter(data)
+
+  chromosomes <- validate_chromosomes(seq_res, chromosomes)
+
+  data <- data %>%
+    dplyr::mutate(chr = factor(chr, levels = chromosomes)) %>%
+    dplyr::filter(chr %in% chromosomes) %>%
+    dplyr::filter(VAF > 0) %>%
+    dplyr::filter(VAF <= max(cuts) & VAF >= min(cuts))
+
+  if (!is.null(samples)) {
+    if (any(!samples %in% unique(data$sample_name))) {
+      stop("Invalid sample name in samples parameter")
+    }
+    data <- data %>% dplyr::filter(.data$sample_name %in% samples)
+  }
+
+  result <- list("data" = data, "driver_mutations" = driver_mutations)
+
+  if (!is.null(labels)) {
+    result["label_name"] <- label_name
+  }
+
+  return(result)
 }
 
 #' Plot a Variant Allele Frequency (VAF) histogram
@@ -186,7 +256,7 @@ filter_germinal <- function(data) {
 #'
 #' # simulating sequencing without the normal sample
 #' seq_results <- simulate_seq(phylo_forest, coverage = 10, write_SAM = F,
-#'                             with_normal_sample = FALSE)
+#'                             with_normal_sample = FALSE, quiet = TRUE)
 #'
 #' # plotting the VAF histogram without germinal mutations
 #' plot_VAF_histogram(seq_results)
@@ -248,67 +318,17 @@ plot_VAF_histogram <- function(
   driver_mutation_labels = TRUE,
   cuts = c(0, 1)
 ) {
-  # if the type of seq_res is a list and seq_res contains a field "mutations"
-  if (is.list(seq_result) && ("mutations" %in% names(seq_result))) {
+  setup_data <- setup_VAF_data_for_plotting(seq_result, chromosomes, samples,
+                                            labels, mutation_filter,
+                                            driver_mutations, cuts)
 
-    # extract the field
-    seq_res <- seq_result$mutations
-
-    if (is.null(driver_mutations) && "parameters" %in% names(seq_result)) {
-      if ("driver_mutations" %in% names(seq_result$parameters)) {
-        driver_mutations <- seq_result$parameters$driver_mutations
-      }
-    }
-  } else {
-    seq_res <- seq_result
-  }
-
-  data <- seq_to_long(seq_res)
-
-  if (!is.null(labels)) {
-    if (!is(labels, "data.frame")) {
-      stop("The parameter \"labels\" must be a data frame when non-NULL.")
-    }
-
-    if (length(labels) != 1) {
-      stop(paste0("The parameters \"labels\" must be a data frame ",
-                  "with one column when non-NULL."))
-    }
-
-    if (nrow(labels) != nrow(seq_res)) {
-      stop(paste0("The parameters \"seq_result\" and \"labels\"",
-                  " must have the same number of rows."))
-    }
-
-    data["labels"] <- labels
-    label_name <- names(labels)
-  }
-
-  if (!is.function(mutation_filter)) {
-    stop("The parameter \"mutation_filter\" must be a function.")
-  }
-  data <- mutation_filter(data)
-
-  chromosomes <- validate_chromosomes(seq_res, chromosomes)
-
-  data <- data %>%
-    dplyr::mutate(chr = factor(chr, levels = chromosomes)) %>%
-    dplyr::filter(chr %in% chromosomes) %>%
-    dplyr::filter(VAF > 0) %>%
-    dplyr::filter(VAF <= max(cuts), VAF >= min(cuts))
-
-  if (!is.null(samples)) {
-    if (any(!samples %in% unique(data$sample_name))) {
-      stop("Invalid sample name in samples parameter")
-    }
-    data <- data %>% dplyr::filter(sample_name %in% samples)
-  }
+  data <- setup_data$data
 
   if (!is.null(labels)) {
     plot <- data %>%
       ggplot2::ggplot(mapping = ggplot2::aes(x = VAF,
                                              fill = labels)) +
-      ggplot2::labs(col = data$labels, fill = label_name)
+      ggplot2::labs(col = data$labels, fill = setup_data$label_name)
   } else {
     plot <- data %>%
       ggplot2::ggplot(mapping = ggplot2::aes(x = VAF))
@@ -328,7 +348,8 @@ plot_VAF_histogram <- function(
     ggplot2::theme(legend.position = "bottom")
 
   if (driver_mutation_labels) {
-    plot <- add_driver_mutation_labels(plot, data, driver_mutations)
+    plot <- add_VAF_driver_mutation_labels(plot, data,
+                                           setup_data$driver_mutations)
   }
 
   return(plot)

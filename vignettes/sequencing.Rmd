@@ -57,8 +57,9 @@ We can simulate the sequencing of these samples with coverage
 of 2.5X by as it follows.
 
 ```{r}
-# let us simulate a 30x sequencing of the four sample
-seq_results <- simulate_seq(phylo_forest, coverage = 30)
+# let us simulate a 30x sequencing of the four sample and avoid
+# the progress bar
+seq_results <- simulate_seq(phylo_forest, coverage = 30, quiet = TRUE)
 
 # let us load the dplyr library to filter the `simulate_seq` output
 library(dplyr)
@@ -117,21 +118,22 @@ plot too.
 
 ```{r, fig.alt=c("The VAF histogram of all samples.", "The VAF marginal distribution S_1_1 vs S_1_2.", "The VAF marginal distribution S_1_1 vs S_2_2.", "The VAF marginal distribution S_1_2 vs S_2_2.")}
 # plotting the VAF histogram
-plot_VAF_histogram(f_seq, cuts = c(0.02, 1))
+plot_VAF_histogram(seq_results, cuts = c(0.02, 1))
 
 # plotting the VAF marginals
-plot_VAF_marginals(f_seq, samples = c("S_1_1", "S_1_2", "S_2_2"))
+plot_VAF_marginals(seq_results, samples = c("S_1_1", "S_1_2", "S_2_2"))
 ```
 
 The VAF and the VAF marginal plots can be labelled.
 
 ```{r, fig.alt=c("The VAF histogram labelled by mutation class.", "The VAF marginal distribution S_1_1 vs S_1_2 labelled by mutation class.", "The VAF marginal distribution S_1_1 vs S_2_2 labelled by mutation class.", "The VAF marginal distribution S_1_2 vs S_2_2 labelled by mutation class.")}
 # plotting the VAF histogram with labels
-plot_VAF_histogram(f_seq, labels = f_seq["classes"], cuts = c(0.02, 1))
+plot_VAF_histogram(seq_results, labels = seq_results$mutations["classes"],
+                   cuts = c(0.02, 1))
 
 # plotting the VAF marginals and labelling it
-plot_VAF_marginals(f_seq, samples = c("S_1_1", "S_1_2", "S_2_2"),
-                   labels = f_seq["classes"])
+plot_VAF_marginals(seq_results, labels = seq_results$mutations["classes"],
+                   samples = c("S_1_1", "S_1_2", "S_2_2"))
 ```
 
 ### Saving the Simulated Reads

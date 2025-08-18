@@ -65,21 +65,17 @@
 #'
 #' phylo_forest <- m_engine$place_mutations(forest, 100, 10)
 #'
-#' # simulate sequencing without the normal sample
-#' seq_results <- simulate_seq(phylo_forest, coverage = 100, write_SAM = F,
-#'                             with_normal_sample = FALSE)
-#'
-#' library(dplyr)
-#'
-#' # filter germinal mutations
-#' f_seq <- seq_results$mutations %>% dplyr::filter(classes!="germinal")
+#' # simulate sequencing without the normal sample and avoid progress bar
+#' seq_results <- simulate_seq(phylo_forest, coverage = 30, write_SAM = F,
+#'                             with_normal_sample = FALSE, quiet = TRUE)
 #'
 #' # label filtered mutations using phylogenetic forest data
-#' labels <- label_mutations(f_seq, phylo_forest)
+#' labels <- label_mutations(seq_results$mutations, phylo_forest)
 #' labels
 #'
 #' # plotting histogram of the VAF with phylogenetic labels
-#' plot_VAF_histogram(f_seq, labels = labels["label"], cuts = c(0.02, 1))
+#' plot_VAF_histogram(seq_results, labels = labels["label"],
+#'                    cuts = c(0.02, 1))
 label_mutations <- function(seq_results, phylo_forest) {
 
   # if the type of seq_res is a list and seq_res contains a field "mutations"

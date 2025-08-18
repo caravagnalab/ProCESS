@@ -229,8 +229,9 @@ the coverage of each mutation locus, and the corresponding VAF in each of the
 samples.
 
 ```{r}
+# simulate the sequencing without normal sample and avoid progress bar
 seq_results <- simulate_seq(phylo_forest, coverage = 30,
-                            with_normal_sample = FALSE)
+                            with_normal_sample = FALSE, quiet = TRUE)
 
 head(seq_results$mutations)
 ```
@@ -238,21 +239,21 @@ head(seq_results$mutations)
 ProCESS allows to visualise the sequencing results.
 
 ```{r, fig.width=4, fig.height=7, fig.alt=c("The VAF histogram labelled by mutation class.")}
-f_seq <- seq_results$mutations %>% filter(classes != "germinal")
-
-plot_VAF_histogram(f_seq, labels = f_seq["classes"], cuts = c(0.02, 1))
+plot_VAF_histogram(seq_results, labels = seq_results$mutations["classes"],
+                   cuts = c(0.02, 1))
 ```
 
 Marginal distributions can also be plotted.
 
 ```{r, fig.width=4, fig.height=4, fig.alt=c("The VAF marginal distribution S1 vs S2 labelled by mutation class.", "The VAF marginal distribution S1 vs S3 labelled by mutation class.", "The VAF marginal distribution S2 vs S3 labelled by mutation class.")}
-plot_VAF_marginals(f_seq, samples = c("S1", "S2", "S3"),
-                   labels = f_seq["classes"])
+plot_VAF_marginals(seq_results, labels = seq_results$mutations["classes"],
+                   samples = c("S1", "S2", "S3"))
 ```
 
 In S1 vs S3 figure, we can some spot passenger mutations occurring in both S1
 and S3. Let us identify these mutations.
 
 ```{r}
-f_seq %>% filter(classes == "passenger" & S1.VAF > 0 & S3.VAF > 0)
+seq_results$mutations %>% filter(classes == "passenger" &
+                                   S1.VAF > 0 & S3.VAF > 0)
 ```
