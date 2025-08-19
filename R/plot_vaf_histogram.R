@@ -32,7 +32,12 @@ mutation_string <- function(mutation) {
 }
 
 # add labels for driver mutations
-add_VAF_driver_mutation_labels <- function(plot, data, driver_mutations) {
+add_driver_mutation_labels <- function(
+    plot,
+    data,
+    driver_mutations,
+    x_value,
+    y_value) {
 
   ggb <- ggplot2::ggplot_build(plot)
 
@@ -67,6 +72,17 @@ add_VAF_driver_mutation_labels <- function(plot, data, driver_mutations) {
 
   panels <- unique(drivers$PANEL)
 
+  get_value_expr <- function(x) {
+    if (is.character(x)) {
+      rlang::sym(x)
+    } else {
+      x
+    }
+  }
+
+  x_expr <- get_value_expr(x_value)
+  y_expr <- get_value_expr(y_value)
+
   for (panel in panels) {
     drivers_in_panel <- drivers %>% dplyr::filter(PANEL == panel)
 
@@ -76,8 +92,8 @@ add_VAF_driver_mutation_labels <- function(plot, data, driver_mutations) {
       ggrepel::geom_label_repel(
         data = drivers_in_panel,
         ggplot2::aes(
-          x = VAF,
-          y = 0,
+          x = !!x_expr,
+          y = !!y_expr,
           label = code,
           fill = causes
         ),
@@ -106,15 +122,13 @@ filter_germinal <- function(data) {
 }
 
 # setup input data for plotting
-setup_VAF_data_for_plotting <- function(
+setup_data_for_plotting <- function(
     seq_result,
     chromosomes,
     samples,
     labels,
     mutation_filter,
-    driver_mutations,
-    cuts)
-{
+    driver_mutations) {
   # if the type of seq_res is a list and seq_res contains a field "mutations"
   if (is.list(seq_result) && ("mutations" %in% names(seq_result))) {
 
@@ -160,24 +174,58 @@ setup_VAF_data_for_plotting <- function(
 
   data <- data %>%
     dplyr::mutate(chr = factor(chr, levels = chromosomes)) %>%
-    dplyr::filter(chr %in% chromosomes) %>%
-    dplyr::filter(VAF > 0) %>%
-    dplyr::filter(VAF <= max(cuts) & VAF >= min(cuts))
+    dplyr::filter(chr %in% chromosomes)
+
+  normal_data <- data %>% dplyr::filter(sample_name == "normal_sample")
 
   if (!is.null(samples)) {
     if (any(!samples %in% unique(data$sample_name))) {
-      stop("Invalid sample name in samples parameter")
+      wrong_names <- setdiff(samples, unique(data$sample_name))
+      stop(paste("Invalid sample names in samples parameter:",
+                 paste0(wrong_names, collapse = ", ")))
     }
     data <- data %>% dplyr::filter(.data$sample_name %in% samples)
   }
 
-  result <- list("data" = data, "driver_mutations" = driver_mutations)
+  result <- list("data" = data, "normal" = normal_data,
+                 "driver_mutations" = driver_mutations)
 
   if (!is.null(labels)) {
     result["label_name"] <- label_name
   }
 
   return(result)
+}
+
+# setup data for VAF plotting
+setup_VAF_data_for_plotting <- function(
+    seq_result,
+    chromosomes,
+    samples,
+    labels,
+    mutation_filter,
+    driver_mutations,
+    cuts) {
+  result <- setup_data_for_plotting(seq_result, chromosomes,
+                                    samples, labels, mutation_filter,
+                                    driver_mutations)
+
+  data <- result$data %>%
+    dplyr::filter(.data$VAF > 0) %>%
+    dplyr::filter(.data$VAF <= max(cuts) & .data$VAF >= min(cuts))
+
+  normal <- result$normal %>%
+    dplyr::filter(.data$VAF > 0) %>%
+    dplyr::filter(.data$VAF <= max(cuts) & .data$VAF >= min(cuts))
+
+  filtered_result <- list("data" = data, "normal" = normal,
+                          "driver_mutations" = result$driver_mutations)
+
+  if (!is.null(labels)) {
+    filtered_result["label_name"] <- result$label_name
+  }
+
+  return(filtered_result)
 }
 
 #' Plot a Variant Allele Frequency (VAF) histogram
@@ -202,7 +250,7 @@ setup_VAF_data_for_plotting <- function(
 #'   `function(x) x %>% dplyr::filter(classes != "germinal")`).
 #' @param driver_mutations The data frame of the driver mutations as
 #'   returned by `PhylogeneticForest$get_driver_mutations()`.
-#'   This parameter can be avoided when `seq_result` if the result
+#'   This parameter can be avoided when `seq_result` is the result
 #'   of the function `simulate_seq()` (default: `NULL`).
 #' @param driver_mutation_labels A Boolean value to enable/disable
 #'   driver mutation labels in the returned plot (default: TRUE).
@@ -247,9 +295,9 @@ setup_VAF_data_for_plotting <- function(
 #'
 #' m_engine$add_mutant(mutant_name="A", passenger_rates=c(SNV=5e-8),
 #'                     drivers = list(SNV("22", 16510210, "C", "T", allele = 1),
-#'                                    "DGCR8 P26L")
+#'                                    "DGCR8 P26L"))
 #' m_engine$add_mutant(mutant_name="B", passenger_rates=c(SNV=5e-9),
-#'                     drivers = list("DGCR8 A18V", allele = 1))
+#'                     drivers = list("DGCR8 A18V"))
 #' m_engine$add_exposure(c(SBS1 = 0.2, SBS5 = 0.8))
 #'
 #' phylo_forest <- m_engine$place_mutations(forest, 10, 10)
@@ -263,6 +311,7 @@ setup_VAF_data_for_plotting <- function(
 #'
 #' # let us define a function to filter germinal and pre-neoplastic
 #' # from the input data
+#' library(dplyr)
 #' filter_data <- function(data) {
 #'   data %>% dplyr::filter(!classes %in% list("germinal",
 #'                                             "pre-neoplastic"))
@@ -285,7 +334,6 @@ setup_VAF_data_for_plotting <- function(
 #'
 #' # the same plots can be drawn by using the mutations data frame
 #' # in place of the `simulate_seq()` output
-#' library(dplyr)
 #'
 #' # filter germinal mutations
 #' f_seq <- seq_results$mutations %>%
@@ -328,7 +376,7 @@ plot_VAF_histogram <- function(
     plot <- data %>%
       ggplot2::ggplot(mapping = ggplot2::aes(x = VAF,
                                              fill = labels)) +
-      ggplot2::labs(col = data$labels, fill = setup_data$label_name)
+      ggplot2::labs(col = NULL, fill = setup_data$label_name)
   } else {
     plot <- data %>%
       ggplot2::ggplot(mapping = ggplot2::aes(x = VAF))
@@ -348,8 +396,8 @@ plot_VAF_histogram <- function(
     ggplot2::theme(legend.position = "bottom")
 
   if (driver_mutation_labels) {
-    plot <- add_VAF_driver_mutation_labels(plot, data,
-                                           setup_data$driver_mutations)
+    plot <- add_driver_mutation_labels(plot, data, setup_data$driver_mutations,
+                                       "VAF", 0)
   }
 
   return(plot)

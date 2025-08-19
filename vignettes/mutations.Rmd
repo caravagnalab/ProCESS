@@ -139,7 +139,7 @@ m_engine <- MutationEngine(setup_code = "demo")
 m_engine$add_mutant(mutant_name = "A",
                     passenger_rates = list("+" = c(SNV = 1e-9, indel = 1e-9),
                                            "-" = c(SNV = 3e-9, CNA = 1e-11)),
-                    drivers = list(SNV("22", 10510210, "C", allele = 1),
+                    drivers = list(SNV("22", 46510210, "C", allele = 1),
                                    Mutation("22", 16085675, "GCCTCCCGA", "G"),
                                    CNA(type = "A", chr = "22",
                                        chr_pos = 10303470, len = 200000),

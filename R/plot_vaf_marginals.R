@@ -49,10 +49,6 @@ add_marginals_driver_mutation_labels <- function(plot, data, driver_mutations) {
       color = 'black',
       size = 2,
       min.segment.length = 0,
-      #max.overlaps = Inf,
-      #force = 1000,
-      #force_pull = 100,
-      #max.iter = 1000,
       segment.color = "grey50", # Color of the connecting segment
       segment.linetype = "dashed", # Line type of the segment
       nudge_x = 0.1,
@@ -87,7 +83,7 @@ add_marginals_driver_mutation_labels <- function(plot, data, driver_mutations) {
 #'   `function(x) x %>% dplyr::filter(classes != "germinal")`).
 #' @param driver_mutations The data frame of the driver mutations as
 #'   returned by `PhylogeneticForest$get_driver_mutations()`.
-#'   This parameter can be avoided when `seq_result` if the result
+#'   This parameter can be avoided when `seq_result` is the result
 #'   of the function `simulate_seq()` (default: `NULL`).
 #' @param driver_mutation_labels A Boolean value to enable/disable
 #'   driver mutation labels in the returned plot (default: TRUE).
@@ -133,8 +129,11 @@ add_marginals_driver_mutation_labels <- function(plot, data, driver_mutations) {
 #' # placing mutations
 #' m_engine <- MutationEngine(setup_code = "demo")
 #'
-#' m_engine$add_mutant(mutant_name="A", passenger_rates=c(SNV=5e-8))
-#' m_engine$add_mutant(mutant_name="B", passenger_rates=c(SNV=5e-9))
+#' m_engine$add_mutant(mutant_name="A", passenger_rates=c(SNV=5e-8),
+#'                     drivers = list(SNV("22", 16510210, "C", "T", allele = 1),
+#'                                    "DGCR8 P26L"))
+#' m_engine$add_mutant(mutant_name="B", passenger_rates=c(SNV=5e-9),
+#'                     drivers = list("DGCR8 A18V"))
 #' m_engine$add_exposure(c(SBS1 = 0.2, SBS5 = 0.8))
 #'
 #' phylo_forest <- m_engine$place_mutations(forest, 10, 10)
@@ -148,6 +147,7 @@ add_marginals_driver_mutation_labels <- function(plot, data, driver_mutations) {
 #'
 #' # let us define a function to filter germinal and pre-neoplastic
 #' # from the input data
+#' library(dplyr)
 #' filter_data <- function(data) {
 #'   data %>% dplyr::filter(!classes %in% list("germinal",
 #'                                             "pre-neoplastic"))
@@ -169,7 +169,6 @@ add_marginals_driver_mutation_labels <- function(plot, data, driver_mutations) {
 #'
 #' # the same plots can be drawn by using the mutations data frame
 #' # in place of the `simulate_seq()` output
-#' library(dplyr)
 #'
 #' # filter germinal mutations
 #' f_seq <- seq_results$mutations %>%
@@ -242,10 +241,10 @@ plot_VAF_marginals <- function(
     }
 
     plot <- plot +
-      ggplot2::geom_point(alpha = 0.7) +
+      ggplot2::geom_point(alpha = 0.5) +
       ggplot2::xlim(c(-0.01, 1.01)) +
       ggplot2::ylim(c(-0.01, 1.01)) +
-      ggplot2::labs(x = couple[1], y = couple[2], col = "labels") +
+      ggplot2::labs(x = couple[1], y = couple[2]) +
       ggplot2::theme_bw() +
       ggplot2::theme(legend.position = "bottom")
 

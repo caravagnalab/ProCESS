@@ -94,35 +94,46 @@ ProCESS/RACE provides functions to plot the Variant Allele
 Frequency (VAF), the B-Allele Frequency (BAF),
 and the Depth Ratio (DR) of a sample.
 
-```{r, fig.alt=c("A plot depicting the Variant Allele Frequency (VAF) of a sequenced sample.", "A plot depicting the B-Allele Frequency (BAF) of a sequenced sample.", "A plot depicting the Depth Ratio (DR) of a sequenced sample.")}
-library(dplyr)
+```{r, fig.alt=c("A plot depicting the Variant Allele Frequency (VAF) of all samples.", "A plot depicting the B-Allele Frequency (BAF) of all samples.", "A plot depicting the Depth Ratio (DR) of all samples.")}
+# plot the VAF of the mutations sequenced in all samples
+plot_VAF(seq_results)
 
-# filter germinal mutations
-f_seq <- seq_results$mutations %>% filter(classes != "germinal")
+# plot the BAF of the mutations sequenced in all samples
+plot_BAF(seq_results)
 
-# plot the VAF of the mutations sequenced on the sample S_2_2
-# over the reference genome
-plot_VAF(f_seq, sample = "S_2_2")
-
-# plot the BAF of the mutations sequenced on the sample S_2_2
-# over the reference genome
-plot_BAF(f_seq, sample = "S_2_2")
-
-# plot the DR of the mutations sequenced on the sample S_2_2
-# over the reference genome
-plot_DR(f_seq, sample = "S_2_2")
+# plot the DR of the mutations sequenced in all samples
+plot_DR(seq_results)
 ```
 
-The VAF and the VAF marginal distributions can be
+The VAF histogram and the VAF marginal distributions can be
 plot too.
 
 ```{r, fig.alt=c("The VAF histogram of all samples.", "The VAF marginal distribution S_1_1 vs S_1_2.", "The VAF marginal distribution S_1_1 vs S_2_2.", "The VAF marginal distribution S_1_2 vs S_2_2.")}
 # plotting the VAF histogram
-plot_VAF_histogram(seq_results, cuts = c(0.02, 1))
+plot_VAF_histogram(seq_results)
 
 # plotting the VAF marginals
 plot_VAF_marginals(seq_results, samples = c("S_1_1", "S_1_2", "S_2_2"))
 ```
+
+All above plotting functions allow to focus on specific samples, 
+filter the data, and label the plotted points.
+
+```{r, fig.alt=c("A plot depicting the Variant Allele Frequency (VAF) of the sample S_2_2.", "A plot depicting the Variant Allele Frequency (VAF) of the sample S_2_2 missing of the driver mutation labels.", "A plot depicting the Variant Allele Frequency (VAF) of the sample S_2_2 labelled by mutation class.")}
+# plot the VAF of the mutations sequenced in S_2_2 filtering out
+# those with VAF lower than 0.02
+plot_VAF(seq_results, samples = "S_2_2", cuts = c(0.02, 1))
+
+# plot the VAF and avoid the driver labels
+plot_VAF(seq_results, samples = "S_2_2", cuts = c(0.02, 1),
+         driver_mutation_labels = FALSE)
+
+# plot the VAF and labels the point according to the mutation classes
+plot_VAF(seq_results, samples = "S_2_2", cuts = c(0.02, 1),
+         labels = seq_results$mutations["classes"])
+
+```
+
 
 The VAF and the VAF marginal plots can be labelled.
 
