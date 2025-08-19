@@ -226,13 +226,15 @@ plot_BAF <- function(
   Ntotal <- nrow(data$tumour)
   N = min(N, Ntotal)
 
+  data$tumour$BAF <- pmin(data$tumour$VAF, 1 - data$tumour$VAF)
+
   d <- data$tumour %>%
     #dplyr::group_by(chr) %>%
     dplyr::sample_n(N) %>%
     #dplyr::ungroup() %>%
     dplyr::arrange(chr, from) %>%
     dplyr::mutate(abs_pos = 1:dplyr::n()) %>%
-    dplyr::filter(VAF <= max(cuts), VAF >= min(cuts))
+    dplyr::filter(BAF <= max(cuts), BAF >= min(cuts))
 
   chr_limits <- d %>%
     dplyr::group_by(chr) %>%
@@ -246,7 +248,7 @@ plot_BAF <- function(
     dplyr::pull(mean_pos)
 
   d %>%
-    ggplot2::ggplot(mapping = ggplot2::aes(x = abs_pos, y = VAF)) +
+    ggplot2::ggplot(mapping = ggplot2::aes(x = abs_pos, y = BAF)) +
     ggplot2::geom_vline(xintercept = chr_means, linetype = "dashed",
                         alpha = 0.2) +
     ggplot2::geom_vline(xintercept = chr_limits, linetype = "solid",
