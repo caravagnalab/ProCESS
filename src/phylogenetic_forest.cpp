@@ -61,20 +61,14 @@ Rcpp::List PhylogeneticForest::get_samples_info() const
 
     const auto &samples = get_samples();
     std::vector<size_t> DNA(samples.size(), 0);
-    for (const auto &[cell_id, mutations_ptr] : get_leaves_mutations()) {
-        DNA[get_coming_from().at(cell_id)] += mutations_ptr->allelic_size();
+    for (const auto& leaf_mutations : get_leaf_mutation_tour()) {
+        DNA[get_coming_from().at(leaf_mutations.get_id())] += leaf_mutations.allelic_size();
     }
 
     std::map<std::string, size_t> sample_name_map;
     for (size_t j = 0; j < samples.size(); ++j) {
         sample_name_map[samples[j].get_name()] = j;
     }
-
-    size_t normal_DNA_quantity{0};
-    for (auto [cell_id, normal_genome] : get_normal_genomes()) {
-        normal_DNA_quantity += normal_genome.allelic_size();
-    }
-    normal_DNA_quantity /= get_roots().size();
 
     using namespace Rcpp;
 
@@ -87,7 +81,8 @@ Rcpp::List PhylogeneticForest::get_samples_info() const
         const auto j = sample_name_map.at(sample_name);
 
         DNA_quantities[j] = DNA[i];
-        equivalent_normal_cells[j] = static_cast<double>(DNA[i]) / normal_DNA_quantity;
+        equivalent_normal_cells[j] = static_cast<double>(DNA[i])
+                                / get_germline_mutations().allelic_size();
     }
 
     return DataFrame::create(_["name"] = info["name"], _["id"] = info["id"],
@@ -330,6 +325,19 @@ count_mutations(const std::map<RACES::Mutants::CellId,
     return counter;
 }
 
+size_t
+count_mutations(const PhylogeneticForest::GenomeMutationTour& mutation_tour)
+{
+    size_t counter{0};
+
+    for (const auto& node_mutations : mutation_tour) {
+        counter += count_mutations(node_mutations);
+    }
+
+    return counter;
+}
+
+
 size_t count_CNAs(const RACES::Mutations::GenomeMutations &mutations)
 {
     size_t counter{0};
@@ -347,6 +355,17 @@ size_t count_CNAs(const std::map<RACES::Mutants::CellId,
     size_t counter{0};
     for (const auto &[cell_id, mutations_ptr] : genome_mutations) {
         counter += count_CNAs(*mutations_ptr);
+    }
+
+    return counter;
+}
+
+size_t count_CNAs(const PhylogeneticForest::GenomeMutationTour& mutation_tour)
+{
+    size_t counter{0};
+
+    for (const auto& node_mutations : mutation_tour) {
+        counter += count_CNAs(node_mutations);
     }
 
     return counter;
@@ -483,7 +502,10 @@ Rcpp::List PhylogeneticForest::get_germline_SIDs() const
 
 Rcpp::List PhylogeneticForest::get_sampled_cell_SIDs() const
 {
-    size_t num_of_mutations = count_mutations(get_leaves_mutations());
+    //size_t num_of_mutations = count_mutations(get_leaves_mutations());
+    const auto leaf_tour = get_leaf_mutation_tour();
+
+    const size_t num_of_mutations = count_mutations(leaf_tour);
 
     using namespace Rcpp;
 
@@ -494,8 +516,9 @@ Rcpp::List PhylogeneticForest::get_sampled_cell_SIDs() const
         classes(num_of_mutations);
 
     size_t index{0};
-    for (const auto &[cell_id, mutations_ptr] : get_leaves_mutations()) {
-        fill_mutation_lists(*mutations_ptr, cell_ids, chr_names, chr_pos, alleles, ref,
+
+    for (const auto& leaf_mutations : leaf_tour) {
+        fill_mutation_lists(leaf_mutations, cell_ids, chr_names, chr_pos, alleles, ref,
                             alt, types, causes, classes, index);
     }
 
@@ -506,21 +529,21 @@ Rcpp::List PhylogeneticForest::get_sampled_cell_SIDs() const
 }
 
 Rcpp::List
-PhylogeneticForest::get_sampled_cell_SIDs(const RACES::Mutants::CellId &cell_id) const
+PhylogeneticForest::get_cell_SIDs(const RACES::Mutants::CellId &cell_id) const
 {
-    auto mutation_it = get_leaves_mutations().find(cell_id);
+    try {
+        auto cell_mutations = get_cell_mutations(cell_id);
 
-    if (mutation_it == get_leaves_mutations().end()) {
-        Rcpp::stop("Cell \"" + std::to_string(cell_id) + "\" is not a leaf");
+        return get_SID_dataframe(cell_mutations);
+    } catch (std::domain_error& ex) {
+         Rcpp::stop(ex.what());
     }
-
-    return get_SID_dataframe(*(mutation_it->second));
 }
 
 Rcpp::List PhylogeneticForest::get_SID_dataframe(
     const RACES::Mutations::CellGenomeMutations &cell_mutations)
 {
-    size_t num_of_mutations = count_mutations(cell_mutations);
+    const size_t num_of_mutations = count_mutations(cell_mutations);
 
     using namespace Rcpp;
 
@@ -542,7 +565,8 @@ Rcpp::List PhylogeneticForest::get_SID_dataframe(
 
 Rcpp::List PhylogeneticForest::get_sampled_cell_CNAs() const
 {
-    size_t num_of_mutations = count_CNAs(get_leaves_mutations());
+    const auto leaf_tour = get_leaf_mutation_tour();
+    const size_t num_of_mutations = count_CNAs(leaf_tour);
 
     using namespace Rcpp;
 
@@ -553,9 +577,10 @@ Rcpp::List PhylogeneticForest::get_sampled_cell_CNAs() const
         classes(num_of_mutations);
 
     size_t index{0};
-    for (const auto &[cell_id, mutations_ptr] : get_leaves_mutations()) {
-        fill_CNA_lists(*mutations_ptr, cell_ids, chr_names, CNA_begins, CNA_ends,
+    for (const auto& leaf_mutations : leaf_tour) {
+        fill_CNA_lists(leaf_mutations, cell_ids, chr_names, CNA_begins, CNA_ends,
                        src_alleles, dst_alleles, types, classes, index);
+        break;
     }
 
     return DataFrame::create(_["cell_id"] = cell_ids, _["type"] = types,
@@ -565,15 +590,15 @@ Rcpp::List PhylogeneticForest::get_sampled_cell_CNAs() const
 }
 
 Rcpp::List
-PhylogeneticForest::get_sampled_cell_CNAs(const RACES::Mutants::CellId &cell_id) const
+PhylogeneticForest::get_cell_CNAs(const RACES::Mutants::CellId &cell_id) const
 {
-    auto mutation_it = get_leaves_mutations().find(cell_id);
-
-    if (mutation_it == get_leaves_mutations().end()) {
-        Rcpp::stop("Cell \"" + std::to_string(cell_id) + "\" is not a leaf");
+    RACES::Mutations::CellGenomeMutations cell_mutations;
+    try {
+        cell_mutations = get_cell_mutations(cell_id);
+    } catch (std::domain_error& ex) {
+        Rcpp::stop(ex.what());
     }
 
-    const auto &cell_mutations = *(mutation_it->second);
     size_t num_of_mutations = count_CNAs(cell_mutations);
 
     using namespace Rcpp;
@@ -846,7 +871,7 @@ Rcpp::List get_bulk_allelic_fragmentation(
 
 Rcpp::List PhylogeneticForest::get_bulk_allelic_fragmentation() const
 {
-    const double num_of_cells = get_leaves_mutations().size();
+    const double num_of_cells = num_of_leaves();
     const auto &chr_map = get_germline_mutations().get_chromosomes();
     const auto allelic_count = get_allelic_count(2);
 
@@ -911,13 +936,32 @@ size_t count_rows_in_cell_allelic_fragmentation(
     return num_of_rows;
 }
 
+size_t count_rows_in_cell_allelic_fragmentation(
+    const PhylogeneticForest::GenomeMutationTour& node_tour)
+{
+    size_t num_of_rows{0};
+
+    for (const auto& node_mutations : node_tour) {
+        const auto b_points = node_mutations.get_CNA_break_points();
+        const auto allelic_map = node_mutations.get_allelic_map(b_points, 2);
+
+        for (const auto &[chr_id, chr_allelic_map] : allelic_map) {
+            num_of_rows += chr_allelic_map.size();
+        }
+    }
+
+    return num_of_rows;
+}
+
 Rcpp::List PhylogeneticForest::get_cell_allelic_fragmentation() const
 {
     using namespace Rcpp;
     using namespace RACES::Mutations;
 
+    const auto leaf_tour = get_leaf_mutation_tour();
     const size_t num_of_rows =
-        count_rows_in_cell_allelic_fragmentation(get_leaves_mutations());
+    //    count_rows_in_cell_allelic_fragmentation(get_leaves_mutations());
+        count_rows_in_cell_allelic_fragmentation(leaf_tour);
 
     IntegerVector ids(num_of_rows);
     StringVector chromosomes(num_of_rows);
@@ -927,9 +971,36 @@ Rcpp::List PhylogeneticForest::get_cell_allelic_fragmentation() const
     const auto &chr_map = get_germline_mutations().get_chromosomes();
 
     size_t row_idx{0};
+    /*
     for (const auto &[cell_id, mutations] : get_leaves_mutations()) {
         const auto b_points = mutations->get_CNA_break_points();
         const auto allelic_map = mutations->get_allelic_map(b_points, 2);
+
+        for (const auto &[chr_id, chr_allelic_map] : allelic_map) {
+            auto a_map_it = chr_allelic_map.begin();
+            auto next_a_map_it = a_map_it;
+            while (++next_a_map_it != chr_allelic_map.end()) {
+                fill_allelic_cell_data(a_map_it->second, cell_id, chr_id, a_map_it->first,
+                                       next_a_map_it->first - 1, ids, chromosomes,
+                                       fragment_begins, fragment_ends, major_counts,
+                                       minor_counts, row_idx);
+
+                a_map_it = next_a_map_it;
+            }
+
+            fill_allelic_cell_data(a_map_it->second, cell_id, chr_id, a_map_it->first,
+                                   chr_map.at(chr_id).size(), ids, chromosomes,
+                                   fragment_begins, fragment_ends, major_counts,
+                                   minor_counts, row_idx);
+        }
+    }
+    */
+
+    for (const auto& leaf_mutations: leaf_tour) {
+        const auto b_points = leaf_mutations.get_CNA_break_points();
+        const auto allelic_map = leaf_mutations.get_allelic_map(b_points, 2);
+
+        const auto cell_id = leaf_mutations.get_id();
 
         for (const auto &[chr_id, chr_allelic_map] : allelic_map) {
             auto a_map_it = chr_allelic_map.begin();

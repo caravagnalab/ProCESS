@@ -28,6 +28,7 @@
 
 #include "forest.hpp"
 #include "genomic_data_storage.hpp"
+#include "sampled_cell.hpp"
 
 class MutationEngine;
 
@@ -59,6 +60,8 @@ class PhylogeneticForest : public RACES::Mutations::PhylogeneticForest
                        const TimedMutationalExposure &timed_indel_exposures);
 
   public:
+    using base_type = RACES::Mutations::PhylogeneticForest;
+
     PhylogeneticForest();
 
     inline Rcpp::List get_nodes() const
@@ -98,11 +101,11 @@ class PhylogeneticForest : public RACES::Mutations::PhylogeneticForest
 
     Rcpp::List get_sampled_cell_SIDs() const;
 
-    Rcpp::List get_sampled_cell_SIDs(const RACES::Mutants::CellId &cell_ids) const;
+    Rcpp::List get_cell_SIDs(const RACES::Mutants::CellId &cell_ids) const;
 
     Rcpp::List get_sampled_cell_CNAs() const;
 
-    Rcpp::List get_sampled_cell_CNAs(const RACES::Mutants::CellId &cell_ids) const;
+    Rcpp::List get_cell_CNAs(const RACES::Mutants::CellId &cell_ids) const;
 
     Rcpp::List get_first_occurrence(const SEXP &mutation) const;
 
@@ -126,6 +129,11 @@ class PhylogeneticForest : public RACES::Mutations::PhylogeneticForest
     inline Rcpp::List get_germline_subject_df() const
     {
         return germline_subject.get_dataframe();
+    }
+
+    inline void partition_samples(const SEXP &labelling_function)
+    {
+        ForestCore::partition_samples_in_forest(*this, labelling_function);
     }
 
     inline void save(const std::string &filename) const { save(filename, false); }

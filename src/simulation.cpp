@@ -1449,8 +1449,8 @@ bool TissueSimulation::already_collected_sample(const std::string &sample_name) 
 
 void TissueSimulation::validate_usable_sample_name(const std::string &sample_name) const
 {
-    if (sample_name == "normal_sample") {
-        ::Rf_error("Sample name \"normal_sample\" is reserved.");
+    if (sample_name == "normal sample" || sample_name == "normal.sample") {
+        ::Rf_error("Sample name \"normal sample\" is reserved.");
     }
 
     if (already_collected_sample(sample_name)) {

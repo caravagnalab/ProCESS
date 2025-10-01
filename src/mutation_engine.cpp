@@ -181,6 +181,26 @@ inline std::filesystem::path get_context_index_path(const GenomicDataStorage &st
            std::string("context_index_" + std::to_string(context_sampling) + ".cif");
 }
 
+std::set<RACES::Mutations::GenomicRegion>
+get_region_to_avoid(const GenomicDataStorage &storage)
+{
+    std::set<RACES::Mutations::GenomicRegion> regions_to_avoid;
+
+    auto drivers_path = storage.get_driver_mutations_path();
+    if (std::filesystem::exists(drivers_path)) {
+        auto driver_storage = RACES::Mutations::DriverStorage::load(drivers_path);
+
+        for (const auto &[name, mutation_entry] :
+                                driver_storage.get_code2mutation_map()) {
+            regions_to_avoid.emplace(
+                mutation_entry.mutation,
+                std::max(static_cast<size_t>(1), mutation_entry.mutation.ref.size()));
+        }
+    }
+
+    return regions_to_avoid;
+}
+
 template <typename ABSOLUTE_GENOTYPE_POSITION = uint32_t>
 RACES::Mutations::ContextIndex<ABSOLUTE_GENOTYPE_POSITION>
 build_contex_index(const GenomicDataStorage &storage, const size_t context_sampling,
@@ -214,19 +234,7 @@ build_contex_index(const GenomicDataStorage &storage, const size_t context_sampl
 
     Rcout << "Building context index..." << std::endl << std::flush;
 
-    std::set<GenomicRegion> regions_to_avoid;
-
-    auto drivers_path = storage.get_driver_mutations_path();
-    if (std::filesystem::exists(drivers_path)) {
-        auto driver_storage = DriverStorage::load(drivers_path);
-
-        for (const auto &[name, mutation_entry] :
-             driver_storage.get_code2mutation_map()) {
-            regions_to_avoid.emplace(
-                mutation_entry.mutation,
-                std::max(static_cast<size_t>(1), mutation_entry.mutation.ref.size()));
-        }
-    }
+    std::set<GenomicRegion> regions_to_avoid = get_region_to_avoid(storage);
 
     std::list<GenomicRegion> chr_regions;
     {
@@ -294,19 +302,8 @@ RACES::Mutations::RSIndex build_rs_index(const GenomicDataStorage &storage,
         Rcout << "Building repeated sequence index..." << std::endl << std::flush;
     }
 
-    /*
-      std::set<GenomicRegion> regions_to_avoid;
 
-      auto drivers_path = storage.get_driver_mutations_path();
-      if (std::filesystem::exists(drivers_path)) {
-        auto driver_storage = DriverStorage::load(drivers_path);
-
-        for (const auto& [name, mutation] : driver_storage.get_mutations()) {
-            regions_to_avoid.emplace(mutation, std::max(static_cast<size_t>(1),
-                                                        mutation.ref.size()));
-        }
-      }
-    */
+    std::set<GenomicRegion> regions_to_avoid = get_region_to_avoid(storage);
 
     {
         UI::ProgressBar progress_bar(Rcpp::Rcout, quiet);
@@ -1096,18 +1093,18 @@ void MutationEngine::add_mutant(const std::string &mutant_name,
 }
 
 PhylogeneticForest MutationEngine::place_mutations(
-    const SampleForest &forest, const size_t &num_of_preneoplatic_SNVs,
-    const std::string &preneoplatic_SNV_signature_name,
-    const size_t &num_of_preneoplatic_indels,
-    const std::string &preneoplatic_indel_signature_name, const int seed)
+    const SampleForest &forest, const size_t &num_of_pre_neoplastic_SNVs,
+    const std::string &pre_neoplastic_SNV_signature_name,
+    const size_t &num_of_pre_neoplastic_indels,
+    const std::string &pre_neoplastic_indel_signature_name, const int seed)
 {
     RACES::UI::ProgressBar progress_bar(Rcpp::Rcout);
 
     progress_bar.set_message("Placing mutations");
 
     auto phylo_forest = m_engine.place_mutations(
-        forest, num_of_preneoplatic_SNVs, num_of_preneoplatic_indels, progress_bar, seed,
-        preneoplatic_SNV_signature_name, preneoplatic_indel_signature_name);
+        forest, num_of_pre_neoplastic_SNVs, num_of_pre_neoplastic_indels, progress_bar, seed,
+        pre_neoplastic_SNV_signature_name, pre_neoplastic_indel_signature_name);
     progress_bar.set_message("Mutations placed");
 
     using MutationType = RACES::Mutations::MutationType;

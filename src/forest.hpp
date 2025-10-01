@@ -24,8 +24,30 @@
 
 #include <mutant_properties.hpp>
 
-struct ForestCore
+#include "sampled_cell.hpp"
+
+class ForestCore
 {
+    template<typename FOREST>
+    class LabellingFunction
+    {
+        FOREST const& forest;
+        Rcpp::Function const& R_function;
+
+    public:
+        LabellingFunction(const FOREST& forest,
+                        const Rcpp::Function& R_function):
+            forest{forest}, R_function{R_function}
+        {}
+
+        std::string operator()(const RACES::Mutants::CellId& cell_id) const
+        {
+            auto node = Rcpp::wrap(SampledCell(forest, cell_id));
+
+            return Rcpp::as<std::string>(R_function(node));
+        }
+    };
+public:
     template <typename CPP_FOREST>
     static Rcpp::List get_nodes(const CPP_FOREST &forest,
                                 const std::vector<RACES::Mutants::CellId> &cell_ids)
@@ -116,6 +138,26 @@ struct ForestCore
         auto coalencent_ids = forest.get_coalescent_cells(cell_ids);
 
         return ForestCore::get_nodes<CPP_FOREST>(forest, coalencent_ids);
+    }
+
+    template<typename FOREST>
+    static void
+    partition_samples_in_forest(FOREST& forest, const SEXP &labelling_function)
+    {
+        switch (TYPEOF(labelling_function)) {
+        case CLOSXP:
+        {
+            Rcpp::Function l_function = Rcpp::as<Rcpp::Function>(labelling_function);
+
+            LabellingFunction l_func{forest, l_function};
+
+            static_cast<FOREST::base_type&>(forest).partition_samples(l_func);
+            
+            break;
+        }
+        default:
+            Rcpp::stop("The parameter `labelling_function` must be a function.");
+        }
     }
 };
 

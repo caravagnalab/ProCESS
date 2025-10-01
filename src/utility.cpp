@@ -139,8 +139,10 @@ std::string ordinal_suffix(const size_t &ord)
 void raise_error(const RACES::Archive::WrongFileFormatDescr &exception,
                  const std::string &file_description)
 {
-    const auto err_msg = "Wrong file format for the " + file_description + " file \"" +
-                         to_string(exception.filepath) + "\". Remove it and retry.";
+    const auto err_msg = "Wrong file format for the " + file_description
+                         + " file \"" + to_string(exception.filepath) + "\". "
+                         + "Expecting \""+ exception.expected_descr + "\"; got \""
+                         + exception.read_descr + "\". Remove it and retry.";
     ::Rf_error("%s", err_msg.c_str());
 }
 

@@ -505,12 +505,12 @@ RCPP_MODULE(Mutations)
 //'   mutations occurring in the cell represented by the node itself
 //'   and produces a phylogenetic forest.
 //' @param sample_forest A sample forest.
-//' @param num_of_preneoplatic_SNVs The number of pre-neoplastic SNVs.
-//' @param preneoplatic_SNV_signature_name The name of the SNV signature
-//'   for the preneoplastic SNV generation (optional).
-//' @param num_of_preneoplatic_indels The number of pre-neoplastic indels.
-//' @param preneoplatic_indel_signature_name The name of the indel signature
-//'   for the preneoplastic indel generation.
+//' @param num_of_pre_neoplastic_SNVs The number of pre-neoplastic SNVs.
+//' @param pre_neoplastic_SNV_signature_name The name of the SNV signature
+//'   for the pre-neoplastic SNV generation (optional).
+//' @param num_of_pre_neoplastic_indels The number of pre-neoplastic indels.
+//' @param pre_neoplastic_indel_signature_name The name of the indel signature
+//'   for the pre_neoplastic indel generation.
 //' @param seed The seed for random number generator (optional).
 //' @return A phylogenetic forest whose structure corresponds to
 //'   `sample_forest`.
@@ -550,30 +550,30 @@ RCPP_MODULE(Mutations)
 //' phylogenetic_forest
         .method("place_mutations",
                 (PhylogeneticForest (MutationEngine::*)(
-                    const SampleForest &forest, const size_t &num_of_preneoplatic_SNVs,
-                    const size_t &num_of_preneoplatic_indels))(
+                    const SampleForest &forest, const size_t &num_of_pre_neoplastic_SNVs,
+                    const size_t &num_of_pre_neoplastic_indels))(
                     &MutationEngine::place_mutations),
                 "Placing mutations on a SampleForest")
         .method("place_mutations",
                 (PhylogeneticForest (MutationEngine::*)(
-                    const SampleForest &forest, const size_t &num_of_preneoplatic_SNVs,
-                    const size_t &num_of_preneoplatic_indels,
+                    const SampleForest &forest, const size_t &num_of_pre_neoplastic_SNVs,
+                    const size_t &num_of_pre_neoplastic_indels,
                     const SEXP &seed))(&MutationEngine::place_mutations),
                 "Placing mutations on a SampleForest")
         .method("place_mutations",
                 (PhylogeneticForest (MutationEngine::*)(
-                    const SampleForest &forest, const size_t &num_of_preneoplatic_SNVs,
-                    const std::string &preneoplatic_SNV_signature_name,
-                    const size_t &num_of_preneoplatic_indels,
-                    const std::string &preneoplatic_indel_signature_name))(
+                    const SampleForest &forest, const size_t &num_of_pre_neoplastic_SNVs,
+                    const std::string &pre_neoplastic_SNV_signature_name,
+                    const size_t &num_of_pre_neoplastic_indels,
+                    const std::string &pre_neoplastic_indel_signature_name))(
                     &MutationEngine::place_mutations),
                 "Placing mutations on a SampleForest")
         .method("place_mutations",
                 (PhylogeneticForest (MutationEngine::*)(
-                    const SampleForest &forest, const size_t &num_of_preneoplatic_SNVs,
-                    const std::string &preneoplatic_SNV_signature_name,
-                    const size_t &num_of_preneoplatic_indels,
-                    const std::string &preneoplatic_indel_signature_name,
+                    const SampleForest &forest, const size_t &num_of_pre_neoplastic_SNVs,
+                    const std::string &pre_neoplastic_SNV_signature_name,
+                    const size_t &num_of_pre_neoplastic_indels,
+                    const std::string &pre_neoplastic_indel_signature_name,
                     const SEXP &seed))(&MutationEngine::place_mutations),
                 "Placing mutations on a SampleForest")
 
@@ -1027,7 +1027,7 @@ RCPP_MODULE(Mutations)
 //'   last CNA locus in the chromosome), `allele`, `src allele`
 //'   (the allele origin for amplifications, `NA` for deletions), and
 //'   `class` (i.e., `"driver"`, `"passenger"`, `"germinal"` or
-//'   `"preneoplastic"`).
+//'   `"pre-neoplastic"`).
 //' }
 //' @field get_sampled_cell_mutations Gets the SNVs and the indels of the
 //'   sampled cells\itemize{
@@ -1035,7 +1035,7 @@ RCPP_MODULE(Mutations)
 //'   mutation chromosome), `begin` (i.e., position in the chromosome),
 //'   `allele` (in which the SNV occurs), `ref`, `alt`, `type` (i.e., either
 //'   `"SNV"` or `"indel"`), `cause`, and `class` (i.e., `"driver"`,
-//'   `"passenger"`, `"germinal"` or `"preneoplastic"`) for each mutation
+//'   `"passenger"`, `"germinal"` or `"pre-neoplastic"`) for each mutation
 //'   in the sampled cell genomes.
 //' }
 //' @field get_samples_info Retrieves information about the samples \itemize{
@@ -1065,6 +1065,11 @@ RCPP_MODULE(Mutations)
 //' \item \emph{Parameter:} \code{sample_names} - The names of the samples whose cells will be used
 //'   as leaves of the new forest.
 //' \item \emph{Returns:} A sample forest built on the samples mentioned in `sample_names`.
+//' }
+//' @field partition_samples Partitions the samples in a phylogenetic forest \itemize{
+//' \item \emph{Parameter:} \code{labelling_function} - An R labelling function that maps any sampled
+//'   cell to a labelling string.
+//' \item The method alters the original phylogenetic forest.
 //' }
 //' @field get_absolute_chromosome_positions Gets the absolute chromosome positions \itemize{
 //' \item \emph{Returns:} A data frame reporting the name (column "`chr`"), the length
@@ -1134,6 +1139,19 @@ RCPP_MODULE(Mutations)
 //' @seealso [SampleForest$get_subforest_for()] for usage examples
         .method("get_subforest_for", &PhylogeneticForest::get_subforest_for,
                 "Get the sub-forest for some of the original samples")
+
+//' @name PhylogeneticForest$partition_samples
+//' @title Partitioning forest samples
+//' @description This method partitions the samples in a phylogenetic forest.
+//' @details This method partitions the samples in a phylogenetic forest
+//'   according to a labelling function. It works in-place by altering the
+//'   phylogenetic forest from which the method is called.
+//' @param labelling_function An R labelling function that maps any sampled
+//'   cell to a labelling string.
+//' @seealso [SampleForest$get_subforest_for()] for usage examples
+        .method("partition_samples",
+                &PhylogeneticForest::partition_samples,
+                "Partition each sample in the forest according to a labelling function")
 
 //' @name PhylogeneticForest$get_samples_info
 //' @title Retrieving sample information
@@ -1208,13 +1226,12 @@ RCPP_MODULE(Mutations)
 //' @details This method builds a data frame representing all the CNAs
 //'   in the cells sampled during the simulation and represented by
 //'   the leaves of the phylogenetic forest.
-//' @param cell_id The identifier of the cell whose CNAs are aimed (optional).
 //' @return A data frame reporting `cell_id`, `type` (`"A"` for amplifications
 //'   and `"D"` for deletions), `chr`, `begin` (i.e., the first CNA
 //'   locus in the chromosome), `end` (i.e., last CNA locus in the chromosome),
 //'   `allele`, `src allele` (the allele origin for amplifications, `NA` for
 //'   deletions), and `class` (i.e., `"driver"`, `"passenger"`, `"germinal"`
-//'   or `"preneoplastic"`).
+//'   or `"pre-neoplastic"`).
 //' @examples
 //' sim <- TissueSimulation()
 //'
@@ -1243,15 +1260,59 @@ RCPP_MODULE(Mutations)
 //' mutations <- phylo_forest$get_sampled_cell_CNAs()
 //'
 //' head(mutations)
-//' @seealso `PhylogeneticForest$$get_sampled_cell_mutations()`
-        .method("get_sampled_cell_CNAs",
-                (List (PhylogeneticForest::*)(const RACES::Mutants::CellId &)
-                     const)(&PhylogeneticForest::get_sampled_cell_CNAs),
-                "Get the CNAs of a sampled cell")
+//' @seealso `PhylogeneticForest$get_sampled_cell_mutations()`
         .method("get_sampled_cell_CNAs",
                 (List (PhylogeneticForest::*)()
                      const)(&PhylogeneticForest::get_sampled_cell_CNAs),
-                "Get the CNAs of all the sampled cells")
+                "Get the CNAs of all sampled cells")
+
+//' @name PhylogeneticForest$get_cell_CNAs
+//' @title Getting the CNAs of a cell in the samples' phylogeny
+//' @description This method returns the CNAs of one cell represented
+//'   in the forest
+//' @details This method builds a data frame representing all the CNAs
+//'   in the cell represented by nodes of the phylogenetic forest being either
+//'   one of the sampled cells or one of their ancestors.
+//' @param cell_id The identifier of the cell whose CNAs are aimed.
+//' @return A data frame reporting `cell_id`, `type` (`"A"` for amplifications
+//'   and `"D"` for deletions), `chr`, `begin` (i.e., the first CNA
+//'   locus in the chromosome), `end` (i.e., last CNA locus in the chromosome),
+//'   `allele`, `src allele` (the allele origin for amplifications, `NA` for
+//'   deletions), and `class` (i.e., `"driver"`, `"passenger"`, `"germinal"`
+//'   or `"pre-neoplastic"`).
+//' @examples
+//' sim <- TissueSimulation()
+//'
+//' sim$add_mutant(name = "Clone_1",
+//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'                growth_rates = c("+" = 0.2, "-" = 0.08),
+//'                death_rates = c("+" = 0.05, "-" = 0.01))
+//' sim$place_cell("Clone_1+", 500, 500)
+//' sim$run_up_to_size("Clone_1-", 1000)
+//'
+//' sim$sample_cells("Sample_A", c(475, 475), c(525, 525))
+//' sample_forest <- sim$get_sample_forest()
+//'
+//' m_engine <- MutationEngine(setup_code = "demo")
+//'
+//' m_engine$add_mutant("Clone_1", list("+" = c(SNV = 1e-7, indel = 1e-8),
+//'                                     "-" = c(SNV = 3e-7, CNA = 1e-11)),
+//'                     list(SNV("22", 10510210, "C", allele = 1),
+//'                          CNA("D", "22", 5010000, 200000,
+//'                                    allele = 1)))
+//'
+//' m_engine$add_exposure(c(ID1 = 1, SBS1 = 0.5, SBS2 = 0.5))
+//'
+//' phylo_forest <- m_engine$place_mutations(sample_forest, 1, 1)
+//'
+//' mutations <- phylo_forest$get_sampled_cell_CNAs()
+//'
+//' head(mutations)
+//' @seealso `PhylogeneticForest$get_sampled_cell_CNAs()`
+        .method("get_cell_CNAs",
+                (List (PhylogeneticForest::*)(const RACES::Mutants::CellId &)
+                     const)(&PhylogeneticForest::get_cell_CNAs),
+                "Get the CNAs of a cell")
 
 //' @name PhylogeneticForest$get_sampled_cell_mutations
 //' @title Getting the sampled cells' mutations
@@ -1261,13 +1322,11 @@ RCPP_MODULE(Mutations)
 //'   and represented by the leaves of the phylogenetic forest.
 //'   The data frame also reports the allele in which the mutations occur to
 //'   support double occurrences due to CNAs.
-//' @param cell_id The identifier of the cell whose mutations are aimed
-//'   (optional).
 //' @return A data frame reporting `cell_id`, `chr`, (i.e., the mutation
 //'   chromosome), `chr_pos` (i.e., position in the chromosome), `allele`
 //'   (in which the mutation occurs), `ref`, `alt`, `type` (i.e., either
 //'   `"SNV"` or `"indel"`), `cause`, and `class` (i.e., `"driver"`,
-//'   `"passenger"`, `"germinal"` or `"preneoplastic"`) for each mutation
+//'   `"passenger"`, `"germinal"` or `"pre-neoplastic"`) for each mutation
 //'   in the sampled cell genomes.
 //' @examples
 //' sim <- TissueSimulation()
@@ -1297,15 +1356,62 @@ RCPP_MODULE(Mutations)
 //' mutations <- phylo_forest$get_sampled_cell_mutations()
 //'
 //' head(mutations)
-//' @seealso `PhylogeneticForest$$get_sampled_cell_CNAs()`
-        .method("get_sampled_cell_mutations",
-                (List (PhylogeneticForest::*)(const RACES::Mutants::CellId &)
-                     const)(&PhylogeneticForest::get_sampled_cell_SIDs),
-                "Get the SNVs and the indels of a sampled cell")
+//' @seealso `PhylogeneticForest$get_sampled_cell_CNAs()`
         .method("get_sampled_cell_mutations",
                 (List (PhylogeneticForest::*)()
                      const)(&PhylogeneticForest::get_sampled_cell_SIDs),
                 "Get the SNVs and indels of all the sampled cells")
+
+//' @name PhylogeneticForest$get_cell_mutations
+//' @title Getting the mutations of a cell in the samples' phylogeny
+//' @description This method returns the mutations of one cell represented
+//'   in the forest
+//' @details This method builds a data frame representing all the SNV
+//'   and the indel mutations in the cell represented by nodes of the
+//'   phylogenetic forest being either one of the sampled cells or one of
+//'   their ancestors.
+//'   The data frame also reports the allele in which the mutations occur to
+//'   support double occurrences due to CNAs.
+//' @param cell_id The identifier of the cell whose SIDs are aimed.
+//' @return A data frame reporting `cell_id`, `chr`, (i.e., the mutation
+//'   chromosome), `chr_pos` (i.e., position in the chromosome), `allele`
+//'   (in which the mutation occurs), `ref`, `alt`, `type` (i.e., either
+//'   `"SNV"` or `"indel"`), `cause`, and `class` (i.e., `"driver"`,
+//'   `"passenger"`, `"germinal"` or `"pre-neoplastic"`) for each mutation
+//'   in the sampled cell genomes.
+//' @examples
+//' sim <- TissueSimulation()
+//'
+//' sim$add_mutant(name = "Clone_1",
+//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'                growth_rates = c("+" = 0.2, "-" = 0.08),
+//'                death_rates = c("+" = 0.05, "-" = 0.01))
+//' sim$place_cell("Clone_1+", 500, 500)
+//' sim$run_up_to_size("Clone_1-", 1000)
+//'
+//' sim$sample_cells("Sample_A", c(475, 475), c(525, 525))
+//' sample_forest <- sim$get_sample_forest()
+//'
+//' m_engine <- MutationEngine(setup_code = "demo")
+//'
+//' m_engine$add_mutant("Clone_1", list("+" = c(SNV = 1e-8, indel = 1e-8),
+//'                                     "-" = c(SNV = 3e-8, CNA = 1e-11)),
+//'                     list(SNV("22", 10510210, "C", allele = 1),
+//'                          CNA("D", "22", 5010000, 200000,
+//'                                    allele = 1)))
+//'
+//' m_engine$add_exposure(c(ID1 = 1, SBS1 = 0.5, SBS2 = 0.5))
+//'
+//' phylo_forest <- m_engine$place_mutations(sample_forest, 1, 1)
+//'
+//' mutations <- phylo_forest$get_cell_mutations(1)
+//'
+//' head(mutations)
+//' @seealso `vignette("sample_partition")`
+        .method("get_cell_mutations",
+                (List (PhylogeneticForest::*)(const RACES::Mutants::CellId &)
+                     const)(&PhylogeneticForest::get_cell_SIDs),
+                "Get the SNVs and the indels of one cell")
 
 //' @name PhylogeneticForest$get_germline_mutations
 //' @title Getting the germinal mutations
@@ -1477,4 +1583,56 @@ RCPP_MODULE(Mutations)
                                      const bool))&PhylogeneticForest::load,
              List::create(_["filename"] = "", _["quiet"] = false),
              "Recover a phylogenetic forest");
+
+
+//' @name SampledCell
+//' @title A sampled cell
+//' @description The sampled cell class for sample labelling.
+//' @details There is no public constructor for this class as it is
+//'   exclusively used by `simulate_seq()` to label sampled cells.
+//' @seealso `simulate_seq()` and `vignette("sample_partition")`
+    class_<SampledCell>("SampledCell")
+
+//' @name SampledCell$epistate
+//' @title Getting the sampled cell epigenetic state
+//' @description The epigenetic state of the sampled cell.
+//' @details This property is the epigenetic state of the sampled cell.
+//'   It can be one among "`+`", "`-`", or "".
+//' @seealso `simulate_seq()` and `vignette("sample_partition")`
+        .property("epistate", &SampledCell::epistate, "The cell epistate")
+
+//' @name SampledCell$mutant
+//' @title Getting the sampled cell mutant
+//' @description The mutant name of the sampled cell.
+//' @details This property is the mutant name of the sampled cell.
+//' @seealso `simulate_seq()` and `vignette("sample_partition")`
+        .property("mutant", &SampledCell::mutant, "The cell mutant name")
+
+//' @name SampledCell$species
+//' @title Getting the sampled cell species
+//' @description The species name of the sampled cell.
+//' @details This property is the species name of the sampled cell.
+//' @seealso `simulate_seq()` and `vignette("sample_partition")`
+        .property("species", &SampledCell::species, "The cell species name")
+
+//' @name SampledCell$birth_time
+//' @title Getting the sampled cell birth time
+//' @description The birth time of the sampled cell.
+//' @details This property is the birth time of the sampled cell.
+//' @seealso `simulate_seq()` and `vignette("sample_partition")`
+        .property("birth_time", &SampledCell::birth_time, "The cell birth time")
+
+//' @name SampledCell$mutations
+//' @title Getting the sampled cell mutations
+//' @description The mutations of the sampled cell.
+//' @details This property contains a data frame that represents the sampled
+//'   cell mutations. The data frame format is analogous to that returned by
+//'   `PhylogeneticForest$get_sampled_cell_mutations()`: it has columns
+//'   `cell_id`, `chr`, (i.e., the mutation chromosome), `chr_pos` (i.e.,
+//'   position in the chromosome), `allele` (in which the mutation occurs),
+//'   `ref`, `alt`, `type` (i.e., either `"SNV"` or `"indel"`), `cause`, and
+//'   `class` (i.e., `"driver"`, `"passenger"`, `"germinal"` or
+//'   `"pre_neoplastic"`).
+//' @seealso `simulate_seq()` and `vignette("sample_partition")`
+        .property("mutations", &SampledCell::mutations, "The cell mutation data frame");
 }

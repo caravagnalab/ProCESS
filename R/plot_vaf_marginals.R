@@ -75,7 +75,7 @@ add_marginals_driver_mutation_labels <- function(plot, data, driver_mutations) {
 #'   include in the plot (default: all the chromosomes in `seq_res`).
 #' @param samples A character vector specifying the sample names to include
 #'   in the plot. When set to `NULL`, the function includes all samples
-#'   except the "normal_sample" (default: `NULL`).
+#'   except the "normal sample" (default: `NULL`).
 #' @param labels A data frame column labelling each mutation. Each label
 #'   is associated to a different colour in the plot (default: `NULL`).
 #' @param mutation_filter A function filtering mutations from the input

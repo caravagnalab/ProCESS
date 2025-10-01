@@ -33,19 +33,20 @@ knitr::opts_chunk$set(
 > those obtained by the reader.
 
 
-The sequencing simulation supports sample partition
-analoguous to [FACS](https://www.sinobiological.com/category/fcm-facs-facs).
-Users can provide a labelling function for the sampled cells by
-using the `simulate_seq()` parameter `cell_labelling`.
-This function must take in input an object of the class `SampledCell` and
-return a string representing the cell label. The function `simulate_seq()`
-applies the labelling function to all the sampled cells and
-partition them according to the labelling function outputs.
+ProCESS allows to partition samples according to cell features as 
+[FACS](https://www.sinobiological.com/category/fcm-facs-facs) does.
+The method `PhylogeneticForest$partition_samples()` takes 
+a labelling function, which accepts in input an object of the 
+class `SampledCell` and returns a string, and applies it 
+to the sampled cells. Then, it partitions the 
+forest samples by using the obtained labels.
 The resulting sub-samples are named according the format
 `<sample name>_<cell label>`.
 
-Let us assume to have built the phylogenetic forest `phylo_forest`
-as detailed in `vignette("mutations")`.
+The method `PhylogeneticForest$partition_samples()` permanently changes the
+phylogenetic forest from which is called. If users want to preserve the 
+original forest, they must take care of it, for instance by copying or
+saving it in a file.
 
 ```{r, echo=FALSE, results='hide', message=FALSE}
 library(ProCESS)
@@ -53,7 +54,16 @@ library(ProCESS)
 phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
 ```
 
-The sampled cells can be grouped by epigenetic state as it
+Let us assume to have built the phylogenetic forest `phylo_forest`
+as detailed in `vignette("mutations")`. Information about the samples
+from which the forest has been built can be obtained by using the
+`PhylogeneticForest$get_samples_info()`.
+
+```{r}
+phylo_forest$get_samples_info()
+```
+
+The forest samples can be split by epigenetic state as it
 follows.
 
 ```{r}
@@ -74,32 +84,34 @@ epi_labelling <- function(cell) {
   return("")
 }
 
-seq_results <- simulate_seq(phylo_forest, coverage = 0.5,
-                            cell_labelling = epi_labelling)
+phylo_forest$partition_samples(epi_labelling)
 
-library(dplyr)
-
-seq_results$mutations %>% head()
+phylo_forest$get_samples_info()
 ```
 
-The same approach can be easily applied to group sampled cells
+The same method can be easily applied to partition sampled cells
 by mutant name...
 
 ```{r}
+# loading again the original forest
+phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
+
 # a mutant-name-based labelling function
 mutant_labelling <- function(cell) {
   return(cell$mutant)
 }
 
-seq_results <- simulate_seq(phylo_forest, coverage = 0.5,
-                            cell_labelling = mutant_labelling)
+phylo_forest$partition_samples(mutant_labelling)
 
-seq_results$mutations %>% head()
+phylo_forest$get_samples_info()
 ```
 
 ..., birth time...
 
 ```{r}
+# loading again the original forest
+phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
+
 # a birth-time-based labelling function
 birth_time_labelling <- function(cell) {
   if (cell$birth_time > 421) {
@@ -113,15 +125,19 @@ birth_time_labelling <- function(cell) {
   return("OLD")
 }
 
-seq_results <- simulate_seq(phylo_forest, coverage = 0.5,
-                            cell_labelling = birth_time_labelling)
+phylo_forest$partition_samples(mutant_labelling)
 
-seq_results$mutations %>% head()
+phylo_forest$get_samples_info()
 ```
 
 ..., mutations...
 
 ```{r}
+# loading again the original forest
+phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
+
+library(dplyr)
+
 # collect all the sample passenger indels
 passenger_indels <- phylo_forest$get_sampled_cell_mutations() %>%
   filter(class == "passenger", type == "indel")
@@ -147,10 +163,9 @@ mutations_labelling <- function(cell) {
   return("MISSES_MUTATION")
 }
 
-seq_results <- simulate_seq(phylo_forest, coverage = 0.5,
-                            cell_labelling = mutations_labelling)
+phylo_forest$partition_samples(mutant_labelling)
 
-seq_results$mutations %>% head()
+phylo_forest$get_samples_info()
 ```
 
 ... or combination of these properties.

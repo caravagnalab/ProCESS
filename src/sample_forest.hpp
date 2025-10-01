@@ -28,19 +28,21 @@
 
 class MutationEngine;
 
-class SampleForest : protected RACES::Mutants::DescendantsForest
+class SampleForest : public RACES::Mutants::DescendantForest
 {
     SampleForest();
 
     Rcpp::List get_nodes(const std::vector<RACES::Mutants::CellId> &cell_ids) const;
 
   public:
+    using base_type = RACES::Mutants::DescendantForest;
+
     SampleForest(const RACES::Mutants::Evolutions::Simulation &simulation);
 
     inline Rcpp::List get_nodes() const
     {
         return ForestCore::get_nodes(
-            static_cast<const RACES::Mutants::DescendantsForest &>(*this));
+            static_cast<const RACES::Mutants::DescendantForest &>(*this));
     }
 
     Rcpp::List get_samples_info() const;
@@ -48,31 +50,31 @@ class SampleForest : protected RACES::Mutants::DescendantsForest
     inline Rcpp::List get_species_info() const
     {
         return ForestCore::get_species_info(
-            static_cast<const RACES::Mutants::DescendantsForest &>(*this));
+            static_cast<const RACES::Mutants::DescendantForest &>(*this));
     }
 
     inline Rcpp::List get_coalescent_cells() const
     {
         return ForestCore::get_coalescent_cells(
-            static_cast<const RACES::Mutants::DescendantsForest &>(*this));
+            static_cast<const RACES::Mutants::DescendantForest &>(*this));
     }
 
     inline Rcpp::List
     get_coalescent_cells(const std::list<RACES::Mutants::CellId> &cell_ids) const
     {
         return ForestCore::get_coalescent_cells(
-            static_cast<const RACES::Mutants::DescendantsForest &>(*this), cell_ids);
+            static_cast<const RACES::Mutants::DescendantForest &>(*this), cell_ids);
     }
 
     inline std::list<std::list<RACES::Mutants::CellId>> get_sticks() const
     {
-        return RACES::Mutants::DescendantsForest::get_sticks();
+        return RACES::Mutants::DescendantForest::get_sticks();
     }
 
     inline std::list<std::list<RACES::Mutants::CellId>>
     get_sticks(const double birth_threshold) const
     {
-        return RACES::Mutants::DescendantsForest::get_sticks(birth_threshold);
+        return RACES::Mutants::DescendantForest::get_sticks(birth_threshold);
     }
 
     SampleForest get_subforest_for(const std::vector<std::string> &sample_names) const;

@@ -377,10 +377,10 @@ sampled_cells %>% head()
 cell_id <- sampled_cells[3, 1]
 
 # get the SNVs and the indels of the 3rd cell in `sampled_cells`
-phylo_forest$get_sampled_cell_mutations(cell_id) %>% head()
+phylo_forest$get_cell_mutations(cell_id) %>% head()
 
 # get the CNAs of the 3rd cell in `sampled_cells`
-phylo_forest$get_sampled_cell_CNAs(cell_id) %>% head()
+phylo_forest$get_cell_CNAs(cell_id) %>% head()
 ```
 
 The method `PhylogeneticForest$get_samples_info()` is analogous to
@@ -412,7 +412,7 @@ even when the cell was not sampled.
 
 ```{r}
 # select one of the mutations
-mutation_row <- phylo_forest$get_sampled_cell_mutations(cell_id)[2, ]
+mutation_row <- phylo_forest$get_cell_mutations(cell_id)[2, ]
 
 # rebuild the corresponding mutation
 mutation <- Mutation(mutation_row["chr"][1, ],

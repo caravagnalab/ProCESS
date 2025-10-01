@@ -22,8 +22,7 @@
 #'
 #' @param tree_plot The output of `plot_forest`.
 #' @param forest The original forest object from which the input to
-#'        `plot_forest`
-#' has been derived.
+#'   `plot_forest`has been derived.
 #' @param samples If `TRUE` it annotates samples.
 #' @param MRCAs If `TRUE` it annotates MRCAs.
 #' @param exposures If `TRUE` it annotates exposures to mutational signatures.

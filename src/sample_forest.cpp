@@ -20,10 +20,10 @@
 #include "simulation.hpp"
 #include "utility.hpp"
 
-SampleForest::SampleForest() : RACES::Mutants::DescendantsForest() {}
+SampleForest::SampleForest() : RACES::Mutants::DescendantForest() {}
 
 SampleForest::SampleForest(const RACES::Mutants::Evolutions::Simulation &simulation)
-    : RACES::Mutants::DescendantsForest(simulation)
+    : RACES::Mutants::DescendantForest(simulation)
 {}
 
 Rcpp::List SampleForest::get_samples_info() const
@@ -36,8 +36,8 @@ SampleForest::get_subforest_for(const std::vector<std::string> &sample_names) co
 {
     SampleForest forest;
 
-    static_cast<RACES::Mutants::DescendantsForest &>(forest) =
-        RACES::Mutants::DescendantsForest::get_subforest_for(sample_names);
+    static_cast<RACES::Mutants::DescendantForest &>(forest) =
+        RACES::Mutants::DescendantForest::get_subforest_for(sample_names);
 
     return forest;
 }
@@ -46,7 +46,7 @@ void SampleForest::save(const std::string &filename) const
 {
     RACES::Archive::Binary::Out out_archive(filename);
 
-    RACES::Mutants::DescendantsForest::save(out_archive);
+    RACES::Mutants::DescendantForest::save(out_archive);
 }
 
 SampleForest SampleForest::load(const std::string &filename)
@@ -64,8 +64,8 @@ SampleForest SampleForest::load(const std::string &filename)
     RACES::Archive::Binary::In in_archive(filename);
 
     try {
-        static_cast<RACES::Mutants::DescendantsForest &>(forest) =
-            RACES::Mutants::DescendantsForest::load(in_archive);
+        static_cast<RACES::Mutants::DescendantForest &>(forest) =
+            RACES::Mutants::DescendantForest::load(in_archive);
     } catch (RACES::Archive::WrongFileFormatDescr &ex) {
         raise_error(ex, "sample forest");
     } catch (RACES::Archive::WrongFileFormatVersion &ex) {

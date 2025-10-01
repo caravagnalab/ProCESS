@@ -222,7 +222,7 @@ assumes all the cells in the sample to be neoplastic by default.
 The function `simulate_normal_seq()` simulates the sequencing
 of a sample whose cells have germline and tumoral pre-neoplastic
 mutations. The pre-neoplastic mutations can be avoided
-by setting the optional parameter `with_preneoplastic`.
+by setting the optional parameter `with_pre_neoplastic`.
 
 ### Simulating Sequencing Errors
 

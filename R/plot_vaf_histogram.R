@@ -176,7 +176,7 @@ setup_data_for_plotting <- function(
     dplyr::mutate(chr = factor(chr, levels = chromosomes)) %>%
     dplyr::filter(chr %in% chromosomes)
 
-  normal_data <- data %>% dplyr::filter(sample_name == "normal_sample")
+  normal_data <- data %>% dplyr::filter(sample_name == "normal.sample")
 
   if (!is.null(samples)) {
     if (any(!samples %in% unique(data$sample_name))) {
@@ -239,7 +239,7 @@ setup_VAF_data_for_plotting <- function(
 #'   include in the plot (default: all the chromosomes in `seq_res`).
 #' @param samples A character vector specifying the sample names to include
 #'   in the plot. When set to `NULL`, the function includes all samples
-#'   except the "normal_sample" (default: `NULL`).
+#'   except the "normal sample" (default: `NULL`).
 #' @param labels A data frame column labelling each mutation. Each label
 #'   is associated to a different colour in the plot (default: `NULL`).
 #' @param binwidth The width of the plot bins. When set to `NULL`, the

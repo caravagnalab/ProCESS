@@ -25,7 +25,7 @@
 #'   include in the plot (default: all the chromosomes in `seq_res`).
 #' @param samples A character vector specifying the sample names to include
 #'   in the plot. When set to `NULL`, the function includes all samples
-#'   except the "normal_sample" (default: `NULL`).
+#'   except the "normal sample" (default: `NULL`).
 #' @param labels A data frame column labelling each mutation. Each label
 #'   is associated to a different colour in the plot (default: `NULL`).
 #' @param mutation_filter A function filtering mutations from the input
@@ -128,11 +128,11 @@ plot_DR <- function(
 
   if (nrow(setup_data$normal) == 0) {
     stop(paste("The parameter \"seq_result\" does not contain",
-               "the mandatory normal sample \"normal_sample\"."))
+               "the mandatory normal sample \"normal sample\"."))
   }
 
   data <- setup_data$data %>%
-    dplyr::filter(.data$sample_name != "normal_sample")
+    dplyr::filter(.data$sample_name != "normal.sample")
 
   N <- min(N, nrow(data))
 
@@ -195,7 +195,7 @@ plot_DR <- function(
 #'   include in the plot (default: all the chromosomes in `seq_res`).
 #' @param samples A character vector specifying the sample names to include
 #'   in the plot. When set to `NULL`, the function includes all samples
-#'   except the "normal_sample" (default: `NULL`).
+#'   except the "normal sample" (default: `NULL`).
 #' @param labels A data frame column labelling each mutation. Each label
 #'   is associated to a different colour in the plot (default: `NULL`).
 #' @param mutation_filter A function filtering mutations from the input
@@ -307,7 +307,7 @@ plot_BAF <- function(
                                             driver_mutations, cuts)
 
   tumour_data <- setup_data$data %>%
-    dplyr::filter(.data$sample_name != "normal_sample")
+    dplyr::filter(.data$sample_name != "normal.sample")
 
   tumour_data$BAF <- pmin(tumour_data$VAF, 1 - tumour_data$VAF)
 
@@ -382,7 +382,7 @@ plot_BAF <- function(
 #'   include in the plot (default: all the chromosomes in `seq_res`).
 #' @param samples A character vector specifying the sample names to include
 #'   in the plot. When set to `NULL`, the function includes all samples
-#'   except the "normal_sample" (default: `NULL`).
+#'   except the "normal sample" (default: `NULL`).
 #' @param labels A data frame column labelling each mutation. Each label
 #'   is associated to a different colour in the plot (default: `NULL`).
 #' @param mutation_filter A function filtering mutations from the input
@@ -494,7 +494,7 @@ plot_VAF <- function(
                                             driver_mutations, cuts)
 
   tumour_data <- setup_data$data %>%
-    dplyr::filter(.data$sample_name != "normal_sample")
+    dplyr::filter(.data$sample_name != "normal.sample")
 
   tumour_data_no_drivers <- tumour_data %>%
     dplyr::filter(.data$classes != "driver")

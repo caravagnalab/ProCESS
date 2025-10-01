@@ -19,7 +19,6 @@
 
 #include <Rcpp.h>
 
-#include "sampled_cell.hpp"
 #include "seq_simulation.hpp"
 #include "sequencers.hpp"
 
@@ -150,15 +149,13 @@ RCPP_MODULE(Sequencing)
 //' @param write_SAM A Boolean flag to enable/disable SAM generation
 //'   (default: `FALSE`).
 //' @param update_SAM Update the output directory (default: `FALSE`).
-//' @param cell_labelling The labelling function for sampled cells
-//'   See `vignette("sample_partition")` for details (default: `NULL`).
 //' @param purity The ratio between the number of sample tumour cell
 //'   and that of all the cells, i.e., tumour and normal
 //'   ones. This value must belong to the interval [0,1]
 //'   (default: `1`).
 //' @param with_normal_sample A Boolean flag to enable/disable the
 //'   analysis of a normal sample (default: `TRUE`).
-//' @param preneoplastic_in_normal A Boolean flag to add/remove
+//' @param pre_neoplastic_in_normal A Boolean flag to add/remove
 //'   pre-neoplastic mutations in both normal sample and normal
 //'   contaminant cells (default: `FALSE`).
 //' @param filename_prefix The prefix of the output SAM file name
@@ -198,9 +195,8 @@ RCPP_MODULE(Sequencing)
                  _["reference_genome"] = R_NilValue, _["chromosomes"] = R_NilValue,
                  _["coverage"] = 10, _["read_size"] = 150, _["insert_size_mean"] = 0,
                  _["insert_size_stddev"] = 10, _["output_dir"] = "ProCESS_SAM",
-                 _["write_SAM"] = false, _["update_SAM"] = false,
-                 _["cell_labelling"] = R_NilValue, _["purity"] = 1,
-                 _["with_normal_sample"] = true, _["preneoplastic_in_normal"] = false,
+                 _["write_SAM"] = false, _["update_SAM"] = false, _["purity"] = 1,
+                 _["with_normal_sample"] = true, _["pre_neoplastic_in_normal"] = false,
                  _["filename_prefix"] = "chr_", _["template_name_prefix"] = "r",
                  _["include_non_sequenced_mutations"] = false, _["seed"] = R_NilValue,
                  _["quiet"] = false),
@@ -212,7 +208,7 @@ RCPP_MODULE(Sequencing)
 //'   phylogenetic forest. Add the cells in the wild-type sample contains
 //'   the germline mutations. The forest pre-neoplastic mutations are also
 //'   added to the sample by default. However, they can be avoided by
-//'   using the parameter `with_preneoplastic`.
+//'   using the parameter `with_pre_neoplastic`.
 //' @param phylo_forest A phylogenetic forest.
 //' @param sequencer The sequencer that performs the sequencing simulation
 //'   (default: an `ErrorlessIlluminaSequencer`).
@@ -232,8 +228,6 @@ RCPP_MODULE(Sequencing)
 //' @param write_SAM A Boolean flag to enable/disable SAM generation
 //'   (default: `TRUE`).
 //' @param update_SAM Update the output directory (default: `FALSE`).
-//' @param with_preneoplastic Add the forest pre-neoplastic mutations
-//'   to the sample cells. (default: `FALSE`).
 //' @param filename_prefix The prefix of the output SAM file name
 //'   (default: `"chr_"`).
 //' @param template_name_prefix The template name prefix (default:
@@ -255,13 +249,12 @@ RCPP_MODULE(Sequencing)
 //'   which it occurs (columns `chr` and `chr_pos`),
 //'   the SNV reference base, the alternative base, the causes,
 //'   and the classes of the SNV (columns `ref_base`, `alt_base`,
-//'   `causes`, and `classes`, respectively). Moreover, for each
-//'   of the sequenced samples `normal_sample`, the returned
-//'   data frame contains three columns: the number of reads in
-//'   which the corresponding SNV occurs (column
-//'   `normal_sample.occurrences`), the coverage of the SNV
-//'   locus (column `normal_sample.coverage`), and the
-//'   corresponding VAF (column `normal_sample.VAF`).
+//'   `causes`, and `classes`, respectively). Moreover, the
+//'   returned data frame contains three columns: the number of
+//'   reads in which the corresponding SNV occurs (column
+//'   `normal.sample.occurrences`), the coverage of the SNV
+//'   locus (column `normal.sample.coverage`), and the
+//'   corresponding VAF (column `normal.sample.VAF`).
 //' @seealso `BasicIlluminaSequencer` and
 //'   `ErrorlessIlluminaSequencer` as sequencer types, and
 //'   `vignette("sequencing")` for usage examples
@@ -272,60 +265,9 @@ RCPP_MODULE(Sequencing)
                  _["coverage"] = 10, _["read_size"] = 150, _["insert_size_mean"] = 0,
                  _["insert_size_stddev"] = 10, _["output_dir"] = "ProCESS_normal_SAM",
                  _["write_SAM"] = true, _["update_SAM"] = false,
-                 _["with_preneoplastic"] = false, _["filename_prefix"] = "chr_",
-                 _["template_name_prefix"] = "r",
+                 _["filename_prefix"] = "chr_", _["template_name_prefix"] = "r",
                  _["include_non_sequenced_mutations"] = false, _["seed"] = R_NilValue,
                  _["quiet"] = false),
              "Simulating the sequencing of a normal sample");
 
-//' @name SampledCell
-//' @title A sampled cell
-//' @description The sampled cell class for sample labelling.
-//' @details There is no public constructor for this class as it is
-//'   exclusively used by `simulate_seq()` to label sampled cells.
-//' @seealso `simulate_seq()` and `vignette("sample_partition")`
-    class_<SampledCell>("SampledCell")
-
-//' @name SampledCell$epistate
-//' @title Getting the sampled cell epigenetic state
-//' @description The epigenetic state of the sampled cell.
-//' @details This property is the epigenetic state of the sampled cell.
-//'   It can be one among "`+`", "`-`", or "".
-//' @seealso `simulate_seq()` and `vignette("sample_partition")`
-        .property("epistate", &SampledCell::epistate, "The cell epistate")
-
-//' @name SampledCell$mutant
-//' @title Getting the sampled cell mutant
-//' @description The mutant name of the sampled cell.
-//' @details This property is the mutant name of the sampled cell.
-//' @seealso `simulate_seq()` and `vignette("sample_partition")`
-        .property("mutant", &SampledCell::mutant, "The cell mutant name")
-
-//' @name SampledCell$species
-//' @title Getting the sampled cell species
-//' @description The species name of the sampled cell.
-//' @details This property is the species name of the sampled cell.
-//' @seealso `simulate_seq()` and `vignette("sample_partition")`
-        .property("species", &SampledCell::species, "The cell species name")
-
-//' @name SampledCell$birth_time
-//' @title Getting the sampled cell birth time
-//' @description The birth time of the sampled cell.
-//' @details This property is the birth time of the sampled cell.
-//' @seealso `simulate_seq()` and `vignette("sample_partition")`
-        .property("birth_time", &SampledCell::birth_time, "The cell birth time")
-
-//' @name SampledCell$mutations
-//' @title Getting the sampled cell mutations
-//' @description The mutations of the sampled cell.
-//' @details This property contains a data frame that represents the sampled
-//'   cell mutations. The data frame format is analogous to that returned by
-//'   `PhylogeneticForest$get_sampled_cell_mutations()`: it has columns
-//'   `cell_id`, `chr`, (i.e., the mutation chromosome), `chr_pos` (i.e.,
-//'   position in the chromosome), `allele` (in which the mutation occurs),
-//'   `ref`, `alt`, `type` (i.e., either `"SNV"` or `"indel"`), `cause`, and
-//'   `class` (i.e., `"driver"`, `"passenger"`, `"germinal"` or
-//'   `"preneoplastic"`).
-//' @seealso `simulate_seq()` and `vignette("sample_partition")`
-        .property("mutations", &SampledCell::mutations, "The cell mutation data frame");
 }

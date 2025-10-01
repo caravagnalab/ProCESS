@@ -37,9 +37,9 @@
 #'                           Sample.A.occurrences = c(10, 90),
 #'                           Sample.A.coverage = c(100, 100),
 #'                           Sample.A.VAF = c(0.1, 0.9),
-#'                           normal_sample.occurrences = c(45, 52),
-#'                           normal_sample.coverage = c(100, 100),
-#'                           normal_sample.VAF = c(0.45, 0.52))
+#'                           normal.sample.occurrences = c(45, 52),
+#'                           normal.sample.coverage = c(100, 100),
+#'                           normal.sample.VAF = c(0.45, 0.52))
 #' seq_results
 #'
 #' # Convert to long format
