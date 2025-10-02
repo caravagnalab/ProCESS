@@ -547,7 +547,7 @@ bool is_COSMIC_account(const SEXP &COSMIC_account_data)
     Rcpp::CharacterVector names = list_account_data.names();
 
     std::set<std::string> needed_names{"email", "password"};
-    for (size_t i = 0; i < list_account_data.size(); ++i) {
+    for (auto i = 0; i < list_account_data.size(); ++i) {
         needed_names.extract(Rcpp::as<std::string>(names[i]));
     }
 
@@ -569,7 +569,7 @@ std::shared_ptr<Account> extract_COSMIC_account(const SEXP &COSMIC_account_data)
     Rcpp::CharacterVector names = list_account_data.names();
 
     std::set<std::string> needed_names{"email", "password"};
-    for (size_t i = 0; i < list_account_data.size() && needed_names.size() > 0; ++i) {
+    for (auto i = 0; i < list_account_data.size() && needed_names.size() > 0; ++i) {
         needed_names.extract(Rcpp::as<std::string>(names[i]));
     }
 
