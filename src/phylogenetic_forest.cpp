@@ -21,6 +21,7 @@
 #include "phylogenetic_forest.hpp"
 #include "sid.hpp"
 #include "simulation.hpp"
+#include "mutation_engine.hpp"
 
 #include "utility.hpp"
 
@@ -247,41 +248,7 @@ Rcpp::List PhylogeneticForest::get_driver_mutations() const
 
 Rcpp::List PhylogeneticForest::get_species_info() const
 {
-    using namespace Rcpp;
-
-    size_t num_of_rows = get_species_data().size();
-
-    CharacterVector mutant_names(num_of_rows), epi_states(num_of_rows);
-    NumericVector SNV_rates(num_of_rows), CNA_rates(num_of_rows),
-        indel_rates(num_of_rows);
-
-    using namespace RACES::Mutants;
-
-    size_t i{0};
-    const auto &p_rates = get_mutational_properties().get_passenger_rates();
-
-    for (const auto &[species_id, species_data] : get_species_data()) {
-        const auto m_name = get_mutant_name(species_data.mutant_id);
-        const auto epi_state =
-            MutantProperties::signature_to_string(species_data.signature);
-
-        const auto found = p_rates.find(m_name + epi_state);
-
-        if (found == p_rates.end()) {
-            Rcpp::stop("Unknown species \"" + m_name + epi_state + "\"");
-        }
-
-        mutant_names[i] = m_name;
-        epi_states[i] = epi_state;
-        SNV_rates[i] = found->second.snv;
-        CNA_rates[i] = found->second.cna;
-        indel_rates[i] = found->second.indel;
-        ++i;
-    }
-
-    return DataFrame::create(_["mutant"] = mutant_names, _["epistate"] = epi_states,
-                             _["SNV_rate"] = SNV_rates, _["indel_rate"] = indel_rates,
-                             _["CNA_rate"] = CNA_rates);
+    return MutationEngine::get_species_info(get_mutational_properties());
 }
 
 PhylogeneticForest

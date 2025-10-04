@@ -1082,14 +1082,29 @@ void MutationEngine::add_mutant(const std::string &mutant_name,
     if (contains_passenger_rates(epistate_passenger_rates)) {
         auto p_rates = get_passenger_rates(epistate_passenger_rates);
 
-        m_engine.add_mutant(mutant_name, {{"", p_rates}}, c_sids, c_cnas,
-                            application_order);
+        m_engine.add_mutant(mutant_name, {{"", std::move(p_rates)}}, c_sids,
+                            c_cnas, application_order);
 
         return;
     }
 
     auto epi_rates = get_epistate_passenger_rates(epistate_passenger_rates);
     m_engine.add_mutant(mutant_name, epi_rates, c_sids, c_cnas, application_order);
+}
+
+void MutationEngine::change_rates_from(const RACES::Time time,
+                                       const std::string &mutant_name,
+                                       const Rcpp::List &passenger_rates)
+{
+    std::map<std::string, RACES::Mutations::PassengerRates> epi_rates;
+    if (contains_passenger_rates(passenger_rates)) {
+        epi_rates.emplace("", get_passenger_rates(passenger_rates));
+    } else {
+        epi_rates = get_epistate_passenger_rates(passenger_rates);
+    }
+
+    auto& m_prop = m_engine.get_mutational_properties();
+    m_prop.change_rates_from(time, mutant_name, epi_rates);
 }
 
 PhylogeneticForest MutationEngine::place_mutations(
@@ -1200,7 +1215,8 @@ std::ostream &show_driver_mutations(
 
             os << indent;
             if (found != driver_reverse_map.end()) {
-                os << found->second << " (" << static_cast<RACES::Mutations::SID>(*SID_it)
+                os << found->second << (found->second.size()>0?" ":"")
+                   << "(" << static_cast<RACES::Mutations::SID>(*SID_it)
                    << ")";
             } else {
                 os << static_cast<RACES::Mutations::SID>(*SID_it);
@@ -1233,30 +1249,35 @@ std::ostream &show_driver_mutations(
     return os;
 }
 
-Rcpp::List MutationEngine::get_species_rates() const
+Rcpp::List MutationEngine::get_species_info(const RACES::Mutations::MutationalProperties& m_properties)
 {
     using namespace Rcpp;
     using namespace RACES::Mutations;
 
-    const auto &m_properties = m_engine.get_mutational_properties();
-
-    const size_t num_of_species = m_properties.get_passenger_rates().size();
-    CharacterVector species_names(num_of_species);
-    NumericVector SNV_rates(num_of_species), CNA_rates(num_of_species),
-        indel_rates(num_of_species);
+    size_t num_of_rows{0};
+    for (const auto &timed_p_rates :
+                std::views::values(m_properties.get_passenger_rates())) {
+        num_of_rows += timed_p_rates.num_of_values();
+    }
+    CharacterVector species_names(num_of_rows);
+    NumericVector SNV_rates(num_of_rows), CNA_rates(num_of_rows),
+        indel_rates(num_of_rows), times(num_of_rows);
 
     size_t i{0};
-    for (const auto &[species_name, p_rates] : m_properties.get_passenger_rates()) {
-        species_names[i] = species_name;
-        SNV_rates[i] = p_rates.snv;
-        CNA_rates[i] = p_rates.cna;
-        indel_rates[i] = p_rates.indel;
-
-        ++i;
+    for (const auto &[species_name, timed_p_rates] : m_properties.get_passenger_rates()) {
+        for (const auto &[time, p_rates] : timed_p_rates) {
+            species_names[i] = species_name;
+            times[i] = time;
+            SNV_rates[i] = p_rates.snv;
+            CNA_rates[i] = p_rates.cna;
+            indel_rates[i] = p_rates.indel;
+            ++i;
+        }
     }
 
-    return DataFrame::create(_["species"] = species_names, _["SNV_rate"] = SNV_rates,
-                             _["CNA_rate"] = CNA_rates, _["indel_rate"] = indel_rates);
+    return DataFrame::create(_["species"] = species_names, _["time"] = times,
+                             _["SNV_rate"] = SNV_rates, _["indel_rate"] = indel_rates,
+                             _["CNA_rate"] = CNA_rates);
 }
 
 void MutationEngine::show() const
@@ -1266,21 +1287,34 @@ void MutationEngine::show() const
 
     const auto &m_properties = m_engine.get_mutational_properties();
 
-    for (const auto &[species_name, p_rates] : m_properties.get_passenger_rates()) {
-        Rcout << std::endl << "   \"" << species_name << "\": {";
-        std::string sep;
-        if (p_rates.snv > 0) {
-            Rcout << "SNV: " << p_rates.snv;
-            sep = ", ";
+    for (const auto &[species_name, timed_p_rates] : m_properties.get_passenger_rates()) {
+        Rcout << std::endl << "   \"" << species_name << "\":";
+        for (auto it = timed_p_rates.begin(); it != timed_p_rates.end(); ++it) {
+            const auto next_it = std::next(it);
+            Rcout << std::endl << "      [" << it->first << ",";
+
+            if (next_it == timed_p_rates.end()) {
+                 Rcout << "inf";
+            } else {
+                 Rcout << next_it->first;
+            }
+            Rcout << "): {";
+
+            const auto& p_rates = it->second;
+            std::string sep;
+            if (p_rates.snv > 0) {
+                Rcout << "SNV: " << p_rates.snv;
+                sep = ", ";
+            }
+            if (p_rates.indel > 0) {
+                Rcout << sep << "indel: " << p_rates.indel;
+                sep = ", ";
+            }
+            if (p_rates.cna > 0) {
+                Rcout << sep << "CNA: " << p_rates.cna;
+            }
+            Rcout << "}";
         }
-        if (p_rates.indel > 0) {
-            Rcout << sep << "indel: " << p_rates.indel;
-            sep = ", ";
-        }
-        if (p_rates.cna > 0) {
-            Rcout << sep << "CNA: " << p_rates.cna;
-        }
-        Rcout << "}";
     }
 
     const auto driver_reverse_map = m_engine.get_driver_storage().get_reverse_map();

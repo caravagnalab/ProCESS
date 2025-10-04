@@ -115,6 +115,9 @@ class MutationEngine
     void add_mutant(const std::string &mutant_name, const Rcpp::List &passenger_rates,
                     const Rcpp::List &drivers);
 
+    void change_rates_from(const RACES::Time time, const std::string &mutant_name,
+                           const Rcpp::List &passenger_rates);
+
     inline Rcpp::List get_active_germline() const
     {
         return storage.get_germline_storage().get_subject_df(germline_subject);
@@ -130,7 +133,12 @@ class MutationEngine
         return storage.get_germline_storage().get_population_descriptions_df();
     }
 
-    Rcpp::List get_species_rates() const;
+    static Rcpp::List get_species_info(const RACES::Mutations::MutationalProperties& m_properties);
+
+    inline Rcpp::List get_species_info() const
+    {
+        return get_species_info(m_engine.get_mutational_properties());
+    }
 
     Rcpp::List get_known_driver_mutations() const;
 

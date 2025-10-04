@@ -464,6 +464,7 @@ RCPP_MODULE(Mutations)
 //'   does not have an epigenetic state.
 //' @param drivers The list of the driver SNVs, indels, CNAs, and the whole
 //'   genome doubling events (WGD) characterizing the mutant (optional).
+//' @seealso [MutationEngine$change_rates_from()]
 //' @examples
 //' # create a demonstrative mutation engine
 //' m_engine <- MutationEngine(setup_code = "demo")
@@ -489,14 +490,59 @@ RCPP_MODULE(Mutations)
 //' m_engine
         .method("add_mutant",
                 (void (MutationEngine::*)(const std::string &,
-                                          const Rcpp::List &passenger_rates))(
+                                          const Rcpp::List &))(
                     &MutationEngine::add_mutant),
                 "Add mutant")
         .method("add_mutant",
-                (void (MutationEngine::*)(
-                    const std::string &, const Rcpp::List &passenger_rates,
-                    const Rcpp::List &))(&MutationEngine::add_mutant),
+                (void (MutationEngine::*)(const std::string &,
+                                          const Rcpp::List &,const Rcpp::List &))(
+                    &MutationEngine::add_mutant),
                 "Add mutant")
+
+//' @name MutationEngine$change_rates_from
+//' @title Change the passenger rates from a specified time
+//' @description This method changes the passenger rates from a specified time.
+//' @details This method changes the passenger rates from a specified time. The
+//'     rates before the specified time and those of the unspecified epigenetic
+//'     states are not affected.
+//' @param time The time from which the passenger rates are set.
+//' @param mutant_name The mutant name.
+//' @param passenger_rates The list of the passenger rates whose names are the
+//'   epigenetic states of the species or a single rate, if the mutant
+//'   does not have an epigenetic state.
+//' @seealso [MutationEngine$add_mutant()]
+//' @examples
+//' # create a demonstrative mutation engine
+//' m_engine <- MutationEngine(setup_code = "demo")
+//'
+//' # add the mutant "A" characterized by two driver SNV on chromosome 22, two
+//' # indels on the same chromosome, a whole genome doubling event, and finally
+//' # two CNAs: an amplification and a deletion. The mutant has two epigenetic
+//' # states and its species "A+" and "A-" have passenger SNV rates 1e-9 and
+//' # 3e-8, respectively, and passenger CNA rates 0 and 1e-11, respectively.
+//' m_engine$add_mutant("A", list("+" = c(SNV = 1e-9, indel = 1e-10),
+//'                               "-" = c(SNV = 3e-8, CNA = 1e-11)),
+//'                     drivers = list("DGCR8 P26L",
+//'                                    Mutation("22", 16085675, "GCCTCCCGA",
+//'                                             "G"),
+//'                                    "EP300 S2346del",
+//'                                    WGD,
+//'                                    CNA(type = "A", chr = "22",
+//'                                        chr_pos = 10303470,
+//'                                        len = 200000),
+//'                                    SNV("22", 23657587, "C"),
+//'                                    CNA("D", "22", 5010000, 200000)))
+//'
+//' m_engine
+//'
+//' m_engine$change_rates_from(10, "A", list("+" = c(SNV = 4e-1,
+//'                                                  indel = 4e-1)))
+//' m_engine
+        .method("change_rates_from",
+                (void (MutationEngine::*)(const RACES::Time, const std::string &,
+                                          const Rcpp::List &))(
+                    &MutationEngine::change_rates_from),
+                "Change passenger rates from a given timestamp")
 
 //' @name MutationEngine$place_mutations
 //' @title Placing the mutations
@@ -666,21 +712,30 @@ RCPP_MODULE(Mutations)
         .method("get_population_descriptions",
                 &MutationEngine::get_population_descriptions)
 
-//' @name MutationEngine$get_species_rates
-//' @title Getting the registered species rates
-//' @description This method returns the registered species rates.
-//' @details The registered species rates are returned in a
-//'   data frame. The column `species` contains the species names;
-//'   the columns `SNV_rate`, `CNA_rate`, and `indel_rate`
-//'   store the SNV, CNA, and indel rates, respectively.
+//' @name MutationEngine$get_species_info
+//' @title Getting the registered species and their rates
+//' @description This method returns the registered species and
+//'   their rates.
+//' @details The registered species and their rates during the
+//'   simulation are returned in a data frame. The column
+//'   `species` contains the species names; the columns `time`,
+//'   `SNV_rate`, `indel_rate`, and `CNA_rate` store the time
+//'   from which rates hold, and the corresponding the SNV,
+//'   indel, and CNA rates, respectively.
 //' @return A data frame containing the registered species rates.
 //' @examples
 //' # build a mutation engine
 //' m_engine <- MutationEngine(setup_code = "demo")
 //'
 //' # get the active germline subject data frame
-//' head(m_engine$get_species_rates(), 5)
-        .method("get_species_rates", &MutationEngine::get_species_rates)
+//' head(m_engine$get_species_info(), 5)
+//' @name PhylogeneticForest$get_species_info
+//' @title Getting the species
+//' @description This method describes the simulated species.
+//' @return A data frame reporting `species`, `time`, `SNV_rate`,
+//'   `indel_rate`, and `CNA_rate` for each registered species.
+//' @seealso [PhylogeneticForest$get_species_info()]
+        .method("get_species_info", &MutationEngine::get_species_info)
 
 //' @name MutationEngine$get_SNV_signatures
 //' @title Getting the SNV signatures
@@ -1053,7 +1108,7 @@ RCPP_MODULE(Mutations)
 //'   `allele`, `src_allele`, and `code` for each driver mutations.
 //' }
 //' @field get_species_info Gets the species data\itemize{
-//' \item \emph{Returns:} A data frame reporting `mutant`, `epistate`,
+//' \item \emph{Returns:} A data frame reporting `species`, `time`,
 //'   `SNV_rate`, `indel_rate`, and `CNA_rate` for each registered species.
 //' }
 //' @field get_sticks Computes the forest sticks \itemize{
@@ -1204,10 +1259,17 @@ RCPP_MODULE(Mutations)
                 "Get the applied driver mutations")
 
 //' @name PhylogeneticForest$get_species_info
-//' @title Getting the species
-//' @description This method describes the simulated species.
-//' @return A data frame reporting `mutant`, `epistate`, `SNV_rate`,
-//'   `indel_rate`, and `CNA_rate` for each registered species.
+//' @title Getting the species and their rates
+//' @description This method returns the species and their rates.
+//' @details This method returns the species and their rates during
+//'   the simulation are returned in a data frame. The column `species`
+//'   contains the species names; the columns `time`, `SNV_rate`,
+//'   `indel_rate`, and `CNA_rate` store the time from which rates
+//'   hold, and the corresponding the SNV, indel, and CNA rates,
+//'   respectively.
+//' @return A data frame reporting `species`, `time`, `SNV_rate`,
+//'   `indel_rate`, and `CNA_rate` for each species.
+//' @seealso [MutationEngine$get_species_info()]
         .method("get_species_info", &PhylogeneticForest::get_species_info,
                 "Get the recorded species")
 
