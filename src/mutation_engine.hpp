@@ -34,12 +34,10 @@
 
 class MutationEngine
 {
-    using AbsGenotypePosition = uint32_t;
-
     GenomicDataStorage storage;
 
     std::string germline_subject;
-    size_t context_sampling;
+    size_t context_sampling_delta;
     size_t max_motif_size;
     size_t max_repetition_storage;
     size_t driver_CNA_min_distance;
@@ -47,15 +45,17 @@ class MutationEngine
 
     std::map<SIDMut::SID, std::string> driver_codes;
 
-    RACES::Mutations::ContextIndex<AbsGenotypePosition> context_index;
     RACES::Mutations::RSIndex rs_index;
-    RACES::Mutations::MutationEngine<AbsGenotypePosition, std::mt19937_64> m_engine;
+    RACES::Mutations::MutationEngine<std::mt19937_64> m_engine;
 
     bool avoid_homozygous_losses;
 
+    std::filesystem::path tmp_dir;
+    size_t cache_size;
+
     GermlineSubject get_germline_subject(const std::string &subject_name) const;
 
-    void init_mutation_engine(const bool &quiet);
+    void init_mutation_engine(const SEXP& seed, const bool &quiet);
 
     template <typename MUTATION_TYPE> void show_timed_exposures() const
     {
@@ -87,10 +87,13 @@ class MutationEngine
                    const std::string &drivers_source,
                    const std::string &passenger_CNAs_source,
                    const std::string &germline_source,
-                   const std::string &germline_subject, const size_t &context_sampling,
+                   const std::string &germline_subject,
+                   const size_t &context_sampling_delta,
                    const size_t &max_motif_size, const size_t &max_repetition_storage,
                    const size_t &driver_CNA_min_distance, const std::string &tumour_type,
-                   const bool &avoid_homozygous_losses, const bool &quiet);
+                   const bool &avoid_homozygous_losses,
+                   const std::filesystem::path &tmp_dir, const size_t &cache_size,
+                   const SEXP& seed, const bool &quiet);
 
     MutationEngine(const std::shared_ptr<Account> &COSMIC_account,
                    const std::string &directory, const std::string &reference_source,
@@ -99,10 +102,13 @@ class MutationEngine
                    const std::string &drivers_source,
                    const std::string &passenger_CNAs_source,
                    const std::string &germline_source,
-                   const std::string &germline_subject, const size_t &context_sampling,
+                   const std::string &germline_subject,
+                   const size_t &context_sampling_delta,
                    const size_t &max_motif_size, const size_t &max_repetition_storage,
                    const size_t &driver_CNA_min_distance, const std::string &tumour_type,
-                   const bool &avoid_homozygous_losses, const bool &quiet);
+                   const bool &avoid_homozygous_losses,
+                   const std::filesystem::path &tmp_dir, const size_t &cache_size,
+                   const SEXP& seed, const bool &quiet);
 
     static Rcpp::List get_supported_setups();
 
@@ -214,23 +220,26 @@ class MutationEngine
         const std::string &indel_signatures_source, const std::string &drivers_source,
         const std::string &passenger_CNAs_source, const std::string &germline_source,
         const std::string &setup_code, const SEXP &COSMIC_account_data,
-        const std::string &germline_subject, const size_t &context_sampling,
+        const std::string &germline_subject, const size_t &context_sampling_delta,
         const size_t &max_motif_size, const size_t &max_repetition_storage,
         const size_t &driver_CNA_min_distance, const std::string &tumour_type,
-        const bool avoid_homozygous_losses, const bool quiet);
+        const bool avoid_homozygous_losses, std::string tmp_dir,
+        const size_t &cache_size, const SEXP& seed, const bool quiet);
 
     static Rcpp::List get_available_tumour_type(const std::string &setup_code);
 
-    inline void set_context_sampling(const size_t &context_sampling)
+    inline void set_context_sampling_delta(const size_t &context_sampling_delta,
+                                           const SEXP& seed)
     {
-        set_context_sampling(context_sampling, false);
+        set_context_sampling_delta(context_sampling_delta, seed, false);
     }
 
-    void set_context_sampling(const size_t &context_sampling, const bool quiet);
+    void set_context_sampling_delta(const size_t &context_sampling_delta,
+                                    const SEXP& seed, const bool quiet);
 
-    inline void rebuild_indices() { rebuild_indices(false); }
+    inline void rebuild_indices(const SEXP& seed) { rebuild_indices(seed, false); }
 
-    void rebuild_indices(const bool quiet);
+    void rebuild_indices(const SEXP& seed, const bool quiet);
 
     void reset(const bool full = true, const bool quiet = false);
 };

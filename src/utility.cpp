@@ -72,7 +72,7 @@ std::filesystem::path get_tmp_dir_path(const std::string &base_name)
 {
     int i{0};
 
-    std::mt19937 r_gen((unsigned)time(NULL));
+    std::mt19937_64 r_gen((unsigned)time(NULL));
 
     std::uniform_int_distribution<uint32_t> dist;
 

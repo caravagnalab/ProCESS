@@ -24,7 +24,7 @@
 
 #include <Rcpp.h>
 
-#include <context_index.hpp>
+#include <sbs_context_index.hpp>
 #include <csv_reader.hpp>
 #include <fasta_chr_reader.hpp>
 #include <read_simulator.hpp>
@@ -175,10 +175,10 @@ Rcpp::List MutationEngine::get_supported_setups()
 }
 
 inline std::filesystem::path get_context_index_path(const GenomicDataStorage &storage,
-                                                    const size_t context_sampling)
+                                                    const size_t context_sampling_delta)
 {
     return storage.get_directory() /
-           std::string("context_index_" + std::to_string(context_sampling) + ".cif");
+           std::string("context_index_" + std::to_string(context_sampling_delta));
 }
 
 std::set<RACES::Mutations::GenomicRegion>
@@ -201,33 +201,23 @@ get_region_to_avoid(const GenomicDataStorage &storage)
     return regions_to_avoid;
 }
 
-template <typename ABSOLUTE_GENOTYPE_POSITION = uint32_t>
-RACES::Mutations::ContextIndex<ABSOLUTE_GENOTYPE_POSITION>
-build_contex_index(const GenomicDataStorage &storage, const size_t context_sampling,
-                   const bool &quiet)
+template <typename RANDOM_GENERATOR = std::mt19937_64>
+void build_context_index(const GenomicDataStorage &storage,
+                         const std::filesystem::path tmp_dir,
+                         const size_t cache_size,
+                         const size_t context_sampling_delta,
+                         const SEXP& seed,
+                         const bool &quiet)
 {
     using namespace RACES;
     using namespace RACES::Mutations;
 
-    using Index = ContextIndex<ABSOLUTE_GENOTYPE_POSITION>;
+    using Index = SBSContextIndex<RANDOM_GENERATOR>;
 
-    Index context_index;
+    const auto context_index_path = get_context_index_path(storage, context_sampling_delta);
 
-    auto contex_index_filename = get_context_index_path(storage, context_sampling);
-
-    if (std::filesystem::exists(contex_index_filename)) {
-        Archive::Binary::In archive(contex_index_filename);
-        try {
-            RACES::UI::ProgressBar progress_bar(Rcpp::Rcout, quiet);
-
-            archive.load(context_index, progress_bar, "context index");
-        } catch (RACES::Archive::WrongFileFormatDescr &ex) {
-            raise_error(ex, "context index");
-        } catch (RACES::Archive::WrongFileFormatVersion &ex) {
-            raise_error(ex, "context index");
-        }
-
-        return context_index;
+    if (std::filesystem::exists(context_index_path)) {
+        return;
     }
 
     using namespace Rcpp;
@@ -236,25 +226,16 @@ build_contex_index(const GenomicDataStorage &storage, const size_t context_sampl
 
     std::set<GenomicRegion> regions_to_avoid = get_region_to_avoid(storage);
 
-    std::list<GenomicRegion> chr_regions;
     {
         UI::ProgressBar progress_bar(Rcpp::Rcout, quiet);
-        const auto reference_path = storage.get_reference_path();
-        context_index = Index::build_index(reference_path, regions_to_avoid,
-                                           context_sampling, &progress_bar);
-        chr_regions = context_index.get_chromosome_regions();
-    }
 
-    if (chr_regions.size() > 0) {
-        UI::ProgressBar progress_bar(Rcpp::Rcout, quiet);
-        Archive::Binary::Out archive(contex_index_filename);
-
-        archive.save(context_index, progress_bar, "context index");
+        RANDOM_GENERATOR random_generator(get_random_seed<>(seed));
+        Index::build(random_generator, context_index_path,
+                     storage.get_reference_path(), regions_to_avoid,
+                     tmp_dir, cache_size, context_sampling_delta, progress_bar);
     }
 
     Rcout << "done" << std::endl;
-
-    return context_index;
 }
 
 inline std::filesystem::path get_rs_index_path(const GenomicDataStorage &storage,
@@ -302,7 +283,6 @@ RACES::Mutations::RSIndex build_rs_index(const GenomicDataStorage &storage,
         Rcout << "Building repeated sequence index..." << std::endl << std::flush;
     }
 
-
     std::set<GenomicRegion> regions_to_avoid = get_region_to_avoid(storage);
 
     {
@@ -325,13 +305,16 @@ RACES::Mutations::RSIndex build_rs_index(const GenomicDataStorage &storage,
     return rs_index;
 }
 
-template <typename ABSOLUTE_GENOTYPE_POSITION>
+/*
+template <typename RANDOM_GENERATOR = std::mt19937_64>
 std::map<RACES::Mutations::ChromosomeId, size_t> get_num_of_alleles(
-    const RACES::Mutations::ContextIndex<ABSOLUTE_GENOTYPE_POSITION> &context_index,
+    const std::filesystem::path &context_index_path,
     const size_t &default_num_of_alleles,
     const std::map<std::string, size_t> &alleles_num_exceptions)
 {
     using namespace RACES::Mutations;
+
+    SBSContextIndex<RANDOM_GENERATOR> context_index(context_index_path);
 
     const auto chr_regions = context_index.get_chromosome_regions();
 
@@ -351,6 +334,7 @@ std::map<RACES::Mutations::ChromosomeId, size_t> get_num_of_alleles(
 
     return alleles_per_chromosome;
 }
+*/
 
 template <
     typename MUTATION_TYPE,
@@ -447,10 +431,12 @@ load_passenger_CNAs(const std::filesystem::path &CNAs_csv, const std::string &tu
     return std::vector<RACES::Mutations::CNA>(CNAs.begin(), CNAs.end());
 }
 
-void MutationEngine::init_mutation_engine(const bool &quiet)
+void MutationEngine::init_mutation_engine(const SEXP& seed, const bool &quiet)
 {
-    context_index = build_contex_index(storage, context_sampling, quiet);
-    rs_index = build_rs_index(storage, max_motif_size, max_repetition_storage, quiet);
+    build_context_index(storage, tmp_dir, cache_size,
+                        context_sampling_delta, seed, quiet);
+    rs_index = build_rs_index(storage, max_motif_size,
+                              max_repetition_storage, quiet);
 
     reset();
 }
@@ -461,20 +447,22 @@ MutationEngine::MutationEngine(
     const std::string &SBS_signatures_source, const std::string &indel_signatures_source,
     const std::string &drivers_source, const std::string &passenger_CNAs_source,
     const std::string &germline_source, const std::string &germline_subject,
-    const size_t &context_sampling, const size_t &max_motif_size,
+    const size_t &context_sampling_delta, const size_t &max_motif_size,
     const size_t &max_repetition_storage, const size_t &driver_CNA_min_distance,
     const std::string &tumour_type, const bool &avoid_homozygous_losses,
-    const bool &quiet)
+    const std::filesystem::path &tmp_dir, const size_t &cache_size,
+    const SEXP& seed, const bool &quiet)
     : storage(setup_storage(setup_name, directory, reference_source,
                             SBS_signatures_source, indel_signatures_source,
                             drivers_source, passenger_CNAs_source, germline_source,
                             COSMIC_account)),
-      germline_subject(germline_subject), context_sampling(context_sampling),
-      max_motif_size(max_motif_size), max_repetition_storage(max_repetition_storage),
-      driver_CNA_min_distance(driver_CNA_min_distance), tumour_type(tumour_type),
-      avoid_homozygous_losses(avoid_homozygous_losses)
+      germline_subject{germline_subject}, context_sampling_delta{context_sampling_delta},
+      max_motif_size{max_motif_size}, max_repetition_storage{max_repetition_storage},
+      driver_CNA_min_distance{driver_CNA_min_distance}, tumour_type{tumour_type},
+      avoid_homozygous_losses{avoid_homozygous_losses}, tmp_dir{tmp_dir},
+      cache_size{cache_size*1024*1024}
 {
-    init_mutation_engine(quiet);
+    init_mutation_engine(seed, quiet);
 }
 
 MutationEngine::MutationEngine(
@@ -482,19 +470,22 @@ MutationEngine::MutationEngine(
     const std::string &reference_source, const std::string &SBS_signatures_source,
     const std::string &indel_signatures_source, const std::string &drivers_source,
     const std::string &passenger_CNAs_source, const std::string &germline_source,
-    const std::string &germline_subject, const size_t &context_sampling,
+    const std::string &germline_subject, const size_t &context_sampling_delta,
     const size_t &max_motif_size, const size_t &max_repetition_storage,
     const size_t &driver_CNA_min_distance, const std::string &tumour_type,
-    const bool &avoid_homozygous_losses, const bool &quiet)
+    const bool &avoid_homozygous_losses,
+    const std::filesystem::path &tmp_dir, const size_t &cache_size,
+    const SEXP& seed, const bool &quiet)
     : storage(setup_storage(directory, reference_source, SBS_signatures_source,
                             indel_signatures_source, drivers_source,
                             passenger_CNAs_source, germline_source, COSMIC_account)),
-      germline_subject(germline_subject), context_sampling(context_sampling),
-      max_motif_size(max_motif_size), max_repetition_storage(max_repetition_storage),
-      driver_CNA_min_distance(driver_CNA_min_distance), tumour_type(tumour_type),
-      avoid_homozygous_losses(avoid_homozygous_losses)
+      germline_subject{germline_subject}, context_sampling_delta{context_sampling_delta},
+      max_motif_size{max_motif_size}, max_repetition_storage{max_repetition_storage},
+      driver_CNA_min_distance{driver_CNA_min_distance}, tumour_type{tumour_type},
+      avoid_homozygous_losses{avoid_homozygous_losses}, tmp_dir{tmp_dir},
+      cache_size{cache_size*1024*1024}
 {
-    init_mutation_engine(quiet);
+    init_mutation_engine(seed, quiet);
 }
 
 struct DummyTest
@@ -596,19 +587,30 @@ MutationEngine MutationEngine::build_MutationEngine(
     const std::string &drivers_source, const std::string &passenger_CNAs_source,
     const std::string &germline_source, const std::string &setup_code,
     const SEXP &COSMIC_account_data, const std::string &germline_subject,
-    const size_t &context_sampling, const size_t &max_motif_size,
+    const size_t &context_sampling_samples, const size_t &max_motif_size,
     const size_t &max_repetition_storage, const size_t &driver_CNA_min_distance,
-    const std::string &tumour_type, const bool avoid_homozygous_losses, const bool quiet)
+    const std::string &tumour_type, const bool avoid_homozygous_losses,
+    std::string tmp_dir, const size_t &cache_size,
+    const SEXP& seed, const bool quiet)
 {
+    std::filesystem::path tmp_dir_path;
+    if (tmp_dir.size()==0) {
+        tmp_dir_path = std::filesystem::temp_directory_path();
+    } else {
+        tmp_dir_path = tmp_dir;
+    }
+
     auto COSMIC_account = extract_COSMIC_account(COSMIC_account_data);
 
     if (setup_code != "") {
         return MutationEngine(COSMIC_account, setup_code, directory, reference_source,
                               SBS_signatures_source, indel_signatures_source,
                               drivers_source, passenger_CNAs_source, germline_source,
-                              germline_subject, context_sampling, max_motif_size,
-                              max_repetition_storage, driver_CNA_min_distance,
-                              tumour_type, avoid_homozygous_losses, quiet);
+                              germline_subject, context_sampling_samples,
+                              max_motif_size, max_repetition_storage,
+                              driver_CNA_min_distance, tumour_type,
+                              avoid_homozygous_losses, tmp_dir_path, cache_size,
+                              seed, quiet);
     }
 
     if (directory == "" || reference_source == "" || SBS_signatures_source == "" ||
@@ -623,8 +625,9 @@ MutationEngine MutationEngine::build_MutationEngine(
     return MutationEngine(
         COSMIC_account, directory, reference_source, SBS_signatures_source,
         indel_signatures_source, drivers_source, passenger_CNAs_source, germline_source,
-        germline_subject, context_sampling, max_motif_size, max_repetition_storage,
-        driver_CNA_min_distance, tumour_type, avoid_homozygous_losses, quiet);
+        germline_subject, context_sampling_samples, max_motif_size,
+        max_repetition_storage, driver_CNA_min_distance, tumour_type,
+        avoid_homozygous_losses, tmp_dir_path, cache_size, seed, quiet);
 }
 
 Rcpp::List MutationEngine::get_available_tumour_type(const std::string &setup_code)
@@ -1337,29 +1340,34 @@ void MutationEngine::show() const
     Rcout << std::endl;
 }
 
-void MutationEngine::rebuild_indices(const bool quiet)
+void MutationEngine::rebuild_indices(const SEXP& seed, const bool quiet)
 {
-    auto index_path = get_context_index_path(storage, context_sampling);
+    auto index_path = get_context_index_path(storage, context_sampling_delta);
 
-    std::filesystem::remove(index_path);
+    std::filesystem::remove_all(index_path);
 
-    context_index = build_contex_index(storage, quiet, context_sampling);
+    build_context_index(storage, tmp_dir, cache_size,
+                        context_sampling_delta, seed, quiet);
 
     index_path = get_rs_index_path(storage, max_motif_size, max_repetition_storage);
 
-    std::filesystem::remove(index_path);
+    std::filesystem::remove_all(index_path);
 
     rs_index = build_rs_index(storage, max_motif_size, max_repetition_storage, quiet);
 }
 
-void MutationEngine::set_context_sampling(const size_t &context_sampling,
-                                          const bool quiet)
+void MutationEngine::set_context_sampling_delta(const size_t &context_sampling_delta,
+                                                const SEXP &seed,
+                                                const bool quiet)
 {
-    this->context_sampling = context_sampling;
+    if (context_sampling_delta != this->context_sampling_delta) {
+        this->context_sampling_delta = context_sampling_delta;
 
-    context_index = build_contex_index(storage, context_sampling, quiet);
+        build_context_index(storage, tmp_dir, cache_size,
+                            context_sampling_delta, seed, quiet);
 
-    reset();
+        reset();
+    }
 }
 
 void warning_function(const RACES::WarningType type, const std::string message)
@@ -1369,7 +1377,7 @@ void warning_function(const RACES::WarningType type, const std::string message)
     switch (type) {
     case RACES::WarningType::NO_MUT_FOR_CONTEXT:
         oss << " Decrease `MutationEngine`'s "
-            << "parameter `context_sampling`." << std::endl;
+            << "parameter `context_sampling_delta`." << std::endl;
         break;
     case RACES::WarningType::NO_MUT_FOR_RPATTERN:
         oss << " Increase `MutationEngine`'s "
@@ -1420,10 +1428,12 @@ void MutationEngine::reset(const bool full, const bool quiet)
 
     auto germline = germline_storage.get_germline(germline_subject, quiet);
 
-    m_engine = RACES::Mutations::MutationEngine(
-        context_index, rs_index, SBS_signatures, indel_signatures, mutational_properties,
-        germline, driver_storage, passenger_CNAs, driver_CNA_min_distance,
-        warning_function);
+    const auto context_index_path = get_context_index_path(storage, context_sampling_delta);
+
+    m_engine = RACES::Mutations::MutationEngine(rs_index,
+        context_index_path, SBS_signatures, indel_signatures,
+        mutational_properties, germline, driver_storage, cache_size,
+        passenger_CNAs, driver_CNA_min_distance, warning_function);
 
     for (const auto &[type, mutation_timed_exposures] : timed_exposures) {
         for (const auto &[time, exposure] : mutation_timed_exposures) {

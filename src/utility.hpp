@@ -40,7 +40,7 @@ inline std::string ordtostr(const size_t ord)
 
 template <typename RESULT_TYPE = int,
           std::enable_if_t<std::is_integral_v<RESULT_TYPE>, bool> = true>
-RESULT_TYPE get_random_seed(const SEXP seed)
+RESULT_TYPE get_random_seed(const SEXP& seed)
 {
     switch (TYPEOF(seed)) {
     case INTSXP:

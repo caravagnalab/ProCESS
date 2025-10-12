@@ -23,7 +23,6 @@
 
 #include <germline.hpp>
 
-#include <context_index.hpp>
 #include <csv_reader.hpp>
 #include <progress_bar.hpp>
 #include <utils.hpp>

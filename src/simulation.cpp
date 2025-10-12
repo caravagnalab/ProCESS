@@ -1815,7 +1815,7 @@ TissueSimulation::search_samples(const Rcpp::IntegerVector &minimum_cell_vector,
                                  const size_t num_of_samples, const int seed) const
 {
     auto rectangles = find_all_samples(minimum_cell_vector, width, height);
-    std::mt19937 gen(seed);
+    std::mt19937_64 gen(seed);
 
     if (rectangles.size() < num_of_samples) {
         std::ostringstream oss;

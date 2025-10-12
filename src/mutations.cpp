@@ -871,7 +871,7 @@ RCPP_MODULE(Mutations)
 //' @param germline_src The germline directory path or URL (mandatory when
 //'   `setup_code` is *not* provided).
 //' @param germline_subject The germline subject (optional).
-//' @param context_sampling The number of reference contexts per context in
+//' @param context_sampling_delta The number of reference contexts per context in
 //'   the index (optional: default value is 100).
 //' @param COSMIC_account A named list containing "email" and "password" of
 //'   a valid COSMIC account (required to download mutational signatures
@@ -892,6 +892,11 @@ RCPP_MODULE(Mutations)
 //'   homozygous losses. When set to `TRUE`, passenger CNAs will be
 //'   exclusively applied to regions covered by two alleles at least.
 //'   (default: TRUE).
+//' @param tmp_directory The directory used to store temporary files
+//'   (default: the default temporary directory).
+//' @param index_cache_size The cache size of the indices in MBytes 
+//'   (default: 500MB).
+//' @param seed The seed for random number generator (optional).
 //' @param quiet An optional Boolean flag to avoid the progress bar
 //'   (default: FALSE).
 //' @seealso [MutationEngine$get_germline_subjects()] to get the available
@@ -933,18 +938,18 @@ RCPP_MODULE(Mutations)
 //' m_engine <- MutationEngine("Test", reference_url, sbs_url, indel_url,
 //'                            drivers_url, passenger_CNAs_url, germline_url)
 //'
-//' # if the `context_sampling` parameter changes, a new context index is
+//' # if the `context_sampling_delta` parameter changes, a new context index is
 //' # built, while neither the reference sequence nor the SBS file are
 //' # downloaded again.
 //' m_engine <- MutationEngine("Test", reference_url, sbs_url, indel_url,
 //'                            drivers_url, passenger_CNAs_url, germline_url,
-//'                            context_sampling = 50)
+//'                            context_sampling_delta = 50)
 //'
 //' # a further construction with the same parameters avoids both
 //' # downloads and context index construction.
 //' m_engine <- MutationEngine("Test", reference_url, sbs_url, indel_url,
 //'                            drivers_url, passenger_CNAs_url, germline_url,
-//'                            context_sampling = 50)
+//'                            context_sampling_delta = 50)
 //'
 //' m_engine
 //'
@@ -954,9 +959,9 @@ RCPP_MODULE(Mutations)
 //' # those available for testing purpose.
 //' m_engine <- MutationEngine(setup_code = "demo")
 //'
-//' # the `context_sampling` can be used also when a pre-defined set-up
+//' # the `context_sampling_delta` can be used also when a pre-defined set-up
 //' # configuration is adopted.
-//' m_engine <- MutationEngine(setup_code = "demo", context_sampling = 50)
+//' m_engine <- MutationEngine(setup_code = "demo", context_sampling_delta = 50)
 //'
 //' m_engine
 //'
@@ -991,10 +996,13 @@ RCPP_MODULE(Mutations)
                           _["drivers_src"] = "", _["passenger_CNAs_src"] = "",
                           _["germline_src"] = "", _["setup_code"] = "",
                           _["COSMIC_account"] = R_NilValue, _["germline_subject"] = "",
-                          _["context_sampling"] = 100, _["max_motif_size"] = 50,
+                          _["context_sampling_delta"] = 1, _["max_motif_size"] = 50,
                           _["max_repetition_storage"] = 500000,
                           _["driver_CNA_min_distance"] = 10000, _["tumour_type"] = "",
-                          _["avoid_homozygous_losses"] = true, _["quiet"] = false),
+                          _["avoid_homozygous_losses"] = true, 
+                          _["tmp_directory"] = "",
+                          _["index_cache_size"] = 50, _["seed"] = R_NilValue,
+                          _["quiet"] = false),
              "Create a MutationEngine");
 
 //' @name get_available_tumours_in
