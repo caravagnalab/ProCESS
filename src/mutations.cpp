@@ -729,11 +729,6 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the active germline subject data frame
 //' head(m_engine$get_species_info(), 5)
-//' @name PhylogeneticForest$get_species_info
-//' @title Getting the species
-//' @description This method describes the simulated species.
-//' @return A data frame reporting `species`, `time`, `SNV_rate`,
-//'   `indel_rate`, and `CNA_rate` for each registered species.
 //' @seealso [PhylogeneticForest$get_species_info()]
         .method("get_species_info", &MutationEngine::get_species_info)
 
