@@ -1,0 +1,21 @@
+pandoc: 3.8.2.1
+pkgdown: 2.1.3
+pkgdown_sha: ~
+articles:
+  custom_engine: custom_engine.html
+  four_mutants: four_mutants.html
+  growth_models: growth_models.html
+  infinite_site_model: infinite_site_model.html
+  mutations: mutations.html
+  ProCESS: ProCESS.html
+  run_until: run_until.html
+  sample_partition: sample_partition.html
+  sampling: sampling.html
+  SCOUT: SCOUT.html
+  sequencing: sequencing.html
+  time_series: time_series.html
+  tissue_simulation: tissue_simulation.html
+last_built: 2025-10-21T10:23Z
+urls:
+  reference: https://caravagnalab.github.io/ProCESS/reference
+  article: https://caravagnalab.github.io/ProCESS/articles
