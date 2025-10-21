@@ -47,10 +47,10 @@ add_driver_mutation_labels <- function(
   }
 
   drivers <- data %>% dplyr::filter(.data$classes == "driver") %>%
-    dplyr::left_join(facet_p %>% dplyr::select(.data$sample_name,
+    dplyr::left_join(facet_p %>% dplyr::select(.data$sample,
                                                .data$y_max,
                                                .data$PANEL),
-                     by = c("sample_name"))
+                     by = c("sample"))
 
   if (!is.null(driver_mutations)) {
     drivers <- dplyr::left_join(drivers, driver_mutations,
@@ -144,7 +144,11 @@ setup_data_for_plotting <- function(
     seq_res <- seq_result
   }
 
-  data <- seq_to_long(seq_res)
+  if ("sample" %in% names(seq_res)) {
+    data <- seq_res
+  } else {
+    data <- seq_to_long(seq_res)
+  }
 
   if (!is.null(labels)) {
     if (!is(labels, "data.frame")) {
@@ -176,15 +180,15 @@ setup_data_for_plotting <- function(
     dplyr::mutate(chr = factor(chr, levels = chromosomes)) %>%
     dplyr::filter(chr %in% chromosomes)
 
-  normal_data <- data %>% dplyr::filter(sample_name == "normal.sample")
+  normal_data <- data %>% dplyr::filter(sample == "normal.sample")
 
   if (!is.null(samples)) {
-    if (any(!samples %in% unique(data$sample_name))) {
-      wrong_names <- setdiff(samples, unique(data$sample_name))
+    if (any(!samples %in% unique(data$sample))) {
+      wrong_names <- setdiff(samples, unique(data$sample))
       stop(paste("Invalid sample names in samples parameter:",
                  paste0(wrong_names, collapse = ", ")))
     }
-    data <- data %>% dplyr::filter(.data$sample_name %in% samples)
+    data <- data %>% dplyr::filter(.data$sample %in% samples)
   }
 
   result <- list("data" = data, "normal" = normal_data,
@@ -388,7 +392,7 @@ plot_VAF_histogram <- function(
 
   plot <- plot +
     ggplot2::geom_histogram(binwidth = binwidth, alpha = 0.5) +
-    ggplot2::facet_grid(sample_name ~ chr, scales = "free_y") +
+    ggplot2::facet_grid(sample ~ chr, scales = "free_y") +
     ggplot2::coord_cartesian(ylim = c(0, NA), xlim = c(0, 1)) +
     ggplot2::ylab("count") +
     ggplot2::theme_bw() +

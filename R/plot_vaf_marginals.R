@@ -207,16 +207,16 @@ plot_VAF_marginals <- function(
   data <- setup_data$data
   driver_mutations <- setup_data$driver_mutations
 
-  if (length(unique(data$sample_name)) < 2) {
+  if (length(unique(data$sample)) < 2) {
     stop("At least two samples are required.")
   }
 
-  combinations <- utils::combn(unique(data$sample_name), m = 2)
+  combinations <- utils::combn(unique(data$sample), m = 2)
 
   lapply(seq_len(ncol(combinations)), function(i) {
     couple <- combinations[, i]
-    d1 <- data %>% dplyr::filter(.data$sample_name == couple[1])
-    d2 <- data %>% dplyr::filter(.data$sample_name == couple[2])
+    d1 <- data %>% dplyr::filter(.data$sample == couple[1])
+    d2 <- data %>% dplyr::filter(.data$sample == couple[2])
 
     djoin <- dplyr::full_join(d1, d2, by = c("chr", "from", "ref", "alt",
                                              "classes", "causes")) %>%

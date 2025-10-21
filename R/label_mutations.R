@@ -95,7 +95,7 @@ label_mutations <- function(seq_results, phylo_forest) {
   mutations_with_cell <- seq_res %>%
     dplyr::rowwise() %>%
     dplyr::mutate(cell_id = phylo_forest$get_first_occurrences(Mutation(
-      chr, chr_pos, ref, alt
+      chr, from, ref, alt
     ))[[1]]) %>%
     dplyr::ungroup()
   labelled_mutations <- dplyr::full_join(mutations_with_cell,

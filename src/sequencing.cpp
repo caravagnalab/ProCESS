@@ -162,10 +162,14 @@ RCPP_MODULE(Sequencing)
 //'   (default: `"chr_"`).
 //' @param template_name_prefix The template name prefix (default:
 //'   `"r"`).
-//' @param include_non_sequenced_mutations A Boolean flag to include
-//'   in the resulting data frame also the mutations that are not
-//'   covered by any of the simulated reads, but occur to one of the
-//'   samples at least (default: `FALSE`).
+//' @param missed_SID_statistics A Boolean flag to collect
+//'   statistics also about the mutations that are not covered by
+//'   any of the simulated reads (default: `FALSE`).
+//' @param germline_statistics A Boolean flag to collect
+//'   statistics also about the germinal mutations that are not
+//'   covered by any of the simulated reads (default: `FALSE`).
+//' @param wide_format A Boolean flag to request wide/long format
+//'   for the mutation output (default: `TRUE`).
 //' @param seed The random seed for the internal random generator
 //'   (optional).
 //' @param quiet A Boolean flag to enable/disable the progress bar
@@ -174,18 +178,28 @@ RCPP_MODULE(Sequencing)
 //'   frame (name "`mutations`") and the calling parameters (name
 //'   "`parameters`").
 //'
-//'   The sequencing output data frame reports, for each of the
-//'   observed SNVs and indels, the chromosome and the position in
-//'   which it occurs (columns `chr` and `chr_pos`), the reference
-//'   and alternative sequences (columns `ref` and `alt`, respectively),
-//'   its cause and class (columns `causes`, and `classes`,
-//'   respectively).
-//'   Moreover, for each of the sequenced samples `<sample name>`,
-//'   the returned data frame contains three columns: the number of
-//'   reads in which the corresponding mutation occurs (column
-//'   `<sample name>.occurrences`), the coverage of the mutation
-//'   (column `<sample name>.coverage`), and the corresponding VAF
-//'   (column `<sample name>.VAF`).
+//'   If `wide_format` is set to `true`, the sequencing output data
+//'   frame reports, for each of the observed SNVs and indels, the
+//'   chromosome and the position in which it occurs (columns `chr`
+//'   and `from`), the reference and the alternative sequence,
+//'   the causes, and the classes of the mutation (columns `ref`,
+//'   `alt`, `causes`, and `classes`, respectively). Moreover, the
+//'   returned data frame contains three columns per sample: the
+//'   number of reads in which the corresponding SNV occurs (column
+//'   `<sample name>.NV`), the coverage of the SNV locus (column
+//'   `<sample name>.DP`), and the corresponding VAF (column
+//'   `<sample name>.VAF`).
+//'
+//'   Instead, when `wide_format` is set to `false`, the output data
+//'   frame contains a row for each mutation in each sample and
+//'   consists of 10 columns: `sample`, `chr`, `from`, `ref`,
+//'   `alt`, `causes`, `classes`, `NV`, `DP`, and `VAF`. The column
+//'   `sample` contains the name of the sample in which the
+//'   mutation has been identified. The columns `chr`, from`, `ref`,
+//'   `alt`, `causes`, and `classes` correspond to those of the
+//'   wide_format` output. The columns `NV`, `DP`, and `VAF` 
+//'   maintain the number of occurrences, the coverage, and the VAF
+//'   of the mutation in cited sample.
 //' @seealso `BasicIlluminaSequencer` and
 //'   `ErrorlessIlluminaSequencer` as sequencer types, and
 //'   `vignette("sequencing")` for usage examples
@@ -198,7 +212,8 @@ RCPP_MODULE(Sequencing)
                  _["write_SAM"] = false, _["update_SAM"] = false, _["purity"] = 1,
                  _["with_normal_sample"] = true, _["pre_neoplastic_in_normal"] = false,
                  _["filename_prefix"] = "chr_", _["template_name_prefix"] = "r",
-                 _["include_non_sequenced_mutations"] = false, _["seed"] = R_NilValue,
+                 _["missed_SID_statistics"] = false, _["germline_statistics"] = false,
+                 _["wide_format"] = true, _["seed"] = R_NilValue,
                  _["quiet"] = false),
              "Simulating the sequencing of the samples in a phylogenetic forest");
 
@@ -232,10 +247,14 @@ RCPP_MODULE(Sequencing)
 //'   (default: `"chr_"`).
 //' @param template_name_prefix The template name prefix (default:
 //'   `"r"`).
-//' @param include_non_sequenced_mutations A Boolean flag to include
-//'   in the resulting data frame also the mutations that are not
-//'   covered by any of the simulated reads, but occur to one of the
-//'   samples at least (default: `FALSE`).
+//' @param missed_SID_statistics A Boolean flag to collect
+//'   statistics also about the mutations that are not covered by
+//'   any of the simulated reads (default: `FALSE`).
+//' @param germline_statistics A Boolean flag to collect
+//'   statistics also about the germinal mutations that are not
+//'   covered by any of the simulated reads (default: `FALSE`).
+//' @param wide_format A Boolean flag to request wide/long format
+//'   for the mutation output (default: `TRUE`).
 //' @param seed The random seed for the internal random generator
 //'   (optional).
 //' @param quiet A Boolean flag to enable/disable the progress bar
@@ -244,17 +263,29 @@ RCPP_MODULE(Sequencing)
 //'   frame (name "`mutations`") and the calling parameters
 //'   (name "`parameters`").
 //'
-//'   The sequencing output data frame reports, for each of the
-//'   observed SNVs and indels, the chromosome and the position in
-//'   which it occurs (columns `chr` and `chr_pos`),
-//'   the SNV reference base, the alternative base, the causes,
-//'   and the classes of the SNV (columns `ref_base`, `alt_base`,
-//'   `causes`, and `classes`, respectively). Moreover, the
+//'
+//'   If `wide_format` is set to `true`, the sequencing output data
+//'   frame reports, for each of the observed SNVs and indels, the
+//'   chromosome and the position in which it occurs (columns `chr`
+//'   and `from`), the reference and the alternative sequence,
+//'   the causes, and the classes of the mutation (columns `ref`,
+//'   `alt`, `causes`, and `classes`, respectively). Moreover, the
 //'   returned data frame contains three columns: the number of
 //'   reads in which the corresponding SNV occurs (column
-//'   `normal.sample.occurrences`), the coverage of the SNV
-//'   locus (column `normal.sample.coverage`), and the
+//'   `normal.sample.NV`), the coverage of the SNV
+//'   locus (column `normal.sample.DP`), and the
 //'   corresponding VAF (column `normal.sample.VAF`).
+//'
+//'   Instead, when `wide_format` is set to `false`, the output data
+//'   frame contains a row for each mutation in each sample and
+//'   consists of 10 columns: `sample`, `chr`, `from`, `ref`,
+//'   `alt`, `causes`, `classes`, `NV`, `DP`, and `VAF`. The column
+//'   `sample` contains the name of the sample in which the
+//'   mutation has been identified. The columns `chr`, from`, `ref`,
+//'   `alt`, `causes`, and `classes` correspond to those of the
+//'   wide_format` output. The columns `NV`, `DP`, and `VAF` 
+//'   maintain the number of occurrences, the coverage, and the VAF
+//'   of the mutation in cited sample.
 //' @seealso `BasicIlluminaSequencer` and
 //'   `ErrorlessIlluminaSequencer` as sequencer types, and
 //'   `vignette("sequencing")` for usage examples
@@ -266,7 +297,8 @@ RCPP_MODULE(Sequencing)
                  _["insert_size_stddev"] = 10, _["output_dir"] = "ProCESS_normal_SAM",
                  _["write_SAM"] = true, _["update_SAM"] = false,
                  _["filename_prefix"] = "chr_", _["template_name_prefix"] = "r",
-                 _["include_non_sequenced_mutations"] = false, _["seed"] = R_NilValue,
+                 _["missed_SID_statistics"] = false, _["germline_statistics"] = false,
+                 _["wide_format"] = true, _["seed"] = R_NilValue,
                  _["quiet"] = false),
              "Simulating the sequencing of a normal sample");
 

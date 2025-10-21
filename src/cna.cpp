@@ -63,7 +63,7 @@ Rcpp::List CNA::get_dataframe() const
     using namespace RACES::Mutations;
 
     return DataFrame::create(_["chr"] = get_chromosome(),
-                             _["chr_pos"] = get_position_in_chromosome(),
+                             _["from"] = get_position_in_chromosome(),
                              _["length"] = get_length(), _["allele"] = get_allele(),
                              _["src_allele"] = get_src_allele(), _["type"] = get_type());
 }
@@ -73,7 +73,7 @@ void CNA::show() const
     using namespace Rcpp;
 
     Rcout << "CNA(type: \"" << get_type() << "\", chr: \"" << get_chromosome()
-          << "\", chr_pos: " << get_position_in_chromosome()
+          << "\", from: " << get_position_in_chromosome()
           << ", length: " << get_length();
 
     if (dest != RANDOM_ALLELE) {

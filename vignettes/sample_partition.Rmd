@@ -152,7 +152,7 @@ p_indel
 mutations_labelling <- function(cell) {
   has_indel <- nrow(cell$mutations %>%
                       filter(chr == p_indel[["chr"]],
-                             chr_pos == p_indel[["chr_pos"]],
+                             from == p_indel[["from"]],
                              ref == p_indel[["ref"]],
                              alt == p_indel[["alt"]])) > 0
 

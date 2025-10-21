@@ -132,7 +132,7 @@ plot_DR <- function(
   }
 
   data <- setup_data$data %>%
-    dplyr::filter(.data$sample_name != "normal.sample")
+    dplyr::filter(.data$sample != "normal.sample")
 
   N <- min(N, nrow(data))
 
@@ -169,7 +169,7 @@ plot_DR <- function(
   }
 
   plot +
-    ggplot2::facet_wrap(~sample_name.tumour,  ncol = 1,
+    ggplot2::facet_wrap(~sample.tumour,  ncol = 1,
                         strip.position = "right") +
     ggplot2::geom_vline(xintercept = chr_means, linetype = "dashed",
                         alpha = 0.2) +
@@ -307,7 +307,7 @@ plot_BAF <- function(
                                             driver_mutations, cuts)
 
   tumour_data <- setup_data$data %>%
-    dplyr::filter(.data$sample_name != "normal.sample")
+    dplyr::filter(.data$sample != "normal.sample")
 
   tumour_data$BAF <- pmin(tumour_data$VAF, 1 - tumour_data$VAF)
 
@@ -351,7 +351,7 @@ plot_BAF <- function(
   }
 
   plot <- plot +
-    ggplot2::facet_wrap(~sample_name,  ncol = 1, strip.position = "right") +
+    ggplot2::facet_wrap(~sample,  ncol = 1, strip.position = "right") +
     ggplot2::geom_vline(xintercept = chr_means, linetype = "dashed",
                         alpha = 0.2) +
     ggplot2::geom_vline(xintercept = chr_limits, linetype = "solid",
@@ -494,7 +494,7 @@ plot_VAF <- function(
                                             driver_mutations, cuts)
 
   tumour_data <- setup_data$data %>%
-    dplyr::filter(.data$sample_name != "normal.sample")
+    dplyr::filter(.data$sample != "normal.sample")
 
   tumour_data_no_drivers <- tumour_data %>%
     dplyr::filter(.data$classes != "driver")
@@ -536,7 +536,7 @@ plot_VAF <- function(
   }
 
   plot <- plot +
-    ggplot2::facet_wrap(~sample_name,  ncol = 1, strip.position = "right") +
+    ggplot2::facet_wrap(~sample,  ncol = 1, strip.position = "right") +
     ggplot2::geom_vline(xintercept = chr_means, linetype = "dashed",
                         alpha = 0.2) +
     ggplot2::geom_vline(xintercept = chr_limits, linetype = "solid",

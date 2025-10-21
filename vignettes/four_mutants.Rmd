@@ -172,7 +172,7 @@ m_engine$add_mutant("B", passenger_rates = c(SNV = 1e-9, indel = 2e-9,
                                              CNA = 1e-9),
                     drivers = list(SNV("22", 16050185, "C", allele = 1),
                                    CNA(type = "A", chr = "22",
-                                       chr_pos = 16485130, len = 200000)))
+                                       from = 16485130, len = 200000)))
 
 m_engine$add_mutant("C", passenger_rates = list(SNV = 2e-8, indel = 2e-9),
                     drivers = list(SNV("22", 32786322, "G"),

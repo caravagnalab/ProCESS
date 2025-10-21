@@ -463,7 +463,7 @@ Rcpp::List PhylogeneticForest::get_germline_SIDs() const
         }
     }
 
-    return DataFrame::create(_["chr"] = chr_names, _["chr_pos"] = chr_pos,
+    return DataFrame::create(_["chr"] = chr_names, _["from"] = chr_pos,
                              _["allele"] = alleles, _["ref"] = ref, _["alt"] = alt,
                              _["type"] = types, _["cause"] = causes,
                              _["class"] = classes);
@@ -492,7 +492,7 @@ Rcpp::List PhylogeneticForest::get_sampled_cell_SIDs() const
     }
 
     return DataFrame::create(_["cell_id"] = cell_ids, _["chr"] = chr_names,
-                             _["chr_pos"] = chr_pos, _["allele"] = alleles,
+                             _["from"] = chr_pos, _["allele"] = alleles,
                              _["ref"] = ref, _["alt"] = alt, _["type"] = types,
                              _["cause"] = causes, _["class"] = classes);
 }
@@ -528,7 +528,7 @@ Rcpp::List PhylogeneticForest::get_SID_dataframe(
                         classes, index);
 
     return DataFrame::create(_["cell_id"] = cell_ids, _["chr"] = chr_names,
-                             _["chr_pos"] = chr_pos, _["allele"] = alleles,
+                             _["from"] = chr_pos, _["allele"] = alleles,
                              _["ref"] = ref, _["alt"] = alt, _["type"] = types,
                              _["cause"] = causes, _["class"] = classes);
 }

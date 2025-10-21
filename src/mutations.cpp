@@ -109,7 +109,7 @@ RCPP_MODULE(Mutations)
 //' @name Mutation$get_dataframe
 //' @title Getting the mutation data frame
 //' @description This method builds a data frame representing the mutation.
-//' @details The data frame has the columns `chr`, `chr_pos`, `ref`, `alt`,
+//' @details The data frame has the columns `chr`, `from`, `ref`, `alt`,
 //'   `type` (i.e., "`SNV`" and "`indel`"), and `cause`.
 //' @examples
 //' snv <- SNV("X", 20002, "T", "A")
@@ -123,7 +123,7 @@ RCPP_MODULE(Mutations)
 //' @title Creating an SNV
 //' @description This function creates SNVs.
 //' @param chr The name of the chromosome in which the SNV occurs.
-//' @param chr_pos The position in the chromosome where the SNV occurs.
+//' @param from The position in the chromosome where the SNV occurs.
 //' @param alt The base after the mutation.
 //' @param ref The base before the mutation (optional).
 //' @param allele The allele in which the SNV must occur (optional).
@@ -146,7 +146,7 @@ RCPP_MODULE(Mutations)
 //' snv <- SNV("X", 20002, "T", cause = "SBS1")
 //' snv
     function("SNV", &SIDMut::build_SNV,
-             List::create(_["chr"], _["chr_pos"], _["alt"], _["ref"] = "?",
+             List::create(_["chr"], _["from"], _["alt"], _["ref"] = "?",
                           _["allele"] = R_NilValue, _["cause"] = ""),
              "Create a single nucleotide variation (SNV)");
 
@@ -161,7 +161,7 @@ RCPP_MODULE(Mutations)
 //'   parameter order: the `alt` parameter comes before the optional
 //'   `ref` parameter in `SNV()`; `Mutation()` adopts the reverse order.
 //' @param chr The name of the chromosome in which the indel occurs.
-//' @param chr_pos The position in the chromosome where the indel occurs.
+//' @param from The position in the chromosome where the indel occurs.
 //' @param ref The reference sequence.
 //' @param alt The mutation altered sequence.
 //' @param allele The allele in which the mutation must occur (optional).
@@ -184,7 +184,7 @@ RCPP_MODULE(Mutations)
 //' mutation <- Mutation("X", 20002, "A", "AT", cause = "SBS1")
 //' mutation
     function("Mutation", &SIDMut::build_SID,
-             List::create(_["chr"], _["chr_pos"], _["ref"], _["alt"],
+             List::create(_["chr"], _["from"], _["ref"], _["alt"],
                           _["allele"] = R_NilValue, _["cause"] = ""),
              "Create either an SNV or a indel");
 
@@ -194,7 +194,7 @@ RCPP_MODULE(Mutations)
 //' @param type The CNA type: either `"A"` or `"D"` for amplification and
 //'   deletion, respectively.
 //' @param chr The name of the chromosome in which the CNA occurs.
-//' @param chr_pos The position in the chromosome where the CNA occurs.
+//' @param from The position in the chromosome where the CNA occurs.
 //' @param len The CNA length.
 //' @param allele The allele in which the CNA occurs. (optional)
 //' @param src_allele The allele from which the region is amplified. (optional,
@@ -212,7 +212,7 @@ RCPP_MODULE(Mutations)
 //'
 //' cna
     function("CNA", &CNA::build_CNA,
-             List::create(_["type"], _["chr"], _["chr_pos"], _["len"],
+             List::create(_["type"], _["chr"], _["from"], _["len"],
                           _["allele"] = R_NilValue, _["src_allele"] = R_NilValue),
              "Create a copy number alteration (CNA)");
 
@@ -220,7 +220,7 @@ RCPP_MODULE(Mutations)
 //' @title Creating a CNA amplification
 //' @description This function creates a CNA amplification.
 //' @param chr The name of the chromosome in which the CNA occurs.
-//' @param chr_pos The position in the chromosome where the CNA occurs.
+//' @param from The position in the chromosome where the CNA occurs.
 //' @param len The CNA length.
 //' @param allele The allele in which the amplification is placed. (optional)
 //' @param src_allele The allele from which the region is amplified. (optional)
@@ -232,7 +232,7 @@ RCPP_MODULE(Mutations)
 //'
 //' cna
     function("Amplification", &CNA::build_amplification,
-             List::create(_["chr"], _["chr_pos"], _["len"], _["allele"] = R_NilValue,
+             List::create(_["chr"], _["from"], _["len"], _["allele"] = R_NilValue,
                           _["src_allele"] = R_NilValue),
              "Create a CNA amplification");
 
@@ -240,7 +240,7 @@ RCPP_MODULE(Mutations)
 //' @title Creating a CNA deletion
 //' @description This function creates a CNA deletion.
 //' @param chr The name of the chromosome in which the CNA occurs.
-//' @param chr_pos The position in the chromosome where the CNA occurs.
+//' @param from The position in the chromosome where the CNA occurs.
 //' @param len The CNA length.
 //' @param allele The allele in which the deletion occurs. (optional)
 //' @seealso `Amplification` to build an amplification; `CNA` to build
@@ -251,7 +251,7 @@ RCPP_MODULE(Mutations)
 //'
 //' cna
     function("Deletion", &CNA::build_deletion,
-             List::create(_["chr"], _["chr_pos"], _["len"], _["allele"] = R_NilValue),
+             List::create(_["chr"], _["from"], _["len"], _["allele"] = R_NilValue),
              "Create a CNA deletion");
 
 //' @name CNA
@@ -337,7 +337,7 @@ RCPP_MODULE(Mutations)
 //' @name CNA$get_dataframe
 //' @title Getting the CNA data frame
 //' @description This method builds a data frame representing the CNA.
-//' @details The data frame contains the  columns "`chr`", "`chr_pos`",
+//' @details The data frame contains the  columns "`chr`", "`from`",
 //'   "`length`", "`alt_base`", "`allele`"", "`src_allele`", and "`type`".
 //' @examples
 //' # create an amplification CNA
@@ -482,7 +482,7 @@ RCPP_MODULE(Mutations)
 //'                                    "EP300 S2346del",
 //'                                    WGD,
 //'                                    CNA(type = "A", chr = "22",
-//'                                        chr_pos = 10303470,
+//'                                        from = 10303470,
 //'                                        len = 200000),
 //'                                    SNV("22", 23657587, "C"),
 //'                                    CNA("D", "22", 5010000, 200000)))
@@ -528,7 +528,7 @@ RCPP_MODULE(Mutations)
 //'                                    "EP300 S2346del",
 //'                                    WGD,
 //'                                    CNA(type = "A", chr = "22",
-//'                                        chr_pos = 10303470,
+//'                                        from = 10303470,
 //'                                        len = 200000),
 //'                                    SNV("22", 23657587, "C"),
 //'                                    CNA("D", "22", 5010000, 200000)))
@@ -1057,7 +1057,7 @@ RCPP_MODULE(Mutations)
 //' }
 //' @field get_germline_mutations Gets the germinal SNVs and indels\itemize{
 //' \item \emph{Return:} A data frame reporting `chr` (i.e., the
-//'   chromosome), `chr_pos`" (i.e., the position in the chromosome),
+//'   chromosome), `from`" (i.e., the position in the chromosome),
 //'   `allele` (in which the SNV occurs), `ref`, `alt`, `type` (i.e., either
 //'   `"SNV"` or `"indel"`) and `class` (i.e., `"germinal"`).
 //' }
@@ -1385,7 +1385,7 @@ RCPP_MODULE(Mutations)
 //'   The data frame also reports the allele in which the mutations occur to
 //'   support double occurrences due to CNAs.
 //' @return A data frame reporting `cell_id`, `chr`, (i.e., the mutation
-//'   chromosome), `chr_pos` (i.e., position in the chromosome), `allele`
+//'   chromosome), `from` (i.e., position in the chromosome), `allele`
 //'   (in which the mutation occurs), `ref`, `alt`, `type` (i.e., either
 //'   `"SNV"` or `"indel"`), `cause`, and `class` (i.e., `"driver"`,
 //'   `"passenger"`, `"germinal"` or `"pre-neoplastic"`) for each mutation
@@ -1436,7 +1436,7 @@ RCPP_MODULE(Mutations)
 //'   support double occurrences due to CNAs.
 //' @param cell_id The identifier of the cell whose SIDs are aimed.
 //' @return A data frame reporting `cell_id`, `chr`, (i.e., the mutation
-//'   chromosome), `chr_pos` (i.e., position in the chromosome), `allele`
+//'   chromosome), `from` (i.e., position in the chromosome), `allele`
 //'   (in which the mutation occurs), `ref`, `alt`, `type` (i.e., either
 //'   `"SNV"` or `"indel"`), `cause`, and `class` (i.e., `"driver"`,
 //'   `"passenger"`, `"germinal"` or `"pre-neoplastic"`) for each mutation
@@ -1482,7 +1482,7 @@ RCPP_MODULE(Mutations)
 //'   SNVs and indels of the cells represented in the phylogenetic forest.
 //'   The data frame also reports the allele in which the mutations occur to
 //'   support double occurrences due to CNAs.
-//' @return A data frame reporting "`chr`", "`chr_pos`" (i.e., the position in
+//' @return A data frame reporting "`chr`", "`from`" (i.e., the position in
 //'   the chromosome), "`allele`" (in which the mutation occurs), "`ref`",
 //'   "`alt`", "`cause`", "`type`" (i.e., either `"SNV"` or `"indel"`) and
 //'   "`class`" (i.e., `"germinal"`).
@@ -1690,7 +1690,7 @@ RCPP_MODULE(Mutations)
 //' @details This property contains a data frame that represents the sampled
 //'   cell mutations. The data frame format is analogous to that returned by
 //'   `PhylogeneticForest$get_sampled_cell_mutations()`: it has columns
-//'   `cell_id`, `chr`, (i.e., the mutation chromosome), `chr_pos` (i.e.,
+//'   `cell_id`, `chr`, (i.e., the mutation chromosome), `from` (i.e.,
 //'   position in the chromosome), `allele` (in which the mutation occurs),
 //'   `ref`, `alt`, `type` (i.e., either `"SNV"` or `"indel"`), `cause`, and
 //'   `class` (i.e., `"driver"`, `"passenger"`, `"germinal"` or

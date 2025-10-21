@@ -78,14 +78,13 @@ The number of columns in the data frame "`mutations`" depends on
 the number of samples in the phylogenetic forest. The first four
 columns describe the mutation and report the chromosome and the
 position in the chromosome of the mutation (columns `chr` and
-`chr_pos`, respectively), the genetic context in which the
-mutation occurs (column `context`), and the new base (column
-`alt_base`).
+`from`, respectively), the mutation reference sequence (column
+`ref`), and the alternative sequence (column `alt`).
 Then, there are three columns for each of the samples: they
 contain the number of simulated reads affected by the
 mutation, the sequencing coverage of the mutation locus,
 and the ratio between these two last columns
-(columns `<sample name> occurrences`, `<sample name> coverage`,
+(columns `<sample name> NV`, `<sample name> DP`,
 and `<sample name> VAF`, respectively).
 
 ### Plotting Sequencing Data

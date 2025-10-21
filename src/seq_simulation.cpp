@@ -83,14 +83,14 @@ void add_SNV_data(
     }
 
     df.push_back(chr_names, "chr");
-    df.push_back(chr_pos, "chr_pos");
+    df.push_back(chr_pos, "from");
     df.push_back(ref, "ref");
     df.push_back(alt, "alt");
     df.push_back(causes, "causes");
     df.push_back(classes, "classes");
 }
 
-void add_sample_statistics(
+void add_wide_sample_statistics(
     Rcpp::DataFrame &df,
     const RACES::Mutations::SequencingSimulations::SampleStatistics &sample_statistics,
     const std::map<RACES::Mutations::SID,
@@ -138,8 +138,8 @@ void add_sample_statistics(
 
     const auto &sample_name = sample_statistics.get_sample_name();
 
-    df.push_back(occurrences, sample_name + ".occurrences");
-    df.push_back(coverages, sample_name + ".coverage");
+    df.push_back(occurrences, sample_name + ".NV");
+    df.push_back(coverages, sample_name + ".DP");
     df.push_back(VAF, sample_name + ".VAF");
 }
 
@@ -174,19 +174,79 @@ get_active_mutations(const RACES::Mutations::SequencingSimulations::SampleSetSta
 }
 
 Rcpp::List
-get_result_dataframe(const RACES::Mutations::SequencingSimulations::SampleSetStatistics
+get_wide_dataframe(const RACES::Mutations::SequencingSimulations::SampleSetStatistics
                          &sample_set_statistics,
-                     const bool &include_non_sequenced_mutations)
+                   const bool &include_non_sequenced_mutations)
 {
     const auto mutations =
         get_active_mutations(sample_set_statistics, include_non_sequenced_mutations);
 
     auto df = Rcpp::DataFrame::create();
     for (const auto &[sample_name, sample_stats] : sample_set_statistics) {
-        add_sample_statistics(df, sample_stats, mutations);
+        add_wide_sample_statistics(df, sample_stats, mutations);
     }
 
     return df;
+}
+
+
+Rcpp::List
+get_long_dataframe(const RACES::Mutations::SequencingSimulations::SampleSetStatistics
+                    &sample_set_statistics)
+{
+    using namespace Rcpp;
+    using namespace RACES::Mutations;
+
+    size_t num_of_rows{0};
+
+    for (const auto &[sample_name, sample_stats] : sample_set_statistics) {
+        num_of_rows += sample_stats.get_data().size();
+    }
+
+    IntegerVector chr_pos(num_of_rows), occurrences(num_of_rows),
+                  coverages(num_of_rows);
+    DoubleVector VAF(num_of_rows);
+    CharacterVector samples(num_of_rows), chr_names(num_of_rows), ref(num_of_rows),
+                    alt(num_of_rows), causes(num_of_rows), classes(num_of_rows);
+
+    size_t index{0};
+    for (const auto &[sample_name, sample_stats] : sample_set_statistics) {
+        for (const auto &[sid, sid_data] : sample_stats.get_data()) {
+            samples[index] = sample_name;
+            chr_names[index] = GenomicPosition::chrtos(sid.chr_id);
+            chr_pos[index] = sid.position;
+            ref[index] = sid.ref;
+            alt[index] = sid.alt;
+            if (sid_data.causes.size() == 0) {
+                causes[index] = NA_STRING;
+            } else {
+                causes[index] = join(sid_data.causes, ';');
+            }
+
+            const auto descr_set = get_descriptions(sid_data.nature_set);
+            classes[index] = join(descr_set, ';');
+            
+            occurrences[index] = sid_data.num_of_occurrences;
+
+            const auto coverage = sample_stats.get_coverage(sid);
+            coverages[index] = coverage;
+
+            if (coverage != 0) {
+                VAF[index] = static_cast<double>(sid_data.num_of_occurrences) / coverage;
+            } else {
+                VAF[index] = R_NaN;
+            }
+
+            ++index;
+        }
+    }
+
+    return DataFrame::create(_["sample"] = samples,
+                             _["chr"] = chr_names, _["from"] = chr_pos,
+                             _["ref"] = ref, _["alt"] = alt,
+                             _["causes"] = causes,
+                             _["classes"] = classes, _["NV"] = occurrences,
+                             _["DP"] = coverages, _["VAF"] = VAF);
 }
 
 std::filesystem::path get_reference_genome(const PhylogeneticForest &forest,
@@ -284,8 +344,9 @@ simulate_seq(RACES::Mutations::SequencingSimulations::ReadSimulator<> &simulator
              const std::set<RACES::Mutations::ChromosomeId> &chromosome_ids,
              const double& coverage, const bool& produce_normal_sample,
              const double& purity, const bool& with_pre_neoplastic,
-             const bool& with_germinal,
-             const std::string &base_name, std::ostream &progress_bar_stream,
+             const bool& with_germinal, const std::string &base_name,
+             const bool& missed_SID_statistics, const bool& germinal_statistics,
+             std::ostream &progress_bar_stream,
              const int &seed, const bool quiet)
 {
     using namespace RACES::Sequencers;
@@ -295,7 +356,8 @@ simulate_seq(RACES::Mutations::SequencingSimulations::ReadSimulator<> &simulator
 
     return simulator(sequencer, forest, chromosome_ids, coverage, produce_normal_sample,
                      purity, with_pre_neoplastic, with_germinal, base_name,
-                     progress_bar_stream, quiet);
+                     missed_SID_statistics, germinal_statistics, progress_bar_stream,
+                     quiet);
 }
 
 RACES::Mutations::SequencingSimulations::SampleSetStatistics simulate_seq(
@@ -304,8 +366,9 @@ RACES::Mutations::SequencingSimulations::SampleSetStatistics simulate_seq(
     const std::set<RACES::Mutations::ChromosomeId> &chromosome_ids,
     const double& coverage, const bool& produce_normal_sample,
     const double& purity, const bool& with_pre_neoplastic,
-    const bool& with_germinal,
-    const std::string &base_name, std::ostream &progress_bar_stream,
+    const bool& with_germinal, const std::string &base_name,
+    const bool& missed_SID_statistics, const bool& germinal_statistics,
+    std::ostream &progress_bar_stream,
     const int &seed, const bool quiet)
 {
     switch (TYPEOF(sequencer)) {
@@ -323,12 +386,14 @@ RACES::Mutations::SequencingSimulations::SampleSetStatistics simulate_seq(
                 return simulate_seq<QualityScoreModel>(
                     simulator, sequencer_ptr, forest, chromosome_ids, coverage,
                     produce_normal_sample, purity, with_pre_neoplastic, with_germinal,
-                    base_name, progress_bar_stream, seed, quiet);
+                    base_name, missed_SID_statistics, germinal_statistics,
+                    progress_bar_stream, seed, quiet);
             } else {
                 return simulate_seq<ConstantQualityScoreModel>(
                     simulator, sequencer_ptr, forest, chromosome_ids, coverage,
                     produce_normal_sample, purity, with_pre_neoplastic, with_germinal,
-                    base_name, progress_bar_stream, seed, quiet);
+                    base_name, missed_SID_statistics, germinal_statistics,
+                    progress_bar_stream, seed, quiet);
             }
         }
         if (s4obj.is("Rcpp_ErrorlessIlluminaSequencer")) {
@@ -336,7 +401,8 @@ RACES::Mutations::SequencingSimulations::SampleSetStatistics simulate_seq(
 
             return simulator(seq, forest, chromosome_ids, coverage,
                              produce_normal_sample, purity, with_pre_neoplastic,
-                             with_germinal, base_name, progress_bar_stream, quiet);
+                             with_germinal, base_name, missed_SID_statistics,
+                             germinal_statistics, progress_bar_stream, quiet);
         }
 
         Rcpp::stop("Unsupported sequencer type");
@@ -347,6 +413,7 @@ RACES::Mutations::SequencingSimulations::SampleSetStatistics simulate_seq(
 
         return simulator(seq, forest, chromosome_ids, coverage, produce_normal_sample,
                          purity, with_pre_neoplastic, with_germinal, base_name,
+                         missed_SID_statistics, germinal_statistics,
                          progress_bar_stream, quiet);
     }
     default:
@@ -451,10 +518,20 @@ Rcpp::List simulate_seq(const PhylogeneticForest &forest, SEXP &sequencer,
                         const bool &pre_neoplastic_in_normal,
                         const std::string &filename_prefix,
                         const std::string &template_name_prefix,
-                        const bool &include_non_sequenced_mutations, const SEXP &seed,
+                        const bool &missed_SID_statistics,
+                        const bool &germline_statistics,
+                        const bool &wide_format, const SEXP &seed,
                         const bool &quiet)
 {
     using namespace RACES::Mutations::SequencingSimulations;
+
+
+    if (with_normal_sample && !wide_format
+            && !(pre_neoplastic_in_normal || germline_statistics)) {
+        Rcpp::warning("\"with_normal_sample\"=TRUE, but neither \"pre_neoplastic_in_normal\" "
+                      "nor \"germline_statistics\" are TRUE. The output statistics will "
+                      "contain any reference to the normal sample.");
+    }
 
     const auto ref_genome = get_reference_genome(forest, reference_genome);
 
@@ -489,10 +566,13 @@ Rcpp::List simulate_seq(const PhylogeneticForest &forest, SEXP &sequencer,
 
     const auto chr_ids = get_relevant_chr_set(forest, chromosome_ids);
 
+    const bool collect_missed = missed_SID_statistics || wide_format;
+
     auto result =
         simulate_seq(simulator, sequencer, forest, chr_ids, coverage,
                      with_normal_sample, purity, pre_neoplastic_in_normal,
-                     true, filename_prefix, Rcpp::Rcout, c_seed, quiet);
+                     true, filename_prefix, collect_missed,
+                     germline_statistics, Rcpp::Rcout, c_seed, quiet);
 
     if (remove_output_path) {
         std::filesystem::remove_all(output_path);
@@ -511,12 +591,15 @@ Rcpp::List simulate_seq(const PhylogeneticForest &forest, SEXP &sequencer,
         _["with_normal_sample"] = with_normal_sample,
         _["filename_prefix"] = filename_prefix,
         _["template_name_prefix"] = template_name_prefix,
-        _["include_non_sequenced_mutations"] = include_non_sequenced_mutations,
+        _["missed_SID_statistics"] = missed_SID_statistics,
+        _["germline_statistics"] = germline_statistics,
+        _["wide_format"] = wide_format,
         _["seed"] = c_seed, _["quiet"] = quiet,
         _["driver_mutations"] = forest.get_driver_mutations());
 
-    return List::create(_["mutations"] =
-                            get_result_dataframe(result, include_non_sequenced_mutations),
+    return List::create(_["mutations"] = 
+                            (wide_format?get_wide_dataframe(result, missed_SID_statistics):
+                                         get_long_dataframe(result)),
                         _["parameters"] = parameters);
 }
 
@@ -528,8 +611,10 @@ Rcpp::List simulate_normal_seq(const PhylogeneticForest &forest, SEXP &sequencer
                                const bool &update_SAM_dir,
                                const std::string &filename_prefix,
                                const std::string &template_name_prefix,
-                               const bool &include_non_sequenced_mutations,
-                               const SEXP &seed, const bool quiet)
+                               const bool &missed_SID_statistics,
+                               const bool &germline_statistics,
+                               const bool &wide_format, const SEXP &seed,
+                               const bool quiet)
 {
     using namespace RACES::Mutations::SequencingSimulations;
 
@@ -568,9 +653,11 @@ Rcpp::List simulate_normal_seq(const PhylogeneticForest &forest, SEXP &sequencer
 
     const auto chr_ids = get_relevant_chr_set(empty_forest, chromosome_ids);
 
+    const bool collect_missed = missed_SID_statistics || wide_format;
     auto result =
         simulate_seq(simulator, sequencer, empty_forest, chr_ids, coverage, true, 1,
-                     false, true, filename_prefix, Rcpp::Rcout, c_seed, quiet);
+                     false, true, filename_prefix, collect_missed,
+                     germline_statistics, Rcpp::Rcout, c_seed, quiet);
 
     if (remove_output_path) {
         std::filesystem::remove_all(output_path);
@@ -587,10 +674,13 @@ Rcpp::List simulate_normal_seq(const PhylogeneticForest &forest, SEXP &sequencer
         _["write_SAM"] = write_SAM, _["update_SAM"] = update_SAM_dir,
         _["filename_prefix"] = filename_prefix,
         _["template_name_prefix"] = template_name_prefix,
-        _["include_non_sequenced_mutations"] = include_non_sequenced_mutations,
+        _["missed_SID_statistics"] = missed_SID_statistics,
+        _["germline_statistics"] = germline_statistics,
+        _["wide_format"] = wide_format,
         _["seed"] = c_seed, _["quiet"] = quiet);
 
     return List::create(_["mutations"] =
-                            get_result_dataframe(result, include_non_sequenced_mutations),
+                            (wide_format?get_wide_dataframe(result, missed_SID_statistics):
+                                         get_long_dataframe(result)),
                         _["parameters"] = parameters);
 }

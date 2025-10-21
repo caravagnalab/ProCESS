@@ -47,7 +47,7 @@
 #' m_engine$add_mutant(mutant_name = "A",
 #'                     passenger_rates = c(SNV = 1e-9),
 #'                     drivers = list(SNV("22", 10510210, "C"),
-#'                                    CNA(type = "A", "22", chr_pos = 10303470,
+#'                                    CNA(type = "A", "22", from = 10303470,
 #'                                        len = 200000)))
 #' m_engine$add_exposure(coefficients = c(SBS13 = 0.2, SBS1 = 0.8))
 #' m_engine$add_exposure(time=50, coefficients = c(SBS17b = 0.2, SBS3 = 0.8))
@@ -191,7 +191,7 @@ annotate_forest <- function(tree_plot, forest, samples = TRUE, MRCAs = TRUE,
       try(expr = {
         drivers_mutations <- forest$get_sampled_cell_mutations() %>%
           dplyr::filter(class == "driver") %>%
-          dplyr::mutate(driver_id = paste0(chr, ":", chr_pos, ":",
+          dplyr::mutate(driver_id = paste0(chr, ":", from, ":",
                                            ref, ">", alt),
                         driver_type = type) %>%
           dplyr::select(cell_id, driver_id, driver_type)

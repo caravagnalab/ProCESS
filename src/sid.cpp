@@ -66,7 +66,7 @@ Rcpp::List SIDMut::get_dataframe() const
     using namespace RACES::Mutations;
 
     return DataFrame::create(
-        _["chr"] = get_chromosome(), _["chr_pos"] = position,
+        _["chr"] = get_chromosome(), _["from"] = position,
         _["allele"] = wrap_allele(allele_id), _["ref"] = get_ref(), _["alt"] = get_alt(),
         _["type"] = (is_SBS() ? "SNV" : "indel"), _["cause"] = get_cause());
 }
@@ -82,7 +82,7 @@ void SIDMut::show() const
     }
 
     Rcout << "(chr: " << get_chromosome()
-          << ", chr_pos: " << static_cast<size_t>(position)
+          << ", from: " << static_cast<size_t>(position)
           << ", allele: " << alleletostr(allele_id)
           << ", ref: " << (ref.size() == 0 ? "-" : ref)
           << ", alt: " << (alt.size() == 0 ? "-" : alt);

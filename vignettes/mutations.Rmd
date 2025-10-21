@@ -142,7 +142,7 @@ m_engine$add_mutant(mutant_name = "A",
                     drivers = list(SNV("22", 46510210, "C", allele = 1),
                                    Mutation("22", 16085675, "GCCTCCCGA", "G"),
                                    CNA(type = "A", chr = "22",
-                                       chr_pos = 10303470, len = 200000),
+                                       from = 10303470, len = 200000),
                                    CNA("D", "22", 5010000, 200000,
                                        allele = 1),
                                    WGD))
@@ -416,7 +416,7 @@ mutation_row <- phylo_forest$get_cell_mutations(cell_id)[2, ]
 
 # rebuild the corresponding mutation
 mutation <- Mutation(mutation_row["chr"][1, ],
-                     mutation_row["chr_pos"][1, ],
+                     mutation_row["from"][1, ],
                      mutation_row["ref"][1, ],
                      mutation_row["alt"][1, ])
 

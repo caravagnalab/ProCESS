@@ -427,7 +427,7 @@ sim$mutate_progeny(sim$choose_cell_in("A",  c(450, 550), c(500, 600)), "C")
 sim$run_up_to_time(sim$get_clock() + 7)
 ```
 
-```{r,  fig.height=4, fig.width=3, fig.alt=c("The species count after the third mutant \"C\" arose.", "The tumour tissue after the third mutant \"C\" mutant arose.")}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The species count after the third mutant C arose.", "The tumour tissue after the third mutant C mutant arose.")}
 plot_state(sim)
 plot_tissue(sim, num_of_bins = 250)
 ```
