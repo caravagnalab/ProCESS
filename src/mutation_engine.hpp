@@ -45,7 +45,6 @@ class MutationEngine
 
     std::map<SIDMut::SID, std::string> driver_codes;
 
-    RACES::Mutations::RSIndex rs_index;
     RACES::Mutations::MutationEngine<std::mt19937_64> m_engine;
 
     bool avoid_homozygous_losses;
