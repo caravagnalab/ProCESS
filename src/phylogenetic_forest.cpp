@@ -62,7 +62,7 @@ Rcpp::List PhylogeneticForest::get_samples_info() const
 
     const auto &samples = get_samples();
     std::vector<size_t> DNA(samples.size(), 0);
-    for (const auto& [leaf_id, leaf_mutations] : get_leaf_mutation_tour()) {
+    for (const auto& [leaf_id, leaf_mutations] : get_leaf_mutation_tour(*this)) {
         DNA[get_coming_from().at(leaf_id)] += leaf_mutations.allelic_size();
     }
 
@@ -293,7 +293,7 @@ count_mutations(const std::map<RACES::Mutants::CellId,
 }
 
 size_t
-count_mutations(const PhylogeneticForest::MutationTour<RACES::Mutations::GenomeMutations>& mutation_tour)
+count_mutations(const RACES::Mutations::MutationTour<RACES::Mutations::GenomeMutations>& mutation_tour)
 {
     size_t counter{0};
 
@@ -327,7 +327,7 @@ size_t count_CNAs(const std::map<RACES::Mutants::CellId,
     return counter;
 }
 
-size_t count_CNAs(const PhylogeneticForest::MutationTour<RACES::Mutations::GenomeMutations>& mutation_tour)
+size_t count_CNAs(const RACES::Mutations::MutationTour<RACES::Mutations::GenomeMutations>& mutation_tour)
 {
     size_t counter{0};
 
@@ -472,7 +472,7 @@ Rcpp::List PhylogeneticForest::get_germline_SIDs() const
 Rcpp::List PhylogeneticForest::get_sampled_cell_SIDs() const
 {
     //size_t num_of_mutations = count_mutations(get_leaves_mutations());
-    const auto leaf_tour = get_leaf_mutation_tour();
+    const auto leaf_tour = get_leaf_mutation_tour(*this);
 
     const size_t num_of_mutations = count_mutations(leaf_tour);
 
@@ -535,7 +535,7 @@ Rcpp::List PhylogeneticForest::get_SID_dataframe(
 
 Rcpp::List PhylogeneticForest::get_sampled_cell_CNAs() const
 {
-    const auto leaf_tour = get_leaf_mutation_tour();
+    const auto leaf_tour = get_leaf_mutation_tour(*this);
     const size_t num_of_mutations = count_CNAs(leaf_tour);
 
     using namespace Rcpp;
@@ -906,7 +906,7 @@ size_t count_rows_in_cell_allelic_fragmentation(
 }
 
 size_t count_rows_in_cell_allelic_fragmentation(
-    const PhylogeneticForest::MutationTour<RACES::Mutations::GenomeMutations>& node_tour)
+    const RACES::Mutations::MutationTour<RACES::Mutations::GenomeMutations>& node_tour)
 {
     size_t num_of_rows{0};
 
@@ -927,7 +927,7 @@ Rcpp::List PhylogeneticForest::get_cell_allelic_fragmentation() const
     using namespace Rcpp;
     using namespace RACES::Mutations;
 
-    const auto leaf_tour = get_leaf_mutation_tour();
+    const auto leaf_tour = get_leaf_mutation_tour(*this);
     const size_t num_of_rows =
     //    count_rows_in_cell_allelic_fragmentation(get_leaves_mutations());
         count_rows_in_cell_allelic_fragmentation(leaf_tour);
