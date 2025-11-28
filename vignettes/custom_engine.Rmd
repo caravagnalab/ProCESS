@@ -114,7 +114,8 @@ be specified during the `MutationEngine()` call.
 m_engine <- MutationEngine(setup_code = "demo")
 
 # get the size of the context index when `context_sampling` is 100
-utils:::format.object_size(file.size("demo/context_index_100.cif"), "auto")
+utils:::format.object_size(file.size("demo/context_index_100.cif"),
+                           standard = "auto")
 ```
 
 Let us rebuild the context index sampling one context every 50.
