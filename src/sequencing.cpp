@@ -31,8 +31,8 @@ RCPP_MODULE(Sequencing)
 //' @title An error-free Illumina sequencer class
 //' @description This class implements a perfect Illumina sequencers that
 //'   does not commit errors.
-//' @seealso `simulate_seq()`, `simulate_normal_seq()`, and
-//'   `vignette("sequencing")` for usage examples
+//' @seealso \code{\link{simulate_seq}}, \code{\link{simulate_normal_seq}},
+//'   and \code{vignette("sequencing")} for usage examples.
     class_<ErrorlessIlluminaSequencer>("ErrorlessIlluminaSequencer")
 
         .method("show", &ErrorlessIlluminaSequencer::show,
@@ -54,8 +54,8 @@ RCPP_MODULE(Sequencing)
 //' @description This class implements a basic model for Illumina sequencers.
 //' @details It specifies a simulated sequencing error rate and the simulated
 //'   sequencing errors will occurs according to that rate.
-//' @seealso `simulate_seq()`, `simulate_normal_seq()`, and
-//'   `vignette("sequencing")` for usage examples
+//' @seealso \code{\link{simulate_seq}}, \code{\link{simulate_normal_seq}},
+//'   and \code{vignette("sequencing")} for usage examples.
     class_<BasicIlluminaSequencer>("BasicIlluminaSequencer")
         .method("show", &BasicIlluminaSequencer::show,
                 "Show a description for the sequencer")
@@ -128,8 +128,8 @@ RCPP_MODULE(Sequencing)
 
 //' @name simulate_seq
 //' @title Simulating the sequencing of sampled cells
-//' @description This method simulates the sequencing of the samples in a phylogenetic
-//'   forest.
+//' @description This method simulates the sequencing of the samples in a
+//'   phylogenetic forest.
 //' @param phylo_forest A phylogenetic forest.
 //' @param sequencer The sequencer that performs the sequencing simulation
 //'   (default: an `ErrorlessIlluminaSequencer`).
@@ -151,7 +151,7 @@ RCPP_MODULE(Sequencing)
 //' @param update_SAM Update the output directory (default: `FALSE`).
 //' @param purity The ratio between the number of sample tumour cell
 //'   and that of all the cells, i.e., tumour and normal
-//'   ones. This value must belong to the interval [0,1]
+//'   ones. This value must belong to the interval \eqn{[0,1]}
 //'   (default: `1`).
 //' @param with_normal_sample A Boolean flag to enable/disable the
 //'   analysis of a normal sample (default: `TRUE`).
@@ -200,9 +200,9 @@ RCPP_MODULE(Sequencing)
 //'   wide_format` output. The columns `NV`, `DP`, and `VAF` 
 //'   maintain the number of occurrences, the coverage, and the VAF
 //'   of the mutation in cited sample.
-//' @seealso `BasicIlluminaSequencer` and
-//'   `ErrorlessIlluminaSequencer` as sequencer types, and
-//'   `vignette("sequencing")` for usage examples
+//' @seealso \code{\link{BasicIlluminaSequencer}} and
+//'   \code{\link{ErrorlessIlluminaSequencer}} as sequencer types, and
+//'   \code{vignette("sequencing")} for usage examples.
     function("simulate_seq", &simulate_seq,
              List::create(
                  _["phylo_forest"], _["sequencer"] = R_NilValue,
@@ -286,9 +286,9 @@ RCPP_MODULE(Sequencing)
 //'   wide_format` output. The columns `NV`, `DP`, and `VAF` 
 //'   maintain the number of occurrences, the coverage, and the VAF
 //'   of the mutation in cited sample.
-//' @seealso `BasicIlluminaSequencer` and
-//'   `ErrorlessIlluminaSequencer` as sequencer types, and
-//'   `vignette("sequencing")` for usage examples
+//' @seealso \code{\link{BasicIlluminaSequencer}} and
+//'   \code{\link{ErrorlessIlluminaSequencer}} as sequencer types, and
+//'   \code{vignette("sequencing")} for usage examples.
     function("simulate_normal_seq", &simulate_normal_seq,
              List::create(
                  _["phylo_forest"], _["sequencer"] = R_NilValue,

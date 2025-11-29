@@ -29,10 +29,12 @@ RCPP_MODULE(Logics)
 
 //' @name Variable
 //' @title Represent a simulation quantity
-//' @description The objects of this class represent one among the following quantities:
+//' @description The objects of this class represent one among the following
+//'   quantities:
 //'
 //'   -  the cardinality of a species;
-//'   -  the number fired event among deaths, duplications and switches in a species;
+//'   -  the number fired event among deaths, duplications and switches in a
+//'   species;
 //'   -  the elapse simulation time.
 //'
 //' @examples
@@ -43,9 +45,9 @@ RCPP_MODULE(Logics)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //'
 //' # get the variable representing the cardinality of A+ in sim
 //' sim$var("A+")
@@ -59,15 +61,15 @@ RCPP_MODULE(Logics)
 //' # the logic variables can be stored in an R variable
 //' va_p <- sim$var("A+")
 //' va_p
-//' @seealso [Simulation$var()] to build a variable
+//' @seealso \code{\link{TissueSimulation$var}} to build a variable
     class_<Logics::Variable>("Variable")
         .method("show", &Logics::Variable::show, "Show a variable");
 
 //' @name Expression
 //' @title Represent an expression of value and variable
-//' @description The objects of this class are polynomial expression of variables
-//'   and values built by using the binary operators `+`, `-`, and `*` with the
-//'   usual semantics.
+//' @description The objects of this class are polynomial expression of
+//'   variables and values built by using the binary operators `+`, `-`,
+//'   and `*` with the usual semantics.
 //'
 //'   An expression is one of the following object:
 //'
@@ -85,8 +87,8 @@ RCPP_MODULE(Logics)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                growth_rates = 0.2,
-//'                death_rates = 0.1)
+//'   growth_rates = 0.2,
+//'   death_rates = 0.1)
 //'
 //' # build an expression
 //' sim$var("A") - 2 * sim$var("Time") * sim$var("A.duplications") + 3.4
@@ -98,7 +100,7 @@ RCPP_MODULE(Logics)
 //' # the logic expression can be stored in an R variable
 //' v_exp <- sim$var("A") - 2 * v_time * sim$var("A.duplications") + 3.4
 //' v_exp
-//' @seealso [Variable]
+//' @seealso \code{\link{Variable}}
     class_<Logics::Expression>("Expression")
         .method("show", &Logics::Expression::show, "Show an expression");
 
@@ -130,7 +132,7 @@ RCPP_MODULE(Logics)
 //'   A formula is:
 //'
 //'   -  a relation among two expressions (operators `<`, `<=`, `==`,
-//'      `!=`, `>=`, `>`);
+//'   `!=`, `>=`, `>`);
 //'   -  the conjunction of two formulas (operator `&`);
 //'   -  the disjunction of two formulas (operator `|`).
 //'
@@ -142,9 +144,9 @@ RCPP_MODULE(Logics)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //'
 //' # get a formula that holds when the cardinality of the mutant A
 //' # is greater than 1000
@@ -159,7 +161,8 @@ RCPP_MODULE(Logics)
 //'
 //' # combine above formulas by using Boolean operators `&` and `|`
 //' f1 & (f2 | f3)
-//' @seealso [Variable], [Simulation$var()], [vignette("tissue_simulation")]
+//' @seealso \code{\link{Variable}}, \code{\link{TissueSimulation$var}},
+//'   \code{vignette("tissue_simulation")}
     class_<Logics::Formula>("Formula").method("show", &Logics::Formula::show,
                                               "Show a formula");
 

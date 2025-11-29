@@ -199,8 +199,8 @@ RCPP_MODULE(Mutations)
 //' @param allele The allele in which the CNA occurs. (optional)
 //' @param src_allele The allele from which the region is amplified. (optional,
 //'   for amplification only)
-//' @seealso `Amplification` to build an amplification; `Deletion` to build a
-//'   deletion.
+//' @seealso  \code{\link{Amplification}} to build an amplification;
+//'   \code{\link{Deletion}} to build a deletion.
 //' @examples
 //' # create an amplification
 //' cna <- CNA("A", "X", 20002, 100)
@@ -224,8 +224,8 @@ RCPP_MODULE(Mutations)
 //' @param len The CNA length.
 //' @param allele The allele in which the amplification is placed. (optional)
 //' @param src_allele The allele from which the region is amplified. (optional)
-//' @seealso `Deletion` to build a deletion; `CNA` to build both amplifications
-//'   and deletions.
+//' @seealso  \code{\link{Deletion}} to build a deletion; \code{\link{CNA}}
+//'   to build both amplifications and deletions.
 //' @examples
 //' # create an amplification CNA
 //' cna <- Amplification("X", 20002, 100)
@@ -243,8 +243,8 @@ RCPP_MODULE(Mutations)
 //' @param from The position in the chromosome where the CNA occurs.
 //' @param len The CNA length.
 //' @param allele The allele in which the deletion occurs. (optional)
-//' @seealso `Amplification` to build an amplification; `CNA` to build
-//'   both amplifications and deletions.
+//' @seealso  \code{\link{Amplification}} to build an amplification;
+//'   \code{\link{CNA}} to build both amplifications and deletions.
 //' @examples
 //' # create a deletion CNA
 //' cna <- Deletion("Y", 40020, 200)
@@ -368,16 +368,18 @@ RCPP_MODULE(Mutations)
 //'   forest by mutations and produce a consistent phylogenetic forest.
 //' @details The mutations are randomly generated according to three
 //'   factors:
-//'     - the mutational rates of the species involved in the samples
-//'       forest
-//'     - the genotypical characterisation of the mutants involved in the
-//'       sample forest, i.e., the somatic mutations characterising
-//'       the mutant genotypes
-//'     - the SBS and ID signatures active along the species simulation
+//'   - the mutational rates of the species involved in the samples
+//'   forest
+//'   - the genotypical characterisation of the mutants involved in the
+//'   sample forest, i.e., the somatic mutations characterising
+//'   the mutant genotypes
+//'   - the SBS and ID signatures active along the species simulation
 //'
 //'   These data are provided to a mutation engine by using the methods
-//'   [MutationEngine$add_exposure()] and [MutationEngine$add_exposure()]
-//'   These data are provided by means of the [MutationEngine$add_mutant()].
+//'   \code{\link{MutationEngine$add_exposure}} and
+//'   \code{\link{MutationEngine$add_exposure}}.
+//'   These data are provided by means of the
+//'    \code{\link{MutationEngine$add_mutant}}.
 //'
 //'   The initialisation of a `MutationEngine` object requires a reference
 //'   sequence and the SBS and ID mutational signatures. An SBS index and
@@ -434,7 +436,7 @@ RCPP_MODULE(Mutations)
 //' # time 0 up to the successive coefficient change. The indel and SNV
 //' # exposures can be specified in the same list.
 //' m_engine$add_exposure(c(SBS13 = 0.3, SBS1 = 0.7, ID2 = 0.2, ID3 = 0.3,
-//'                         ID20 = 0.5))
+//'   ID20 = 0.5))
 //'
 //' # add a default set of coefficients that will be used from simulated
 //' # time 3.2 up to the end of the simulation.
@@ -464,7 +466,7 @@ RCPP_MODULE(Mutations)
 //'   does not have an epigenetic state.
 //' @param drivers The list of the driver SNVs, indels, CNAs, and the whole
 //'   genome doubling events (WGD) characterizing the mutant (optional).
-//' @seealso [MutationEngine$change_rates_from()]
+//' @seealso \code{\link{MutationEngine$change_rates_from}}
 //' @examples
 //' # create a demonstrative mutation engine
 //' m_engine <- MutationEngine(setup_code = "demo")
@@ -475,17 +477,17 @@ RCPP_MODULE(Mutations)
 //' # states and its species "A+" and "A-" have passenger SNV rates 1e-9 and
 //' # 3e-8, respectively, and passenger CNA rates 0 and 1e-11, respectively.
 //' m_engine$add_mutant("A", list("+" = c(SNV = 1e-9, indel = 1e-10),
-//'                               "-" = c(SNV = 3e-8, CNA = 1e-11)),
-//'                     drivers = list("DGCR8 P26L",
-//'                                    Mutation("22", 16085675, "GCCTCCCGA",
-//'                                             "G"),
-//'                                    "EP300 S2346del",
-//'                                    WGD,
-//'                                    CNA(type = "A", chr = "22",
-//'                                        from = 10303470,
-//'                                        len = 200000),
-//'                                    SNV("22", 23657587, "C"),
-//'                                    CNA("D", "22", 5010000, 200000)))
+//'   "-" = c(SNV = 3e-8, CNA = 1e-11)),
+//'   drivers = list("DGCR8 P26L",
+//'   Mutation("22", 16085675, "GCCTCCCGA",
+//'   "G"),
+//'   "EP300 S2346del",
+//'   WGD,
+//'   CNA(type = "A", chr = "22",
+//'   from = 10303470,
+//'   len = 200000),
+//'   SNV("22", 23657587, "C"),
+//'   CNA("D", "22", 5010000, 200000)))
 //'
 //' m_engine
         .method("add_mutant",
@@ -503,14 +505,14 @@ RCPP_MODULE(Mutations)
 //' @title Change the passenger rates from a specified time
 //' @description This method changes the passenger rates from a specified time.
 //' @details This method changes the passenger rates from a specified time. The
-//'     rates before the specified time and those of the unspecified epigenetic
-//'     states are not affected.
+//'   rates before the specified time and those of the unspecified epigenetic
+//'   states are not affected.
 //' @param time The time from which the passenger rates are set.
 //' @param mutant_name The mutant name.
 //' @param passenger_rates The list of the passenger rates whose names are the
 //'   epigenetic states of the species or a single rate, if the mutant
 //'   does not have an epigenetic state.
-//' @seealso [MutationEngine$add_mutant()]
+//' @seealso \code{\link{MutationEngine$add_mutant}}
 //' @examples
 //' # create a demonstrative mutation engine
 //' m_engine <- MutationEngine(setup_code = "demo")
@@ -521,22 +523,22 @@ RCPP_MODULE(Mutations)
 //' # states and its species "A+" and "A-" have passenger SNV rates 1e-9 and
 //' # 3e-8, respectively, and passenger CNA rates 0 and 1e-11, respectively.
 //' m_engine$add_mutant("A", list("+" = c(SNV = 1e-9, indel = 1e-10),
-//'                               "-" = c(SNV = 3e-8, CNA = 1e-11)),
-//'                     drivers = list("DGCR8 P26L",
-//'                                    Mutation("22", 16085675, "GCCTCCCGA",
-//'                                             "G"),
-//'                                    "EP300 S2346del",
-//'                                    WGD,
-//'                                    CNA(type = "A", chr = "22",
-//'                                        from = 10303470,
-//'                                        len = 200000),
-//'                                    SNV("22", 23657587, "C"),
-//'                                    CNA("D", "22", 5010000, 200000)))
+//'   "-" = c(SNV = 3e-8, CNA = 1e-11)),
+//'   drivers = list("DGCR8 P26L",
+//'   Mutation("22", 16085675, "GCCTCCCGA",
+//'   "G"),
+//'   "EP300 S2346del",
+//'   WGD,
+//'   CNA(type = "A", chr = "22",
+//'   from = 10303470,
+//'   len = 200000),
+//'   SNV("22", 23657587, "C"),
+//'   CNA("D", "22", 5010000, 200000)))
 //'
 //' m_engine
 //'
 //' m_engine$change_rates_from(10, "A", list("+" = c(SNV = 4e-1,
-//'                                                  indel = 4e-1)))
+//'   indel = 4e-1)))
 //' m_engine
         .method("change_rates_from",
                 (void (MutationEngine::*)(const RACES::Time, const std::string &,
@@ -574,7 +576,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # sample the region [450,500]x[475,550]
 //' sim$sample_cells("S1", lower_corner = c(450, 475),
-//'                        upper_corner = c(500, 550))
+//'   upper_corner = c(500, 550))
 //'
 //' # build the sample forest
 //' sample_forest <- sim$get_sample_forest()
@@ -587,7 +589,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # add the default set of SNV signature coefficients
 //' m_engine$add_exposure(c(SBS13 = 0.3, SBS1 = 0.7, ID2 = 0.3, ID21 = 0.5,
-//'                         ID3 = 0.2))
+//'   ID3 = 0.2))
 //'
 //' # place the mutations on the sample forest assuming 1000 pre-neoplastic
 //' # SNVs and 500 indels
@@ -646,9 +648,10 @@ RCPP_MODULE(Mutations)
 //'   subject population and super population, respectively, and
 //'   the column `gender` declares the subject gender.
 //' @return A data frame the active germline subject.
-//' @seealso [MutationEngine$get_germline_subjects()] to get the
-//'   available germline subjects; [MutationEngine$set_germline_subject()]
-//'   to set the active germline subject.
+//' @seealso \code{\link{MutationEngine$get_germline_subjects}} to
+//'   get the available germline subjects;
+//'   \code{\link{MutationEngine$set_germline_subject}} to set the
+//'   active germline subject.
 //' @examples
 //' # build a mutation engine
 //' m_engine <- MutationEngine(setup_code = "demo")
@@ -661,11 +664,12 @@ RCPP_MODULE(Mutations)
 //' @title Setting the germline subject
 //' @description This method sets the germline subject.
 //' @details The subject must be one among those reported by
-//'   [MutationEngine$get_germline_subjects()].
+//'   \code{\link{MutationEngine$get_germline_subjects}}.
 //' @return Set the germline subject.
-//' @seealso [MutationEngine$get_germline_subjects()] to get the
-//'   available germline subjects; [MutationEngine$get_active_germline()]
-//'   to get the active germline subject.
+//' @seealso \code{\link{MutationEngine$get_germline_subjects}} to
+//'   get the available germline subjects;
+//'   \code{\link{MutationEngine$get_active_germline}} to get the
+//'   active germline subject.
 //' @examples
 //' # build a mutation engine
 //' m_engine <- MutationEngine(setup_code = "demo")
@@ -683,8 +687,9 @@ RCPP_MODULE(Mutations)
 //'   contain the subject population and super population,
 //'   respectively; the column `gender` declares the subject gender.
 //' @return A data frame the available germline subjects.
-//' @seealso [MutationEngine$get_active_germline()] to get the
-//'   available germline subjects; [MutationEngine$set_germline_subject()]
+//' @seealso \code{\link{MutationEngine$get_active_germline}} to get the
+//'   available germline subjects;
+//'   \code{\link{MutationEngine$set_germline_subject}}
 //'   to set the active germline.
 //' @examples
 //' # build a mutation engine
@@ -729,7 +734,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the active germline subject data frame
 //' head(m_engine$get_species_info(), 5)
-//' @seealso [PhylogeneticForest$get_species_info()]
+//' @seealso \code{\link{PhylogeneticForest$get_species_info}}
         .method("get_species_info", &MutationEngine::get_species_info)
 
 //' @name MutationEngine$get_SNV_signatures
@@ -794,7 +799,7 @@ RCPP_MODULE(Mutations)
 //'   adding a mutant to the mutation engine, the variant code,
 //'   and the tumour type associated to the mutation.
 //' @return A data frame containing the known driver.
-//' @seealso [MutationEngine$add_mutant()]
+//' @seealso \code{\link{MutationEngine$add_mutant}}
 //' @examples
 //' # build a mutation engine
 //' m_engine <- MutationEngine(setup_code = "demo")
@@ -826,7 +831,8 @@ RCPP_MODULE(Mutations)
 //'
 //'   The second building modality exclusively requires a set-up code
 //'   (parameter `setup_code`). The list of supported set-up codes can
-//'   be obtained by using the function [get_mutation_engine_codes()].
+//'   be obtained by using the function
+//'   \code{\link{get_mutation_engine_codes}}.
 //'
 //'   Whenever the mutational signatures are meant to be downloaded from
 //'   the COSMIC site, a valid COSMIC account is needed and can be
@@ -847,8 +853,8 @@ RCPP_MODULE(Mutations)
 //'   sequence, the SBS file, and the previously built context index
 //'   are loaded from the set-up directory avoiding further
 //'   computations.
-//' @seealso [get_mutation_engine_codes()] provides a list of the supported
-//'   set-up codes.
+//' @seealso \code{\link{get_mutation_engine_codes}} provides a list of
+//'   the supported set-up codes.
 //' @export
 //' @param setup_code The set-up code (optional).
 //' @param directory The set-up directory (mandatory when `setup_code` is
@@ -889,57 +895,58 @@ RCPP_MODULE(Mutations)
 //'   (default: TRUE).
 //' @param quiet An optional Boolean flag to avoid the progress bar
 //'   (default: FALSE).
-//' @seealso [MutationEngine$get_germline_subjects()] to get the available
-//'   germline subjects; [MutationEngine$set_germline_subject()] to set the
-//'   active germline subject; [MutationEngine$get_active_germline()] to get
-//'   the active germline subject.
+//' @seealso \code{\link{MutationEngine$get_germline_subjects}} to get the
+//'   available germline subjects;
+//'   \code{\link{MutationEngine$set_germline_subject}} to set the active
+//'   germline subject; \code{\link{MutationEngine$get_active_germline}} to
+//'   get the active germline subject.
 //' @return A mutation engine object.
 //' @examples
 //' # set the reference and SBS URLs
 //' reference_url <- paste0("https://ftp.ensembl.org/pub/grch37/release-111/",
-//'                         "fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.",
-//'                         "dna.chromosome.22.fa.gz")
+//'   "fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.",
+//'   "dna.chromosome.22.fa.gz")
 //' sbs_url <- paste0("https://zenodo.org/records/15875185/files/",
-//'                   "SBS_demo_signatures.txt")
+//'   "SBS_demo_signatures.txt")
 //' indel_url <- paste0("https://zenodo.org/records/15875185/files/",
-//'                     "indel_demo_signatures.txt")
+//'   "indel_demo_signatures.txt")
 //' drivers_url <- paste0("https://zenodo.org/records/15875185/files/",
-//'                       "driver_mutations_hg19.csv.bz2")
+//'   "driver_mutations_hg19.csv.bz2")
 //' passenger_CNAs_url <- paste0("https://zenodo.org/records/15875185/",
-//'                              "files/passenger_CNAs_hg19.csv.bz2")
+//'   "files/passenger_CNAs_hg19.csv.bz2")
 //' germline_url <- paste0("https://zenodo.org/records/15875185/files/",
-//'                        "germline_data_demo.tar.bz2")
+//'   "germline_data_demo.tar.bz2")
 //'
 //' # build a mutation engine and save the required files into the
 //' # directory "Test". The `drivers_url` parameter is optional, but
 //' # it is suggested to avoid passenger mutations on driver loci.
 //' m_engine <- MutationEngine(directory = "Test",
-//'                            reference_src = reference_url,
-//'                            SBS_signatures_src = sbs_url,
-//'                            indel_signatures_src = indel_url,
-//'                            drivers_src = drivers_url,
-//'                            passenger_CNAs_src = passenger_CNAs_url,
-//'                            germline_src = germline_url)
+//'   reference_src = reference_url,
+//'   SBS_signatures_src = sbs_url,
+//'   indel_signatures_src = indel_url,
+//'   drivers_src = drivers_url,
+//'   passenger_CNAs_src = passenger_CNAs_url,
+//'   germline_src = germline_url)
 //'
 //' # if the parameters of a mutation engine construction match those of a
 //' # previous construction, then the corresponding reference sequence,
 //' # the SBS file, and the previously built context index are loaded from
 //' # the set-up directory avoiding further computations.
 //' m_engine <- MutationEngine("Test", reference_url, sbs_url, indel_url,
-//'                            drivers_url, passenger_CNAs_url, germline_url)
+//'   drivers_url, passenger_CNAs_url, germline_url)
 //'
 //' # if the `context_sampling` parameter changes, a new context index is
 //' # built, while neither the reference sequence nor the SBS file are
 //' # downloaded again.
 //' m_engine <- MutationEngine("Test", reference_url, sbs_url, indel_url,
-//'                            drivers_url, passenger_CNAs_url, germline_url,
-//'                            context_sampling = 50)
+//'   drivers_url, passenger_CNAs_url, germline_url,
+//'   context_sampling = 50)
 //'
 //' # a further construction with the same parameters avoids both
 //' # downloads and context index construction.
 //' m_engine <- MutationEngine("Test", reference_url, sbs_url, indel_url,
-//'                            drivers_url, passenger_CNAs_url, germline_url,
-//'                            context_sampling = 50)
+//'   drivers_url, passenger_CNAs_url, germline_url,
+//'   context_sampling = 50)
 //'
 //' m_engine
 //'
@@ -963,8 +970,8 @@ RCPP_MODULE(Mutations)
 //' # and "GRCh38"). The COSMIC account can be passed to `MutationEngine()` as
 //' # follows
 //' m_engine <- MutationEngine(setup_code = "demo",
-//'                            COSMIC_account = list(email = "foo@bar.org",
-//'                                                  password = "********"))
+//'   COSMIC_account = list(email = "foo@bar.org",
+//'   password = "********"))
 //' m_engine
 //'
 //' # remove the "demo" directory
@@ -973,8 +980,8 @@ RCPP_MODULE(Mutations)
 //' # In alternative, pre-download the mutational signatures and pass their
 //' # paths to `MutationEngine()` as parameters.
 //' m_engine <- MutationEngine(setup_code = "demo",
-//'                            SBS_signatures_src = "Test/SBS_signatures.txt",
-//'                            indel_signatures_src = "Test/indel_signatures.txt")
+//'   SBS_signatures_src = "Test/SBS_signatures.txt",
+//'   indel_signatures_src = "Test/indel_signatures.txt")
 //' m_engine
 //'
 //' # remove the "Test" and "demo" directories
@@ -999,7 +1006,7 @@ RCPP_MODULE(Mutations)
 //' @param setup_code The set-up code whose available tumour types are
 //'   requested.
 //' @return A data frame reporting the types available for a set-up code.
-//' @seealso [MutationEngine()] to build a mutation engine
+//' @seealso \code{\link{MutationEngine}} to build a mutation engine
 //' @export
 //' @examples
 //' # get the types available for the "demo" set-up code
@@ -1013,7 +1020,7 @@ RCPP_MODULE(Mutations)
 //' @description This method returns the supported codes for predefined set-up.
 //' @return A data frame reporting the code and a description for each
 //'   supported predefined set-up.
-//' @seealso [MutationEngine()] to build a mutation engine
+//' @seealso \code{\link{MutationEngine}} to build a mutation engine
 //' @export
 //' @examples
 //' # get the list of supported mutation engine set-up codes
@@ -1026,7 +1033,7 @@ RCPP_MODULE(Mutations)
 //' @description This class represents the phylogenetic forest of the
 //'   cells sampled during the computation.
 //' @details The leaves of his forest are the sampled cells.
-//'   This class is analogous to the class [SampleForest],
+//'   This class is analogous to the class \code{\link{SampleForest}},
 //'   but each node is labelled with the mutations occurring
 //'   for the first time on the cell represented by the node
 //'   itself. Moreover each leaf is also associated with the
@@ -1107,28 +1114,33 @@ RCPP_MODULE(Mutations)
 //'   `SNV_rate`, `indel_rate`, and `CNA_rate` for each registered species.
 //' }
 //' @field get_sticks Computes the forest sticks \itemize{
-//' \item \emph{Returns:} The list of the forest sticks. Each stick is represented as
-//'   the list of cell identifiers labelling the nodes in the stick
-//'   from the higher to the deeper in the forest.
+//' \item \emph{Returns:} The list of the forest sticks. Each stick is
+//'   represented as the list of cell identifiers labelling the nodes in
+//'   the stick from the higher to the deeper in the forest.
 //' }
-//' @field get_subforest_for Builds a sub-forest using as leaves some of the original samples \itemize{
-//' \item \emph{Parameter:} \code{sample_names} - The names of the samples whose cells will be used
-//'   as leaves of the new forest.
-//' \item \emph{Returns:} A sample forest built on the samples mentioned in `sample_names`.
+//' @field get_subforest_for Builds a sub-forest using as leaves some of the
+//'   original samples \itemize{
+//' \item \emph{Parameter:} \code{sample_names} - The names of the samples whose
+//'   cells will be used as leaves of the new forest.
+//' \item \emph{Returns:} A sample forest built on the samples mentioned in
+//'   `sample_names`.
 //' }
-//' @field partition_samples Partitions the samples in a phylogenetic forest \itemize{
-//' \item \emph{Parameter:} \code{labelling_function} - An R labelling function that maps any sampled
-//'   cell to a labelling string.
+//' @field partition_samples Partitions the samples in a phylogenetic forest
+//'   \itemize{
+//' \item \emph{Parameter:} \code{labelling_function} - An R labelling function
+//'   that maps any sampled cell to a labelling string.
 //' \item The method alters the original phylogenetic forest.
 //' }
-//' @field get_absolute_chromosome_positions Gets the absolute chromosome positions \itemize{
-//' \item \emph{Returns:} A data frame reporting the name (column "`chr`"), the length
-//'   (column "`length`"), the initial absolute position (column "`from`"),
-//'   and the final absolute position (column "`to`") of each chromosome.
+//' @field get_absolute_chromosome_positions Gets the absolute chromosome
+//'   positions \itemize{
+//' \item \emph{Returns:} A data frame reporting the name (column "`chr`"), the
+//'   length (column "`length`"), the initial absolute position (column
+//'   "`from`"), and the final absolute position (column "`to`") of each
+//'   chromosome.
 //' }
 //' @field save Saves a phylogenetic forest in a file \itemize{
-//' \item \emph{Parameter:} \code{filename} - The path of the file in which the phylogenetic
-//'   forest must be saved.
+//' \item \emph{Parameter:} \code{filename} - The path of the file in which the
+//'   phylogenetic forest must be saved.
 //' }
     class_<PhylogeneticForest>("PhylogeneticForest")
 
@@ -1144,7 +1156,7 @@ RCPP_MODULE(Mutations)
 //'   node, (column `sample`), the mutant (column
 //'   `mutant`), the epistate (column `epistate`),
 //'   and the birth time (column `birth_time`).
-//' @seealso [SampleForest$get_nodes()] for usage examples
+//' @seealso \code{\link{SampleForest$get_nodes}} for usage examples.
         .method("get_nodes",
                 (List (PhylogeneticForest::*)() const)(&PhylogeneticForest::get_nodes),
                 "Get the nodes of the forest")
@@ -1169,7 +1181,8 @@ RCPP_MODULE(Mutations)
 //'   containing the node, (column `sample`), the mutant
 //'   (column `mutant`), the epistate (column `epistate`),
 //'   and the birth time (column `birth_time`).
-//' @seealso [SampleForest$get_coalescent_cells()] for usage examples
+//' @seealso \code{\link{SampleForest$get_coalescent_cells}} for
+//'   usage examples
         .method("get_coalescent_cells",
                 (List (PhylogeneticForest::*)(const std::list<RACES::Mutants::CellId> &)
                      const)(&PhylogeneticForest::get_coalescent_cells),
@@ -1186,7 +1199,7 @@ RCPP_MODULE(Mutations)
 //' @param sample_names The names of the samples whose cells will be used
 //'   as leaves of the new forest
 //' @return A sample forest built on the samples mentioned in `sample_names`
-//' @seealso [SampleForest$get_subforest_for()] for usage examples
+//' @seealso \code{\link{SampleForest$get_subforest_for}} for usage examples.
         .method("get_subforest_for", &PhylogeneticForest::get_subforest_for,
                 "Get the sub-forest for some of the original samples")
 
@@ -1198,7 +1211,7 @@ RCPP_MODULE(Mutations)
 //'   phylogenetic forest from which the method is called.
 //' @param labelling_function An R labelling function that maps any sampled
 //'   cell to a labelling string.
-//' @seealso [SampleForest$get_subforest_for()] for usage examples
+//' @seealso \code{\link{SampleForest$get_subforest_for}} for usage examples.
         .method("partition_samples",
                 &PhylogeneticForest::partition_samples,
                 "Partition each sample in the forest according to a labelling function")
@@ -1222,8 +1235,8 @@ RCPP_MODULE(Mutations)
 //'   The "`DNA_quantity`" is stored as a real number despite being a natural
 //'   number as it usually exceeds the largest natural number that can be
 //'   natively represented by R.
-//' @seealso [SampleForest$get_samples_info()] for usage examples,
-//'   [Simulation$get_samples_info()]
+//' @seealso \code{\link{SampleForest$get_samples_info}} for usage examples,
+//'   \code{\link{TissueSimulation$get_samples_info}}
         .method("get_samples_info", &PhylogeneticForest::get_samples_info,
                 "Get some pieces of information about the samples")
 
@@ -1264,7 +1277,7 @@ RCPP_MODULE(Mutations)
 //'   respectively.
 //' @return A data frame reporting `species`, `time`, `SNV_rate`,
 //'   `indel_rate`, and `CNA_rate` for each species.
-//' @seealso [MutationEngine$get_species_info()]
+//' @seealso \code{\link{MutationEngine$get_species_info}}
         .method("get_species_info", &PhylogeneticForest::get_species_info,
                 "Get the recorded species")
 
@@ -1293,9 +1306,9 @@ RCPP_MODULE(Mutations)
 //' sim <- TissueSimulation()
 //'
 //' sim$add_mutant(name = "Clone_1",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.05, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.05, "-" = 0.01))
 //' sim$place_cell("Clone_1+", 500, 500)
 //' sim$run_up_to_size("Clone_1-", 1000)
 //'
@@ -1305,10 +1318,10 @@ RCPP_MODULE(Mutations)
 //' m_engine <- MutationEngine(setup_code = "demo")
 //'
 //' m_engine$add_mutant("Clone_1", list("+" = c(SNV = 1e-7, indel = 1e-8),
-//'                                     "-" = c(SNV = 3e-7, CNA = 1e-11)),
-//'                     list(SNV("22", 10510210, "C", allele = 1),
-//'                          CNA("D", "22", 5010000, 200000,
-//'                                    allele = 1)))
+//'   "-" = c(SNV = 3e-7, CNA = 1e-11)),
+//'   list(SNV("22", 10510210, "C", allele = 1),
+//'   CNA("D", "22", 5010000, 200000,
+//'   allele = 1)))
 //'
 //' m_engine$add_exposure(c(ID1 = 1, SBS1 = 0.5, SBS2 = 0.5))
 //'
@@ -1317,7 +1330,7 @@ RCPP_MODULE(Mutations)
 //' mutations <- phylo_forest$get_sampled_cell_CNAs()
 //'
 //' head(mutations)
-//' @seealso `PhylogeneticForest$get_sampled_cell_mutations()`
+//' @seealso \code{\link{PhylogeneticForest$get_sampled_cell_mutations}}
         .method("get_sampled_cell_CNAs",
                 (List (PhylogeneticForest::*)()
                      const)(&PhylogeneticForest::get_sampled_cell_CNAs),
@@ -1341,9 +1354,9 @@ RCPP_MODULE(Mutations)
 //' sim <- TissueSimulation()
 //'
 //' sim$add_mutant(name = "Clone_1",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.05, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.05, "-" = 0.01))
 //' sim$place_cell("Clone_1+", 500, 500)
 //' sim$run_up_to_size("Clone_1-", 1000)
 //'
@@ -1353,10 +1366,10 @@ RCPP_MODULE(Mutations)
 //' m_engine <- MutationEngine(setup_code = "demo")
 //'
 //' m_engine$add_mutant("Clone_1", list("+" = c(SNV = 1e-7, indel = 1e-8),
-//'                                     "-" = c(SNV = 3e-7, CNA = 1e-11)),
-//'                     list(SNV("22", 10510210, "C", allele = 1),
-//'                          CNA("D", "22", 5010000, 200000,
-//'                                    allele = 1)))
+//'   "-" = c(SNV = 3e-7, CNA = 1e-11)),
+//'   list(SNV("22", 10510210, "C", allele = 1),
+//'   CNA("D", "22", 5010000, 200000,
+//'   allele = 1)))
 //'
 //' m_engine$add_exposure(c(ID1 = 1, SBS1 = 0.5, SBS2 = 0.5))
 //'
@@ -1365,7 +1378,7 @@ RCPP_MODULE(Mutations)
 //' mutations <- phylo_forest$get_sampled_cell_CNAs()
 //'
 //' head(mutations)
-//' @seealso `PhylogeneticForest$get_sampled_cell_CNAs()`
+//' @seealso \code{\link{PhylogeneticForest$get_sampled_cell_CNAs}}
         .method("get_cell_CNAs",
                 (List (PhylogeneticForest::*)(const RACES::Mutants::CellId &)
                      const)(&PhylogeneticForest::get_cell_CNAs),
@@ -1389,9 +1402,9 @@ RCPP_MODULE(Mutations)
 //' sim <- TissueSimulation()
 //'
 //' sim$add_mutant(name = "Clone_1",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.05, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.05, "-" = 0.01))
 //' sim$place_cell("Clone_1+", 500, 500)
 //' sim$run_up_to_size("Clone_1-", 1000)
 //'
@@ -1401,10 +1414,10 @@ RCPP_MODULE(Mutations)
 //' m_engine <- MutationEngine(setup_code = "demo")
 //'
 //' m_engine$add_mutant("Clone_1", list("+" = c(SNV = 1e-8, indel = 1e-8),
-//'                                     "-" = c(SNV = 3e-8, CNA = 1e-11)),
-//'                     list(SNV("22", 10510210, "C", allele = 1),
-//'                          CNA("D", "22", 5010000, 200000,
-//'                                    allele = 1)))
+//'   "-" = c(SNV = 3e-8, CNA = 1e-11)),
+//'   list(SNV("22", 10510210, "C", allele = 1),
+//'   CNA("D", "22", 5010000, 200000,
+//'   allele = 1)))
 //'
 //' m_engine$add_exposure(c(ID1 = 1, SBS1 = 0.5, SBS2 = 0.5))
 //'
@@ -1413,7 +1426,7 @@ RCPP_MODULE(Mutations)
 //' mutations <- phylo_forest$get_sampled_cell_mutations()
 //'
 //' head(mutations)
-//' @seealso `PhylogeneticForest$get_sampled_cell_CNAs()`
+//' @seealso \code{\link{PhylogeneticForest$get_sampled_cell_CNAs}}
         .method("get_sampled_cell_mutations",
                 (List (PhylogeneticForest::*)()
                      const)(&PhylogeneticForest::get_sampled_cell_SIDs),
@@ -1440,9 +1453,9 @@ RCPP_MODULE(Mutations)
 //' sim <- TissueSimulation()
 //'
 //' sim$add_mutant(name = "Clone_1",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.05, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.05, "-" = 0.01))
 //' sim$place_cell("Clone_1+", 500, 500)
 //' sim$run_up_to_size("Clone_1-", 1000)
 //'
@@ -1452,10 +1465,10 @@ RCPP_MODULE(Mutations)
 //' m_engine <- MutationEngine(setup_code = "demo")
 //'
 //' m_engine$add_mutant("Clone_1", list("+" = c(SNV = 1e-8, indel = 1e-8),
-//'                                     "-" = c(SNV = 3e-8, CNA = 1e-11)),
-//'                     list(SNV("22", 10510210, "C", allele = 1),
-//'                          CNA("D", "22", 5010000, 200000,
-//'                                    allele = 1)))
+//'   "-" = c(SNV = 3e-8, CNA = 1e-11)),
+//'   list(SNV("22", 10510210, "C", allele = 1),
+//'   CNA("D", "22", 5010000, 200000,
+//'   allele = 1)))
 //'
 //' m_engine$add_exposure(c(ID1 = 1, SBS1 = 0.5, SBS2 = 0.5))
 //'
@@ -1464,7 +1477,7 @@ RCPP_MODULE(Mutations)
 //' mutations <- phylo_forest$get_cell_mutations(1)
 //'
 //' head(mutations)
-//' @seealso `vignette("sample_partition")`
+//' @seealso \code{vignette("sample_partition")}
         .method("get_cell_mutations",
                 (List (PhylogeneticForest::*)(const RACES::Mutants::CellId &)
                      const)(&PhylogeneticForest::get_cell_SIDs),
@@ -1481,7 +1494,7 @@ RCPP_MODULE(Mutations)
 //'   the chromosome), "`allele`" (in which the mutation occurs), "`ref`",
 //'   "`alt`", "`cause`", "`type`" (i.e., either `"SNV"` or `"indel"`) and
 //'   "`class`" (i.e., `"germinal"`).
-//' @seealso `vignette("mutations")` for usage examples
+//' @seealso \code{vignette("mutations")} for usage examples.
         .method("get_germline_mutations", &PhylogeneticForest::get_germline_SIDs,
                 "Get the germinal SNVs and indels")
 
@@ -1517,7 +1530,7 @@ RCPP_MODULE(Mutations)
 //'   birth time smaller than or equal to `birth_threshold`. Each stick is
 //'   represented as the list of cell identifiers labelling the nodes in the
 //'   stick from the higher to the deeper in the forest.
-//' @seealso [SampleForest$get_sticks()] for usage examples
+//' @seealso \code{\link{SampleForest$get_sticks}} for usage examples.
         .method("get_sticks",
                 (std::list<std::list<RACES::Mutants::CellId>> (PhylogeneticForest::*)(
                     const double) const)(&PhylogeneticForest::get_sticks),
@@ -1533,24 +1546,24 @@ RCPP_MODULE(Mutations)
 //'   evolution over time.
 //' @return A data frame reporting `time`, `signature`, `exposure` and,
 //'   `type`.
-//' @seealso `vignette("mutations")` for usage examples
+//' @seealso \code{vignette("mutations")} for usage examples.
         .method("get_exposures", &PhylogeneticForest::get_timed_exposures,
                 "Get the timed exposure data frame")
 
 //' @name PhylogeneticForest$get_bulk_allelic_fragmentation
 //' @title Getting the bulk allelic fragmentation data frame
 //' @description This method returns a data frame representing the bulk allelic
-//'     fragmentation of the genome.
+//'   fragmentation of the genome.
 //' @param sample_name The name of the sample whose bulk allelic fragmentation
-//'     is aimed (optional).
+//'   is aimed (optional).
 //' @return A data frame reporting, for each genomic fragment and for all
-//'     the allelic type on the genomic fragment, the chromosome (`chr`),
-//'     the first base position (`begin`), the last base position (`end`),
-//'     the number of copy of the major and minor alleles (`major` and
-//'     `minor`, respectively), and the ratio between the number of cells
-//'     exhibiting this allelic type and the total number of cells in the
-//'     sample.
-//' @seealso `vignette("mutations")` for usage examples
+//'   the allelic type on the genomic fragment, the chromosome (`chr`),
+//'   the first base position (`begin`), the last base position (`end`),
+//'   the number of copy of the major and minor alleles (`major` and
+//'   `minor`, respectively), and the ratio between the number of cells
+//'   exhibiting this allelic type and the total number of cells in the
+//'   sample.
+//' @seealso \code{vignette("mutations")} for usage examples.
         .method("get_bulk_allelic_fragmentation",
                 (Rcpp::List (PhylogeneticForest::*)(const std::string &)
                      const)(&PhylogeneticForest::get_bulk_allelic_fragmentation),
@@ -1563,14 +1576,14 @@ RCPP_MODULE(Mutations)
 //' @name PhylogeneticForest$get_cell_allelic_fragmentation
 //' @title Getting the cell allelic fragmentation data frame
 //' @description This method returns a data frame representing the allelic
-//'     fragmentation of each sampled cell.
+//'   fragmentation of each sampled cell.
 //' @return A data frame reporting, for each cell, for each genomic fragment,
-//'     and for all the allelic type on the genomic fragment, the cell
-//'     identifier (`cell_id`), the chromosome (`chr`), the first base
-//'     position (`begin`), the last base position (`end`), and the number
-//'     of copy of the major and minor alleles (`major` and `minor`,
-//'     respectively).
-//' @seealso `vignette("mutations")` for usage examples
+//'   and for all the allelic type on the genomic fragment, the cell
+//'   identifier (`cell_id`), the chromosome (`chr`), the first base
+//'   position (`begin`), the last base position (`end`), and the number
+//'   of copy of the major and minor alleles (`major` and `minor`,
+//'   respectively).
+//' @seealso \code{vignette("mutations")} for usage examples.
         .method("get_cell_allelic_fragmentation",
                 (Rcpp::List (PhylogeneticForest::*)()
                      const)(&PhylogeneticForest::get_cell_allelic_fragmentation),
@@ -1579,9 +1592,11 @@ RCPP_MODULE(Mutations)
 //' @name PhylogeneticForest$get_first_occurrences
 //' @title Getting the cell in which a mutation emerged
 //' @description This method returns the identifier of the cell in which a
-        //mutation occurs '   for the first time. ' @param mutation A mutation being a
-        //SNV, a indel, or a CNA. ' @return The identifier of the cell in which a mutation
-        //occurs for the first time. ' @seealso `vignette("mutations")` for usage examples
+//'   mutation occurs for the first time. 
+//' @param mutation A mutation being a SNV, a indel, or a CNA.
+//' @return The identifier of the cell in which a mutation
+//'   occurs for the first time.
+//' @seealso \code{vignette("mutations")} for usage examples.
         .method("get_first_occurrences",
                 (Rcpp::List (PhylogeneticForest::*)(const SEXP &)
                      const)(&PhylogeneticForest::get_first_occurrence),
@@ -1592,7 +1607,7 @@ RCPP_MODULE(Mutations)
 //' @title Getting the reference genome path
 //' @description This method returns the reference genome path.
 //' @return The reference genome path.
-//' @seealso [PhylogeneticForest$set_reference_path()]
+//' @seealso \code{\link{PhylogeneticForest$set_reference_path}}
         .method("get_reference_path",
                 (std::string (PhylogeneticForest::*)()
                      const)(&PhylogeneticForest::get_reference_path),
@@ -1602,7 +1617,7 @@ RCPP_MODULE(Mutations)
 //' @title Setting the reference genome path
 //' @description This method returns the reference genome path.
 //' @return The reference genome path.
-//' @seealso [PhylogeneticForest$get_reference_path()]
+//' @seealso \code{\link{PhylogeneticForest$get_reference_path}}
         .method("set_reference_path",
                 (void (PhylogeneticForest::*)(const std::string))(
                     &PhylogeneticForest::set_reference_path),
@@ -1647,7 +1662,8 @@ RCPP_MODULE(Mutations)
 //' @description The sampled cell class for sample labelling.
 //' @details There is no public constructor for this class as it is
 //'   exclusively used by `simulate_seq()` to label sampled cells.
-//' @seealso `simulate_seq()` and `vignette("sample_partition")`
+//' @seealso \code{\link{simulate_seq}} and
+//'   \code{vignette("sample_partition")}.
     class_<SampledCell>("SampledCell")
 
 //' @name SampledCell$epistate
@@ -1655,28 +1671,32 @@ RCPP_MODULE(Mutations)
 //' @description The epigenetic state of the sampled cell.
 //' @details This property is the epigenetic state of the sampled cell.
 //'   It can be one among "`+`", "`-`", or "".
-//' @seealso `simulate_seq()` and `vignette("sample_partition")`
+//' @seealso \code{\link{simulate_seq}}, and
+//'   \code{vignette("sample_partition")}.
         .property("epistate", &SampledCell::epistate, "The cell epistate")
 
 //' @name SampledCell$mutant
 //' @title Getting the sampled cell mutant
 //' @description The mutant name of the sampled cell.
 //' @details This property is the mutant name of the sampled cell.
-//' @seealso `simulate_seq()` and `vignette("sample_partition")`
+//' @seealso \code{\link{simulate_seq}}, and
+//'   \code{vignette("sample_partition")}.
         .property("mutant", &SampledCell::mutant, "The cell mutant name")
 
 //' @name SampledCell$species
 //' @title Getting the sampled cell species
 //' @description The species name of the sampled cell.
 //' @details This property is the species name of the sampled cell.
-//' @seealso `simulate_seq()` and `vignette("sample_partition")`
+//' @seealso \code{\link{simulate_seq}}, and
+//'   \code{vignette("sample_partition")}.
         .property("species", &SampledCell::species, "The cell species name")
 
 //' @name SampledCell$birth_time
 //' @title Getting the sampled cell birth time
 //' @description The birth time of the sampled cell.
 //' @details This property is the birth time of the sampled cell.
-//' @seealso `simulate_seq()` and `vignette("sample_partition")`
+//' @seealso \code{\link{simulate_seq}}, and
+//'   \code{vignette("sample_partition")}.
         .property("birth_time", &SampledCell::birth_time, "The cell birth time")
 
 //' @name SampledCell$mutations
@@ -1690,6 +1710,7 @@ RCPP_MODULE(Mutations)
 //'   `ref`, `alt`, `type` (i.e., either `"SNV"` or `"indel"`), `cause`, and
 //'   `class` (i.e., `"driver"`, `"passenger"`, `"germinal"` or
 //'   `"pre_neoplastic"`).
-//' @seealso `simulate_seq()` and `vignette("sample_partition")`
+//' @seealso \code{\link{simulate_seq}}, and
+//'   \code{vignette("sample_partition")}.
         .property("mutations", &SampledCell::mutations, "The cell mutation data frame");
 }

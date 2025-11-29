@@ -56,7 +56,8 @@ RCPP_MODULE(Mutants)
 
 //' @name TissueRectangle$lower_corner
 //' @title The tissue rectangle lower corner
-//' @description This is the vector of the minima among all the rectangle dimensions.
+//' @description This is the vector of the minima among all the rectangle
+//'   dimensions.
 //' @examples
 //' # create a 51x51-rectangle from (500, 500) to (550, 550)
 //' rect <- new(TissueRectangle, c(500, 500), c(550, 550))
@@ -68,7 +69,8 @@ RCPP_MODULE(Mutants)
 
 //' @name TissueRectangle$upper_corner
 //' @title The tissue rectangle upper corner
-//' @description This is the vector of the maxima among all the rectangle dimensions.
+//' @description This is the vector of the maxima among all the rectangle
+//'   dimensions.
 //' @examples
 //' rect <- new(TissueRectangle, c(500, 500), c(550, 550))
 //'
@@ -99,73 +101,93 @@ RCPP_MODULE(Mutants)
 //'   one mutant to a different mutant.
 //' @field add_mutant Adds a mutant and its species \itemize{
 //' \item \emph{Parameter:} \code{mutant} - The mutant name.
-//' \item \emph{Parameter:} \code{epigenetic_rates} - The epigenetic rates of the mutant species (optional).
-//' \item \emph{Parameter:} \code{growth_rates} - The duplication rates of the mutant species.
-//' \item \emph{Parameter:} \code{death_rates} - The death rates of the mutant species.
+//' \item \emph{Parameter:} \code{epigenetic_rates} - The epigenetic rates of
+//'   the mutant species (optional).
+//' \item \emph{Parameter:} \code{growth_rates} - The duplication rates of the
+//'   mutant species.
+//' \item \emph{Parameter:} \code{death_rates} - The death rates of the mutant
+//'   species.
 //' }
 //' @field choose_cell_in Chooses one cell in a mutant \itemize{
 //' \item \emph{Parameter:} \code{mutant} - The mutant of the cell to choose.
-//' \item \emph{Parameter:} \code{lower_corner} - The lower left corner of a rectangular selection (optional).
-//' \item \emph{Parameter:} \code{upper_corner} - The upper right corner of a rectangular selection (optional).
-//' \item \emph{Returns:} A list reporting "`cell_id`", "`mutant`", "`epistate`", "`position_x`",
-//'   and "`position_y`" of the choosen cell.
+//' \item \emph{Parameter:} \code{lower_corner} - The lower left corner of a
+//'   rectangular selection (optional).
+//' \item \emph{Parameter:} \code{upper_corner} - The upper right corner of a
+//'   rectangular selection (optional).
+//' \item \emph{Returns:} A list reporting "`cell_id`", "`mutant`",
+//'   "`epistate`", "`position_x`", and "`position_y`" of the choosen cell.
 //' }
-//' @field death_activation_level The number of cells that activates cell death in a species.
-//' @field border_growth_model Switch between homogeneous and border driven growth models.
-//' @field get_added_cells Gets the cells manually added to the simulation \itemize{
-//' \item \emph{Returns:} A data frame reporting "`mutant`", "`epistate`", "`position_x`",
-//'   "`position_y`", and "`time`" for each cells manually added to
-//'   the simulation.
+//' @field death_activation_level The number of cells that activates cell death
+//'   in a species.
+//' @field border_growth_model Switch between homogeneous and border driven
+//'   growth models.
+//' @field get_added_cells Gets the cells manually added to the simulation
+//'   \itemize{
+//' \item \emph{Returns:} A data frame reporting "`mutant`", "`epistate`",
+//'   "`position_x`", "`position_y`", and "`time`" for each cells manually
+//'   added to the simulation.
 //' }
-//' @field search_sample Searches a rectangular sample having a minimum number of cells\itemize{
-//' \item \emph{Parameter:} \code{mutant_name} - The mutant of the searched cells.
-//' \item \emph{Parameter:} \code{num_of_cells} - The number of cells in the searched sample.
+//' @field search_sample Searches a rectangular sample having a minimum number
+//'   of cells\itemize{
+//' \item \emph{Parameter:} \code{mutant_name} - The mutant of the searched
+//'   cells.
+//' \item \emph{Parameter:} \code{num_of_cells} - The number of cells in the
+//'   searched sample.
 //' \item \emph{Parameter:} \code{width} - The width of the searched sample.
 //' \item \emph{Parameter:} \code{height} - The height of the searched sample.
-//' \item \emph{Returns:} If a rectangular sample satisfying the provided constraints can
-//'   be found, the corresponding rectangle.
+//' \item \emph{Returns:} If a rectangular sample satisfying the provided
+//'   constraints can be found, the corresponding rectangle.
 //' }
 //' @field get_cell Gets one the tissue cells \itemize{
-//' \item \emph{Parameter:} \code{x} - The position of the aimed cell on the x axis.
-//' \item \emph{Parameter:} \code{y} - The position of the aimed cell on the y axis.
-//' \item \emph{Returns:} A data frame reporting "`cell_id`", "`mutant`", "`epistate`", "`position_x`",
-//'   and "`position_y`" of the aimed cell.
+//' \item \emph{Parameter:} \code{x} - The position of the aimed cell on the x
+//'   axis.
+//' \item \emph{Parameter:} \code{y} - The position of the aimed cell on the y
+//'   axis.
+//' \item \emph{Returns:} A data frame reporting "`cell_id`", "`mutant`",
+//'   "`epistate`", "`position_x`", and "`position_y`" of the aimed cell.
 //' }
 //' @field get_cells Gets the tissue cells \itemize{
-//' \item \emph{Parameter:} \code{lower_corner} - The lower-left corner of the selection frame (optional).
-//' \item \emph{Parameter:} \code{upper_corner} - The upper-right corner of the selection frame (optional).
-//' \item \emph{Parameter:} \code{mutant_filter} - The vector of the to-be-selected mutant names (optional).
-//' \item \emph{Parameter:} \code{epigenetic_filter} - The vector of the to-be-selected epigenetic states (optional).
-//' \item \emph{Returns:} A data frame reporting "`cell_id`", "`mutant`", "`epistate`", "`position_x`",
-//'   and "`position_y`" for each cells satisfying the provided filters and laying
-//'   in the input frame.
+//' \item \emph{Parameter:} \code{lower_corner} - The lower-left corner of the
+//'   selection frame (optional).
+//' \item \emph{Parameter:} \code{upper_corner} - The upper-right corner of the
+//'   selection frame (optional).
+//' \item \emph{Parameter:} \code{mutant_filter} - The vector of
+//'   the to-be-selected mutant names (optional).
+//' \item \emph{Parameter:} \code{epigenetic_filter} - The vector of the
+//'   to-be-selected epigenetic states (optional).
+//' \item \emph{Returns:} A data frame reporting "`cell_id`", "`mutant`",
+//'   "`epistate`", "`position_x`", and "`position_y`" for each cells
+//'   satisfying the provided filters and laying in the input frame.
 //' }
 //' @field get_clock Gets the simulated time \itemize{
 //' \item \emph{Returns:} The time simulated by the simulation.
 //' }
-//' @field get_count_history Gets the history of the number of cells per species \itemize{
-//' \item \emph{Returns:} A data frame reporting "`mutant`", "`epistate`", "`counts`",
-//'   and "`time`" for each species and for each sampled time.
+//' @field get_count_history Gets the history of the number of cells per
+//'   species \itemize{
+//' \item \emph{Returns:} A data frame reporting "`mutant`", "`epistate`",
+//'   "`counts`", and "`time`" for each species and for each sampled time.
 //' }
 //' @field get_counts Counts the number of cells per species\itemize{
-//' \item \emph{Returns:} A data frame reporting "`mutant`", "`epistate`", "`counts`", and
-//'   "`overall`" for each species in the simulation.
+//' \item \emph{Returns:} A data frame reporting "`mutant`", "`epistate`",
+//'   "`counts`", and "`overall`" for each species in the simulation.
 //' }
-//' @field get_firing_history Gets the history of the number of fired events \itemize{
-//' \item \emph{Returns:} A data frame reporting "event", "`mutant`", "`epistate`", "`fired`",
-//'   and "`time`" for each event type, for each species, and for each sampled time.
+//' @field get_firing_history Gets the history of the number of fired events
+//'   \itemize{
+//' \item \emph{Returns:} A data frame reporting "event", "`mutant`",
+//'   "`epistate`", "`fired`", and "`time`" for each event type, for each
+//'   species, and for each sampled time.
 //' }
 //' @field get_firings Gets the number of fired events \itemize{
-//' \item \emph{Returns:} A data frame reporting "event", "`mutant`", "`epistate`", and "`fired`"
-//'   for each event type and for each species.
+//' \item \emph{Returns:} A data frame reporting "event", "`mutant`",
+//'   "`epistate`", and "`fired`" for each event type and for each species.
 //' }
 //' @field get_name Gets the simulation name \itemize{
-//' \item \emph{Returns:} The simulation name, which corresponds to the name of the directory
-//'   in which the simulation is saving its progresses.
+//' \item \emph{Returns:} The simulation name, which corresponds to the name of
+//'   the directory in which the simulation is saving its progresses.
 //' }
 //' @field get_lineage_graph Gets the simulation lineage graph\itemize{
-//' \item \emph{Returns:} A data frame reporting "`ancestor`", "`progeny`", and "`first_occurrence`"
-//'   of each species-to-species transition.
+//' \item \emph{Returns:} A data frame reporting "`ancestor`", "`progeny`", and
+//'   "`first_occurrence`" of each species-to-species transition.
 //' }
 //' @field get_rates Gets the rates of a species\itemize{
 //' \item \emph{Parameter:} \code{species} - The species whose rates are aimed.
@@ -187,17 +209,23 @@ RCPP_MODULE(Mutants)
 //' \item \emph{Returns:} A data frame describing the registered species.
 //' }
 //' @field get_tissue_size Gets the size of the simulated tissue \itemize{
-//' \item \emph{Returns:} The vector `c(x_size, y_size)` of the simulated tissue.
+//' \item \emph{Returns:} The vector `c(x_size, y_size)` of the simulated
+//'   tissue.
 //' }
 //' @field mutate_progeny Generates a mutated offspring \itemize{
-//' \item \emph{Parameter:} \code{cell_position} - The position of the cell whose offspring will mutate.
-//' \item \emph{Parameter:} \code{mutated_mutant} - The mutant of the mutated cell.
+//' \item \emph{Parameter:} \code{cell_position} - The position of the cell
+//'   whose offspring will mutate.
+//' \item \emph{Parameter:} \code{mutated_mutant} - The mutant of the mutated
+//'   cell.
 //' }
 //' or
 //' \itemize{
-//' \item \emph{Parameter:} \code{x} - The position of the cell whose progeny will mutate on the x axis.
-//' \item \emph{Parameter:} \code{y} - The position of the cell whose progeny will mutate on the y axis.
-//' \item \emph{Parameter:} \code{mutated_mutant} - The mutant of the mutated cell.
+//' \item \emph{Parameter:} \code{x} - The position of the cell whose progeny
+//'   will mutate on the x axis.
+//' \item \emph{Parameter:} \code{y} - The position of the cell whose progeny
+//'   will mutate on the y axis.
+//' \item \emph{Parameter:} \code{mutated_mutant} - The mutant of the mutated
+//'   cell.
 //' }
 //' @field place_cell Places one cell in the tissue \itemize{
 //' \item \emph{Parameter:} \code{species} - The name of the new cell species.
@@ -205,37 +233,53 @@ RCPP_MODULE(Mutants)
 //' \item \emph{Parameter:} \code{y} - The position on the y axis of the cell.
 //' }
 //' @field schedule_mutation Schedules a mutation \itemize{
-//' \item \emph{Parameter:} \code{src} - The name of the mutant from which the mutation occurs.
-//' \item \emph{Parameter:} \code{dest} - The name of the mutant to which the mutation leads.
-//' \item \emph{Parameter:} \code{time} - The simulated time at which the mutation will occurs.
+//' \item \emph{Parameter:} \code{src} - The name of the mutant from which the
+//'   mutation occurs.
+//' \item \emph{Parameter:} \code{dest} - The name of the mutant to which the
+//'   mutation leads.
+//' \item \emph{Parameter:} \code{time} - The simulated time at which the
+//'   mutation will occurs.
 //' }
 //' @field run_up_to_event Simulates cell evolution \itemize{
-//' \item \emph{Parameter:} \code{event} - The considered event type, i.e., "growth", "death", or "switch".
-//' \item \emph{Parameter:} \code{species} - The species whose event number is considered.
-//' \item \emph{Parameter:} \code{num_of_events} - The threshold for the event number.
-//' \item \emph{Parameter:} \code{quiet} - A Boolean flag to avoid progress bar (optional).
+//' \item \emph{Parameter:} \code{event} - The considered event type, i.e.,
+//'   "growth", "death", or "switch".
+//' \item \emph{Parameter:} \code{species} - The species whose event number
+//'   is considered.
+//' \item \emph{Parameter:} \code{num_of_events} - The threshold for the event
+//'   number.
+//' \item \emph{Parameter:} \code{quiet} - A Boolean flag to avoid progress
+//'   bar (optional).
 //' }
 //' @field run_up_to_size Simulates cell evolution \itemize{
-//' \item \emph{Parameter:} \code{species} - The species whose number of cells is considered.
-//' \item \emph{Parameter:} \code{num_of_cells} - The threshold for the cell number.
-//' \item \emph{Parameter:} \code{quiet} - A Boolean flag to avoid progress bar (optional).
+//' \item \emph{Parameter:} \code{species} - The species whose number of cells
+//'   is considered.
+//' \item \emph{Parameter:} \code{num_of_cells} - The threshold for the cell
+//'   number.
+//' \item \emph{Parameter:} \code{quiet} - A Boolean flag to avoid progress
+//'   bar (optional).
 //' }
 //' @field run_up_to_time Simulates cell evolution \itemize{
 //' \item \emph{Parameter:} \code{time} - The final simulation time.
-//' \item \emph{Parameter:} \code{quiet} - A Boolean flag to avoid progress bar (optional).
+//' \item \emph{Parameter:} \code{quiet} - A Boolean flag to avoid progress
+//'   bar (optional).
 //' }
 //' @field run_until Simulates cell evolution \itemize{
-//' \item \emph{Parameter:} \code{formula} - The formula that will be satisfied at the
+//' \item \emph{Parameter:} \code{formula} - The formula that will be satisfied
+//'   at the
 //'    end of the simulation.
-//' \item \emph{Parameter:} \code{quiet} - A Boolean flag to avoid progress bar (optional).
+//' \item \emph{Parameter:} \code{quiet} - A Boolean flag to avoid progress bar
+//'   (optional).
 //' }
 //' @field sample_cells Samples a tissue rectangle region \itemize{
 //' \item \emph{Parameter:} \code{name} - The sample name.
-//' \item \emph{Parameter:} \code{lower_corner} - The bottom-left corner of the rectangle.
-//' \item \emph{Parameter:} \code{upper_corner} - The top-right corner of the rectangle.
+//' \item \emph{Parameter:} \code{lower_corner} - The bottom-left corner of the
+//'   rectangle.
+//' \item \emph{Parameter:} \code{upper_corner} - The top-right corner of the
+//'   rectangle.
 //' }
 //' @field update_rates Updates the rates of a species\itemize{
-//' \item \emph{Parameter:} \code{species} - The species whose rates must be updated.
+//' \item \emph{Parameter:} \code{species} - The species whose rates must be
+//'   updated.
 //' \item \emph{Parameter:} \code{rates} - The list of the rates to be updated.
 //' \item \emph{Returns:} The vector of the species names.
 //' }
@@ -260,9 +304,9 @@ RCPP_MODULE(Mutants)
 //' # create a tissue simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //'
 //' # add into the tissue a cell of species "A+" in position (500,500)
 //' sim$place_cell("A+", 500, 500)
@@ -279,7 +323,8 @@ RCPP_MODULE(Mutants)
 //'   optional parameter `epigenetic_rate` is missing, this
 //'   method creates only one species with no epigenetic states.
 //' @param mutant The mutant name.
-//' @param epigenetic_rates The epigenetic rates of the mutant species (optional).
+//' @param epigenetic_rates The epigenetic rates of the mutant species
+//'   (optional).
 //' @param growth_rates The duplication rates of the mutant species.
 //' @param death_rates The death rates of the mutant species.
 //' @examples
@@ -291,9 +336,9 @@ RCPP_MODULE(Mutants)
 //'
 //' # create the two species "A+" and "A-". They both have mutant "A".
 //' sim$add_mutant(name = "A",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //'
 //' # create the species "C" its mutant is "C".
 //' sim$add_mutant(name = "C", growth_rate = 0.2, death_rate = 0.1)
@@ -315,8 +360,10 @@ RCPP_MODULE(Mutants)
 //'   Optionally, the lower and upper corners of a tissue rectangular
 //'   selection can be provided to obtain one cell in the rectangle.
 //' @param mutant The mutant of the cell to choose.
-//' @param lower_corner The lower corner of the rectangular selection (optional).
-//' @param upper_corner The upper corner of the rectangular selection (optional).
+//' @param lower_corner The lower corner of the rectangular selection
+//'   (optional).
+//' @param upper_corner The upper corner of the rectangular selection
+//'   (optional).
 //' @return A list reporting `cell_id`, `mutant`, `epistate`, `position_x`,
 //'   and `position_y` of the choosen cell.
 //' @examples
@@ -326,13 +373,13 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //' sim$add_mutant(name = "B",
-//'                epigenetic_rates = c("+-" = 0.1, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.15, "-" = 0.4),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.1, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.15, "-" = 0.4),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //' sim$place_cell("A+", 500, 500)
 //' sim$death_activation_level <- 100
 //' sim$schedule_mutation("A","B",20)
@@ -361,14 +408,14 @@ RCPP_MODULE(Mutants)
 //'   For the sake of example, if the mutation from "A" to "B" is
 //'   scheduled, then we have three possible situations:
 //'   1. The mutant "A" consists of the only species "A". Then,
-//'      during one duplication of a cell of "A", one cell of "B"
-//'      will arise.
+//'   during one duplication of a cell of "A", one cell of "B"
+//'   will arise.
 //'   2. The mutant "A" consists of the species "A+" and "A-" and
-//'      during one duplication of a cell of "A+", one cell of "B+"
-//'      will arise.
+//'   during one duplication of a cell of "A+", one cell of "B+"
+//'   will arise.
 //'   3. The mutant "A" consists of the species "A+" and "A-" and
-//'      during one duplication of a cell of "A-", one cell of "B-"
-//'      will arise.
+//'   during one duplication of a cell of "A-", one cell of "B-"
+//'   will arise.
 //'   No other scenario can occur.
 //' @param src The name of the mutant from which the mutation occurs.
 //' @param dest The name of the mutant to which the mutation leads.
@@ -380,13 +427,13 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //' sim$add_mutant(name = "B",
-//'                epigenetic_rates = c("+-" = 0.02, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.3, "-" = 0.1),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.02, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.3, "-" = 0.1),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //'
 //' # schedule an evolution from mutant "A" to mutant "B" at time 50
 //' sim$schedule_mutation(src = "A", dst = "B", time = 50)
@@ -424,8 +471,8 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                growth_rate = 0.2,
-//'                death_rate = 0.01)
+//'   growth_rate = 0.2,
+//'   death_rate = 0.01)
 //' sim$place_cell("A", 500, 500)
 //'
 //' sim$death_activation_level <- 100
@@ -443,9 +490,10 @@ RCPP_MODULE(Mutants)
 
 //' @name TissueSimulation$get_samples_forest
 //' @title Getting the sample forest
-//' @description This method is deprecated. Please use `TissueSimulation$get_sample_forest()` instead.
+//' @description This method is deprecated. Please use
+//'   `TissueSimulation$get_sample_forest()` instead.
 //' @return The sample forest having as leaves the sampled cells
-//' @seealso `TissueSimulation$get_sample_forest()`
+//' @seealso \code{\link{TissueSimulation$get_sample_forest}}
         .method("get_samples_forest", &TissueSimulation::get_samples_forest,
                 "Get the sample forest having as leaves the sampled cells")
 
@@ -514,9 +562,9 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //' sim$place_cell("A+", 500, 500)
 //' sim$run_up_to_event("switch", "A+", 100)
 //'
@@ -527,12 +575,12 @@ RCPP_MODULE(Mutants)
 
 //' @name TissueSimulation$get_cell
 //' @title Getting one of the tissue cells
-//' @description This method collects some data of the aimed cell without altering
-//'   the tissue.
+//' @description This method collects some data of the aimed cell without
+//'   altering the tissue.
 //' @param x The position of the aimed cell on the x axis.
 //' @param y The position of the aimed cell on the y axis.
-//' @return A data frame reporting `cell_id`, `mutant`, `epistate`, `position_x`,
-//'   and `position_y` of the aimed cell.
+//' @return A data frame reporting `cell_id`, `mutant`, `epistate`,
+//'   `position_x`, and `position_y` of the aimed cell.
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -540,13 +588,13 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.02, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.02, "-" = 0.01))
 //' sim$add_mutant(name = "B",
-//'                epigenetic_rates = c("+-" = 0.02, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.3, "-" = 0.1),
-//'                death_rates = c("+" = 0.02, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.02, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.3, "-" = 0.1),
+//'   death_rates = c("+" = 0.02, "-" = 0.01))
 //' sim$schedule_mutation(src = "A", dst = "B", time = 50)
 //' sim$place_cell("A+", 500, 500)
 //' sim$run_up_to_time(40)
@@ -586,13 +634,13 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //' sim$add_mutant(name = "B",
-//'                epigenetic_rates = c("+-" = 0.02, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.3, "-" = 0.1),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.02, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.3, "-" = 0.1),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //' sim$schedule_mutation(src = "A", dst = "B", time = 50)
 //' sim$place_cell("A+", 500, 500)
 //' sim$run_up_to_time(30)
@@ -611,7 +659,7 @@ RCPP_MODULE(Mutants)
 //'
 //' # cells can be filtered by frame, mutant, and epigenetic states
 //' sim$get_cells(lower_corner=c(495,495), upper_corner=c(505,505),
-//'               mutant_filter=c("A"),epigenetic_filter=c("+","-"))
+//'   mutant_filter=c("A"),epigenetic_filter=c("+","-"))
         .method("get_cells",
                 (List (TissueSimulation::*)(const std::vector<RE::AxisPosition> &,
                                             const std::vector<RE::AxisPosition> &,
@@ -664,13 +712,13 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //' sim$add_mutant(name = "B",
-//'                epigenetic_rates = c("+-" = 0.02, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.3, "-" = 0.1),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.02, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.3, "-" = 0.1),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //' sim$schedule_mutation(src = "A", dst = "B", time = 20)
 //' sim$run_up_to_time(50)
 //'
@@ -709,13 +757,13 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //' sim$add_mutant(name = "B",
-//'                epigenetic_rates = c("+-" = 0.02, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.3, "-" = 0.1),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.02, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.3, "-" = 0.1),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //' sim$schedule_mutation(src = "A", dst = "B", time = 30)
 //' sim$place_cell("A+", 500, 500)
 //' sim$run_up_to_time(50)
@@ -788,9 +836,9 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //' sim$place_cell("A+", 500, 500)
 //' sim$run_up_to_event("switch", "A+", 100)
 //'
@@ -813,9 +861,9 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //' sim$place_cell("A+", 500, 500)
 //' sim$history_delta <- 20
 //' sim$run_up_to_time(70)
@@ -839,9 +887,9 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.02),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.02),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //'
 //' # Get the rates of "A-". In this case c("growth"=0.08, "death"=0.01,
 //' # "switch"=0.02) is expected
@@ -856,7 +904,8 @@ RCPP_MODULE(Mutants)
 //'   contains the columns "`time`", "`mutant`", "`epistate`", "`event`",
 //'   and "`rate`". Each row reports an update in the rate of an event
 //'   in a species.
-//' @seealso [TissueSimulation$update_rates()], [TissueSimulation$get_rates()]
+//' @seealso \code{\link{TissueSimulation$update_rates}},
+//'   \code{\link{TissueSimulation$get_rates}}
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -864,9 +913,9 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //'
 //' sim$place_cell("A+", 500, 500)
 //'
@@ -899,9 +948,9 @@ RCPP_MODULE(Mutants)
 //'   "`xmax`" report the boundaries of the sample bounding box, while
 //'   "`tumour_cells`" and "`tumour_cells_in_bbox`" are the number of tumour
 //'   cells in the sample and in the bounding box, respectively.
-//' @seealso [TissueSimulation$sample_cells()],
-//'   [SampleForest$get_samples_info()],
-//'   [PhylogeneticForest$get_samples_info()]
+//' @seealso \code{\link{TissueSimulation$sample_cells}},
+//'   \code{\link{SampleForest$get_samples_info}},
+//'   \code{\link{PhylogeneticForest$get_samples_info}}
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -909,8 +958,8 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                growth_rate = 0.2,
-//'                death_rate = 0.01)
+//'   growth_rate = 0.2,
+//'   death_rate = 0.01)
 //' sim$place_cell("A", 500, 500)
 //'
 //' sim$death_activation_level <- 100
@@ -936,7 +985,7 @@ RCPP_MODULE(Mutants)
 //' @title The delta time between time series samples
 //' @description This value is the maximum time between two successive
 //'   time series data samples.
-//' @seealso `TissueSimulation`
+//' @seealso \code{\link{TissueSimulation}}
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -962,7 +1011,8 @@ RCPP_MODULE(Mutants)
 //'   The mutated cell will be located in the position of its parent.
 //' @param cell_position The position of the cell whose offspring will mutate.
 //' @param mutated_mutant The mutant of the mutated cell.
-//' @seealso `TissueSimulation`, [TissueSimulation$choose_cell_in()]
+//' @seealso \code{\link{TissueSimulation}},
+//'   \code{\link{TissueSimulation$choose_cell_in}}
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -970,16 +1020,16 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.01, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.01, "-" = 0.01))
 //' sim$place_cell("A+", 500, 500)
 //' sim$run_up_to_time(30)
 //'
 //' sim$add_mutant(name = "B",
-//'                epigenetic_rates = c("+-" = 0.1, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.15, "-" = 0.3),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.1, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.15, "-" = 0.3),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //'
 //' # duplicate the cell in position (503, 492). One of
 //' # its direct descendents will have mutant "B"
@@ -1003,8 +1053,10 @@ RCPP_MODULE(Mutants)
 //' @param time The final simulation time.
 //' @param quiet An optional  Boolean flag to avoid the progress bar
 //'   (default: FALSE).
-//' @seealso `TissueSimulation`, [TissueSimulation$run_up_to_event()],
-//'    [TissueSimulation$run_up_to_size()], [TissueSimulation$run_until()]
+//' @seealso \code{\link{TissueSimulation}},
+//'    \code{\link{TissueSimulation$run_up_to_event}},
+//'    \code{\link{TissueSimulation$run_up_to_size}},
+//'    \code{\link{TissueSimulation$run_until}}
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1027,15 +1079,17 @@ RCPP_MODULE(Mutants)
 
 //' @name TissueSimulation$run_up_to_event
 //' @title Simulating cell evolution
-//' @description This method simulates cell evolution until the number of events that
-//'   have occurred to cells of a species reaches a specified threshold.
+//' @description This method simulates cell evolution until the number of events
+//'   that have occurred to cells of a species reaches a specified threshold.
 //' @param event The considered event, i.e., `growth`, `death`, or `switch`.
 //' @param species The species whose event number is considered.
 //' @param num_of_events The threshold for the event number.
 //' @param quiet An optional  Boolean flag to avoid the progress bar
 //'   (default: FALSE).
-//' @seealso `TissueSimulation`, [TissueSimulation$run_up_to_time()],
-//'    [TissueSimulation$run_up_to_size()], [TissueSimulation$run_until()]
+//' @seealso \code{\link{TissueSimulation}},
+//'    \code{\link{TissueSimulation$run_up_to_time}},
+//'    \code{\link{TissueSimulation$run_up_to_size}},
+//'    \code{\link{TissueSimulation$run_until}}
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1043,9 +1097,9 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //' sim$place_cell("A+", 500, 500)
 //'
 //' # simulate the cell evolution until the number of epigenetic events from
@@ -1064,14 +1118,16 @@ RCPP_MODULE(Mutants)
 
 //' @name TissueSimulation$run_up_to_size
 //' @title Simulating cell evolution
-//' @description This method simulates cell evolution until the number of cells in
-//'   a species reaches a specified threshold.
+//' @description This method simulates cell evolution until the number of
+//'   cells in a species reaches a specified threshold.
 //' @param species The species whose number of cells is considered.
 //' @param num_of_cells The threshold for the cell number.
 //' @param quiet An optional  Boolean flag to avoid the progress bar
 //'   (default: FALSE).
-//' @seealso `TissueSimulation`, [TissueSimulation$run_up_to_time()],
-//'    [TissueSimulation$run_up_to_event()], [TissueSimulation$run_until()]
+//' @seealso \code{\link{TissueSimulation}},
+//'    \code{\link{TissueSimulation$run_up_to_time}},
+//'    \code{\link{TissueSimulation$run_up_to_event}},
+//'    \code{\link{TissueSimulation$run_until}}
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1079,9 +1135,9 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //' sim$place_cell("A+", 500, 500)
 //'
 //' # simulate the tissue until the species "A+" account for 100
@@ -1106,8 +1162,11 @@ RCPP_MODULE(Mutants)
 //'    simulation.
 //' @param quiet An optional  Boolean flag to avoid the progress bar
 //'   (default: FALSE).
-//' @seealso `TissueSimulation`, [TissueSimulation$var()], [TissueSimulation$run_up_to_time()],
-//'    [TissueSimulation$run_up_to_event()], [TissueSimulation$run_up_to_size()]
+//' @seealso \code{\link{TissueSimulation}},
+//'    \code{\link{TissueSimulation$var}},
+//'    \code{\link{TissueSimulation$run_up_to_time}},
+//'    \code{\link{TissueSimulation$run_up_to_event}},
+//'    \code{\link{TissueSimulation$run_up_to_size}}
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1115,9 +1174,9 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //' sim$place_cell("A+", 500, 500)
 //'
 //' # get the variable representing the simulation time
@@ -1181,7 +1240,7 @@ RCPP_MODULE(Mutants)
 //'   in pair with `lower_corner`).
 //' @param num_of_cells The maximum number of tumour cells to collect
 //'   (optional).
-//' @seealso [TissueSimulation$get_samples_info()]
+//' @seealso \code{\link{TissueSimulation$get_samples_info}}
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1189,8 +1248,8 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                growth_rate = 0.2,
-//'                death_rate = 0.01)
+//'   growth_rate = 0.2,
+//'   death_rate = 0.01)
 //' sim$place_cell("A", 500, 500)
 //'
 //' sim$death_activation_level <- 100
@@ -1204,7 +1263,7 @@ RCPP_MODULE(Mutants)
 //'
 //' # randomly sample 50 tumour cells from the tissue region [500,550]x[500,550]
 //' sim$sample_cells("S3", lower_corner=c(500,500), upper_corner=c(550,550),
-//'                  num_of_cells=50)
+//'   num_of_cells=50)
 //'
 //' sim$get_samples_info()
         .method(
@@ -1241,9 +1300,9 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //'
 //' # Set the death and epigenetic switch rates of "A-" to 0
 //' sim$update_rates("A-", c(switch=0, death=0))
@@ -1264,7 +1323,7 @@ RCPP_MODULE(Mutants)
 //' @param height The height of the searched sample.
 //' @return If a rectangular sample satisfying the provided constraints can
 //'   be found, the corresponding rectangle.
-//' @seealso `TissueSimulation`
+//' @seealso \code{\link{TissueSimulation}}
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1299,10 +1358,10 @@ RCPP_MODULE(Mutants)
 //' @param height The height of the searched sample.
 //' @param n_samples The number of searched samples.
 //' @param seed The seed of the random generator the select the samples
-//'     among those satisfying the constraints (optional).
+//'   among those satisfying the constraints (optional).
 //' @return A vector of `n_samples` rectangular tissue samples that
-//'     satisfy the aimed constraints.
-//' @seealso `TissueSimulation`
+//'   satisfy the aimed constraints.
+//' @seealso \code{\link{TissueSimulation}}
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1323,17 +1382,17 @@ RCPP_MODULE(Mutants)
 //' # find 3 50x50 samples containing 80 "B" cells and 100 "A" cells
 //' # at least
 //' bboxes <- sim$search_samples(c("A" = 100, "B" = 80), 50, 50,
-//'                              n_samples=3)
+//'   n_samples=3)
 //' bboxes
 //'
 //' # plot the bbox of the found samples
 //' for (bbox in bboxes) {
 //'   plot <- plot +
-//'     ggplot2::geom_rect(xmin = bbox$lower_corner[1],
-//'                        xmax = bbox$upper_corner[1],
-//'                        ymin = bbox$lower_corner[2],
-//'                        ymax = bbox$upper_corner[2],
-//'                        fill = NA, color = "black")
+//'   ggplot2::geom_rect(xmin = bbox$lower_corner[1],
+//'   xmax = bbox$upper_corner[1],
+//'   ymin = bbox$lower_corner[2],
+//'   ymax = bbox$upper_corner[2],
+//'   fill = NA, color = "black")
 //' }
 //'
 //' plot
@@ -1366,7 +1425,8 @@ RCPP_MODULE(Mutants)
 //'   occurred since the computation beginning in the species.
 //' @return A variable representing the simulation quantity according to
 //'   the parameter `variable_description`.
-//' @seealso `TissueSimulation`, [TissueSimulation$run_until()]
+//' @seealso \code{\link{TissueSimulation}},
+//'    \code{\link{TissueSimulation$run_until}}
 //' @examples
 //' # build a simulation and add two species to it
 //' # set the seed of the random number generator
@@ -1375,9 +1435,9 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'                growth_rates = c("+" = 0.2, "-" = 0.08),
-//'                death_rates = c("+" = 0.1, "-" = 0.01))
+//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
+//'   growth_rates = c("+" = 0.2, "-" = 0.08),
+//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //'
 //' # get the variable representing the simulation time
 //' sim$var("Time")
@@ -1409,13 +1469,13 @@ RCPP_MODULE(Mutants)
 //' # create a simulation having name "recover_simulation_test" and
 //' # save its snapshots in a local directory
 //' sim <- TissueSimulation("recover_simulation_test",
-//'            save_snapshots=TRUE)
+//'   save_snapshots=TRUE)
 //'
 //' # add the species of "A"
 //' sim$add_mutant("A",
-//'                epigenetic_rates=c("+-" = 0.01, "-+"=0.01),
-//'                growth_rates = c("+"=0.1, "-"=0.01),
-//'                death_rates = c("+"=0.05, "-"=0.005))
+//'   epigenetic_rates=c("+-" = 0.01, "-+"=0.01),
+//'   growth_rates = c("+"=0.1, "-"=0.01),
+//'   death_rates = c("+"=0.05, "-"=0.005))
 //'
 //' # place a cell in the tissue
 //' sim$place_cell("A+", 500, 500)
@@ -1445,7 +1505,7 @@ RCPP_MODULE(Mutants)
 //' @title Building a new simulation
 //' @description This method builds a new simulation.
 //' @param name The name of the simulation (default:
-//'     "`races_<year>_<hour><minute><second>`").
+//'   "`races_<year>_<hour><minute><second>`").
 //' @param width The width of the simulated tissue (default: 1000).
 //' @param height The height of the simulated tissue (default: 1000).
 //' @param save_snapshots A flag to save simulation snapshots on disk
@@ -1502,15 +1562,16 @@ RCPP_MODULE(Mutants)
 
 //' @name SpatialSimulation
 //' @title Building a new simulation
-//' @description This function is deprecated. Please use `TissueSimulation()` instead.
+//' @description This function is deprecated. Please use `TissueSimulation()`
+//'   instead.
 //' @param name The name of the simulation (default:
-//'     "`races_<year>_<hour><minute><second>`").
+//'   "`races_<year>_<hour><minute><second>`").
 //' @param width The width of the simulated tissue (default: 1000).
 //' @param height The height of the simulated tissue (default: 1000).
 //' @param save_snapshots A flag to save simulation snapshots on disk
 //'   (default: `FALSE`).
 //' @param seed The seed for the pseudo-random generator (optional).
-//' @seealso `TissueSimulation`
+//' @seealso \code{\link{TissueSimulation}}
     function("SpatialSimulation", &SpatialSimulation,
              List::create(_["name"] = R_NilValue, _["width"] = 1000, _["height"] = 1000,
                           _["save_snapshots"] = false, _["seed"] = R_NilValue),
@@ -1558,18 +1619,20 @@ RCPP_MODULE(Mutants)
 //'   for each registered species.
 //' }
 //' @field get_sticks Compute the forest sticks \itemize{
-//' \item \emph{Returns:} The list of the forest sticks. Each stick is represented as
-//'   the list of cell identifiers labelling the nodes in the stick
-//'   from the higher to the deeper in the forest.
+//' \item \emph{Returns:} The list of the forest sticks. Each stick is
+//'   represented as the list of cell identifiers labelling the nodes
+//'   in the stick from the higher to the deeper in the forest.
 //' }
-//' @field get_subforest_for Build a sub-forest using as leaves some of the original samples \itemize{
-//' \item \emph{Parameter:} \code{sample_names} - The names of the samples whose cells will be used
-//'   as leaves of the new forest.
-//' \item \emph{Returns:} A sample forest built on the samples mentioned in `sample_names`.
+//' @field get_subforest_for Build a sub-forest using as leaves some of the
+//'   original samples \itemize{
+//' \item \emph{Parameter:} \code{sample_names} - The names of the samples
+//'   whose cells will be used as leaves of the new forest.
+//' \item \emph{Returns:} A sample forest built on the samples mentioned in
+//'   `sample_names`.
 //' }
 //' @field save Save a sample forest in a file \itemize{
-//' \item \emph{Parameter:} \code{filename} - The path of the file in which the samples
-//'   forest must be saved.
+//' \item \emph{Parameter:} \code{filename} - The path of the file in which
+//'   the samples forest must be saved.
 //' }
     class_<SampleForest>("SampleForest")
 
@@ -1592,8 +1655,8 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                growth_rate = 0.2,
-//'                death_rate = 0.01)
+//'   growth_rate = 0.2,
+//'   death_rate = 0.01)
 //' sim$place_cell("A", 500, 500)
 //'
 //' sim$death_activation_level <- 100
@@ -1638,8 +1701,8 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                growth_rate = 0.2,
-//'                death_rate = 0.01)
+//'   growth_rate = 0.2,
+//'   death_rate = 0.01)
 //' sim$place_cell("A", 500, 500)
 //'
 //' sim$death_activation_level <- 100
@@ -1674,8 +1737,8 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A",
-//'                growth_rate = 0.2,
-//'                death_rate = 0.01)
+//'   growth_rate = 0.2,
+//'   death_rate = 0.01)
 //' sim$place_cell("A", 500, 500)
 //'
 //' sim$death_activation_level <- 100
@@ -1708,8 +1771,9 @@ RCPP_MODULE(Mutants)
 //'   "`xmax`" report the boundaries of the sample bounding box, while
 //'   "`tumour_cells`" and "`tumour_cells_in_bbox`" are the number of tumour
 //'   cells in the sample and in the bounding box, respectively.
-//' @seealso [PhylogeneticForest$get_samples_info()] for usage examples,
-//'   [TissueSimulation$sample_cells()], [TissueSimulation$get_samples_info()]
+//' @seealso \code{\link{PhylogeneticForest$get_samples_info}} for usage
+//'   examples, \code{\link{TissueSimulation$sample_cells}},
+//'   \code{\link{TissueSimulation$get_samples_info}}
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1717,7 +1781,7 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A", growth_rate = 0.2,
-//'                death_rate = 0.01)
+//'   death_rate = 0.01)
 //' sim$place_cell("A", 500, 500)
 //'
 //' sim$death_activation_level <- 100
@@ -1738,7 +1802,7 @@ RCPP_MODULE(Mutants)
 //' @name SampleForest$get_species_info
 //' @title Getting forest species
 //' @description This method builds a data frame containing information
-//'      about the simulated species.
+//'   about the simulated species.
 //' @return A data frame reporting `mutant` and `epistate`
 //'   for each registered species.
         .method("get_species_info", &SampleForest::get_species_info,
@@ -1763,7 +1827,7 @@ RCPP_MODULE(Mutants)
 //'   birth time smaller than or equal to `birth_threshold`. Each stick is
 //'   represented as the list of cell identifiers labelling the nodes in the
 //'   stick from the higher to the deeper in the forest.
-//' @seealso [PhylogeneticForest$get_sticks()]
+//' @seealso \code{\link{PhylogeneticForest$get_sticks}}
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1771,7 +1835,7 @@ RCPP_MODULE(Mutants)
 //' # create a simulation
 //' sim <- TissueSimulation()
 //' sim$add_mutant(name = "A", growth_rate = 0.2,
-//'                death_rate = 0.01)
+//'   death_rate = 0.01)
 //' sim$place_cell("A", 500, 500)
 //'
 //' sim$death_activation_level <- 100
@@ -1836,7 +1900,8 @@ RCPP_MODULE(Mutants)
 
 //' @name load_samples_forest
 //' @title Loading sample forests
-//' @description This function is deprecated. Please use `load_sample_forest()` instead.
+//' @description This function is deprecated. Please use `load_sample_forest()`
+//'   instead.
 //' @param filename The path of the file from which the samples
 //'   forest must be load.
 //' @return The load samples forest
