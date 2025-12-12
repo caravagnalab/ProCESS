@@ -118,6 +118,6 @@ SPN06 is profiled at a three time-points, before treatment and at relapse of eac
 
 <img src="img/SCOUT/SPN07.png" alt="SPN07" width="850"/><br>
 
-SPN06 is a prototype glioblastoma with 6 clones that compete over time during a single line of treatment. The main clonal population is driven by inactivated PTEN (mutation and LOH), but manifests two subclones: one associated with an ATRX1  mutation, and one by a NF1 mutation. Upon chemotherapy by timolozomide (which causes an MSH6 mutation and microsatellite instability), resistance is achieved by a hypermutant subclone. Within the relapse clone, an extra subclone emerges due to a TP53 mutation.
+SPN06 is a prototype glioblastoma with 6 clones that compete over time during a single line of treatment. The main clonal population is driven by inactivated PTEN (mutation and LOH), but manifests two subclones: one associated with an ATRX1  mutation, and one by a NF1 mutation. Upon chemotherapy with temozolomide (which causes an MSH6 mutation and microsatellite instability), resistance is achieved by a hypermutant subclone. Within the relapse clone, an extra subclone emerges due to a TP53 mutation.
 
 SPN07 is profiled at a two time-points, before treatment and at relapse of each treatment. The three diagnostic and two relapse biopsies are polyclonal.
