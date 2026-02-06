@@ -28,7 +28,7 @@
 
 std::filesystem::path get_tmp_dir_path(const std::string &base_name = "ProCESS");
 
-RACES::Mutations::AlleleId get_allele_id(const SEXP allele_id,
+CLONES::Mutations::AlleleId get_allele_id(const SEXP allele_id,
                                          const std::string &parameter_name);
 
 std::string ordinal_suffix(const size_t &ord);
@@ -63,10 +63,10 @@ RESULT_TYPE get_random_seed(const SEXP seed)
                "number or NILL.");
 }
 
-void raise_error(const RACES::Archive::WrongFileFormatDescr &exception,
+void raise_error(const CLONES::Archive::WrongFileFormatDescr &exception,
                  const std::string &file_description);
 
-void raise_error(const RACES::Archive::WrongFileFormatVersion &exception,
+void raise_error(const CLONES::Archive::WrongFileFormatVersion &exception,
                  const std::string &file_description);
 
 #endif // __PROCESS_UTILITY__

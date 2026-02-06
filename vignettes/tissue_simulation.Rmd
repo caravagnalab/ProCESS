@@ -19,12 +19,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-> *Disclaimer:* RACES/ProCESS internally implements the
+> *Disclaimer:* CLONES/ProCESS internally implements the
 > probability distributions using the C++11 random number
 > distribution classes. The standard does not specify their
 > algorithms, and the class implementations are left free
 > for the compiler. Thus, the simulation output depends on
-> the compiler used to compile RACES, and because of that,
+> the compiler used to compile CLONES, and because of that,
 > the results reported in this article may differ from
 > those obtained by the reader.
 
@@ -450,7 +450,7 @@ Any species that has a non-zero death rate can become extinct
 stochastically by *drift*.
 
 Drift makes it difficult to simulate an be confident of what species are
-in the model. To facilitate the user, RACES can avoid drift by setting a
+in the model. To facilitate the user, CLONES can avoid drift by setting a
 *death activation level.* This value is the minimum number of cells that
 enables cell death in a species: a cell of species $S$ can die if and
 only if $S$ has reached the death activation level at least once during

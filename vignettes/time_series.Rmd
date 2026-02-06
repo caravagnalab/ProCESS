@@ -71,12 +71,12 @@ sim$run_up_to_time(sim$get_clock() + 7)
 > *Note:* This article presents advanced topics on tissue simulation.
 > Refer to `vignette("tissue_simulation")` for an introduction on the subject.
 
-> *Disclaimer:* RACES/ProCESS internally implements the
+> *Disclaimer:* CLONES/ProCESS internally implements the
 > probability distributions using the C++11 random number
 > distribution classes. The standard does not specify their
 > algorithms, and the class implementations are left free
 > for the compiler. Thus, the simulation output depends on
-> the compiler used to compile RACES, and because of that,
+> the compiler used to compile CLONES, and because of that,
 > the results reported in this article may differ from
 > those obtained by the reader.
 
@@ -88,7 +88,7 @@ the simulation data over time.
 ## Default History-Based Data
 
 However, this is not required because at the end of any `run_to_*`
-methods, RACES stores the data about the number of species cells, and
+methods, CLONES stores the data about the number of species cells, and
 that of event firings. These data can be extracted.
 
 Let us consider the simulation `sim` as produced in

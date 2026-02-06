@@ -20,10 +20,10 @@
 #include "simulation.hpp"
 #include "utility.hpp"
 
-SampleForest::SampleForest() : RACES::Mutants::DescendantsForest() {}
+SampleForest::SampleForest() : CLONES::Mutants::DescendantsForest() {}
 
-SampleForest::SampleForest(const RACES::Mutants::Evolutions::Simulation &simulation)
-    : RACES::Mutants::DescendantsForest(simulation)
+SampleForest::SampleForest(const CLONES::Mutants::Evolutions::Simulation &simulation)
+    : CLONES::Mutants::DescendantsForest(simulation)
 {}
 
 Rcpp::List SampleForest::get_samples_info() const
@@ -36,17 +36,17 @@ SampleForest::get_subforest_for(const std::vector<std::string> &sample_names) co
 {
     SampleForest forest;
 
-    static_cast<RACES::Mutants::DescendantsForest &>(forest) =
-        RACES::Mutants::DescendantsForest::get_subforest_for(sample_names);
+    static_cast<CLONES::Mutants::DescendantsForest &>(forest) =
+        CLONES::Mutants::DescendantsForest::get_subforest_for(sample_names);
 
     return forest;
 }
 
 void SampleForest::save(const std::string &filename) const
 {
-    RACES::Archive::Binary::Out out_archive(filename);
+    CLONES::Archive::Binary::Out out_archive(filename);
 
-    RACES::Mutants::DescendantsForest::save(out_archive);
+    CLONES::Mutants::DescendantsForest::save(out_archive);
 }
 
 SampleForest SampleForest::load(const std::string &filename)
@@ -61,14 +61,14 @@ SampleForest SampleForest::load(const std::string &filename)
         Rcpp::stop("The file \"" + filename + "\" is not a regular file.");
     }
 
-    RACES::Archive::Binary::In in_archive(filename);
+    CLONES::Archive::Binary::In in_archive(filename);
 
     try {
-        static_cast<RACES::Mutants::DescendantsForest &>(forest) =
-            RACES::Mutants::DescendantsForest::load(in_archive);
-    } catch (RACES::Archive::WrongFileFormatDescr &ex) {
+        static_cast<CLONES::Mutants::DescendantsForest &>(forest) =
+            CLONES::Mutants::DescendantsForest::load(in_archive);
+    } catch (CLONES::Archive::WrongFileFormatDescr &ex) {
         raise_error(ex, "sample forest");
-    } catch (RACES::Archive::WrongFileFormatVersion &ex) {
+    } catch (CLONES::Archive::WrongFileFormatVersion &ex) {
         raise_error(ex, "sample forest");
     }
 

@@ -23,7 +23,7 @@ ErrorlessIlluminaSequencer::ErrorlessIlluminaSequencer() {}
 
 void ErrorlessIlluminaSequencer::show() const
 {
-    RACES::Sequencers::Illumina::ErrorLessSequencer seq;
+    CLONES::Sequencers::Illumina::ErrorLessSequencer seq;
 
     Rcpp::Rcout << seq.get_model_name() << " (platform: \"" << seq.get_platform_name()
                 << "\")" << std::endl;
@@ -40,15 +40,15 @@ BasicIlluminaSequencer::BasicIlluminaSequencer(const double error_rate,
 {}
 
 template <template <class> typename QUALITY_SCORE_MODEL,
-          typename QUALITY_CODEC = RACES::Sequencers::SangerQualityCodec>
+          typename QUALITY_CODEC = CLONES::Sequencers::SangerQualityCodec>
 void show_sequencer(const double &error_rate)
 {
-    RACES::Sequencers::Illumina::BasicSequencer<QUALITY_SCORE_MODEL> seq(error_rate);
+    CLONES::Sequencers::Illumina::BasicSequencer<QUALITY_SCORE_MODEL> seq(error_rate);
 
     Rcpp::Rcout << seq.get_model_name() << " (platform: \"" << seq.get_platform_name()
                 << "\" error rate: " << std::to_string(error_rate);
 
-    using namespace RACES::Sequencers;
+    using namespace CLONES::Sequencers;
 
     if constexpr (std::is_base_of_v<QUALITY_SCORE_MODEL<QUALITY_CODEC>,
                                     QualityScoreModel<QUALITY_CODEC>>) {
@@ -65,7 +65,7 @@ void show_sequencer(const double &error_rate)
 
 void BasicIlluminaSequencer::show() const
 {
-    using namespace RACES::Sequencers;
+    using namespace CLONES::Sequencers;
 
     if (producing_random_scores()) {
         show_sequencer<QualityScoreModel>(error_rate);

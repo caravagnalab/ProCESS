@@ -28,7 +28,7 @@ travis: build
 	(cd .. && R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --no-manual)
 
 clean:
-	rm -rf _install _builds RACES 
+	rm -rf _install _builds CLONES 
 	rm src/RcppExports.cpp src/*.o src/*.so R/RcppExports.R
 	rm -rf man/*.Rd .roxygen.lock src/.roxygen.lock
 	rm -rf docs pkgdown

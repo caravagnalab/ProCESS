@@ -28,10 +28,10 @@ struct ForestCore
 {
     template <typename CPP_FOREST>
     static Rcpp::List get_nodes(const CPP_FOREST &forest,
-                                const std::vector<RACES::Mutants::CellId> &cell_ids)
+                                const std::vector<CLONES::Mutants::CellId> &cell_ids)
     {
         using namespace Rcpp;
-        using namespace RACES::Mutants;
+        using namespace CLONES::Mutants;
 
         IntegerVector ids(cell_ids.size()), ancestors(cell_ids.size()),
                       depths(cell_ids.size());
@@ -75,7 +75,7 @@ struct ForestCore
 
     template <typename CPP_FOREST> static Rcpp::List get_nodes(const CPP_FOREST &forest)
     {
-        std::vector<RACES::Mutants::CellId> cell_ids;
+        std::vector<CLONES::Mutants::CellId> cell_ids;
         cell_ids.reserve(forest.num_of_nodes());
         for (const auto &[cell_id, cell] : forest.get_cells()) {
             cell_ids.push_back(cell_id);
@@ -93,7 +93,7 @@ struct ForestCore
 
         CharacterVector mutant_names(num_of_rows), epi_states(num_of_rows);
 
-        using namespace RACES::Mutants;
+        using namespace CLONES::Mutants;
 
         size_t i{0};
         for (const auto &[species_id, species_data] : forest.get_species_data()) {
@@ -117,7 +117,7 @@ struct ForestCore
     template <typename CPP_FOREST>
     static Rcpp::List
     get_coalescent_cells(const CPP_FOREST &forest,
-                         const std::list<RACES::Mutants::CellId> &cell_ids)
+                         const std::list<CLONES::Mutants::CellId> &cell_ids)
     {
         auto coalencent_ids = forest.get_coalescent_cells(cell_ids);
 

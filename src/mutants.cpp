@@ -26,8 +26,8 @@
 
 using namespace Rcpp;
 
-namespace RE = RACES::Mutants::Evolutions;
-namespace RC = RACES::Mutants;
+namespace RE = CLONES::Mutants::Evolutions;
+namespace RC = CLONES::Mutants;
 
 RCPP_MODULE(Mutants)
 {
@@ -1017,12 +1017,12 @@ RCPP_MODULE(Mutants)
 //' # simulate the tissue up to simulate timed 100
 //' sim$run_up_to_time(40)
         .method("run_up_to_time",
-                (void (TissueSimulation::*)(const RACES::Time &,
+                (void (TissueSimulation::*)(const CLONES::Time &,
                                             const bool))&TissueSimulation::run_up_to_time,
                 "Simulating the system up to the specified simulation time")
         .method("run_up_to_time",
                 (void (TissueSimulation::*)(
-                    const RACES::Time &))&TissueSimulation::run_up_to_time,
+                    const CLONES::Time &))&TissueSimulation::run_up_to_time,
                 "Simulating the system up to the specified simulation time")
 
 //' @name TissueSimulation$run_up_to_event
@@ -1211,16 +1211,16 @@ RCPP_MODULE(Mutants)
             "sample_cells",
             (void (TissueSimulation::*)(
                 const std::string &,
-                const std::vector<RACES::Mutants::Evolutions::AxisPosition> &lower_corner,
-                const std::vector<RACES::Mutants::Evolutions::AxisPosition> &upper_corner,
+                const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &lower_corner,
+                const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner,
                 const size_t &num_of_cells) const)(&TissueSimulation::sample_cells),
             "Sample a rectangular region of the tissue")
         .method(
             "sample_cells",
             (void (TissueSimulation::*)(
                 const std::string &,
-                const std::vector<RACES::Mutants::Evolutions::AxisPosition> &lower_corner,
-                const std::vector<RACES::Mutants::Evolutions::AxisPosition> &upper_corner)
+                const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &lower_corner,
+                const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner)
                  const)(&TissueSimulation::sample_cells),
             "Sample a rectangular region of the tissue")
         .method(
@@ -1655,7 +1655,7 @@ RCPP_MODULE(Mutants)
 //'
 //' forest$get_coalescent_cells()
         .method("get_coalescent_cells",
-                (List (SampleForest::*)(const std::list<RACES::Mutants::CellId> &)
+                (List (SampleForest::*)(const std::list<CLONES::Mutants::CellId> &)
                      const)(&SampleForest::get_coalescent_cells),
                 "Get the most recent common ancestor of some cells")
         .method("get_coalescent_cells",
@@ -1811,11 +1811,11 @@ RCPP_MODULE(Mutants)
 //' # birth times 40 time units at most
 //' forest$get_sticks(40)
         .method("get_sticks",
-                (std::list<std::list<RACES::Mutants::CellId>> (SampleForest::*)(
+                (std::list<std::list<CLONES::Mutants::CellId>> (SampleForest::*)(
                     const double) const)(&SampleForest::get_sticks),
                 "Get the forest sticks")
         .method("get_sticks",
-                (std::list<std::list<RACES::Mutants::CellId>> (SampleForest::*)()
+                (std::list<std::list<CLONES::Mutants::CellId>> (SampleForest::*)()
                      const)(&SampleForest::get_sticks),
                 "Get the forest sticks")
 

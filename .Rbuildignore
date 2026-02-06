@@ -13,7 +13,7 @@
 ^races_*-*$
 ^pkgdown$
 ^doc$
-^RACES$
+^CLONES$
 ^_install$
 ^_builds$
 ^Makefile$

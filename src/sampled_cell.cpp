@@ -19,9 +19,9 @@
 
 #include "phylogenetic_forest.hpp"
 
-SampledCell::SampledCell(const RACES::Mutations::PhylogeneticForest &forest,
-                         const RACES::Mutants::CellId &cell_id)
-    : RACES::Mutations::PhylogeneticForest::const_node(&forest, cell_id)
+SampledCell::SampledCell(const CLONES::Mutations::PhylogeneticForest &forest,
+                         const CLONES::Mutants::CellId &cell_id)
+    : CLONES::Mutations::PhylogeneticForest::const_node(&forest, cell_id)
 {}
 
 Rcpp::List SampledCell::mutations() const

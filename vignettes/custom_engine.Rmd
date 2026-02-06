@@ -20,16 +20,16 @@ knitr::opts_chunk$set(
 )
 ```
 
-> *Disclaimer:* RACES/ProCESS internally implements the
+> *Disclaimer:* CLONES/ProCESS internally implements the
 > probability distributions using the C++11 random number
 > distribution classes. The standard does not specify their
 > algorithms, and the class implementations are left free
 > for the compiler. Thus, the simulation output depends on
-> the compiler used to compile RACES, and because of that,
+> the compiler used to compile CLONES, and because of that,
 > the results reported in this article may differ from
 > those obtained by the reader.
 
-ProCESS/RACES can simulate genomic mutations on the cells represented in
+ProCESS/CLONES can simulate genomic mutations on the cells represented in
 a `SampleForest` according to the specified SBS and indel mutational signatures
 (see `vignette["mutations"]`).
 This task is achieved by the mutation engine which uses two indices on the

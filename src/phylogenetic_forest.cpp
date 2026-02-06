@@ -24,41 +24,41 @@
 
 #include "utility.hpp"
 
-PhylogeneticForest::PhylogeneticForest() : RACES::Mutations::PhylogeneticForest() {}
+PhylogeneticForest::PhylogeneticForest() : CLONES::Mutations::PhylogeneticForest() {}
 
 PhylogeneticForest::PhylogeneticForest(
-    const RACES::Mutations::PhylogeneticForest &orig,
+    const CLONES::Mutations::PhylogeneticForest &orig,
     const GermlineSubject &germline_subject, const std::filesystem::path reference_path,
-    const std::map<RACES::Mutations::SID, std::string> &driver_codes,
+    const std::map<CLONES::Mutations::SID, std::string> &driver_codes,
     const TimedMutationalExposure &timed_SBS_exposures,
     const TimedMutationalExposure &timed_indel_exposures)
-    : RACES::Mutations::PhylogeneticForest{orig}, germline_subject{germline_subject},
+    : CLONES::Mutations::PhylogeneticForest{orig}, germline_subject{germline_subject},
       reference_path{reference_path}, driver_codes{driver_codes}
 {
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutations;
     timed_exposures[MutationType::Type::SBS] = timed_SBS_exposures;
     timed_exposures[MutationType::Type::INDEL] = timed_indel_exposures;
 }
 
 PhylogeneticForest::PhylogeneticForest(
-    RACES::Mutations::PhylogeneticForest &&orig, const GermlineSubject &germline_subject,
+    CLONES::Mutations::PhylogeneticForest &&orig, const GermlineSubject &germline_subject,
     const std::filesystem::path reference_path,
-    const std::map<RACES::Mutations::SID, std::string> &driver_codes,
+    const std::map<CLONES::Mutations::SID, std::string> &driver_codes,
     const TimedMutationalExposure &timed_SBS_exposures,
     const TimedMutationalExposure &timed_indel_exposures)
-    : RACES::Mutations::PhylogeneticForest{std::move(orig)},
+    : CLONES::Mutations::PhylogeneticForest{std::move(orig)},
       germline_subject{germline_subject}, reference_path{reference_path},
       driver_codes{driver_codes}
 {
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutations;
     timed_exposures[MutationType::Type::SBS] = timed_SBS_exposures;
     timed_exposures[MutationType::Type::INDEL] = timed_indel_exposures;
 }
 
-std::map<RACES::Mutants::CellId, size_t>
-PhylogeneticForest::get_total_mutations(const std::map<RACES::Mutants::CellId, size_t>& new_mutations) const
+std::map<CLONES::Mutants::CellId, size_t>
+PhylogeneticForest::get_total_mutations(const std::map<CLONES::Mutants::CellId, size_t>& new_mutations) const
 {
-    using namespace RACES::Mutants;
+    using namespace CLONES::Mutants;
     std::map<CellId, size_t> total_mutations;
 
     const auto& root_ids = get_root_cells();
@@ -87,7 +87,7 @@ PhylogeneticForest::get_total_mutations(const std::map<RACES::Mutants::CellId, s
     return total_mutations;
 }
 
-Rcpp::IntegerVector fill_vector_by_value(const std::map<RACES::Mutants::CellId, size_t>& values)
+Rcpp::IntegerVector fill_vector_by_value(const std::map<CLONES::Mutants::CellId, size_t>& values)
 {
     Rcpp::IntegerVector vector(values.size());
 
@@ -103,13 +103,13 @@ Rcpp::IntegerVector fill_vector_by_value(const std::map<RACES::Mutants::CellId, 
 
 Rcpp::List PhylogeneticForest::get_mutation_statistics() const
 {
-    const auto new_SID_maps = get_new_mutations<RACES::Mutations::SID>(get_mutation_first_cells());
+    const auto new_SID_maps = get_new_mutations<CLONES::Mutations::SID>(get_mutation_first_cells());
     const auto total_SID_maps = get_total_mutations(new_SID_maps);
 
     const auto new_SIDs = fill_vector_by_value(new_SID_maps);
     const auto total_SIDs = fill_vector_by_value(total_SID_maps);
 
-    const auto new_CNA_maps = get_new_mutations<RACES::Mutations::CNA>(get_CNA_first_cells());
+    const auto new_CNA_maps = get_new_mutations<CLONES::Mutations::CNA>(get_CNA_first_cells());
     const auto total_CNA_maps = get_total_mutations(new_CNA_maps);
 
     const auto new_CNAs = fill_vector_by_value(new_CNA_maps);
@@ -174,10 +174,10 @@ Rcpp::List PhylogeneticForest::get_samples_info() const
                              _["equivalent_normal_cells"] = equivalent_normal_cells);
 }
 
-std::string find_code(const RACES::Mutations::MutationSpec<RACES::Mutations::SID> &sid,
-                      const std::map<RACES::Mutations::SID, std::string> &driver_codes)
+std::string find_code(const CLONES::Mutations::MutationSpec<CLONES::Mutations::SID> &sid,
+                      const std::map<CLONES::Mutations::SID, std::string> &driver_codes)
 {
-    const auto found = driver_codes.find(static_cast<RACES::Mutations::SID>(sid));
+    const auto found = driver_codes.find(static_cast<CLONES::Mutations::SID>(sid));
     if (found != driver_codes.end()) {
         return (found->second);
     }
@@ -190,8 +190,8 @@ std::string find_code(const RACES::Mutations::MutationSpec<RACES::Mutations::SID
     return "";
 }
 
-inline void fill_SID_row(const RACES::Mutations::MutationSpec<RACES::Mutations::SID> &sid,
-                         const std::map<RACES::Mutations::SID, std::string> &driver_codes,
+inline void fill_SID_row(const CLONES::Mutations::MutationSpec<CLONES::Mutations::SID> &sid,
+                         const std::map<CLONES::Mutations::SID, std::string> &driver_codes,
                          Rcpp::CharacterVector &types, Rcpp::CharacterVector &CNA_types,
                          Rcpp::CharacterVector &chrs, Rcpp::CharacterVector &refs,
                          Rcpp::CharacterVector &alts, Rcpp::IntegerVector &starts,
@@ -200,7 +200,7 @@ inline void fill_SID_row(const RACES::Mutations::MutationSpec<RACES::Mutations::
                          const size_t &i)
 {
     using namespace Rcpp;
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutations;
 
     types[i] = "SID";
     CNA_types[i] = NA_STRING;
@@ -221,7 +221,7 @@ inline void fill_SID_row(const RACES::Mutations::MutationSpec<RACES::Mutations::
     }
 }
 
-inline void fill_CNA_row(const RACES::Mutations::CNA &cna, Rcpp::CharacterVector &types,
+inline void fill_CNA_row(const CLONES::Mutations::CNA &cna, Rcpp::CharacterVector &types,
                          Rcpp::CharacterVector &CNA_types, Rcpp::CharacterVector &chrs,
                          Rcpp::CharacterVector &refs, Rcpp::CharacterVector &alts,
                          Rcpp::IntegerVector &starts, Rcpp::IntegerVector &ends,
@@ -229,7 +229,7 @@ inline void fill_CNA_row(const RACES::Mutations::CNA &cna, Rcpp::CharacterVector
                          Rcpp::CharacterVector &codes, const size_t &i)
 {
     using namespace Rcpp;
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutations;
 
     types[i] = "CNA";
     refs[i] = NA_STRING;
@@ -239,7 +239,7 @@ inline void fill_CNA_row(const RACES::Mutations::CNA &cna, Rcpp::CharacterVector
     ends[i] = cna.position + cna.length - 1;
     alleles[i] = (cna.dest == RANDOM_ALLELE ? NA_INTEGER : cna.dest);
 
-    if (cna.type == RACES::Mutations::CNA::Type::AMPLIFICATION) {
+    if (cna.type == CLONES::Mutations::CNA::Type::AMPLIFICATION) {
         src_alleles[i] = cna.source;
         CNA_types[i] = "A";
     } else {
@@ -257,7 +257,7 @@ inline void fill_WGD_row(Rcpp::CharacterVector &types, Rcpp::CharacterVector &CN
                          const size_t &i)
 {
     using namespace Rcpp;
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutations;
 
     types[i] = "WGD";
     CNA_types[i] = NA_STRING;
@@ -274,7 +274,7 @@ inline void fill_WGD_row(Rcpp::CharacterVector &types, Rcpp::CharacterVector &CN
 Rcpp::List PhylogeneticForest::get_driver_mutations() const
 {
     using namespace Rcpp;
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutations;
 
     const auto &mutational_properties = get_mutational_properties();
 
@@ -335,7 +335,7 @@ Rcpp::List PhylogeneticForest::get_species_info() const
     NumericVector SNV_rates(num_of_rows), CNA_rates(num_of_rows),
         indel_rates(num_of_rows);
 
-    using namespace RACES::Mutants;
+    using namespace CLONES::Mutants;
 
     size_t i{0};
     const auto &p_rates = get_mutational_properties().get_passenger_rates();
@@ -372,13 +372,13 @@ PhylogeneticForest::get_subforest_for(const std::vector<std::string> &sample_nam
     forest.reference_path = reference_path;
     forest.timed_exposures = timed_exposures;
 
-    static_cast<RACES::Mutations::PhylogeneticForest &>(forest) =
-        RACES::Mutations::PhylogeneticForest::get_subforest_for(sample_names);
+    static_cast<CLONES::Mutations::PhylogeneticForest &>(forest) =
+        CLONES::Mutations::PhylogeneticForest::get_subforest_for(sample_names);
 
     return forest;
 }
 
-size_t count_mutations(const RACES::Mutations::GenomeMutations &mutations)
+size_t count_mutations(const CLONES::Mutations::GenomeMutations &mutations)
 {
     size_t counter{0};
     for (const auto &[chr_id, chromosome] : mutations.get_chromosomes()) {
@@ -393,8 +393,8 @@ size_t count_mutations(const RACES::Mutations::GenomeMutations &mutations)
 }
 
 size_t
-count_mutations(const std::map<RACES::Mutants::CellId,
-                               std::shared_ptr<RACES::Mutations::CellGenomeMutations>>
+count_mutations(const std::map<CLONES::Mutants::CellId,
+                               std::shared_ptr<CLONES::Mutations::CellGenomeMutations>>
                     &genome_mutations)
 {
     size_t counter{0};
@@ -405,7 +405,7 @@ count_mutations(const std::map<RACES::Mutants::CellId,
     return counter;
 }
 
-size_t count_CNAs(const RACES::Mutations::GenomeMutations &mutations)
+size_t count_CNAs(const CLONES::Mutations::GenomeMutations &mutations)
 {
     size_t counter{0};
     for (const auto &[chr_id, chromosome] : mutations.get_chromosomes()) {
@@ -415,8 +415,8 @@ size_t count_CNAs(const RACES::Mutations::GenomeMutations &mutations)
     return counter;
 }
 
-size_t count_CNAs(const std::map<RACES::Mutants::CellId,
-                                 std::shared_ptr<RACES::Mutations::CellGenomeMutations>>
+size_t count_CNAs(const std::map<CLONES::Mutants::CellId,
+                                 std::shared_ptr<CLONES::Mutations::CellGenomeMutations>>
                       &genome_mutations)
 {
     size_t counter{0};
@@ -427,14 +427,14 @@ size_t count_CNAs(const std::map<RACES::Mutants::CellId,
     return counter;
 }
 
-void fill_mutation_lists(const RACES::Mutations::CellGenomeMutations &cell_mutations,
+void fill_mutation_lists(const CLONES::Mutations::CellGenomeMutations &cell_mutations,
                          Rcpp::IntegerVector &cell_ids, Rcpp::CharacterVector &chr_names,
                          Rcpp::IntegerVector &chr_pos, Rcpp::IntegerVector &alleles,
                          Rcpp::CharacterVector &ref, Rcpp::CharacterVector &alt,
                          Rcpp::CharacterVector &types, Rcpp::CharacterVector &causes,
                          Rcpp::CharacterVector &classes, size_t &index)
 {
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutations;
 
     for (const auto &[chr_id, chromosome] : cell_mutations.get_chromosomes()) {
         for (const auto &[allele_id, allele] : chromosome.get_alleles()) {
@@ -458,7 +458,7 @@ void fill_mutation_lists(const RACES::Mutations::CellGenomeMutations &cell_mutat
     }
 }
 
-void fill_CNA_lists(const RACES::Mutations::CellGenomeMutations &cell_mutations,
+void fill_CNA_lists(const CLONES::Mutations::CellGenomeMutations &cell_mutations,
                     Rcpp::IntegerVector &cell_ids, Rcpp::CharacterVector &chr_names,
                     Rcpp::IntegerVector &CNA_begins, Rcpp::IntegerVector &CNA_ends,
                     Rcpp::IntegerVector &src_alleles, Rcpp::IntegerVector &dst_alleles,
@@ -468,10 +468,10 @@ void fill_CNA_lists(const RACES::Mutations::CellGenomeMutations &cell_mutations,
     for (const auto &[chr_id, chromosome] : cell_mutations.get_chromosomes()) {
         for (const auto &cna_ptr : chromosome.get_CNAs()) {
             cell_ids[index] = cell_mutations.get_id();
-            chr_names[index] = RACES::Mutations::GenomicPosition::chrtos(chr_id);
+            chr_names[index] = CLONES::Mutations::GenomicPosition::chrtos(chr_id);
             CNA_begins[index] = cna_ptr->begin();
             CNA_ends[index] = cna_ptr->end();
-            bool is_amp = cna_ptr->type == RACES::Mutations::CNA::Type::AMPLIFICATION;
+            bool is_amp = cna_ptr->type == CLONES::Mutations::CNA::Type::AMPLIFICATION;
             src_alleles[index] = (is_amp ? cna_ptr->source : NA_INTEGER);
             dst_alleles[index] = cna_ptr->dest;
             classes[index] = cna_ptr->get_nature_description();
@@ -497,7 +497,7 @@ Rcpp::List PhylogeneticForest::get_absolute_chromosome_positions() const
     size_t index{0};
     size_t pos{1};
     for (const auto &[chr_id, from] : abspos) {
-        names[index] = RACES::Mutations::GenomicPosition::chrtos(chr_id);
+        names[index] = CLONES::Mutations::GenomicPosition::chrtos(chr_id);
         auto chr_length = germline.get_chromosome(chr_id).size();
         lengths[index] = chr_length;
         froms[index] = pos;
@@ -535,7 +535,7 @@ Rcpp::List PhylogeneticForest::get_germline_SIDs() const
             for (const auto &[f_pos, fragment] : allele.get_fragments()) {
                 for (const auto &[mutation_pos, mutation_ptr] :
                      fragment.get_mutations()) {
-                    chr_names[index] = RACES::Mutations::GenomicPosition::chrtos(chr_id);
+                    chr_names[index] = CLONES::Mutations::GenomicPosition::chrtos(chr_id);
                     chr_pos[index] = mutation_ptr->position;
                     alleles[index] = allele_id;
                     ref[index] = mutation_ptr->ref;
@@ -581,7 +581,7 @@ Rcpp::List PhylogeneticForest::get_sampled_cell_SIDs() const
 }
 
 Rcpp::List
-PhylogeneticForest::get_sampled_cell_SIDs(const RACES::Mutants::CellId &cell_id) const
+PhylogeneticForest::get_sampled_cell_SIDs(const CLONES::Mutants::CellId &cell_id) const
 {
     auto mutation_it = get_leaves_mutations().find(cell_id);
 
@@ -593,7 +593,7 @@ PhylogeneticForest::get_sampled_cell_SIDs(const RACES::Mutants::CellId &cell_id)
 }
 
 Rcpp::List PhylogeneticForest::get_SID_dataframe(
-    const RACES::Mutations::CellGenomeMutations &cell_mutations)
+    const CLONES::Mutations::CellGenomeMutations &cell_mutations)
 {
     size_t num_of_mutations = count_mutations(cell_mutations);
 
@@ -640,7 +640,7 @@ Rcpp::List PhylogeneticForest::get_sampled_cell_CNAs() const
 }
 
 Rcpp::List
-PhylogeneticForest::get_sampled_cell_CNAs(const RACES::Mutants::CellId &cell_id) const
+PhylogeneticForest::get_sampled_cell_CNAs(const CLONES::Mutants::CellId &cell_id) const
 {
     auto mutation_it = get_leaves_mutations().find(cell_id);
 
@@ -671,15 +671,15 @@ PhylogeneticForest::get_sampled_cell_CNAs(const RACES::Mutants::CellId &cell_id)
 
 template <typename MUTATION_TYPE, typename R_MUTATION>
 Rcpp::List get_first_occurrence(
-    const std::map<MUTATION_TYPE, std::set<RACES::Mutants::CellId>> &mutation_first_cells,
-    const RACES::Mutations::GenomeMutations &germline, const R_MUTATION &mutation)
+    const std::map<MUTATION_TYPE, std::set<CLONES::Mutants::CellId>> &mutation_first_cells,
+    const CLONES::Mutations::GenomeMutations &germline, const R_MUTATION &mutation)
 {
     auto first_cell_it = mutation_first_cells.find(mutation);
 
     if (first_cell_it == mutation_first_cells.end()) {
         std::ostringstream oss;
 
-        if constexpr (std::is_base_of_v<MUTATION_TYPE, RACES::Mutations::SID>) {
+        if constexpr (std::is_base_of_v<MUTATION_TYPE, CLONES::Mutations::SID>) {
             if (germline.includes(mutation)) {
                 Rcpp::List R_cell_ids(1);
 
@@ -735,7 +735,7 @@ Rcpp::List PhylogeneticForest::get_first_occurrence(const SEXP &mutation) const
 }
 
 void fill_timed_exposures(
-    const std::map<RACES::Time, RACES::Mutations::MutationalExposure>
+    const std::map<CLONES::Time, CLONES::Mutations::MutationalExposure>
         &mutation_timed_exposures,
     const std::string &mutation_type_name, size_t &index, Rcpp::NumericVector &times,
     Rcpp::NumericVector &probs, Rcpp::CharacterVector &sig_names,
@@ -755,8 +755,8 @@ void fill_timed_exposures(
 Rcpp::List PhylogeneticForest::get_timed_exposures() const
 {
     using namespace Rcpp;
-    using namespace RACES::Mutants;
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutants;
+    using namespace CLONES::Mutations;
 
     size_t dataframe_size{0};
     for (const auto &[type, mutation_timed_exposures] : timed_exposures) {
@@ -783,10 +783,10 @@ Rcpp::List PhylogeneticForest::get_timed_exposures() const
 }
 
 size_t count_rows_in_allelic_bulk_data(
-    const std::map<RACES::Mutations::AllelicType, size_t> &chr_allelic_count,
+    const std::map<CLONES::Mutations::AllelicType, size_t> &chr_allelic_count,
     const double &num_of_cells)
 {
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutations;
 
     double total_count{0.0};
     size_t num_of_rows{0};
@@ -804,7 +804,7 @@ size_t count_rows_in_allelic_bulk_data(
 }
 
 size_t count_rows_in_bulk_allelic_fragmentation(
-    const RACES::Mutations::PhylogeneticForest::AllelicCount &allelic_count,
+    const CLONES::Mutations::PhylogeneticForest::AllelicCount &allelic_count,
     const double &num_of_cells)
 {
     size_t num_of_rows{0};
@@ -818,15 +818,15 @@ size_t count_rows_in_bulk_allelic_fragmentation(
 }
 
 void fill_allelic_bulk_data(
-    const std::map<RACES::Mutations::AllelicType, size_t> &chr_allelic_count,
-    const RACES::Mutations::ChromosomeId &chr_id,
-    const RACES::Mutations::ChrPosition frag_begin,
-    const RACES::Mutations::ChrPosition frag_end, const double &num_of_cells,
+    const std::map<CLONES::Mutations::AllelicType, size_t> &chr_allelic_count,
+    const CLONES::Mutations::ChromosomeId &chr_id,
+    const CLONES::Mutations::ChrPosition frag_begin,
+    const CLONES::Mutations::ChrPosition frag_end, const double &num_of_cells,
     Rcpp::StringVector &chromosomes, Rcpp::IntegerVector &fragment_begins,
     Rcpp::IntegerVector &fragment_ends, Rcpp::IntegerVector &major_counts,
     Rcpp::IntegerVector &minor_counts, Rcpp::NumericVector &ratios, size_t &row_idx)
 {
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutations;
 
     double total_count{0.0};
 
@@ -863,7 +863,7 @@ void fill_allelic_bulk_data(
     }
 }
 
-const std::list<RACES::Mutants::CellId> &
+const std::list<CLONES::Mutants::CellId> &
 PhylogeneticForest::get_cell_ids_in(const std::string &sample_name) const
 {
     for (const auto &sample : get_samples()) {
@@ -876,13 +876,13 @@ PhylogeneticForest::get_cell_ids_in(const std::string &sample_name) const
 }
 
 Rcpp::List get_bulk_allelic_fragmentation(
-    const RACES::Mutations::PhylogeneticForest::AllelicCount &allelic_count,
-    const std::map<RACES::Mutations::ChromosomeId, RACES::Mutations::ChromosomeMutations>
+    const CLONES::Mutations::PhylogeneticForest::AllelicCount &allelic_count,
+    const std::map<CLONES::Mutations::ChromosomeId, CLONES::Mutations::ChromosomeMutations>
         &chr_map,
     const double &num_of_cells)
 {
     using namespace Rcpp;
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutations;
 
     const size_t num_of_rows =
         count_rows_in_bulk_allelic_fragmentation(allelic_count, num_of_cells);
@@ -938,18 +938,18 @@ PhylogeneticForest::get_bulk_allelic_fragmentation(const std::string &sample_nam
     return ::get_bulk_allelic_fragmentation(allelic_count, chr_map, num_of_cells);
 }
 
-void fill_allelic_cell_data(const RACES::Mutations::AllelicType &allelic_type,
-                            const RACES::Mutants::CellId &cell_id,
-                            const RACES::Mutations::ChromosomeId &chr_id,
-                            const RACES::Mutations::ChrPosition frag_begin,
-                            const RACES::Mutations::ChrPosition frag_end,
+void fill_allelic_cell_data(const CLONES::Mutations::AllelicType &allelic_type,
+                            const CLONES::Mutants::CellId &cell_id,
+                            const CLONES::Mutations::ChromosomeId &chr_id,
+                            const CLONES::Mutations::ChrPosition frag_begin,
+                            const CLONES::Mutations::ChrPosition frag_end,
                             Rcpp::IntegerVector &ids, Rcpp::StringVector &chromosomes,
                             Rcpp::IntegerVector &fragment_begins,
                             Rcpp::IntegerVector &fragment_ends,
                             Rcpp::IntegerVector &major_counts,
                             Rcpp::IntegerVector &minor_counts, size_t &row_idx)
 {
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutations;
 
     ids[row_idx] = cell_id;
     chromosomes[row_idx] = GenomicPosition::chrtos(chr_id);
@@ -968,8 +968,8 @@ void fill_allelic_cell_data(const RACES::Mutations::AllelicType &allelic_type,
 }
 
 size_t count_rows_in_cell_allelic_fragmentation(
-    const std::map<RACES::Mutants::CellId,
-                   std::shared_ptr<RACES::Mutations::CellGenomeMutations>>
+    const std::map<CLONES::Mutants::CellId,
+                   std::shared_ptr<CLONES::Mutations::CellGenomeMutations>>
         &leave_mutations)
 {
     size_t num_of_rows{0};
@@ -989,7 +989,7 @@ size_t count_rows_in_cell_allelic_fragmentation(
 Rcpp::List PhylogeneticForest::get_cell_allelic_fragmentation() const
 {
     using namespace Rcpp;
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutations;
 
     const size_t num_of_rows =
         count_rows_in_cell_allelic_fragmentation(get_leaves_mutations());
@@ -1042,15 +1042,15 @@ void PhylogeneticForest::set_reference_path(const std::filesystem::path referenc
 
 void PhylogeneticForest::save(const std::string &filename, const bool quiet) const
 {
-    RACES::Archive::Binary::Out out_archive(filename);
+    CLONES::Archive::Binary::Out out_archive(filename);
 
     auto ref_str = to_string(reference_path);
 
     out_archive & germline_subject & ref_str & driver_codes & timed_exposures;
 
-    RACES::UI::ProgressBar progress_bar(Rcpp::Rcout, quiet);
+    CLONES::UI::ProgressBar progress_bar(Rcpp::Rcout, quiet);
 
-    out_archive.save(static_cast<const RACES::Mutations::PhylogeneticForest &>(*this),
+    out_archive.save(static_cast<const CLONES::Mutations::PhylogeneticForest &>(*this),
                      progress_bar, "forest");
 }
 
@@ -1064,7 +1064,7 @@ PhylogeneticForest PhylogeneticForest::load(const std::string &filename, const b
         Rcpp::stop("The file \"" + filename + "\" is not a regular file.");
     }
 
-    RACES::Archive::Binary::In in_archive(filename);
+    CLONES::Archive::Binary::In in_archive(filename);
 
     PhylogeneticForest forest;
 
@@ -1077,13 +1077,13 @@ PhylogeneticForest PhylogeneticForest::load(const std::string &filename, const b
     in_archive & forest.driver_codes & forest.timed_exposures;
 
     try {
-        RACES::UI::ProgressBar progress_bar(Rcpp::Rcout, quiet);
+        CLONES::UI::ProgressBar progress_bar(Rcpp::Rcout, quiet);
 
-        in_archive.load(static_cast<RACES::Mutations::PhylogeneticForest &>(forest),
+        in_archive.load(static_cast<CLONES::Mutations::PhylogeneticForest &>(forest),
                         progress_bar, "forest");
-    } catch (RACES::Archive::WrongFileFormatDescr &ex) {
+    } catch (CLONES::Archive::WrongFileFormatDescr &ex) {
         raise_error(ex, "phylogenetic forest");
-    } catch (RACES::Archive::WrongFileFormatVersion &ex) {
+    } catch (CLONES::Archive::WrongFileFormatVersion &ex) {
         raise_error(ex, "phylogenetic forest");
     }
 

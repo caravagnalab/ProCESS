@@ -1118,7 +1118,7 @@ RCPP_MODULE(Mutations)
 //'   and the birth time (column `birth_time`).
 //' @seealso [SampleForest$get_coalescent_cells()] for usage examples
         .method("get_coalescent_cells",
-                (List (PhylogeneticForest::*)(const std::list<RACES::Mutants::CellId> &)
+                (List (PhylogeneticForest::*)(const std::list<CLONES::Mutants::CellId> &)
                      const)(&PhylogeneticForest::get_coalescent_cells),
                 "Get the most recent common ancestor of some cells")
         .method("get_coalescent_cells",
@@ -1247,7 +1247,7 @@ RCPP_MODULE(Mutations)
 //' head(mutations)
 //' @seealso `PhylogeneticForest$$get_sampled_cell_mutations()`
         .method("get_sampled_cell_CNAs",
-                (List (PhylogeneticForest::*)(const RACES::Mutants::CellId &)
+                (List (PhylogeneticForest::*)(const CLONES::Mutants::CellId &)
                      const)(&PhylogeneticForest::get_sampled_cell_CNAs),
                 "Get the CNAs of a sampled cell")
         .method("get_sampled_cell_CNAs",
@@ -1301,7 +1301,7 @@ RCPP_MODULE(Mutations)
 //' head(mutations)
 //' @seealso `PhylogeneticForest$$get_sampled_cell_CNAs()`
         .method("get_sampled_cell_mutations",
-                (List (PhylogeneticForest::*)(const RACES::Mutants::CellId &)
+                (List (PhylogeneticForest::*)(const CLONES::Mutants::CellId &)
                      const)(&PhylogeneticForest::get_sampled_cell_SIDs),
                 "Get the SNVs and the indels of a sampled cell")
         .method("get_sampled_cell_mutations",
@@ -1358,11 +1358,11 @@ RCPP_MODULE(Mutations)
 //'   stick from the higher to the deeper in the forest.
 //' @seealso [SampleForest$get_sticks()] for usage examples
         .method("get_sticks",
-                (std::list<std::list<RACES::Mutants::CellId>> (PhylogeneticForest::*)(
+                (std::list<std::list<CLONES::Mutants::CellId>> (PhylogeneticForest::*)(
                     const double) const)(&PhylogeneticForest::get_sticks),
                 "Get the forest sticks")
         .method("get_sticks",
-                (std::list<std::list<RACES::Mutants::CellId>> (PhylogeneticForest::*)()
+                (std::list<std::list<CLONES::Mutants::CellId>> (PhylogeneticForest::*)()
                      const)(&PhylogeneticForest::get_sticks),
                 "Get the forest sticks")
 
