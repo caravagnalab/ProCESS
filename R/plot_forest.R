@@ -54,7 +54,7 @@ plot_forest <- function(forest, highlight_sample = NULL, color_map = NULL) {
     warning("The forest does not contain any node")
     return(ggplot2::ggplot())
   } else {
-    forest_data <- forest$get_nodes()
+    forest_data <- forest$get_nodes() %>% dplyr::select(-.data$depth)
 
     forest_data[nrow(forest_data) + 1, ] <- c(NA, NA, NA, NA, NA, 0)
 

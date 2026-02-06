@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,6 +53,81 @@ PhylogeneticForest::PhylogeneticForest(
     using namespace RACES::Mutations;
     timed_exposures[MutationType::Type::SBS] = timed_SBS_exposures;
     timed_exposures[MutationType::Type::INDEL] = timed_indel_exposures;
+}
+
+std::map<RACES::Mutants::CellId, size_t>
+PhylogeneticForest::get_total_mutations(const std::map<RACES::Mutants::CellId, size_t>& new_mutations) const
+{
+    using namespace RACES::Mutants;
+    std::map<CellId, size_t> total_mutations;
+
+    const auto& root_ids = get_root_cells();
+
+    std::list<CellId> next{root_ids.begin(), root_ids.end()};
+
+    for (const auto& root: root_ids) {
+        total_mutations.emplace(root, new_mutations.at(root));
+
+        next.push_back(root);
+    }
+
+    while (!next.empty()) {
+        const auto next_node = get_node(next.front());
+        const auto front_muts = total_mutations.at(next.front());
+        for (const auto child: next_node.children()) {
+            const auto child_id = child.get_id();
+            next.push_back(child_id);
+
+            total_mutations.emplace(child_id, front_muts+new_mutations.at(child_id));
+        }
+
+        next.pop_front();
+    }
+
+    return total_mutations;
+}
+
+Rcpp::IntegerVector fill_vector_by_value(const std::map<RACES::Mutants::CellId, size_t>& values)
+{
+    Rcpp::IntegerVector vector(values.size());
+
+    size_t i{0};
+    for (const auto& [cell_id, value] : values) {
+        vector[i] = value;
+
+        i++;
+    }
+
+    return vector;
+}
+
+Rcpp::List PhylogeneticForest::get_mutation_statistics() const
+{
+    const auto new_SID_maps = get_new_mutations<RACES::Mutations::SID>(get_mutation_first_cells());
+    const auto total_SID_maps = get_total_mutations(new_SID_maps);
+
+    const auto new_SIDs = fill_vector_by_value(new_SID_maps);
+    const auto total_SIDs = fill_vector_by_value(total_SID_maps);
+
+    const auto new_CNA_maps = get_new_mutations<RACES::Mutations::CNA>(get_CNA_first_cells());
+    const auto total_CNA_maps = get_total_mutations(new_CNA_maps);
+
+    const auto new_CNAs = fill_vector_by_value(new_CNA_maps);
+    const auto total_CNAs = fill_vector_by_value(total_CNA_maps);
+
+    using namespace Rcpp;
+
+    IntegerVector ids(new_SID_maps.size());
+    size_t i{0};
+    for (const auto& [cell_id, mut]: new_SID_maps) {
+        ids[i] = cell_id;
+
+        ++i;
+    }
+
+    return DataFrame::create(_["cell_id"] = ids, _["new_SIDs"] = new_SIDs,
+                             _["new_CNAs"] = new_CNAs, _["total_SIDs"] = total_SIDs,
+                             _["total_CNAs"] = total_CNAs);
 }
 
 Rcpp::List PhylogeneticForest::get_samples_info() const

@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,10 +33,13 @@ struct ForestCore
         using namespace Rcpp;
         using namespace RACES::Mutants;
 
-        IntegerVector ids(cell_ids.size()), ancestors(cell_ids.size());
+        IntegerVector ids(cell_ids.size()), ancestors(cell_ids.size()),
+                      depths(cell_ids.size());
         CharacterVector mutants(cell_ids.size()), epi_states(cell_ids.size()),
             sample_names(cell_ids.size());
         NumericVector birth(cell_ids.size());
+
+        const auto node_depths = forest.get_node_depths();
 
         size_t i{0};
         for (const auto &cell_id : cell_ids) {
@@ -47,6 +50,8 @@ struct ForestCore
             } else {
                 ancestors[i] = cell_node.parent().get_id();
             }
+
+            depths[i] = node_depths.at(cell_id);
 
             mutants[i] = cell_node.get_mutant_name();
             epi_states[i] = MutantProperties::signature_to_string(
@@ -63,8 +68,9 @@ struct ForestCore
         }
 
         return DataFrame::create(_["cell_id"] = ids, _["ancestor"] = ancestors,
-                                 _["mutant"] = mutants, _["epistate"] = epi_states,
-                                 _["sample"] = sample_names, _["birth_time"] = birth);
+                                 _["depth"] = depths, _["mutant"] = mutants,
+                                 _["epistate"] = epi_states, _["sample"] = sample_names,
+                                 _["birth_time"] = birth);
     }
 
     template <typename CPP_FOREST> static Rcpp::List get_nodes(const CPP_FOREST &forest)

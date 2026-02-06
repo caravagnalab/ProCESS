@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 #include <phylogenetic_forest.hpp>
 
 #include "forest.hpp"
+#include "sample_forest.hpp"
 #include "genomic_data_storage.hpp"
 
 class MutationEngine;
@@ -58,6 +59,28 @@ class PhylogeneticForest : public RACES::Mutations::PhylogeneticForest
                        const TimedMutationalExposure &timed_SBS_exposures,
                        const TimedMutationalExposure &timed_indel_exposures);
 
+    template<typename MUTATION_TYPE>
+    std::map<RACES::Mutants::CellId, size_t>
+    get_new_mutations(const std::map<MUTATION_TYPE, std::set<RACES::Mutants::CellId>>& first_occurrences) const
+    {
+        std::map<RACES::Mutants::CellId, size_t> new_mutations;
+
+        for (const auto& [cell_id, cell] : get_cells()) {
+            new_mutations.emplace(cell_id, 0);
+        }
+
+        for (const auto [mutation, cell_ids]: first_occurrences) {
+            for (const auto cell_id: cell_ids) {
+                ++(new_mutations[cell_id]);
+            }
+        }
+
+        return new_mutations;
+    }
+
+    std::map<RACES::Mutants::CellId, size_t>
+    get_total_mutations(const std::map<RACES::Mutants::CellId, size_t>& new_mutations) const;
+
   public:
     PhylogeneticForest();
 
@@ -66,6 +89,8 @@ class PhylogeneticForest : public RACES::Mutations::PhylogeneticForest
         return ForestCore::get_nodes(
             static_cast<const RACES::Mutations::PhylogeneticForest &>(*this));
     }
+
+    Rcpp::List get_mutation_statistics() const;
 
     const std::list<RACES::Mutants::CellId> &
     get_cell_ids_in(const std::string &sample_name) const;

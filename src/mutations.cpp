@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1013,7 +1013,8 @@ RCPP_MODULE(Mutations)
 //' \item \emph{Return:} A data frame representing, for each node
 //'   in the forest, the identified (column `id`),
 //'   whenever the node is not a root, the ancestor
-//'   identifier (column `ancestor`), whenever the node
+//'   identifier (column `ancestor`), the node's depth
+//'   (column "`depth`"), whenever the node
 //'   was sampled, i.e., it is one of the forest
 //'   leaves, the name of the sample containing the
 //'   node, (column `sample`), the mutant (column
@@ -1083,12 +1084,13 @@ RCPP_MODULE(Mutations)
 //' @return A data frame representing, for each node
 //'   in the forest, the identified (column `cell_id`),
 //'   whenever the node is not a root, the ancestor
-//'   identifier (column `ancestor`), whenever the
-//'   node was sampled, i.e., it is one of the forest
-//'   leaves, the name of the sample containing the
-//'   node, (column `sample`), the mutant (column
-//'   `mutant`), the epistate (column `epistate`),
-//'   and the birth time (column `birth_time`).
+//'   identifier (column `ancestor`), the node's depth
+//'   (column "`depth`"), whenever the node was sampled,
+//'   i.e., it is one of the forest leaves, the name of
+//'   the sample containing the node, (column `sample`),
+//'   the mutant (column `mutant`), the epistate (column
+//'   `epistate`), and the birth time (column
+//'   `birth_time`).
 //' @seealso [SampleForest$get_nodes()] for usage examples
         .method("get_nodes",
                 (List (PhylogeneticForest::*)() const)(&PhylogeneticForest::get_nodes),
@@ -1415,15 +1417,32 @@ RCPP_MODULE(Mutations)
 
 //' @name PhylogeneticForest$get_first_occurrences
 //' @title Getting the cell in which a mutation emerged
-//' @description This method returns the identifier of the cell in which a
-        //mutation occurs '   for the first time. ' @param mutation A mutation being a
-        //SNV, a indel, or a CNA. ' @return The identifier of the cell in which a mutation
-        //occurs for the first time. ' @seealso `vignette("mutations")` for usage examples
+//' @description This method returns the identifier of the cell in which a mutation occurs
+//'   for the first time.
+//' @param mutation A mutation being a SNV, a indel, or a CNA.
+//' @return The identifier of the cell in which a mutation occurs for the first time.
+//' @seealso `vignette("mutations")` for usage examples
         .method("get_first_occurrences",
                 (Rcpp::List (PhylogeneticForest::*)(const SEXP &)
                      const)(&PhylogeneticForest::get_first_occurrence),
                 "Get the identifier of the cell in which the mutation occurs for the "
                 "first time")
+
+//' @name PhylogeneticForest$get_mutation_statistics
+//' @title Getting the statistics about mutations on each node
+//' @description This method returns a dataframe reporting the statistics about
+//'   mutations on each node.
+//' @return A dataframe consisting of five columns "`cell_id`", "`new_SIDs`",
+//'   "`new_CNAs`", "`total_SIDs`", and "`total_CNAs`". Each row represents a
+//'   node in the phylogenetic forest and reports the identifier of the
+//'   corresponding cell and contains the number of mutations (`new_SIDs`) and
+//'   CNAs (`new_CNAs`) appearing for the first time on the cell. Moreover, it
+//'   show the total number of mutations and CNAs on the cell (`total_SIDs`
+//'   and `total_CNAs`, respectively).
+        .method("get_mutation_statistics",
+                (Rcpp::List (PhylogeneticForest::*)()
+                     const)(&PhylogeneticForest::get_mutation_statistics),
+                "Get the statistics about node mutations")
 
 //' @name PhylogeneticForest$get_reference_path
 //' @title Getting the reference genome path

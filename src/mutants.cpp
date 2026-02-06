@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -829,7 +829,7 @@ RCPP_MODULE(Mutants)
 
 //' @name TissueSimulation$get_rates
 //' @title Getting the species rates
-//' @description This method return the rates of a species.
+//' @description This method returns the rates of a species.
 //' @param species The species whose rates are aimed.
 //' @return The list of the species rates.
 //' @examples
@@ -1537,7 +1537,8 @@ RCPP_MODULE(Mutants)
 //' \item \emph{Return:} A data frame representing, for each node
 //'   in the forest, the identified (column "`cell_id`"),
 //'   whenever the node is not a root, the ancestor
-//'   identifier (column "`ancestor`"), whenever the node
+//'   identifier (column "`ancestor`"), the node's depth
+//'   (column "`depth`"), whenever the node
 //'   was sampled, i.e., it is one of the forest
 //'   leaves, the name of the sample containing the
 //'   node, (column "`sample`"), the mutant (column
@@ -1578,6 +1579,7 @@ RCPP_MODULE(Mutants)
 //' @description This method builds a data frame containing forest nodes.
 //' @return A data frame representing, for each node
 //'   in the forest, the identified (column "`cell_id`"),
+//'   the node's depth (column "`depth`"),
 //'   whenever the node is not a root, the ancestor
 //'   identifier (column "`ancestor`"), whenever the
 //'   node was sampled, i.e., it is one of the forest
@@ -1754,7 +1756,7 @@ RCPP_MODULE(Mutants)
 //'   A _stick_ is a path of the forest in which the only crucial nodes are
 //'   the first and the last one.
 //'
-//'   This method return the list of the forest sticks. Each stick is
+//'   This method returns the list of the forest sticks. Each stick is
 //'   represented by the sequence of cell identifiers labelling the nodes in
 //'   the stick.
 //' @param birth_threshold The maximum birth time for the cells associated

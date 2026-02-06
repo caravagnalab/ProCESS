@@ -68,7 +68,7 @@ plot_sticks = function(forest, labels, cls = NULL) {
       dplyr::add_row(cell_id="WT", ancestor="WT", mutant=NA, epistate="",
                      sample=NA, birth_time=0, label="Truncal")
 
-    forest_data <- forest$get_nodes()
+    forest_data <- forest$get_nodes() %>% dplyr::select(-.data$depth)
 
     forest_data[nrow(forest_data) + 1, ] <- c(NA, NA, NA, NA, NA, 0)
 
