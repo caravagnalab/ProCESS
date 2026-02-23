@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,8 +20,8 @@
 namespace Logics
 {
 
-Variable::Variable(RACES::Mutants::Logics::Variable &&variable)
-    : RACES::Mutants::Logics::Variable(std::move(variable))
+Variable::Variable(CLONES::Mutants::Logics::Variable &&variable)
+    : CLONES::Mutants::Logics::Variable(std::move(variable))
 {}
 
 void Variable::show() const { Rcpp::Rcout << *this << std::endl; }
@@ -60,8 +60,8 @@ Expression to_expression(const SEXP &exp)
     }
 }
 
-Expression::Expression(RACES::Mutants::Logics::Expression &&expression)
-    : RACES::Mutants::Logics::Expression(std::move(expression))
+Expression::Expression(CLONES::Mutants::Logics::Expression &&expression)
+    : CLONES::Mutants::Logics::Expression(std::move(expression))
 {}
 
 void Expression::show() const { Rcpp::Rcout << *this << std::endl; }
@@ -81,13 +81,13 @@ SEXP multiply(const SEXP &lhs, const SEXP &rhs)
     return Rcpp::wrap(Expression(to_expression(lhs) * to_expression(rhs)));
 }
 
-Relation::Relation(RACES::Mutants::Logics::Relation &&relation)
-    : RACES::Mutants::Logics::Relation(std::move(relation))
+Relation::Relation(CLONES::Mutants::Logics::Relation &&relation)
+    : CLONES::Mutants::Logics::Relation(std::move(relation))
 {}
 
 void Relation::show() const
 {
-    Rcpp::Rcout << static_cast<const RACES::Mutants::Logics::Relation &>(*this)
+    Rcpp::Rcout << static_cast<const CLONES::Mutants::Logics::Relation &>(*this)
                 << std::endl;
 }
 
@@ -121,13 +121,13 @@ SEXP lt(const SEXP &lhs, const SEXP &rhs)
     return Rcpp::wrap(Formula(Relation(to_expression(lhs) < to_expression(rhs))));
 }
 
-Formula::Formula(RACES::Mutants::Logics::Formula &&formula)
-    : RACES::Mutants::Logics::Formula(std::move(formula))
+Formula::Formula(CLONES::Mutants::Logics::Formula &&formula)
+    : CLONES::Mutants::Logics::Formula(std::move(formula))
 {}
 
 void Formula::show() const
 {
-    Rcpp::Rcout << static_cast<const RACES::Mutants::Logics::Formula &>(*this)
+    Rcpp::Rcout << static_cast<const CLONES::Mutants::Logics::Formula &>(*this)
                 << std::endl;
 }
 

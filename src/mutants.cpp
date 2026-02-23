@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,8 +26,8 @@
 
 using namespace Rcpp;
 
-namespace RE = RACES::Mutants::Evolutions;
-namespace RC = RACES::Mutants;
+namespace RE = CLONES::Mutants::Evolutions;
+namespace RC = CLONES::Mutants;
 
 RCPP_MODULE(Mutants)
 {
@@ -877,7 +877,7 @@ RCPP_MODULE(Mutants)
 
 //' @name TissueSimulation$get_rates
 //' @title Getting the species rates
-//' @description This method return the rates of a species.
+//' @description This method returns the rates of a species.
 //' @param species The species whose rates are aimed.
 //' @return The list of the species rates.
 //' @examples
@@ -1069,12 +1069,12 @@ RCPP_MODULE(Mutants)
 //' # simulate the tissue up to simulate timed 100
 //' sim$run_up_to_time(40)
         .method("run_up_to_time",
-                (void (TissueSimulation::*)(const RACES::Time &,
+                (void (TissueSimulation::*)(const CLONES::Time &,
                                             const bool))&TissueSimulation::run_up_to_time,
                 "Simulating the system up to the specified simulation time")
         .method("run_up_to_time",
                 (void (TissueSimulation::*)(
-                    const RACES::Time &))&TissueSimulation::run_up_to_time,
+                    const CLONES::Time &))&TissueSimulation::run_up_to_time,
                 "Simulating the system up to the specified simulation time")
 
 //' @name TissueSimulation$run_up_to_event
@@ -1270,16 +1270,16 @@ RCPP_MODULE(Mutants)
             "sample_cells",
             (void (TissueSimulation::*)(
                 const std::string &,
-                const std::vector<RACES::Mutants::Evolutions::AxisPosition> &lower_corner,
-                const std::vector<RACES::Mutants::Evolutions::AxisPosition> &upper_corner,
+                const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &lower_corner,
+                const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner,
                 const size_t &num_of_cells) const)(&TissueSimulation::sample_cells),
             "Sample a rectangular region of the tissue")
         .method(
             "sample_cells",
             (void (TissueSimulation::*)(
                 const std::string &,
-                const std::vector<RACES::Mutants::Evolutions::AxisPosition> &lower_corner,
-                const std::vector<RACES::Mutants::Evolutions::AxisPosition> &upper_corner)
+                const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &lower_corner,
+                const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner)
                  const)(&TissueSimulation::sample_cells),
             "Sample a rectangular region of the tissue")
         .method(
@@ -1505,7 +1505,7 @@ RCPP_MODULE(Mutants)
 //' @title Building a new simulation
 //' @description This method builds a new simulation.
 //' @param name The name of the simulation (default:
-//'   "`races_<year>_<hour><minute><second>`").
+//'   "`clones_<year>_<hour><minute><second>`").
 //' @param width The width of the simulated tissue (default: 1000).
 //' @param height The height of the simulated tissue (default: 1000).
 //' @param save_snapshots A flag to save simulation snapshots on disk
@@ -1549,7 +1549,7 @@ RCPP_MODULE(Mutants)
 //' sim <- TissueSimulation("test", seed=13)
 //'
 //' # ...or creating a simulation without providing any name. By default, the
-//' # simulation name will have the following format `races_<date>_<hour>`.
+//' # simulation name will have the following format `clones_<date>_<hour>`.
 //' sim <- TissueSimulation(seed=13)
 //'
 //' # finally we can also specify the size of the simulated space
@@ -1565,7 +1565,7 @@ RCPP_MODULE(Mutants)
 //' @description This function is deprecated. Please use `TissueSimulation()`
 //'   instead.
 //' @param name The name of the simulation (default:
-//'   "`races_<year>_<hour><minute><second>`").
+//'   "`clones_<year>_<hour><minute><second>`").
 //' @param width The width of the simulated tissue (default: 1000).
 //' @param height The height of the simulated tissue (default: 1000).
 //' @param save_snapshots A flag to save simulation snapshots on disk
@@ -1598,7 +1598,8 @@ RCPP_MODULE(Mutants)
 //' \item \emph{Return:} A data frame representing, for each node
 //'   in the forest, the identified (column "`cell_id`"),
 //'   whenever the node is not a root, the ancestor
-//'   identifier (column "`ancestor`"), whenever the node
+//'   identifier (column "`ancestor`"), the node's depth
+//'   (column "`depth`"), whenever the node
 //'   was sampled, i.e., it is one of the forest
 //'   leaves, the name of the sample containing the
 //'   node, (column "`sample`"), the mutant (column
@@ -1642,7 +1643,8 @@ RCPP_MODULE(Mutants)
 //' @return A data frame representing, for each node
 //'   in the forest, the identified (column "`cell_id`"),
 //'   whenever the node is not a root, the ancestor
-//'   identifier (column "`ancestor`"), whenever the
+//'   identifier (column "`ancestor`"), the node's depth
+//'   (column "`depth`"), whenever the
 //'   node was sampled, i.e., it is one of the forest
 //'   leaves, the name of the sample containing the
 //'   node, (column "`sample`"), the mutant (column
@@ -1716,7 +1718,7 @@ RCPP_MODULE(Mutants)
 //'
 //' forest$get_coalescent_cells()
         .method("get_coalescent_cells",
-                (List (SampleForest::*)(const std::list<RACES::Mutants::CellId> &)
+                (List (SampleForest::*)(const std::list<CLONES::Mutants::CellId> &)
                      const)(&SampleForest::get_coalescent_cells),
                 "Get the most recent common ancestor of some cells")
         .method("get_coalescent_cells",
@@ -1818,7 +1820,7 @@ RCPP_MODULE(Mutants)
 //'   A _stick_ is a path of the forest in which the only crucial nodes are
 //'   the first and the last one.
 //'
-//'   This method return the list of the forest sticks. Each stick is
+//'   This method returns the list of the forest sticks. Each stick is
 //'   represented by the sequence of cell identifiers labelling the nodes in
 //'   the stick.
 //' @param birth_threshold The maximum birth time for the cells associated
@@ -1873,11 +1875,11 @@ RCPP_MODULE(Mutants)
 //' # birth times 40 time units at most
 //' forest$get_sticks(40)
         .method("get_sticks",
-                (std::list<std::list<RACES::Mutants::CellId>> (SampleForest::*)(
+                (std::list<std::list<CLONES::Mutants::CellId>> (SampleForest::*)(
                     const double) const)(&SampleForest::get_sticks),
                 "Get the forest sticks")
         .method("get_sticks",
-                (std::list<std::list<RACES::Mutants::CellId>> (SampleForest::*)()
+                (std::list<std::list<CLONES::Mutants::CellId>> (SampleForest::*)()
                      const)(&SampleForest::get_sticks),
                 "Get the forest sticks")
 

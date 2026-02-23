@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,24 +26,24 @@
 #include <position.hpp>
 #include <position_set.hpp>
 
-class TissueRectangle : public RACES::Mutants::RectangleSet
+class TissueRectangle : public CLONES::Mutants::RectangleSet
 {
   public:
     TissueRectangle();
 
-    TissueRectangle(const RACES::Mutants::Evolutions::PositionInTissue &lower_corner,
-                    const RACES::Mutants::Evolutions::PositionInTissue &upper_corner);
+    TissueRectangle(const CLONES::Mutants::Evolutions::PositionInTissue &lower_corner,
+                    const CLONES::Mutants::Evolutions::PositionInTissue &upper_corner);
 
-    TissueRectangle(const RACES::Mutants::Evolutions::PositionInTissue &lower_corner,
-                    const RACES::Mutants::Evolutions::AxisSize &x_size,
-                    const RACES::Mutants::Evolutions::AxisSize &y_size);
+    TissueRectangle(const CLONES::Mutants::Evolutions::PositionInTissue &lower_corner,
+                    const CLONES::Mutants::Evolutions::AxisSize &x_size,
+                    const CLONES::Mutants::Evolutions::AxisSize &y_size);
 
     TissueRectangle(const std::vector<uint16_t> &lower_corner,
                     const std::vector<uint16_t> &upper_corner);
 
     TissueRectangle(const std::vector<uint16_t> &lower_corner,
-                    const RACES::Mutants::Evolutions::AxisSize &x_size,
-                    const RACES::Mutants::Evolutions::AxisSize &y_size);
+                    const CLONES::Mutants::Evolutions::AxisSize &x_size,
+                    const CLONES::Mutants::Evolutions::AxisSize &y_size);
 
     Rcpp::IntegerVector get_lower_corner() const;
 

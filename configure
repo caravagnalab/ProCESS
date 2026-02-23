@@ -4,11 +4,11 @@ set -e
 which cmake
 
 
-if [ ! -d RACES ]; then
+if [ ! -d CLONES ]; then
 
-    git clone https://github.com/albertocasagrande/RACES.git
+    git clone https://github.com/albertocasagrande/CLONES.git
 
-    (cd RACES; git checkout 641deaa && rm -rf .git )
+    (cd CLONES; git checkout 9ac9f42 && rm -rf .git )
 
 fi
 

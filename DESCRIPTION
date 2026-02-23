@@ -7,7 +7,7 @@ Authors@R: c(
     person("Alberto", "Casagrande", email = "alberto.casagrande@uniud.it", role = c("aut", "cre")),
     person("Giulio", "Caravagna", role = c("aut")))
 Maintainer: Alberto Casagrande <alberto.casagrande@uniud.it>
-Description: ProCESS is an R wrapper for RACES and provides
+Description: ProCESS is an R wrapper for CLONES and provides
         additional plotting functions. It supports spacial
         evolution of different mutants, different epigenetic
         mutant states, timed-triggered driver mutations.

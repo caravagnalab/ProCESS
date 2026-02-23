@@ -10,10 +10,10 @@
 ^\.Rhistory$
 ^README.Rmd$
 ^nobuild$
-^races_*-*$
+^clones_*-*$
 ^pkgdown$
 ^doc$
-^RACES$
+^CLONES$
 ^_install$
 ^_builds$
 ^Makefile$

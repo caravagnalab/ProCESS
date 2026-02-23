@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,12 +25,12 @@
 
 #include <Rcpp.h>
 
-class SIDMut : public RACES::Mutations::MutationSpec<RACES::Mutations::SID>
+class SIDMut : public CLONES::Mutations::MutationSpec<CLONES::Mutations::SID>
 {
 
-    SIDMut(const RACES::Mutations::ChromosomeId &chromosome_id,
-           const RACES::Mutations::ChrPosition &chromosomic_position,
-           const RACES::Mutations::AlleleId allele_id, const std::string &ref,
+    SIDMut(const CLONES::Mutations::ChromosomeId &chromosome_id,
+           const CLONES::Mutations::ChrPosition &chromosomic_position,
+           const CLONES::Mutations::AlleleId allele_id, const std::string &ref,
            const std::string &alt, const std::string &cause = "");
 
   public:
@@ -38,10 +38,10 @@ class SIDMut : public RACES::Mutations::MutationSpec<RACES::Mutations::SID>
 
     inline std::string get_chromosome() const
     {
-        return RACES::Mutations::GenomicPosition::chrtos(chr_id);
+        return CLONES::Mutations::GenomicPosition::chrtos(chr_id);
     }
 
-    inline const RACES::Mutations::ChrPosition &get_position_in_chromosome() const
+    inline const CLONES::Mutations::ChrPosition &get_position_in_chromosome() const
     {
         return position;
     }

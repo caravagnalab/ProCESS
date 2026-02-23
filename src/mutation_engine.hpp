@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,9 +47,9 @@ class MutationEngine
 
     std::map<SIDMut::SID, std::string> driver_codes;
 
-    RACES::Mutations::ContextIndex<AbsGenotypePosition> context_index;
-    RACES::Mutations::RSIndex rs_index;
-    RACES::Mutations::MutationEngine<AbsGenotypePosition, std::mt19937_64> m_engine;
+    CLONES::Mutations::ContextIndex<AbsGenotypePosition> context_index;
+    CLONES::Mutations::RSIndex rs_index;
+    CLONES::Mutations::MutationEngine<AbsGenotypePosition, std::mt19937_64> m_engine;
 
     bool avoid_homozygous_losses;
 
@@ -115,7 +115,7 @@ class MutationEngine
     void add_mutant(const std::string &mutant_name, const Rcpp::List &passenger_rates,
                     const Rcpp::List &drivers);
 
-    void change_rates_from(const RACES::Time time, const std::string &mutant_name,
+    void change_rates_from(const CLONES::Time time, const std::string &mutant_name,
                            const Rcpp::List &passenger_rates);
 
     inline Rcpp::List get_active_germline() const
@@ -133,7 +133,7 @@ class MutationEngine
         return storage.get_germline_storage().get_population_descriptions_df();
     }
 
-    static Rcpp::List get_species_info(const RACES::Mutations::MutationalProperties& m_properties);
+    static Rcpp::List get_species_info(const CLONES::Mutations::MutationalProperties& m_properties);
 
     inline Rcpp::List get_species_info() const
     {

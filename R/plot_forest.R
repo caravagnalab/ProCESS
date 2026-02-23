@@ -1,5 +1,5 @@
 ## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
-## Copyright (C) 2023-2025 - Giulio Caravagna <gcaravagna@units.it>
+## Copyright (C) 2023-2026 - Giulio Caravagna <gcaravagna@units.it>
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -48,14 +48,12 @@
 plot_forest <- function(forest, highlight_sample = NULL, color_map = NULL) {
   stopifnot(inherits(forest, "Rcpp_SampleForest"))
 
-  nodes <- forest$get_nodes()
+  forest_data <- forest$get_nodes() %>% dplyr::select(-.data$depth)
 
-  if (nrow(nodes) == 0) {
+  if (nrow(forest_data) == 0) {
     warning("The forest does not contain any node")
     return(ggplot2::ggplot())
   } else {
-    forest_data <- forest$get_nodes()
-
     forest_data[nrow(forest_data) + 1, ] <- c(NA, NA, NA, NA, NA, 0)
 
     forest_data <- forest_data %>%

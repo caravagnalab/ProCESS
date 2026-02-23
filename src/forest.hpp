@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ class ForestCore
             forest{forest}, R_function{R_function}
         {}
 
-        std::string operator()(const RACES::Mutants::CellId& cell_id) const
+        std::string operator()(const CLONES::Mutants::CellId& cell_id) const
         {
             auto node = Rcpp::wrap(SampledCell(forest, cell_id));
 
@@ -50,15 +50,18 @@ class ForestCore
 public:
     template <typename CPP_FOREST>
     static Rcpp::List get_nodes(const CPP_FOREST &forest,
-                                const std::vector<RACES::Mutants::CellId> &cell_ids)
+                                const std::vector<CLONES::Mutants::CellId> &cell_ids)
     {
         using namespace Rcpp;
-        using namespace RACES::Mutants;
+        using namespace CLONES::Mutants;
 
-        IntegerVector ids(cell_ids.size()), ancestors(cell_ids.size());
+        IntegerVector ids(cell_ids.size()), ancestors(cell_ids.size()),
+                      depths(cell_ids.size());
         CharacterVector mutants(cell_ids.size()), epi_states(cell_ids.size()),
             sample_names(cell_ids.size());
         NumericVector birth(cell_ids.size());
+
+        const auto node_depths = forest.get_node_depths();
 
         size_t i{0};
         for (const auto &cell_id : cell_ids) {
@@ -70,6 +73,7 @@ public:
                 ancestors[i] = cell_node.parent().get_id();
             }
 
+            depths[i] = node_depths.at(cell_id);
             mutants[i] = cell_node.get_mutant_name();
             epi_states[i] = MutantProperties::signature_to_string(
                 cell_node.get_methylation_signature());
@@ -85,13 +89,14 @@ public:
         }
 
         return DataFrame::create(_["cell_id"] = ids, _["ancestor"] = ancestors,
-                                 _["mutant"] = mutants, _["epistate"] = epi_states,
-                                 _["sample"] = sample_names, _["birth_time"] = birth);
+                                 _["depth"] = depths, _["mutant"] = mutants,
+                                 _["epistate"] = epi_states, _["sample"] = sample_names,
+                                 _["birth_time"] = birth);
     }
 
     template <typename CPP_FOREST> static Rcpp::List get_nodes(const CPP_FOREST &forest)
     {
-        std::vector<RACES::Mutants::CellId> cell_ids;
+        std::vector<CLONES::Mutants::CellId> cell_ids;
         cell_ids.reserve(forest.num_of_nodes());
         for (const auto &[cell_id, cell] : forest.get_cells()) {
             cell_ids.push_back(cell_id);
@@ -109,7 +114,7 @@ public:
 
         CharacterVector mutant_names(num_of_rows), epi_states(num_of_rows);
 
-        using namespace RACES::Mutants;
+        using namespace CLONES::Mutants;
 
         size_t i{0};
         for (const auto &[species_id, species_data] : forest.get_species_data()) {
@@ -133,7 +138,7 @@ public:
     template <typename CPP_FOREST>
     static Rcpp::List
     get_coalescent_cells(const CPP_FOREST &forest,
-                         const std::list<RACES::Mutants::CellId> &cell_ids)
+                         const std::list<CLONES::Mutants::CellId> &cell_ids)
     {
         auto coalencent_ids = forest.get_coalescent_cells(cell_ids);
 

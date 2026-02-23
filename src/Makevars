@@ -4,13 +4,13 @@ CXX_STD=CXX20
 BUILD_DIR =     ../_builds
 INSTALL_DIR =   ../_install
 
-PKG_LIBS += -L$(INSTALL_DIR)/lib/ -lRACES
+PKG_LIBS += -L$(INSTALL_DIR)/lib/ -lCLONES
 
 PKG_CXXFLAGS += -I$(INSTALL_DIR)/include/
 
-LIBRACES = $(INSTALL_DIR)/lib/libRACES.so
+LIBCLONES = $(INSTALL_DIR)/lib/libCLONES.so
 
-all: 	$(LIBRACES) ../man/Simulation.Rd
+all: 	$(LIBCLONES) ../man/Simulation.Rd
 
 ../man/Simulation.Rd:
 	@if [ ! -f .roxygen.lock ]; then \
@@ -19,11 +19,11 @@ all: 	$(LIBRACES) ../man/Simulation.Rd
 		 && ${R_HOME}/bin/R --vanilla --silent -e 'Rcpp::compileAttributes()' \
 		 && ${R_HOME}/bin/R --vanilla --silent -e 'roxygen2::roxygenise(roclets=c("rd"))'); \
 		rm .roxygen.lock; \
-		rm -rf races_*; \
+		rm -rf clones_*; \
 	fi
 
-$(LIBRACES): ../man/Simulation.Rd
-	cmake -H../RACES/ -B$(BUILD_DIR) \
+$(LIBCLONES): ../man/Simulation.Rd
+	cmake -H../CLONES/ -B$(BUILD_DIR) \
 	-DCMAKE_BUILD_TYPE=Release \
 	-DCMAKE_INSTALL_PREFIX=$(INSTALL_DIR) \
 	-DBUILD_ONLY_LIBRARIES:bool=true \
@@ -33,7 +33,7 @@ $(LIBRACES): ../man/Simulation.Rd
 	cmake --build $(BUILD_DIR) --target install --config Release
 
 	# mac/linux
-	cp $(INSTALL_DIR)/lib/*RACES.a $(LIBRACES)
+	cp $(INSTALL_DIR)/lib/*CLONES.a $(LIBCLONES)
 
 .PHONY: all clean
 

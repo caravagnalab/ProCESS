@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,29 +49,29 @@ void TissueRectangle::show() const
 TissueRectangle::TissueRectangle() : RectangleSet() {}
 
 TissueRectangle::TissueRectangle(
-    const RACES::Mutants::Evolutions::PositionInTissue &lower_corner,
-    const RACES::Mutants::Evolutions::PositionInTissue &upper_corner)
+    const CLONES::Mutants::Evolutions::PositionInTissue &lower_corner,
+    const CLONES::Mutants::Evolutions::PositionInTissue &upper_corner)
     : RectangleSet(lower_corner, upper_corner)
 {}
 
 TissueRectangle::TissueRectangle(
-    const RACES::Mutants::Evolutions::PositionInTissue &lower_corner,
-    const RACES::Mutants::Evolutions::AxisSize &x_size,
-    const RACES::Mutants::Evolutions::AxisSize &y_size)
+    const CLONES::Mutants::Evolutions::PositionInTissue &lower_corner,
+    const CLONES::Mutants::Evolutions::AxisSize &x_size,
+    const CLONES::Mutants::Evolutions::AxisSize &y_size)
     : RectangleSet(lower_corner, x_size, y_size)
 {}
 
 TissueRectangle::TissueRectangle(const std::vector<uint16_t> &lower_corner,
                                  const std::vector<uint16_t> &upper_corner)
     : TissueRectangle(
-          RACES::Mutants::Evolutions::PositionInTissue{lower_corner[0], lower_corner[1]},
-          RACES::Mutants::Evolutions::PositionInTissue{upper_corner[0], upper_corner[1]})
+          CLONES::Mutants::Evolutions::PositionInTissue{lower_corner[0], lower_corner[1]},
+          CLONES::Mutants::Evolutions::PositionInTissue{upper_corner[0], upper_corner[1]})
 {}
 
 TissueRectangle::TissueRectangle(const std::vector<uint16_t> &lower_corner,
-                                 const RACES::Mutants::Evolutions::AxisSize &x_size,
-                                 const RACES::Mutants::Evolutions::AxisSize &y_size)
+                                 const CLONES::Mutants::Evolutions::AxisSize &x_size,
+                                 const CLONES::Mutants::Evolutions::AxisSize &y_size)
     : TissueRectangle(
-          RACES::Mutants::Evolutions::PositionInTissue{lower_corner[0], lower_corner[1]},
+          CLONES::Mutants::Evolutions::PositionInTissue{lower_corner[0], lower_corner[1]},
           x_size, y_size)
 {}

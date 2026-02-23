@@ -21,6 +21,6 @@ _install
 *.Rd
 *.log
 *.lock
-RACES
+CLONES
 *.pdf
 docs*

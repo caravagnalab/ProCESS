@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-> *Disclaimer:* RACES/ProCESS internally implements the probability
+> *Disclaimer:* CLONES/ProCESS internally implements the probability
 > distributions using the C++11 random number distribution classes whose
 > algorithms are not defined by the standard. Thus, the simulation
 > depends on the compiler used to compile ProCESS, and because of that,

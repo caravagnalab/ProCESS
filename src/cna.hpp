@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,28 +24,28 @@
 
 #include <Rcpp.h>
 
-class CNA : public RACES::Mutations::CNA
+class CNA : public CLONES::Mutations::CNA
 {
     // amplification
-    CNA(const RACES::Mutations::GenomicPosition &initial_position,
-        const RACES::Mutations::CNA::Length &length,
-        const RACES::Mutations::AlleleId &allele,
-        const RACES::Mutations::AlleleId &src_allele);
+    CNA(const CLONES::Mutations::GenomicPosition &initial_position,
+        const CLONES::Mutations::CNA::Length &length,
+        const CLONES::Mutations::AlleleId &allele,
+        const CLONES::Mutations::AlleleId &src_allele);
 
     // deleletion
-    CNA(const RACES::Mutations::GenomicPosition &initial_position,
-        const RACES::Mutations::CNA::Length &length,
-        const RACES::Mutations::AlleleId &allele);
+    CNA(const CLONES::Mutations::GenomicPosition &initial_position,
+        const CLONES::Mutations::CNA::Length &length,
+        const CLONES::Mutations::AlleleId &allele);
 
   public:
     CNA();
 
     inline std::string get_chromosome() const
     {
-        return RACES::Mutations::GenomicPosition::chrtos(chr_id);
+        return CLONES::Mutations::GenomicPosition::chrtos(chr_id);
     }
 
-    inline const RACES::Mutations::ChrPosition &get_position_in_chromosome() const
+    inline const CLONES::Mutations::ChrPosition &get_position_in_chromosome() const
     {
         return begin();
     }
@@ -58,7 +58,7 @@ class CNA : public RACES::Mutations::CNA
 
     inline std::string get_type() const
     {
-        if (type == RACES::Mutations::CNA::Type::AMPLIFICATION) {
+        if (type == CLONES::Mutations::CNA::Type::AMPLIFICATION) {
             return "A";
         }
         return "D";

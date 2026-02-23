@@ -1,5 +1,5 @@
 ## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
-## Copyright (C) 2023-2025 - Alberto Casagrande <alberto.casagrande@uniud.it>
+## Copyright (C) 2023-2026 - Alberto Casagrande <alberto.casagrande@uniud.it>
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -54,8 +54,8 @@
 
 plot_sticks = function(forest, labels, cls = NULL) {
   stopifnot(inherits(forest, "Rcpp_SampleForest"))
-  nodes <- forest$get_nodes()
-  if (nrow(nodes) == 0) {
+  forest_data <- forest$get_nodes() %>% dplyr::select(-.data$depth)
+  if (nrow(forest_data) == 0) {
     warning("The forest does not contain any node")
     return(ggplot2::ggplot())
   } else {
@@ -67,8 +67,6 @@ plot_sticks = function(forest, labels, cls = NULL) {
       ) %>%
       dplyr::add_row(cell_id="WT", ancestor="WT", mutant=NA, epistate="",
                      sample=NA, birth_time=0, label="Truncal")
-
-    forest_data <- forest$get_nodes()
 
     forest_data[nrow(forest_data) + 1, ] <- c(NA, NA, NA, NA, NA, 0)
 

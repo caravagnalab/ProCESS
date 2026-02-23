@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -541,7 +541,7 @@ RCPP_MODULE(Mutations)
 //'   indel = 4e-1)))
 //' m_engine
         .method("change_rates_from",
-                (void (MutationEngine::*)(const RACES::Time, const std::string &,
+                (void (MutationEngine::*)(const CLONES::Time, const std::string &,
                                           const Rcpp::List &))(
                     &MutationEngine::change_rates_from),
                 "Change passenger rates from a given timestamp")
@@ -1070,7 +1070,8 @@ RCPP_MODULE(Mutations)
 //' \item \emph{Return:} A data frame representing, for each node
 //'   in the forest, the identified (column `id`),
 //'   whenever the node is not a root, the ancestor
-//'   identifier (column `ancestor`), whenever the node
+//'   identifier (column `ancestor`), the node's depth
+//'   (column "`depth`"), whenever the node
 //'   was sampled, i.e., it is one of the forest
 //'   leaves, the name of the sample containing the
 //'   node, (column `sample`), the mutant (column
@@ -1150,12 +1151,13 @@ RCPP_MODULE(Mutations)
 //' @return A data frame representing, for each node
 //'   in the forest, the identified (column `cell_id`),
 //'   whenever the node is not a root, the ancestor
-//'   identifier (column `ancestor`), whenever the
-//'   node was sampled, i.e., it is one of the forest
-//'   leaves, the name of the sample containing the
-//'   node, (column `sample`), the mutant (column
-//'   `mutant`), the epistate (column `epistate`),
-//'   and the birth time (column `birth_time`).
+//'   identifier (column `ancestor`), the node's depth
+//'   (column "`depth`"), whenever the node was sampled,
+//'   i.e., it is one of the forest leaves, the name of
+//'   the sample containing the node, (column `sample`),
+//'   the mutant (column `mutant`), the epistate (column
+//'   `epistate`), and the birth time (column
+//'   `birth_time`).
 //' @seealso \code{\link{SampleForest$get_nodes}} for usage examples.
         .method("get_nodes",
                 (List (PhylogeneticForest::*)() const)(&PhylogeneticForest::get_nodes),
@@ -1184,7 +1186,7 @@ RCPP_MODULE(Mutations)
 //' @seealso \code{\link{SampleForest$get_coalescent_cells}} for
 //'   usage examples
         .method("get_coalescent_cells",
-                (List (PhylogeneticForest::*)(const std::list<RACES::Mutants::CellId> &)
+                (List (PhylogeneticForest::*)(const std::list<CLONES::Mutants::CellId> &)
                      const)(&PhylogeneticForest::get_coalescent_cells),
                 "Get the most recent common ancestor of some cells")
         .method("get_coalescent_cells",
@@ -1380,7 +1382,7 @@ RCPP_MODULE(Mutations)
 //' head(mutations)
 //' @seealso \code{\link{PhylogeneticForest$get_sampled_cell_CNAs}}
         .method("get_cell_CNAs",
-                (List (PhylogeneticForest::*)(const RACES::Mutants::CellId &)
+                (List (PhylogeneticForest::*)(const CLONES::Mutants::CellId &)
                      const)(&PhylogeneticForest::get_cell_CNAs),
                 "Get the CNAs of a cell")
 
@@ -1479,7 +1481,7 @@ RCPP_MODULE(Mutations)
 //' head(mutations)
 //' @seealso \code{vignette("sample_partition")}
         .method("get_cell_mutations",
-                (List (PhylogeneticForest::*)(const RACES::Mutants::CellId &)
+                (List (PhylogeneticForest::*)(const CLONES::Mutants::CellId &)
                      const)(&PhylogeneticForest::get_cell_SIDs),
                 "Get the SNVs and the indels of one cell")
 
@@ -1532,11 +1534,11 @@ RCPP_MODULE(Mutations)
 //'   stick from the higher to the deeper in the forest.
 //' @seealso \code{\link{SampleForest$get_sticks}} for usage examples.
         .method("get_sticks",
-                (std::list<std::list<RACES::Mutants::CellId>> (PhylogeneticForest::*)(
+                (std::list<std::list<CLONES::Mutants::CellId>> (PhylogeneticForest::*)(
                     const double) const)(&PhylogeneticForest::get_sticks),
                 "Get the forest sticks")
         .method("get_sticks",
-                (std::list<std::list<RACES::Mutants::CellId>> (PhylogeneticForest::*)()
+                (std::list<std::list<CLONES::Mutants::CellId>> (PhylogeneticForest::*)()
                      const)(&PhylogeneticForest::get_sticks),
                 "Get the forest sticks")
 
@@ -1612,6 +1614,22 @@ RCPP_MODULE(Mutations)
                 (std::string (PhylogeneticForest::*)()
                      const)(&PhylogeneticForest::get_reference_path),
                 "Get the reference genome path")
+
+//' @name PhylogeneticForest$get_mutation_statistics
+//' @title Getting the statistics about mutations on each node
+//' @description This method returns a dataframe reporting the statistics about
+//'   mutations on each node.
+//' @return A dataframe consisting of five columns "`cell_id`", "`new_SIDs`",
+//'   "`new_CNAs`", "`total_SIDs`", and "`total_CNAs`". Each row represents a
+//'   node in the phylogenetic forest and reports the identifier of the
+//'   corresponding cell and contains the number of mutations (`new_SIDs`) and
+//'   CNAs (`new_CNAs`) appearing for the first time on the cell. Moreover, it
+//'   show the total number of mutations and CNAs on the cell (`total_SIDs`
+//'   and `total_CNAs`, respectively).
+        .method("get_mutation_statistics",
+                (Rcpp::List (PhylogeneticForest::*)()
+                     const)(&PhylogeneticForest::get_mutation_statistics),
+                "Get the statistics about node mutations")
 
 //' @name PhylogeneticForest$set_reference_path
 //' @title Setting the reference genome path

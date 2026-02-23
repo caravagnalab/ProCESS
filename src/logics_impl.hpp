@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,20 +27,20 @@ class TissueSimulation;
 namespace Logics
 {
 
-class Variable : public RACES::Mutants::Logics::Variable
+class Variable : public CLONES::Mutants::Logics::Variable
 {
   public:
-    Variable(RACES::Mutants::Logics::Variable &&variable);
+    Variable(CLONES::Mutants::Logics::Variable &&variable);
 
     void show() const;
 
     friend class TissueSimulation;
 };
 
-class Expression : public RACES::Mutants::Logics::Expression
+class Expression : public CLONES::Mutants::Logics::Expression
 {
   public:
-    Expression(RACES::Mutants::Logics::Expression &&expression);
+    Expression(CLONES::Mutants::Logics::Expression &&expression);
 
     void show() const;
 };
@@ -49,10 +49,10 @@ SEXP sum(const SEXP &lhs, const SEXP &rhs);
 SEXP subtract(const SEXP &lhs, const SEXP &rhs);
 SEXP multiply(const SEXP &lhs, const SEXP &rhs);
 
-class Relation : public RACES::Mutants::Logics::Relation
+class Relation : public CLONES::Mutants::Logics::Relation
 {
   public:
-    Relation(RACES::Mutants::Logics::Relation &&relation);
+    Relation(CLONES::Mutants::Logics::Relation &&relation);
 
     void show() const;
 };
@@ -66,10 +66,10 @@ SEXP ne(const SEXP &lhs, const SEXP &rhs);
 SEXP lt(const SEXP &lhs, const SEXP &rhs);
 SEXP le(const SEXP &lhs, const SEXP &rhs);
 
-class Formula : public RACES::Mutants::Logics::Formula
+class Formula : public CLONES::Mutants::Logics::Formula
 {
   public:
-    Formula(RACES::Mutants::Logics::Formula &&Formula);
+    Formula(CLONES::Mutants::Logics::Formula &&Formula);
 
     void show() const;
 };

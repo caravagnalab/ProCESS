@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,15 +24,15 @@
 
 #include <Rcpp.h>
 
-class SampledCell : private RACES::Mutations::PhylogeneticForest::const_node
+class SampledCell : private CLONES::Mutations::PhylogeneticForest::const_node
 {
   public:
-    SampledCell(const RACES::Mutations::PhylogeneticForest &forest,
-                const RACES::Mutants::CellId &cell_id);
+    SampledCell(const CLONES::Mutations::PhylogeneticForest &forest,
+                const CLONES::Mutants::CellId &cell_id);
 
     inline std::string epistate() const
     {
-        using namespace RACES::Mutants;
+        using namespace CLONES::Mutants;
 
         return MutantProperties::signature_to_string(get_methylation_signature());
     }
@@ -41,7 +41,7 @@ class SampledCell : private RACES::Mutations::PhylogeneticForest::const_node
 
     inline std::string species() const { return mutant() + epistate(); }
 
-    inline const RACES::Time &birth_time() const { return get_birth_time(); }
+    inline const CLONES::Time &birth_time() const { return get_birth_time(); }
 
     Rcpp::List mutations() const;
 };

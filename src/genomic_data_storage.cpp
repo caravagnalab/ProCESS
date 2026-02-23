@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -95,7 +95,7 @@ std::vector<GermlineSubject> GermlineStorage::get_population() const
 {
     std::list<GermlineSubject> s_list;
 
-    RACES::IO::CSVReader csv_reader(get_population_file(), true, '\t');
+    CLONES::IO::CSVReader csv_reader(get_population_file(), true, '\t');
 
     for (const auto &row : csv_reader) {
         s_list.emplace_back(row.get_field(0), row.get_field(1), row.get_field(2),
@@ -125,14 +125,14 @@ Rcpp::List GermlineStorage::get_population_descriptions_df() const
                     _["quote"] = "", _["header"] = true, _["sep"] = "\t");
 }
 
-std::map<RACES::Mutations::ChromosomeId, size_t>
+std::map<CLONES::Mutations::ChromosomeId, size_t>
 GermlineStorage::get_alleles_per_chromosome(const std::string &gender) const
 {
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutations;
 
     std::map<ChromosomeId, size_t> alleles_per_chromosome;
 
-    RACES::IO::CSVReader csv_reader(get_alleles_file(), true, '\t');
+    CLONES::IO::CSVReader csv_reader(get_alleles_file(), true, '\t');
 
     const auto &header = csv_reader.get_header();
     auto found = find(header.begin(), header.end(), gender);
@@ -152,7 +152,7 @@ GermlineStorage::get_alleles_per_chromosome(const std::string &gender) const
 
 GermlineSubject GermlineStorage::get_subject(const std::string &subject_name) const
 {
-    RACES::IO::CSVReader csv_reader(get_population_file(), true, '\t');
+    CLONES::IO::CSVReader csv_reader(get_population_file(), true, '\t');
 
     for (const auto &row : csv_reader) {
         if (row.get_field(0) == subject_name) {
@@ -169,10 +169,10 @@ Rcpp::List GermlineStorage::get_subject_df(const std::string &subject_name) cons
     return get_subject(subject_name).get_dataframe();
 }
 
-RACES::Mutations::GenomeMutations
+CLONES::Mutations::GenomeMutations
 GermlineStorage::build_germline(const std::string &subject_name, const bool quiet) const
 {
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutations;
 
     auto bin_path = get_binary_file(subject_name);
 
@@ -183,19 +183,19 @@ GermlineStorage::build_germline(const std::string &subject_name, const bool quie
     auto germline = GermlineMutations::load(get_file(), num_of_alleles, subject.name,
                                             Rcpp::Rcout, quiet);
 
-    RACES::Archive::Binary::Out oarchive(bin_path);
+    CLONES::Archive::Binary::Out oarchive(bin_path);
 
-    RACES::UI::ProgressBar progress_bar(Rcpp::Rcout, quiet);
+    CLONES::UI::ProgressBar progress_bar(Rcpp::Rcout, quiet);
 
     oarchive.save(germline, progress_bar, "germline");
 
     return germline;
 }
 
-RACES::Mutations::GenomeMutations
+CLONES::Mutations::GenomeMutations
 GermlineStorage::get_germline(const std::string &subject_name, const bool quiet) const
 {
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutations;
 
     auto bin_path = get_binary_file(subject_name);
 
@@ -203,17 +203,17 @@ GermlineStorage::get_germline(const std::string &subject_name, const bool quiet)
         return build_germline(subject_name, quiet);
     }
 
-    RACES::Archive::Binary::In iarchive(bin_path);
+    CLONES::Archive::Binary::In iarchive(bin_path);
 
     GenomeMutations germline;
 
     try {
-        RACES::UI::ProgressBar progress_bar(Rcpp::Rcout, quiet);
+        CLONES::UI::ProgressBar progress_bar(Rcpp::Rcout, quiet);
 
         iarchive.load(germline, progress_bar, "germline");
-    } catch (RACES::Archive::WrongFileFormatDescr &ex) {
+    } catch (CLONES::Archive::WrongFileFormatDescr &ex) {
         raise_error(ex, "germline");
-    } catch (RACES::Archive::WrongFileFormatVersion &ex) {
+    } catch (CLONES::Archive::WrongFileFormatVersion &ex) {
         raise_error(ex, "germline");
     }
     return germline;
@@ -348,8 +348,8 @@ void GenomicDataStorage::retrieve_signatures(
 {
     std::list<std::pair<std::string, std::filesystem::path>> download_list;
 
-    collect_signatures_download_list<RACES::Mutations::SBSType>(download_list);
-    collect_signatures_download_list<RACES::Mutations::IDType>(download_list);
+    collect_signatures_download_list<CLONES::Mutations::SBSType>(download_list);
+    collect_signatures_download_list<CLONES::Mutations::IDType>(download_list);
 
     if (download_list.size() == 0) {
         return;

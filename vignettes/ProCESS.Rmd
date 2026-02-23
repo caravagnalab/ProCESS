@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-ProCESS wraps the [RACES](https://github.com/albertocasagrande/RACES) simulation
+ProCESS wraps the [CLONES](https://github.com/albertocasagrande/CLONES) simulation
 and data-generation engine by using the
 [R/C++ Rcpp interface](https://www.rcpp.org/), making it easy to "program"
 stochastic tumour evolution.

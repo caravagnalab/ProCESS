@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +19,9 @@
 
 #include "phylogenetic_forest.hpp"
 
-SampledCell::SampledCell(const RACES::Mutations::PhylogeneticForest &forest,
-                         const RACES::Mutants::CellId &cell_id)
-    : RACES::Mutations::PhylogeneticForest::const_node(&forest, cell_id)
+SampledCell::SampledCell(const CLONES::Mutations::PhylogeneticForest &forest,
+                         const CLONES::Mutants::CellId &cell_id)
+    : CLONES::Mutations::PhylogeneticForest::const_node(&forest, cell_id)
 {}
 
 Rcpp::List SampledCell::mutations() const

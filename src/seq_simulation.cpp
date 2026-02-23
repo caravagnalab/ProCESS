@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,12 +38,12 @@ std::string join(const std::set<std::string> &S, const char &sep = ';')
 }
 
 std::set<std::string>
-get_descriptions(const std::set<RACES::Mutations::Mutation::Nature> &nature_set)
+get_descriptions(const std::set<CLONES::Mutations::Mutation::Nature> &nature_set)
 {
     std::set<std::string> nature_strings;
 
     for (const auto &nature : nature_set) {
-        nature_strings.insert(RACES::Mutations::Mutation::get_nature_description(nature));
+        nature_strings.insert(CLONES::Mutations::Mutation::get_nature_description(nature));
     }
 
     return nature_strings;
@@ -51,11 +51,11 @@ get_descriptions(const std::set<RACES::Mutations::Mutation::Nature> &nature_set)
 
 void add_SNV_data(
     Rcpp::DataFrame &df,
-    const std::map<RACES::Mutations::SID,
-                   RACES::Mutations::SequencingSimulations::SIDData> &mutations)
+    const std::map<CLONES::Mutations::SID,
+                   CLONES::Mutations::SequencingSimulations::SIDData> &mutations)
 {
     using namespace Rcpp;
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutations;
 
     size_t num_of_mutations = mutations.size();
 
@@ -92,9 +92,9 @@ void add_SNV_data(
 
 void add_wide_sample_statistics(
     Rcpp::DataFrame &df,
-    const RACES::Mutations::SequencingSimulations::SampleStatistics &sample_statistics,
-    const std::map<RACES::Mutations::SID,
-                   RACES::Mutations::SequencingSimulations::SIDData> &mutations)
+    const CLONES::Mutations::SequencingSimulations::SampleStatistics &sample_statistics,
+    const std::map<CLONES::Mutations::SID,
+                   CLONES::Mutations::SequencingSimulations::SIDData> &mutations)
 {
     if (df.length() == 0) {
         add_SNV_data(df, mutations);
@@ -107,7 +107,7 @@ void add_wide_sample_statistics(
     }
 
     using namespace Rcpp;
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutations;
 
     DoubleVector VAF(num_of_mutations);
     IntegerVector occurrences(num_of_mutations), coverages(num_of_mutations);
@@ -143,12 +143,12 @@ void add_wide_sample_statistics(
     df.push_back(VAF, sample_name + ".VAF");
 }
 
-std::map<RACES::Mutations::SID, RACES::Mutations::SequencingSimulations::SIDData>
-get_active_mutations(const RACES::Mutations::SequencingSimulations::SampleSetStatistics
+std::map<CLONES::Mutations::SID, CLONES::Mutations::SequencingSimulations::SIDData>
+get_active_mutations(const CLONES::Mutations::SequencingSimulations::SampleSetStatistics
                          &sample_set_statistics,
                      const bool &include_non_sequenced_mutations)
 {
-    std::map<RACES::Mutations::SID, RACES::Mutations::SequencingSimulations::SIDData>
+    std::map<CLONES::Mutations::SID, CLONES::Mutations::SequencingSimulations::SIDData>
         active_mutations;
 
     for (const auto &[sample_name, sample_stats] : sample_set_statistics) {
@@ -174,7 +174,7 @@ get_active_mutations(const RACES::Mutations::SequencingSimulations::SampleSetSta
 }
 
 Rcpp::List
-get_wide_dataframe(const RACES::Mutations::SequencingSimulations::SampleSetStatistics
+get_wide_dataframe(const CLONES::Mutations::SequencingSimulations::SampleSetStatistics
                          &sample_set_statistics,
                    const bool &include_non_sequenced_mutations)
 {
@@ -191,11 +191,11 @@ get_wide_dataframe(const RACES::Mutations::SequencingSimulations::SampleSetStati
 
 
 Rcpp::List
-get_long_dataframe(const RACES::Mutations::SequencingSimulations::SampleSetStatistics
+get_long_dataframe(const CLONES::Mutations::SequencingSimulations::SampleSetStatistics
                     &sample_set_statistics)
 {
     using namespace Rcpp;
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutations;
 
     size_t num_of_rows{0};
 
@@ -281,21 +281,21 @@ std::filesystem::path get_reference_genome(const PhylogeneticForest &forest,
     }
 }
 
-std::set<RACES::Mutations::ChromosomeId>
+std::set<CLONES::Mutations::ChromosomeId>
 get_relevant_chr_set(const PhylogeneticForest& forest, SEXP &chromosome_ids)
 {
     using namespace Rcpp;
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutations;
 
     switch (TYPEOF(chromosome_ids)) {
     case NILSXP:
     {
-        std::set<RACES::Mutations::ChromosomeId> chr_ids;
+        std::set<CLONES::Mutations::ChromosomeId> chr_ids;
 
         const auto& germline_mutations = forest.get_germline_mutations();
         const auto chr_view = std::views::keys(germline_mutations.get_chromosomes());
 
-        return std::set<RACES::Mutations::ChromosomeId>{chr_view.begin(), chr_view.end()};
+        return std::set<CLONES::Mutations::ChromosomeId>{chr_view.begin(), chr_view.end()};
     }
     case STRSXP:
     {
@@ -337,11 +337,11 @@ get_relevant_chr_set(const PhylogeneticForest& forest, SEXP &chromosome_ids)
 }
 
 template <template <class> typename QUALITY_SCORE_MODEL>
-inline RACES::Mutations::SequencingSimulations::SampleSetStatistics
-simulate_seq(RACES::Mutations::SequencingSimulations::ReadSimulator<> &simulator,
+inline CLONES::Mutations::SequencingSimulations::SampleSetStatistics
+simulate_seq(CLONES::Mutations::SequencingSimulations::ReadSimulator<> &simulator,
              const Rcpp::XPtr<BasicIlluminaSequencer> &R_seq,
              const PhylogeneticForest& forest,
-             const std::set<RACES::Mutations::ChromosomeId> &chromosome_ids,
+             const std::set<CLONES::Mutations::ChromosomeId> &chromosome_ids,
              const double& coverage, const bool& produce_normal_sample,
              const double& purity, const bool& with_pre_neoplastic,
              const bool& with_germinal, const std::string &base_name,
@@ -349,7 +349,7 @@ simulate_seq(RACES::Mutations::SequencingSimulations::ReadSimulator<> &simulator
              std::ostream &progress_bar_stream,
              const int &seed, const bool quiet)
 {
-    using namespace RACES::Sequencers;
+    using namespace CLONES::Sequencers;
 
     Illumina::BasicSequencer<QUALITY_SCORE_MODEL> sequencer(R_seq->get_error_rate(),
                                                             seed);
@@ -360,10 +360,10 @@ simulate_seq(RACES::Mutations::SequencingSimulations::ReadSimulator<> &simulator
                      quiet);
 }
 
-RACES::Mutations::SequencingSimulations::SampleSetStatistics simulate_seq(
-    RACES::Mutations::SequencingSimulations::ReadSimulator<> &simulator, SEXP &sequencer,
+CLONES::Mutations::SequencingSimulations::SampleSetStatistics simulate_seq(
+    CLONES::Mutations::SequencingSimulations::ReadSimulator<> &simulator, SEXP &sequencer,
     const PhylogeneticForest& forest,
-    const std::set<RACES::Mutations::ChromosomeId> &chromosome_ids,
+    const std::set<CLONES::Mutations::ChromosomeId> &chromosome_ids,
     const double& coverage, const bool& produce_normal_sample,
     const double& purity, const bool& with_pre_neoplastic,
     const bool& with_germinal, const std::string &base_name,
@@ -380,7 +380,7 @@ RACES::Mutations::SequencingSimulations::SampleSetStatistics simulate_seq(
 
             Rcpp::XPtr<BasicIlluminaSequencer> sequencer_ptr(env.get(".pointer"));
 
-            using namespace RACES::Sequencers;
+            using namespace CLONES::Sequencers;
 
             if (sequencer_ptr->producing_random_scores()) {
                 return simulate_seq<QualityScoreModel>(
@@ -397,7 +397,7 @@ RACES::Mutations::SequencingSimulations::SampleSetStatistics simulate_seq(
             }
         }
         if (s4obj.is("Rcpp_ErrorlessIlluminaSequencer")) {
-            RACES::Sequencers::Illumina::ErrorLessSequencer seq;
+            CLONES::Sequencers::Illumina::ErrorLessSequencer seq;
 
             return simulator(seq, forest, chromosome_ids, coverage,
                              produce_normal_sample, purity, with_pre_neoplastic,
@@ -409,7 +409,7 @@ RACES::Mutations::SequencingSimulations::SampleSetStatistics simulate_seq(
     }
     case NILSXP:
     {
-        RACES::Sequencers::Illumina::ErrorLessSequencer seq;
+        CLONES::Sequencers::Illumina::ErrorLessSequencer seq;
 
         return simulator(seq, forest, chromosome_ids, coverage, produce_normal_sample,
                          purity, with_pre_neoplastic, with_germinal, base_name,
@@ -523,7 +523,7 @@ Rcpp::List simulate_seq(const PhylogeneticForest &forest, SEXP &sequencer,
                         const bool &wide_format, const SEXP &seed,
                         const bool &quiet)
 {
-    using namespace RACES::Mutations::SequencingSimulations;
+    using namespace CLONES::Mutations::SequencingSimulations;
 
 
     if (with_normal_sample && !wide_format
@@ -616,7 +616,7 @@ Rcpp::List simulate_normal_seq(const PhylogeneticForest &forest, SEXP &sequencer
                                const bool &wide_format, const SEXP &seed,
                                const bool quiet)
 {
-    using namespace RACES::Mutations::SequencingSimulations;
+    using namespace CLONES::Mutations::SequencingSimulations;
 
     const auto ref_genome = get_reference_genome(forest, reference_genome);
 

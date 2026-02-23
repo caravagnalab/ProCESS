@@ -10,7 +10,7 @@
 
 `ProCESS` stands for Programmable Cancer Evolution Spatial Simulator.
 It is an R wrapper for
-[RACES](https://github.com/albertocasagrande/RACES), a C++ tumour
+[CLONES](https://github.com/albertocasagrande/CLONES), a C++ tumour
 evolution simulator, and provides additional plotting functions. 
 
 #### Help and support

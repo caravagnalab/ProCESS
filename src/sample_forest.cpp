@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,10 @@
 #include "simulation.hpp"
 #include "utility.hpp"
 
-SampleForest::SampleForest() : RACES::Mutants::DescendantForest() {}
+SampleForest::SampleForest() : CLONES::Mutants::DescendantForest() {}
 
-SampleForest::SampleForest(const RACES::Mutants::Evolutions::Simulation &simulation)
-    : RACES::Mutants::DescendantForest(simulation)
+SampleForest::SampleForest(const CLONES::Mutants::Evolutions::Simulation &simulation)
+    : CLONES::Mutants::DescendantForest(simulation)
 {}
 
 Rcpp::List SampleForest::get_samples_info() const
@@ -36,17 +36,17 @@ SampleForest::get_subforest_for(const std::vector<std::string> &sample_names) co
 {
     SampleForest forest;
 
-    static_cast<RACES::Mutants::DescendantForest &>(forest) =
-        RACES::Mutants::DescendantForest::get_subforest_for(sample_names);
+    static_cast<CLONES::Mutants::DescendantForest &>(forest) =
+        CLONES::Mutants::DescendantForest::get_subforest_for(sample_names);
 
     return forest;
 }
 
 void SampleForest::save(const std::string &filename) const
 {
-    RACES::Archive::Binary::Out out_archive(filename);
+    CLONES::Archive::Binary::Out out_archive(filename);
 
-    RACES::Mutants::DescendantForest::save(out_archive);
+    CLONES::Mutants::DescendantForest::save(out_archive);
 }
 
 SampleForest SampleForest::load(const std::string &filename)
@@ -61,14 +61,14 @@ SampleForest SampleForest::load(const std::string &filename)
         Rcpp::stop("The file \"" + filename + "\" is not a regular file.");
     }
 
-    RACES::Archive::Binary::In in_archive(filename);
+    CLONES::Archive::Binary::In in_archive(filename);
 
     try {
-        static_cast<RACES::Mutants::DescendantForest &>(forest) =
-            RACES::Mutants::DescendantForest::load(in_archive);
-    } catch (RACES::Archive::WrongFileFormatDescr &ex) {
+        static_cast<CLONES::Mutants::DescendantForest &>(forest) =
+            CLONES::Mutants::DescendantForest::load(in_archive);
+    } catch (CLONES::Archive::WrongFileFormatDescr &ex) {
         raise_error(ex, "sample forest");
-    } catch (RACES::Archive::WrongFileFormatVersion &ex) {
+    } catch (CLONES::Archive::WrongFileFormatVersion &ex) {
         raise_error(ex, "sample forest");
     }
 

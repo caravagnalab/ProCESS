@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ struct GermlineSubject
     Rcpp::List get_dataframe() const;
 
     template <typename ARCHIVE,
-              std::enable_if_t<std::is_base_of_v<RACES::Archive::Basic::Out, ARCHIVE>,
+              std::enable_if_t<std::is_base_of_v<CLONES::Archive::Basic::Out, ARCHIVE>,
                                bool> = true>
     inline void save(ARCHIVE &archive) const
     {
@@ -48,7 +48,7 @@ struct GermlineSubject
     }
 
     template <typename ARCHIVE,
-              std::enable_if_t<std::is_base_of_v<RACES::Archive::Basic::In, ARCHIVE>,
+              std::enable_if_t<std::is_base_of_v<CLONES::Archive::Basic::In, ARCHIVE>,
                                bool> = true>
     inline static GermlineSubject load(ARCHIVE &archive)
     {
@@ -121,7 +121,7 @@ class GermlineStorage
         return get_path() / ("germline_" + subject_name + ".dat");
     }
 
-    RACES::Mutations::GenomeMutations build_germline(const std::string &subject_name,
+    CLONES::Mutations::GenomeMutations build_germline(const std::string &subject_name,
                                                      const bool quiet) const;
 
   public:
@@ -133,12 +133,12 @@ class GermlineStorage
 
     std::vector<GermlineSubject> get_population() const;
 
-    std::map<RACES::Mutations::ChromosomeId, size_t>
+    std::map<CLONES::Mutations::ChromosomeId, size_t>
     get_alleles_per_chromosome(const std::string &gender) const;
 
     GermlineSubject get_subject(const std::string &subject_name) const;
 
-    RACES::Mutations::GenomeMutations get_germline(const std::string &subject_name,
+    CLONES::Mutations::GenomeMutations get_germline(const std::string &subject_name,
                                                    const bool quiet) const;
 
     Rcpp::List get_subject_df(const std::string &subject_name) const;
@@ -186,7 +186,7 @@ class GenomicDataStorage
 
     template <
         typename MUTATION_TYPE,
-        std::enable_if_t<std::is_base_of_v<RACES::Mutations::MutationType, MUTATION_TYPE>,
+        std::enable_if_t<std::is_base_of_v<CLONES::Mutations::MutationType, MUTATION_TYPE>,
                          bool> = true>
     std::list<std::pair<std::string, std::filesystem::path>> &
     collect_signatures_download_list(
@@ -246,7 +246,7 @@ class GenomicDataStorage
 
     template <
         typename MUTATION_TYPE,
-        std::enable_if_t<std::is_base_of_v<RACES::Mutations::MutationType, MUTATION_TYPE>,
+        std::enable_if_t<std::is_base_of_v<CLONES::Mutations::MutationType, MUTATION_TYPE>,
                          bool> = true>
     std::string get_signatures_path() const
     {
@@ -259,15 +259,15 @@ class GenomicDataStorage
 
     template <
         typename MUTATION_TYPE,
-        std::enable_if_t<std::is_base_of_v<RACES::Mutations::MutationType, MUTATION_TYPE>,
+        std::enable_if_t<std::is_base_of_v<CLONES::Mutations::MutationType, MUTATION_TYPE>,
                          bool> = true>
     std::string get_signatures_src() const
     {
-        if constexpr (std::is_base_of_v<MUTATION_TYPE, RACES::Mutations::SBSType>) {
+        if constexpr (std::is_base_of_v<MUTATION_TYPE, CLONES::Mutations::SBSType>) {
             return SBS_signatures_src;
         }
 
-        if constexpr (std::is_base_of_v<MUTATION_TYPE, RACES::Mutations::IDType>) {
+        if constexpr (std::is_base_of_v<MUTATION_TYPE, CLONES::Mutations::IDType>) {
             return indel_signatures_src;
         }
 
@@ -276,15 +276,15 @@ class GenomicDataStorage
 
     template <
         typename MUTATION_TYPE,
-        std::enable_if_t<std::is_base_of_v<RACES::Mutations::MutationType, MUTATION_TYPE>,
+        std::enable_if_t<std::is_base_of_v<CLONES::Mutations::MutationType, MUTATION_TYPE>,
                          bool> = true>
     std::filesystem::path signatures_storage_path() const
     {
-        if constexpr (std::is_base_of_v<MUTATION_TYPE, RACES::Mutations::SBSType>) {
+        if constexpr (std::is_base_of_v<MUTATION_TYPE, CLONES::Mutations::SBSType>) {
             return get_directory() / "SBS_signatures.txt";
         }
 
-        if constexpr (std::is_base_of_v<MUTATION_TYPE, RACES::Mutations::IDType>) {
+        if constexpr (std::is_base_of_v<MUTATION_TYPE, CLONES::Mutations::IDType>) {
             return get_directory() / "indel_signatures.txt";
         }
 

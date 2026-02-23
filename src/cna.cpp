@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,26 +20,26 @@
 #include "utility.hpp"
 
 // amplification
-CNA::CNA(const RACES::Mutations::GenomicPosition &initial_position,
-         const RACES::Mutations::CNA::Length &length,
-         const RACES::Mutations::AlleleId &allele,
-         const RACES::Mutations::AlleleId &src_allele)
-    : RACES::Mutations::CNA(initial_position, length,
-                            RACES::Mutations::CNA::Type::AMPLIFICATION, src_allele,
+CNA::CNA(const CLONES::Mutations::GenomicPosition &initial_position,
+         const CLONES::Mutations::CNA::Length &length,
+         const CLONES::Mutations::AlleleId &allele,
+         const CLONES::Mutations::AlleleId &src_allele)
+    : CLONES::Mutations::CNA(initial_position, length,
+                            CLONES::Mutations::CNA::Type::AMPLIFICATION, src_allele,
                             allele)
 {}
 
 // deleletion
-CNA::CNA(const RACES::Mutations::GenomicPosition &initial_position,
-         const RACES::Mutations::CNA::Length &length,
-         const RACES::Mutations::AlleleId &allele)
-    : RACES::Mutations::CNA(initial_position, length,
-                            RACES::Mutations::CNA::Type::DELETION, allele, allele)
+CNA::CNA(const CLONES::Mutations::GenomicPosition &initial_position,
+         const CLONES::Mutations::CNA::Length &length,
+         const CLONES::Mutations::AlleleId &allele)
+    : CLONES::Mutations::CNA(initial_position, length,
+                            CLONES::Mutations::CNA::Type::DELETION, allele, allele)
 {}
 
 CNA::CNA() {}
 
-SEXP wrap_allele_id(const RACES::Mutations::AlleleId &allele_id)
+SEXP wrap_allele_id(const CLONES::Mutations::AlleleId &allele_id)
 {
     if (allele_id == RANDOM_ALLELE) {
         return Rcpp::wrap(NA_INTEGER);
@@ -49,7 +49,7 @@ SEXP wrap_allele_id(const RACES::Mutations::AlleleId &allele_id)
 
 SEXP CNA::get_src_allele() const
 {
-    if (type == RACES::Mutations::CNA::Type::AMPLIFICATION) {
+    if (type == CLONES::Mutations::CNA::Type::AMPLIFICATION) {
         return wrap_allele_id(source);
     }
     return Rcpp::wrap(NA_INTEGER);
@@ -60,7 +60,7 @@ SEXP CNA::get_allele() const { return wrap_allele_id(dest); }
 Rcpp::List CNA::get_dataframe() const
 {
     using namespace Rcpp;
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutations;
 
     return DataFrame::create(_["chr"] = get_chromosome(),
                              _["from"] = get_position_in_chromosome(),
@@ -93,7 +93,7 @@ CNA CNA::build_CNA(const std::string type, const SEXP chromosome, const SEXP pos
                    const SEXP length, const SEXP allele, const SEXP src_allele)
 {
     using namespace Rcpp;
-    using namespace RACES::Mutations;
+    using namespace CLONES::Mutations;
 
     auto chr_name = as<std::string>(chromosome);
     auto chr_id = GenomicPosition::stochr(chr_name);

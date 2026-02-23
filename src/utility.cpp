@@ -1,6 +1,6 @@
 /*
  * This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
- * Copyright (c) 2023-2025 Alberto Casagrande <alberto.casagrande@uniud.it>
+ * Copyright (c) 2023-2026 Alberto Casagrande <alberto.casagrande@uniud.it>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -88,7 +88,7 @@ std::filesystem::path get_tmp_dir_path(const std::string &base_name)
     return output_path;
 }
 
-RACES::Mutations::AlleleId get_allele_id(const SEXP allele_id,
+CLONES::Mutations::AlleleId get_allele_id(const SEXP allele_id,
                                          const std::string &parameter_name)
 {
     switch (TYPEOF(allele_id)) {
@@ -136,7 +136,7 @@ std::string ordinal_suffix(const size_t &ord)
     }
 }
 
-void raise_error(const RACES::Archive::WrongFileFormatDescr &exception,
+void raise_error(const CLONES::Archive::WrongFileFormatDescr &exception,
                  const std::string &file_description)
 {
     const auto err_msg = "Wrong file format for the " + file_description
@@ -146,7 +146,7 @@ void raise_error(const RACES::Archive::WrongFileFormatDescr &exception,
     ::Rf_error("%s", err_msg.c_str());
 }
 
-void raise_error(const RACES::Archive::WrongFileFormatVersion &exception,
+void raise_error(const CLONES::Archive::WrongFileFormatVersion &exception,
                  const std::string &file_description)
 {
     const auto err_msg =
