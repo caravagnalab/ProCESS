@@ -26,6 +26,17 @@ SampleForest::SampleForest(const CLONES::Mutants::Evolutions::Simulation &simula
     : CLONES::Mutants::DescendantForest(simulation)
 {}
 
+std::vector<SampleForest::const_node> SampleForest::get_roots() const
+{
+    std::vector<SampleForest::const_node> roots;
+
+    for (const auto node : CLONES::Mutants::DescendantForest::get_roots()) {
+        roots.emplace_back(node);
+    }
+
+    return roots;
+}
+
 Rcpp::List SampleForest::get_samples_info() const
 {
     return TissueSimulation::get_samples_info(get_samples());

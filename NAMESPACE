@@ -34,6 +34,10 @@ export(CNA)
 export(Amplification)
 export(Deletion)
 
+export(SampleForestNode)
+export(SampleForestLabelTour)
+export(get_label_tour)
+
 export(Variable)
 export(Expression)
 export(Formula)

@@ -24,6 +24,8 @@
 #include "simulation.hpp"
 #include "tissue_rectangle.hpp"
 
+#include "forest_labelling.hpp"
+
 using namespace Rcpp;
 
 namespace RE = CLONES::Mutants::Evolutions;
@@ -1891,6 +1893,180 @@ RCPP_MODULE(Mutants)
         .method("save", &SampleForest::save, "Save a sample forest")
 
         .method("show", &SampleForest::show, "Describe the SampleForest");
+
+   class_<SampleForest::const_node>("SampleForestNode")
+        .property("cell_id",
+            (CLONES::Mutants::CellId (SampleForestNode::*)() const)(&SampleForestNode::get_id),
+            "The identifier of the cell associated to the node")
+        .property("parent",
+            (SampleForestNode (SampleForestNode::*)() const)(&SampleForestNode::parent),
+            "The node's parent")
+        .property("children",
+            (std::vector<SampleForestNode> (SampleForestNode::*)() const)(&SampleForestNode::children),
+            "The node's children")
+        .property("is_root",
+            (bool (SampleForestNode::*)() const)(&SampleForestNode::is_root),
+            "A Boolean flag that is set to TRUE iff the node is a root")
+        .property("is_leaf",
+            (bool (SampleForestNode::*)() const)(&SampleForestNode::is_leaf),
+            "A Boolean flag that is set to TRUE iff the node is a leaf")
+        .property("birth_time",
+            (CLONES::Time (SampleForestNode::*)() const)(&SampleForestNode::get_birth_time),
+            "The birth time of the cell associated to the node")
+        .property("death_time",
+            (CLONES::Time (SampleForestNode::*)() const)(&SampleForestNode::get_death_time),
+            "The death time of the cell associated to the node")
+        .property("life_span",
+            (CLONES::Time (SampleForestNode::*)() const)(&SampleForestNode::get_death_time),
+            "The life span of the cell associated to the node")
+        .property("species_id",
+            (CLONES::Mutants::SpeciesId (SampleForestNode::*)() const)(&SampleForestNode::get_species_id),
+            "The identifier of the species to whom the cell associated to the node belong")
+        .property("species_name",
+            (std::string (SampleForestNode::*)() const)(&SampleForestNode::get_species_name),
+            "The name of the species to whom the cell associated to the node belong")
+        .property("mutant_id",
+            (CLONES::Mutants::MutantId (SampleForestNode::*)() const)(&SampleForestNode::get_mutant_id),
+            "The identifier of the mutant to whom the cell associated to the node belong")
+        .property("mutant_name",
+            (std::string (SampleForestNode::*)() const)(&SampleForestNode::get_mutant_name),
+            "The name of the mutant to whom the cell associated to the node belong");
+
+    class_<SampleForestLabelTour>("SampleForestLabelTour")
+        .property("value",
+            (Rcpp::List (SampleForestLabelTour::*)() const)(&SampleForestLabelTour::get_value),
+            "Get the pair \"cell id\"-\"label\" for the current node in the tour")
+        .method("step",
+            (void (SampleForestLabelTour::*)())(&SampleForestLabelTour::step),
+            "Go to the next node in the tour")
+        .property("done",
+            (bool (SampleForestLabelTour::*)() const)(&SampleForestLabelTour::done),
+            "Test whether the tour ended");
+
+//' @name get_label_tour
+//' @title Labelling forest nodes
+//' @description This method generates a `SampleForestLabelTour`
+//' @param forest A `SampleForest` object.
+//' @param labelling_functor A function of the type
+//'  `label_type (*)(label_type, SampleForestNode)`.
+//' @param init_value The initial value of the labelling process
+//'  (default: `NULL`).
+//' @param only_leaves A Boolean value.
+//' @return A ` SampleForestLabelTour` that iterates
+//'   over `forest`'s nodes and applies labels from the root down to the
+//'   leaves. The labels are computed by using `labelling_functor`. For
+//'   each of `forest`'s nodes, `labelling_functor` takes as input the
+//'   parent label and the current node in the form of a
+//'   `SampleForestNode` object are returns the label of the current node.
+//'   The value `init_label` may be used as parent label for all forest
+//'   roots. The returned object exclusively iterates over `forest`'s
+//'   leaves if and only if `only_leaves` is set to `TRUE`.
+//' @examples
+//'
+//' set.seed(0)
+//' sim <- TissueSimulation()
+//' 
+//' sim$add_mutant(name = "A", growth_rates = 0.1, death_rates = 0.01)
+//' 
+//' sim$place_cell("A", 500, 500)
+//' sim$run_up_to_size("A", 10)
+//' 
+//' sim$sample_cells("S_1_1", bottom_left = c(500, 500),
+//'                  top_right = c(502, 502))
+//' 
+//' forest <- sim$get_sample_forest()
+//'
+//' # we define a function to collect the tour labels
+//' collect_labels <- function(tour)
+//' {
+//'   total <- NULL
+//'
+//'   # `SampleForestLabelTour$done` is `TRUE` iff the tour ended  
+//'   while (!tour$done) {
+//'    if (is.null(total)) {
+//'        # `SampleForestLabelTour$value` is a pair cell
+//'        #  identifier for the curren not and node label
+//'        total <- tour$value
+//'    } else {
+//'        total <- rbind(total, tour$value)
+//'    }
+//'
+//'    # `SampleForestLabelTour$step()` advances to the next node
+//'    # in the tour
+//'    tour$step()
+//'   }
+//'
+//'   return(total)
+//' }
+//'
+//' print("Functor 1")
+//' # a labelling functor
+//' labelling_functor1 <- function(label, node) {
+//'   # the nodes are labelled by the identifiers of the associated cells
+//'   return(node$cell_id)
+//' }
+//'
+//' # since `labelling_functor1` does not use `label`, we can omit the
+//' # parameter `init_value`
+//' tour <- get_label_tour(forest, labelling_functor1)
+//'
+//' print("Functor 1 - All nodes")
+//' print(collect_labels(tour))
+//'
+//' # since `labelling_functor1` does not use `label`, we can omit the
+//' # parameter `init_value`
+//' tour <- get_label_tour(forest, labelling_functor1, only_leaves=TRUE)
+//'
+//' print("Functor 1 - Only leaves")
+//' print(collect_labels(tour))
+//'
+//' labelling_functor2 <- function(label, node) {
+//'   # the nodes are labelled by their visiting order
+//'   return(label+1)
+//' }
+//'
+//' # `labelling_functor2` uses `label` and we must specify the
+//' # parameter `init_value`
+//' tour <- get_label_tour(forest, labelling_functor2,
+//'                        init_value=0, only_leaves=TRUE)
+//'
+//' print("Functor 2 - Only leaves")
+//' print(collect_labels(tour))
+//'
+//' a <- 3.14
+//'
+//' # this functor uses a global variable to compute the
+//' # labels
+//' labelling_functor3 <- function(label, node) {
+//'   # the nodes are labelled by their visiting order multiplied
+//'   # by the value in the global variable `a`
+//'   return(label+a)
+//' }
+//'
+//' tour <- get_label_tour(forest, labelling_functor3,
+//'                        init_value=0, only_leaves=TRUE)
+//'
+//' print("Functor 3 - Only leaves")
+//' print(collect_labels(tour))
+//'
+//' set.seed(0)
+//'
+//' # this functor uses a random function
+//' labelling_functor4 <- function(label, node) {
+//'   # the nodes are randomly labelled
+//'   return(label+sample(-100:100, 1))
+//' }
+//'
+//' tour <- get_label_tour(forest, labelling_functor4,
+//'                        init_value=0, only_leaves=TRUE)
+//'
+//' print("Functor 4 - Only leaves")
+//' print(collect_labels(tour))
+    function("get_label_tour", &(get_label_tour<SampleForest>),
+            List::create(
+                 _["forest"], _["labelling_functor"],
+                 _["init_value"] = R_NilValue, _["only_leaves"] = false),
+            "Get a labelling tour");
 
 //' @name load_sample_forest
 //' @title Loading sample forests
