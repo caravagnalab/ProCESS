@@ -159,7 +159,7 @@ plot_VAF_histogram <- function(
     plot <- data %>%
       ggplot2::ggplot(mapping = ggplot2::aes(x = VAF,
                                              fill = labels)) +
-      ggplot2::labs(col = data$labels, fill = label_name)
+      ggplot2::labs(fill = label_name)
   } else {
     plot <- data %>%
       ggplot2::ggplot(mapping = ggplot2::aes(x = VAF))
