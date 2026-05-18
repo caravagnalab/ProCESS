@@ -1,5 +1,5 @@
 ## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
-## Copyright (C) 2023-2025 - Alberto Casagrande <alberto.casagrande@uniud.it>
+## Copyright (C) 2023-2026 - Alberto Casagrande <alberto.casagrande@uniud.it>
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -131,7 +131,6 @@ plot_sticks = function(forest, labels, cls = NULL) {
       ggplot2::scale_color_manual(values = cls, na.translate=FALSE)  +
       ggplot2::theme_minimal() + ggplot2::theme(legend.position = "bottom") +
       ggplot2::labs(
-        shape = "Sample",
         x = NULL,
         y = "Birth time"
       ) + ggplot2::guides(

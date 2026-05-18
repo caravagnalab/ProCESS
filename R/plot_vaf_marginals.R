@@ -1,5 +1,5 @@
 ## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
-## Copyright (C) 2023-2025 - Giulio Caravagna <gcaravagna@units.it>
+## Copyright (C) 2023-2026 - Giulio Caravagna <gcaravagna@units.it>
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -120,6 +120,7 @@ plot_VAF_marginals <- function(seq_result, chromosomes = NULL, samples = NULL,
     }
 
     data["labels"] <- labels
+    label_name <- names(labels)
   }
 
   chromosomes <- validate_chromosomes(seq_res, chromosomes)
@@ -154,7 +155,8 @@ plot_VAF_marginals <- function(seq_result, chromosomes = NULL, samples = NULL,
     if (!is.null(labels)) {
       plot <- djoin %>%
         ggplot2::ggplot(mapping = ggplot2::aes(x = VAF.x, y = VAF.y,
-                                               col = labels.x))
+                                               col = labels.x)) +
+        ggplot2::labs(col = label_name)
     } else {
       plot <- djoin %>%
         ggplot2::ggplot(mapping = ggplot2::aes(x = VAF.x,
@@ -165,7 +167,7 @@ plot_VAF_marginals <- function(seq_result, chromosomes = NULL, samples = NULL,
       ggplot2::geom_point(alpha = 0.7) +
       ggplot2::xlim(c(-0.01, 1.01)) +
       ggplot2::ylim(c(-0.01, 1.01)) +
-      ggplot2::labs(x = couple[1], y = couple[2], col = "labels") +
+      ggplot2::labs(x = couple[1], y = couple[2]) +
       ggplot2::theme_bw() +
       ggplot2::theme(legend.position = "bottom")
   })
