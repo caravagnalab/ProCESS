@@ -110,7 +110,7 @@ RCPP_MODULE(Mutations)
 //' @title Getting the mutation data frame
 //' @description This method builds a data frame representing the mutation.
 //' @details The data frame has the columns `chr`, `chr_pos`, `ref`, `alt`,
-//'   `type` (i.e., "`SNV`" and "`indel`"), and `cause`.
+//'   `type` (i.e., "SNV" and "indel"), and `cause`.
 //' @examples
 //' snv <- SNV("X", 20002, "T", "A")
 //'
@@ -337,8 +337,8 @@ RCPP_MODULE(Mutations)
 //' @name CNA$get_dataframe
 //' @title Getting the CNA data frame
 //' @description This method builds a data frame representing the CNA.
-//' @details The data frame contains the  columns "`chr`", "`chr_pos`",
-//'   "`length`", "`alt_base`", "`allele`"", "`src_allele`", and "`type`".
+//' @details The data frame contains the  columns `chr`, `chr_pos`,
+//'   `length`, `alt_base`, `allele`, `src_allele`, and `type`.
 //' @examples
 //' # create an amplification CNA
 //' amp_cna <- Amplification("X", 20002, 100)
@@ -581,8 +581,8 @@ RCPP_MODULE(Mutations)
 //' @title Getting the genome information
 //' @description This method returns information about the genome.
 //' @details This method returns a data frame reporting the name
-//'    (column "`name`"), the size (column "`size`"), and the number
-//'    of alleles (column "`num_of_alleles`") of each chromosome.
+//'    (column `name`), the size (column `size`), and the number
+//'    of alleles (column `num_of_alleles`) of each chromosome.
 //' @examples
 //' # build a mutation engine
 //' m_engine <- MutationEngine(setup_code = "demo")
@@ -732,14 +732,14 @@ RCPP_MODULE(Mutations)
 //' @details The mutation are returned in a data frame reporting
 //'   the known driver mutations together with their types,
 //'   associated tumours, affected genes, and code name. The
-//'   first three columns ("`chr`", "`from`", and "`to`")
+//'   first three columns (`chr`, `from`, and `to`)
 //'   report the mutation chromosome, the initial position
 //'   and the final position, respectively. The next three
-//'   columns ("`ref`", "`alt`", and "`mutation_type`")
+//'   columns (`ref`, `alt`, and `mutation_type`)
 //'   describe the reference sequence, the altered sequence,
 //'   and the type of the mutation. The last four columns
-//'   ("`driver_gene`", "`driver_code`", "`driver_CDS`", and
-//'   "`tumour_type`") detail the affected gene, the driver
+//'   (`driver_gene`, `driver_code`, `driver_CDS`, and
+//'   `tumour_type`) detail the affected gene, the driver
 //'   code, which can be used to specify the mutation when
 //'   adding a mutant to the mutation engine, the variant code,
 //'   and the tumour type associated to the mutation.
@@ -1014,7 +1014,7 @@ RCPP_MODULE(Mutations)
 //'   in the forest, the identified (column `id`),
 //'   whenever the node is not a root, the ancestor
 //'   identifier (column `ancestor`), the node's depth
-//'   (column "`depth`"), whenever the node
+//'   (column `depth`), whenever the node
 //'   was sampled, i.e., it is one of the forest
 //'   leaves, the name of the sample containing the
 //'   node, (column `sample`), the mutant (column
@@ -1041,11 +1041,11 @@ RCPP_MODULE(Mutations)
 //' }
 //' @field get_samples_info Retrieves information about the samples \itemize{
 //' \item \emph{Returns:} A data frame containing, for each sample collected
-//'   during the simulation, the columns "`name`", "`time`", "`ymin`",
-//'   "`xmin`", "`ymax`", "`xmax`", "`tumour_cells`", and
-//'   "`tumour_cells_in_bbox`". The columns "`ymin`", "`xmin`", "`ymax`",
-//'   "`xmax`" report the boundaries of the sample bounding box, while
-//'   "`tumour_cells`" and "`tumour_cells_in_bbox`" are the number of
+//'   during the simulation, the columns `name`, `time`, `ymin`,
+//'   `xmin`, `ymax`, `xmax`, `tumour_cells`, and
+//'   `tumour_cells_in_bbox`. The columns `ymin`, `xmin`, `ymax`,
+//'   `xmax` report the boundaries of the sample bounding box, while
+//'   `tumour_cells` and `tumour_cells_in_bbox` are the number of
 //'   tumour cells in the sample and in the bounding box, respectively.
 //' }
 //' @field get_driver_mutations Gets the driver mutations\itemize{
@@ -1068,9 +1068,9 @@ RCPP_MODULE(Mutations)
 //' \item \emph{Returns:} A sample forest built on the samples mentioned in `sample_names`.
 //' }
 //' @field get_absolute_chromosome_positions Gets the absolute chromosome positions \itemize{
-//' \item \emph{Returns:} A data frame reporting the name (column "`chr`"), the length
-//'   (column "`length`"), the initial absolute position (column "`from`"),
-//'   and the final absolute position (column "`to`") of each chromosome.
+//' \item \emph{Returns:} A data frame reporting the name (column `chr`), the length
+//'   (column `length`), the initial absolute position (column `from`),
+//'   and the final absolute position (column `to`) of each chromosome.
 //' }
 //' @field save Saves a phylogenetic forest in a file \itemize{
 //' \item \emph{Parameter:} \code{filename} - The path of the file in which the phylogenetic
@@ -1085,7 +1085,7 @@ RCPP_MODULE(Mutations)
 //'   in the forest, the identified (column `cell_id`),
 //'   whenever the node is not a root, the ancestor
 //'   identifier (column `ancestor`), the node's depth
-//'   (column "`depth`"), whenever the node was sampled,
+//'   (column `depth`), whenever the node was sampled,
 //'   i.e., it is one of the forest leaves, the name of
 //'   the sample containing the node, (column `sample`),
 //'   the mutant (column `mutant`), the epistate (column
@@ -1143,17 +1143,17 @@ RCPP_MODULE(Mutations)
 //'   the samples whose cells were used as leaves
 //'   of the sample forest.
 //' @return A data frame containing, for each sample collected during the
-//'   simulation, the columns "`name`", "`time`", "`id`", "`ymin`", "`xmin`",
-//'    "`ymax`", "`ymax`", "`xmax`", "`tumour_cells`", "`tumour_cells_in_bbox`",
-//'   "`DNA_quantity`", and "`equivalent_normal_cells`". The columns "`ymin`",
-//'   "`xmin`", "`ymax`", and "`xmax`" report the boundaries of the sample
-//'   bounding box, while "`tumour_cells`" and "`tumour_cells_in_bbox`" are the
+//'   simulation, the columns `name`, `time`, `id`, `ymin`, `xmin`,
+//'    `ymax`, `ymax`, `xmax`, `tumour_cells`, `tumour_cells_in_bbox`,
+//'   `DNA_quantity`, and `equivalent_normal_cells`. The columns `ymin`,
+//'   `xmin`, `ymax`, and `xmax` report the boundaries of the sample
+//'   bounding box, while `tumour_cells` and `tumour_cells_in_bbox` are the
 //'   number of tumour cells in the sample and in the bounding box,
-//'   respectively. Finally, "`DNA_quantity`" contains the overall number of
+//'   respectively. Finally, `DNA_quantity` contains the overall number of
 //'   tumoral bases, i.e., the sum of the lengths of all the alleles of all the
-//'   sample tumoral cells, and "`equivalent_normal_cells`" contains the number
+//'   sample tumoral cells, and `equivalent_normal_cells` contains the number
 //'   of normal cells that contain as much DNA as the sample tumoral cells.
-//'   The "`DNA_quantity`" is stored as a real number despite being a natural
+//'   The `DNA_quantity` is stored as a real number despite being a natural
 //'   number as it usually exceeds the largest natural number that can be
 //'   natively represented by R.
 //' @seealso [SampleForest$get_samples_info()] for usage examples,
@@ -1169,10 +1169,10 @@ RCPP_MODULE(Mutations)
 //'    and `code`. Each row in the data frame reports one driver mutations.
 //'    The fields `mutant` and `order` report the name of the mutant and the
 //'    application order among the mutant driver mutations, respectively.
-//'    The column `type` declares the mutation type and contains "`SID`",
-//'    "`CNA`", or "`WGD`" when the mutation is an SNV/indel, a CNA, or
+//'    The column `type` declares the mutation type and contains `SID`,
+//'    `CNA`, or `WGD` when the mutation is an SNV/indel, a CNA, or
 //'    a whole genome duplication, respectively. When the mutation is a CNA,
-//'    the `CNA_type` can either be "`A`" (i.e., amplification) or "`D`"
+//'    the `CNA_type` can either be `"A"` (i.e., amplification) or `"D"`
 //'    (i.e., deletion). When the mutation is not a WGD, the fields `chr`,
 //'    `start`, and `end` contains the mutation chromosome, the initial and
 //'    the final position on the chromosome, respectively. When the mutation
@@ -1316,10 +1316,10 @@ RCPP_MODULE(Mutations)
 //'   SNVs and indels of the cells represented in the phylogenetic forest.
 //'   The data frame also reports the allele in which the mutations occur to
 //'   support double occurrences due to CNAs.
-//' @return A data frame reporting "`chr`", "`chr_pos`" (i.e., the position in
-//'   the chromosome), "`allele`" (in which the mutation occurs), "`ref`",
-//'   "`alt`", "`cause`", "`type`" (i.e., either `"SNV"` or `"indel"`) and
-//'   "`class`" (i.e., `"germinal"`).
+//' @return A data frame reporting `chr`, `chr_pos` (i.e., the position in
+//'   the chromosome), `allele` (in which the mutation occurs), `ref`,
+//'   `alt`, `cause`, `type` (i.e., either `"SNV"` or `"indel"`) and
+//'   `class` (i.e., `"germinal"`).
 //' @seealso `vignette("mutations")` for usage examples
         .method("get_germline_mutations", &PhylogeneticForest::get_germline_SIDs,
                 "Get the germinal SNVs and indels")
@@ -1330,9 +1330,9 @@ RCPP_MODULE(Mutations)
 //' @details Its builds a data frame reporting the name, the length, and the
 //'   initial and final absolute positions of each chromosome in the
 //'   reference genome.
-//' @return A data frame reporting the name (column "`chr`"), the length
-//'   (column "`length`"), the initial absolute position (column "`from`"),
-//'   and the final absolute position (column "`to`") of each chromosome.
+//' @return A data frame reporting the name (column `chr`), the length
+//'   (column `length`), the initial absolute position (column `from`),
+//'   and the final absolute position (column `to`) of each chromosome.
         .method("get_absolute_chromosome_positions",
                 &PhylogeneticForest::get_absolute_chromosome_positions,
                 "Get the absolute chromosome positions")
@@ -1432,8 +1432,8 @@ RCPP_MODULE(Mutations)
 //' @title Getting the statistics about mutations on each node
 //' @description This method returns a dataframe reporting the statistics about
 //'   mutations on each node.
-//' @return A dataframe consisting of five columns "`cell_id`", "`new_SIDs`",
-//'   "`new_CNAs`", "`total_SIDs`", and "`total_CNAs`". Each row represents a
+//' @return A dataframe consisting of five columns `cell_id`, `new_SIDs`,
+//'   `new_CNAs`, `total_SIDs`, and `total_CNAs`. Each row represents a
 //'   node in the phylogenetic forest and reports the identifier of the
 //'   corresponding cell and contains the number of mutations (`new_SIDs`) and
 //'   CNAs (`new_CNAs`) appearing for the first time on the cell. Moreover, it

@@ -168,8 +168,8 @@ RCPP_MODULE(Sequencing)
 //' @param seed The random seed for the internal random generator
 //'   (optional).
 //' @return A named list of two elements: the sequencing output data
-//'   frame (name "`mutations`") and the calling parameters (name
-//'   "`parameters`").
+//'   frame (name `mutations`) and the calling parameters (name
+//'   `parameters`).
 //'
 //'   The sequencing output data frame reports, for each of the
 //'   observed SNVs and indels, the chromosome and the position in
@@ -238,8 +238,8 @@ RCPP_MODULE(Sequencing)
 //' @param seed The random seed for the internal random generator
 //'   (optional).
 //' @return A named list of two elements: the sequencing output data
-//'   frame (name "`mutations`") and the calling parameters
-//'   (name "`parameters`").
+//'   frame (name `mutations`) and the calling parameters
+//'   (name `parameters`).
 //'
 //'   The sequencing output data frame reports, for each of the
 //'   observed SNVs and indels, the chromosome and the position in

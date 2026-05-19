@@ -107,14 +107,14 @@ RCPP_MODULE(Mutants)
 //' \item \emph{Parameter:} \code{mutant} - The mutant of the cell to choose.
 //' \item \emph{Parameter:} \code{lower_corner} - The lower left corner of a rectangular selection (optional).
 //' \item \emph{Parameter:} \code{upper_corner} - The upper right corner of a rectangular selection (optional).
-//' \item \emph{Returns:} A list reporting "`cell_id`", "`mutant`", "`epistate`", "`position_x`",
-//'   and "`position_y`" of the choosen cell.
+//' \item \emph{Returns:} A list reporting `cell_id`, `mutant`, `epistate`, `position_x`,
+//'   and `position_y` of the choosen cell.
 //' }
 //' @field death_activation_level The number of cells that activates cell death in a species.
 //' @field border_growth_model Switch between homogeneous and border driven growth models.
 //' @field get_added_cells Gets the cells manually added to the simulation \itemize{
-//' \item \emph{Returns:} A data frame reporting "`mutant`", "`epistate`", "`position_x`",
-//'   "`position_y`", and "`time`" for each cells manually added to
+//' \item \emph{Returns:} A data frame reporting `mutant`, `epistate`, `position_x`,
+//'   `position_y`, and `time` for each cells manually added to
 //'   the simulation.
 //' }
 //' @field search_sample Searches a rectangular sample having a minimum number of cells\itemize{
@@ -128,35 +128,35 @@ RCPP_MODULE(Mutants)
 //' @field get_cell Gets one the tissue cells \itemize{
 //' \item \emph{Parameter:} \code{x} - The position of the aimed cell on the x axis.
 //' \item \emph{Parameter:} \code{y} - The position of the aimed cell on the y axis.
-//' \item \emph{Returns:} A data frame reporting "`cell_id`", "`mutant`", "`epistate`", "`position_x`",
-//'   and "`position_y`" of the aimed cell.
+//' \item \emph{Returns:} A data frame reporting `cell_id`, `mutant`, `epistate`, `position_x`,
+//'   and `position_y` of the aimed cell.
 //' }
 //' @field get_cells Gets the tissue cells \itemize{
 //' \item \emph{Parameter:} \code{lower_corner} - The lower-left corner of the selection frame (optional).
 //' \item \emph{Parameter:} \code{upper_corner} - The upper-right corner of the selection frame (optional).
 //' \item \emph{Parameter:} \code{mutant_filter} - The vector of the to-be-selected mutant names (optional).
 //' \item \emph{Parameter:} \code{epigenetic_filter} - The vector of the to-be-selected epigenetic states (optional).
-//' \item \emph{Returns:} A data frame reporting "`cell_id`", "`mutant`", "`epistate`", "`position_x`",
-//'   and "`position_y`" for each cells satisfying the provided filters and laying
+//' \item \emph{Returns:} A data frame reporting `cell_id`, `mutant`, `epistate`, `position_x`,
+//'   and `position_y` for each cells satisfying the provided filters and laying
 //'   in the input frame.
 //' }
 //' @field get_clock Gets the simulated time \itemize{
 //' \item \emph{Returns:} The time simulated by the simulation.
 //' }
 //' @field get_count_history Gets the history of the number of cells per species \itemize{
-//' \item \emph{Returns:} A data frame reporting "`mutant`", "`epistate`", "`counts`",
-//'   and "`time`" for each species and for each sampled time.
+//' \item \emph{Returns:} A data frame reporting `mutant`, `epistate`, `counts`,
+//'   and `time` for each species and for each sampled time.
 //' }
 //' @field get_counts Counts the number of cells per species\itemize{
-//' \item \emph{Returns:} A data frame reporting "`mutant`", "`epistate`", "`counts`", and
-//'   "`overall`" for each species in the simulation.
+//' \item \emph{Returns:} A data frame reporting `mutant`, `epistate`, `counts`, and
+//'   `overall` for each species in the simulation.
 //' }
 //' @field get_firing_history Gets the history of the number of fired events \itemize{
-//' \item \emph{Returns:} A data frame reporting "event", "`mutant`", "`epistate`", "`fired`",
-//'   and "`time`" for each event type, for each species, and for each sampled time.
+//' \item \emph{Returns:} A data frame reporting "event", `mutant`, `epistate`, `fired`,
+//'   and `time` for each event type, for each species, and for each sampled time.
 //' }
 //' @field get_firings Gets the number of fired events \itemize{
-//' \item \emph{Returns:} A data frame reporting "event", "`mutant`", "`epistate`", and "`fired`"
+//' \item \emph{Returns:} A data frame reporting "event", `mutant`, `epistate`, and `fired`
 //'   for each event type and for each species.
 //' }
 //' @field get_name Gets the simulation name \itemize{
@@ -164,7 +164,7 @@ RCPP_MODULE(Mutants)
 //'   in which the simulation is saving its progresses.
 //' }
 //' @field get_lineage_graph Gets the simulation lineage graph\itemize{
-//' \item \emph{Returns:} A data frame reporting "`ancestor`", "`progeny`", and "`first_occurrence`"
+//' \item \emph{Returns:} A data frame reporting `ancestor`, `progeny`, and `first_occurrence`
 //'   of each species-to-species transition.
 //' }
 //' @field get_rates Gets the rates of a species\itemize{
@@ -176,11 +176,11 @@ RCPP_MODULE(Mutants)
 //' }
 //' @field get_samples_info Retrieves information about the samples \itemize{
 //' \item \emph{Returns:} A data frame containing, for each sample collected
-//'   during the simulation, the columns "`name`", "`time`", "`ymin`",
-//'   "`xmin`", "`ymax`", "`xmax`", "`tumour_cells`", and
-//'   "`tumour_cells_in_bbox`". The columns "`ymin`", "`xmin`", "`ymax`",
-//'   "`xmax`" report the boundaries of the sample bounding box, while
-//'   "`tumour_cells`" and "`tumour_cells_in_bbox`" are the number of tumour
+//'   during the simulation, the columns `name`, `time`, `ymin`,
+//'   `xmin`, `ymax`, `xmax`, `tumour_cells`, and
+//'   `tumour_cells_in_bbox`. The columns `ymin`, `xmin`, `ymax`,
+//'   `xmax` report the boundaries of the sample bounding box, while
+//'   `tumour_cells` and `tumour_cells_in_bbox` are the number of tumour
 //'   cells in the sample and in the bounding box, respectively.
 //' }
 //' @field get_species Gets the species \itemize{
@@ -576,8 +576,8 @@ RCPP_MODULE(Mutants)
 //'   (optional).
 //' @param epigenetic_filter The vector of the to-be-selected epigenetic states
 //'   (optional).
-//' @return A data frame reporting "`cell_id`", "`mutant`", "`epistate`",
-//'   "`position_x`", and "`position_y`" for each cells satisfying the provided
+//' @return A data frame reporting `cell_id`, `mutant`, `epistate`,
+//'   `position_x`, and `position_y` for each cells satisfying the provided
 //'   filters and laying in the input frame.
 //' @examples
 //' # set the seed of the random number generator
@@ -853,8 +853,8 @@ RCPP_MODULE(Mutants)
 //' @description This method retrieves the simulation rates
 //'   update history.
 //' @return A data frame containing the event rates updates. The data frame
-//'   contains the columns "`time`", "`mutant`", "`epistate`", "`event`",
-//'   and "`rate`". Each row reports an update in the rate of an event
+//'   contains the columns `time`, `mutant`, `epistate`, `event`,
+//'   and `rate`. Each row reports an update in the rate of an event
 //'   in a species.
 //' @seealso [TissueSimulation$update_rates()], [TissueSimulation$get_rates()]
 //' @examples
@@ -893,11 +893,11 @@ RCPP_MODULE(Mutants)
 //' @description This method retrieves information about
 //'   the samples collected along the simulation.
 //' @return A data frame containing, for each sample collected
-//'   during the simulation, the columns "`name`", "`time`", "`id`",
-//'   "`ymin`", "`xmin`", "`ymax`", "`xmax`", "`tumour_cells`", and
-//'   "`tumour_cells_in_bbox`". The columns "`ymin`", "`xmin`", "`ymax`",
-//'   "`xmax`" report the boundaries of the sample bounding box, while
-//'   "`tumour_cells`" and "`tumour_cells_in_bbox`" are the number of tumour
+//'   during the simulation, the columns `name`, `time`, `id`,
+//'   `ymin`, `xmin`, `ymax`, `xmax`, `tumour_cells`, and
+//'   `tumour_cells_in_bbox`. The columns `ymin`, `xmin`, `ymax`,
+//'   `xmax` report the boundaries of the sample bounding box, while
+//'   `tumour_cells` and `tumour_cells_in_bbox` are the number of tumour
 //'   cells in the sample and in the bounding box, respectively.
 //' @seealso [TissueSimulation$sample_cells()],
 //'   [SampleForest$get_samples_info()],
@@ -1525,37 +1525,37 @@ RCPP_MODULE(Mutants)
 //' \item \emph{Parameter:} \code{cell_ids} - The list of the identifiers of the
 //'   cells whose most recent common ancestors are aimed (optional).
 //' \item \emph{Return:} A data frame representing, for each of the identified
-//'   cells, the identified (column "`cell_id`"), whenever the
+//'   cells, the identified (column `cell_id`), whenever the
 //'   node is not a root, the ancestor identifier (column
-//'   "`ancestor`"), whenever the node was sampled, i.e., it is
+//'   `ancestor`), whenever the node was sampled, i.e., it is
 //'   one of the forest leaves, the name of the sample
-//'   containing the node, (column "`sample`"), the mutant
-//'   (column "`mutant`"), the epistate (column "`epistate`"),
-//'   and the birth time (column "`birth_time`").
+//'   containing the node, (column `sample`), the mutant
+//'   (column `mutant`), the epistate (column `epistate`),
+//'   and the birth time (column `birth_time`).
 //' }
 //' @field get_nodes Get the forest nodes \itemize{
 //' \item \emph{Return:} A data frame representing, for each node
-//'   in the forest, the identified (column "`cell_id`"),
+//'   in the forest, the identified (column `cell_id`),
 //'   whenever the node is not a root, the ancestor
-//'   identifier (column "`ancestor`"), the node's depth
-//'   (column "`depth`"), whenever the node
+//'   identifier (column `ancestor`), the node's depth
+//'   (column `depth`), whenever the node
 //'   was sampled, i.e., it is one of the forest
 //'   leaves, the name of the sample containing the
-//'   node, (column "`sample`"), the mutant (column
-//'   "`mutant`"), the epistate (column "`epistate`"),
-//'   and the birth time (column "`birth_time`").
+//'   node, (column `sample`), the mutant (column
+//'   `mutant`), the epistate (column `epistate`),
+//'   and the birth time (column `birth_time`).
 //' }
 //' @field get_samples_info Retrieve information about the samples \itemize{
 //' \item \emph{Returns:} A data frame containing, for each sample collected
-//'   during the simulation, the columns "`name`", "`time`", "`ymin`",
-//'   "`xmin`", "`ymax`", "`xmax`", "`tumour_cells`", and
-//'   "`tumour_cells_in_bbox`". The columns "`ymin`", "`xmin`", "`ymax`",
-//'   "`xmax`" report the boundaries of the sample bounding box, while
-//'   "`tumour_cells`" and "`tumour_cells_in_bbox`" are the number of tumour
+//'   during the simulation, the columns `name`, `time`, `ymin`,
+//'   `xmin`, `ymax`, `xmax`, `tumour_cells`, and
+//'   `tumour_cells_in_bbox`. The columns `ymin`, `xmin`, `ymax`,
+//'   `xmax` report the boundaries of the sample bounding box, while
+//'   `tumour_cells` and `tumour_cells_in_bbox` are the number of tumour
 //'   cells in the sample and in the bounding box, respectively.
 //' }
 //' @field get_species_info Gets the species data\itemize{
-//' \item \emph{Returns:} A data frame reporting "`mutant`" and "`epistate`"
+//' \item \emph{Returns:} A data frame reporting `mutant` and `epistate`
 //'   for each registered species.
 //' }
 //' @field get_sticks Compute the forest sticks \itemize{
@@ -1578,15 +1578,15 @@ RCPP_MODULE(Mutants)
 //' @title Getting forest nodes
 //' @description This method builds a data frame containing forest nodes.
 //' @return A data frame representing, for each node
-//'   in the forest, the identified (column "`cell_id`"),
-//'   the node's depth (column "`depth`"),
+//'   in the forest, the identified (column `cell_id`),
+//'   the node's depth (column `depth`),
 //'   whenever the node is not a root, the ancestor
-//'   identifier (column "`ancestor`"), whenever the
+//'   identifier (column `ancestor`), whenever the
 //'   node was sampled, i.e., it is one of the forest
 //'   leaves, the name of the sample containing the
-//'   node, (column "`sample`"), the mutant (column
-//'   "`mutant`"), the epistate (column "`epistate`"),
-//'   and the birth time (column "`birth_time`").
+//'   node, (column `sample`), the mutant (column
+//'   `mutant`), the epistate (column `epistate`),
+//'   and the birth time (column `birth_time`).
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1626,13 +1626,13 @@ RCPP_MODULE(Mutants)
 //' @param cell_ids The list of the identifiers of the cells whose
 //'   most recent common ancestors are aimed (optional).
 //' @return A data frame representing, for each of the identified
-//'   cells, the identified (column "`cell_id`"), whenever the
+//'   cells, the identified (column `cell_id`), whenever the
 //'   node is not a root, the ancestor identifier (column
-//'   "`ancestor`"), whenever the node was sampled, i.e., it is
+//'   `ancestor`), whenever the node was sampled, i.e., it is
 //'   one of the forest leaves, the name of the sample
-//'   containing the node, (column "`sample`"), the mutant
-//'   (column "`mutant`"), the epistate (column "`epistate`"),
-//'   and the birth time (column "`birth_time`").
+//'   containing the node, (column `sample`), the mutant
+//'   (column `mutant`), the epistate (column `epistate`),
+//'   and the birth time (column `birth_time`).
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1708,11 +1708,11 @@ RCPP_MODULE(Mutants)
 //'   the samples whose cells were used as leaves
 //'   of the sample forest.
 //' @return A data frame containing, for each sample collected
-//'   during the simulation, the columns "`name`", "`time`", "`id`",
-//'   "`ymin`", "`xmin`", "`ymax`", "`xmax`", "`tumour_cells`", and
-//'   "`tumour_cells_in_bbox`". The columns "`ymin`", "`xmin`", "`ymax`",
-//'   "`xmax`" report the boundaries of the sample bounding box, while
-//'   "`tumour_cells`" and "`tumour_cells_in_bbox`" are the number of tumour
+//'   during the simulation, the columns `name`, `time`, `id`,
+//'   `ymin`, `xmin`, `ymax`, `xmax`, `tumour_cells`, and
+//'   `tumour_cells_in_bbox`. The columns `ymin`, `xmin`, `ymax`,
+//'   `xmax` report the boundaries of the sample bounding box, while
+//'   `tumour_cells` and `tumour_cells_in_bbox` are the number of tumour
 //'   cells in the sample and in the bounding box, respectively.
 //' @seealso [PhylogeneticForest$get_samples_info()] for usage examples,
 //'   [TissueSimulation$sample_cells()], [TissueSimulation$get_samples_info()]
