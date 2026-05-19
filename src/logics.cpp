@@ -59,7 +59,7 @@ RCPP_MODULE(Logics)
 //' # the logic variables can be stored in an R variable
 //' va_p <- sim$var("A+")
 //' va_p
-//' @seealso [Simulation$var()] to build a variable
+//' @seealso [TissueSimulation$var()] to build a variable
     class_<Logics::Variable>("Variable")
         .method("show", &Logics::Variable::show, "Show a variable");
 
@@ -98,7 +98,7 @@ RCPP_MODULE(Logics)
 //' # the logic expression can be stored in an R variable
 //' v_exp <- sim$var("A") - 2 * v_time * sim$var("A.duplications") + 3.4
 //' v_exp
-//' @seealso [Variable]
+//' @seealso [Variable()]
     class_<Logics::Expression>("Expression")
         .method("show", &Logics::Expression::show, "Show an expression");
 
@@ -159,7 +159,7 @@ RCPP_MODULE(Logics)
 //'
 //' # combine above formulas by using Boolean operators `&` and `|`
 //' f1 & (f2 | f3)
-//' @seealso [Variable], [Simulation$var()], [vignette("tissue_simulation")]
+//' @seealso [Variable()], [TissueSimulation$var()], `vignette("tissue_simulation")`
     class_<Logics::Formula>("Formula").method("show", &Logics::Formula::show,
                                               "Show a formula");
 

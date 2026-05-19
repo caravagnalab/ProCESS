@@ -32,7 +32,7 @@ RCPP_MODULE(Sequencing)
 //' @title An error-free Illumina sequencer class
 //' @description This class implements a perfect Illumina sequencers that
 //'   does not commit errors.
-//' @seealso `simulate_seq()`, `simulate_normal_seq()`, and
+//' @seealso [simulate_seq()], [simulate_normal_seq()], and
 //'   `vignette("sequencing")` for usage examples
     class_<ErrorlessIlluminaSequencer>("ErrorlessIlluminaSequencer")
 
@@ -55,7 +55,7 @@ RCPP_MODULE(Sequencing)
 //' @description This class implements a basic model for Illumina sequencers.
 //' @details It specifies a simulated sequencing error rate and the simulated
 //'   sequencing errors will occurs according to that rate.
-//' @seealso `simulate_seq()`, `simulate_normal_seq()`, and
+//' @seealso [simulate_seq()], [simulate_normal_seq()], and
 //'   `vignette("sequencing")` for usage examples
     class_<BasicIlluminaSequencer>("BasicIlluminaSequencer")
         .method("show", &BasicIlluminaSequencer::show,
@@ -119,10 +119,6 @@ RCPP_MODULE(Sequencing)
 //' # build a sequencer model having error rate 4e-3
 //' sequencer <- BasicIlluminaSequencer(error_rate=4e-3)
 //' sequencer
-//'
-//' # build a sequencer model having error rate 4e-3 and set the seed to 5
-//' sequencer <- BasicIlluminaSequencer(error_rate=4e-3, seed=5)
-//' sequencer
     function("BasicIlluminaSequencer", &BasicIlluminaSequencer::build_sequencer,
              List::create(_["error_rate"], _["random_quality_scores"] = true),
              "Create a basic Illumina sequencer model");
@@ -138,13 +134,13 @@ RCPP_MODULE(Sequencing)
 //'    mutation engine reference genome).
 //' @param chromosomes The chromosomes that must be considered (default:
 //'   `NULL`, i.e., all the reference chromosomes).
-//' @param coverage The sequencing coverage (default: `10`).
-//' @param read_size The read size (default: `150`).
+//' @param coverage The sequencing coverage (default: \eqn{10}).
+//' @param read_size The read size (default: \eqn{150}).
 //' @param insert_size_mean The insert size mean. Use 0 for single read
 //'   sequencing and any value greater than 0 for pair read sequencing
-//'   (default: `0`).
+//'   (default: \eqn{0}).
 //' @param insert_size_stddev The insert size standard deviation.
-//'   (default: `10`).
+//'   (default: \eqn{10}).
 //' @param output_dir The SAM output directory (default:
 //'   `"ProCESS_SAM"`).
 //' @param write_SAM A Boolean flag to enable/disable SAM generation
@@ -154,8 +150,8 @@ RCPP_MODULE(Sequencing)
 //'   See `vignette("sample_partition")` for details (default: `NULL`).
 //' @param purity The ratio between the number of sample tumour cell
 //'   and that of all the cells, i.e., tumour and normal
-//'   ones. This value must belong to the interval [0,1]
-//'   (default: `1`).
+//'   ones. This value must belong to the interval \eqn{[0,1]}
+//'   (default: \eqn{1}).
 //' @param with_normal_sample A Boolean flag to enable/disable the
 //'   analysis of a normal sample (default: `TRUE`).
 //' @param preneoplastic_in_normal A Boolean flag to add/remove
@@ -187,8 +183,8 @@ RCPP_MODULE(Sequencing)
 //'   `<sample name>.occurrences`), the coverage of the mutation
 //'   (column `<sample name>.coverage`), and the corresponding VAF
 //'   (column `<sample name>.VAF`).
-//' @seealso `BasicIlluminaSequencer` and
-//'   `ErrorlessIlluminaSequencer` as sequencer types, and
+//' @seealso [BasicIlluminaSequencer()] and
+//'   [ErrorlessIlluminaSequencer()] as sequencer types, and
 //'   `vignette("sequencing")` for usage examples
     function("simulate_seq", &simulate_seq,
              List::create(
@@ -217,13 +213,13 @@ RCPP_MODULE(Sequencing)
 //'    mutation engine reference genome).
 //' @param chromosomes The chromosomes that must be considered (default:
 //'   `NULL`, i.e., all the reference chromosomes).
-//' @param coverage The sequencing coverage (default: `10`).
-//' @param read_size The read size (default: `150`).
+//' @param coverage The sequencing coverage (default: \eqn{10}).
+//' @param read_size The read size (default: \eqn{150}).
 //' @param insert_size_mean The insert size mean. Use 0 for single read
 //'   sequencing and any value greater than 0 for pair read sequencing
-//'   (default: `0`).
+//'   (default: \eqn{0}).
 //' @param insert_size_stddev The insert size standard deviation.
-//'   (default: `10`).
+//'   (default: \eqn{10}).
 //' @param output_dir The SAM output directory (default:
 //'   `"ProCESS_normal_SAM"`).
 //' @param write_SAM A Boolean flag to enable/disable SAM generation
@@ -276,8 +272,8 @@ RCPP_MODULE(Sequencing)
 //' @title A sampled cell
 //' @description The sampled cell class for sample labelling.
 //' @details There is no public constructor for this class as it is
-//'   exclusively used by `simulate_seq()` to label sampled cells.
-//' @seealso `simulate_seq()` and `vignette("sample_partition")`
+//'   exclusively used by [simulate_seq()] to label sampled cells.
+//' @seealso [simulate_seq()] and `vignette("sample_partition")`
     class_<SampledCell>("SampledCell")
 
 //' @name SampledCell$epistate
@@ -285,28 +281,28 @@ RCPP_MODULE(Sequencing)
 //' @description The epigenetic state of the sampled cell.
 //' @details This property is the epigenetic state of the sampled cell.
 //'   It can be one among "`+`", "`-`", or "".
-//' @seealso `simulate_seq()` and `vignette("sample_partition")`
+//' @seealso [simulate_seq()] and `vignette("sample_partition")`
         .property("epistate", &SampledCell::epistate, "The cell epistate")
 
 //' @name SampledCell$mutant
 //' @title Getting the sampled cell mutant
 //' @description The mutant name of the sampled cell.
 //' @details This property is the mutant name of the sampled cell.
-//' @seealso `simulate_seq()` and `vignette("sample_partition")`
+//' @seealso [simulate_seq()] and `vignette("sample_partition")`
         .property("mutant", &SampledCell::mutant, "The cell mutant name")
 
 //' @name SampledCell$species
 //' @title Getting the sampled cell species
 //' @description The species name of the sampled cell.
 //' @details This property is the species name of the sampled cell.
-//' @seealso `simulate_seq()` and `vignette("sample_partition")`
+//' @seealso [simulate_seq()] and `vignette("sample_partition")`
         .property("species", &SampledCell::species, "The cell species name")
 
 //' @name SampledCell$birth_time
 //' @title Getting the sampled cell birth time
 //' @description The birth time of the sampled cell.
 //' @details This property is the birth time of the sampled cell.
-//' @seealso `simulate_seq()` and `vignette("sample_partition")`
+//' @seealso [simulate_seq()] and `vignette("sample_partition")`
         .property("birth_time", &SampledCell::birth_time, "The cell birth time")
 
 //' @name SampledCell$mutations
@@ -314,12 +310,12 @@ RCPP_MODULE(Sequencing)
 //' @description The mutations of the sampled cell.
 //' @details This property contains a data frame that represents the sampled
 //'   cell mutations. The data frame format is analogous to that returned by
-//'   `PhylogeneticForest$get_sampled_cell_mutations()`: it has columns
+//'   [PhylogeneticForest$get_sampled_cell_mutations()]: it has columns
 //'   `cell_id`, `chr`, (i.e., the mutation chromosome), `chr_pos` (i.e.,
 //'   position in the chromosome), `allele` (in which the mutation occurs),
 //'   `ref`, `alt`, `type` (i.e., either `"SNV"` or `"indel"`), `cause`, and
 //'   `class` (i.e., `"driver"`, `"passenger"`, `"germinal"` or
 //'   `"preneoplastic"`).
-//' @seealso `simulate_seq()` and `vignette("sample_partition")`
+//' @seealso [simulate_seq()] and `vignette("sample_partition")`
         .property("mutations", &SampledCell::mutations, "The cell mutation data frame");
 }

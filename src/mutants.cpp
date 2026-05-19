@@ -86,16 +86,16 @@ RCPP_MODULE(Mutants)
 //'   cell can duplicate or die according to the rates that delineate
 //'   the cell species.
 //'
-//'   `TissueSimulation` supports epigenetic evolutions, and it lets
+//'   [TissueSimulation()] supports epigenetic evolutions, and it lets
 //'   users define species pairs that belong to the same mutant (even
 //'   though, its genomic characterisation is unknown) and differ
 //'   because of their epigenetic state (i.e., either "+" or "-").
 //'
-//'   `TissueSimulation` models epigenetic mutations and allows a cell
+//'   [TissueSimulation()] models epigenetic mutations and allows a cell
 //'   in one of mutant species to generate a new cell belonging to the
 //'   other species of the same mutant at a specified rate.
 //'
-//'   `TissueSimulation` also allows users to schedule mutations from
+//'   [TissueSimulation()] also allows users to schedule mutations from
 //'   one mutant to a different mutant.
 //' @field add_mutant Adds a mutant and its species \itemize{
 //' \item \emph{Parameter:} \code{mutant} - The mutant name.
@@ -336,7 +336,7 @@ RCPP_MODULE(Mutants)
 //' sim$place_cell("A+", 500, 500)
 //' sim$death_activation_level <- 100
 //' sim$schedule_mutation("A","B",20)
-//' sim$run_up_to_size(species = "B-", num_of_cells = 50)
+//' sim$run_up_to_size(species = "B-", num_of_cells = 100)
 //'
 //' # Randomly choose one cell in "B" in the tissue
 //' sim$choose_cell_in(mutant = "B")
@@ -443,9 +443,9 @@ RCPP_MODULE(Mutants)
 
 //' @name TissueSimulation$get_samples_forest
 //' @title Getting the sample forest
-//' @description This method is deprecated. Please use `TissueSimulation$get_sample_forest()` instead.
+//' @description This method is deprecated. Please use [TissueSimulation$get_sample_forest()] instead.
 //' @return The sample forest having as leaves the sampled cells
-//' @seealso `TissueSimulation$get_sample_forest()`
+//' @seealso [TissueSimulation$get_sample_forest()]
         .method("get_samples_forest", &TissueSimulation::get_samples_forest,
                 "Get the sample forest having as leaves the sampled cells")
 
@@ -691,7 +691,7 @@ RCPP_MODULE(Mutants)
 //'
 //' # get the tissue size, i.e., expecting c(1200,900)
 //' sim$get_tissue_size()
-//' @seealso `TissueSimulation()`
+//' @seealso [TissueSimulation()]
         .method("get_tissue_size", &TissueSimulation::get_tissue_size,
                 "Get the simulation tissue size")
 
@@ -936,7 +936,7 @@ RCPP_MODULE(Mutants)
 //' @title The delta time between time series samples
 //' @description This value is the maximum time between two successive
 //'   time series data samples.
-//' @seealso `TissueSimulation`
+//' @seealso [TissueSimulation()]
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -948,7 +948,7 @@ RCPP_MODULE(Mutants)
 //' sim$history_delta
 //'
 //' # set the delta time between two time series samples
-//' sim$death_activation_level <- 20
+//' sim$history_delta <- 20
         .property("history_delta", &TissueSimulation::get_history_delta,
                   &TissueSimulation::set_history_delta,
                   "The sampling delta for the get_*_history functions")
@@ -962,7 +962,7 @@ RCPP_MODULE(Mutants)
 //'   The mutated cell will be located in the position of its parent.
 //' @param cell_position The position of the cell whose offspring will mutate.
 //' @param mutated_mutant The mutant of the mutated cell.
-//' @seealso `TissueSimulation`, [TissueSimulation$choose_cell_in()]
+//' @seealso [TissueSimulation()], [TissueSimulation$choose_cell_in()]
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1003,7 +1003,7 @@ RCPP_MODULE(Mutants)
 //' @param time The final simulation time.
 //' @param quiet An optional  Boolean flag to avoid the progress bar
 //'   (default: FALSE).
-//' @seealso `TissueSimulation`, [TissueSimulation$run_up_to_event()],
+//' @seealso [TissueSimulation()], [TissueSimulation$run_up_to_event()],
 //'    [TissueSimulation$run_up_to_size()], [TissueSimulation$run_until()]
 //' @examples
 //' # set the seed of the random number generator
@@ -1034,7 +1034,7 @@ RCPP_MODULE(Mutants)
 //' @param num_of_events The threshold for the event number.
 //' @param quiet An optional  Boolean flag to avoid the progress bar
 //'   (default: FALSE).
-//' @seealso `TissueSimulation`, [TissueSimulation$run_up_to_time()],
+//' @seealso [TissueSimulation()], [TissueSimulation$run_up_to_time()],
 //'    [TissueSimulation$run_up_to_size()], [TissueSimulation$run_until()]
 //' @examples
 //' # set the seed of the random number generator
@@ -1070,7 +1070,7 @@ RCPP_MODULE(Mutants)
 //' @param num_of_cells The threshold for the cell number.
 //' @param quiet An optional  Boolean flag to avoid the progress bar
 //'   (default: FALSE).
-//' @seealso `TissueSimulation`, [TissueSimulation$run_up_to_time()],
+//' @seealso [TissueSimulation()], [TissueSimulation$run_up_to_time()],
 //'    [TissueSimulation$run_up_to_event()], [TissueSimulation$run_until()]
 //' @examples
 //' # set the seed of the random number generator
@@ -1106,7 +1106,7 @@ RCPP_MODULE(Mutants)
 //'    simulation.
 //' @param quiet An optional  Boolean flag to avoid the progress bar
 //'   (default: FALSE).
-//' @seealso `TissueSimulation`, [TissueSimulation$var()], [TissueSimulation$run_up_to_time()],
+//' @seealso [TissueSimulation()], [TissueSimulation$var()], [TissueSimulation$run_up_to_time()],
 //'    [TissueSimulation$run_up_to_event()], [TissueSimulation$run_up_to_size()]
 //' @examples
 //' # set the seed of the random number generator
@@ -1264,7 +1264,7 @@ RCPP_MODULE(Mutants)
 //' @param height The height of the searched sample.
 //' @return If a rectangular sample satisfying the provided constraints can
 //'   be found, the corresponding rectangle.
-//' @seealso `TissueSimulation`
+//' @seealso [TissueSimulation()]
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1302,7 +1302,7 @@ RCPP_MODULE(Mutants)
 //'     among those satisfying the constraints (optional).
 //' @return A vector of `n_samples` rectangular tissue samples that
 //'     satisfy the aimed constraints.
-//' @seealso `TissueSimulation`
+//' @seealso [TissueSimulation()]
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1366,7 +1366,7 @@ RCPP_MODULE(Mutants)
 //'   occurred since the computation beginning in the species.
 //' @return A variable representing the simulation quantity according to
 //'   the parameter `variable_description`.
-//' @seealso `TissueSimulation`, [TissueSimulation$run_until()]
+//' @seealso [TissueSimulation()], [TissueSimulation$run_until()]
 //' @examples
 //' # build a simulation and add two species to it
 //' # set the seed of the random number generator
@@ -1445,7 +1445,7 @@ RCPP_MODULE(Mutants)
 //' @title Building a new simulation
 //' @description This method builds a new simulation.
 //' @param name The name of the simulation (default:
-//'     "`races_<year>_<hour><minute><second>`").
+//'     "`clones_<year>_<hour><minute><second>`").
 //' @param width The width of the simulated tissue (default: 1000).
 //' @param height The height of the simulated tissue (default: 1000).
 //' @param save_snapshots A flag to save simulation snapshots on disk
@@ -1502,15 +1502,15 @@ RCPP_MODULE(Mutants)
 
 //' @name SpatialSimulation
 //' @title Building a new simulation
-//' @description This function is deprecated. Please use `TissueSimulation()` instead.
+//' @description This function is deprecated. Please use [TissueSimulation()] instead.
 //' @param name The name of the simulation (default:
-//'     "`races_<year>_<hour><minute><second>`").
+//'     "`clones_<year>_<hour><minute><second>`").
 //' @param width The width of the simulated tissue (default: 1000).
 //' @param height The height of the simulated tissue (default: 1000).
 //' @param save_snapshots A flag to save simulation snapshots on disk
 //'   (default: `FALSE`).
 //' @param seed The seed for the pseudo-random generator (optional).
-//' @seealso `TissueSimulation`
+//' @seealso [TissueSimulation()]
     function("SpatialSimulation", &SpatialSimulation,
              List::create(_["name"] = R_NilValue, _["width"] = 1000, _["height"] = 1000,
                           _["save_snapshots"] = false, _["seed"] = R_NilValue),
@@ -1694,6 +1694,10 @@ RCPP_MODULE(Mutants)
 //' # build the sample forest
 //' forest <- sim$get_sample_forest()
 //'
+//' # show the forest data
+//' forest
+//'
+//' # get the subforest for sample "S2"
 //' forest$get_subforest_for("S2")
         .method("get_subforest_for", &SampleForest::get_subforest_for,
                 "Get the sub-forest for some of the original samples")
@@ -1777,19 +1781,19 @@ RCPP_MODULE(Mutants)
 //' sim$place_cell("A", 500, 500)
 //'
 //' sim$death_activation_level <- 100
-//' sim$run_up_to_size(species = "A", num_of_cells = 100)
+//' sim$run_up_to_size(species = "A", num_of_cells = 15)
 //'
 //' sim$get_clock()
 //'
 //' sim$add_mutant(name = "B", growth_rate = 0.3, death_rate = 0.01)
 //' sim$mutate_progeny(sim$choose_cell_in("A"), "B")
-//' sim$run_up_to_size(species = "B", num_of_cells = 120)
+//' sim$run_up_to_size(species = "B", num_of_cells = 100)
 //'
 //' sim$get_clock()
 //'
-//' sim$add_mutant(name = "C", growth_rate = 0.3, death_rate = 0.01)
+//' sim$add_mutant(name = "C", growth_rate = 0.4, death_rate = 0.01)
 //' sim$mutate_progeny(sim$choose_cell_in("B"), "C")
-//' sim$run_up_to_size(species = "C", num_of_cells = 200)
+//' sim$run_up_to_size(species = "C", num_of_cells = 2000)
 //'
 //' # search for a 33x33 region containing 50 cells in A and
 //' # 50 cells in B at least and sample it
@@ -1838,11 +1842,11 @@ RCPP_MODULE(Mutants)
 
 //' @name load_samples_forest
 //' @title Loading sample forests
-//' @description This function is deprecated. Please use `load_sample_forest()` instead.
+//' @description This function is deprecated. Please use [load_sample_forest()] instead.
 //' @param filename The path of the file from which the samples
 //'   forest must be load.
 //' @return The load samples forest
-//' @seealso `load_sample_forest()`
+//' @seealso [load_sample_forest()]
     function("load_samples_forest", &load_samples_forest,
              "Load a sample forest");
 }

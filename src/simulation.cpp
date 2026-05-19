@@ -405,7 +405,7 @@ std::string get_time_string()
     return buffer;
 }
 
-inline std::string get_default_name() { return "races_" + get_time_string(); }
+inline std::string get_default_name() { return "clones_" + get_time_string(); }
 
 void TissueSimulation::init(const SEXP &sexp)
 {

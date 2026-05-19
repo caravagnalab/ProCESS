@@ -128,7 +128,7 @@ RCPP_MODULE(Mutations)
 //' @param ref The base before the mutation (optional).
 //' @param allele The allele in which the SNV must occur (optional).
 //' @param cause The cause of the SNV (optional).
-//' @seealso `Mutation()` for SNV and indel creation.
+//' @seealso [Mutation()] for SNV and indel creation.
 //' @examples
 //' # create a SNV without specifying the cause and context
 //' snv <- SNV("X", 20002, "T")
@@ -153,20 +153,20 @@ RCPP_MODULE(Mutations)
 //' @name Mutation
 //' @title Creating a SNV or a indel
 //' @description This function creates SNVs and indels.
-//' @details It generalizes the function `SNV()` by building SNVs and
+//' @details It generalizes the function [SNV()] by building SNVs and
 //'   indels. However, it requires the reference sequence specification
-//'   whereas `SNV()` can deduce it from the reference sequence itself.
+//'   whereas [SNV()] can deduce it from the reference sequence itself.
 //'
-//'   Another difference with respect to `SNV()` is the `ref`-`alt`
+//'   Another difference with respect to [SNV()] is the `ref`-`alt`
 //'   parameter order: the `alt` parameter comes before the optional
-//'   `ref` parameter in `SNV()`; `Mutation()` adopts the reverse order.
+//'   `ref` parameter in [SNV()]; [Mutation()] adopts the reverse order.
 //' @param chr The name of the chromosome in which the indel occurs.
 //' @param chr_pos The position in the chromosome where the indel occurs.
 //' @param ref The reference sequence.
 //' @param alt The mutation altered sequence.
 //' @param allele The allele in which the mutation must occur (optional).
 //' @param cause The cause of the mutation (optional).
-//' @seealso `SNV()` for SNV creation.
+//' @seealso [SNV()] for SNV creation.
 //' @examples
 //' # create a deletion without specifying the cause
 //' mutation <- Mutation("X", 20002, "TAC", "T")
@@ -910,7 +910,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # Some of the pre-defined configurations requires to download the mutational
 //' # signatures from the COSMIC site which requires an account (e.g., "GRCh37"
-//' # and "GRCh38"). The COSMIC account can be passed to `MutationEngine()` as
+//' # and "GRCh38"). The COSMIC account can be passed to [MutationEngine()] as
 //' # follows
 //' m_engine <- MutationEngine(setup_code = "demo",
 //'                            COSMIC_account = list(email = "foo@bar.org",
@@ -921,7 +921,7 @@ RCPP_MODULE(Mutations)
 //' unlink("demo", recursive = TRUE)
 //'
 //' # In alternative, pre-download the mutational signatures and pass their
-//' # paths to `MutationEngine()` as parameters.
+//' # paths to [MutationEngine()] as parameters.
 //' m_engine <- MutationEngine(setup_code = "demo",
 //'                            SBS_signatures_src = "Test/SBS_signatures.txt",
 //'                            indel_signatures_src = "Test/indel_signatures.txt")
@@ -1157,7 +1157,7 @@ RCPP_MODULE(Mutations)
 //'   number as it usually exceeds the largest natural number that can be
 //'   natively represented by R.
 //' @seealso [SampleForest$get_samples_info()] for usage examples,
-//'   [Simulation$get_samples_info()]
+//'   [TissueSimulation$get_samples_info()]
         .method("get_samples_info", &PhylogeneticForest::get_samples_info,
                 "Get some pieces of information about the samples")
 
@@ -1245,7 +1245,7 @@ RCPP_MODULE(Mutations)
 //' mutations <- phylo_forest$get_sampled_cell_CNAs()
 //'
 //' head(mutations)
-//' @seealso `PhylogeneticForest$$get_sampled_cell_mutations()`
+//' @seealso [PhylogeneticForest$get_sampled_cell_mutations()]
         .method("get_sampled_cell_CNAs",
                 (List (PhylogeneticForest::*)(const CLONES::Mutants::CellId &)
                      const)(&PhylogeneticForest::get_sampled_cell_CNAs),
@@ -1299,7 +1299,7 @@ RCPP_MODULE(Mutations)
 //' mutations <- phylo_forest$get_sampled_cell_mutations()
 //'
 //' head(mutations)
-//' @seealso `PhylogeneticForest$$get_sampled_cell_CNAs()`
+//' @seealso [PhylogeneticForest$get_sampled_cell_CNAs()]
         .method("get_sampled_cell_mutations",
                 (List (PhylogeneticForest::*)(const CLONES::Mutants::CellId &)
                      const)(&PhylogeneticForest::get_sampled_cell_SIDs),
