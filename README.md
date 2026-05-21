@@ -23,14 +23,14 @@ In order to install the development version of `ProCESS`, you need:
 
 * [R and Rtools](https://cran.r-project.org)
 
-* the R package [`devtools`](https://devtools.r-lib.org)
+* the R package [`pak`](https://pak.r-lib.org)
 
 * [git](https://git-scm.com/downloads)
 
 When the requirements have been satisfied, issue the R command:
 
 ``` r
-devtools::install_github("caravagnalab/ProCESS")
+pak::pak("caravagnalab/ProCESS")
 ```
 
 
