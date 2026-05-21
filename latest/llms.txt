@@ -1,0 +1,411 @@
+# ProCESS
+
+`ProCESS` stands for Programmable Cancer Evolution Spatial Simulator. It
+is an R wrapper for
+[CLONES](https://github.com/albertocasagrande/CLONES), a C++ Library fOr
+Neoplastic Evolution Simulations, and provides additional plotting
+functions.
+
+#### Help and support
+
+## [![ProCESS GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-https://caravagnalab.github.io/ProCESS/-yellow.svg)](https://caravagnalab.github.io/ProCESS/)
+
+### Installation
+
+In order to install the development version of `ProCESS`, you need:
+
+- [R and Rtools](https://cran.r-project.org)
+
+- the R package [`pak`](https://pak.r-lib.org)
+
+- [git](https://git-scm.com/downloads)
+
+When the requirements have been satisfied, issue the R command:
+
+``` r
+
+pak::pak("caravagnalab/ProCESS")
+```
+
+------------------------------------------------------------------------
+
+#### Copyright and contacts
+
+Giulio Caravagna, Alberto Casagrande. Cancer Data Science (CDS)
+Laboratory.
+
+[![CDS Lab
+GitHub](https://img.shields.io/badge/CDS%20Lab%20Github-caravagnalab-seagreen.svg)](https://github.com/caravagnalab)
+[![CDS Lab
+Webpage](https://img.shields.io/badge/CDS%20Lab%20webpage-https://www.caravagnalab.org/-red.svg)](https://www.caravagnalab.org/)
+
+# Package index
+
+## Spatial simulation interface
+
+Spatial simulation classes and methods
+
+- [`annotate_forest()`](https://caravagnalab.github.io/ProCESS/reference/annotate_forest.md)
+  : Annotate a plot of cell divisions
+- [`bbox_sampler()`](https://caravagnalab.github.io/ProCESS/reference/bbox_sampler.md)
+  : Bounding box sampler
+- [`load_samples_forest`](https://caravagnalab.github.io/ProCESS/reference/load_samples_forest.md)
+  : Loading sample forests
+- [`load_sample_forest()`](https://caravagnalab.github.io/ProCESS/reference/load_sample_forest.md)
+  : Loading sample forests
+- [`TissueRectangle$lower_corner`](https://caravagnalab.github.io/ProCESS/reference/TissueRectangle-cash-lower_corner.md)
+  : The tissue rectangle lower corner
+- [`TissueRectangle$new`](https://caravagnalab.github.io/ProCESS/reference/TissueRectangle-cash-new.md)
+  : Build a new rectangle of tissue
+- [`TissueRectangle$upper_corner`](https://caravagnalab.github.io/ProCESS/reference/TissueRectangle-cash-upper_corner.md)
+  : The tissue rectangle upper corner
+- [`TissueRectangle`](https://caravagnalab.github.io/ProCESS/reference/TissueRectangle.md)
+  : A rectangle in the tissue
+- [`SampleForest$get_coalescent_cells`](https://caravagnalab.github.io/ProCESS/reference/SampleForest-cash-get_coalescent_cells.md)
+  : Retrieving the most recent common ancestors
+- [`SampleForest$get_nodes`](https://caravagnalab.github.io/ProCESS/reference/SampleForest-cash-get_nodes.md)
+  : Getting forest nodes
+- [`SampleForest$get_samples_info`](https://caravagnalab.github.io/ProCESS/reference/SampleForest-cash-get_samples_info.md)
+  : Retrieving the samples' information
+- [`SampleForest$get_species_info`](https://caravagnalab.github.io/ProCESS/reference/SampleForest-cash-get_species_info.md)
+  : Getting forest species
+- [`SampleForest$get_sticks`](https://caravagnalab.github.io/ProCESS/reference/SampleForest-cash-get_sticks.md)
+  : Computing the forest sticks
+- [`SampleForest$get_subforest_for`](https://caravagnalab.github.io/ProCESS/reference/SampleForest-cash-get_subforest_for.md)
+  : Building sub-forests
+- [`SampleForest$save`](https://caravagnalab.github.io/ProCESS/reference/SampleForest-cash-save.md)
+  : Saving sample forests
+- [`SampleForest`](https://caravagnalab.github.io/ProCESS/reference/SampleForest.md)
+  : The sample cell ancestor forest
+- [`SpatialSimulation`](https://caravagnalab.github.io/ProCESS/reference/SpatialSimulation.md)
+  : Building a new simulation
+- [`TissueSimulation$add_mutant`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-add_mutant.md)
+  : Adding a mutant and its species
+- [`TissueSimulation$border_growth_model`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-border_growth_model.md)
+  : Internal cells duplication
+- [`TissueSimulation$choose_cell_in`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-choose_cell_in.md)
+  : Picking one cell in a mutant
+- [`TissueSimulation$death_activation_level`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-death_activation_level.md)
+  : Death activation level
+- [`TissueSimulation$get_added_cells`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-get_added_cells.md)
+  : Getting the cells manually added to the simulation
+- [`TissueSimulation$get_cell`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-get_cell.md)
+  : Getting one of the tissue cells
+- [`TissueSimulation$get_cells`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-get_cells.md)
+  : Getting the tissue cells
+- [`TissueSimulation$get_clock`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-get_clock.md)
+  : Getting the simulated time
+- [`TissueSimulation$get_count_history`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-get_count_history.md)
+  : Getting the history of the number of cells per species
+- [`TissueSimulation$get_counts`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-get_counts.md)
+  : Counting the cell number
+- [`TissueSimulation$get_firing_history`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-get_firing_history.md)
+  : Getting the fired event history
+- [`TissueSimulation$get_firings`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-get_firings.md)
+  : Getting the number of fired events
+- [`TissueSimulation$get_lineage_graph`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-get_lineage_graph.md)
+  : Getting the simulation lineage graph
+- [`TissueSimulation$get_name`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-get_name.md)
+  : Getting the simulation name
+- [`TissueSimulation$get_rates`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-get_rates.md)
+  : Getting the species rates
+- [`TissueSimulation$get_rates_update_history`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-get_rates_update_history.md)
+  : Retrieving the rates update history
+- [`TissueSimulation$get_sample_forest`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-get_sample_forest.md)
+  : Getting the sample forest
+- [`TissueSimulation$get_samples_forest`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-get_samples_forest.md)
+  : Getting the sample forest
+- [`TissueSimulation$get_samples_info`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-get_samples_info.md)
+  : Retrieving sample information
+- [`TissueSimulation$get_species`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-get_species.md)
+  : Getting the species
+- [`TissueSimulation$get_tissue_size`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-get_tissue_size.md)
+  : Getting the simulated tissue size
+- [`TissueSimulation$history_delta`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-history_delta.md)
+  : The delta time between time series samples
+- [`TissueSimulation$mutate_progeny`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-mutate_progeny.md)
+  : Generating a mutated progeny
+- [`TissueSimulation$place_cell`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-place_cell.md)
+  : Placing one cell in the tissue
+- [`TissueSimulation$run_until`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-run_until.md)
+  : Simulating cell evolution
+- [`TissueSimulation$run_up_to_event`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-run_up_to_event.md)
+  : Simulating cell evolution
+- [`TissueSimulation$run_up_to_size`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-run_up_to_size.md)
+  : Simulating cell evolution
+- [`TissueSimulation$run_up_to_time`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-run_up_to_time.md)
+  : Simulating cell evolution
+- [`TissueSimulation$sample_cells`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-sample_cells.md)
+  : Sampling a set of cells
+- [`TissueSimulation$schedule_mutation`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-schedule_mutation.md)
+  : Scheduling a mutation
+- [`TissueSimulation$search_sample`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-search_sample.md)
+  : Searching for a rectangular tissue sample
+- [`TissueSimulation$search_samples`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-search_samples.md)
+  : Searching rectangular tissue samples
+- [`TissueSimulation$update_rates`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-update_rates.md)
+  : Updating species rates
+- [`TissueSimulation$var`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation-cash-var.md)
+  : Building a simulation status variable
+- [`TissueSimulation()`](https://caravagnalab.github.io/ProCESS/reference/TissueSimulation.md)
+  : Simulating the cell evolution in a tissue
+- [`plot_firings()`](https://caravagnalab.github.io/ProCESS/reference/plot_firings.md)
+  : Plot the number of stochastic events in the simulation
+- [`plot_muller()`](https://caravagnalab.github.io/ProCESS/reference/plot_muller.md)
+  : Draw a Muller plot of the simulation
+- [`plot_state()`](https://caravagnalab.github.io/ProCESS/reference/plot_state.md)
+  : Plot the current number of cells in a tissue
+- [`plot_timeseries()`](https://caravagnalab.github.io/ProCESS/reference/plot_timeseries.md)
+  : Plot the number of cells along a simulation
+- [`plot_tissue()`](https://caravagnalab.github.io/ProCESS/reference/plot_tissue.md)
+  : Plot a tissue
+- [`recover_simulation()`](https://caravagnalab.github.io/ProCESS/reference/recover_simulation.md)
+  : Loading a simulation
+
+## Mutation simulation interface
+
+Mutation simulation classes and methods
+
+- [`Amplification()`](https://caravagnalab.github.io/ProCESS/reference/Amplification.md)
+  : Creating a CNA amplification
+- [`CNA$get_allele`](https://caravagnalab.github.io/ProCESS/reference/CNA-cash-get_allele.md)
+  : Getting the CNA allele
+- [`CNA$get_chromosome`](https://caravagnalab.github.io/ProCESS/reference/CNA-cash-get_chromosome.md)
+  : Getting the CNA chromosome
+- [`CNA$get_dataframe`](https://caravagnalab.github.io/ProCESS/reference/CNA-cash-get_dataframe.md)
+  : Getting the CNA data frame
+- [`CNA$get_length`](https://caravagnalab.github.io/ProCESS/reference/CNA-cash-get_length.md)
+  : Getting the CNA length
+- [`CNA$get_position_in_chromosome`](https://caravagnalab.github.io/ProCESS/reference/CNA-cash-get_position_in_chromosome.md)
+  : Getting the CNA chromosome position
+- [`CNA$get_src_allele`](https://caravagnalab.github.io/ProCESS/reference/CNA-cash-get_src_allele.md)
+  : Getting the CNA source allele
+- [`CNA()`](https://caravagnalab.github.io/ProCESS/reference/CNA.md) :
+  Creating a CNA
+- [`Deletion()`](https://caravagnalab.github.io/ProCESS/reference/Deletion.md)
+  : Creating a CNA deletion
+- [`get_available_tumours_in()`](https://caravagnalab.github.io/ProCESS/reference/get_available_tumours_in.md)
+  : Getting the tumour types available in a setup
+- [`get_mutation_engine_codes()`](https://caravagnalab.github.io/ProCESS/reference/get_mutation_engine_codes.md)
+  : Getting the supported setups
+- [`get_relevant_branches()`](https://caravagnalab.github.io/ProCESS/reference/get_relevant_branches.md)
+  : Get the data frame of the relevant branches
+- [`load_phylogenetic_forest()`](https://caravagnalab.github.io/ProCESS/reference/load_phylogenetic_forest.md)
+  : Loading a phylogenetic forest
+- [`Mutation$get_alt`](https://caravagnalab.github.io/ProCESS/reference/Mutation-cash-get_alt.md)
+  : Getting the mutation altered sequence
+- [`Mutation$get_cause`](https://caravagnalab.github.io/ProCESS/reference/Mutation-cash-get_cause.md)
+  : Getting the mutation cause
+- [`Mutation$get_chromosome`](https://caravagnalab.github.io/ProCESS/reference/Mutation-cash-get_chromosome.md)
+  : Getting the mutation chromosome
+- [`Mutation$get_dataframe`](https://caravagnalab.github.io/ProCESS/reference/Mutation-cash-get_dataframe.md)
+  : Getting the mutation data frame
+- [`Mutation$get_position_in_chromosome`](https://caravagnalab.github.io/ProCESS/reference/Mutation-cash-get_position_in_chromosome.md)
+  : Getting the mutation chromosome position
+- [`Mutation$get_ref`](https://caravagnalab.github.io/ProCESS/reference/Mutation-cash-get_ref.md)
+  : Getting the mutation reference sequence
+- [`Mutation()`](https://caravagnalab.github.io/ProCESS/reference/Mutation.md)
+  : Either an SBS or an indel
+- [`MutationEngine$add_exposure`](https://caravagnalab.github.io/ProCESS/reference/MutationEngine-cash-add_exposure.md)
+  : Adding an exposure to the mutation engine
+- [`MutationEngine$add_mutant`](https://caravagnalab.github.io/ProCESS/reference/MutationEngine-cash-add_mutant.md)
+  : Adding a mutant specification
+- [`MutationEngine$get_SNV_signatures`](https://caravagnalab.github.io/ProCESS/reference/MutationEngine-cash-get_SNV_signatures.md)
+  : Getting the SNV signatures
+- [`MutationEngine$get_active_germline`](https://caravagnalab.github.io/ProCESS/reference/MutationEngine-cash-get_active_germline.md)
+  : Getting the active germline subject
+- [`MutationEngine$get_genome_info`](https://caravagnalab.github.io/ProCESS/reference/MutationEngine-cash-get_genome_info.md)
+  : Getting the genome information
+- [`MutationEngine$get_germline_subjects`](https://caravagnalab.github.io/ProCESS/reference/MutationEngine-cash-get_germline_subjects.md)
+  : Getting the germline subjects
+- [`MutationEngine$get_indel_signatures`](https://caravagnalab.github.io/ProCESS/reference/MutationEngine-cash-get_indel_signatures.md)
+  : Getting the indel signatures
+- [`MutationEngine$get_known_drivers`](https://caravagnalab.github.io/ProCESS/reference/MutationEngine-cash-get_known_drivers.md)
+  : Getting the known driver mutations
+- [`MutationEngine$get_population_descriptions`](https://caravagnalab.github.io/ProCESS/reference/MutationEngine-cash-get_population_descriptions.md)
+  : Getting the population descriptions
+- [`MutationEngine$get_species_rates`](https://caravagnalab.github.io/ProCESS/reference/MutationEngine-cash-get_species_rates.md)
+  : Getting the registered species rates
+- [`MutationEngine$infinite_sites_model`](https://caravagnalab.github.io/ProCESS/reference/MutationEngine-cash-infinite_sites_model.md)
+  : Switching on and off the infinite sites model
+- [`MutationEngine$place_mutations`](https://caravagnalab.github.io/ProCESS/reference/MutationEngine-cash-place_mutations.md)
+  : Placing the mutations
+- [`MutationEngine$set_germline_subject`](https://caravagnalab.github.io/ProCESS/reference/MutationEngine-cash-set_germline_subject.md)
+  : Setting the germline subject
+- [`MutationEngine()`](https://caravagnalab.github.io/ProCESS/reference/MutationEngine.md)
+  : Generating phylogenetic forests
+- [`PhylogeneticForest$get_absolute_chromosome_positions`](https://caravagnalab.github.io/ProCESS/reference/PhylogeneticForest-cash-get_absolute_chromosome_positions.md)
+  : Getting the absolute chromosome positions
+- [`PhylogeneticForest$get_bulk_allelic_fragmentation`](https://caravagnalab.github.io/ProCESS/reference/PhylogeneticForest-cash-get_bulk_allelic_fragmentation.md)
+  : Getting the bulk allelic fragmentation data frame
+- [`PhylogeneticForest$get_cell_allelic_fragmentation`](https://caravagnalab.github.io/ProCESS/reference/PhylogeneticForest-cash-get_cell_allelic_fragmentation.md)
+  : Getting the cell allelic fragmentation data frame
+- [`PhylogeneticForest$get_coalescent_cells`](https://caravagnalab.github.io/ProCESS/reference/PhylogeneticForest-cash-get_coalescent_cells.md)
+  : Retrieving the most recent common ancestors
+- [`PhylogeneticForest$get_driver_mutations`](https://caravagnalab.github.io/ProCESS/reference/PhylogeneticForest-cash-get_driver_mutations.md)
+  : Getting the driver mutations
+- [`PhylogeneticForest$get_exposures`](https://caravagnalab.github.io/ProCESS/reference/PhylogeneticForest-cash-get_exposures.md)
+  : Getting the timed exposure data frame
+- [`PhylogeneticForest$get_first_occurrences`](https://caravagnalab.github.io/ProCESS/reference/PhylogeneticForest-cash-get_first_occurrences.md)
+  : Getting the cell in which a mutation emerged
+- [`PhylogeneticForest$get_germline_mutations`](https://caravagnalab.github.io/ProCESS/reference/PhylogeneticForest-cash-get_germline_mutations.md)
+  : Getting the germinal mutations
+- [`PhylogeneticForest$get_germline_subject`](https://caravagnalab.github.io/ProCESS/reference/PhylogeneticForest-cash-get_germline_subject.md)
+  : Getting the germline subject
+- [`PhylogeneticForest$get_mutation_statistics`](https://caravagnalab.github.io/ProCESS/reference/PhylogeneticForest-cash-get_mutation_statistics.md)
+  : Getting the statistics about mutations on each node
+- [`PhylogeneticForest$get_nodes`](https://caravagnalab.github.io/ProCESS/reference/PhylogeneticForest-cash-get_nodes.md)
+  : Getting the forest nodes
+- [`PhylogeneticForest$get_reference_path`](https://caravagnalab.github.io/ProCESS/reference/PhylogeneticForest-cash-get_reference_path.md)
+  : Getting the reference genome path
+- [`PhylogeneticForest$get_sampled_cell_CNAs`](https://caravagnalab.github.io/ProCESS/reference/PhylogeneticForest-cash-get_sampled_cell_CNAs.md)
+  : Getting the sampled cells' CNAs
+- [`PhylogeneticForest$get_sampled_cell_mutations`](https://caravagnalab.github.io/ProCESS/reference/PhylogeneticForest-cash-get_sampled_cell_mutations.md)
+  : Getting the sampled cells' mutations
+- [`PhylogeneticForest$get_samples_info`](https://caravagnalab.github.io/ProCESS/reference/PhylogeneticForest-cash-get_samples_info.md)
+  : Retrieving sample information
+- [`PhylogeneticForest$get_species_info`](https://caravagnalab.github.io/ProCESS/reference/PhylogeneticForest-cash-get_species_info.md)
+  : Getting the species
+- [`PhylogeneticForest$get_sticks`](https://caravagnalab.github.io/ProCESS/reference/PhylogeneticForest-cash-get_sticks.md)
+  : Computing the forest sticks
+- [`PhylogeneticForest$get_subforest_for`](https://caravagnalab.github.io/ProCESS/reference/PhylogeneticForest-cash-get_subforest_for.md)
+  : Building sub-forests
+- [`PhylogeneticForest$save`](https://caravagnalab.github.io/ProCESS/reference/PhylogeneticForest-cash-save.md)
+  : Saving a phylogenetic forest
+- [`PhylogeneticForest$set_reference_path`](https://caravagnalab.github.io/ProCESS/reference/PhylogeneticForest-cash-set_reference_path.md)
+  : Setting the reference genome path
+- [`PhylogeneticForest`](https://caravagnalab.github.io/ProCESS/reference/PhylogeneticForest.md)
+  : The phylogenetic forest of cells in samples
+- [`plot_exposure_timeline()`](https://caravagnalab.github.io/ProCESS/reference/plot_exposure_timeline.md)
+  : Plot the signature exposure timeline of a phylogenetic forest
+- [`plot_forest()`](https://caravagnalab.github.io/ProCESS/reference/plot_forest.md)
+  : Plot a sample forest
+- [`plot_sticks()`](https://caravagnalab.github.io/ProCESS/reference/plot_sticks.md)
+  : Annotate a plot of cell divisions
+- [`SNV()`](https://caravagnalab.github.io/ProCESS/reference/SNV.md) :
+  Creating an SNV
+- [`WholeGenomeDoubling`](https://caravagnalab.github.io/ProCESS/reference/WholeGenomeDoubling.md)
+  : Whole genome doubling events
+
+## Sequencing simulation interface
+
+Sequencing simulation methods
+
+- [`BasicIlluminaSequencer$error_rate`](https://caravagnalab.github.io/ProCESS/reference/BasicIlluminaSequencer-cash-error_rate.md)
+  : Getting the error rate
+- [`BasicIlluminaSequencer$random_quality_scores`](https://caravagnalab.github.io/ProCESS/reference/BasicIlluminaSequencer-cash-random_quality_scores.md)
+  : Check the non-constant quality score model
+- [`BasicIlluminaSequencer`](https://caravagnalab.github.io/ProCESS/reference/BasicIlluminaSequencer.md)
+  : A basic Illumina sequencer class
+- [`ErrorlessIlluminaSequencer`](https://caravagnalab.github.io/ProCESS/reference/ErrorlessIlluminaSequencer.md)
+  : An error-free Illumina sequencer class
+- [`label_mutations()`](https://caravagnalab.github.io/ProCESS/reference/label_mutations.md)
+  : Label mutations using phylogenetic forest data
+- [`plot_BAF()`](https://caravagnalab.github.io/ProCESS/reference/plot_BAF.md)
+  : Plot the genome-wide B-Allele Frequency (BAF)
+- [`plot_DR()`](https://caravagnalab.github.io/ProCESS/reference/plot_DR.md)
+  : Plot the genome-wide Depth Ratio (DR)
+- [`plot_VAF()`](https://caravagnalab.github.io/ProCESS/reference/plot_VAF.md)
+  : Plot the genome-wide Variant Allele Frequency (VAF)
+- [`plot_VAF_histogram()`](https://caravagnalab.github.io/ProCESS/reference/plot_VAF_histogram.md)
+  : Plot a Variant Allele Frequency (VAF) histogram
+- [`plot_VAF_marginals()`](https://caravagnalab.github.io/ProCESS/reference/plot_VAF_marginals.md)
+  : Plot Marginals of Variant Allele Frequency (VAF)
+- [`SampledCell$birth_time`](https://caravagnalab.github.io/ProCESS/reference/SampledCell-cash-birth_time.md)
+  : Getting the sampled cell birth time
+- [`SampledCell$epistate`](https://caravagnalab.github.io/ProCESS/reference/SampledCell-cash-epistate.md)
+  : Getting the sampled cell epigenetic state
+- [`SampledCell$mutant`](https://caravagnalab.github.io/ProCESS/reference/SampledCell-cash-mutant.md)
+  : Getting the sampled cell mutant
+- [`SampledCell$mutations`](https://caravagnalab.github.io/ProCESS/reference/SampledCell-cash-mutations.md)
+  : Getting the sampled cell mutations
+- [`SampledCell$species`](https://caravagnalab.github.io/ProCESS/reference/SampledCell-cash-species.md)
+  : Getting the sampled cell species
+- [`SampledCell`](https://caravagnalab.github.io/ProCESS/reference/SampledCell.md)
+  : A sampled cell
+- [`simulate_seq`](https://caravagnalab.github.io/ProCESS/reference/simulate_seq.md)
+  : Simulating the sequencing of sampled cells
+- [`simulate_normal_seq`](https://caravagnalab.github.io/ProCESS/reference/simulate_normal_seq.md)
+  : Simulating wild-type sequencing
+- [`seq_to_long()`](https://caravagnalab.github.io/ProCESS/reference/seq_to_long.md)
+  : Convert sequencing results from wide to long format
+
+## Simulation Logics
+
+Simulation Logics
+
+- [`Expression`](https://caravagnalab.github.io/ProCESS/reference/Expression.md)
+  : Represent an expression of value and variable
+- [`Formula`](https://caravagnalab.github.io/ProCESS/reference/Formula.md)
+  : First-order simulation state formulas
+- [`Variable`](https://caravagnalab.github.io/ProCESS/reference/Variable.md)
+  : Represent a simulation quantity
+
+# Articles
+
+### Introduction
+
+- [Tissue
+  simulation](https://caravagnalab.github.io/ProCESS/articles/tissue_simulation.md):
+
+  Learn how to simulate tumour evolution
+
+- [Tissue
+  sampling](https://caravagnalab.github.io/ProCESS/articles/sampling.md):
+
+  How to sample cells from a simulated tissue
+
+- [Simulating
+  Mutations](https://caravagnalab.github.io/ProCESS/articles/mutations.md):
+
+  How to simulate mutations on sampled cells
+
+- [Sequencing
+  Simulation](https://caravagnalab.github.io/ProCESS/articles/sequencing.md):
+
+  How to simulate sample sequencing
+
+### Advanced techniques
+
+- [Growth
+  Models](https://caravagnalab.github.io/ProCESS/articles/growth_models.md):
+
+  What is a growth model and which growth models are implemented by
+  ProCESS
+
+- [Formula-based simulation
+  constraints](https://caravagnalab.github.io/ProCESS/articles/run_until.md):
+
+  Simulating a tissue evolution until a simulation state formula does
+  not hold
+
+- [Customizing mutation
+  engine](https://caravagnalab.github.io/ProCESS/articles/custom_engine.md):
+
+  How to customize the mutation engine and its indices
+
+- [Infinite Site
+  Model](https://caravagnalab.github.io/ProCESS/articles/infinite_site_model.md):
+
+  How to enable/disable the infinite site model
+
+- [Partitioning samples
+  (FACS)](https://caravagnalab.github.io/ProCESS/articles/sample_partition.md):
+
+  How to partitioning samples, sorting cells, and simulate FACS
+
+- [Time Series
+  Analysis](https://caravagnalab.github.io/ProCESS/articles/time_series.md):
+
+  Analyse the evolution of the system over time
+
+### Tests and Examples
+
+- [A four-mutants
+  example](https://caravagnalab.github.io/ProCESS/articles/four_mutants.md):
+
+  Sampling a four-mutants simulation
+
+- [SCOUT](https://caravagnalab.github.io/ProCESS/articles/SCOUT.md):
+
+  The Simulated Cohort of Universal Tumours (SCOUT)

@@ -9,7 +9,7 @@ cells sampled during the computation."><meta property="og:image" content="https:
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,7 +102,8 @@ chromosome), <code>chr_pos</code>" (i.e., the position in the chromosome),
 <dd><p>Get the forest nodes</p><ul><li><p><em>Return:</em> A data frame representing, for each node
 in the forest, the identified (column <code>id</code>),
 whenever the node is not a root, the ancestor
-identifier (column <code>ancestor</code>), whenever the node
+identifier (column <code>ancestor</code>), the node's depth
+(column <code>depth</code>), whenever the node
 was sampled, i.e., it is one of the forest
 leaves, the name of the sample containing the
 node, (column <code>sample</code>), the mutant (column
@@ -135,11 +136,11 @@ in the sampled cell genomes.</p></li>
 
 <dt><code>get_samples_info</code></dt>
 <dd><p>Retrieves information about the samples</p><ul><li><p><em>Returns:</em> A data frame containing, for each sample collected
-during the simulation, the columns "<code>name</code>", "<code>time</code>", "<code>ymin</code>",
-"<code>xmin</code>", "<code>ymax</code>", "<code>xmax</code>", "<code>tumour_cells</code>", and
-"<code>tumour_cells_in_bbox</code>". The columns "<code>ymin</code>", "<code>xmin</code>", "<code>ymax</code>",
-"<code>xmax</code>" report the boundaries of the sample bounding box, while
-"<code>tumour_cells</code>" and "<code>tumour_cells_in_bbox</code>" are the number of
+during the simulation, the columns <code>name</code>, <code>time</code>, <code>ymin</code>,
+<code>xmin</code>, <code>ymax</code>, <code>xmax</code>, <code>tumour_cells</code>, and
+<code>tumour_cells_in_bbox</code>. The columns <code>ymin</code>, <code>xmin</code>, <code>ymax</code>,
+<code>xmax</code> report the boundaries of the sample bounding box, while
+<code>tumour_cells</code> and <code>tumour_cells_in_bbox</code> are the number of
 tumour cells in the sample and in the bounding box, respectively.</p></li>
 </ul></dd>
 
@@ -172,9 +173,9 @@ as leaves of the new forest.</p></li>
 
 
 <dt><code>get_absolute_chromosome_positions</code></dt>
-<dd><p>Gets the absolute chromosome positions</p><ul><li><p><em>Returns:</em> A data frame reporting the name (column "<code>chr</code>"), the length
-(column "<code>length</code>"), the initial absolute position (column "<code>from</code>"),
-and the final absolute position (column "<code>to</code>") of each chromosome.</p></li>
+<dd><p>Gets the absolute chromosome positions</p><ul><li><p><em>Returns:</em> A data frame reporting the name (column <code>chr</code>), the length
+(column <code>length</code>), the initial absolute position (column <code>from</code>),
+and the final absolute position (column <code>to</code>) of each chromosome.</p></li>
 </ul></dd>
 
 
@@ -195,7 +196,7 @@ forest must be saved.</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

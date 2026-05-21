@@ -9,7 +9,7 @@ the samples collected along the simulation."><meta property="og:image" content="
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,11 +52,11 @@ the samples collected along the simulation.</p>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A data frame containing, for each sample collected
-during the simulation, the columns "<code>name</code>", "<code>time</code>", "<code>id</code>",
-"<code>ymin</code>", "<code>xmin</code>", "<code>ymax</code>", "<code>xmax</code>", "<code>tumour_cells</code>", and
-"<code>tumour_cells_in_bbox</code>". The columns "<code>ymin</code>", "<code>xmin</code>", "<code>ymax</code>",
-"<code>xmax</code>" report the boundaries of the sample bounding box, while
-"<code>tumour_cells</code>" and "<code>tumour_cells_in_bbox</code>" are the number of tumour
+during the simulation, the columns <code>name</code>, <code>time</code>, <code>id</code>,
+<code>ymin</code>, <code>xmin</code>, <code>ymax</code>, <code>xmax</code>, <code>tumour_cells</code>, and
+<code>tumour_cells_in_bbox</code>. The columns <code>ymin</code>, <code>xmin</code>, <code>ymax</code>,
+<code>xmax</code> report the boundaries of the sample bounding box, while
+<code>tumour_cells</code> and <code>tumour_cells_in_bbox</code> are the number of tumour
 cells in the sample and in the bounding box, respectively.</p>
     </div>
     <div class="section level2">
@@ -80,14 +80,20 @@ cells in the sample and in the bounding box, respectively.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="va">death_activation_level</span> <span class="op">&lt;-</span> <span class="fl">100</span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span>species <span class="op">=</span> <span class="st">"A"</span>, num_of_cells <span class="op">=</span> <span class="fl">50000</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 
+ [███████████████████████████████████████-] 97% [00m:00s] Cells: 48630                             
+
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                         
+</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># sample the region [450,500]x[475,550]</span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">sample_cells</span><span class="op">(</span><span class="st">"S1"</span>, lower_corner<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">450</span>,<span class="fl">475</span><span class="op">)</span>, upper_corner<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">500</span>,<span class="fl">550</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># simulate 1 time unit more</span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_time</span><span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="fu">get_clock</span><span class="op">(</span><span class="op">)</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                         
+</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># sample the region [500,520]x[525,550]</span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">sample_cells</span><span class="op">(</span><span class="st">"S2"</span>, lower_corner<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">500</span>,<span class="fl">525</span><span class="op">)</span>, upper_corner<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">520</span>,<span class="fl">550</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -96,8 +102,8 @@ cells in the sample and in the bounding box, respectively.</p>
 <span class="r-in"><span><span class="co"># samples, i.e, S1 and S2</span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">get_samples_info</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   name id xmin ymin xmax ymax tumour_cells tumour_cells_in_bbox     time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   S1 11  450  475  500  550         3863                 3863 215.0761</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   S2 12  500  525  520  550          531                  531 216.0767</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   S1 11  450  475  500  550         3848                 3848 291.0345</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   S2 12  500  525  520  550          519                  519 292.0371</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -109,7 +115,7 @@ cells in the sample and in the bounding box, respectively.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

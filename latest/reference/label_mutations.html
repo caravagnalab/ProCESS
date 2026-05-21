@@ -9,7 +9,7 @@ occurs for the first time."><meta property="og:image" content="https://caravagna
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,14 +90,18 @@ based on phylogenetic sticks (column "<code>label</code>").</p>
 <span class="r-in"><span>               death_rates <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">place_cell</span><span class="op">(</span><span class="st">"A"</span>, <span class="fl">500</span>, <span class="fl">500</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"A"</span>,<span class="fl">1e4</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                         
+</span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">add_mutant</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"B"</span>,</span></span>
 <span class="r-in"><span>               growth_rates <span class="op">=</span> <span class="fl">3.5</span>,</span></span>
 <span class="r-in"><span>               death_rates <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">mutate_progeny</span><span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="fu">choose_cell_in</span><span class="op">(</span><span class="st">"A"</span><span class="op">)</span>, <span class="st">"B"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"B"</span>,<span class="fl">1e4</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                         
+</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># sample the tissue and build the sample forest</span></span></span>
 <span class="r-in"><span><span class="va">bbox</span> <span class="op">&lt;-</span> <span class="va">sim</span><span class="op">$</span><span class="fu">search_sample</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span> <span class="op">=</span> <span class="fl">100</span>,<span class="st">"B"</span> <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, <span class="fl">50</span>, <span class="fl">50</span><span class="op">)</span></span></span>
@@ -106,25 +110,465 @@ based on phylogenetic sticks (column "<code>label</code>").</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># place the mutations</span></span></span>
 <span class="r-in"><span><span class="va">m_engine</span> <span class="op">=</span> <span class="fu"><a href="MutationEngine.html">MutationEngine</a></span><span class="op">(</span>setup_code <span class="op">=</span> <span class="st">"demo"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [█---------------------------------------] 0% [00m:00s] Loading context index                                                                 [████████████████████████████████████████] 100% [00m:00s] Context index loaded                                                               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [█---------------------------------------] 0% [00m:00s] Loading RS index                                                                      [███████████████████---------------------] 46% [00m:01s] Loading RS index                                                                     [█████████████████████████████████████---] 91% [00m:02s] Loading RS index                                                                     [████████████████████████████████████████] 100% [00m:02s] RS index loaded                                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [█---------------------------------------] 0% [00m:00s] Loading germline                                                                      [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 
+ [█---------------------------------------] 0% [00m:00s] Loading context index                     
+
+ [████████████████████████████████████████] 100% [00m:00s] Context index loaded                    
+</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 
+ [█---------------------------------------] 0% [00m:00s] Loading RS index                          
+
+ [█████████████---------------------------] 32% [00m:01s] Loading RS index                         
+
+ [███████████████████████████-------------] 65% [00m:02s] Loading RS index                         
+
+ [███████████████████████████████████████-] 97% [00m:03s] Loading RS index                         
+
+ [████████████████████████████████████████] 100% [00m:03s] RS index loaded                         
+</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 
+ [█---------------------------------------] 0% [00m:00s] Loading germline                          
+
+ [████████████████████████████████████████] 100% [00m:00s] Germline loaded                         
+</span>
 <span class="r-in"><span><span class="va">m_engine</span><span class="op">$</span><span class="fu">add_mutant</span><span class="op">(</span>mutant_name <span class="op">=</span> <span class="st">"A"</span>,</span></span>
 <span class="r-in"><span>                    passenger_rates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>SNV <span class="op">=</span> <span class="fl">5e-8</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs                                                                   [████████████████████████████████████████] 100% [00m:00s] "A"'s SIDs validated                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 
+ [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs                       
+
+ [████████████████████████████████████████] 100% [00m:00s] "A"'s SIDs validated                    
+</span>
 <span class="r-in"><span><span class="va">m_engine</span><span class="op">$</span><span class="fu">add_mutant</span><span class="op">(</span>mutant_name <span class="op">=</span> <span class="st">"B"</span>,</span></span>
 <span class="r-in"><span>                    passenger_rates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>SNV <span class="op">=</span> <span class="fl">5e-8</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [█---------------------------------------] 0% [00m:00s] Retrieving "B" SIDs                                                                   [████████████████████████████████████████] 100% [00m:00s] "B"'s SIDs validated                                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 
+ [█---------------------------------------] 0% [00m:00s] Retrieving "B" SIDs                       
+
+ [████████████████████████████████████████] 100% [00m:00s] "B"'s SIDs validated                    
+</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">m_engine</span><span class="op">$</span><span class="fu">add_exposure</span><span class="op">(</span>time <span class="op">=</span> <span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>SBS1 <span class="op">=</span> <span class="fl">0.2</span>,SBS5 <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">phylo_forest</span> <span class="op">&lt;-</span> <span class="va">m_engine</span><span class="op">$</span><span class="fu">place_mutations</span><span class="op">(</span><span class="va">forest</span>, <span class="fl">100</span>, <span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [█---------------------------------------] 0% [00m:00s] Placing mutations                                                                     [████████████████████████████████████████] 100% [00m:00s] Mutations placed                                                                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 
+ [█---------------------------------------] 0% [00m:00s] Placing mutations                         
+
+ [████████████████████████████████████████] 100% [00m:00s] Mutations placed                        
+</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># simulate sequencing without the normal sample</span></span></span>
 <span class="r-in"><span><span class="va">seq_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="simulate_seq.html">simulate_seq</a></span><span class="op">(</span><span class="va">phylo_forest</span>, coverage <span class="op">=</span> <span class="fl">100</span>, write_SAM <span class="op">=</span> <span class="cn">F</span>,</span></span>
 <span class="r-in"><span>                            with_normal_sample <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [█---------------------------------------] 0% [00m:00s]                                                                                       [█---------------------------------------] 0% [00m:00s] Processing chr. 22                                                                    [█---------------------------------------] 0% [00m:00s] Processing chr. 22                                                                    [█---------------------------------------] 0% [00m:01s] Processing chr. 22                                                                    [█---------------------------------------] 1% [00m:02s] Processing chr. 22                                                                    [█---------------------------------------] 1% [00m:03s] Processing chr. 22                                                                    [█---------------------------------------] 1% [00m:04s] Processing chr. 22                                                                    [█---------------------------------------] 2% [00m:05s] Processing chr. 22                                                                    [█---------------------------------------] 2% [00m:06s] Processing chr. 22                                                                    [██--------------------------------------] 3% [00m:07s] Processing chr. 22                                                                    [██--------------------------------------] 3% [00m:08s] Processing chr. 22                                                                    [██--------------------------------------] 4% [00m:09s] Processing chr. 22                                                                    [██--------------------------------------] 4% [00m:10s] Processing chr. 22                                                                    [██--------------------------------------] 4% [00m:12s] Processing chr. 22                                                                    [███-------------------------------------] 5% [00m:13s] Processing chr. 22                                                                    [███-------------------------------------] 5% [00m:14s] Processing chr. 22                                                                    [███-------------------------------------] 6% [00m:15s] Processing chr. 22                                                                    [███-------------------------------------] 6% [00m:16s] Processing chr. 22                                                                    [███-------------------------------------] 7% [00m:17s] Processing chr. 22                                                                    [███-------------------------------------] 7% [00m:18s] Processing chr. 22                                                                    [████------------------------------------] 8% [00m:19s] Processing chr. 22                                                                    [████------------------------------------] 8% [00m:20s] Processing chr. 22                                                                    [████------------------------------------] 8% [00m:21s] Processing chr. 22                                                                    [████------------------------------------] 9% [00m:22s] Processing chr. 22                                                                    [████------------------------------------] 9% [00m:23s] Processing chr. 22                                                                    [█████-----------------------------------] 10% [00m:24s] Processing chr. 22                                                                   [█████-----------------------------------] 10% [00m:25s] Processing chr. 22                                                                   [█████-----------------------------------] 11% [00m:26s] Processing chr. 22                                                                   [█████-----------------------------------] 11% [00m:27s] Processing chr. 22                                                                   [█████-----------------------------------] 11% [00m:28s] Processing chr. 22                                                                   [█████-----------------------------------] 12% [00m:29s] Processing chr. 22                                                                   [█████-----------------------------------] 12% [00m:30s] Processing chr. 22                                                                   [██████----------------------------------] 13% [00m:31s] Processing chr. 22                                                                   [██████----------------------------------] 13% [00m:32s] Processing chr. 22                                                                   [██████----------------------------------] 14% [00m:33s] Processing chr. 22                                                                   [██████----------------------------------] 14% [00m:34s] Processing chr. 22                                                                   [███████---------------------------------] 15% [00m:35s] Processing chr. 22                                                                   [███████---------------------------------] 15% [00m:36s] Processing chr. 22                                                                   [███████---------------------------------] 15% [00m:37s] Processing chr. 22                                                                   [███████---------------------------------] 16% [00m:38s] Processing chr. 22                                                                   [███████---------------------------------] 16% [00m:39s] Processing chr. 22                                                                   [███████---------------------------------] 17% [00m:40s] Processing chr. 22                                                                   [███████---------------------------------] 17% [00m:41s] Processing chr. 22                                                                   [███████---------------------------------] 17% [00m:42s] Processing chr. 22                                                                   [████████--------------------------------] 18% [00m:43s] Processing chr. 22                                                                   [████████--------------------------------] 18% [00m:44s] Processing chr. 22                                                                   [████████--------------------------------] 19% [00m:45s] Processing chr. 22                                                                   [████████--------------------------------] 19% [00m:46s] Processing chr. 22                                                                   [████████--------------------------------] 19% [00m:47s] Processing chr. 22                                                                   [█████████-------------------------------] 20% [00m:48s] Processing chr. 22                                                                   [█████████-------------------------------] 20% [00m:49s] Processing chr. 22                                                                   [█████████-------------------------------] 21% [00m:50s] Processing chr. 22                                                                   [█████████-------------------------------] 21% [00m:51s] Processing chr. 22                                                                   [█████████-------------------------------] 22% [00m:52s] Processing chr. 22                                                                   [█████████-------------------------------] 22% [00m:53s] Processing chr. 22                                                                   [█████████-------------------------------] 22% [00m:54s] Processing chr. 22                                                                   [██████████------------------------------] 23% [00m:55s] Processing chr. 22                                                                   [██████████------------------------------] 23% [00m:56s] Processing chr. 22                                                                   [██████████------------------------------] 24% [00m:57s] Processing chr. 22                                                                   [██████████------------------------------] 24% [00m:58s] Processing chr. 22                                                                   [██████████------------------------------] 24% [00m:59s] Processing chr. 22                                                                   [███████████-----------------------------] 25% [01m:00s] Processing chr. 22                                                                   [███████████-----------------------------] 25% [01m:01s] Processing chr. 22                                                                   [███████████-----------------------------] 26% [01m:02s] Processing chr. 22                                                                   [███████████-----------------------------] 26% [01m:03s] Processing chr. 22                                                                   [███████████-----------------------------] 26% [01m:04s] Processing chr. 22                                                                   [███████████-----------------------------] 27% [01m:05s] Processing chr. 22                                                                   [███████████-----------------------------] 27% [01m:06s] Processing chr. 22                                                                   [████████████----------------------------] 28% [01m:07s] Processing chr. 22                                                                   [████████████----------------------------] 28% [01m:08s] Processing chr. 22                                                                   [████████████----------------------------] 29% [01m:09s] Processing chr. 22                                                                   [████████████----------------------------] 29% [01m:10s] Processing chr. 22                                                                   [█████████████---------------------------] 30% [01m:11s] Processing chr. 22                                                                   [█████████████---------------------------] 30% [01m:12s] Processing chr. 22                                                                   [█████████████---------------------------] 30% [01m:13s] Processing chr. 22                                                                   [█████████████---------------------------] 31% [01m:14s] Processing chr. 22                                                                   [█████████████---------------------------] 31% [01m:15s] Processing chr. 22                                                                   [█████████████---------------------------] 32% [01m:16s] Processing chr. 22                                                                   [█████████████---------------------------] 32% [01m:17s] Processing chr. 22                                                                   [██████████████--------------------------] 33% [01m:18s] Processing chr. 22                                                                   [██████████████--------------------------] 33% [01m:19s] Processing chr. 22                                                                   [██████████████--------------------------] 33% [01m:20s] Processing chr. 22                                                                   [██████████████--------------------------] 34% [01m:21s] Processing chr. 22                                                                   [██████████████--------------------------] 34% [01m:22s] Processing chr. 22                                                                   [███████████████-------------------------] 35% [01m:23s] Processing chr. 22                                                                   [███████████████-------------------------] 35% [01m:24s] Processing chr. 22                                                                   [███████████████-------------------------] 36% [01m:25s] Processing chr. 22                                                                   [███████████████-------------------------] 36% [01m:26s] Processing chr. 22                                                                   [███████████████-------------------------] 37% [01m:27s] Processing chr. 22                                                                   [███████████████-------------------------] 37% [01m:28s] Processing chr. 22                                                                   [███████████████-------------------------] 37% [01m:29s] Processing chr. 22                                                                   [████████████████------------------------] 38% [01m:30s] Processing chr. 22                                                                   [████████████████------------------------] 38% [01m:31s] Processing chr. 22                                                                   [████████████████------------------------] 39% [01m:32s] Processing chr. 22                                                                   [████████████████------------------------] 39% [01m:33s] Processing chr. 22                                                                   [█████████████████-----------------------] 40% [01m:34s] Processing chr. 22                                                                   [█████████████████-----------------------] 40% [01m:35s] Processing chr. 22                                                                   [█████████████████-----------------------] 40% [01m:36s] Processing chr. 22                                                                   [█████████████████-----------------------] 41% [01m:37s] Processing chr. 22                                                                   [█████████████████-----------------------] 41% [01m:38s] Processing chr. 22                                                                   [█████████████████-----------------------] 42% [01m:39s] Processing chr. 22                                                                   [█████████████████-----------------------] 42% [01m:40s] Processing chr. 22                                                                   [██████████████████----------------------] 43% [01m:41s] Processing chr. 22                                                                   [██████████████████----------------------] 43% [01m:42s] Processing chr. 22                                                                   [██████████████████----------------------] 43% [01m:43s] Processing chr. 22                                                                   [██████████████████----------------------] 44% [01m:44s] Processing chr. 22                                                                   [██████████████████----------------------] 44% [01m:45s] Processing chr. 22                                                                   [███████████████████---------------------] 45% [01m:46s] Processing chr. 22                                                                   [███████████████████---------------------] 45% [01m:47s] Processing chr. 22                                                                   [███████████████████---------------------] 46% [01m:48s] Processing chr. 22                                                                   [███████████████████---------------------] 46% [01m:49s] Processing chr. 22                                                                   [███████████████████---------------------] 46% [01m:50s] Processing chr. 22                                                                   [███████████████████---------------------] 47% [01m:51s] Processing chr. 22                                                                   [███████████████████---------------------] 47% [01m:52s] Processing chr. 22                                                                   [████████████████████--------------------] 48% [01m:53s] Processing chr. 22                                                                   [████████████████████--------------------] 48% [01m:54s] Processing chr. 22                                                                   [████████████████████--------------------] 49% [01m:55s] Processing chr. 22                                                                   [████████████████████--------------------] 49% [01m:56s] Processing chr. 22                                                                   [█████████████████████-------------------] 50% [01m:57s] Processing chr. 22                                                                   [█████████████████████-------------------] 50% [01m:58s] Processing chr. 22                                                                   [█████████████████████-------------------] 50% [01m:59s] Processing chr. 22                                                                   [█████████████████████-------------------] 51% [02m:00s] Processing chr. 22                                                                   [█████████████████████-------------------] 51% [02m:01s] Processing chr. 22                                                                   [█████████████████████-------------------] 52% [02m:02s] Processing chr. 22                                                                   [█████████████████████-------------------] 52% [02m:03s] Processing chr. 22                                                                   [██████████████████████------------------] 52% [02m:04s] Processing chr. 22                                                                   [██████████████████████------------------] 52% [02m:05s] Processing chr. 22                                                                   [██████████████████████------------------] 52% [02m:06s] Processing chr. 22                                                                   [██████████████████████------------------] 54% [02m:07s] Processing chr. 22                                                                   [██████████████████████------------------] 54% [02m:08s] Processing chr. 22                                                                   [███████████████████████-----------------] 55% [02m:09s] Processing chr. 22                                                                   [███████████████████████-----------------] 55% [02m:10s] Processing chr. 22                                                                   [███████████████████████-----------------] 56% [02m:11s] Processing chr. 22                                                                   [███████████████████████-----------------] 56% [02m:12s] Processing chr. 22                                                                   [███████████████████████-----------------] 57% [02m:13s] Processing chr. 22                                                                   [███████████████████████-----------------] 57% [02m:14s] Processing chr. 22                                                                   [███████████████████████-----------------] 57% [02m:15s] Processing chr. 22                                                                   [████████████████████████----------------] 58% [02m:16s] Processing chr. 22                                                                   [████████████████████████----------------] 58% [02m:17s] Processing chr. 22                                                                   [████████████████████████----------------] 58% [02m:18s] Processing chr. 22                                                                   [████████████████████████----------------] 58% [02m:19s] Processing chr. 22                                                                   [█████████████████████████---------------] 60% [02m:20s] Processing chr. 22                                                                   [█████████████████████████---------------] 60% [02m:21s] Processing chr. 22                                                                   [█████████████████████████---------------] 61% [02m:22s] Processing chr. 22                                                                   [█████████████████████████---------------] 61% [02m:23s] Processing chr. 22                                                                   [█████████████████████████---------------] 61% [02m:24s] Processing chr. 22                                                                   [█████████████████████████---------------] 62% [02m:25s] Processing chr. 22                                                                   [█████████████████████████---------------] 62% [02m:26s] Processing chr. 22                                                                   [██████████████████████████--------------] 63% [02m:27s] Processing chr. 22                                                                   [██████████████████████████--------------] 63% [02m:28s] Processing chr. 22                                                                   [██████████████████████████--------------] 64% [02m:29s] Processing chr. 22                                                                   [██████████████████████████--------------] 64% [02m:30s] Processing chr. 22                                                                   [███████████████████████████-------------] 65% [02m:31s] Processing chr. 22                                                                   [███████████████████████████-------------] 65% [02m:32s] Processing chr. 22                                                                   [███████████████████████████-------------] 65% [02m:33s] Processing chr. 22                                                                   [███████████████████████████-------------] 66% [02m:34s] Processing chr. 22                                                                   [███████████████████████████-------------] 66% [02m:35s] Processing chr. 22                                                                   [███████████████████████████-------------] 67% [02m:36s] Processing chr. 22                                                                   [███████████████████████████-------------] 67% [02m:37s] Processing chr. 22                                                                   [████████████████████████████------------] 68% [02m:38s] Processing chr. 22                                                                   [████████████████████████████------------] 68% [02m:39s] Processing chr. 22                                                                   [████████████████████████████------------] 69% [02m:40s] Processing chr. 22                                                                   [████████████████████████████------------] 69% [02m:41s] Processing chr. 22                                                                   [████████████████████████████------------] 69% [02m:42s] Processing chr. 22                                                                   [█████████████████████████████-----------] 70% [02m:43s] Processing chr. 22                                                                   [█████████████████████████████-----------] 70% [02m:44s] Processing chr. 22                                                                   [█████████████████████████████-----------] 71% [02m:45s] Processing chr. 22                                                                   [█████████████████████████████-----------] 71% [02m:46s] Processing chr. 22                                                                   [█████████████████████████████-----------] 71% [02m:47s] Processing chr. 22                                                                   [█████████████████████████████-----------] 72% [02m:48s] Processing chr. 22                                                                   [█████████████████████████████-----------] 72% [02m:49s] Processing chr. 22                                                                   [██████████████████████████████----------] 73% [02m:50s] Processing chr. 22                                                                   [██████████████████████████████----------] 73% [02m:51s] Processing chr. 22                                                                   [██████████████████████████████----------] 73% [02m:52s] Processing chr. 22                                                                   [██████████████████████████████----------] 74% [02m:53s] Processing chr. 22                                                                   [██████████████████████████████----------] 74% [02m:54s] Processing chr. 22                                                                   [███████████████████████████████---------] 75% [02m:55s] Processing chr. 22                                                                   [███████████████████████████████---------] 75% [02m:56s] Processing chr. 22                                                                   [███████████████████████████████---------] 75% [02m:57s] Processing chr. 22                                                                   [███████████████████████████████---------] 76% [02m:58s] Processing chr. 22                                                                   [███████████████████████████████---------] 76% [02m:59s] Processing chr. 22                                                                   [███████████████████████████████---------] 77% [03m:00s] Processing chr. 22                                                                   [███████████████████████████████---------] 77% [03m:01s] Processing chr. 22                                                                   [████████████████████████████████--------] 78% [03m:02s] Processing chr. 22                                                                   [████████████████████████████████--------] 78% [03m:03s] Processing chr. 22                                                                   [████████████████████████████████--------] 78% [03m:04s] Processing chr. 22                                                                   [████████████████████████████████--------] 79% [03m:05s] Processing chr. 22                                                                   [████████████████████████████████--------] 79% [03m:06s] Processing chr. 22                                                                   [█████████████████████████████████-------] 80% [03m:07s] Processing chr. 22                                                                   [█████████████████████████████████-------] 80% [03m:08s] Processing chr. 22                                                                   [█████████████████████████████████-------] 81% [03m:09s] Processing chr. 22                                                                   [█████████████████████████████████-------] 81% [03m:10s] Processing chr. 22                                                                   [█████████████████████████████████-------] 81% [03m:11s] Processing chr. 22                                                                   [█████████████████████████████████-------] 82% [03m:12s] Processing chr. 22                                                                   [█████████████████████████████████-------] 82% [03m:13s] Processing chr. 22                                                                   [██████████████████████████████████------] 83% [03m:14s] Processing chr. 22                                                                   [██████████████████████████████████------] 83% [03m:15s] Processing chr. 22                                                                   [██████████████████████████████████------] 83% [03m:16s] Processing chr. 22                                                                   [██████████████████████████████████------] 84% [03m:17s] Processing chr. 22                                                                   [██████████████████████████████████------] 84% [03m:18s] Processing chr. 22                                                                   [██████████████████████████████████------] 84% [03m:19s] Processing chr. 22                                                                   [███████████████████████████████████-----] 85% [03m:20s] Processing chr. 22                                                                   [███████████████████████████████████-----] 85% [03m:21s] Processing chr. 22                                                                   [███████████████████████████████████-----] 86% [03m:22s] Processing chr. 22                                                                   [███████████████████████████████████-----] 86% [03m:23s] Processing chr. 22                                                                   [███████████████████████████████████-----] 87% [03m:24s] Processing chr. 22                                                                   [███████████████████████████████████-----] 87% [03m:25s] Processing chr. 22                                                                   [████████████████████████████████████----] 88% [03m:26s] Processing chr. 22                                                                   [████████████████████████████████████----] 88% [03m:27s] Processing chr. 22                                                                   [████████████████████████████████████----] 88% [03m:28s] Processing chr. 22                                                                   [████████████████████████████████████----] 89% [03m:29s] Processing chr. 22                                                                   [████████████████████████████████████----] 89% [03m:30s] Processing chr. 22                                                                   [█████████████████████████████████████---] 90% [03m:31s] Processing chr. 22                                                                   [█████████████████████████████████████---] 90% [03m:32s] Processing chr. 22                                                                   [█████████████████████████████████████---] 91% [03m:33s] Processing chr. 22                                                                   [█████████████████████████████████████---] 91% [03m:34s] Processing chr. 22                                                                   [█████████████████████████████████████---] 92% [03m:35s] Processing chr. 22                                                                   [█████████████████████████████████████---] 92% [03m:36s] Processing chr. 22                                                                   [█████████████████████████████████████---] 92% [03m:37s] Processing chr. 22                                                                   [██████████████████████████████████████--] 93% [03m:38s] Processing chr. 22                                                                   [██████████████████████████████████████--] 93% [03m:39s] Processing chr. 22                                                                   [██████████████████████████████████████--] 94% [03m:40s] Processing chr. 22                                                                   [██████████████████████████████████████--] 94% [03m:41s] Processing chr. 22                                                                   [███████████████████████████████████████-] 95% [03m:42s] Processing chr. 22                                                                   [███████████████████████████████████████-] 95% [03m:43s] Processing chr. 22                                                                   [███████████████████████████████████████-] 96% [03m:44s] Processing chr. 22                                                                   [███████████████████████████████████████-] 96% [03m:45s] Processing chr. 22                                                                   [███████████████████████████████████████-] 96% [03m:46s] Processing chr. 22                                                                   [███████████████████████████████████████-] 97% [03m:47s] Processing chr. 22                                                                   [███████████████████████████████████████-] 97% [03m:48s] Processing chr. 22                                                                   [████████████████████████████████████████] 98% [03m:49s] Processing chr. 22                                                                   [████████████████████████████████████████] 98% [03m:50s] Processing chr. 22                                                                   [████████████████████████████████████████] 99% [03m:51s] Processing chr. 22                                                                   [████████████████████████████████████████] 99% [03m:52s] Processing chr. 22                                                                   [████████████████████████████████████████] 100% [03m:53s] Reads simulated                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 
+ [█---------------------------------------] 0% [00m:00s] Processing chr. 22                        
+
+ [█---------------------------------------] 0% [00m:00s] Processing chr. 22                        
+
+ [█---------------------------------------] 0% [00m:01s] Processing chr. 22                        
+
+ [█---------------------------------------] 1% [00m:02s] Processing chr. 22                        
+
+ [█---------------------------------------] 1% [00m:03s] Processing chr. 22                        
+
+ [█---------------------------------------] 2% [00m:04s] Processing chr. 22                        
+
+ [█---------------------------------------] 2% [00m:05s] Processing chr. 22                        
+
+ [██--------------------------------------] 3% [00m:06s] Processing chr. 22                        
+
+ [██--------------------------------------] 3% [00m:07s] Processing chr. 22                        
+
+ [██--------------------------------------] 4% [00m:08s] Processing chr. 22                        
+
+ [██--------------------------------------] 4% [00m:09s] Processing chr. 22                        
+
+ [███-------------------------------------] 5% [00m:10s] Processing chr. 22                        
+
+ [███-------------------------------------] 5% [00m:11s] Processing chr. 22                        
+
+ [███-------------------------------------] 5% [00m:12s] Processing chr. 22                        
+
+ [███-------------------------------------] 6% [00m:13s] Processing chr. 22                        
+
+ [███-------------------------------------] 6% [00m:14s] Processing chr. 22                        
+
+ [███-------------------------------------] 7% [00m:15s] Processing chr. 22                        
+
+ [███-------------------------------------] 7% [00m:16s] Processing chr. 22                        
+
+ [████------------------------------------] 8% [00m:17s] Processing chr. 22                        
+
+ [████------------------------------------] 8% [00m:18s] Processing chr. 22                        
+
+ [████------------------------------------] 9% [00m:19s] Processing chr. 22                        
+
+ [████------------------------------------] 9% [00m:20s] Processing chr. 22                        
+
+ [█████-----------------------------------] 10% [00m:21s] Processing chr. 22                       
+
+ [█████-----------------------------------] 10% [00m:22s] Processing chr. 22                       
+
+ [█████-----------------------------------] 11% [00m:23s] Processing chr. 22                       
+
+ [█████-----------------------------------] 11% [00m:24s] Processing chr. 22                       
+
+ [█████-----------------------------------] 12% [00m:25s] Processing chr. 22                       
+
+ [█████-----------------------------------] 12% [00m:26s] Processing chr. 22                       
+
+ [██████----------------------------------] 13% [00m:27s] Processing chr. 22                       
+
+ [██████----------------------------------] 13% [00m:28s] Processing chr. 22                       
+
+ [██████----------------------------------] 14% [00m:29s] Processing chr. 22                       
+
+ [██████----------------------------------] 14% [00m:30s] Processing chr. 22                       
+
+ [███████---------------------------------] 15% [00m:31s] Processing chr. 22                       
+
+ [███████---------------------------------] 15% [00m:32s] Processing chr. 22                       
+
+ [███████---------------------------------] 16% [00m:33s] Processing chr. 22                       
+
+ [███████---------------------------------] 16% [00m:34s] Processing chr. 22                       
+
+ [███████---------------------------------] 17% [00m:35s] Processing chr. 22                       
+
+ [███████---------------------------------] 17% [00m:36s] Processing chr. 22                       
+
+ [████████--------------------------------] 18% [00m:37s] Processing chr. 22                       
+
+ [████████--------------------------------] 18% [00m:38s] Processing chr. 22                       
+
+ [████████--------------------------------] 19% [00m:39s] Processing chr. 22                       
+
+ [████████--------------------------------] 19% [00m:40s] Processing chr. 22                       
+
+ [█████████-------------------------------] 20% [00m:41s] Processing chr. 22                       
+
+ [█████████-------------------------------] 20% [00m:42s] Processing chr. 22                       
+
+ [█████████-------------------------------] 21% [00m:43s] Processing chr. 22                       
+
+ [█████████-------------------------------] 21% [00m:44s] Processing chr. 22                       
+
+ [█████████-------------------------------] 22% [00m:45s] Processing chr. 22                       
+
+ [█████████-------------------------------] 22% [00m:46s] Processing chr. 22                       
+
+ [██████████------------------------------] 23% [00m:47s] Processing chr. 22                       
+
+ [██████████------------------------------] 23% [00m:48s] Processing chr. 22                       
+
+ [██████████------------------------------] 24% [00m:49s] Processing chr. 22                       
+
+ [██████████------------------------------] 24% [00m:50s] Processing chr. 22                       
+
+ [███████████-----------------------------] 25% [00m:51s] Processing chr. 22                       
+
+ [███████████-----------------------------] 25% [00m:52s] Processing chr. 22                       
+
+ [███████████-----------------------------] 26% [00m:53s] Processing chr. 22                       
+
+ [███████████-----------------------------] 26% [00m:54s] Processing chr. 22                       
+
+ [███████████-----------------------------] 27% [00m:55s] Processing chr. 22                       
+
+ [███████████-----------------------------] 27% [00m:56s] Processing chr. 22                       
+
+ [████████████----------------------------] 28% [00m:57s] Processing chr. 22                       
+
+ [████████████----------------------------] 28% [00m:58s] Processing chr. 22                       
+
+ [████████████----------------------------] 29% [00m:59s] Processing chr. 22                       
+
+ [████████████----------------------------] 29% [01m:00s] Processing chr. 22                       
+
+ [█████████████---------------------------] 30% [01m:01s] Processing chr. 22                       
+
+ [█████████████---------------------------] 30% [01m:02s] Processing chr. 22                       
+
+ [█████████████---------------------------] 31% [01m:03s] Processing chr. 22                       
+
+ [█████████████---------------------------] 31% [01m:04s] Processing chr. 22                       
+
+ [█████████████---------------------------] 31% [01m:05s] Processing chr. 22                       
+
+ [█████████████---------------------------] 32% [01m:06s] Processing chr. 22                       
+
+ [█████████████---------------------------] 32% [01m:07s] Processing chr. 22                       
+
+ [██████████████--------------------------] 33% [01m:08s] Processing chr. 22                       
+
+ [██████████████--------------------------] 33% [01m:09s] Processing chr. 22                       
+
+ [██████████████--------------------------] 34% [01m:10s] Processing chr. 22                       
+
+ [██████████████--------------------------] 34% [01m:11s] Processing chr. 22                       
+
+ [███████████████-------------------------] 35% [01m:12s] Processing chr. 22                       
+
+ [███████████████-------------------------] 35% [01m:13s] Processing chr. 22                       
+
+ [███████████████-------------------------] 36% [01m:14s] Processing chr. 22                       
+
+ [███████████████-------------------------] 36% [01m:15s] Processing chr. 22                       
+
+ [███████████████-------------------------] 37% [01m:16s] Processing chr. 22                       
+
+ [███████████████-------------------------] 37% [01m:17s] Processing chr. 22                       
+
+ [████████████████------------------------] 38% [01m:18s] Processing chr. 22                       
+
+ [████████████████------------------------] 38% [01m:19s] Processing chr. 22                       
+
+ [████████████████------------------------] 39% [01m:20s] Processing chr. 22                       
+
+ [████████████████------------------------] 39% [01m:21s] Processing chr. 22                       
+
+ [█████████████████-----------------------] 40% [01m:22s] Processing chr. 22                       
+
+ [█████████████████-----------------------] 40% [01m:23s] Processing chr. 22                       
+
+ [█████████████████-----------------------] 41% [01m:24s] Processing chr. 22                       
+
+ [█████████████████-----------------------] 41% [01m:25s] Processing chr. 22                       
+
+ [█████████████████-----------------------] 42% [01m:26s] Processing chr. 22                       
+
+ [█████████████████-----------------------] 42% [01m:27s] Processing chr. 22                       
+
+ [██████████████████----------------------] 43% [01m:28s] Processing chr. 22                       
+
+ [██████████████████----------------------] 43% [01m:29s] Processing chr. 22                       
+
+ [██████████████████----------------------] 44% [01m:30s] Processing chr. 22                       
+
+ [██████████████████----------------------] 44% [01m:31s] Processing chr. 22                       
+
+ [███████████████████---------------------] 45% [01m:32s] Processing chr. 22                       
+
+ [███████████████████---------------------] 45% [01m:33s] Processing chr. 22                       
+
+ [███████████████████---------------------] 46% [01m:34s] Processing chr. 22                       
+
+ [███████████████████---------------------] 46% [01m:35s] Processing chr. 22                       
+
+ [███████████████████---------------------] 47% [01m:36s] Processing chr. 22                       
+
+ [███████████████████---------------------] 47% [01m:37s] Processing chr. 22                       
+
+ [████████████████████--------------------] 48% [01m:38s] Processing chr. 22                       
+
+ [████████████████████--------------------] 48% [01m:39s] Processing chr. 22                       
+
+ [████████████████████--------------------] 49% [01m:40s] Processing chr. 22                       
+
+ [████████████████████--------------------] 49% [01m:41s] Processing chr. 22                       
+
+ [█████████████████████-------------------] 50% [01m:42s] Processing chr. 22                       
+
+ [█████████████████████-------------------] 50% [01m:43s] Processing chr. 22                       
+
+ [█████████████████████-------------------] 51% [01m:44s] Processing chr. 22                       
+
+ [█████████████████████-------------------] 51% [01m:45s] Processing chr. 22                       
+
+ [█████████████████████-------------------] 52% [01m:46s] Processing chr. 22                       
+
+ [█████████████████████-------------------] 52% [01m:47s] Processing chr. 22                       
+
+ [██████████████████████------------------] 52% [01m:48s] Processing chr. 22                       
+
+ [██████████████████████------------------] 52% [01m:49s] Processing chr. 22                       
+
+ [██████████████████████------------------] 54% [01m:50s] Processing chr. 22                       
+
+ [██████████████████████------------------] 54% [01m:51s] Processing chr. 22                       
+
+ [███████████████████████-----------------] 55% [01m:52s] Processing chr. 22                       
+
+ [███████████████████████-----------------] 55% [01m:53s] Processing chr. 22                       
+
+ [███████████████████████-----------------] 56% [01m:54s] Processing chr. 22                       
+
+ [███████████████████████-----------------] 56% [01m:55s] Processing chr. 22                       
+
+ [███████████████████████-----------------] 57% [01m:56s] Processing chr. 22                       
+
+ [███████████████████████-----------------] 57% [01m:57s] Processing chr. 22                       
+
+ [████████████████████████----------------] 58% [01m:58s] Processing chr. 22                       
+
+ [████████████████████████----------------] 58% [01m:59s] Processing chr. 22                       
+
+ [████████████████████████----------------] 58% [02m:00s] Processing chr. 22                       
+
+ [████████████████████████----------------] 58% [02m:01s] Processing chr. 22                       
+
+ [█████████████████████████---------------] 60% [02m:02s] Processing chr. 22                       
+
+ [█████████████████████████---------------] 60% [02m:03s] Processing chr. 22                       
+
+ [█████████████████████████---------------] 61% [02m:04s] Processing chr. 22                       
+
+ [█████████████████████████---------------] 61% [02m:05s] Processing chr. 22                       
+
+ [█████████████████████████---------------] 62% [02m:06s] Processing chr. 22                       
+
+ [█████████████████████████---------------] 62% [02m:07s] Processing chr. 22                       
+
+ [██████████████████████████--------------] 63% [02m:08s] Processing chr. 22                       
+
+ [██████████████████████████--------------] 63% [02m:09s] Processing chr. 22                       
+
+ [██████████████████████████--------------] 64% [02m:10s] Processing chr. 22                       
+
+ [██████████████████████████--------------] 64% [02m:11s] Processing chr. 22                       
+
+ [███████████████████████████-------------] 65% [02m:12s] Processing chr. 22                       
+
+ [███████████████████████████-------------] 65% [02m:13s] Processing chr. 22                       
+
+ [███████████████████████████-------------] 65% [02m:14s] Processing chr. 22                       
+
+ [███████████████████████████-------------] 66% [02m:15s] Processing chr. 22                       
+
+ [███████████████████████████-------------] 66% [02m:16s] Processing chr. 22                       
+
+ [███████████████████████████-------------] 67% [02m:17s] Processing chr. 22                       
+
+ [███████████████████████████-------------] 67% [02m:18s] Processing chr. 22                       
+
+ [████████████████████████████------------] 68% [02m:19s] Processing chr. 22                       
+
+ [████████████████████████████------------] 68% [02m:20s] Processing chr. 22                       
+
+ [████████████████████████████------------] 69% [02m:21s] Processing chr. 22                       
+
+ [████████████████████████████------------] 69% [02m:22s] Processing chr. 22                       
+
+ [█████████████████████████████-----------] 70% [02m:23s] Processing chr. 22                       
+
+ [█████████████████████████████-----------] 70% [02m:24s] Processing chr. 22                       
+
+ [█████████████████████████████-----------] 71% [02m:25s] Processing chr. 22                       
+
+ [█████████████████████████████-----------] 71% [02m:26s] Processing chr. 22                       
+
+ [█████████████████████████████-----------] 72% [02m:27s] Processing chr. 22                       
+
+ [█████████████████████████████-----------] 72% [02m:28s] Processing chr. 22                       
+
+ [██████████████████████████████----------] 73% [02m:29s] Processing chr. 22                       
+
+ [██████████████████████████████----------] 73% [02m:30s] Processing chr. 22                       
+
+ [██████████████████████████████----------] 74% [02m:31s] Processing chr. 22                       
+
+ [██████████████████████████████----------] 74% [02m:32s] Processing chr. 22                       
+
+ [███████████████████████████████---------] 75% [02m:33s] Processing chr. 22                       
+
+ [███████████████████████████████---------] 75% [02m:34s] Processing chr. 22                       
+
+ [███████████████████████████████---------] 76% [02m:35s] Processing chr. 22                       
+
+ [███████████████████████████████---------] 76% [02m:36s] Processing chr. 22                       
+
+ [███████████████████████████████---------] 77% [02m:37s] Processing chr. 22                       
+
+ [███████████████████████████████---------] 77% [02m:38s] Processing chr. 22                       
+
+ [████████████████████████████████--------] 78% [02m:39s] Processing chr. 22                       
+
+ [████████████████████████████████--------] 78% [02m:40s] Processing chr. 22                       
+
+ [████████████████████████████████--------] 79% [02m:41s] Processing chr. 22                       
+
+ [████████████████████████████████--------] 79% [02m:42s] Processing chr. 22                       
+
+ [█████████████████████████████████-------] 80% [02m:43s] Processing chr. 22                       
+
+ [█████████████████████████████████-------] 80% [02m:44s] Processing chr. 22                       
+
+ [█████████████████████████████████-------] 81% [02m:45s] Processing chr. 22                       
+
+ [█████████████████████████████████-------] 81% [02m:46s] Processing chr. 22                       
+
+ [█████████████████████████████████-------] 82% [02m:47s] Processing chr. 22                       
+
+ [█████████████████████████████████-------] 82% [02m:48s] Processing chr. 22                       
+
+ [██████████████████████████████████------] 83% [02m:49s] Processing chr. 22                       
+
+ [██████████████████████████████████------] 83% [02m:50s] Processing chr. 22                       
+
+ [██████████████████████████████████------] 84% [02m:51s] Processing chr. 22                       
+
+ [██████████████████████████████████------] 84% [02m:52s] Processing chr. 22                       
+
+ [███████████████████████████████████-----] 85% [02m:53s] Processing chr. 22                       
+
+ [███████████████████████████████████-----] 85% [02m:54s] Processing chr. 22                       
+
+ [███████████████████████████████████-----] 86% [02m:55s] Processing chr. 22                       
+
+ [███████████████████████████████████-----] 86% [02m:56s] Processing chr. 22                       
+
+ [███████████████████████████████████-----] 87% [02m:57s] Processing chr. 22                       
+
+ [███████████████████████████████████-----] 87% [02m:58s] Processing chr. 22                       
+
+ [████████████████████████████████████----] 88% [02m:59s] Processing chr. 22                       
+
+ [████████████████████████████████████----] 88% [03m:00s] Processing chr. 22                       
+
+ [████████████████████████████████████----] 89% [03m:01s] Processing chr. 22                       
+
+ [████████████████████████████████████----] 89% [03m:02s] Processing chr. 22                       
+
+ [█████████████████████████████████████---] 90% [03m:03s] Processing chr. 22                       
+
+ [█████████████████████████████████████---] 90% [03m:04s] Processing chr. 22                       
+
+ [█████████████████████████████████████---] 91% [03m:05s] Processing chr. 22                       
+
+ [█████████████████████████████████████---] 91% [03m:06s] Processing chr. 22                       
+
+ [█████████████████████████████████████---] 92% [03m:07s] Processing chr. 22                       
+
+ [█████████████████████████████████████---] 92% [03m:08s] Processing chr. 22                       
+
+ [██████████████████████████████████████--] 93% [03m:09s] Processing chr. 22                       
+
+ [██████████████████████████████████████--] 93% [03m:10s] Processing chr. 22                       
+
+ [██████████████████████████████████████--] 94% [03m:11s] Processing chr. 22                       
+
+ [██████████████████████████████████████--] 94% [03m:12s] Processing chr. 22                       
+
+ [███████████████████████████████████████-] 95% [03m:13s] Processing chr. 22                       
+
+ [███████████████████████████████████████-] 95% [03m:14s] Processing chr. 22                       
+
+ [███████████████████████████████████████-] 96% [03m:15s] Processing chr. 22                       
+
+ [███████████████████████████████████████-] 96% [03m:16s] Processing chr. 22                       
+
+ [███████████████████████████████████████-] 97% [03m:17s] Processing chr. 22                       
+
+ [███████████████████████████████████████-] 97% [03m:18s] Processing chr. 22                       
+
+ [████████████████████████████████████████] 98% [03m:19s] Processing chr. 22                       
+
+ [████████████████████████████████████████] 98% [03m:20s] Processing chr. 22                       
+
+ [████████████████████████████████████████] 99% [03m:21s] Processing chr. 22                       
+
+ [████████████████████████████████████████] 99% [03m:22s] Processing chr. 22                       
+
+ [████████████████████████████████████████] 100% [03m:23s] Reads simulated                         
+</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
@@ -142,250 +586,26 @@ based on phylogenetic sticks (column "<code>label</code>").</p>
 <span class="r-in"><span><span class="co"># label filtered mutations using phylogenetic forest data</span></span></span>
 <span class="r-in"><span><span class="va">labels</span> <span class="op">&lt;-</span> <span class="fu">label_mutations</span><span class="op">(</span><span class="va">f_seq</span>, <span class="va">phylo_forest</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">labels</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4,385 × 16</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4,113 × 17</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    chr    chr_pos ref   alt   causes classes        Sampling.occurrences</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 22    16<span style="text-decoration: underline;">061</span>473 T     C     SBS5   passenger                         2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 22    16<span style="text-decoration: underline;">089</span>370 T     G     SBS5   passenger                         3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 22    16<span style="text-decoration: underline;">109</span>834 T     G     SBS5   passenger                         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 22    16<span style="text-decoration: underline;">110</span>961 T     G     SBS5   passenger                        10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 22    16<span style="text-decoration: underline;">121</span>473 C     T     SBS5   passenger                         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 22    16<span style="text-decoration: underline;">122</span>476 G     A     SBS1   passenger                         8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 22    16<span style="text-decoration: underline;">128</span>303 C     A     SBS1   passenger                        10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 22    16<span style="text-decoration: underline;">131</span>174 A     G     SBS1   pre-neoplastic                   64</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 22    16<span style="text-decoration: underline;">136</span>128 T     A     SBS1   passenger                         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 22    16<span style="text-decoration: underline;">137</span>331 G     A     SBS5   passenger                         6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4,375 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 9 more variables: Sampling.coverage &lt;int&gt;, Sampling.VAF &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   cell_id &lt;dbl&gt;, ancestor &lt;int&gt;, mutant &lt;chr&gt;, epistate &lt;chr&gt;, sample &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   birth_time &lt;dbl&gt;, label &lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 22    16<span style="text-decoration: underline;">071</span>175 G     C     SBS5   passenger                        19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 22    16<span style="text-decoration: underline;">072</span>815 T     C     SBS1   passenger                         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 22    16<span style="text-decoration: underline;">105</span>963 C     G     SBS5   passenger                        10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 22    16<span style="text-decoration: underline;">116</span>546 G     A     SBS5   passenger                        41</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 22    16<span style="text-decoration: underline;">122</span>476 G     A     SBS1   passenger                         4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 22    16<span style="text-decoration: underline;">125</span>311 G     C     SBS5   passenger                         3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 22    16<span style="text-decoration: underline;">126</span>021 T     A     SBS5   passenger                         3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 22    16<span style="text-decoration: underline;">131</span>174 A     G     SBS1   pre-neoplastic                   62</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 22    16<span style="text-decoration: underline;">149</span>514 T     G     SBS5   passenger                        45</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 22    16<span style="text-decoration: underline;">157</span>055 T     A     SBS5   passenger                         2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4,103 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 10 more variables: Sampling.coverage &lt;int&gt;, Sampling.VAF &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   cell_id &lt;dbl&gt;, ancestor &lt;int&gt;, depth &lt;int&gt;, mutant &lt;chr&gt;, epistate &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   sample &lt;chr&gt;, birth_time &lt;dbl&gt;, label &lt;chr&gt;</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plotting histogram of the VAF with phylogenetic labels</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot_VAF_histogram.html">plot_VAF_histogram</a></span><span class="op">(</span><span class="va">f_seq</span>, labels <span class="op">=</span> <span class="va">labels</span><span class="op">[</span><span class="st">"label"</span><span class="op">]</span>, cuts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.02</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Ignoring unknown labels:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">colour</span> : <span style="color: #0000BB;">"c(\"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"B\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"Subclonal\", \"Truncal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Truncal\", \"B\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"B\", \"B\", \"B\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Truncal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"B\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"B\", \"Truncal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Truncal\", \"B\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"B\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Truncal\", \"B\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"B\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Truncal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"B\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"B\", \"B\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Truncal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"B\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Truncal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"Truncal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"B\", \"B\", \"B\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"B\", \"Subclonal\", \"B\", \"B\", \"B\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Truncal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"B\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Truncal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Truncal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"B\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Truncal\", \"Truncal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"B\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Truncal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"B\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Truncal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"B\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"B\", \"B\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Truncal\", \"B\", \"B\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Truncal\", \"Subclonal\", \"Subclonal\", \"B\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"B\", \"B\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"B\", \"B\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Truncal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"B\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"B\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"B\", \"B\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"B\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"B\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"Truncal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"B\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"B\", \"B\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Truncal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"B\", \"Subclonal\", \"Truncal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"B\", \"Subclonal\", \"Truncal\", \"B\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"B\", \"B\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Truncal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Truncal\", \"Truncal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"B\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"B\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"B\", \"B\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Truncal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Truncal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Truncal\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"Subclonal\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"Subclonal\", \"B\", \"B\",</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">\"Subclonal\", \"B\", \"Subclonal\", \"Subclonal\", \"Subclonal\")"</span></span>
 <span class="r-plt img"><img src="label_mutations-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -398,7 +618,7 @@ based on phylogenetic sticks (column "<code>label</code>").</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

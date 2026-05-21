@@ -9,7 +9,7 @@ mutations."><meta property="og:image" content="https://caravagnalab.github.io/Pr
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,14 +58,14 @@ mutations.</p>
     <p>The mutation are returned in a data frame reporting
 the known driver mutations together with their types,
 associated tumours, affected genes, and code name. The
-first three columns ("<code>chr</code>", "<code>from</code>", and "<code>to</code>")
+first three columns (<code>chr</code>, <code>from</code>, and <code>to</code>)
 report the mutation chromosome, the initial position
 and the final position, respectively. The next three
-columns ("<code>ref</code>", "<code>alt</code>", and "<code>mutation_type</code>")
+columns (<code>ref</code>, <code>alt</code>, and <code>mutation_type</code>)
 describe the reference sequence, the altered sequence,
 and the type of the mutation. The last four columns
-("<code>driver_gene</code>", "<code>driver_code</code>", "<code>driver_CDS</code>", and
-"<code>tumour_type</code>") detail the affected gene, the driver
+(<code>driver_gene</code>, <code>driver_code</code>, <code>driver_CDS</code>, and
+<code>tumour_type</code>) detail the affected gene, the driver
 code, which can be used to specify the mutation when
 adding a mutant to the mutation engine, the variant code,
 and the tumour type associated to the mutation.</p>
@@ -79,9 +79,27 @@ and the tumour type associated to the mutation.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># build a mutation engine</span></span></span>
 <span class="r-in"><span><span class="va">m_engine</span> <span class="op">&lt;-</span> <span class="fu"><a href="MutationEngine.html">MutationEngine</a></span><span class="op">(</span>setup_code <span class="op">=</span> <span class="st">"demo"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [█---------------------------------------] 0% [00m:00s] Loading context index                                                                 [████████████████████████████████████████] 100% [00m:00s] Context index loaded                                                               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [█---------------------------------------] 0% [00m:00s] Loading RS index                                                                      [█████████████████████-------------------] 51% [00m:01s] Loading RS index                                                                     [████████████████████████████████████████] 98% [00m:02s] Loading RS index                                                                     [████████████████████████████████████████] 100% [00m:02s] RS index loaded                                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [█---------------------------------------] 0% [00m:00s] Loading germline                                                                      [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 
+ [█---------------------------------------] 0% [00m:00s] Loading context index                     
+
+ [████████████████████████████████████████] 100% [00m:00s] Context index loaded                    
+</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 
+ [█---------------------------------------] 0% [00m:00s] Loading RS index                          
+
+ [█████████████---------------------------] 32% [00m:01s] Loading RS index                         
+
+ [███████████████████████████-------------] 65% [00m:02s] Loading RS index                         
+
+ [███████████████████████████████████████-] 96% [00m:03s] Loading RS index                         
+
+ [████████████████████████████████████████] 100% [00m:03s] RS index loaded                         
+</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 
+ [█---------------------------------------] 0% [00m:00s] Loading germline                          
+
+ [████████████████████████████████████████] 100% [00m:00s] Germline loaded                         
+</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># get the known driver data frame</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">m_engine</span><span class="op">$</span><span class="fu">get_known_drivers</span><span class="op">(</span><span class="op">)</span>, <span class="fl">5</span><span class="op">)</span></span></span>
@@ -108,7 +126,7 @@ and the tumour type associated to the mutation.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

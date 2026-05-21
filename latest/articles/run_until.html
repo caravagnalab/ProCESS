@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,22 +82,22 @@
     
 <blockquote>
 <p><em>Note:</em> This article presents advanced topics on tissue
-simulation. Refer to <code><a href="../articles/tissue_simulation.html">vignette("tissue_simulation")</a></code> for an
-introduction of the subject.</p>
+simulation. Refer to <a href="tissue_simulation.html">this article</a>
+for an introduction to the subject.</p>
 </blockquote>
 <blockquote>
-<p><em>Disclaimer:</em> RACES/ProCESS internally implements the
+<p><em>Disclaimer:</em> ProCESS/CLONES internally implements the
 probability distributions using the C++11 random number distribution
 classes. The standard does not specify their algorithms, and the class
 implementations are left free for the compiler. Thus, the simulation
-output depends on the compiler used to compile RACES, and because of
-that, the results reported in this article may differ from those
-obtained by the reader.</p>
+output depends on the compiler used to compile <a href="https://github.com/albertocasagrande/CLONES" class="external-link">CLONES</a>, and
+because of that, the results reported in this article may differ from
+those obtained by the reader.</p>
 </blockquote>
 <p>ProCESS implements a first-order unquantified logic having variables
 representing the cardinality of the species, the number of events fired
 in a species (being duplications, deaths, or switches), and the
-simulation time. These variables and reals values are summed by
+simulation time. These variables and real values are summed by
 <code>+</code>, subtracted by <code>-</code>, and multiplied by
 <code>*</code> and form expressions. The expressions are then compared
 with the standard semantics by <code>&gt;</code>, <code>&gt;=</code>,
@@ -105,24 +105,22 @@ with the standard semantics by <code>&gt;</code>, <code>&gt;=</code>,
 <code>&lt;</code> to form relations. A formula in this language is
 either a relation, the conjunction of two formulas (<code>&amp;</code>),
 or the disjunction of two formulas (<code>|</code>).</p>
-<p>Any formula in above language expresses a condition on the simulation
-status and it can be used as the parameter of the method
-<code>TissueSimulation$run_until()</code> to let the simulation evolve
-until the condition does not hold.</p>
+<p>Any formula in the above language expresses a condition on the
+simulation status. It can be used as a parameter of the method <code><a href="../reference/TissueSimulation-cash-run_until.html">TissueSimulation$run_until()</a></code>
+to let the simulation evolve until the condition no longer holds.</p>
 <div class="section level3">
 <h3 id="variables">Variables<a class="anchor" aria-label="anchor" href="#variables"></a>
 </h3>
-<p>The variables represent one among the following quantities:</p>
+<p>The variables represent one of the following quantities:</p>
 <ul>
 <li>the cardinality of a species;</li>
-<li>the number fired event among deaths, duplications and switches in a
+<li>the number of fired deaths, duplications, or switches in a
 species;</li>
 <li>the elapse simulation time.</li>
 </ul>
-<p>All above variables can be built by using the method
-<code>TissueSimulation$var()</code>. When the parameter is the string
-<code>"Time"</code>, the elapsed simulation time variable is
-returned.</p>
+<p>All the above variables can be built by using the method <code><a href="../reference/TissueSimulation-cash-var.html">TissueSimulation$var()</a></code>.
+When the parameter is the string <code>"Time"</code>, the elapsed
+simulation time variable is returned.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://caravagnalab.github.io/ProCESS">ProCESS</a></span><span class="op">)</span></span>
 <span></span>
@@ -155,9 +153,9 @@ the cardinality of the species is built.</p>
 <span><span class="co">#&gt; |A-|</span></span></code></pre></div>
 <p>Finally, when the parameter is the name of a species followed by a
 <code>.</code> and the name of an event among <code>deaths</code>,
-<code>duplications</code>, or <code>switches</code>,
-<code>TissueSimulation$var()</code> returns the variable associated with
-the number of the corresponding event in the specified species.</p>
+<code>duplications</code>, or <code>switches</code>, <code><a href="../reference/TissueSimulation-cash-var.html">TissueSimulation$var()</a></code>
+returns the variable associated with the number of the corresponding
+event in the specified species.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get the variable representing the number of epigenetic</span></span>
 <span><span class="co"># switches from A+</span></span>
@@ -176,7 +174,7 @@ the number of the corresponding event in the specified species.</p>
 <div class="section level3">
 <h3 id="expressions-and-formulas">Expressions and Formulas<a class="anchor" aria-label="anchor" href="#expressions-and-formulas"></a>
 </h3>
-<p>An expression is one of the following object:</p>
+<p>An expression is one of the following objects:</p>
 <ul>
 <li>a variable, e.g., <code>sim$var("A+")</code>;</li>
 <li>a numeric value, e.g., <code>3.4</code>;</li>
@@ -201,11 +199,11 @@ and <code>&gt;=</code>.</p>
 </ul>
 </div>
 <div class="section level3">
-<h3 id="the-method-tissuesimulationrun_until">The method <code>TissueSimulation$run_until()</code><a class="anchor" aria-label="anchor" href="#the-method-tissuesimulationrun_until"></a>
+<h3 id="the-method-tissuesimulationrun_until">The method <code><a href="../reference/TissueSimulation-cash-run_until.html">TissueSimulation$run_until()</a></code><a class="anchor" aria-label="anchor" href="#the-method-tissuesimulationrun_until"></a>
 </h3>
-<p>The method <code>TissueSimulation$run_until()</code> takes as the
-parameter a formula and lets the simulation evolve until the formula
-does not hold.</p>
+<p>The method <code><a href="../reference/TissueSimulation-cash-run_until.html">TissueSimulation$run_until()</a></code>
+takes a formula as a parameter and runs the simulation until the formula
+no longer holds.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># build a condition stating that the cardinality of A+ doubles</span></span>
 <span><span class="co"># that of A-</span></span>
@@ -249,20 +247,20 @@ does not hold.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Species: <span style="color: #00BB00;">2</span>, <span style="color: #00BB00;">with</span> epigenetics</span></span>
 <span><span class="co">#&gt;    </span></span>
-<span><span class="co">#&gt;    =======  ====  ====  ====  ======  ===</span></span>
-<span><span class="co">#&gt;    species   λ      δ    ε    counts   % </span></span>
-<span><span class="co">#&gt;    =======  ====  ====  ====  ======  ===</span></span>
-<span><span class="co">#&gt;         A-  0.08  0.01  0.01    30    75 </span></span>
-<span><span class="co">#&gt;         A+  0.20  0.10  0.01    10    25 </span></span>
-<span><span class="co">#&gt;    =======  ====  ====  ====  ======  ===</span></span>
+<span><span class="co">#&gt;    =======  ====  ====  ====  ======  ========</span></span>
+<span><span class="co">#&gt;    species   λ      δ    ε    counts     %    </span></span>
+<span><span class="co">#&gt;    =======  ====  ====  ====  ======  ========</span></span>
+<span><span class="co">#&gt;         A-  0.08  0.01  0.01    32    76.19048</span></span>
+<span><span class="co">#&gt;         A+  0.20  0.10  0.01    10    23.80952</span></span>
+<span><span class="co">#&gt;    =======  ====  ====  ====  ======  ========</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── Firings: 73 total</span></span>
+<span><span class="co">#&gt; ── Firings: 74 total</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Species [A-]:  5 (deaths), 37 (duplications) and  5 (switches)</span></span>
-<span><span class="co">#&gt;  Species [A+]:  8 (deaths), 15 (duplications) and  3 (switches)</span></span>
+<span><span class="co">#&gt;  Species [A-]:  4 (deaths), 37 (duplications) and  5 (switches)</span></span>
+<span><span class="co">#&gt;  Species [A+]:  8 (deaths), 16 (duplications) and  4 (switches)</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> The simulation has no samples yet!</span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">get_clock</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 40.34598</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 40.01942</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -275,7 +273,7 @@ does not hold.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

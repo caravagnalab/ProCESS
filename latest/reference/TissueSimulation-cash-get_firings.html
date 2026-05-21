@@ -9,7 +9,7 @@ number of simulated events per species."><meta property="og:image" content="http
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,16 +68,18 @@ for each event type, mutant, and epigenetic states.</p>
 <span class="r-in"><span>               death_rates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"+"</span> <span class="op">=</span> <span class="fl">0.1</span>, <span class="st">"-"</span> <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">place_cell</span><span class="op">(</span><span class="st">"A+"</span>, <span class="fl">500</span>, <span class="fl">500</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_event</span><span class="op">(</span><span class="st">"switch"</span>, <span class="st">"A+"</span>, <span class="fl">100</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                         
+</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># get the number of event fired per event and species</span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">get_firings</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    event mutant epistate fired</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  death      A        -   168</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 growth      A        -   905</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 switch      A        -   106</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  death      A        +  1539</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 growth      A        +  2202</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 growth      A        -   802</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 switch      A        -    92</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  death      A        +  1289</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 growth      A        +  1810</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 switch      A        +   100</span>
 </code></pre></div>
     </div>
@@ -90,7 +92,7 @@ for each event type, mutant, and epigenetic states.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>
