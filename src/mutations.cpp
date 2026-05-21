@@ -122,6 +122,7 @@ RCPP_MODULE(Mutations)
 //' @name SNV
 //' @title Creating an SNV
 //' @description This function creates SNVs.
+//' @usage SNV(chr, chr_pos, alt, ref="?", allele=NULL, cause="")
 //' @param chr The name of the chromosome in which the SNV occurs.
 //' @param chr_pos The position in the chromosome where the SNV occurs.
 //' @param alt The base after the mutation.
@@ -153,6 +154,7 @@ RCPP_MODULE(Mutations)
 //' @name Mutation
 //' @title Creating a SNV or a indel
 //' @description This function creates SNVs and indels.
+//' @usage Mutation(chr, chr_pos, ref, alt, allele=NULL, cause="")
 //' @details It generalizes the function [SNV()] by building SNVs and
 //'   indels. However, it requires the reference sequence specification
 //'   whereas [SNV()] can deduce it from the reference sequence itself.
@@ -191,6 +193,7 @@ RCPP_MODULE(Mutations)
 //' @name CNA
 //' @title Creating a CNA
 //' @description This function creates a CNA.
+//' @usage CNA(type, chr, chr_pos, len, allele=NULL, src_allele=NULL)
 //' @param type The CNA type: either `"A"` or `"D"` for amplification and
 //'   deletion, respectively.
 //' @param chr The name of the chromosome in which the CNA occurs.
@@ -219,6 +222,7 @@ RCPP_MODULE(Mutations)
 //' @name Amplification
 //' @title Creating a CNA amplification
 //' @description This function creates a CNA amplification.
+//' @usage Amplification(chr, chr_pos, len, allele=NULL, src_allele=NULL)
 //' @param chr The name of the chromosome in which the CNA occurs.
 //' @param chr_pos The position in the chromosome where the CNA occurs.
 //' @param len The CNA length.
@@ -239,6 +243,7 @@ RCPP_MODULE(Mutations)
 //' @name Deletion
 //' @title Creating a CNA deletion
 //' @description This function creates a CNA deletion.
+//' @usage Deletion(chr, chr_pos, len, allele=NULL)
 //' @param chr The name of the chromosome in which the CNA occurs.
 //' @param chr_pos The position in the chromosome where the CNA occurs.
 //' @param len The CNA length.
@@ -761,7 +766,13 @@ RCPP_MODULE(Mutations)
 //' @description This function downloads and sets up the data
 //'   requires by a mutation engine. Finally, it builds mutation
 //'   engine itself.
+//' @usage
+//' MutationEngine(directory, reference_src,
+//'                SBS_signatures_src, indel_signatures_src,
+//'                drivers_src, passenger_CNAs_src,
+//'                germline_src)
 //'
+//' MutationEngine(setup_code="demo")
 //' @details There are two building modalities: the first one is more
 //'   general, but it requires to specify all the data sources; the
 //'   second one adopts some pre-set configurations, but it is
@@ -946,6 +957,7 @@ RCPP_MODULE(Mutations)
 //' @title Getting the tumour types available in a setup
 //' @description This method returns the tumour types available for a
 //'   set-up code.
+//' @usage get_available_tumours_in(setup_code)
 //' @param setup_code The set-up code whose available tumour types are
 //'   requested.
 //' @return A data frame reporting the types available for a set-up code.
@@ -961,6 +973,7 @@ RCPP_MODULE(Mutations)
 //' @name get_mutation_engine_codes
 //' @title Getting the supported setups
 //' @description This method returns the supported codes for predefined set-up.
+//' @usage get_mutation_engine_codes()
 //' @return A data frame reporting the code and a description for each
 //'   supported predefined set-up.
 //' @seealso [MutationEngine()] to build a mutation engine
@@ -1486,6 +1499,7 @@ RCPP_MODULE(Mutations)
 //' @name load_phylogenetic_forest
 //' @title Loading a phylogenetic forest
 //' @description This method loads a phylogenetic forest from a file.
+//' @usage load_phylogenetic_forest(filename)
 //' @param filename The path of the file from which the phylogenetic
 //'   forest must be load.
 //' @param quiet An optional  Boolean flag to avoid the progress bar

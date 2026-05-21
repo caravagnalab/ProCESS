@@ -1404,6 +1404,7 @@ RCPP_MODULE(Mutants)
 //' @name recover_simulation
 //' @title Loading a simulation
 //' @description This method loads a simulation from the disk.
+//' @usage recover_simulation(name)
 //' @param name The name of the simulation to be recovered.
 //' @examples
 //' # create a simulation having name "recover_simulation_test" and
@@ -1444,6 +1445,7 @@ RCPP_MODULE(Mutants)
 //' @name TissueSimulation
 //' @title Building a new simulation
 //' @description This method builds a new simulation.
+//' @usage TissueSimulation(name, width=1000, height=1000, save_snapshots=FALSE)
 //' @param name The name of the simulation (default:
 //'     "`clones_<year>_<hour><minute><second>`").
 //' @param width The width of the simulated tissue (default: 1000).
@@ -1835,6 +1837,7 @@ RCPP_MODULE(Mutants)
 //' @name load_sample_forest
 //' @title Loading sample forests
 //' @description This method loads a sample forest in a file.
+//' @usage load_sample_forest(filename)
 //' @param filename The path of the file from which the samples
 //'   forest must be load.
 //' @return The load sample forest
