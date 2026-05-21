@@ -19,16 +19,16 @@ knitr::opts_chunk$set(
 )
 ```
 
-> *Disclaimer:* CLONES/ProCESS internally implements the
+> *Disclaimer:* ProCESS/CLONES internally implements the
 > probability distributions using the C++11 random number
 > distribution classes. The standard does not specify their
 > algorithms, and the class implementations are left free
 > for the compiler. Thus, the simulation output depends on
-> the compiler used to compile CLONES, and because of that,
-> the results reported in this article may differ from
-> those obtained by the reader.
+> the compiler used to compile [CLONES](https://github.com/albertocasagrande/CLONES), and
+> because of that, the results reported in this article may
+> differ from those obtained by the reader.
 
-To simulate a tissue the following steps are required:
+The following steps are required to simulate a tissue.
 
 1.  creation of a tissue;
 
@@ -36,14 +36,14 @@ To simulate a tissue the following steps are required:
 
 3.  actual simulation.
 
-The simulation is managed by an object of the S4 class `TissueSimulation`,
-which allows to program the tissue evolution over time, adding new cells
-as far as the simulation progresses. The state of the simulation and
+The simulation is managed by an object of the R6 class `TissueSimulation`,
+which allows programmingm the tissue evolution over time, adding new cells
+as the simulation progresses. The state of the simulation and
 tissue can be visualised using `ggplot2`-powered plots.
 
 ## Tissue specification
 
-To perform a simulation a new object of class `TissueSimulation` must be
+To perform a simulation, a new object of class `TissueSimulation` must be
 created.
 
 ```{r, eval=FALSE}
@@ -53,9 +53,8 @@ library(ProCESS)
 sim <- TissueSimulation()
 ```
 
-This automatically builds a 1000x1000-cells tissue - which can host $1$
-million cells - and sets the name of the simulation to be
-`races_<date>_<hour>`.
+This automatically builds a 1000x1000-cell tissue and sets the name of the 
+simulation to be `clones_<date>_<hour>`.
 
 A simulation custom name can be specified as it follows.
 
@@ -69,17 +68,17 @@ set.seed(0)
 sim <- TissueSimulation("Test")
 ```
 
-The `set.seed()` call is not mandatory and can be avoided; however, it is
-highly suggested to guarantee the simulation repeatability.
+The `set.seed()` call is not mandatory and can be omitted; however, it is
+highly recommended to ensure the simulation repeatability.
 
-In order to save the simulation progresses in the disk and recover it in
-the future, use the optional Boolean parameter `save_snapshots`. By
-setting `save_snapshots` to `TRUE`, the simulation progresses will be
-saved in a directory whose name is the name of the simulation.
+The optional Boolean parameter `save_snapshots` can be used to save the 
+simulation progress to the disk and recover it later. By
+setting `save_snapshots` to `TRUE`, the simulation progress os
+saved in a directory named after the simulation.
 
 ```{r, eval = FALSE}
-# The progresses of the simulation will saved in the "Test" folder.
-# If the directory "Test" already exists an exception is raised.
+# The progress of the simulation will be saved in the "Test" folder.
+# If the directory "Test" already exists, an exception is raised.
 sim <- TissueSimulation("Test", save_snapshots = TRUE)
 ```
 
@@ -87,15 +86,15 @@ sim <- TissueSimulation("Test", save_snapshots = TRUE)
 sim$death_activation_level <- 50
 ```
 
-Class `TissueSimulation` exports a `TissueSimulation$show()` method to get
-information on the current object.
+We can get information about any `TissueSimulation` object by printing the
+corresponding variable.
 
 ```{r, eval}
 sim
 ```
 
-The `sim` object exposes also methods to get information about the
-simulation and control it.
+`TissueSimulation` objects expose methods to retrieve specific information 
+and control the modelled simulations.
 
 ```{r}
 # Get the simulation directory, i.e., "Test"
@@ -107,12 +106,12 @@ sim$get_tissue_size()
 
 ### Custom Tissue Sizes
 
-The tissue sizes can be specified during simulation creation using
+The tissue size can be specified during simulation creation using
 the parameters `width` and `height`.
 
 ```{r}
-# build a tissue simulation whose tissue has width 1200 and
-# height 900
+# build a tissue simulation whose tissue has a width of 1200 and
+# a height of 900
 sim <- TissueSimulation("Test", width = 1200, height = 900)
 
 # Get the tissue size, i.e., c(1200,900)
@@ -121,7 +120,7 @@ sim$get_tissue_size()
 
 ## Species specification
 
-In order to simulate the evolution of some species we need to add them
+In order to simulate the evolution of some species, we need to add them
 to `sim`. This process defines the evolutionary parameters of the
 species.
 
@@ -130,26 +129,26 @@ mutations. Cells in the same mutant can have different liveness rates
 due to different epigenetic states.
 
 A *species* is a mutant with an optional epigenetic state. At this point in the
-simulation, the mutant is just a name (`A`, `B`, ..) that, at a later stage
-could be linked to mutations of interest. The epigenome is a binary
-feature of a species that is represented by epistates `+`/`-` (positive
-and negative status). This is an abstraction, and could represent an
-active/inactive state linked to a promoter methylation or, more broadly,
+simulation, the mutant is just a name (`A`, `B`, etc.) that could later
+be linked to mutations of interest. The epigenome is a binary
+feature of a species, represented by epi-states `+`/`-` (positive
+and negative status). This is an abstraction that could represent an
+active/inactive state linked to promoter methylation or, more broadly,
 a phenotype. The evolution of mutants is non-reversible (no-back
-mutations model), while the evolution among epistates is potentially
+mutations model), while the evolution among epi-states is potentially
 reversible.
 
-For example, if we define two mutants `A` and `B` with their epistates
+For example, if we define two mutants `A` and `B` with their epi-states
 `+`/`-`, we have 4 distinct species: `A+` and `A-`, as well as `B+` and
 `B-`.
 
-Hybrid models can be obtained, e.g., a mutant `A` (with no epistates),
+Hybrid models can be obtained, e.g., a mutant `A` (with no epi-states),
 together with `B+` and `B-`.
 
 ### Evolutionary parameters
 
 We use a notation common in linear birth-death processes. If a species
-`A` has no epistates then its stochastic behaviour is defined by the
+`A` has no epi-states, then its stochastic behaviour is defined by the
 state-change rates
 
 $$
@@ -161,10 +160,10 @@ $$
 
 where:
 
--   $\lambda>0$ is a growth rate for cells that duplicate;
--   $\delta>0$ is a death rate for cells that duplicate.
+-   $\lambda>0$ is the cell growth rate;
+-   $\delta>0$ is the cell death rate.
 
-Instead, if the species has epistate `+` (denoted $A_\oplus$) and `-`
+Instead, if the species has epi-state `+` (denoted $A_\oplus$) and `-`
 (denoted $A_\ominus$), then its stochastic behaviour is defined by the
 state-change rates
 
@@ -180,7 +179,7 @@ $$
 $$
 
 where the rates $\lambda$ and $\delta$ are as above, and $\epsilon_{+-}$
-or $\epsilon_{-+}$ are the ratesat which cells of a certain epistate
+or $\epsilon_{-+}$ are the rates at which cells of a certain epi-state
 duplicate and flip the epigenetic marker of one of the progeny.
 
 ```{r, eval=TRUE}
@@ -196,7 +195,7 @@ sim
 sim$get_species()
 ```
 
-A mutant without epistates could be added as
+A mutant without epi-states could be added as
 
 ```{r, eval=FALSE}
 # Not run
@@ -207,14 +206,14 @@ To be able to simulate the model, an initial cell needs to be displaced
 in the tissue.
 
 ```{r}
-# We add one cell of species A+ (mutant A in epistate +) in
+# We add one cell of species A+ (mutant A in epi-state +) in
 # position (500, 500).
 sim$place_cell("A+", 500, 500)
 ```
 
 ### Visualisations
 
-We can query the current state of the simulation, and extract the
+We can query the current state of the simulation and extract the
 position of each cell in the tissue.
 
 ```{r}
@@ -225,7 +224,7 @@ sim$get_counts()
 sim$get_cells()
 ```
 
-These information can be plot. Note that the tissue visualisation uses
+This information can be plotted. Note that the tissue visualisation uses
 hexagonal bins to avoid plotting delays when the simulation uses
 thousands of cells.
 
@@ -250,14 +249,13 @@ There are 4 ways to let the simulation evolve:
 -   advancing until a desired number of firings (of one particular
     event) has occurred;
 -   advancing until a formula is not satisfied by the simulation
-    status (_advanced topic_; see `vignette("run_until")`).
+    status (_advanced topic_; see [this article](run_until.html)).
 
 ### Size-Based Simulation
 
-We can run the simulation up to when we have $\theta > 0$; cells of
-species `A+`
+We can run the simulation up to when we have $\theta > 0$; cells of species `A+`
 
-```{r,  fig.height=4, fig.width=3, fig.alt=c("The tissue of a tumour with one mutant \"A\" and two species \"A+\" and \"A-\". The species \"A+\" consists of 500 cells.")}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The tissue of a tumour with one mutant `A` and two species `A+` and `A-`. The species `A+` consists of 500 cells.")}
 # Counts per species is now 0
 sim$get_counts()
 
@@ -288,14 +286,14 @@ sim$run_up_to_event("death", "A-", 100)
 sim$get_firings()
 ```
 
-```{r,  fig.height=4, fig.width=3, fig.alt=c("The tumour tissue after letting the simulation evolves until 100 deaths occurred to \"A-\" cells.")}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The tumour tissue after letting the simulation evolves until 100 deaths occurred to `A-` cells.")}
 # Plot the tissue by using 200 bins
 plot_tissue(sim, num_of_bins = 200)
 ```
 
 ### Clock-Based Simulation
 
-It is also possible to take the current simulation clock as reference,
+It is also possible to take the current simulation clock as a reference,
 and simulate further.
 
 ```{r}
@@ -309,13 +307,13 @@ sim$run_up_to_time(sim$get_clock() + 15)
 sim$get_clock()
 ```
 
-```{r,  fig.height=4, fig.width=3, fig.alt=c("The tumour tissue after letting the simulation evolves until 100 deaths occurred to \"A-\" cells.")}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The tumour tissue after letting the simulation evolves until 100 deaths occurred to `A-` cells.")}
 plot_tissue(sim)
 ```
 
 ##### Getting Cells (Advanced)
 
-At this point, if we query the simulation we will find more cells (we
+At this point, if we query the simulation, we will find more cells (we
 use `dplyr` to process query results). For convenience, the getters
 accept parameters to subset the tissue.
 
@@ -341,8 +339,8 @@ sim$get_cells(c(500, 500), c(505, 505), c("A", "B"), c("-"))  %>% head()
 
 ### Evolving new species
 
-ProCESS can select cells from the tissue, randomly for every mutant, or
-in a constrained tissue area.
+ProCESS can select cells from the tissue randomly for each mutant, or
+within a constrained tissue area.
 
 ```{r}
 # Stochastic sampling from the whole tissue: it can return A+ or A-
@@ -358,14 +356,14 @@ sim$choose_cell_in("A",  c(500, 350), c(550, 450))
 This feature can be used to program the generation of new species,
 mimicking new mutants that generate subclonal expansions.
 
-Imagine we want to add a new mutant `B` with epistates -- and
-therefore new species `B+` and `B-` - as descending from `A,`we need to:
+Imagine we want to add a new mutant `B` with epi-states -- and
+therefore new species `B+` and `B-` -- as descending from `A`, we need to:
 
 -   locate one cell of mutant `A` in the tissue, which is where we
     will inject the new mutant;
 
--   add the specifics of mutant `B` (via `TissueSimulation$add_mutant()`, as
-    we did for `A`);
+-   add the specifics of mutant `B` (via <code>[TissueSimulation$add_mutant()](../reference/TissueSimulation-cash-add_mutant.html)</code>, 
+    as we did for `A`);
 
 -   implement the change of the cell of mutant `A` to a cell of
     mutant `B`.
@@ -388,18 +386,18 @@ Then we inject the cell, and simulate a little bit.
 # Mutant injection
 sim$mutate_progeny(cell, "B")
 
-# Generated event A -> B either in + or - epistates is now recorded
+# Generated event A -> B either in + or - epi-states is now recorded
 sim$get_counts()
 
 # New evolution
-sim$run_up_to_size("B+", 600)
+sim$run_up_to_size("B+", 20000)
 ```
 
-At this point, we can inspect in more details the tissue. It can help to
-facet on the species to clearly appreciate the spatial diffusion of the
+At this point, we can inspect the tissue in more detail. It can help to
+face the species to clearly appreciate the spatial diffusion of the
 populations.
 
-```{r,  fig.height=4, fig.width=3, fig.alt=c("The species count after the new mutant \"B\" arose.", "The tumour tissue after the new mutant \"B\" arose.")}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The species count after the new mutant `B` arose.", "The tumour tissue after the new mutant `B` arose.")}
 plot_state(sim)
 plot_tissue(sim, num_of_bins = 250)
 ```
@@ -427,16 +425,16 @@ sim$mutate_progeny(sim$choose_cell_in("A",  c(450, 550), c(500, 600)), "C")
 sim$run_up_to_time(sim$get_clock() + 7)
 ```
 
-```{r,  fig.height=4, fig.width=3, fig.alt=c("The species count after the third mutant \"C\" arose.", "The tumour tissue after the third mutant \"C\" mutant arose.")}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The species count after the third mutant `C` arose.", "The tumour tissue after the third mutant `C` mutant arose.")}
 plot_state(sim)
 plot_tissue(sim, num_of_bins = 250)
 ```
 
 ### Other Operations
 
-##### Injection of Cells over a Tissue
+##### Injection of Cells into a Tissue
 
-On the tissue, we can inject multiple cells manually; all injected cells
+In the tissue, we can manually inject multiple cells; all injected cells
 can be retrieved.
 
 ```{r}
@@ -446,17 +444,18 @@ sim$get_added_cells()
 
 ##### Avoiding Drift
 
-Any species that has a non-zero death rate can become extinct
-stochastically by *drift*.
+Any species with a non-zero death rate can become extinct
+due to *drift*.
 
-Drift makes it difficult to simulate an be confident of what species are
-in the model. To facilitate the user, CLONES can avoid drift by setting a
-*death activation level.* This value is the minimum number of cells that
-enables cell death in a species: a cell of species $S$ can die if and
+Drift makes it difficult to simulate and be confident about what species are
+in the model. To facilitate the user,
+[CLONES](https://github.com/albertocasagrande/CLONES) can avoid drift by
+setting a *death activation level*. This value is the minimum number of cells
+that enables cell death in a species: a cell of species $S$ can die if and
 only if $S$ has reached the death activation level at least once during
 the simulation.
 
-This threshold holds for all the species and it is set to 1 by default.
+This threshold applies to all species and is set to 1 by default.
 
 ```{r}
 sim$death_activation_level

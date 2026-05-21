@@ -21,9 +21,10 @@ knitr::opts_chunk$set(
 ```
 
 > *Note:* This article presents advanced topics on sequencing simulation.
-> Refer to `vignette("sequencing")` for an introduction on the subject.
+> Refer to the [article about sequencing](sequencing.html)
+> for an  introduction on the subject.
 
-> *Disclaimer:* CLONES/ProCESS internally implements the
+> *Disclaimer:* ProCESS/CLONES internally implements the
 > probability distributions using the C++11 random number
 > distribution classes. The standard does not specify their
 > algorithms, and the class implementations are left free
@@ -33,19 +34,19 @@ knitr::opts_chunk$set(
 > those obtained by the reader.
 
 
-The sequencing simulation supports sample partition
-analoguous to [FACS](https://www.sinobiological.com/category/fcm-facs-facs).
+The sequencing simulation supports a sample partition
+analogous to [FACS](https://www.sinobiological.com/category/fcm-facs-facs).
 Users can provide a labelling function for the sampled cells by
 using the `simulate_seq()` parameter `cell_labelling`.
-This function must take in input an object of the class `SampledCell` and
+This function must take as input an object of the class `SampledCell` and
 return a string representing the cell label. The function `simulate_seq()`
 applies the labelling function to all the sampled cells and
 partition them according to the labelling function outputs.
 The resulting sub-samples are named according the format
 `<sample name>_<cell label>`.
 
-Let us assume to have built the phylogenetic forest `phylo_forest`
-as detailed in `vignette("mutations")`.
+Let us assume that the phylogenetic forest `phylo_forest`
+was built as detailed in [this article](mutations.html).
 
 ```{r, echo=FALSE, results='hide', message=FALSE}
 library(ProCESS)
@@ -53,8 +54,7 @@ library(ProCESS)
 phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
 ```
 
-The sampled cells can be grouped by epigenetic state as it
-follows.
+The sampled cells can be grouped by epi-state as follows.
 
 ```{r}
 # the labelling function parameter has type `SampledCell`

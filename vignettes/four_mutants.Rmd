@@ -19,16 +19,16 @@ knitr::opts_chunk$set(
 )
 ```
 
-> *Disclaimer:* CLONES/ProCESS internally implements the
+> *Disclaimer:* ProCESS/CLONES internally implements the
 > probability distributions using the C++11 random number
 > distribution classes. The standard does not specify their
 > algorithms, and the class implementations are left free
 > for the compiler. Thus, the simulation output depends on
-> the compiler used to compile CLONES, and because of that,
+> the compiler used to compile [CLONES](https://github.com/albertocasagrande/CLONES), and because of that,
 > the results reported in this article may differ from
 > those obtained by the reader.
 
-We build a tumour with a single mutant "A" and grow it up to
+We build a tumour with a single mutant `A` and grow it up to
 10 cells.
 
 ```{r}
@@ -51,8 +51,8 @@ sim$place_cell("A", 300, 300)
 sim$run_up_to_size("A", 10)
 ```
 
-We add a new mutant "B" as sub-clone of "A" and let the simulation
-evolve until "B" reaches 30 cells.
+We add a new mutant `B` as a sub-clone of `A` and let the simulation
+evolve until `B` reaches 30 cells.
 ```{r}
 sim$add_mutant(name = "B", growth_rates = 0.145, death_rates = 0.06)
 sim$mutate_progeny(sim$choose_cell_in("A"), "B")
@@ -60,8 +60,8 @@ sim$mutate_progeny(sim$choose_cell_in("A"), "B")
 sim$run_up_to_size("B", 30)
 ```
 
-We add a further mutants "C" as sub-clones for "A" and let the tumour
-grow again up to the point in which "C" consists of 25000 cells.
+We add a further mutant `C` as a sub-clones for `A` and let the tumour
+grow again up to the point at which `C` consists of 25000 cells.
 ```{r}
 sim$add_mutant(name = "C", growth_rates = 0.15, death_rates = 0.06)
 sim$mutate_progeny(sim$choose_cell_in("A"), "C")
@@ -82,7 +82,7 @@ plot_state(sim)
 ## Tissue sampling level
 
 
-We can collect three samples: "S1" and "S2".
+We can collect two samples: "S1" and "S2".
 
 ```{r}
 sim$sample_cells("S1", c(145, 230), c(215, 300))
@@ -100,9 +100,9 @@ plot_tissue(sim) +
                     label = "S2", parse = TRUE)
 ```
 
-After the sampling, we can add a new mutant "D" as sub-clone of "B", let the
-simulation further evolve until the sum of the cardinalities of the mutants "C"
-and "D" is 100000, and sample the tissue again.
+After the sampling, we can add a new mutant `D` as a sub-clone of `B`, let the
+simulation continue to evolve until the sum of the cardinalities of mutants `C`
+and `D` is 100000, and sample the tissue again.
 
 ```{r, fig.width=3, fig.height=3, fig.alt=c("After collecting the samples S1 and S2, a more aggressive mutant D arises from B and a further sample S3, containing both D and C cells, is collected.", "The simulation state after collecting S3.")}
 sim$add_mutant(name = "D", growth_rates = 0.8, death_rates = 0.01)
@@ -125,8 +125,8 @@ The time-series plot represents the species cardinalities along the simulation.
 plot_timeseries(sim)
 ```
 
-The Muller plot, instead, overviews the percentage of cells in each species along the simulation
-evolution.
+The Muller plot, instead, shows the percentage of cells in each species over
+the course of the simulation.
 
 ```{r, fig.width=4, fig.alt=c("The Muller plot overviews the percentage of cells in each species along the simulation evolution.")}
 plot_muller(sim)
@@ -147,7 +147,7 @@ plot_forest(sample_forest) %>%
 
 We first build the mutation engine to label each cell in the sample forest.
 The mutation engine pre-defined setups automatically download all the needed
-file. All the pre-configured setups, but "demo" requires a COSMIC account to
+files. All the pre-configured setups, but "demo" requires a COSMIC account to
 download the signature files from the COSMIC site.
 
 ```{r}
@@ -158,7 +158,7 @@ m_engine <- MutationEngine(setup_code="demo",
 
 ```
 
-We must genomically characterise the tissue simulation mutants providing
+We must genomically characterise the tissue simulation mutants, providing
 passenger mutation rates and the list of driver mutations.
 
 ```{r}
@@ -250,8 +250,8 @@ plot_VAF_marginals(f_seq, samples = c("S1", "S2", "S3"),
                    labels = f_seq["classes"])
 ```
 
-In S1 vs S3 figure, we can some spot passenger mutations occurring in both S1
-and S3. Let us identify these mutations.
+In the S1 vs S3 figure, we can spot passenger mutations occurring in
+both S1 and S3. Let us identify these mutations.
 
 ```{r}
 f_seq %>% filter(classes == "passenger" & S1.VAF > 0 & S3.VAF > 0)

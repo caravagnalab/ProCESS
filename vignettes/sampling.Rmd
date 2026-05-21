@@ -19,22 +19,23 @@ knitr::opts_chunk$set(
 )
 ```
 
-> *Disclaimer:* CLONES/ProCESS internally implements the probability
-> distributions using the C++11 random number distribution classes whose
-> algorithms are not defined by the standard. Thus, the simulation
-> depends on the compiler used to compile ProCESS, and because of that,
-> the results reported in this article may differ from those obtained by
-> the reader.
+> *Disclaimer:* ProCESS/CLONES internally implements the
+> probability distributions using the C++11 random number
+> distribution classes. The standard does not specify their
+> algorithms, and the class implementations are left free
+> for the compiler. Thus, the simulation output depends on
+> the compiler used to compile [CLONES](https://github.com/albertocasagrande/CLONES), and
+> because of that, the results reported in this article may
+> differ from those obtained by the reader.
 
-Once one has familiarised on how a tumour evolution simulation can be
-programmed using ProCESS (see `vignette("tissue_simulation")`), the next
+Once one has familiarised oneself with how a tumour evolution simulation can be
+programmed using ProCESS (see the [article on tissue simulation](tissue_simulation.html)), the next
 step is to augment the simulation with sampling of tumour cells. This
-mimics a realistic experimental design where we gather tumour sequencing
+mimics a realistic experimental design in which we collect tumour sequencing
 data.
 
-This vignette introduces sampling using different type of models;
-starting from simpler up to more complex simulation scenarios we
-consider:
+This article introduces sampling using different types of models; starting
+from simpler to more complex simulation scenarios. We consider:
 
 -   *multi-region sampling*: where at every time point multiple
     spatially-separated samples are collected;
@@ -44,7 +45,7 @@ consider:
 
 ## Custom multi-region sampling
 
-We consider a simple monoclonal model, without epigenetic state.
+We consider a simple monoclonal model, without an epi-state.
 
 ```{r, eval=TRUE}
 library(ProCESS)
@@ -66,11 +67,11 @@ current <- plot_tissue(sim)
 current
 ```
 
-A sample is defined by a name and a bounding box, which has a $(x,y)$
-coordinate for the bottom left point, and for the top right point.
+A sample is defined by a name and a bounding box, which has $(x,y)$
+coordinates for the bottom-left and top-right points.
 
-For this simulation, we define two samples with names `"S_1_1"` and
-`"S_1_2"`.
+For this simulation, we define two samples with names `S_1_1` and
+`S_1_2`.
 
 ```{r,  fig.height=4, fig.width=3, fig.alt=c("The rectangular regions corresponding to the samples S_1_1 and S_1_2.")}
 # We collect a squared box of (bbox_width x bbox_width) cells
@@ -100,10 +101,10 @@ sim$sample_cells("S_1_1", bottom_left = bbox1_p, top_right = bbox1_q)
 sim$sample_cells("S_1_2", bottom_left = bbox2_p, top_right = bbox2_q)
 ```
 
-> *Note:* Sampling removes cells from the tissue, as if the tissue was
+> *Note:* Sampling removes cells from the tissue, as if the tissue were
 > surgically resected. Therefore, cells that are mapped to the bounding
-> box after application of `TissueSimulation$sample_cells()` are no longer
-> part of the simulation.
+> box after application of <code>[TissueSimulation$sample_cells()](../reference/TissueSimulation-cash-sample_cells.html)</code>
+> are no longer part of the simulation.
 
 A new call to `plot_tissue()` will show the box where the cells have
 been removed to be white.
@@ -112,8 +113,8 @@ been removed to be white.
 plot_tissue(sim)
 ```
 
-This is also reflected by `TissueSimulation$get_cells()`, which now will not
-find any tumour cell in the sampled region.
+This is also reflected by <code>[TissueSimulation$get_cells()](../reference/TissueSimulation-cash-get_cells.html)</code>,
+which now will not find any tumour cells in the sampled region.
 
 ```{r}
 library(dplyr)
@@ -122,8 +123,8 @@ library(dplyr)
 sim$get_cells(c(400, 400), c(400 + bbox_width, 400 + bbox_width)) %>% head
 ```
 
-It should also be remarked that the sampling process exclusively
-collects tumour cells, while it excludes wild-type cells.
+The sampling process exclusively collects tumour cells, while excluding
+wild-type cells.
 
 ### The sample forest
 
@@ -131,7 +132,7 @@ Every sampled cell is linked, at the evolutionary level, to the other
 cells that originate from the same initial cell. It helps to visualise
 the evolutionary information on the cells that we have sampled as a
 forest of trees (if one seeded multiple initial cells). The forest is an
-object of the S4 class `SampleForest`.
+object of the R6 class `SampleForest`.
 
 ```{r}
 forest <- sim$get_sample_forest()
@@ -156,7 +157,7 @@ forest$get_nodes() %>%
   head
 ```
 
-The roots of the forest having no ancestors.
+The roots of the forest have no ancestors.
 
 ```{r}
 # If it is one cell, then the forest is a tree
@@ -177,8 +178,8 @@ y-axis, their time of birth.
 plot_forest(forest)
 ```
 
-The plot shows also samples annotations and species but, for a large
-number of cells, it might be complicated to view the full forest, unless a
+The plot also shows sample annotations and species, but for a large
+number of cells, it can be difficult to view the full forest, unless a
 very large canvas is used. For this reason, it is possible to subset
 the forest.
 
@@ -190,7 +191,7 @@ plot_forest(S_1_1_forest)
 ```
 
 In general, these plots can be annotated with extra information, such as
-the sampling times, and the MRCAs of each sample in the forest.
+the sampling times and the MRCAs of each sample in the forest.
 
 ```{r,  fig.height=6, fig.width=11, fig.alt=c("The annotated forest of S_1_1 and S_1_2.","The annotated sub-forest of the sample S_1_1.")}
 # Full plot
@@ -229,24 +230,27 @@ current <- plot_tissue(sim)
 current
 ```
 
-Since mutant start has been randomised by `TissueSimulation$choose_cell_in()`,
-we have no exact idea of where to sample to obtain for example, $100$ of
-its cells. We can look visually at the simulation, but this is slow.
+Since the mutant start has been randomised by
+<code>[TissueSimulation$choose_cell_in()](../reference/TissueSimulation-cash-choose_cell_in.html)</code>,
+we have no exact idea of where to sample to obtain, for example, $100$ of
+its cells.We can visually inspect the simulation, but it is slow.
 
-ProCESS provides a `TissueSimulation$search_sample()` function to sample
-bounding boxes that contain a desired number of cells. The function
-takes in input:
+ProCESS provides a 
+<code>[TissueSimulation$search_sample()](../reference/TissueSimulation-cash-search_sample.html)</code>
+function to sample bounding boxes that contain a desired number of cells. The
+function takes in input:
 
 -   a bounding box size;
 -   the number $n$ of cells to sample for a species of interest.
 
-`TissueSimulation$search_sample()` will attempt a fixed number of times to
+<code>[TissueSimulation$search_sample()](../reference/TissueSimulation-cash-search_sample.html)</code>
+will attempt a fixed number of times to
 sample the box, starting from positions occupied by the species of
 interest. If a box that contains at least $n$ cells is not found within
 a number of attempts, then the one with the largest number of samples is
 returned.
 
-This allows to program sampling without having a clear idea of the
+This allows for programming sampling without having a clear idea of the
 tissue conformation.
 
 ```{r,  fig.height=4, fig.width=3, fig.alt=c("The rectangle delimiting the sample S_2_1 containing 2000 cells of mutant B at least.")}
@@ -269,7 +273,7 @@ current +
 sim$sample_cells("S_2_1", bbox$lower_corner, bbox$upper_corner)
 ```
 
-Something similar with species `A`.
+Something similar to species `A`.
 
 ```{r,  fig.height=4, fig.width=3, fig.alt=c("The rectangle delimiting the sample S_2_2 containing 2000 cells of mutant A at least.")}
 bbox <- sim$search_sample(c("A" = ncells), n_w, n_h)
@@ -303,7 +307,7 @@ plot_forest(forest) %>%
 
 ## Randomised cell sampling (Liquid biopsy)
 
-ProCESS supports randomized cell sampling over the full tissue or a
+ProCESS supports randomised cell sampling over the full tissue or a
 rectangle thereof.
 
 ```{r, fig.alt=c("Two further samples S_2_3 and S_2_4 are collected. Their cells are randomly picked-up (like in liquid biopsy) from the whole tissue and from a bounding box, respectively. The figure depicts the sample forest of all the samples.")}
@@ -322,7 +326,7 @@ plot_forest(forest) %>%
   annotate_forest(forest)
 ```
 
-## Two populations with epigenetic state
+## Two populations with an epi-state
 
 We are now ready to simulate a model with epigenetic switches and
 sub-clonal expansions.
@@ -415,15 +419,15 @@ plot_forest(forest) %>%
 
 ### Storing Samples Forests
 
-A sample forest can be saved in a file by using the method
-`SampleForest$save()`.
+A sample forest can be saved in a file by using the method 
+<code>[SampleForest$save()](../reference/SampleForest-cash-save.html)</code>.
 
 ```{r, echo=FALSE,  results='hide', message=FALSE}
 unlink("sample_forest.sff")
 ```
 
 ```{r}
-# check the file existence. It should not exists.
+# check the file existence. It should not exist.
 file.exists("sample_forest.sff")
 
 # save the sample forest in the file "sample_forest.sff"
@@ -433,7 +437,7 @@ forest$save("sample_forest.sff")
 file.exists("sample_forest.sff")
 ```
 
-The saved sample forest can successively be load by using the function
+The saved sample forest can successively be loaded by using the function
 `load_sample_forest()`.
 
 ```{r}
