@@ -129,7 +129,6 @@ plot_sticks = function(forest, labels, cls = NULL) {
       ggplot2::scale_color_manual(values = cls, na.translate=FALSE)  +
       ggplot2::theme_minimal() + ggplot2::theme(legend.position = "bottom") +
       ggplot2::labs(
-        shape = "Sample",
         x = NULL,
         y = "Birth time"
       ) + ggplot2::guides(

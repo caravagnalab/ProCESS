@@ -1,5 +1,5 @@
 ## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
-## Copyright (C) 2023-2025 - Giulio Caravagna <gcaravagna@units.it>
+## Copyright (C) 2023-2026 - Giulio Caravagna <gcaravagna@units.it>
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -233,7 +233,8 @@ plot_VAF_marginals <- function(
       plot <- djoin %>%
         ggplot2::ggplot(mapping = ggplot2::aes(x = .data$VAF.x,
                                                y = .data$VAF.y,
-                                               col = .data$labels.x))
+                                               col = .data$labels.x)) +
+        ggplot2::labs(col = djoin$labels.x)
     } else {
       plot <- djoin %>%
         ggplot2::ggplot(mapping = ggplot2::aes(x = .data$VAF.x,
