@@ -31,8 +31,8 @@ RCPP_MODULE(Sequencing)
 //' @title An error-free Illumina sequencer class
 //' @description This class implements a perfect Illumina sequencers that
 //'   does not commit errors.
-//' @seealso \code{\link{simulate_seq}}, \code{\link{simulate_normal_seq}},
-//'   and \code{vignette("sequencing")} for usage examples.
+//' @seealso [simulate_seq()], [simulate_normal_seq()],
+//'   and [`vignette("sequencing")`] for usage examples.
     class_<ErrorlessIlluminaSequencer>("ErrorlessIlluminaSequencer")
 
         .method("show", &ErrorlessIlluminaSequencer::show,
@@ -54,8 +54,8 @@ RCPP_MODULE(Sequencing)
 //' @description This class implements a basic model for Illumina sequencers.
 //' @details It specifies a simulated sequencing error rate and the simulated
 //'   sequencing errors will occurs according to that rate.
-//' @seealso \code{\link{simulate_seq}}, \code{\link{simulate_normal_seq}},
-//'   and \code{vignette("sequencing")} for usage examples.
+//' @seealso [simulate_seq()], [simulate_normal_seq()],
+//'   and [`vignette("sequencing")`] for usage examples.
     class_<BasicIlluminaSequencer>("BasicIlluminaSequencer")
         .method("show", &BasicIlluminaSequencer::show,
                 "Show a description for the sequencer")
@@ -118,10 +118,6 @@ RCPP_MODULE(Sequencing)
 //' # build a sequencer model having error rate 4e-3
 //' sequencer <- BasicIlluminaSequencer(error_rate=4e-3)
 //' sequencer
-//'
-//' # build a sequencer model having error rate 4e-3 and set the seed to 5
-//' sequencer <- BasicIlluminaSequencer(error_rate=4e-3, seed=5)
-//' sequencer
     function("BasicIlluminaSequencer", &BasicIlluminaSequencer::build_sequencer,
              List::create(_["error_rate"], _["random_quality_scores"] = true),
              "Create a basic Illumina sequencer model");
@@ -137,13 +133,13 @@ RCPP_MODULE(Sequencing)
 //'    mutation engine reference genome).
 //' @param chromosomes The chromosomes that must be considered (default:
 //'   `NULL`, i.e., all the reference chromosomes).
-//' @param coverage The sequencing coverage (default: `10`).
-//' @param read_size The read size (default: `150`).
+//' @param coverage The sequencing coverage (default: \eqn{10}).
+//' @param read_size The read size (default: \eqn{150}).
 //' @param insert_size_mean The insert size mean. Use 0 for single read
 //'   sequencing and any value greater than 0 for pair read sequencing
-//'   (default: `0`).
+//'   (default: \eqn{0}).
 //' @param insert_size_stddev The insert size standard deviation.
-//'   (default: `10`).
+//'   (default: \eqn{10}).
 //' @param output_dir The SAM output directory (default:
 //'   `"ProCESS_SAM"`).
 //' @param write_SAM A Boolean flag to enable/disable SAM generation
@@ -152,7 +148,7 @@ RCPP_MODULE(Sequencing)
 //' @param purity The ratio between the number of sample tumour cell
 //'   and that of all the cells, i.e., tumour and normal
 //'   ones. This value must belong to the interval \eqn{[0,1]}
-//'   (default: `1`).
+//'   (default: \eqn{1}).
 //' @param with_normal_sample A Boolean flag to enable/disable the
 //'   analysis of a normal sample (default: `TRUE`).
 //' @param pre_neoplastic_in_normal A Boolean flag to add/remove
@@ -175,8 +171,8 @@ RCPP_MODULE(Sequencing)
 //' @param quiet A Boolean flag to enable/disable the progress bar
 //'   (default: FALSE).
 //' @return A named list of two elements: the sequencing output data
-//'   frame (name "`mutations`") and the calling parameters (name
-//'   "`parameters`").
+//'   frame (name `mutations`) and the calling parameters (name
+//'   `parameters`).
 //'
 //'   If `wide_format` is set to `true`, the sequencing output data
 //'   frame reports, for each of the observed SNVs and indels, the
@@ -200,9 +196,9 @@ RCPP_MODULE(Sequencing)
 //'   wide_format` output. The columns `NV`, `DP`, and `VAF` 
 //'   maintain the number of occurrences, the coverage, and the VAF
 //'   of the mutation in cited sample.
-//' @seealso \code{\link{BasicIlluminaSequencer}} and
-//'   \code{\link{ErrorlessIlluminaSequencer}} as sequencer types, and
-//'   \code{vignette("sequencing")} for usage examples.
+//' @seealso [BasicIlluminaSequencer()] and
+//'   [ErrorlessIlluminaSequencer()] as sequencer types, and
+//'   [`vignette("sequencing")`] for usage examples.
     function("simulate_seq", &simulate_seq,
              List::create(
                  _["phylo_forest"], _["sequencer"] = R_NilValue,
@@ -231,13 +227,13 @@ RCPP_MODULE(Sequencing)
 //'    mutation engine reference genome).
 //' @param chromosomes The chromosomes that must be considered (default:
 //'   `NULL`, i.e., all the reference chromosomes).
-//' @param coverage The sequencing coverage (default: `10`).
-//' @param read_size The read size (default: `150`).
+//' @param coverage The sequencing coverage (default: \eqn{10}).
+//' @param read_size The read size (default: \eqn{150}).
 //' @param insert_size_mean The insert size mean. Use 0 for single read
 //'   sequencing and any value greater than 0 for pair read sequencing
-//'   (default: `0`).
+//'   (default: \eqn{0}).
 //' @param insert_size_stddev The insert size standard deviation.
-//'   (default: `10`).
+//'   (default: \eqn{10}).
 //' @param output_dir The SAM output directory (default:
 //'   `"ProCESS_normal_SAM"`).
 //' @param write_SAM A Boolean flag to enable/disable SAM generation
@@ -260,8 +256,8 @@ RCPP_MODULE(Sequencing)
 //' @param quiet A Boolean flag to enable/disable the progress bar
 //'   (default: FALSE).
 //' @return A named list of two elements: the sequencing output data
-//'   frame (name "`mutations`") and the calling parameters
-//'   (name "`parameters`").
+//'   frame (name `mutations`) and the calling parameters
+//'   (name `parameters`).
 //'
 //'
 //'   If `wide_format` is set to `true`, the sequencing output data
@@ -286,9 +282,9 @@ RCPP_MODULE(Sequencing)
 //'   wide_format` output. The columns `NV`, `DP`, and `VAF` 
 //'   maintain the number of occurrences, the coverage, and the VAF
 //'   of the mutation in cited sample.
-//' @seealso \code{\link{BasicIlluminaSequencer}} and
-//'   \code{\link{ErrorlessIlluminaSequencer}} as sequencer types, and
-//'   \code{vignette("sequencing")} for usage examples.
+//' @seealso [BasicIlluminaSequencer()] and
+//'   [ErrorlessIlluminaSequencer()] as sequencer types, and
+//'   [`vignette("sequencing")`] for usage examples.
     function("simulate_normal_seq", &simulate_normal_seq,
              List::create(
                  _["phylo_forest"], _["sequencer"] = R_NilValue,

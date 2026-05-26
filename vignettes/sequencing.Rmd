@@ -24,23 +24,24 @@ knitr::opts_chunk$set(
 unlink("ProCESS_SAM", recursive = TRUE)
 ```
 
-> *Disclaimer:* CLONES/ProCESS internally implements the
+> *Disclaimer:* ProCESS/CLONES internally implements the
 > probability distributions using the C++11 random number
 > distribution classes. The standard does not specify their
 > algorithms, and the class implementations are left free
 > for the compiler. Thus, the simulation output depends on
-> the compiler used to compile CLONES, and because of that,
-> the results reported in this article may differ from
-> those obtained by the reader.
+> the compiler used to compile [CLONES](https://github.com/albertocasagrande/CLONES), and
+> because of that, the results reported in this article may
+> differ from those obtained by the reader.
 
 Once a phylogenetic forest has been computed, as detailed in
-`vignette("mutations")`, ProCESS can simulate the sequencing of the
-samples in the forest and return the observed data.
+[this article](mutations.md), ProCESS can simulate
+the sequencing of the samples in the forest and return the
+observed data.
 
-### Sequencing Simulation
+### Simulating Sequencing Reads
 
 Let us reload the phylogenetic forest produced in
-`vignette("mutations")`.
+[this article](mutations.md).
 
 ```{r}
 library(ProCESS)
@@ -53,8 +54,7 @@ phylo_forest
 The loaded phylogenetic forest models the cell evolution of
 4 different samples: `S_1_1`, `S_1_2`, `S_2_1`, and `S_2_2`.
 
-We can simulate the sequencing of these samples with coverage
-of 2.5X by as it follows.
+We can simulate the sequencing of these samples 2.5X coverage as follows.
 
 ```{r}
 # let us simulate a 30x sequencing of the four sample and avoid
@@ -69,7 +69,7 @@ seq_results$parameters
 seq_results$mutations %>% head
 ```
 
-The function `simulate_seq()` returns named list of two elements:
+The function `simulate_seq()` returns a named list of two elements:
 a data frame whose rows represent the mutations observed in the
 simulated reads (name "`mutations`") and the
 calling parameters (name "`parameters`").
@@ -89,7 +89,7 @@ and `<sample name> VAF`, respectively).
 
 ### Plotting Sequencing Data
 
-ProCESS/RACE provides functions to plot the Variant Allele
+ProCESS provides functions to plot the Variant Allele
 Frequency (VAF), the B-Allele Frequency (BAF),
 and the Depth Ratio (DR) of a sample.
 
@@ -148,7 +148,7 @@ plot_VAF_marginals(seq_results, labels = seq_results$mutations["classes"],
 
 ### Saving the Simulated Reads
 
-ProCESS/RACE can also save the simulated reads in the SAM format
+ProCESS can also save the simulated reads in the SAM format
 (see [@10.1093/bioinformatics/btp352]). By setting the optional
 parameter `write_SAM` to `TRUE`, the function `simulate_seq()`
 creates the directory `ProCESS_SAM` and saves the SAM files in it.
@@ -173,8 +173,8 @@ for (line in readLines(ex_file, n = 10)) {
 ```
 
 Each SAM file contains the reads produced by simulating the sequencing
-of *all* the samples. The command-line tools [`samtools`](http://www.htslib.org) can be used to
-split the reads by sample.
+of *all* the samples. The command-line tools 
+[`samtools`](http://www.htslib.org) can be used to split the reads by sample.
 
 ```{bash, eval = FALSE}
 foo@bar % samtools split  -f "%*_%\!.sam" ProCESS_SAM/chr_22.sam
@@ -188,15 +188,15 @@ containing the reads of only one sample.
 Please refer to the [`samtools split` manual](http://www.htslib.org/doc/samtools-split.html)
 for more details.
 
-The `simulate_seq()` parameter `output_dir` set the SAM output directory. See the following
-section for usage examples of this parameter.
+The `simulate_seq()` parameter `output_dir` sets the SAM output directory. See
+the following section for usage examples of this parameter.
 
 ### Sample Purity
 
 The _sample purity_ represents the concentration of tumour cells in a sample.
-More formally, it is the ratio between the number of tumour cells in the sample
-and that of all the sample cells, either tumour or normal (i.e., cells
-having germline and pre-neoplastic mutations).
+More formally, it is the ratio of the number of tumour cells in the total
+number of cells in the sample, whether tumour or normal (i.e., cells with
+the sample to the germline and pre-neoplastic mutations).
 
 ProCESS can simulate different sample purity in sequencing
 simulations.
@@ -219,7 +219,7 @@ The default value of the parameter `purity` is 1, i.e., `simulate_seq()`
 assumes all the cells in the sample to be neoplastic by default.
 
 The function `simulate_normal_seq()` simulates the sequencing
-of a sample whose cells have germline and tumoral pre-neoplastic
+of a sample whose cells have germline and pre-neoplastic
 mutations. The pre-neoplastic mutations can be avoided
 by setting the optional parameter `with_pre_neoplastic`.
 
@@ -254,8 +254,8 @@ seq_results <- simulate_seq(phylo_forest, sequencer = no_error_seq,
 #### The `BasicIlluminaSequencer` Class
 
 This class sets a sequencing error rate independent of the
-base in which the error occurs, from the position of the base
-in the read and from the position of the read on the genome.
+base in which the error occurs, from the base position in the
+read and the read position on the genome.
 
 ```{r, eval=FALSE}
 # build a basic Illumina sequencer model in which errors occur
@@ -288,7 +288,7 @@ for instance, by splitting it by chromosome or reaching
 the aimed coverage with different simulations.
 However, ProCESS prevents successive writing in the same
 directory by default. The Boolean parameter `update_SAM`
-allows multiple writing in the same directory.
+allows multiple writes in the same directory.
 
 ```{r}
 # the default SAM directory already exists

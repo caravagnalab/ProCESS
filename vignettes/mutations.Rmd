@@ -20,32 +20,32 @@ knitr::opts_chunk$set(
 )
 ```
 
-> *Disclaimer:* CLONES/ProCESS internally implements the
+> *Disclaimer:* ProCESS/CLONES internally implements the
 > probability distributions using the C++11 random number
 > distribution classes. The standard does not specify their
 > algorithms, and the class implementations are left free
 > for the compiler. Thus, the simulation output depends on
-> the compiler used to compile CLONES, and because of that,
+> the compiler used to compile [CLONES](https://github.com/albertocasagrande/CLONES), and because of that,
 > the results reported in this article may differ from
 > those obtained by the reader.
 
-ProCESS/CLONES can simulate genomic mutations on the cells represented in
+ProCESS/CLONES can simulate genomic mutations in the cells represented in
 a `SampleForest` according to the specified SBS and indel mutational
 signatures (see [@alexandrov2020repertoire]).
-This process is performed by the class `MutationEngine` which also takes
+This process is performed by the class `MutationEngine`, which also takes
 into account the mutation rate of the simulated species and gives the
 chance to dynamically change the signatures.
 
 ### Setting Up Mutation Engine
 
-The creation of an object of the type `MutationEngine` requires to download
-the reference sequence and the signature files and to build the
+The creation of an object of the type `MutationEngine` requires downloading
+the reference sequence and the signature files and building the
 corresponding two signature indices. The function `MutationEngine()`
 performs all these steps in a single call.
 
-This function is quite flexible and it allows to customize the mutation
-engine in many ways. However, the vast majority of ProCESS users aim a
-standard setup for instance involving the human genome.
+This function is quite flexible and allows customising the mutation engine in
+many ways. However, the vast majority of ProCESS users would aim for a standard
+setup, for instance, involving the human genome.
 
 Because of this, ProCESS provides some predefined setups.
 Their list can be obtained by invoking the function `get_mutation_engine_codes()`.
@@ -79,12 +79,11 @@ dir.exists("demo")
 list.files("demo")
 ```
 
-The execution of the function `MutationEngine()` may takes some time, but
-it is meant to be performed one for all and, as long as the user does not need to
-change the reference genome or the signature files, it is no more required. In this
-spirit, any call to the function `MutationEngine` checks whether all the building
-process sub-tasks are really needed and, if this is not the case, it avoids to
-performs them.
+The execution of the function `MutationEngine()` may take some time, but
+it is meant to be performed one for all and, as long as the user does not need
+to change the reference genome or the signature files, it is no longer
+required. In this spirit, any call to `MutationEngine()` exclusively performs
+the building process sub-tasks that have not been already fulfilled.
 
 ```{r}
 # building a mutation engine by using the "demo" set-up configuration
@@ -93,32 +92,32 @@ m_engine <- MutationEngine(setup_code = "demo")
 
 #### Mutant Genetic Characterization
 
-Once the mutation engine has been built, we can define mutant genotype and
+Once the mutation engine has been built, we can define a mutant genotype and
 declare species mutation rates.
 
-Let us consider simulation peformed in Section "_Two populations with
-epigenetic state_" of `vignette("sampling")`. It involves the two
-mutants `A` and
-"B". Both of them has two possible epigenetic states, `+` and `-`, leading
-to the four the species `A+`, `A-`, `B+`, and `B-`, respectively.
+Let us consider the simulation of Section "_Two populations with
+epigenetic state_" in [this article](sampling.md). It involves the two
+mutants `A` and `B`. Both of them have two possible epigenetic states,
+`+` and `-`, leading to the four species `A+`, `A-`, `B+`, and `B-`,
+respectively.
 Each of these species has a passenger mutation rate that must be
-declated to the mutation engine before labeling the sample forest.
+declared to the mutation engine before the sample forest is labelled.
 Let 1e-9, 3e-8, 8e-7, and 5e-8 be the passenger SNV rates for the
 species `A+`, `A-`, `B+`, and `B-`, respectively. Let the indel
-rates be 0 for all the species, but `A+` which has indel rate 1e-8.
+rates be 0 for all the species, but `A+`, which has an indel rate of 1e-8.
 Furthermore, let 0, 1e-11, 0, and 0 be the passenger CNA rates of the same
 species, respectively.
 
-The two mutants may also be genetically characterized by some
+The two mutants may also be genetically characterised by some
 driver mutations.
-The driver mutations associated with each of the mutants must occur
-in any cell belonging to the mutant itself. Hence, they must be
-declared to the mutant engine before the labeling.
+The driver mutations associated with each mutant must occur in any cell
+belonging to that mutant. Hence, they must be
+declared to the mutant engine before the labelling.
 
-The method `MutationEngine$add_mutant()` takes care of all these
-declarations.
+The method <code>[MutationEngine$add_mutant()](../reference/MutationEngine-cash-add_mutant.md)</code>
+takes care of all these declarations.
 
-For the sake of example, let us assume that `A` is characterized by one
+For the sake of example, let us assume that `A` is characterised by one
 driver mutation on chromosome 22, while `B` has three driver mutations on
 the same chromosome.
 
@@ -151,12 +150,12 @@ m_engine
 ```
 
 In the above code, the driver CNAs, SNVs, and indels are declared by calling
-the functions `CNA()`, `SNV()`, and `Mutation()`, respectively. These function
-allow to specify the allele in which the mutation must lay.
-The mutant `A` is also characterized by a _whole genome doubling_ (`WGD`):
+the functions `CNA()`, `SNV()`, and `Mutation()`, respectively. These functions
+allow specifying the allele in which the mutation must lie.
+The mutant `A` is also characterised by _whole genome doubling_ (`WGD`):
 a genomic event that simultaneously duplicates all the chromosome alleles.
 
-The driver mutations are applied according to their specification order.
+The driver mutations are applied in the order specified.
 For instance, the following two pieces of code specify two different
 genomic characterisations for the same mutant `E`.
 ```{r, eval=FALSE}
@@ -176,11 +175,12 @@ producing a genome in which two alleles contain the placed SNV. Instead, the
 latter snippet requires a whole genome doubling event and, then, places the
 SNV yielding a single occurrence of the SNV in the final genome.
 
-As far as the SNVs and indels concern, ProCESS provides the users with a more
-compact and, sometimes, convenient approach. The mutation engine stores a list
-of known driver mutations and labels each of them by a code which can be used
-during the mutant declaration. The corresponding data frame can be obtained
-by using the method `MutationEngine$get_known_drivers()`.
+As far as SNVs and indels are concerned, ProCESS provides users with a more
+compact and, at times, convenient approach. The mutation engine stores a list
+of known driver mutations and labels each with a code that can be used during
+mutant declaration. The corresponding data frame can be obtained
+by using the method
+<code>[MutationEngine$get_known_drivers()](../reference/MutationEngine-cash-get_known_drivers.md)</code>.
 
 ```{r}
 library(dplyr)
@@ -206,23 +206,23 @@ m_engine
 
 #### Mutational Exposures
 
-The probability for a mutation to occur depends on both its genomic and
+The probability of a mutation occurring depends on both its genomic and
 environmental context.
 
 A _signature_ is a mutation probability distribution over mutation contexts or
-mutation structure. _SBS (single base substitution) signatures_ provide
-for any genomic context (i.e., a triplet of bases) the probability for a SNV
-to occur on that context. On the contrary, _ID (indel) signatures_ associates
+mutation structure. _SBS (single-base substitution) signatures_ provide
+for any genomic context (i.e., a triplet of bases) the probability that an SNV
+occurs on that context. On the contrary, _ID (indel) signatures_ associate
 the probability of an indel to its length and structure
 (see [@alexandrov2020repertoire]).
 
-The signature depends on the environmental context and, because of that, more
+The signature depends on the environmental context and, as a result, more
 than one signature may be active at the same time with different probabilities.
-An _mutational exposure_ (or _exposure_) is a discrete probability distribution
+A _mutational exposure_ (or _exposure_) is a discrete probability distribution
 among signatures.
 
-In order to simulate passenger mutations of a given type, we need to specify a
-default exposure for that type. This can be achieved as it follows.
+To simulate passenger mutations of a given type, we need to specify a
+default exposure for that type. This can be achieved as follows.
 
 ```{r}
 # add SNV and indel default exposures. This will be used from simulated time 0
@@ -233,7 +233,7 @@ m_engine$add_exposure(c(ID2 = 0.6, ID13 = 0.2, ID21 = 0.2))
 
 Further exposures can also be defined by specifying an activation time
 for each of them, i.e., the new exposures will be used
-from the specified time up to the next exposure change.
+from that until the next exposure change.
 
 ```{r}
 # add a new SNV exposure that will be used from simulated
@@ -245,7 +245,7 @@ m_engine
 
 The default exposures and the simultaneous changes in SNV and ID exposures
 can be specified by a single call to the function
-`MutationEngine$add_exposure()` as it follows.
+<code>[MutationEngine$add_exposure()](../reference/MutationEngine-cash-add_exposure.md)</code> as follows.
 
 ```{r}
 m_engine$add_exposure(time = 120, c(SBS5 = 0.3, SBS2 = 0.2, SBS3 = 0.5,
@@ -259,9 +259,9 @@ m_engine
 The passenger CNAs applied during the simulation depend on tumour type.
 The type of tumour can be specified when building the mutation engine
 by using the parameters `tumour_type` or `tumour_study`. For instance,
-if the passenger CNAs file used to build the mutation engine contains
+if the passenger CNA file used to build the mutation engine contains
 some of the data identified in breast carcinoma in the UK,
-the specific CNA can be applied during the simulation as it follows.
+the specific CNA can be applied during the simulation as follows.
 
 ```{r, eval=FALSE}
 m_engine <- MutationEngine(setup_code = "demo",
@@ -278,15 +278,14 @@ get_available_tumours_in(setup_code = "demo") %>% head()
 
 #### Germline Mutations
 
-ProCESS allows users to apply the germline mutations of one of
-the subjects available in the germline data provided in building
-the mutation engine. This feature will enable users to simulate
-a specific cancer type's evolution on an individual with the
+ProCESS allows users to apply germline mutations from one of the subjects in
+the germline data used to build the mutation engine. This feature will enable
+users to simulate a specific cancer type’s evolution on an individual with the
 desired gender and ethnicity.
 
 The available subjects, together with their sex and ethnicity, can
 be obtained by using the method
-`[MutationEngine$get_germline_subjects()]`.
+<code>[MutationEngine$get_germline_subjects()](../reference/MutationEngine-cash-get_germline_subjects.md)</code>.
 
 ```{r}
 subjects <- m_engine$get_germline_subjects()
@@ -299,14 +298,16 @@ The columns `pop` and `super_pop` report the subjects' population
 and super-population codes. The last column,
 `gender`, includes the subject gender.
 
-The method `MutationEngine$get_population_descriptions()` clarifies
-the meaning of the codes reported in the pop columns.
+The method
+<code>[MutationEngine$get_population_descriptions()](../reference/MutationEngine-cash-get_population_descriptions.md)</code>
+clarifies the meaning of the codes reported in the pop columns.
 
 ```{r}
 m_engine$get_population_descriptions()
 ```
 
-The method `MutationEngine$get_active_germline()` returns the
+The method
+<code>[MutationEngine$get_active_germline()](../reference/MutationEngine-cash-get_active_germline.md)</code> returns the
 the active germline subject.
 
 ```{r}
@@ -314,10 +315,10 @@ m_engine$get_active_germline()
 ```
 
 Users can change the germline subject using the method
-`MutationEngine$set_germline_subject()`.
+<code>[MutationEngine$set_germline_subject()](../reference/MutationEngine-cash-set_germline_subject.md)</code>.
 
 When a subject is selected for the first time, ProCESS builds
-a binary representation of the subject genome, saving
+a binary representation of the subject's genome and save
 it for future use. This step may take a few minutes. However,
 all the successive selections of the same subject directly
 load the binary file.
@@ -331,13 +332,13 @@ m_engine$get_active_germline()
 ### Building Phylogenetic Forests
 
 The configured mutation engine can be used to label each node in a
-sample forest by mutations.
+sample forest with mutations.
 
-Since the mutation engine has be configured to deal with the
+Since the mutation engine has been configured to deal with the
 simulation performed in Section "_Two populations with
-epigenetic state_" of `vignette("sampling")`,
-we can load its sample forest from the file `"sample_forest.sff"`
-in saved that article.
+epigenetic state_" in [this article](sampling.md),
+we can load its sample forest from the file `"sample_forest.sff"` as saved
+there.
 
 ```{r}
 sample_forest <- load_sample_forest("sample_forest.sff")
@@ -349,11 +350,11 @@ phylo_forest <- m_engine$place_mutations(sample_forest, 1000, 500)
 phylo_forest
 ```
 
-The phylogenetic forest stores all the mutations labeling the
-sampled cells which are represented by the forest leaves.
-Users can retrieve such data by using the methods
-`PhylogeneticForest$get_sampled_cell_mutations()` and
-`PhylogeneticForest$get_sampled_cell_CNAs()`.
+The phylogenetic forest stores all mutations, labelling the sampled cells
+represented by its leaves. Users can retrieve such data by using the methods
+<code>[PhylogeneticForest$get_sampled_cell_mutations()](../reference/PhylogeneticForest-cash-get_sampled_cell_mutations.md)</code>
+and
+<code>[PhylogeneticForest$get_sampled_cell_CNAs()](../reference/PhylogeneticForest-cash-get_sampled_cell_CNAs.md)</code>.
 
 ```{r}
 library(dplyr)
@@ -383,23 +384,24 @@ phylo_forest$get_cell_mutations(cell_id) %>% head()
 phylo_forest$get_cell_CNAs(cell_id) %>% head()
 ```
 
-The method `PhylogeneticForest$get_samples_info()` is analogous to
-`DescendantForest$get_samples_info()`: it returns a data frame containing
+The method
+<code>[PhylogeneticForest$get_samples_info()](../reference/PhylogeneticForest-cash-get_samples_info.md)</code> is analogous to
+<code>[SampleForest$get_samples_info()](../reference/SampleForest-cash-get_samples_info.md)</code>: it returns a data frame containing
 information about the forest samples. However, the former method adds two
-columns to the result of the latter: "`DNA_quantity`" and
-"`equivalent_normal_cells`". The former column reports the overall quantity
-of tumoral DNA in the sample, i.e., the sum of the lengths of all the
-alleles in the corresponding sample. This quantity is a natural number,
-nevertheless, it is stored as a real number as it usually usually exceeds
+columns to the result of the latter: `DNA_quantity` and
+`equivalent_normal_cells`. The former column reports the total quantity
+of tumoral DNA in the sample, i.e., the sum of the lengths of all
+alleles in the sample. This quantity is a natural number,
+nevertheless, it is stored as a real number as it usually exceeds
 the largest natural number that can be natively represented by R.
 The column "`equivalent_normal_cells`" instead contains the number of
-normal cells that contain as much DNA as the sample tumoral cells.
+normal cells that contain as much DNA as the sample tumour cells.
 
 ```{r}
 phylo_forest$get_samples_info()
 ```
 
-The method `PhylogeneticForest$get_germline_mutations()` returns
+The method <code>[PhylogeneticForest$get_germline_mutations()](../reference/PhylogeneticForest-cash-get_germline_mutations.md)</code> returns
 the SNVs and the indels in the germline.
 
 ```{r}
@@ -426,14 +428,15 @@ phylo_forest$get_first_occurrences(mutation)
 
 The exposures used in placing the mutations on the cells in the
 phylogenetic forest can be obtained by using the method
-`PhylogeneticForest$get_exposures()`.
+<code>[PhylogeneticForest$get_exposures()](../reference/PhylogeneticForest-cash-get_exposures.md)</code>.
 
 ```{r}
 # get the exposures used in placing the mutations
 phylo_forest$get_exposures()
 ```
 
-The method `MutationEngine$get_bulk_allelic_fragmentation()` returns a data frame
+The method <code>[MutationEngine$get_bulk_allelic_fragmentation()](../reference/MutationEngine-cash-get_bulk_allelic_fragmentation.md)</code> 
+returns a data frame
 reporting the allelic type per genome fragment.
 
 ```{r}
@@ -444,8 +447,8 @@ sample_name <- phylo_forest$get_samples_info()[["name"]][1]
 phylo_forest$get_bulk_allelic_fragmentation(sample_name) %>% head()
 ```
 
-Instead, the method `MutationEngine$get_cell_allelic_fragmentation()` returns
-the allelic fragmentation per cell.
+Instead, the method <code>[MutationEngine$get_cell_allelic_fragmentation()](../reference/MutationEngine-cash-get_cell_allelic_fragmentation.md)</code> 
+returns the allelic fragmentation per cell.
 
 ```{r}
 # print the cell allelic fragmentation
@@ -454,7 +457,9 @@ phylo_forest$get_cell_allelic_fragmentation() %>% head()
 
 The details about the SNV and indel signatures adopted during the evolution are
 available in the mutation engine and they can be retrieved by using the methods
-`MutationEngine$get_SNV_signatures()` and `MutationEngine$get_indel_signatures()`.
+<code>[MutationEngine$get_SNV_signatures()](../reference/MutationEngine-cash-get_SNV_signatures.md)</code> 
+and
+<code>[MutationEngine$get_indel_signatures()](../reference/MutationEngine-cash-get_indel_signatures.md)</code>.
 
 ```{r}
 # get the SNV signatures used in placing the mutations
@@ -466,7 +471,8 @@ m_engine$get_indel_signatures()[1:6, 1:5]
 
 Finally, the data of the subject whose germline corresponds to
 wild-type genome in the phylogenetic forest can be
-obtained by the method `Phylogenetic$get_germline_subject()`.
+obtained by the method
+<code>[PhylogeneticForest$get_germline_subject()](../reference/PhylogeneticForest-cash-get_germline_subject.md)</code>.
 
 ```{r}
 phylo_forest$get_germline_subject()
@@ -476,8 +482,9 @@ phylo_forest$get_germline_subject()
 ### Storing Phylogenetic Forests
 
 As in the case of the sample forests, the phylogenetic forests
-can be saved by using the method `PhylogeneticForest$save()` and
-load by the function `load_phylogenetic_forest()`.
+can be saved by using the method 
+<code>[PhylogeneticForest$save()](../reference/PhylogeneticForest-cash-save.md)</code> 
+and load by the function `load_phylogenetic_forest()`.
 
 ```{r}
 # save the phylogenetic forest in the file "phylo_forest.sff"
@@ -492,9 +499,10 @@ loaded_phylo_forest
 ### Getting and Setting the Reference Genome Path
 
 The phylogenetic forest object contains the reference genome FASTA file path.
-The methods `PhylogeneticForest$get_reference_path()` and
-`PhylogeneticForest$set_reference_path()` can be used to get the path and
-set it, respectively.
+The methods 
+<code>[PhylogeneticForest$get_reference_path()](../reference/PhylogeneticForest-cash-get_reference_path.md)</code> and
+<code>[PhylogeneticForest$set_reference_path()](../reference/PhylogeneticForest-cash-set_reference_path.md)</code> 
+can be used to get the path and set it, respectively.
 ```{r}
 phylo_forest$get_reference_path()
 

@@ -19,20 +19,22 @@ knitr::opts_chunk$set(
 )
 ```
 
-> *Disclaimer:* CLONES/ProCESS internally implements the
+> *Disclaimer:* ProCESS/CLONES internally implements the
 > probability distributions using the C++11 random number
 > distribution classes. The standard does not specify their
 > algorithms, and the class implementations are left free
 > for the compiler. Thus, the simulation output depends on
-> the compiler used to compile CLONES, and because of that,
+> the compiler used to compile [CLONES](https://github.com/albertocasagrande/CLONES), and because of that,
 > the results reported in this article may differ from
 > those obtained by the reader.
 
-The mutation engine places mutation on the sampled cell genome according to the
-[infinite sites model](https://en.wikipedia.org/wiki/Infinite_sites_model) by default.
-In particular, any new mutations is placed on a locus whose context is mutation-free.
+The mutation engine places mutations on the sampled cell genome according to the
+[infinite sites model](https://en.wikipedia.org/wiki/Infinite_sites_model) by
+default. In particular, any new mutation is placed on a locus whose context is
+mutation-free.
 
-Let us consider the phylogenetic forest as build in `vignette("mutations")` and verify
+Let us consider the phylogenetic forest as built in
+[this article](mutations.md) and verify
 whether it satisfies the infinite site model.
 
 
@@ -149,7 +151,7 @@ phylo_forest <- m_engine$place_mutations(sample_forest, 1000, 500)
 ```{r}
 library(dplyr)
 
-# this function verifies whether any mutation arised in
+# this function verifies whether any mutation arose in
 # two unrelated cells represented in a phylogenetic forest
 test_infinite_sites_model <- function(phylo_forest) {
   # extract non-germinal SNVs that appear multiple times either
@@ -189,9 +191,10 @@ test_infinite_sites_model <- function(phylo_forest) {
 test_infinite_sites_model(phylo_forest)
 ```
 
-This behavior can be changed by using the mutation engine property
-`MutationEngine$infinite_sites_model()`. This property is a Boolean flag
-that enable/disable the infinite sites model.
+This behaviour can be changed by using the mutation engine property
+<code>[MutationEngine$infinite_sites_model](../reference/MutationEngine-cash-infinite_sites_model.md)</code>.
+This property is a Boolean flag that enables/disables the infinite sites
+model.
 
 ```{r}
 # establish whether the infinite sites model is used
@@ -202,7 +205,7 @@ m_engine$infinite_sites_model <- FALSE
 ```
 
 When the infinite sites model is disabled,
-`MutationEngine$place_mutations()` may place two mutations
+<code>[MutationEngine$place_mutations()](../reference/MutationEngine-cash-place_mutations.md)</code> may place two mutations
 in the same locus of different alleles of the same genome
 or the same mutation in the same locus of one allele
 of the genomes of two cells that are not each other ancestors.
