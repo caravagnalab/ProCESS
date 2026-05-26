@@ -29,12 +29,13 @@ CNA::CNA(const CLONES::Mutations::GenomicPosition &initial_position,
                             allele)
 {}
 
-// deleletion
+// deletion
 CNA::CNA(const CLONES::Mutations::GenomicPosition &initial_position,
          const CLONES::Mutations::CNA::Length &length,
          const CLONES::Mutations::AlleleId &allele)
     : CLONES::Mutations::CNA(initial_position, length,
-                            CLONES::Mutations::CNA::Type::DELETION, allele, allele)
+                             CLONES::Mutations::CNA::Type::DELETION, RANDOM_ALLELE,
+                             allele)
 {}
 
 CNA::CNA() {}
