@@ -1,5 +1,5 @@
 ## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
-## Copyright (C) 2023-2025 - Giulio Caravagna <gcaravagna@units.it>
+## Copyright (C) 2023-2026 - Giulio Caravagna <gcaravagna@units.it>
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -17,10 +17,13 @@
 #' Bounding box sampler
 #'
 #' @description
-#' From a simulation object, this function samples bounding boxes of
-#' a custom size until a number of cells of a certain species are not
-#' sampled. If this never happens, after a fixed number of attempts
-#' the best box is returned.
+#' This function searches for a tissue rectangle that contains a given
+#' number of cells of a certain type. The search is performed by sampling
+#' the tissue uniformly until the constraint on the number of cells
+#' contained in the rectangle is satisfied or the sampling has been
+#' repeated for a specified number of times. When the constraint cannot be
+#' satisfied, the rectangle having the maximal number of cells of the
+#' specified type among those sampled is returned.
 #'
 #' @param simulation A simulation object.
 #' @param which The species name.
@@ -36,8 +39,8 @@
 #' sim <- TissueSimulation()
 #' sim$add_mutant(name = "A", growth_rates = 0.08, death_rates = 0.01)
 #' sim$place_cell("A", 500, 500)
-#' sim$run_up_to_time(60)
-#' bbox <- bbox_sampler(sim, "A", n = 15, n_w = 5, n_h = 5)
+#' sim$run_up_to_size("A", 25000)
+#' bbox <- bbox_sampler(sim, "A", n = 2500, n_w = 50, n_h = 50)
 #' sim$sample_cells("A", bbox$p, bbox$q)
 #' plot_tissue(sim)
 bbox_sampler <- function(simulation, which, n, n_w, n_h, nattempts = 100) {
