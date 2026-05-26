@@ -1,8 +1,8 @@
 Package: ProCESS
 Type: Package
 Title: ProCESS: Programmable Cancer Evolution Spatial Simulator
-Version: 1.2.0
-Date: 2025-09-30
+Version: 1.1.90
+Date: 2026-05-26
 Authors@R: c(
     person("Alberto", "Casagrande", email = "alberto.casagrande@uniud.it", role = c("aut", "cre")),
     person("Giulio", "Caravagna", role = c("aut")))
@@ -33,7 +33,6 @@ Imports:
     rvest,
     stringr
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Suggests:
     rmarkdown
 VignetteBuilder: knitr
@@ -41,3 +40,4 @@ Depends:
     methods,
     R (>= 2.10)
 LazyData: true
+Config/roxygen2/version: 8.0.0
