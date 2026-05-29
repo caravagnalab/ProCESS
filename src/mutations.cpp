@@ -1675,6 +1675,86 @@ RCPP_MODULE(Mutations)
         // show
         .method("show", &PhylogeneticForest::show, "Describe the PhylogeneticForest");
 
+//' @name PhylogeneticForestNode
+//' @title The node of a phylogenetic forest
+//' @description This class represents the nodes of a phylogenetic forest. It does not
+//'   have a user constructor because its objects are produced by ProCESS and passed to
+//'   the labelling function of [get_label_tour()].
+//' @field \code{cell_id} The identifier of the associated cell.
+//' @field \code{parent} The node's parent.
+//' @field \code{children} A list of the node's children.
+//' @field \code{is_root} A flag that is set to TRUE if and only if the node is a root.
+//' @field \code{is_leaf} A flag that is set to TRUE if and only if the node is a leaf.
+//' @field \code{birth_time} The birth time of the cell associated to the node.
+//' @field \code{death_time} The death time of the cell associated to the node.
+//' @field \code{life_span} The life span of the cell associated to the node.
+//' @field \code{species_id} The identifier of the associated cell's species.
+//' @field \code{species_name} The name of the associated cell's species.
+//' @field \code{mutant_id} The identifier of the associated cell's mutant.
+//' @field \code{mutant_name} The name of the associated cell's mutant.
+//' @field \code{arising_mutations} The mutations arising for the first time in the
+//'   associated cell.
+//' @seealso [get_label_tour()], <code>[SampleForestNode]</code>
+   class_<PhylogeneticForest::const_node>("PhylogeneticForestNode")
+        .property("cell_id",
+            (CLONES::Mutants::CellId (PhylogeneticForestNode::*)() const)(&PhylogeneticForestNode::get_id),
+            "The identifier of the cell associated to the node (Read-only)")
+        .property("parent",
+            (PhylogeneticForestNode (PhylogeneticForestNode::*)() const)(&PhylogeneticForestNode::parent),
+            "The node's parent (Read-only)")
+        .property("children",
+            (std::vector<PhylogeneticForestNode> (PhylogeneticForestNode::*)() const)(&PhylogeneticForestNode::children),
+            "The node's children (Read-only)")
+        .property("is_root",
+            (bool (PhylogeneticForestNode::*)() const)(&PhylogeneticForestNode::is_root),
+            "A Boolean flag that is set to TRUE iff the node is a root (Read-only)")
+        .property("is_leaf",
+            (bool (PhylogeneticForestNode::*)() const)(&PhylogeneticForestNode::is_leaf),
+            "A Boolean flag that is set to TRUE iff the node is a leaf (Read-only)")
+        .property("birth_time",
+            (CLONES::Time (PhylogeneticForestNode::*)() const)(&PhylogeneticForestNode::get_birth_time),
+            "The birth time of the cell associated to the node (Read-only)")
+        .property("death_time",
+            (CLONES::Time (PhylogeneticForestNode::*)() const)(&PhylogeneticForestNode::get_death_time),
+            "The death time of the cell associated to the node (Read-only)")
+        .property("life_span",
+            (CLONES::Time (PhylogeneticForestNode::*)() const)(&PhylogeneticForestNode::get_death_time),
+            "The life span of the cell associated to the node (Read-only)")
+        .property("species_id",
+            (CLONES::Mutants::SpeciesId (PhylogeneticForestNode::*)() const)(&PhylogeneticForestNode::get_species_id),
+            "The identifier of the species to whom the cell associated to the node belong (Read-only)")
+        .property("species_name",
+            (std::string (PhylogeneticForestNode::*)() const)(&PhylogeneticForestNode::get_species_name),
+            "The name of the species to whom the cell associated to the node belong (Read-only)")
+        .property("mutant_id",
+            (CLONES::Mutants::MutantId (PhylogeneticForestNode::*)() const)(&PhylogeneticForestNode::get_mutant_id),
+            "The identifier of the mutant to whom the cell associated to the node belong (Read-only)")
+        .property("mutant_name",
+            (std::string (PhylogeneticForestNode::*)() const)(&PhylogeneticForestNode::get_mutant_name),
+            "The name of the mutant to whom the cell associated to the node belong (Read-only)")
+        .property("arising_mutations",
+            (Rcpp::List (PhylogeneticForestNode::*)() const)(&PhylogeneticForestNode::arising_mutations),
+            "The mutations occurring for the first time in the associated cell (Read-only)");
+
+//' @name PhylogeneticForestLabelTour
+//' @title An iterator class over sample forest labels
+//' @description This class represents iterators over sample forest labels. The objects of this
+//'   class are built by [get_label_tour()].
+//' @field \code{value} Get the pair `cell id`-`label` for the current node in the tour.
+//' @field \code{step} A method that moves to the next node in the tour.
+//' @field \code{done} A Boolean flag that is set to TRUE only when the tour ended.
+//' @seealso [get_label_tour()], <code>[SampleForestLabelTour]</code>
+    class_<PhylogeneticForestLabelTour>("PhylogeneticForestLabelTour")
+        .property("value",
+            (Rcpp::List (PhylogeneticForestLabelTour::*)() const)(&PhylogeneticForestLabelTour::get_value),
+            "Get the pair `cell id`-`label` for the current node in the tour")
+        .method("step",
+            (void (PhylogeneticForestLabelTour::*)())(&PhylogeneticForestLabelTour::step),
+            "Go to the next node in the tour")
+        .property("done",
+            (bool (PhylogeneticForestLabelTour::*)() const)(&PhylogeneticForestLabelTour::done),
+            "Test whether the tour ended");
+
 //' @name load_phylogenetic_forest
 //' @title Loading a phylogenetic forest
 //' @description This method loads a phylogenetic forest from a file.

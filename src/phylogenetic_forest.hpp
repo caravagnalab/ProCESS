@@ -85,7 +85,105 @@ class PhylogeneticForest : public CLONES::Mutations::PhylogeneticForest
   public:
     using base_type = CLONES::Mutations::PhylogeneticForest;
 
+    class const_node
+    {
+    public:
+        const_node(const PhylogeneticForest* forest, const base_type::const_node& node):
+            node{node}, forest{forest}
+        {}
+
+        const_node(const PhylogeneticForest& forest, const base_type::const_node& node):
+            const_node{&forest, node}
+        {}
+
+        const_node(const PhylogeneticForest* forest, const CLONES::Mutants::CellId cell_id):
+            node{forest, cell_id}, forest{forest}
+        {}
+
+        const_node(const PhylogeneticForest& forest, const CLONES::Mutants::CellId cell_id):
+            const_node{&forest, cell_id}
+        {}
+    
+        inline const_node parent() const
+        {
+            return {forest, node.parent()};
+        }
+    
+        std::vector<const_node> children() const
+        {
+            std::vector<const_node> children;
+    
+            for (const auto child: node.children()) {
+                children.emplace_back(forest, child);
+            }
+    
+            return children;
+        }
+    
+        inline CLONES::Mutants::CellId get_id() const
+        {
+            return node.get_id();
+        }
+    
+        inline size_t get_height() const
+        {
+            return node.height();
+        }
+    
+        inline bool is_leaf() const
+        {
+            return node.is_leaf();
+        }
+    
+        inline bool is_root() const
+        {
+            return node.is_root();
+        }
+    
+        inline CLONES::Time get_birth_time() const
+        {
+            return node.get_birth_time();
+        }
+    
+        inline CLONES::Time get_death_time() const
+        {
+            return node.get_death_time();
+        }
+    
+        inline CLONES::Time get_life_span() const
+        {
+            return get_death_time()-get_birth_time();
+        }
+    
+        inline CLONES::Mutants::SpeciesId get_species_id() const
+        {
+            return node.get_species_id();
+        }
+    
+        inline CLONES::Mutants::MutantId get_mutant_id() const
+        {
+            return node.get_mutant_id();
+        }
+    
+        inline std::string get_species_name() const
+        {
+            return node.get_species_name();
+        }
+    
+        inline std::string get_mutant_name() const
+        {
+            return node.get_mutant_name();
+        }
+
+        Rcpp::List arising_mutations() const;
+    private:
+        base_type::const_node node;
+        const PhylogeneticForest* forest;
+    };
+
     PhylogeneticForest();
+
+    std::vector<const_node> get_roots() const;
 
     inline Rcpp::List get_nodes() const
     {
@@ -178,8 +276,14 @@ class PhylogeneticForest : public CLONES::Mutations::PhylogeneticForest
     void show() const;
 
     friend class MutationEngine;
+    friend class PhylogeneticForest::const_node;
 };
 
 RCPP_EXPOSED_CLASS(PhylogeneticForest)
+RCPP_EXPOSED_CLASS_NODECL(PhylogeneticForest::const_node)
+RCPP_EXPOSED_CLASS_NODECL(LabelTour<PhylogeneticForest>)
+
+using PhylogeneticForestNode = PhylogeneticForest::const_node;
+using PhylogeneticForestLabelTour = LabelTour<PhylogeneticForest>;
 
 #endif // __PROCESS_PHYLOGENETIC_FOREST__

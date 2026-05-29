@@ -56,6 +56,17 @@ PhylogeneticForest::PhylogeneticForest(
     timed_exposures[MutationType::Type::INDEL] = timed_indel_exposures;
 }
 
+std::vector<PhylogeneticForest::const_node> PhylogeneticForest::get_roots() const
+{
+    std::vector<PhylogeneticForest::const_node> roots;
+
+    for (const auto node : CLONES::Mutations::PhylogeneticForest::get_roots()) {
+        roots.emplace_back(this, node);
+    }
+
+    return roots;
+}
+
 std::map<CLONES::Mutants::CellId, size_t>
 PhylogeneticForest::get_total_mutations(const std::map<CLONES::Mutants::CellId, size_t>& new_mutations) const
 {
@@ -174,16 +185,11 @@ std::string find_code(const CLONES::Mutations::MutationSpec<CLONES::Mutations::S
                       const std::map<CLONES::Mutations::SID, std::string> &driver_codes)
 {
     const auto found = driver_codes.find(static_cast<CLONES::Mutations::SID>(sid));
-    if (found != driver_codes.end()) {
-        return (found->second);
+    if (found == driver_codes.end()) {
+        return "";
     }
 
-    std::ostringstream oss;
-
-    oss << "Unknown driver mutation " << sid << std::endl;
-    Rcpp::warning(oss.str());
-
-    return "";
+    return (found->second);
 }
 
 inline void fill_SID_row(const CLONES::Mutations::MutationSpec<CLONES::Mutations::SID> &sid,
@@ -192,8 +198,9 @@ inline void fill_SID_row(const CLONES::Mutations::MutationSpec<CLONES::Mutations
                          Rcpp::CharacterVector &chrs, Rcpp::CharacterVector &refs,
                          Rcpp::CharacterVector &alts, Rcpp::IntegerVector &starts,
                          Rcpp::IntegerVector &ends, Rcpp::IntegerVector &alleles,
-                         Rcpp::IntegerVector &src_alleles, Rcpp::CharacterVector &codes,
-                         const size_t &i)
+                         Rcpp::IntegerVector &src_alleles,
+                         Rcpp::CharacterVector &natures, Rcpp::CharacterVector &causes,
+                         Rcpp::CharacterVector &codes, const size_t &i)
 {
     using namespace Rcpp;
     using namespace CLONES::Mutations;
@@ -207,6 +214,8 @@ inline void fill_SID_row(const CLONES::Mutations::MutationSpec<CLONES::Mutations
     ends[i] = sid.position + sid.ref.size() - 1;
     alleles[i] = sid.allele_id;
     src_alleles[i] = NA_INTEGER;
+    natures[i] = sid.get_nature_description();
+    causes[i] = sid.cause;
 
     const auto code = find_code(sid, driver_codes);
 
@@ -222,6 +231,7 @@ inline void fill_CNA_row(const CLONES::Mutations::CNA &cna, Rcpp::CharacterVecto
                          Rcpp::CharacterVector &refs, Rcpp::CharacterVector &alts,
                          Rcpp::IntegerVector &starts, Rcpp::IntegerVector &ends,
                          Rcpp::IntegerVector &alleles, Rcpp::IntegerVector &src_alleles,
+                         Rcpp::CharacterVector &natures, Rcpp::CharacterVector &causes,
                          Rcpp::CharacterVector &codes, const size_t &i)
 {
     using namespace Rcpp;
@@ -234,6 +244,8 @@ inline void fill_CNA_row(const CLONES::Mutations::CNA &cna, Rcpp::CharacterVecto
     starts[i] = cna.position;
     ends[i] = cna.position + cna.length - 1;
     alleles[i] = (cna.dest == RANDOM_ALLELE ? NA_INTEGER : cna.dest);
+    natures[i] = cna.get_nature_description();
+    causes[i] = cna.cause;
 
     if (cna.type == CLONES::Mutations::CNA::Type::AMPLIFICATION) {
         src_alleles[i] = cna.source;
@@ -245,12 +257,14 @@ inline void fill_CNA_row(const CLONES::Mutations::CNA &cna, Rcpp::CharacterVecto
     codes[i] = NA_STRING;
 }
 
-inline void fill_WGD_row(Rcpp::CharacterVector &types, Rcpp::CharacterVector &CNA_types,
+inline void fill_WGD_row(const std::string& mutant_name,
+                         Rcpp::CharacterVector &types, Rcpp::CharacterVector &CNA_types,
                          Rcpp::CharacterVector &chrs, Rcpp::CharacterVector &refs,
                          Rcpp::CharacterVector &alts, Rcpp::IntegerVector &starts,
                          Rcpp::IntegerVector &ends, Rcpp::IntegerVector &alleles,
-                         Rcpp::IntegerVector &src_alleles, Rcpp::CharacterVector &codes,
-                         const size_t &i)
+                         Rcpp::IntegerVector &src_alleles,
+                         Rcpp::CharacterVector &natures, Rcpp::CharacterVector &causes,
+                         Rcpp::CharacterVector &codes, const size_t &i)
 {
     using namespace Rcpp;
     using namespace CLONES::Mutations;
@@ -264,7 +278,76 @@ inline void fill_WGD_row(Rcpp::CharacterVector &types, Rcpp::CharacterVector &CN
     ends[i] = NA_INTEGER;
     alleles[i] = NA_INTEGER;
     src_alleles[i] = NA_INTEGER;
+    natures[i] = CLONES::Mutations::Mutation::get_nature_description(CLONES::Mutations::Mutation::Nature::DRIVER);
+    causes[i] = mutant_name;
     codes[i] = NA_STRING;
+}
+
+void fill_mutation_list(const CLONES::Mutations::MutationList& mutations,
+                        const std::string& mutant_name,
+                        const std::map<CLONES::Mutations::SID, std::string>& driver_codes,
+                        Rcpp::CharacterVector &mutant_names, 
+                        Rcpp::CharacterVector &types, Rcpp::CharacterVector &CNA_types,
+                        Rcpp::CharacterVector &chrs, Rcpp::CharacterVector &refs,
+                        Rcpp::CharacterVector &alts, Rcpp::IntegerVector &application_order,
+                        Rcpp::IntegerVector &starts, Rcpp::IntegerVector &ends,
+                        Rcpp::IntegerVector &alleles, Rcpp::IntegerVector &src_alleles,
+                        Rcpp::CharacterVector &natures, Rcpp::CharacterVector &causes,
+                        Rcpp::CharacterVector &codes, size_t &i, size_t &mut_i)
+{
+    using namespace CLONES::Mutations;
+
+    for (auto dm_it = mutations.begin(); dm_it != mutations.end(); ++dm_it, ++mut_i, ++i) {
+        mutant_names[i] = mutant_name;
+        application_order[i] = mut_i;
+        switch (dm_it.get_type()) {
+        case MutationList::MutationType::SID_TURN:
+            fill_SID_row(dm_it.get_last_SID(), driver_codes, types, CNA_types, chrs,
+                         refs, alts, starts, ends, alleles, src_alleles, natures, causes,
+                         codes, i);
+            break;
+        case MutationList::MutationType::CNA_TURN:
+            fill_CNA_row(dm_it.get_last_CNA(), types, CNA_types, chrs, refs, alts,
+                         starts, ends, alleles, src_alleles, natures, causes, codes, i);
+            break;
+        case MutationList::MutationType::WGD_TURN:
+            fill_WGD_row(mutant_name, types, CNA_types, chrs, refs, alts, starts, ends,
+                         alleles, src_alleles, natures, causes, codes, i);
+            break;
+        default:
+            Rcpp::stop("Unsupported mutation type " +
+                       std::to_string(dm_it.get_type()));
+        }
+    }
+}
+
+Rcpp::List PhylogeneticForest::const_node::arising_mutations() const
+{
+    using namespace Rcpp;
+
+    const auto& mutations = node.arising_mutations();
+
+    const size_t num_of_rows{mutations.size()};
+
+    CharacterVector mutant_names(num_of_rows), chrs(num_of_rows), types(num_of_rows),
+        CNA_types(num_of_rows), refs(num_of_rows), alts(num_of_rows), codes(num_of_rows),
+        natures(num_of_rows), causes(num_of_rows);
+    IntegerVector starts(num_of_rows), ends(num_of_rows), application_order(num_of_rows),
+        alleles(num_of_rows), src_alleles(num_of_rows);
+
+    size_t i{0}, mut_i{0};
+    fill_mutation_list(mutations, node.get_species_name(), forest->driver_codes, 
+                       mutant_names, types, CNA_types, chrs, refs, alts,
+                       application_order, starts, ends, alleles, src_alleles, natures,
+                       causes, codes, i, mut_i);
+
+    return DataFrame::create(_["order"] = application_order,
+                             _["type"] = types, _["CNA_type"] = CNA_types,
+                             _["chr"] = chrs, _["start"] = starts, _["end"] = ends,
+                             _["ref"] = refs, _["alt"] = alts, _["allele"] = alleles,
+                             _["src_allele"] = src_alleles,
+                             _["nature"] = natures, _["cause"] = causes,
+                             _["code"] = codes);
 }
 
 Rcpp::List PhylogeneticForest::get_driver_mutations() const
@@ -281,7 +364,8 @@ Rcpp::List PhylogeneticForest::get_driver_mutations() const
     }
 
     CharacterVector mutant_names(num_of_rows), chrs(num_of_rows), types(num_of_rows),
-        CNA_types(num_of_rows), refs(num_of_rows), alts(num_of_rows), codes(num_of_rows);
+        CNA_types(num_of_rows), refs(num_of_rows), alts(num_of_rows), codes(num_of_rows),
+        natures(num_of_rows), causes(num_of_rows);
     IntegerVector starts(num_of_rows), ends(num_of_rows), application_order(num_of_rows),
         alleles(num_of_rows), src_alleles(num_of_rows);
 
@@ -290,28 +374,10 @@ Rcpp::List PhylogeneticForest::get_driver_mutations() const
          mutational_properties.get_driver_mutations()) {
 
         size_t mut_i{0};
-        for (auto dm_it = driver_mutations.begin(); dm_it != driver_mutations.end();
-             ++dm_it, ++mut_i, ++i) {
-            mutant_names[i] = driver_mutations.name;
-            application_order[i] = mut_i;
-            switch (dm_it.get_type()) {
-            case MutationList::MutationType::SID_TURN:
-                fill_SID_row(dm_it.get_last_SID(), driver_codes, types, CNA_types, chrs,
-                             refs, alts, starts, ends, alleles, src_alleles, codes, i);
-                break;
-            case MutationList::MutationType::CNA_TURN:
-                fill_CNA_row(dm_it.get_last_CNA(), types, CNA_types, chrs, refs, alts,
-                             starts, ends, alleles, src_alleles, codes, i);
-                break;
-            case MutationList::MutationType::WGD_TURN:
-                fill_WGD_row(types, CNA_types, chrs, refs, alts, starts, ends, alleles,
-                             src_alleles, codes, i);
-                break;
-            default:
-                Rcpp::stop("Unsupported mutation type " +
-                           std::to_string(dm_it.get_type()));
-            }
-        }
+        fill_mutation_list(driver_mutations, mutant, driver_codes,
+                           mutant_names, types, CNA_types, chrs,
+                           refs, alts, application_order, starts, ends, alleles,
+                           src_alleles, natures, causes, codes, i, mut_i);
     }
 
     return DataFrame::create(_["mutant"] = mutant_names, _["order"] = application_order,

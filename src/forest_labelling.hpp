@@ -81,22 +81,7 @@ public:
     }
 };
 
-template<typename FOREST>
-LabelTour<FOREST> get_label_tour(const FOREST& forest,
-                                 const Rcpp::Function& R_functor,
-                                 const Rcpp::RObject& init_label,
-                                 const bool only_leaves)
-{
-    LabellingFunctor<FOREST> C_functor{R_functor};
-
-    return {forest, C_functor, init_label, only_leaves};
-}
-
-/*
-Rcpp::RObject get_label_tour(const Rcpp::RObject& forest,
-                             const Rcpp::Function& R_functor,
-                             const Rcpp::RObject& init_label,
-                             const bool only_leaves);
-*/
+SEXP get_label_tour(const SEXP& forest, const Rcpp::Function& R_functor,
+                    const Rcpp::RObject& init_label, const bool only_leaves);
 
 #endif // __PROCESS_FOREST_LABELLING__
