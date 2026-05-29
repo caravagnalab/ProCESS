@@ -1287,19 +1287,31 @@ RCPP_MODULE(Mutants)
 //' @description This method updates the rates of a species.
 //' @param species The species whose rates must be updated.
 //' @param rates The list of rates to be updated.
+//' @seealso [TissueSimulation$get_rates()]
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
 //'
 //' # create a simulation
 //' sim <- TissueSimulation()
-//' sim$add_mutant(name = "A",
-//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'   growth_rates = c("+" = 0.2, "-" = 0.08),
-//'   death_rates = c("+" = 0.1, "-" = 0.01))
 //'
-//' # Set the death and epigenetic switch rates of "A-" to 0
-//' sim$update_rates("A-", c(switch=0, death=0))
+//' # add mutant "A" and a cell of "A" in the simulation
+//' sim$add_mutant(name = "A", growth_rate = 0.2,
+//'                death_rate = 0.01)
+//' sim$place_cell("A", 500, 500)
+//' sim$history_delta <- 10
+//'
+//' # let the simulation evolve up to simulated time 100
+//' sim$run_up_to_time(100)
+//'
+//' # update "A"'s death rate to 0.3
+//' sim$update_rates("A", c(death=0.3))
+//'
+//' # let the simulation evolve up to simulated time 200
+//' sim$run_up_to_time(200)
+//'
+//' # plot cell number evolution over time
+//' plot_timeseries(sim)
         .method("update_rates", &TissueSimulation::update_rates,
                 "Update the rates of a species")
 
