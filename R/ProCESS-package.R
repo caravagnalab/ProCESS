@@ -21,6 +21,12 @@
   loadModule("Sequencing", TRUE)
   loadModule("Logics", TRUE)
 
+  if (exists("WGD", envir = .GlobalEnv, inherits = FALSE)) {
+    message(paste(pkgname, "overwrites active binding \"WGD\"."))
+
+    rm("WGD", envir = .GlobalEnv)
+  }
+
   wg_doubling <- function() new(WholeGenomeDoubling)
 
   makeActiveBinding("WGD", wg_doubling, .GlobalEnv)
