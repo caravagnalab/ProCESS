@@ -47,8 +47,6 @@
 #' @param list_all_species A Boolean flag to show all species in
 #'   the legend (default: FALSE).
 #' @return An editable ggplot plot.
-#' @export
-#'
 #' @examples
 #' set.seed(0)
 #' sim <- TissueSimulation(epigenetic_states = c("E1", "E2"))
@@ -96,6 +94,8 @@
 #' names(color_map) <- c("A[E1]", "A[E2]")
 #'
 #' plot_tissue(sim, color_map = color_map)
+#' @export
+#'
 plot_tissue <- function(simulation, num_of_bins = 100,
                         before_sample = NULL,
                         at_sample = NULL,
