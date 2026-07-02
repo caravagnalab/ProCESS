@@ -1,5 +1,5 @@
 
-# ProCESS <a href="caravagnalab.github.io/ProCESS/tree/develop"><img src="man/figures/logo.png" align="right" height="120" alt="" /></a>
+# ProCESS <a href="caravagnalab.github.io/ProCESS/tree/1.3"><img src="man/figures/logo.png" align="right" height="120" alt="" /></a>
 
 <!-- badges: start -->
 
@@ -20,7 +20,7 @@ evolution simulator, and provides additional plotting functions.
 #### Help and support
 
 [![ProCESS GitHub
-Pages](https://img.shields.io/badge/GitHub%20Pages-https://caravagnalab.github.io/ProCESS/develop-yellow.svg)](https://caravagnalab.github.io/ProCESS/develop)
+Pages](https://img.shields.io/badge/GitHub%20Pages-https://caravagnalab.github.io/ProCESS/1.3-yellow.svg)](https://caravagnalab.github.io/ProCESS/1.3)
 
 ------------------------------------------------------------------------
 
@@ -37,7 +37,7 @@ In order to install the development version of `ProCESS`, you need:
 When the requirements have been satisfied, issue the R command:
 
 ``` r
-pak::pak("caravagnalab/ProCESS@develop")
+pak::pak("caravagnalab/ProCESS@1.3")
 ```
 
 ------------------------------------------------------------------------
@@ -67,7 +67,7 @@ sim$place_cell("A[E1]", 150, 150)
 
 # let the simulation evolve until the species "A[E2]" has less than 10 cells
 sim$run_up_to_size("A[E2]", 10)
-#>  [████████████████████████████████████████] 100% [00m:00s] Saving snapshot
+#>  [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                         
 
 # add a mutant "A" and set its species rates
 sim$add_mutant("B", list(E1 = list(duplication = 3, death = 1,
@@ -80,7 +80,7 @@ sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
 
 # let the simulation evolve until the species "A[E2]" has less than 3000 cells
 sim$run_up_to_size("B[E1]", 2e4)
-#>  [███████████████████---------------------] 46% [00m:00s] Cells: 12895 [███████████████████████████████---------] 75% [00m:00s] Cells: 19989 [████████████████████████████████████████] 100% [00m:01s] Saving snapshot
+#>  [████████████████████████████████████████] 100% [00m:12s] Saving snapshot                                         
 
 # plot the tissue
 plot_tissue(sim)
@@ -97,7 +97,7 @@ sim$sample_cells("Sample_C", c(50, 100), c(100, 150))
 
 # let the simulation evolve until the species "B[E1]" has less than 80k cells
 sim$run_up_to_size("B[E1]", 2e4)
-#>  [████████████████████████████████████████] 100% [00m:00s] Saving snapshot
+#>  [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                         
 
 # plot the tissue
 plot_tissue(sim)
@@ -117,7 +117,7 @@ plot_forest(sample_forest) %>%
 <img src="man/figures/README-forest-1.png" alt="Sample forest" width="100%" />
 
 For more advanced usage examples, please refer to [![ProCESS GitHub
-Pages](https://img.shields.io/badge/GitHub%20Pages-https://caravagnalab.github.io/ProCESS/develop-yellow.svg)](https://caravagnalab.github.io/ProCESS/develop).
+Pages](https://img.shields.io/badge/GitHub%20Pages-https://caravagnalab.github.io/ProCESS/1.3-yellow.svg)](https://caravagnalab.github.io/ProCESS/1.3)
 
 ------------------------------------------------------------------------
 

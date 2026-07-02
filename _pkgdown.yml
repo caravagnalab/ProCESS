@@ -1,12 +1,12 @@
-url: https://caravagnalab.github.io/ProCESS/develop
+url: https://caravagnalab.github.io/ProCESS/1.3
 template:
   bootstrap: 5
   math-rendering: katex
 
 repo:
   url:
-    home: https://github.com/caravagnalab/ProCESS/tree/develop
-    source: https://github.com/caravagnalab/ProCESS/tree/develop
+    home: https://github.com/caravagnalab/ProCESS/tree/1.3
+    source: https://github.com/caravagnalab/ProCESS/tree/1.3
     issue: https://github.com/caravagnalab/ProCESS/issues
     user: https://github.com/caravagnalab
 
