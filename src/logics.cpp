@@ -42,24 +42,26 @@ RCPP_MODULE(Logics)
 //' # set the seed of the random number generator
 //' set.seed(0)
 //'
-//' # create a simulation
-//' sim <- TissueSimulation()
-//' sim$add_mutant(name = "A",
-//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'   growth_rates = c("+" = 0.2, "-" = 0.08),
-//'   death_rates = c("+" = 0.1, "-" = 0.01))
+//' # create a simulation with epigenetic states
+//' sim <- TissueSimulation(epigenetic_states = c("E1", "E2"))
 //'
-//' # get the variable representing the cardinality of A+ in sim
-//' sim$var("A+")
+//' # add the mutant "A" and set its species rates
+//' sim$add_mutant("A", list(E1 = list(duplication = 0.2, death = 0.1,
+//'                                    E2 = 0.01),
+//'                          E2 = list(duplication = 0.08, death = 0.01,
+//'                                    E1 = 0.01)))
 //'
-//' # get the variable representing the number of duplications in A+
-//' sim$var("A+.duplications")
+//' # get the variable representing the cardinality of "A[E1]" in sim
+//' sim$var("A[E1]")
+//'
+//' # get the variable representing the number of duplications in "A[E1]"
+//' sim$var("A[E1].duplications")
 //'
 //' # get the variable representing the simulation time
 //' sim$var("Time")
 //'
 //' # the logic variables can be stored in an R variable
-//' va_p <- sim$var("A+")
+//' va_p <- sim$var("A[E1]")
 //' va_p
 //' @seealso [TissueSimulation$var()] to build a variable
     class_<Logics::Variable>("Variable")
@@ -86,9 +88,7 @@ RCPP_MODULE(Logics)
 //'
 //' # create a simulation
 //' sim <- TissueSimulation()
-//' sim$add_mutant(name = "A",
-//'   growth_rates = 0.2,
-//'   death_rates = 0.1)
+//' sim$add_mutant("A", c(duplication = 0.2, death = 0.1))
 //'
 //' # build an expression
 //' sim$var("A") - 2 * sim$var("Time") * sim$var("A.duplications") + 3.4
@@ -141,23 +141,25 @@ RCPP_MODULE(Logics)
 //' # set the seed of the random number generator
 //' set.seed(0)
 //'
-//' # create a simulation
-//' sim <- TissueSimulation()
-//' sim$add_mutant(name = "A",
-//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'   growth_rates = c("+" = 0.2, "-" = 0.08),
-//'   death_rates = c("+" = 0.1, "-" = 0.01))
+//' # create a simulation with epigenetic states
+//' sim <- TissueSimulation(epigenetic_states = c("E1", "E2"))
+//'
+//' # add the mutant "A" and set its species rates
+//' sim$add_mutant("A", list(E1 = list(duplication = 0.2, death = 0.1,
+//'                                    E2 = 0.01),
+//'                          E2 = list(duplication = 0.08, death = 0.01,
+//'                                    E1 = 0.01)))
 //'
 //' # get a formula that holds when the cardinality of the mutant A
 //' # is greater than 1000
-//' f1 <- sim$var("A+") + sim$var("A-") > 1000
+//' f1 <- sim$var("A[E1]") + sim$var("A[E2]") > 1000
 //'
 //' # get a formula that holds when the simulated time is 10 at least
 //' f2 <- sim$var("Time") >= 40
 //'
 //' # get a formula that holds when the number of duplications doubles
-//' # the switch from A+
-//' f3 <- sim$var("A+.duplications") > 2 * sim$var("A+.switches")
+//' # the switch from A[E1]
+//' f3 <- sim$var("A[E1].duplications") > 2 * sim$var("A[E1].switches")
 //'
 //' # combine above formulas by using Boolean operators `&` and `|`
 //' f1 & (f2 | f3)

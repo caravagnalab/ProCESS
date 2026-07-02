@@ -19,14 +19,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-> *Disclaimer:* ProCESS/CLONES internally implements the
-> probability distributions using the C++11 random number
-> distribution classes. The standard does not specify their
-> algorithms, and the class implementations are left free
-> for the compiler. Thus, the simulation output depends on
-> the compiler used to compile [CLONES](https://github.com/albertocasagrande/CLONES), and
-> because of that, the results reported in this article may
-> differ from those obtained by the reader.
+> *Disclaimer:* ProCESS/CLONES implements probability distributions using the
+> C++11 random number distribution classes. Since the standard does not specify
+> the underlying algorithms, their implementations are left to the compiler.
+> Consequently, the simulation output depends on the compiler used to build
+> [CLONES](https://github.com/albertocasagrande/CLONES), and the results
+> reported in this article may differ from those obtained by the reader.
 
 The following steps are required to simulate a tissue.
 
@@ -49,7 +47,7 @@ created.
 ```{r, eval=FALSE}
 library(ProCESS)
 
-# Default constructor
+# default constructor
 sim <- TissueSimulation()
 ```
 
@@ -65,20 +63,20 @@ library(ProCESS)
 # set the seed of the random number generator
 set.seed(0)
 
-# Call your simulation "Test"
+# call your simulation "Test"
 sim <- TissueSimulation("Test")
 ```
 
 The `set.seed()` call is not mandatory and can be omitted; however, it is
 highly recommended to ensure the simulation repeatability.
 
-The optional Boolean parameter `save_snapshots` can be used to save the 
+The optional Boolean parameter `save_snapshots` can be used to save the
 simulation progress to the disk and recover it later. By
 setting `save_snapshots` to `TRUE`, the simulation progress os
 saved in a directory named after the simulation.
 
 ```{r, eval = FALSE}
-# The progress of the simulation will be saved in the "Test" folder.
+# the progress of the simulation will be saved in the "Test" folder.
 # If the directory "Test" already exists, an exception is raised.
 sim <- TissueSimulation("Test", save_snapshots = TRUE)
 ```
@@ -94,14 +92,14 @@ corresponding variable.
 sim
 ```
 
-`TissueSimulation` objects expose methods to retrieve specific information 
+`TissueSimulation` objects expose methods to retrieve specific information
 and control the modelled simulations.
 
 ```{r}
-# Get the simulation directory, i.e., "Test"
+# get the simulation directory, i.e., "Test"
 sim$get_name()
 
-# Get the tissue size, i.e., c(1000,1000)
+# get the tissue size, i.e., c(1000,1000)
 sim$get_tissue_size()
 ```
 
@@ -115,7 +113,7 @@ the parameters `width` and `height`.
 # a height of 900
 sim <- TissueSimulation("Test", width = 1200, height = 900)
 
-# Get the tissue size, i.e., c(1200,900)
+# get the tissue size, i.e., c(1200,900)
 sim$get_tissue_size()
 ```
 
@@ -130,86 +128,122 @@ mutations. Cells in the same mutant can have different liveness rates
 due to different epigenetic states.
 
 A *species* is a mutant with an optional epigenetic state. At this point in the
-simulation, the mutant is just a name (`A`, `B`, etc.) that could later
-be linked to mutations of interest. The epigenome is a binary
-feature of a species, represented by epi-states `+`/`-` (positive
-and negative status). This is an abstraction that could represent an
-active/inactive state linked to promoter methylation or, more broadly,
-a phenotype. The evolution of mutants is non-reversible (no-back
-mutations model), while the evolution among epi-states is potentially
-reversible.
+simulation, the mutant is just a name (`A`, `B`, etc.) that could later be
+linked to mutations of interest. The epigenomic state is a discrete feature of a
+species. This is an abstraction that could represent a set of active/inactive
+states linked to promoter methylations or, more broadly, a phenotype. The
+evolution of mutants is non-reversible (no-back mutations model), while the
+evolution among epigenetic states is potentially reversible.
 
-For example, if we define two mutants `A` and `B` with their epi-states
-`+`/`-`, we have 4 distinct species: `A+` and `A-`, as well as `B+` and
-`B-`.
+For example, if we define a simulation with three epigenetic states `E1`, `E2`,
+and `E3` and two mutants `A` and `B`, we have 6 distinct species: `A[E1]`,
+`A[E2]`, `A[E3]`, `B[E1]`, `B[E2]`, and `B[E3]`.
 
-Hybrid models can be obtained, e.g., a mutant `A` (with no epi-states),
-together with `B+` and `B-`.
+The tissue epigenetic states can be added either at the simulation construction
+or by using the method
+<code>[TissueSimulation$add_epigenetic_states()](../reference/TissueSimulation-cash-add_epigenetic_states.md)</code>.
+
+```{r}
+sim <- TissueSimulation(epigenetic_states = c("E1", "E2"))
+
+# add two further epigenetic states
+sim$add_epigenetic_states(c("E3", "E4"))
+
+# get the simulation epigenetic states
+sim$get_epigenetic_states()
+```
 
 ### Evolutionary parameters
 
-We use a notation common in linear birth-death processes. If a species
-`A` has no epi-states, then its stochastic behaviour is defined by the
-state-change rates
+We use a notation common in linear birth-death processes. If a simulation has
+no epigenetic states, then any mutant `A` has exactly one species `A` and its
+the stochastic behaviour is defined by the state-change rates
 
 $$
 \begin{align}
-\text{(growth)}\quad A & \rightarrow_{\lambda} 2 A \\
-\text{(death)}\quad A & \rightarrow_{\delta} \emptyset
+\text{(duplication)}\quad A & \rightarrow_{\lambda_{A}} 2 A \\
+\text{(death)}\quad A & \rightarrow_{\delta_{A}} \emptyset
 \end{align}
 $$
 
 where:
 
--   $\lambda>0$ is the cell growth rate;
--   $\delta>0$ is the cell death rate.
+-   $\lambda_{A}>0$ is the cell duplication rate in `A`;
+-   $\delta_{A}>0$ is the cell death rate in `A`.
 
-Instead, if the species has epi-state `+` (denoted $A_\oplus$) and `-`
-(denoted $A_\ominus$), then its stochastic behaviour is defined by the
-state-change rates
+Instead, if the simulation has $n$ epigenetic states $E_1$, $E_2$,..., $E_n$,
+then the species of the mutant `A` has $n$ species denoted $A[E_1]$, $A[E_2]$,
+..., $A[E_n]$, respectively. The stochastic behaviour of the species $A[E_i]$ is
+defined by the state-change rates
 
 $$
 \begin{align}
-\text{(growth +)}\quad A_\oplus & \rightarrow_{\lambda_\oplus} 2 A_\oplus \\
-\text{(death +)}\quad A_\oplus & \rightarrow_{\delta_\oplus} \emptyset \\
-\text{(growth -)}\quad A_\ominus & \rightarrow_{\lambda_\ominus} 2 A_\ominus \\
-\text{(death -)}\quad A_\ominus & \rightarrow_{\delta_\ominus} \emptyset \\
-\text{(switch +-)}\quad A_\oplus & \rightarrow_{\epsilon_{+-}} A_\oplus + A_\ominus \\
-\text{(switch -+)}\quad A_\ominus & \rightarrow_{\epsilon_{-+}} A_\ominus + A_\oplus
+\text{(duplication $E_i$)}\quad A[E_i] & \rightarrow_{\lambda_{A,i}} 2 A[E_i] \\
+\text{(death $E_i$)}\quad A[E_i] & \rightarrow_{\delta_{A,i}} \emptyset \\
+\text{(switch from $E_i$ to $E_1$)}\quad A[E_i] & \rightarrow_{\epsilon_{A,i,1}} A[E_1] + A[E_i] \\
+&\vdots\\
+\text{(switch from $Ei$ to $E_n$)}\quad A[Ei] & \rightarrow_{\epsilon_{A,i,n}} A[E_n] + A[E_i]
 \end{align}
 $$
 
-where the rates $\lambda$ and $\delta$ are as above, and $\epsilon_{+-}$
-or $\epsilon_{-+}$ are the rates at which cells of a certain epi-state
-duplicate and flip the epigenetic marker of one of the progeny.
+where the rates $\lambda_{A,i}$ and $\delta_{A,i}$ are as above, and
+$\epsilon_{A,i,j}$ is the rate at which cells of the species $A[E_i]$ duplicate
+and let one of its progeny switch to $A[E_j]$.
+
+Let us add a mutant to the simulation with epigenetic states `E1`, `E2`, `E3`,
+and `E4` by using the method
+<code>[TissueSimulation$add_mutant()](../reference/TissueSimulation-cash-add_mutant.md)</code>.
 
 ```{r, eval=TRUE}
-sim$add_mutant(name = "A",
-               epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-               growth_rates = c("+" = 0.2, "-" = 0.08),
-               death_rates = c("+" = 0.05, "-" = 0.01))
+sim$add_mutant("A", list(E1 = list(duplication = 0.2, death = 0.05,
+                                   E2 = 0.01),
+                         E2 = list(duplication = 0.08, death = 0.01,
+                                   E1 = 0.01, E3 = 0.01),
+                         E3 = list(duplication = 0.08, death = 0.01,
+                                   E2 = 0.01)))
+```
+
+The first parameter of the method is the name of the mutant to be added.
+Instead, the second parameter of the method is a list of the rates to be set.
+
+When the simulation has epigenetic states, the list must be a named list of
+lists. Each name must be an epigenetic state, and the corresponding list
+specifies the rates of the species. The names of this second type of list must
+be among `"duplication"`, `"death"`, or any epigenetic state, while the values
+represent the rates. When the name of a value is an epigenetic state, the value
+itself is the rate of an epigenetic switch from the current state to the one
+specified by the rate names. All missing rates are set to zero by default.
+
+```{r}
+# get the simulation mutants
+sim$get_mutants()
 
 # updated object (counts refer to number of cells of each species)
 sim
 
-# Get the simulation species and their rates
-sim$get_species()
+# get the simulation rates that have been explicitly set
+sim$get_rates()
+
+# to get also the rates that haven't been explicitly set
+sim$get_rates(complete = TRUE)
 ```
 
-A mutant without epi-states could be added as
+When, instead, the simulation has not epigenetic states, the list must be a
+list of rates with names among `"duplication"` and `"death"`.
+A mutant in a simulation without epigenetic states could be added as
 
 ```{r, eval=FALSE}
-# Not run
-sim$add_mutant(name = "A", growth_rates = 0.2, death_rates =  0.1)
+# not run
+sim$add_mutant(name = "A", c(duplication = 0.2, death =  0.1))
 ```
 
 To be able to simulate the model, an initial cell needs to be displaced
 in the tissue.
 
 ```{r}
-# We add one cell of species A+ (mutant A in epi-state +) in
+# add one cell of species A[E1] (mutant A in epi-state E1) in
 # position (500, 500).
-sim$place_cell("A+", 500, 500)
+sim$place_cell("A[E1]", 500, 500)
 ```
 
 ### Visualisations
@@ -218,10 +252,10 @@ We can query the current state of the simulation and extract the
 position of each cell in the tissue.
 
 ```{r}
-# Counts per species
+# counts per species
 sim$get_counts()
 
-# Cells position (one so far)
+# cells position (one so far)
 sim$get_cells()
 ```
 
@@ -230,10 +264,10 @@ hexagonal bins to avoid plotting delays when the simulation uses
 thousands of cells.
 
 ```{r,  fig.height=4, fig.width=3, fig.alt=c("A pie-chart of the species cell count of a tumour consisting of a single cell.", "A representation of the tissue consisting of a single cell.")}
-# Pie-chart for counts
+# pie-chart for counts
 plot_state(sim)
 
-# Spatial distribution for the whole tissue (hexagonal bins)
+# spatial distribution for the whole tissue (hexagonal bins)
 plot_tissue(sim)
 ```
 
@@ -255,15 +289,16 @@ There are 4 ways to let the simulation evolve:
 ### Size-Based Simulation
 
 We can run the simulation up to when we have $\theta > 0$; cells of
-species `A+`
+species `A[E1]`
 
-```{r,  fig.height=4, fig.width=3, fig.alt=c("The tissue of a tumour with one mutant `A` and two species `A+` and `A-`. The species `A+` consists of 500 cells.")}
-# Counts per species is now 0
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The tissue of a tumour with one mutant `A` and two species `A[E1]` and `A[E2]`. The species `A[E1]` consists of 500 cells.")}
+# counts per species is now 0
 sim$get_counts()
 
-sim$run_up_to_size("A+", 500)
+# run the simulation until the species "A[E1]" contains less than 500 cells
+sim$run_up_to_size("A[E1]", 500)
 
-# Counts per species now reports 500 for A+
+# counts per species now reports 500 for A[E1]
 sim$get_counts()
 
 plot_tissue(sim)
@@ -274,22 +309,22 @@ plot_tissue(sim)
 The number of times each event has fired is accessible
 
 ```{r}
-# Get the number of fired event per species
+# get the number of fired event per species
 sim$get_firings()
 ```
 
-A small number of cell deaths have occurred in species `A-` up to this
-point, so we can simulate the system until there are 100 of them.
+A small number of cell deaths have occurred in species `A[E2]` up to this
+point, so we can simulate the system until there are 500 of them.
 
 ```{r}
-sim$run_up_to_event("death", "A-", 100)
+sim$run_up_to_event("death", "A[E2]", 500)
 
-# The row "death", for "A" "-" now reports 100
+# the row "death", for "A[E2]" now reports 1000
 sim$get_firings()
 ```
 
-```{r,  fig.height=4, fig.width=3, fig.alt=c("The tumour tissue after letting the simulation evolves until 100 deaths occurred to `A-` cells.")}
-# Plot the tissue by using 200 bins
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The tumour tissue after letting the simulation evolves until 100 deaths occurred to `A[E2]` cells.")}
+# plot the tissue by using 200 bins
 plot_tissue(sim, num_of_bins = 200)
 ```
 
@@ -299,44 +334,44 @@ It is also possible to take the current simulation clock as a reference,
 and simulate further.
 
 ```{r}
-# Get the simulation clock
+# get the simulation clock
 sim$get_clock()
 
-# Run the simulation for other 15 time units
+# run the simulation for other 15 time units
 sim$run_up_to_time(sim$get_clock() + 15)
 
-# Get again the simulation clock
+# get again the simulation clock
 sim$get_clock()
 ```
 
-```{r,  fig.height=4, fig.width=3, fig.alt=c("The tumour tissue after letting the simulation evolves until 100 deaths occurred to `A-` cells.")}
+```{r,  fig.height=4, fig.width=3, fig.alt=c("The tumour tissue after letting the simulation evolves until 100 deaths occurred to `A[E2]` cells.")}
 plot_tissue(sim)
 ```
 
 ##### Getting Cells (Advanced)
 
 At this point, if we query the simulation, we will find more cells (we
-use `dplyr` to process query results). For convenience, the getters
+use `dplyr` to ease result processing). For convenience, the getters
 accept parameters to subset the tissue.
 
 ```{r, message=FALSE}
-# load dplyr to use %>%
-require(dplyr)
+# load the package dplyr
+library(dplyr)
 
-# Get the cells in the tissue at current simulation time
+# get the cells in the tissue at current simulation time
 sim$get_cells() %>% head()
 
-# Get the cells in the tissue rectangular sample having
+# get the cells in the tissue rectangular sample having
 # [500,500] and [505,505] as lower and upper corners, respectively
 sim$get_cells(c(500, 500), c(505, 505))  %>% head()
 
-# Get the cells in the tissue having epigenetic state "-"
-sim$get_cells(c("A", "B"), c("-")) %>% head()
+# get the cells in the tissue having epigenetic state "E2"
+sim$get_cells(c("A", "B"), c("E2")) %>% head()
 
-# Get the cells in the tissue having epigenetic state "-" and,
+# get the cells in the tissue having epigenetic state "E2" and,
 # at the same time, belonging to rectangular sample bounded by
 # [500,500] and [505,505] as lower and upper corners, respectively
-sim$get_cells(c(500, 500), c(505, 505), c("A", "B"), c("-"))  %>% head()
+sim$get_cells(c(500, 500), c(505, 505), c("A", "B"), c("E2"))  %>% head()
 ```
 
 ### Evolving new species
@@ -345,54 +380,77 @@ ProCESS can select cells from the tissue randomly for each mutant, or
 within a constrained tissue area.
 
 ```{r}
-# Stochastic sampling from the whole tissue: it can return A+ or A-
+# random sampling from the whole tissue: it returns a cell having "A" as mutant
 sim$choose_cell_in("A")
 
-# Calling it again may result in a different cell
+# calling it again may result in a different cell
 sim$choose_cell_in("A")
 
-# Constrain sampling in the tissue rectangular selection [500,550]x[350,450]
+# it can also sample among the cells of a particular species
+sim$choose_cell_in("A[E2]")
+
+# ... or multiple species/mutant
+sim$choose_cell_in(c("A[E2]", "A[E3]"))
+
+# constrain sampling in the tissue rectangular selection [500,550]x[350,450]
 sim$choose_cell_in("A",  c(500, 350), c(550, 450))
 ```
+It is also possible to constrain the selection to the cells being neighbors of
+wild-type cells.
 
-This feature can be used to program the generation of new species,
+```{r}
+# random sampling from the tumour border
+sim$choose_border_cell_in("A")
+
+# constrain sampling to rectangular selection [500,550]x[350,450]
+sim$choose_border_cell_in(c("A[E2]", "A[E3]"),  c(500, 350), c(550, 450))
+```
+
+Choosing border cells is important when the border-driver growth model is
+adopted (this is the default option). See [this article](growth_models.md)
+for more details.
+
+The ability to select a cell can be used to program the generation of new species,
 mimicking new mutants that generate subclonal expansions.
 
-Imagine we want to add a new mutant `B` with epi-states -- and
-therefore new species `B+` and `B-` -- as descending from `A`, we need to:
+Imagine we want to add a new mutant `B` with epi-states -- and therefore new
+species `B[E1]`, `B[E2]`, `B[E3]`, and `B[E4]` -- as descending from `A`, we
+need to:
 
 -   locate one cell of mutant `A` in the tissue, which is where we
     will inject the new mutant;
 
--   add the specifics of mutant `B` (via <code>[TissueSimulation$add_mutant()](../reference/TissueSimulation-cash-add_mutant.md)</code>, 
+-   add the specifics of mutant `B` (via <code>[TissueSimulation$add_mutant()](../reference/TissueSimulation-cash-add_mutant.md)</code>,
     as we did for `A`);
 
 -   implement the change of the cell of mutant `A` to a cell of
     mutant `B`.
 
 ```{r}
-# We locate a random cell
-cell <- sim$choose_cell_in("A")
+# choose a border cell with mutant "A"
+cell <- sim$choose_border_cell_in("A")
 cell
 
-# Add mutant
-sim$add_mutant(name = "B",
-               epigenetic_rates = c("+-" = 0.05, "-+" = 0.05),
-               growth_rates = c("+" = 0.7, "-" = 0.3),
-               death_rates = c("+" = 0.05, "-" = 0.1))
+# add mutant "B"
+sim$add_mutant("B", list(E1 = list(duplication = 0.7, death = 0.05,
+                                   E2 = 0.05),
+                         E2 = list(duplication = 0.3, death = 0.1,
+                                   E1 = 0.05),
+                         E3 = list(death = 0.1, E2 = 0.05)))
 ```
 
-Then we inject the cell, and simulate a little bit.
+Then we inject the cell, and let the simulation evolve until the number
+of the cells in the species `B[E2]` is less than 10000.
 
 ```{r}
-# Mutant injection
+# mutate one of the children of `cell` into the species "B"
 sim$mutate_progeny(cell, "B")
 
-# Generated event A -> B either in + or - epi-states is now recorded
+# generated event A -> B either in any of the added epi-states
 sim$get_counts()
 
-# New evolution
-sim$run_up_to_size("B+", 20000)
+# evolve the simulation until "B[E2]" consists of less than 1e4 cells
+sim$run_up_to_size("B[E2]", 10000)
 ```
 
 At this point, we can inspect the tissue in more detail. It can help to
@@ -405,24 +463,24 @@ plot_tissue(sim, num_of_bins = 250)
 ```
 
 ```{r,  fig.height=6, fig.width=6, fig.alt=c("The tumour tissue in which cells are split by species.")}
-# Facet on species via ggplot
-library(ggplot2)
-
-plot_tissue(sim, num_of_bins = 250) + facet_wrap(~species)
+plot_tissue(sim, num_of_bins = 250) + ggplot2::facet_wrap(~species)
 ```
 
 If, at this point in the simulation, we generate a new mutant `C` from
-`A` in the rectangle $[450,500]\times [550, 600]$.
+`A` in the rectangle $[450,500]\times [550, 650]$.
 
 ```{r}
-# Define evolutionary parameters
-sim$add_mutant(name = "C",
-               epigenetic_rates = c("+-" = 0.1, "-+" = 0.1),
-               growth_rates = c("+" = 0.2, "-" = 0.4),
-               death_rates = c("+" = 0.1, "-" = 0.01))
+# define evolutionary parameters
+sim$add_mutant("C", list(E1 = list(duplication = 0.2, death = 0.1,
+                                   E2 = 0.1),
+                         E2 = list(duplication = 0.4, death = 0.01,
+                                   E1 = 0.1)))
 
-# Choose and mutate
-sim$mutate_progeny(sim$choose_cell_in("A",  c(450, 550), c(500, 600)), "C")
+# choose a border cell in A[E1] or A[E2] in the rectangle [450,500]x[550,650]
+cell <- sim$choose_border_cell_in(c("A[E1]", "A[E2]"),
+                                  c(450, 550), c(500, 650))
+
+sim$mutate_progeny(cell, "C")
 
 sim$run_up_to_time(sim$get_clock() + 7)
 ```
@@ -440,7 +498,7 @@ In the tissue, we can manually inject multiple cells; all injected cells
 can be retrieved.
 
 ```{r}
-# Now it will return just the initial cell
+# now it will return just the initial cell
 sim$get_added_cells()
 ```
 
@@ -462,6 +520,6 @@ This threshold applies to all species and is set to 1 by default.
 ```{r}
 sim$death_activation_level
 
-# Change death activation level
+# change death activation level
 sim$death_activation_level <- 50
 ```

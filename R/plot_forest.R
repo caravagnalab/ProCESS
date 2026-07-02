@@ -32,7 +32,7 @@
 #'
 #' @examples
 #' sim <- TissueSimulation()
-#' sim$add_mutant(name = "A", growth_rates = 0.08, death_rates = 0.0)
+#' sim$add_mutant("A", c(duplication = 0.08))
 #' sim$place_cell("A", 500, 500)
 #' sim$run_up_to_time(60)
 #' sim$sample_cells("MySample", c(500, 500), c(510, 510))
@@ -44,30 +44,36 @@
 #' color_map <- c("#B2DF8A")
 #' names(color_map) <- c("A")
 #'
-#' plot_forest(forest, color_map=color_map)
+#' plot_forest(forest, color_map = color_map)
 plot_forest <- function(forest, highlight_sample = NULL, color_map = NULL) {
   stopifnot(inherits(forest, "Rcpp_SampleForest"))
 
-  forest_data <- forest$get_nodes() %>% dplyr::select(-.data$depth)
+  forest_data <- forest$get_nodes()
 
   if (nrow(forest_data) == 0) {
     warning("The forest does not contain any node")
     return(ggplot2::ggplot())
   } else {
-    forest_data[nrow(forest_data) + 1, ] <- c(NA, NA, NA, NA, NA, 0)
-
     forest_data <- forest_data %>%
       dplyr::as_tibble() %>%
       dplyr::rename(
         from = .data$ancestor,
         to = .data$cell_id
       ) %>%
-      dplyr::select(.data$from, .data$to, .data$mutant,
-                    .data$epistate, .data$sample, .data$birth_time) %>%
+      add_species_col() %>%
+      dplyr::select(.data$from, .data$to, .data$species,
+                    .data$sample, .data$birth_time)
+
+    first_cell <- forest_data %>%
+      dplyr::filter(.data$birth_time == 0)
+
+    forest_data <- forest_data %>%
+      dplyr::add_row(from = NA, to = NA,
+                     species = first_cell[1, ]$species,
+                     sample = NA, birth_time = 0) %>%
       dplyr::mutate(
         from = ifelse(is.na(.data$from), "WT", .data$from),
         to = ifelse(is.na(.data$to), "WT", .data$to),
-        species = paste0(.data$mutant, .data$epistate),
         sample = ifelse(is.na(.data$sample), "N/A", .data$sample),
         highlight = FALSE
       )
@@ -120,8 +126,6 @@ plot_forest <- function(forest, highlight_sample = NULL, color_map = NULL) {
                                                               "indianred3",
                                                               "black")))
 
-    group_name <- get_group_cell_name(forest)
-
     graph_plot +
       ggraph::geom_node_point(ggplot2::aes(color = .data$species,
                                            shape = ifelse(is.na(.data$sample),
@@ -133,14 +137,14 @@ plot_forest <- function(forest, highlight_sample = NULL, color_map = NULL) {
       ggplot2::theme_minimal() +
       ggplot2::theme(legend.position = "bottom") +
       ggplot2::labs(
-        color = group_name,
+        color = "Species",
         shape = "Sample",
         x = NULL,
         y = "Time"
       ) +
       ggplot2::guides(size = "none",
                       shape = ggplot2::guide_legend("Sample"),
-                      color = ggplot2::guide_legend(group_name)) +
+                      color = ggplot2::guide_legend("Species")) +
       ggplot2::scale_size_manual(
         values = point_size
       ) +

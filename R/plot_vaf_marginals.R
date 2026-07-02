@@ -101,9 +101,7 @@ add_marginals_driver_mutation_labels <- function(plot, data, driver_mutations) {
 #' set.seed(0)
 #'
 #' sim <- TissueSimulation()
-#' sim$add_mutant(name = "A",
-#'                growth_rates = 0.1,
-#'                death_rates = 0.0)
+#' sim$add_mutant("A", c(duplication = 0.1))
 #' sim$place_cell("A", 500, 500)
 #' sim$run_up_to_time(100)
 #'
@@ -114,10 +112,8 @@ add_marginals_driver_mutation_labels <- function(plot, data, driver_mutations) {
 #' sim$sample_cells("SampleA", bbox$lower_corner, bbox$upper_corner)
 #'
 #' # adding second mutant
-#' sim$add_mutant(name = "B",
-#'                growth_rates = 0.3,
-#'                death_rates = 0.0)
-#' sim$mutate_progeny(sim$choose_cell_in("A"), "B")
+#' sim$add_mutant("B", c(duplication = 0.3))
+#' sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
 #' sim$run_up_to_time(300)
 #'
 #' # sampling tissue again
@@ -129,10 +125,10 @@ add_marginals_driver_mutation_labels <- function(plot, data, driver_mutations) {
 #' # placing mutations
 #' m_engine <- MutationEngine(setup_code = "demo")
 #'
-#' m_engine$add_mutant(mutant_name="A", passenger_rates=c(SNV=5e-8),
+#' m_engine$add_mutant("A", passenger_rates = c(SNV = 5e-8),
 #'                     drivers = list(SNV("22", 16510210, "C", "T", allele = 1),
 #'                                    "DGCR8 P26L"))
-#' m_engine$add_mutant(mutant_name="B", passenger_rates=c(SNV=5e-9),
+#' m_engine$add_mutant("B", passenger_rates = c(SNV = 5e-9),
 #'                     drivers = list("DGCR8 A18V"))
 #' m_engine$add_exposure(c(SBS1 = 0.2, SBS5 = 0.8))
 #'
@@ -154,7 +150,7 @@ add_marginals_driver_mutation_labels <- function(plot, data, driver_mutations) {
 #' }
 #'
 #' # plotting the VAF marginals without germinal and pre-neoplastic
-#' plot_VAF_marginals(seq_results, mutation_filter=filter_data)
+#' plot_VAF_marginals(seq_results, mutation_filter = filter_data)
 #'
 #' # plotting the VAF marginals filtering out mutations having
 #' # the VAF below 0.2 in both the samples

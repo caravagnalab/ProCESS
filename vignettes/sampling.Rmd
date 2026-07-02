@@ -19,14 +19,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-> *Disclaimer:* ProCESS/CLONES internally implements the
-> probability distributions using the C++11 random number
-> distribution classes. The standard does not specify their
-> algorithms, and the class implementations are left free
-> for the compiler. Thus, the simulation output depends on
-> the compiler used to compile [CLONES](https://github.com/albertocasagrande/CLONES), and
-> because of that, the results reported in this article may
-> differ from those obtained by the reader.
+> *Disclaimer:* ProCESS/CLONES implements probability distributions using the
+> C++11 random number distribution classes. Since the standard does not specify
+> the underlying algorithms, their implementations are left to the compiler.
+> Consequently, the simulation output depends on the compiler used to build
+> [CLONES](https://github.com/albertocasagrande/CLONES), and the results
+> reported in this article may differ from those obtained by the reader.
 
 Once one has familiarised oneself with how a tumour evolution simulation can be
 programmed using ProCESS (see the [article on tissue simulation](tissue_simulation.md)), the next
@@ -48,15 +46,15 @@ from simpler to more complex simulation scenarios. We consider:
 We consider a simple monoclonal model, without an epi-state.
 
 ```{r, eval=TRUE}
-library(ProCESS)
+library("ProCESS")
 
 # set the seed of the random number generator
 set.seed(0)
 
-# Monoclonal model, no epigenetic state
+# monoclonal model, no epigenetic state
 sim <- TissueSimulation("Monoclonal")
 
-sim$add_mutant(name = "A", growth_rates = 0.1, death_rates = 0.01)
+sim$add_mutant("A", c(duplication = 0.1, death = 0.01))
 
 sim$place_cell("A", 500, 500)
 sim$run_up_to_size("A", 60000)
@@ -74,20 +72,20 @@ For this simulation, we define two samples with names `S_1_1` and
 `S_1_2`.
 
 ```{r,  fig.height=4, fig.width=3, fig.alt=c("The rectangular regions corresponding to the samples S_1_1 and S_1_2.")}
-# We collect a squared box of (bbox_width x bbox_width) cells
+# collect a squared box of (bbox_width x bbox_width) cells
 bbox_width <- 50
 
-# Box A1
+# box A1
 bbox1_p <- c(400, 400)
 bbox1_q <- bbox1_p + bbox_width
 
-# Box B1
+# box B1
 bbox2_p <- c(500, 500)
 bbox2_q <- bbox2_p + bbox_width
 
 library(ggplot2)
 
-# View the boxes
+# view the boxes
 current +
   geom_rect(xmin = bbox1_p[1], xmax = bbox1_q[2],
             ymin = bbox1_p[1], ymax = bbox1_q[2],
@@ -96,7 +94,7 @@ current +
             ymin = bbox2_p[1], ymax = bbox2_q[2],
             fill = NA, color = "black")
 
-# Sampling
+# collect two samples from the two boxes
 sim$sample_cells("S_1_1", bottom_left = bbox1_p, top_right = bbox1_q)
 sim$sample_cells("S_1_2", bottom_left = bbox2_p, top_right = bbox2_q)
 ```
@@ -119,7 +117,7 @@ which now will not find any tumour cells in the sampled region.
 ```{r}
 library(dplyr)
 
-# This should be empty
+# this should be empty
 sim$get_cells(c(400, 400), c(400 + bbox_width, 400 + bbox_width)) %>% head
 ```
 
@@ -151,7 +149,7 @@ their ancestors. The field `sample` is not available for internal nodes,
 and reports the sample name otherwise.
 
 ```{r}
-# The leaves in the forest represent sampled cells
+# the leaves in the forest represent sampled cells
 forest$get_nodes() %>%
   filter(!is.na(.data$sample)) %>%
   head
@@ -160,7 +158,7 @@ forest$get_nodes() %>%
 The roots of the forest have no ancestors.
 
 ```{r}
-# If it is one cell, then the forest is a tree
+# if it is one cell, then the forest is a tree
 forest$get_nodes() %>%
   filter(is.na(.data$ancestor))
 ```
@@ -184,7 +182,7 @@ very large canvas is used. For this reason, it is possible to subset
 the forest.
 
 ```{r,  fig.height=6, fig.width=11, fig.alt=c("The sub-forest of sample S_1_1.")}
-# Extract the subforest linked to sample
+# extract the subforest linked to sample
 S_1_1_forest <- forest$get_subforest_for("S_1_1")
 
 plot_forest(S_1_1_forest)
@@ -194,7 +192,7 @@ In general, these plots can be annotated with extra information, such as
 the sampling times and the MRCAs of each sample in the forest.
 
 ```{r,  fig.height=6, fig.width=11, fig.alt=c("The annotated forest of S_1_1 and S_1_2.","The annotated sub-forest of the sample S_1_1.")}
-# Full plot
+# full plot
 plot_forest(forest) %>%
   annotate_forest(forest)
 # S_1_1 plot
@@ -210,7 +208,7 @@ set.seed(0)
 
 sim <- TissueSimulation("Randomised")
 
-sim$add_mutant(name = "A", growth_rates = 0.1, death_rates = 0.01)
+sim$add_mutant("A", c(duplication = 0.1, death = 0.01))
 
 sim$place_cell("A", 500, 500)
 sim$run_up_to_size("A", 60000)
@@ -220,20 +218,15 @@ We include a new mutant and let it grow. This new mutant has much higher
 growth rates than its ancestor.
 
 ```{r,  fig.height=4, fig.width=3, fig.alt=c("A tumour having two mutants/species with different rates.")}
-# Add a new mutant
-sim$add_mutant(name = "B", growth_rates = 1, death_rates = 0.01)
-sim$mutate_progeny(sim$choose_cell_in("A"), "B")
+# add a new mutant
+sim$add_mutant("B", c(duplication = 1, death = 0.01))
+sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
 
 sim$run_up_to_size("B", 10000)
 
 current <- plot_tissue(sim)
 current
 ```
-
-Since the mutant start has been randomised by
-<code>[TissueSimulation$choose_cell_in()](../reference/TissueSimulation-cash-choose_cell_in.md)</code>,
-we have no exact idea of where to sample to obtain, for example, $100$ of
-its cells.We can visually inspect the simulation, but it is slow.
 
 ProCESS provides a 
 <code>[TissueSimulation$search_sample()](../reference/TissueSimulation-cash-search_sample.md)</code>
@@ -254,11 +247,11 @@ This allows for programming sampling without having a clear idea of the
 tissue conformation.
 
 ```{r,  fig.height=4, fig.width=3, fig.alt=c("The rectangle delimiting the sample S_2_1 containing 2000 cells of mutant B at least.")}
-# A bounding box 50x50 with at least 100 cells of species B
+# a bounding box 50x50 with at least 100 cells of species B
 n_w <- n_h <- 50
 ncells <- 0.8 * n_w * n_h
 
-# Sampling ncells with random box sampling of boxes of size n_w x n_h
+# sampling ncells with random box sampling of boxes of size n_w x n_h
 bbox <- sim$search_sample(c("B" = ncells), n_w, n_h)
 
 # plot the bounding box
@@ -326,27 +319,27 @@ plot_forest(forest) %>%
   annotate_forest(forest)
 ```
 
-## Two populations with an epi-state
+## Two populations with epigenetic states
 
-We are now ready to simulate a model with epigenetic switches and
-sub-clonal expansions.
+We are now ready to simulate a model with epigenetic states and sub-clonal
+expansions. The following example uses two epigenetic states. However, user can
+create as many epigenetic states as they need.
 
 ```{r,  fig.height=4, fig.alt=c("A tumour having one mutants and two species with different rates.")}
 # set the seed of the random number generator
 set.seed(0)
 
-sim <- TissueSimulation("Two Populations")
+sim <- TissueSimulation("Two Populations", epigenetic_states = c("E1", "E2"))
 
 sim$death_activation_level <- 20
 
-# First mutant
-sim$add_mutant(name = "A",
-               epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-               growth_rates = c("+" = 0.1, "-" = 0.08),
-               death_rates = c("+" = 0.1, "-" = 0.01))
+# add mutant "A" and set its species rates
+sim$add_mutant("A", list(E1 = list(duplication = 0.1, death = 0.1, E2 = 0.01),
+                         E2 = list(duplication = 0.08, death = 0.01,
+                                   E1 = 0.01)))
 
-sim$place_cell("A+", 500, 500)
-sim$run_up_to_size("A+", 1000)
+sim$place_cell("A[E1]", 500, 500)
+sim$run_up_to_size("A[E1]", 1000)
 plot_tissue(sim, num_of_bins = 500)
 ```
 
@@ -367,7 +360,7 @@ plot_tissue(sim, num_of_bins = 500)
 ```
 
 ```{r,  fig.height=4, fig.width=3, fig.alt=c("The same tumour after 15 simulated time units have been elapsed.")}
-# Let it grow a bit more
+# let the simulation evolve for further 15 time units
 sim$run_up_to_time(sim$get_clock() + 15)
 
 plot_tissue(sim, num_of_bins = 500)
@@ -376,17 +369,15 @@ plot_tissue(sim, num_of_bins = 500)
 Add a new submutant.
 
 ```{r,  fig.height=4, fig.width=3, fig.alt=c("A new mutant with epigenetic state arose.")}
-cell <- sim$choose_cell_in("A")
+cell <- sim$choose_border_cell_in("A")
 
-sim$add_mutant(name = "B",
-               epigenetic_rates = c("+-" = 0.05, "-+" = 0.1),
-               growth_rates = c("+" = 0.8, "-" = 0.3),
-               death_rates = c("+" = 0.05, "-" = 0.05))
+sim$add_mutant("B", list(E1 = list(duplication = 0.08, death = 0.05, E2 = 0.05),
+                         E2 = list(duplication = 0.3, death = 0.05, E1 = 0.1)))
 
 sim$mutate_progeny(cell, "B")
 
-# let it grow more time units
-sim$run_up_to_size("B+", 7000)
+# let it grow more
+sim$run_up_to_size("B[E1]", 7000)
 
 plot_tissue(sim, num_of_bins = 500)
 ```

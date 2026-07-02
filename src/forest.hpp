@@ -63,6 +63,7 @@ public:
 
         const auto node_depths = forest.get_node_depths();
 
+        bool with_epigenetics{false};
         size_t i{0};
         for (const auto &cell_id : cell_ids) {
             ids[i] = cell_id;
@@ -75,8 +76,11 @@ public:
 
             depths[i] = node_depths.at(cell_id);
             mutants[i] = cell_node.get_mutant_name();
-            epi_states[i] = MutantProperties::signature_to_string(
-                cell_node.get_methylation_signature());
+            const auto epistate = cell_node.get_epistate_name();
+            if (epistate != "") {
+                epi_states[i] = epistate;
+                with_epigenetics = true;
+            }
 
             if (cell_node.is_leaf()) {
                 sample_names[i] = cell_node.get_sample().get_name();
@@ -88,10 +92,16 @@ public:
             ++i;
         }
 
+        if (with_epigenetics) {
+            return DataFrame::create(_["cell_id"] = ids, _["ancestor"] = ancestors,
+                                    _["depth"] = depths, _["mutant"] = mutants,
+                                    _["epistate"] = epi_states, _["sample"] = sample_names,
+                                    _["birth_time"] = birth);
+        }
+
         return DataFrame::create(_["cell_id"] = ids, _["ancestor"] = ancestors,
                                  _["depth"] = depths, _["mutant"] = mutants,
-                                 _["epistate"] = epi_states, _["sample"] = sample_names,
-                                 _["birth_time"] = birth);
+                                 _["sample"] = sample_names, _["birth_time"] = birth);
     }
 
     template <typename CPP_FOREST> static Rcpp::List get_nodes(const CPP_FOREST &forest)
@@ -116,15 +126,25 @@ public:
 
         using namespace CLONES::Mutants;
 
+        bool with_epigenetics{false};
         size_t i{0};
         for (const auto &[species_id, species_data] : forest.get_species_data()) {
-            mutant_names[i] = forest.get_mutant_name(species_data.mutant_id);
-            epi_states[i] = MutantProperties::signature_to_string(species_data.signature);
+            mutant_names[i] = species_data.get_mutant_name();
+
+            const auto epistate = species_data.get_epistate_name();
+            if (epistate != "") {
+                epi_states[i] = epistate;
+                with_epigenetics = true;
+            }
 
             ++i;
         }
 
-        return DataFrame::create(_["mutant"] = mutant_names, _["epistate"] = epi_states);
+        if (with_epigenetics) {
+            return DataFrame::create(_["mutant"] = mutant_names, _["epistate"] = epi_states);
+        }
+
+        return DataFrame::create(_["mutant"] = mutant_names);
     }
 
     template <typename CPP_FOREST>

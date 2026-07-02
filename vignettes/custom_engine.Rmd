@@ -20,14 +20,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-> *Disclaimer:* ProCESS/CLONES internally implements the
-> probability distributions using the C++11 random number
-> distribution classes. The standard does not specify their
-> algorithms, and the class implementations are left free
-> for the compiler. Thus, the simulation output depends on
-> the compiler used to compile [CLONES](https://github.com/albertocasagrande/CLONES), and because of that,
-> the results reported in this article may differ from
-> those obtained by the reader.
+> *Disclaimer:* ProCESS/CLONES implements probability distributions using the
+> C++11 random number distribution classes. Since the standard does not specify
+> the underlying algorithms, their implementations are left to the compiler.
+> Consequently, the simulation output depends on the compiler used to build
+> [CLONES](https://github.com/albertocasagrande/CLONES), and the results
+> reported in this article may differ from those obtained by the reader.
 
 ProCESS/CLONES can simulate genomic mutations in the cells represented in
 a `SampleForest` according to the specified SBS and indel mutational signatures
@@ -164,9 +162,9 @@ Let us rebuild the context index, sampling one context every 50.
 
 ```{r}
 # building a mutation engine by using the "demo" set-up configuration
-# and setting max_repetition_storage to 10,000,000
+# and setting max_repetition_storage to 10M
 m_engine <- MutationEngine(setup_code = "demo",
-                           max_repetition_storage = 10000000)
+                           max_repetition_storage = 1e7)
 ```
 
 The above call uses the already downloaded data in the directory `"demo"` to

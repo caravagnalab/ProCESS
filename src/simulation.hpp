@@ -24,7 +24,7 @@
 
 #include <Rcpp.h>
 
-#include <simulation.hpp>
+#include <tissue_simulation.hpp>
 
 #include "logics_impl.hpp"
 #include "sample_forest.hpp"
@@ -32,10 +32,10 @@
 
 struct PlainChooser
 {
-    std::shared_ptr<CLONES::Mutants::Evolutions::Simulation> sim_ptr;
+    std::shared_ptr<CLONES::Mutants::Evolutions::TissueSimulation> sim_ptr;
     std::string mutant_name;
 
-    PlainChooser(const std::shared_ptr<CLONES::Mutants::Evolutions::Simulation> &sim_ptr,
+    PlainChooser(const std::shared_ptr<CLONES::Mutants::Evolutions::TissueSimulation> &sim_ptr,
                  const std::string &mutant_name);
 
     inline const CLONES::Mutants::Evolutions::CellInTissue &operator()()
@@ -50,7 +50,7 @@ struct RectangularChooser : public PlainChooser
     CLONES::Mutants::RectangleSet rectangle;
 
     RectangularChooser(
-        const std::shared_ptr<CLONES::Mutants::Evolutions::Simulation> &sim_ptr,
+        const std::shared_ptr<CLONES::Mutants::Evolutions::TissueSimulation> &sim_ptr,
         const std::string &mutant_name,
         const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &lower_corner,
         const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner);
@@ -64,12 +64,15 @@ struct RectangularChooser : public PlainChooser
 
 class TissueSimulation
 {
-    std::shared_ptr<CLONES::Mutants::Evolutions::Simulation>
+    std::shared_ptr<CLONES::Mutants::Evolutions::TissueSimulation>
         sim_ptr;         //!< The pointer to a CLONES simulation object
     std::string name;    //!< The simulation name
     bool save_snapshots; //!< A flag to preserve binary dump after object destruction
 
-    using EventRateUpdateMap = std::map<std::string, double>;
+    inline static std::map<std::string, CLONES::Mutants::CellEventType> cell_event_names_inv{};
+
+    using DestRateUpdateMap = std::map<CLONES::Mutants::SpeciesId, double>;
+    using EventRateUpdateMap = std::map<std::string, DestRateUpdateMap>;
     using SpeciesRateUpdateMap = std::map<CLONES::Mutants::SpeciesId, EventRateUpdateMap>;
     using RateUpdateHistory = std::map<CLONES::Time, SpeciesRateUpdateMap>;
 
@@ -96,9 +99,6 @@ class TissueSimulation
     find_all_samples(const Rcpp::IntegerVector &minimum_cell_vector,
                      const uint16_t &width, const uint16_t &height) const;
 
-    void
-    add_mutant_rate_history(const CLONES::Mutants::MutantProperties &mutant_propeties);
-
     inline static std::string get_rates_update_history_file_name()
     {
         return "rates_update_history.dat";
@@ -120,8 +120,24 @@ class TissueSimulation
         return sim_path / std::filesystem::path(sample_name + ".rff");
     }
 
+    void set_rate_from_df_row(const SEXP& mutant,
+                              const SEXP& event_name,
+                              const double& rate, const size_t& row_num);
+
+    void set_rate_from_df_row(const SEXP& mutant,
+                              const SEXP& epistate,
+                              const SEXP& event_name,
+                              const SEXP& fc_epistate,
+                              const double& rate, const size_t& row_num);
+
+    void init_history_rate_updates();
   public:
-    template <typename SAMPLES> static Rcpp::List get_samples_info(const SAMPLES &samples)
+    static CLONES::Mutants::RectangleSet
+    get_rectangle(const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &lower_corner,
+                  const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner);
+
+    template <typename SAMPLES>
+    static Rcpp::List get_samples_info(const SAMPLES &samples)
     {
         using namespace Rcpp;
         CharacterVector sample_name(samples.size());
@@ -160,7 +176,7 @@ class TissueSimulation
     TissueSimulation(const std::string &simulation_name, const SEXP &seed,
                      const bool &save_snapshots);
 
-    TissueSimulation(const std::string &simulation_name, const int &seed,
+    TissueSimulation(const std::string &simulation_name, const int seed,
                      const bool &save_snapshots);
 
     ~TissueSimulation();
@@ -182,11 +198,29 @@ class TissueSimulation
         update_tissue(get_tissue_name(), width, height);
     }
 
-    void add_mutant(const std::string &mutant, const Rcpp::List &epigenetic_rates,
-                    const Rcpp::List &growth_rates, const Rcpp::List &death_rates);
+    Rcpp::List get_mutant_names() const;
 
-    void add_mutant(const std::string &mutant, const double &growth_rate,
-                    const double &death_rate);
+    Rcpp::List get_epigenetic_state_names() const;
+
+    void add_mutant(const std::string &mutant_name);
+
+    void add_mutant(const std::string &mutant_name, const Rcpp::List& rates);
+
+    inline void add_mutants(const std::list<std::string> &mutant_names)
+    {
+        for (const auto& mutant_name: mutant_names) {
+            add_mutant(mutant_name);
+        }
+    }
+
+    void add_epistate(const std::string &epigenetic_name);
+
+    inline void add_epistates(const std::list<std::string> &epigenetic_names)
+    {
+        for (const auto& epigenetic_name: epigenetic_names) {
+            add_epistate(epigenetic_name);
+        }
+    }
 
     inline CLONES::Time get_clock() const { return sim_ptr->get_time(); }
 
@@ -314,8 +348,6 @@ class TissueSimulation
     Rcpp::List get_firing_history(const CLONES::Time &minimum_time,
                                   const CLONES::Time &maximum_time) const;
 
-    Rcpp::List get_species() const;
-
     inline std::string get_name() const { return name; }
 
     inline const std::string &get_tissue_name() const
@@ -325,11 +357,32 @@ class TissueSimulation
 
     Rcpp::IntegerVector get_tissue_size() const;
 
-    Rcpp::List get_rates(const std::string &species_name) const;
+    CLONES::Mutants::SpeciesName get_species_name(const std::string& mutant_name, const std::string& species_name) const;
+
+    Rcpp::List get_species() const;
+
+    Rcpp::List get_rates() const;
+
+    Rcpp::List get_rates(const SEXP& complete) const;
 
     Rcpp::List get_rates_update_history() const;
 
-    void update_rates(const std::string &species_name, const Rcpp::List &list);
+    void set_rate(const std::string &src_species_name,
+                  const std::string &event_name,
+                  const double &rate);
+
+    void set_rate(const std::string &src_species_name,
+                  const std::string &event_name,
+                  std::string dst_name,
+                  const double &rate);
+
+    void set_species_rates(const std::string &species_name, const Rcpp::List& rates);
+
+    void set_rates(const Rcpp::DataFrame &rates);
+
+    void set_rates(const Rcpp::List &rates);
+
+    void set_rates(const std::string &mutant_name, const Rcpp::List& rates);
 
     template <typename CHOOSER,
               std::enable_if_t<std::is_base_of_v<PlainChooser, CHOOSER>, bool> = true>
@@ -361,17 +414,17 @@ class TissueSimulation
         Rcpp::stop("Missed to find a border cell");
     }
 
-    Rcpp::List choose_border_cell_in(const std::string &mutant_name);
+    Rcpp::List choose_border_cell_in(const SEXP &names);
 
     Rcpp::List choose_border_cell_in(
-        const std::string &mutant_name,
+        const SEXP &names,
         const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &lower_corner,
         const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner);
 
-    Rcpp::List choose_cell_in(const std::string &mutant_name);
+    Rcpp::List choose_cell_in(const SEXP &names);
 
     Rcpp::List choose_cell_in(
-        const std::string &mutant_name,
+        const SEXP &names,
         const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &lower_corner,
         const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner);
 
@@ -445,6 +498,7 @@ class TissueSimulation
     static TissueSimulation build_simulation(const SEXP &simulation_name,
                                              const SEXP &width, const SEXP &height,
                                              const SEXP &save_snapshots,
+                                             const SEXP &rates, const SEXP &epistates,
                                              const SEXP &seed);
 
     inline void save_tissue(const std::filesystem::path tissue_file_path) const
@@ -462,17 +516,6 @@ class TissueSimulation
         return CLONES::Mutants::Evolutions::Tissue::load(sample_file);
     }
 };
-
-inline TissueSimulation SpatialSimulation(const SEXP &simulation_name, const SEXP &width,
-                                          const SEXP &height, const SEXP &save_snapshots,
-                                          const SEXP &seed)
-{
-    Rcpp::warning("`SpatialSimulation()` is deprecated. "
-                  "Please use `TissueSimulation()` instead.");
-
-    return TissueSimulation::build_simulation(simulation_name, width, height,
-                                              save_snapshots, seed);
-}
 
 RCPP_EXPOSED_CLASS(TissueSimulation)
 

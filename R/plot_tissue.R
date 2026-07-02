@@ -51,28 +51,28 @@
 #'
 #' @examples
 #' set.seed(0)
-#' sim <- TissueSimulation()
-#' sim$add_mutant(name = "A",
-#'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-#'                growth_rates = c("+" = 0.2, "-" = 0.08),
-#'                death_rates = c("+" = 0.1, "-" = 0.01))
-#' sim$place_cell("A+", 500, 500)
-#' sim$run_up_to_size("A-", 60000)
+#' sim <- TissueSimulation(epigenetic_states = c("E1", "E2"))
+#' sim$add_mutant("A", list(E1 = list(duplication = 0.2, death = 0.1,
+#'                                    E2 = 0.01),
+#'                          E2 = list(duplication = 0.08, death = 0.01,
+#'                                    E1 = 0.01)))
+#' sim$place_cell("A[E1]", 500, 500)
+#' sim$run_up_to_size("A[E2]", 60000)
 #'
 #' # collect 3 samples: "Sample_A", "Sample_B", and "Sample_C"
 #' sim$sample_cells("Sample_A", c(425, 425), c(475, 475))
 #' sim$sample_cells("Sample_B", c(525, 525), c(575, 575))
 #' sim$sample_cells("Sample_C", c(425, 525), c(475, 575))
 #'
-#' # let the simulation evolve until the species "A-" account
+#' # let the simulation evolve until the species "A[E2]" account
 #' # for 80000 cells
-#' sim$run_up_to_size("A-", 80000)
+#' sim$run_up_to_size("A[E2]", 80000)
 #'
 #' # plot the tissue in the current status
 #' plot_tissue(sim)
 #'
 #' # plot the tissue as it was when "Sample_B" was collected
-#' plot_tissue(sim, at_sample="Sample_B")
+#' plot_tissue(sim, at_sample = "Sample_B")
 #'
 #' # plot the tissue as it was when "Sample_B" was collected and
 #' # highlight the regions of the samples collected at the same
@@ -93,9 +93,9 @@
 #'
 #' # define a custom color map
 #' color_map <- c("#B2DF8A", "#E31A1C")
-#' names(color_map) <- c("A+", "A-")
+#' names(color_map) <- c("A[E1]", "A[E2]")
 #'
-#' plot_tissue(sim, color_map=color_map)
+#' plot_tissue(sim, color_map = color_map)
 plot_tissue <- function(simulation, num_of_bins = 100,
                         before_sample = NULL,
                         at_sample = NULL,
@@ -141,19 +141,14 @@ plot_tissue <- function(simulation, num_of_bins = 100,
     }
   }
 
-  cells <- cells %>% dplyr::as_tibble() %>%
-    dplyr::mutate(species = paste0(.data$mutant, .data$epistate))
+  cells <- cells %>% add_species_col()
 
   if (is.null(color_map)) {
-    color_map <- get_species_colors(simulation$get_species())
+    color_map <- get_species_colors(get_species(simulation))
   }
 
-  species_name_df <- simulation$get_species() %>%
-    dplyr::as_tibble() %>%
-    dplyr::mutate(species = paste0(.data$mutant, .data$epistate))
-
   cells$species <- factor(cells$species,
-                          levels = unique(species_name_df$species))
+                          levels = unique(names(color_map)))
 
   pl <- ggplot2::ggplot(cells, ggplot2::aes(x = .data$position_x,
                                             y = .data$position_y,
@@ -163,7 +158,7 @@ plot_tissue <- function(simulation, num_of_bins = 100,
                                drop = !list_all_species) +
     my_theme() +
     ggplot2::labs(x = NULL, y = NULL,
-                  fill = get_group_cell_name(simulation)) +
+                  fill = "Species") +
     # ggplot2::scale_alpha_manual(values = c(`+` = 1, `-` = .5)) +
     ggplot2::theme(legend.position = "bottom") +
     ggplot2::xlim(-1, simulation$get_tissue_size()[1] + 1) +
@@ -197,25 +192,4 @@ plot_tissue <- function(simulation, num_of_bins = 100,
   }
 
   return(pl)
-}
-
-with_epistate <- function(data) {
-  if (inherits(data, "Rcpp_SampleForest")) {
-    epistates <- unique(data$get_nodes()[["epistate"]])
-  } else if (inherits(data, "Rcpp_TissueSimulation")) {
-    epistates <- unique(data$get_species()[["epistate"]])
-  } else {
-    stop(paste0("with_epistate(): Unsupported type \"",
-                class(data), "\"."))
-  }
-
-  return(length(epistates)>1 || epistates[1] != "")
-}
-
-get_group_cell_name <- function(data) {
-  if (with_epistate(data)) {
-    return("Species")
-  } else {
-    return("Mutants")
-  }
 }

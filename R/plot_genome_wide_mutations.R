@@ -43,9 +43,7 @@
 #' set.seed(0)
 #'
 #' sim <- TissueSimulation()
-#' sim$add_mutant(name = "A",
-#'                growth_rates = 0.1,
-#'                death_rates = 0.0)
+#' sim$add_mutant("A", c(duplication = 0.1))
 #' sim$place_cell("A", 500, 500)
 #' sim$run_up_to_time(100)
 #'
@@ -56,10 +54,8 @@
 #' sim$sample_cells("Sample_A", bbox$lower_corner, bbox$upper_corner)
 #'
 #' # adding second mutant
-#' sim$add_mutant(name = "B",
-#'                growth_rates = 0.3,
-#'                death_rates = 0.0)
-#' sim$mutate_progeny(sim$choose_cell_in("A"), "B")
+#' sim$add_mutant("B", c(duplication = 0.3))
+#' sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
 #' sim$run_up_to_time(300)
 #'
 #' # sampling tissue again
@@ -71,8 +67,8 @@
 #' # placing mutations
 #' m_engine <- MutationEngine(setup_code = "demo")
 #'
-#' m_engine$add_mutant(mutant_name="A", passenger_rates=c(SNV=5e-8))
-#' m_engine$add_mutant(mutant_name="B", passenger_rates=c(SNV=5e-9))
+#' m_engine$add_mutant("A", passenger_rates = c(SNV = 5e-8))
+#' m_engine$add_mutant("B", passenger_rates = c(SNV = 5e-9))
 #' m_engine$add_exposure(c(SBS1 = 0.2, SBS5 = 0.8))
 #'
 #' phylo_forest <- m_engine$place_mutations(forest, 10, 10)
@@ -85,10 +81,10 @@
 #' plot_DR(seq_results)
 #'
 #' # plotting the depth ratio for Sample_B only
-#' plot_DR(seq_results, samples="Sample_B")
+#' plot_DR(seq_results, samples = "Sample_B")
 #'
 #' # plotting the depth ratio for Sample_B with labels
-#' plot_DR(seq_results, samples="Sample_B",
+#' plot_DR(seq_results, samples = "Sample_B",
 #'         labels = seq_results$mutations["classes"])
 #'
 #' # let us define a function to filter germinal and pre-neoplastic
@@ -100,14 +96,14 @@
 #' }
 #'
 #' # plotting the depth ratio without germinal and pre-neoplastic
-#' plot_DR(seq_results, mutation_filter=filter_data)
+#' plot_DR(seq_results, mutation_filter = filter_data)
 #'
 #' # the same plots can be drawn by using the mutations data frame
 #' # in place of the `simulate_seq()` output
 #'
 #' # filter germinal mutations
 #' f_seq <- seq_results$mutations %>%
-#'    dplyr::filter(classes!="germinal")
+#'    dplyr::filter(classes != "germinal")
 #'
 #' # plotting the depth ratio
 #' plot_DR(f_seq)
@@ -161,7 +157,7 @@ plot_DR <- function(
       ggplot2::ggplot(mapping = ggplot2::aes(x = .data$abs_pos,
                                              y = .data$DR,
                                              color = .data$labels.tumour)) +
-      ggplot2::labs(col = NULL, fill = setup_data$label_name)
+      ggplot2::labs(color = setup_data$label_name)
   } else {
     plot <- data %>%
       ggplot2::ggplot(mapping = ggplot2::aes(x = .data$abs_pos,
@@ -219,9 +215,7 @@ plot_DR <- function(
 #' set.seed(0)
 #'
 #' sim <- TissueSimulation()
-#' sim$add_mutant(name = "A",
-#'                growth_rates = 0.2,
-#'                death_rates = 0.0)
+#' sim$add_mutant("A", c(duplication = 0.2))
 #' sim$place_cell("A", 500, 500)
 #' sim$run_up_to_time(50)
 #'
@@ -232,10 +226,8 @@ plot_DR <- function(
 #' sim$sample_cells("Sample_A", bbox$lower_corner, bbox$upper_corner)
 #'
 #' # adding second mutant
-#' sim$add_mutant(name = "B",
-#'                growth_rates = 0.3,
-#'                death_rates = 0.0)
-#' sim$mutate_progeny(sim$choose_cell_in("A"), "B")
+#' sim$add_mutant("B", c(duplication = 0.3))
+#' sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
 #' sim$run_up_to_time(300)
 #'
 #' # sampling tissue again
@@ -247,10 +239,10 @@ plot_DR <- function(
 #' # placing mutations
 #' m_engine <- MutationEngine(setup_code = "demo")
 #'
-#' m_engine$add_mutant(mutant_name="A", passenger_rates=c(SNV=5e-8),
+#' m_engine$add_mutant(mutant_name="A", passenger_rates = c(SNV = 5e-8),
 #'                     drivers = list(SNV("22", 46510210, "C", "A", allele = 1),
 #'                                    "DGCR8 P26L"))
-#' m_engine$add_mutant(mutant_name="B", passenger_rates=c(SNV=5e-9),
+#' m_engine$add_mutant(mutant_name="B", passenger_rates = c(SNV = 5e-9),
 #'                     drivers = list(list("DGCR8 A18V", allele = 1)))
 #' m_engine$add_exposure(c(SBS1 = 0.2, SBS5 = 0.8))
 #'
@@ -264,10 +256,10 @@ plot_DR <- function(
 #' plot_BAF(seq_results)
 #'
 #' # plotting the BAF for Sample_B only
-#' plot_BAF(seq_results, samples=c("Sample_B"))
+#' plot_BAF(seq_results, samples = c("Sample_B"))
 #'
 #' # plotting the BAF for Sample_B with labels
-#' plot_BAF(seq_results, samples="Sample_B",
+#' plot_BAF(seq_results, samples = "Sample_B",
 #'          labels = seq_results$mutations["classes"])
 #'
 #' # let us define a function to filter germinal and pre-neoplastic
@@ -279,14 +271,14 @@ plot_DR <- function(
 #' }
 #'
 #' # plotting the BAF without germinal and pre-neoplastic
-#' plot_BAF(seq_results, mutation_filter=filter_data)
+#' plot_BAF(seq_results, mutation_filter = filter_data)
 #'
 #' # the same plots can be drawn by using the mutations data frame
 #' # in place of the `simulate_seq()` output
 #'
 #' # filter germinal mutations
 #' f_seq <- seq_results$mutations %>%
-#'    dplyr::filter(classes!="germinal")
+#'    dplyr::filter(classes != "germinal")
 #'
 #' # plotting the BAF
 #' plot_BAF(f_seq)
@@ -342,8 +334,8 @@ plot_BAF <- function(
     plot <- data %>%
       ggplot2::ggplot(mapping = ggplot2::aes(x = .data$abs_pos,
                                              y = .data$BAF,
-                                             color = .data$labels)) +
-      ggplot2::labs(col = NULL, fill = setup_data$label_name)
+                                             color = labels)) +
+      ggplot2::labs(color = setup_data$label_name)
   } else {
     plot <- data %>%
       ggplot2::ggplot(mapping = ggplot2::aes(x = .data$abs_pos,
@@ -367,7 +359,7 @@ plot_BAF <- function(
                                        "abs_pos", "BAF")
   }
 
-  return(plot)
+  plot
 }
 
 
@@ -406,9 +398,7 @@ plot_BAF <- function(
 #' set.seed(0)
 #'
 #' sim <- TissueSimulation()
-#' sim$add_mutant(name = "A",
-#'                growth_rates = 0.2,
-#'                death_rates = 0.0)
+#' sim$add_mutant("A", c(duplication = 0.2))
 #' sim$place_cell("A", 500, 500)
 #' sim$run_up_to_time(50)
 #'
@@ -419,10 +409,8 @@ plot_BAF <- function(
 #' sim$sample_cells("Sample_A", bbox$lower_corner, bbox$upper_corner)
 #'
 #' # adding second mutant
-#' sim$add_mutant(name = "B",
-#'                growth_rates = 0.3,
-#'                death_rates = 0.0)
-#' sim$mutate_progeny(sim$choose_cell_in("A"), "B")
+#' sim$add_mutant("B", c(duplication = 0.3))
+#' sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
 #' sim$run_up_to_time(300)
 #'
 #' # sampling tissue again
@@ -434,10 +422,10 @@ plot_BAF <- function(
 #' # placing mutations
 #' m_engine <- MutationEngine(setup_code = "demo")
 #'
-#' m_engine$add_mutant(mutant_name="A", passenger_rates=c(SNV=5e-8),
+#' m_engine$add_mutant("A", passenger_rates = c(SNV = 5e-8),
 #'                     drivers = list(SNV("22", 46510210, "C", "A", allele = 1),
 #'                                    "DGCR8 P26L"))
-#' m_engine$add_mutant(mutant_name="B", passenger_rates=c(SNV=5e-9),
+#' m_engine$add_mutant("B", passenger_rates = c(SNV = 5e-9),
 #'                     drivers = list(list("DGCR8 A18V", allele = 1)))
 #' m_engine$add_exposure(c(SBS1 = 0.2, SBS5 = 0.8))
 #'
@@ -451,10 +439,10 @@ plot_BAF <- function(
 #' plot_VAF(seq_results)
 #'
 #' # plotting the VAF for Sample_B only
-#' plot_VAF(seq_results, samples=c("Sample_B"))
+#' plot_VAF(seq_results, samples = c("Sample_B"))
 #'
 #' # plotting the VAF for Sample_B with labels
-#' plot_VAF(seq_results, samples="Sample_B",
+#' plot_VAF(seq_results, samples = "Sample_B",
 #'          labels = seq_results$mutations["classes"])
 #'
 #' # let us define a function to filter germinal and pre-neoplastic
@@ -466,14 +454,14 @@ plot_BAF <- function(
 #' }
 #'
 #' # plotting the VAF without germinal and pre-neoplastic
-#' plot_VAF(seq_results, mutation_filter=filter_data)
+#' plot_VAF(seq_results, mutation_filter = filter_data)
 #'
 #' # the same plots can be drawn by using the mutations data frame
 #' # in place of the `simulate_seq()` output
 #'
 #' # filter germinal mutations
 #' f_seq <- seq_results$mutations %>%
-#'    dplyr::filter(classes!="germinal")
+#'    dplyr::filter(classes != "germinal")
 #'
 #' # plotting the VAF
 #' plot_VAF(f_seq)
@@ -518,7 +506,7 @@ plot_VAF <- function(
   chr_limits <- c(chr_limits, max(data$abs_pos))
 
   chr_means <- data %>%
-    dplyr::group_by(chr) %>%
+    dplyr::group_by(.data$chr) %>%
     dplyr::summarise(mean_pos = (max(.data$abs_pos) +
                                    min(.data$abs_pos)) / 2) %>%
     dplyr::pull(.data$mean_pos)
@@ -527,8 +515,8 @@ plot_VAF <- function(
     plot <- data %>%
       ggplot2::ggplot(mapping = ggplot2::aes(x = .data$abs_pos,
                                              y = .data$VAF,
-                                             color = .data$labels)) +
-      ggplot2::labs(col = NULL, fill = setup_data$label_name)
+                                             color = labels)) +
+      ggplot2::labs(color = setup_data$label_name)
   } else {
     plot <- data %>%
       ggplot2::ggplot(mapping = ggplot2::aes(x = .data$abs_pos,
@@ -552,5 +540,5 @@ plot_VAF <- function(
                                        "abs_pos", "VAF")
   }
 
-  return(plot)
+  plot
 }

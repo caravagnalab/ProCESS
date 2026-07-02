@@ -26,63 +26,62 @@ library(ProCESS)
 # set the seed of the random number generator
 set.seed(0)
 
-# Create a tissue simulation whose tissue has size 1200x900
-sim <- TissueSimulation("Test", width=1200, height=900)
+# create a tissue simulation with epigenetic states whose tissue has
+# size 1200x900
+sim <- TissueSimulation("Test", epigenetic_states = c("E1", "E2"),
+                        width = 1200, height = 900)
 
 sim$death_activation_level <- 50
 
-sim$add_mutant(name = "A",
-               epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-               growth_rates = c("+" = 0.2, "-" = 0.08),
-               death_rates = c("+" = 0.1, "-" = 0.01))
+# add a mutant "A"
+sim$add_mutant("A", list(E1 = list(duplication = 0.2, death = 0.1, E2 = 0.01),
+                         E2 = list(duplication = 0.08, death = 0.01,
+                                   E1 = 0.01)))
 
-# We add one cell of species A+ (mutant A in epi-state +) in
+# we add one cell of species A[E1] (mutant A in epi-state E1) in
 # position (500, 500).
-sim$place_cell("A+", 500, 500)
+sim$place_cell("A[E1]", 500, 500)
 
-sim$run_up_to_size("A+", 500)
+# run the simulation until the species A[E1] consists of less than 1000 cells
+sim$run_up_to_size("A[E1]", 1000)
 
-sim$run_up_to_event("death", "A-", 100)
+# run the simulation until less than 100 deaths has occurred in species A[E2]
+sim$run_up_to_event("death", "A[E2]", 100)
 
-# Run the simulation for other 15 time units
+# run the simulation for other 15 time units
 sim$run_up_to_time(sim$get_clock() + 15)
 
-# Add mutant
-sim$add_mutant(name = "B",
-               epigenetic_rates = c("+-" = 0.05, "-+" = 0.05),
-               growth_rates = c("+" = 0.3, "-" = 0.3),
-               death_rates = c("+" = 0.05, "-" = 0.1))
+# add a mutant "B"
+sim$add_mutant("B", list(E1 = list(duplication = 0.3, death = 0.05, E2 = 0.05),
+                         E2 = list(duplication = 0.3, death = 0.1,
+                                   E1 = 0.05)))
 
-# Mutant injection
-sim$mutate_progeny(sim$choose_cell_in("A"), "B")
+# mutant injection
+sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
 
-# New evolution
-sim$run_up_to_size("B+", 600)
+# run the simulation until there are less than cells in B[E1]
+sim$run_up_to_size("B[E1]", 600)
 
-# Define evolutionary parameters
-sim$add_mutant(name = "C",
-               epigenetic_rates = c("+-" = 0.1, "-+" = 0.1),
-               growth_rates = c("+" = 0.2, "-" = 0.4),
-               death_rates = c("+" = 0.1, "-" = 0.01))
+# define evolutionary parameters
+sim$add_mutant("C", list(E1 = list(duplication = 0.2, death = 0.1, E2 = 0.1),
+                         E2 = list(duplication = 0.4, death = 0.01,
+                                   E1 = 0.1)))
 
-# Choose and mutate
-sim$mutate_progeny(sim$choose_cell_in("A",  c(450, 550), c(500, 600)), "C")
+# choose and mutate
+sim$mutate_progeny(sim$choose_border_cell_in("A"), "C")
 
 sim$run_up_to_time(sim$get_clock() + 7)
 ```
 
-> *Note:* This article presents advanced topics on tissue simulation.
-> Refer to [this article](tissue_simulation.md)
-> for an introduction on the subject.
+> *Note:* This article presents advanced topics on tissue simulation. Refer to
+> [this article](tissue_simulation.md) for an introduction on the subject.
 
-> *Disclaimer:* ProCESS/CLONES internally implements the
-> probability distributions using the C++11 random number
-> distribution classes. The standard does not specify their
-> algorithms, and the class implementations are left free
-> for the compiler. Thus, the simulation output depends on
-> the compiler used to compile [CLONES](https://github.com/albertocasagrande/CLONES), and
-> because of that, the results reported in this article may
-> differ from those obtained by the reader.
+> *Disclaimer:* ProCESS/CLONES implements probability distributions using the
+> C++11 random number distribution classes. Since the standard does not specify
+> the underlying algorithms, their implementations are left to the compiler.
+> Consequently, the simulation output depends on the compiler used to build
+> [CLONES](https://github.com/albertocasagrande/CLONES), and the results
+> reported in this article may differ from those obtained by the reader.
 
 Sometimes it is convenient to plot a time series of a simulation,
 reporting species or firing counts over time. Since ProCESS is
@@ -99,25 +98,25 @@ Let us consider the simulation `sim` as produced in
 [this article](tissue_simulation.md).
 
 ```{r}
-library(ProCESS)
+# to use %>% the package dplyr is required
 library(dplyr)
 
-# The firings
+# the firings
 sim$get_firing_history() %>% head()
 
-# For example, total number of the deaths on `B+` at the end of the
+# for example, total number of the deaths on `B+` at the end of the
 # previous calls of the `run_to_*` methods
 sim$get_firing_history() %>%
-  filter(event == "death", mutant == "B", epistate == "-")
+  filter(event == "death", mutant == "B", epistate == "E2")
 
-# The counts
+# the counts
 sim$get_count_history() %>% head()
 ```
 
 The time-series can be plot using `plot_timeseries()`
 
 ```{r,  fig.height=4, fig.width=4, fig.alt=c("A time-series plot. It presents the cell count per species along the simulation.")}
-# Time-series plot
+# time-series plot
 plot_timeseries(sim)
 ```
 
@@ -131,57 +130,50 @@ the state (by default, <code>[TissueSimulation$history_delta](../reference/Tissu
 We show this by re-simulating a tumour with two sub-mutants.
 
 ```{r}
-# Example time-series on a new simulation, with coarse-grained time-series
-sim <- TissueSimulation("Finer Time Series")
+# example time-series on a new simulation, with coarse-grained time-series
+sim <- TissueSimulation("Finer Time Series", epigenetic_states = c("E1", "E2"))
 
 sim$history_delta <- 1
 sim$death_activation_level <- 100
 
-# A
-sim$add_mutant(name = "A",
-               epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-               growth_rates = c("+" = 0.2, "-" = 0.08),
-               death_rates = c("+" = 0.1, "-" = 0.01))
+# add a mutant "A"
+sim$add_mutant("A", list(E1 = list(duplication = 0.2, death = 0.1, E2 = 0.01),
+                         E2 = list(duplication = 0.08, death = 0.01,
+                                   E1 = 0.01)))
 
-sim$place_cell("A+", 500, 500)
-sim$run_up_to_size("A+", 400)
+sim$place_cell("A[E1]", 500, 500)
+sim$run_up_to_size("A[E2]", 400)
 
-# B (linear inside A)
-sim$add_mutant(name = "B",
-               epigenetic_rates = c("+-" = 0.05, "-+" = 0.05),
-               growth_rates = c("+" = 0.3, "-" = 0.3),
-               death_rates = c("+" = 0.05, "-" = 0.1))
+# add a mutant "B"
+sim$add_mutant("B", list(E1 = list(duplication = 0.3, death = 0.3, E2 = 0.05),
+                         E2 = list(duplication = 0.3, death = 0.1, E1 = 0.05)))
 
-sim$mutate_progeny(sim$choose_cell_in("A"), "B")
+sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
 
-sim$run_up_to_size("B-", 300)
+sim$run_up_to_size("B[E2]", 300)
 
-# C (linear inside B)
-sim$add_mutant(name = "C",
-               epigenetic_rates = c("+-" = 0.1, "-+" = 0.1),
-               growth_rates = c("+" = 0.2, "-" = 0.4),
-               death_rates = c("+" = 0.1, "-" = 0.01))
+# add a mutant "C"
+sim$add_mutant("C", list(E1 = list(duplication = 0.2, death = 0.1, E2 = 0.1),
+                         E2 = list(duplication = 0.4, death = 0.01, E1 = 0.1)))
 
-sim$mutate_progeny(sim$choose_cell_in("B"), "C")
+sim$mutate_progeny(sim$choose_border_cell_in("B"), "C")
 
-# D (linear inside A, so branching with C) - same parameters of C
-sim$add_mutant(name = "D",
-               epigenetic_rates = c("+-" = 0.1, "-+" = 0.1),
-               growth_rates = c("+" = 0.2, "-" = 0.4),
-               death_rates = c("+" = 0.1, "-" = 0.01))
+# add a mutant "D" - has the same rates of "C"
+sim$add_mutant("D", list(E1 = list(duplication = 0.2, death = 0.1, E2 = 0.1),
+                         E2 = list(duplication = 0.4, death = 0.01, E1 = 0.1)))
 
-sim$mutate_progeny(sim$choose_cell_in("A"), "D")
+sim$mutate_progeny(sim$choose_border_cell_in("A"), "D")
 
-sim$run_up_to_size("D+", 1000)
+sim$run_up_to_size("D[E1]", 100)
 ```
 
 The time-series can be plot using `plot_timeseries()`.
 
 ```{r,  fig.height=4, fig.width=4, fig.alt=c("A more accurate time-series plot. The count sampling time is configurable.", "The same time-series plot can be presented by using a log-scale.")}
-# Time-series plot
+# time-series plot
 plot_timeseries(sim)
 
-# Logscale helps seeing the different effective growth rates
+# logscale helps seeing the different effective growth rates
 plot_timeseries(sim) + ggplot2::scale_y_log10()
 ```
 
@@ -205,7 +197,7 @@ is not a completely correct perspective of the simulation time-series;
 still, it help understand trends.
 
 ```{r,  fig.height=4, fig.width=6, message=FALSE, warning=FALSE, fig.alt=c("The Muller plot for the last quater of the simulation.", "The Muller plot in log-scale for the last quater of the simulation.")}
-# Custom Mullers
+# custom Mullers
 clock <- sim$get_clock()
 
 plot_muller(sim) + ggplot2::xlim(clock * 3/4, clock)
@@ -221,27 +213,29 @@ The rates of any species may change over time. For instance, this
 happens when a population is subject to a targeted treatment.
 
 For instance, going back to the example simulation, we can increase the death 
-rates of `C+`, `C-`, `B+`, and `B-`.
+rates of `C[E1]`, `C[E2]`, `B[E1]`, and `B[E2]`.
 
 ```{r,  fig.height=4, fig.width=6, message=FALSE, warning=FALSE, fig.alt=c("The Muller plot for the last quarter of the simulation after changing the death rates of B and C species.", "The Muller plot in log-scale  for the last quater of the simulation after changing the death rates of B and C species.")}
-# Current rates
+# current rates
 sim
 
-# Raise the death rate levels
-sim$update_rates("B+", c(death = 0.5))
-sim$update_rates("B-", c(death = 0.5))
-sim$update_rates("C+", c(death = 0.5))
-sim$update_rates("C-", c(death = 0.5))
+# raise the death rate levels of "B" species
+sim$set_rate("B[E1]", "death", 0.5)
+sim$set_rate("B[E2]", "death", 0.5)
 
-# Now D will become larger
-sim$run_up_to_size("D+", 6000)
+# ... and those of "C" species
+sim$set_rates(list(C = list(E1 = list(death = 0.5),
+                            E2 = list(death = 0.5))))
 
-# Current state
+# now D will grow
+sim$run_up_to_size("D[E1]", 6000)
+
+# current state
 sim
 
-# This now show the change in rates
+# this now show the change in rates
 clock <- sim$get_clock()
-plot_muller(sim) + ggplot2::xlim(clock * 3/4, clock)
+plot_muller(sim) + ggplot2::xlim(clock * 3 / 4, clock)
 
 plot_muller(sim) +
   ggplot2::xlim(clock * 3/4, clock) +

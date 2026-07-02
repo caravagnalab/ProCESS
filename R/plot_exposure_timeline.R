@@ -63,9 +63,7 @@ get_exposure_ends <- function(phylo_forest) {
 #' @examples
 #' sim <- TissueSimulation()
 #'
-#' sim$add_mutant(name = "A",
-#'                growth_rates = 0.2,
-#'                death_rates = 0.0)
+#' sim$add_mutant("A", c(duplication = 0.2))
 #' sim$place_cell("A", 500, 500)
 #'
 #' sim$run_up_to_time(150)
@@ -97,10 +95,10 @@ get_exposure_ends <- function(phylo_forest) {
 #' plot_exposure_timeline(phylo_forest)
 #'
 #' # plotting the phylogenetic forest emphatizing the exposure switches
-#' plot_exposure_timeline(phylo_forest, emphasize_switches=TRUE)
+#' plot_exposure_timeline(phylo_forest, emphasize_switches = TRUE)
 #'
 #' # deleting the mutation engine directory
-#' unlink("demo", recursive=TRUE)
+#' unlink("demo", recursive = TRUE)
 #' @export
 plot_exposure_timeline <- function(phylogenetic_forest, linewidth = 0.8,
                                    emphasize_switches = FALSE,
@@ -126,7 +124,6 @@ plot_exposure_timeline <- function(phylogenetic_forest, linewidth = 0.8,
                           linewidth = linewidth) +
     ggplot2::ylim(0, 1) +
     ggplot2::labs(x = "Time Point", y = "Signature Exposure") +
-    #scale_fill_manual(values=colors) +
     ggplot2::scale_colour_manual(name = "Signatures", values = colors) +
     ggplot2::theme_minimal()  # Apply a minimal theme
 

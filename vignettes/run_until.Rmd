@@ -20,18 +20,15 @@ knitr::opts_chunk$set(
 )
 ```
 
-> *Note:* This article presents advanced topics on tissue simulation.
-> Refer to [this article](tissue_simulation.md) for an introduction to the
-> subject.
+> *Note:* This article presents advanced topics on tissue simulation. Refer to
+> [this article](tissue_simulation.md) for an introduction on the subject.
 
-> *Disclaimer:* ProCESS/CLONES internally implements the
-> probability distributions using the C++11 random number
-> distribution classes. The standard does not specify their
-> algorithms, and the class implementations are left free
-> for the compiler. Thus, the simulation output depends on
-> the compiler used to compile [CLONES](https://github.com/albertocasagrande/CLONES), and because of that,
-> the results reported in this article may differ from
-> those obtained by the reader.
+> *Disclaimer:* ProCESS/CLONES implements probability distributions using the
+> C++11 random number distribution classes. Since the standard does not specify
+> the underlying algorithms, their implementations are left to the compiler.
+> Consequently, the simulation output depends on the compiler used to build
+> [CLONES](https://github.com/albertocasagrande/CLONES), and the results
+> reported in this article may differ from those obtained by the reader.
 
 ProCESS implements a first-order unquantified logic having variables
 representing the cardinality of the species, the number of events
@@ -62,17 +59,19 @@ When the parameter is the string `"Time"`, the elapsed simulation time
 variable is returned.
 
 ```{r}
-library(ProCESS)
+library("ProCESS")
 
 # set the seed of the random number generator
 set.seed(0)
 
-# build a tissue simulation and add two species to it
-sim <- TissueSimulation()
-sim$add_mutant(name = "A",
-               epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-               growth_rates = c("+" = 0.2, "-" = 0.08),
-               death_rates = c("+" = 0.1, "-" = 0.01))
+# build a tissue simulation with two epigenetic states
+sim <- TissueSimulation(epigenetic_states = c("E1", "E2"))
+
+# add the mutant "A"
+sim$add_mutant(name = "A", list(E1 = list(duplication = 0.2, death = 0.1,
+                                          E2 = 0.01),
+                                E2 = list(duplication = 0.08, death = 0.01,
+                                          E1 = 0.01)))
 
 # get the variable representing the simulation time
 v_time <- sim$var("Time")
@@ -84,13 +83,13 @@ When the parameter is the name of a species,
 a variable representing the cardinality of the species is built.
 
 ```{r}
-# get the variable representing the cardinality of A+ in sim
-va_p <- sim$var("A+")
-va_p
+# get the variable representing the cardinality of A[E1] in sim
+va1 <- sim$var("A[E1]")
+va1
 
-# get the variable representing the cardinality of A- in sim
-va_m <- sim$var("A-")
-va_m
+# get the variable representing the cardinality of A[E2] in sim
+va2 <- sim$var("A[E2]")
+va2
 ```
 
 
@@ -103,35 +102,35 @@ the corresponding event in the specified species.
 
 ```{r}
 # get the variable representing the number of epigenetic
-# switches from A+
-va_ps <- sim$var("A+.switches")
-va_ps
+# switches from A[E1]
+va1_s <- sim$var("A[E1].switches")
+va1_s
 
 # get the variable representing the number of duplications in A+
-sim$var("A+.duplications")
+sim$var("A[E1].duplications")
 
 # get the variable representing the number of deaths in A+
-sim$var("A+.deaths")
+sim$var("A[E1].deaths")
 ```
 
 ### Expressions and Formulas
 
 An expression is one of the following objects:
 
--  a variable, e.g., `sim$var("A+")`;
+-  a variable, e.g., `sim$var("A[E1]")`;
 -  a numeric value, e.g., `3.4`;
--  the sum of two expressions, e.g., `sim$var("A+") + 3.4`;
--  the subtraction of two expressions, e.g., `sim$var("A+") - 3.4`;
--  the multiplication of two expressions, e.g., `sim$var("A+") * 3.4`.
+-  the sum of two expressions, e.g., `sim$var("A[E1]") + 3.4`;
+-  the subtraction of two expressions, e.g., `sim$var("A[E1]") - 3.4`;
+-  the multiplication of two expressions, e.g., `sim$var("A[E1]") * 3.4`.
 
 Two expression can be related by `<=`, `<`, `==`, `!=`, `>` and
 `>=`.
 
 A formula is:
 
--  a relation among two expressions, e.g., `sim$var("A+")>=2`;
--  the conjunction of two formulas, e.g., `sim$var("A+")>=2 & sim$var("A+")<=500`;
--  the disjunction of two formulas, e.g., `sim$var("A+")>=2 | sim$var("A+")<=500`.
+-  a relation among two expressions, e.g., `sim$var("A[E1]")>=2`;
+-  the conjunction of two formulas, e.g., `sim$var("A[E1]")>=2 & sim$var("A[E1]")<=500`;
+-  the disjunction of two formulas, e.g., `sim$var("A[E1]")>=2 | sim$var("A[E1]")<=500`.
 
 ### The method <code>[TissueSimulation$run_until()](../reference/TissueSimulation-cash-run_until.md)</code>
 
@@ -139,34 +138,47 @@ The method <code>[TissueSimulation$run_until()](../reference/TissueSimulation-ca
 takes a formula as a parameter and 
 runs the simulation until the formula no longer holds.
 
+We can build a condition stating that the cardinality of `A[E1]` doubles that
+of `A[E2]`
 ```{r}
-# build a condition stating that the cardinality of A+ doubles
-# that of A-
-c1 <- va_p >= 2 * va_m
+c1 <- va1 >= 2 * va2
 c1
-
-# build a condition that holds when there are more than
-# 100000 live cells of mutant A
-c2 <- va_p + va_m > 1e5
+```
+..., a condition that holds when there are more than
+100000 live cells of mutant `A`
+```{r}
+c2 <- va1 + va2 > 1e5
 c2
-
-# build a condition that holds when less than 4000
-# epigenetic switches from the species A+ have occurred
-c3 <- va_ps < 4000
-c3
-
+```
+..., a condition that constrains the simulated time
+```{r}
 # build a condition that holds when 40 time unit have been
 # simulated at least
 c4 <- v_time >= 40
 c4
+```
+..., or deal with the number of species events. For instance, we can build a
+condition that holds when less than 4000 epigenetic switches from the species
+`A[E1]` have occurred.
+```{r}
+# build a condition that holds when less than 4000
+# epigenetic switches from the species A[E1] have occurred
+c3 <- va1_s < 4e3
+c3
+```
 
+Moreover, we can logically combine different conditions.
+```{r}
 # build a condition that holds when c4 and at least one
 # among c1, c2, and c3 hold
 c5 <- c4 & (c1 | c2 | c3)
 c5
+```
 
+Any simulation can be run until a condition holds.
+```{r}
 # place the initial cell
-sim$place_cell("A+", 500, 500)
+sim$place_cell("A[E1]", 500, 500)
 
 # run the simulation while c5 does not hold
 sim$run_until(c5)

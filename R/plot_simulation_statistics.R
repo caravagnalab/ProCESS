@@ -26,26 +26,31 @@
 #' @return A ggplot plot.
 #' @export
 #' @examples
-#' sim <- TissueSimulation()
-#' sim$add_mutant(name = "A",
-#'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.02),
-#'                growth_rates = c("+" = 0.2, "-" = 0.08),
-#'                death_rates = c("+" = 0.1, "-" = 0.01))
-#' sim$place_cell("A+", 500, 500)
+#' sim <- TissueSimulation(epigenetic_states = c("E1", "E2"))
+#' sim$add_mutant("A", list(E1 = list(duplication = 0.2, death = 0.1,
+#'                                    E2 = 0.01),
+#'                          E2 = list(duplication = 0.08, death = 0.01,
+#'                                    E1 = 0.02)))
+#' sim$place_cell("A[E1]", 500, 500)
 #' sim$run_up_to_time(60)
 #' plot_firings(sim)
 plot_firings <- function(simulation) {
   stopifnot(inherits(simulation, "Rcpp_TissueSimulation"))
 
   firings <- simulation$get_firings() %>%
-    dplyr::mutate(species = paste0(.data$mutant, .data$epistate))
+    add_species_col()
 
-  ggplot2::ggplot(firings) +
+  plot <- ggplot2::ggplot(firings) +
     ggplot2::geom_bar(stat = "identity",
                       ggplot2::aes(x = "", y = .data$fired,
-                                   fill = .data$event)) +
-    ggplot2::facet_grid(.data$mutant ~ .data$epistate) +
-    ggplot2::coord_polar(theta = "y") +
+                                   fill = .data$event))
+  if ("epistate" %in% colnames(firings)) {
+    plot <- plot + ggplot2::facet_grid(.data$mutant ~ .data$epistate)
+  } else {
+    plot <- plot + ggplot2::facet_grid(.data$mutant)
+  }
+
+  plot + ggplot2::coord_polar(theta = "y") +
     ggplot2::labs(
       fill = "Event",
       x = NULL,

@@ -932,23 +932,14 @@ get_epistate_passenger_rates(const Rcpp::List &list)
 
     if (!list.hasAttribute("names")) {
         Rcpp::stop("Epistate passenger rates list must be a "
-                   "named list whose names are epistates, "
-                   "i.e., either \"+\" or \"-\".");
+                   "named list whose names are epigenetic states.");
     }
 
     Rcpp::CharacterVector names = list.names();
     const size_t list_size = static_cast<size_t>(list.size());
     for (size_t i = 0; i < list_size; ++i) {
-        if (names[i] == "+") {
-            ep_rates["+"] = get_passenger_rates(list[i]);
-        } else {
-            if (names[i] == "-") {
-                ep_rates["-"] = get_passenger_rates(list[i]);
-            } else {
-                Rcpp::stop("\"" + names[i] + "\" is an unsupported name in " +
-                           "epistate passenger rate list.");
-            }
-        }
+        const std::string epistate = Rcpp::as<std::string>(names[i]);
+        ep_rates[epistate] = get_passenger_rates(list[i]);
     }
 
     return ep_rates;
@@ -1056,7 +1047,7 @@ void retrieve_missing_references(
 }
 
 void MutationEngine::add_mutant(const std::string &mutant_name,
-                                const Rcpp::List &epistate_passenger_rates,
+                                const Rcpp::List &passenger_rates,
                                 const Rcpp::List &drivers)
 {
     std::list<SIDSpec> c_sids;
@@ -1079,17 +1070,17 @@ void MutationEngine::add_mutant(const std::string &mutant_name,
         driver_codes[static_cast<CLONES::Mutations::SID>(sid_spec)] = code;
     }
 
-    if (contains_passenger_rates(epistate_passenger_rates)) {
-        auto p_rates = get_passenger_rates(epistate_passenger_rates);
+    if (contains_passenger_rates(passenger_rates)) {
+        const auto p_rates = get_passenger_rates(passenger_rates);
 
-        m_engine.add_mutant(mutant_name, {{"", std::move(p_rates)}}, c_sids,
+        m_engine.add_mutant(mutant_name, p_rates, c_sids,
                             c_cnas, application_order);
+    } else {
+        const auto epi_rates = get_epistate_passenger_rates(passenger_rates);
 
-        return;
+        m_engine.add_mutant(mutant_name, epi_rates, c_sids,
+                            c_cnas, application_order);
     }
-
-    auto epi_rates = get_epistate_passenger_rates(epistate_passenger_rates);
-    m_engine.add_mutant(mutant_name, epi_rates, c_sids, c_cnas, application_order);
 }
 
 void MutationEngine::change_rates_from(const CLONES::Time time,

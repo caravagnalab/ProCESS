@@ -22,7 +22,7 @@
 
 SampleForest::SampleForest() : CLONES::Mutants::DescendantForest() {}
 
-SampleForest::SampleForest(const CLONES::Mutants::Evolutions::Simulation &simulation)
+SampleForest::SampleForest(const CLONES::Mutants::Evolutions::TissueSimulation &simulation)
     : CLONES::Mutants::DescendantForest(simulation)
 {}
 

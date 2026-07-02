@@ -1,4 +1,4 @@
-## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
+# This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
 ## Copyright (C) 2023-2025 - Giulio Caravagna <gcaravagna@units.it>
 ##
 ## This program is free software: you can redistribute it and/or modify
@@ -46,31 +46,40 @@ collapse_loops <- function(df_edges) {
 #' @export
 #'
 #' @examples
-#' sim <- TissueSimulation()
-#' sim$add_mutant(name = "A",
-#'                epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-#'                growth_rates = c("+" = 0.2, "-" = 0.08),
-#'                death_rates = c("+" = 0.02, "-" = 0.01))
-#' sim$history_delta = 1
-#' sim$place_cell("A+", 500, 500)
+#' sim <- TissueSimulation(epigenetic_states = c("E1", "E2"))
+#' sim$add_mutant("A", list(E1 = list(duplication = 0.2, death = 0.02,
+#'                                    E2 = 0.01),
+#'                          E2 = list(duplication = 0.08, death = 0.01,
+#'                                    E1 = 0.01)))
+#' sim$history_delta <- 1
+#' sim$place_cell("A[E1]", 500, 500)
 #' sim$run_up_to_time(60)
 #'
 #' plot_muller(sim)
 #'
 #' # define a custom color map
 #' color_map <- c("#B2DF8A", "#E31A1C")
-#' names(color_map) <- c("A+", "A-")
+#' names(color_map) <- c("A[E1]", "A[E2]")
 #'
-#' plot_muller(sim, color_map=color_map)
+#' plot_muller(sim, color_map = color_map)
 plot_muller <- function(simulation, color_map = NULL) {
   stopifnot(inherits(simulation, "Rcpp_TissueSimulation"))
+
+  if (is.null(color_map)) {
+    color_map <- get_species_colors(get_species(simulation))
+  }
+
+  color_map <- c(`Wild-type` = "gainsboro", color_map)
 
   # Tumour DF
   df_populations <- simulation$get_count_history() %>%
     dplyr::as_tibble() %>%
-    dplyr::mutate(Identity = paste0(.data$mutant, .data$epistate)) %>%
+    add_species_col(col_name = "Identity") %>%
     dplyr::rename(Generation = .data$time, Population = .data$count) %>%
     dplyr::select(.data$Generation, .data$Identity, .data$Population)
+
+  df_populations$Identity <- factor(df_populations$Identity,
+                                    levels = unique(names(color_map)))
 
   # Tumour edges
   df_edges <- simulation$get_lineage_graph() %>%
@@ -103,22 +112,13 @@ plot_muller <- function(simulation, color_map = NULL) {
     df_populations
   )
 
-  if (is.null(color_map)) {
-    color_map <- get_species_colors(simulation$get_species())
-  }
-
-  group_name <- get_group_cell_name(simulation)
-
   suppressWarnings({
     muller_df <- ggmuller::get_Muller_df(df_edges, t_wt_dynamics)
 
     plot <- ggmuller::Muller_pop_plot(muller_df, add_legend = TRUE,
-                                      palette = c(`Wild-type` = "gainsboro",
-                                                  color_map)) +
+                                      palette = color_map) +
       my_theme() +
-      ggplot2::guides(fill = ggplot2::guide_legend(group_name)) #+
-    #ggplot2::scale_fill_manual(values = c(`Wild-type` = "gainsboro",
-    #                                      color_map))
+      ggplot2::guides(fill = ggplot2::guide_legend("Species"))
   })
 
   plot

@@ -37,25 +37,21 @@
 #' # simulate a tissue
 #' sim <- TissueSimulation()
 #'
-#' sim$add_mutant(name = "A",
-#'                growth_rates = 1,
-#'                death_rates = 0)
+#' sim$add_mutant("A", c(duplication = 1))
 #' sim$place_cell("A", 500, 500)
-#' sim$run_up_to_size("A",1e4)
-#' sim$add_mutant(name = "B",
-#'                growth_rates = 3.5,
-#'                death_rates = 0)
-#' sim$mutate_progeny(sim$choose_cell_in("A"), "B")
+#' sim$run_up_to_size("A", 1e4)
+#' sim$add_mutant("B", c(duplication = 3.5))
+#' sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
 #'
 #' sim$run_up_to_size("B",1e4)
 #'
 #' # sample the tissue and build the sample forest
 #' bbox <- sim$search_sample(c("A" = 100,"B" = 100), 50, 50)
 #' sim$sample_cells("Sampling", bbox$lower_corner, bbox$upper_corner)
-#' forest = sim$get_sample_forest()
+#' forest <- sim$get_sample_forest()
 #'
 #' # place the mutations
-#' m_engine = MutationEngine(setup_code = "demo")
+#' m_engine <- MutationEngine(setup_code = "demo")
 #' m_engine$add_mutant(mutant_name = "A",
 #'                     passenger_rates = c(SNV = 5e-8))
 #' m_engine$add_mutant(mutant_name = "B",

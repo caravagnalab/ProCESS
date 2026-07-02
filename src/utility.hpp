@@ -31,7 +31,22 @@ std::filesystem::path get_tmp_dir_path(const std::string &base_name = "ProCESS")
 CLONES::Mutations::AlleleId get_allele_id(const SEXP allele_id,
                                          const std::string &parameter_name);
 
-std::string ordinal_suffix(const size_t &ord);
+template<typename TYPE>
+  requires(std::is_integral_v<TYPE>)
+std::string ordinal_suffix(const TYPE number) {
+
+    if (number % 100 >= 11 && number % 100 <= 13) {
+        return "th";
+    }
+
+    // Check the last digit
+    switch (number % 10) {
+        case 1:  return "st";
+        case 2:  return "nd";
+        case 3:  return "rd";
+        default: return "th";
+    }
+}
 
 inline std::string ordtostr(const size_t ord)
 {

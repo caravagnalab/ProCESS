@@ -39,6 +39,13 @@ add_driver_mutation_labels <- function(
     x_value,
     y_value) {
 
+  if (is.null(driver_mutations)) {
+    warning(paste("Missing driver mutations.",
+                  "Disabling driver mutation labelling."))
+
+    return(plot)
+  }
+
   ggb <- ggplot2::ggplot_build(plot)
 
   facet_p <- ggb$layout$layout %>% dplyr::mutate(y_max = NA)
@@ -67,7 +74,7 @@ add_driver_mutation_labels <- function(
     if (is.na(driver[["code"]])) {
       driver[["code"]] <- mutation_string(driver)
     }
-    drivers[i,] <- driver
+    drivers[i, ] <- driver
   }
 
   panels <- unique(drivers$PANEL)
@@ -83,8 +90,25 @@ add_driver_mutation_labels <- function(
   x_expr <- get_value_expr(x_value)
   y_expr <- get_value_expr(y_value)
 
+  has_legend <- function(plot) {
+    g <- ggplot2::ggplotGrob(plot)
+
+    matching_indices <- grepl(paste0("^", prefix), g$layout$name)
+
+    !all(unlist(lapply(g$grobs[matching_indices], inherits, "zeroGrob")))
+  }
+
+  mutants <- driver_mutations %>%
+    dplyr::select(.data$mutant) %>% unique()
+
+  mutant_fill_map <- get_species_colors(mutants)
+
+  plot <- plot +
+    ggnewscale::new_scale_fill()
+
   for (panel in panels) {
-    drivers_in_panel <- drivers %>% dplyr::filter(PANEL == panel)
+    drivers_in_panel <- drivers %>%
+      dplyr::filter(PANEL == panel)
 
     y_max_count <- drivers_in_panel[["y_max"]][1]
 
@@ -104,16 +128,24 @@ add_driver_mutation_labels <- function(
         min.segment.length = 0,
         segment.color = "grey50", # Color of the connecting segment
         segment.linetype = "dashed", # Line type of the segment
-        show.legend = FALSE,
+        key_glyph = "rect",
         segment.curvature = 0,
         segment.ncp = 1,
         segment.square = TRUE,
         segment.inflect = TRUE,
-        direction = "both"
+        direction = "both",
+        box.padding = 0.5,
+        point.padding = 0.5,
+        force = 2
       )
   }
 
-  return(plot)
+  plot +
+    ggplot2::scale_fill_manual(values = get_species_colors(mutants),
+                               drop = FALSE, name = "Mutants") +
+    ggplot2::theme(
+      legend.key.spacing.y = ggplot2::unit(0.5, "mm")
+    )
 }
 
 # filter germinal mutations from data
@@ -198,7 +230,7 @@ setup_data_for_plotting <- function(
     result["label_name"] <- label_name
   }
 
-  return(result)
+  result
 }
 
 # setup data for VAF plotting
@@ -229,7 +261,7 @@ setup_VAF_data_for_plotting <- function(
     filtered_result["label_name"] <- result$label_name
   }
 
-  return(filtered_result)
+  filtered_result
 }
 
 #' Plot a Variant Allele Frequency (VAF) histogram
@@ -269,9 +301,7 @@ setup_VAF_data_for_plotting <- function(
 #' set.seed(0)
 #'
 #' sim <- TissueSimulation()
-#' sim$add_mutant(name = "A",
-#'                growth_rates = 0.1,
-#'                death_rates = 0.0)
+#' sim$add_mutant("A", c(duplication = 0.1))
 #' sim$place_cell("A", 500, 500)
 #' sim$run_up_to_time(100)
 #'
@@ -282,10 +312,8 @@ setup_VAF_data_for_plotting <- function(
 #' sim$sample_cells("SampleA", bbox$lower_corner, bbox$upper_corner)
 #'
 #' # adding second mutant
-#' sim$add_mutant(name = "B",
-#'                growth_rates = 0.3,
-#'                death_rates = 0.0)
-#' sim$mutate_progeny(sim$choose_cell_in("A"), "B")
+#' sim$add_mutant("B", c(duplication = 0.3))
+#' sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
 #' sim$run_up_to_time(300)
 #'
 #' # sampling tissue again
@@ -297,10 +325,10 @@ setup_VAF_data_for_plotting <- function(
 #' # placing mutations
 #' m_engine <- MutationEngine(setup_code = "demo")
 #'
-#' m_engine$add_mutant(mutant_name="A", passenger_rates=c(SNV=5e-8),
+#' m_engine$add_mutant("A", passenger_rates = c(SNV = 5e-8),
 #'                     drivers = list(SNV("22", 16510210, "C", "T", allele = 1),
 #'                                    "DGCR8 P26L"))
-#' m_engine$add_mutant(mutant_name="B", passenger_rates=c(SNV=5e-9),
+#' m_engine$add_mutant(mutant_name = "B", passenger_rates = c(SNV = 5e-9),
 #'                     drivers = list("DGCR8 A18V"))
 #' m_engine$add_exposure(c(SBS1 = 0.2, SBS5 = 0.8))
 #'
@@ -322,7 +350,7 @@ setup_VAF_data_for_plotting <- function(
 #' }
 #'
 #' # plotting the VAF histogram without germinal and pre-neoplastic
-#' plot_VAF_histogram(seq_results, mutation_filter=filter_data)
+#' plot_VAF_histogram(seq_results, mutation_filter = filter_data)
 #'
 #' # plotting the VAF histogram filtering out VAFs below 0.02
 #' plot_VAF_histogram(seq_results, cuts = c(0.02, 1))
@@ -377,10 +405,15 @@ plot_VAF_histogram <- function(
   data <- setup_data$data
 
   if (!is.null(labels)) {
+    for (col_name in colnames(labels)) {
+      labels <- labels %>%
+        dplyr::mutate(!!col_name := factor(.data[[col_name]]))
+    }
+
     plot <- data %>%
-      ggplot2::ggplot(mapping = ggplot2::aes(x = VAF,
-                                             fill = labels)) +
-      ggplot2::labs(col = NULL, fill = setup_data$label_name)
+      ggplot2::ggplot(
+        mapping = ggplot2::aes(x = VAF, fill = labels,
+                               name = setup_data$label_name))
   } else {
     plot <- data %>%
       ggplot2::ggplot(mapping = ggplot2::aes(x = VAF))

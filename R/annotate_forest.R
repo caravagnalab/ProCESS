@@ -38,26 +38,26 @@
 #'
 #' @examples
 #' sim <- TissueSimulation()
-#' sim$add_mutant(name = "A", growth_rates = 0.08, death_rates = 0.01)
+#' sim$add_mutant("A", c(duplication = 0.08, death = 0.01))
 #' sim$place_cell("A", 500, 500)
 #' sim$run_up_to_time(60)
 #' sim$sample_cells("MySample", c(500, 500), c(510, 510))
-#' m_engine = MutationEngine(setup_code = "demo")
+#' m_engine <- MutationEngine(setup_code = "demo")
 #'
 #' m_engine$add_mutant(mutant_name = "A",
 #'                     passenger_rates = c(SNV = 1e-9),
 #'                     drivers = list(SNV("22", 10510210, "C"),
 #'                                    CNA(type = "A", "22", from = 10303470,
 #'                                        len = 200000)))
-#' m_engine$add_exposure(coefficients = c(SBS13 = 0.2, SBS1 = 0.8))
-#' m_engine$add_exposure(time=50, coefficients = c(SBS17b = 0.2, SBS3 = 0.8))
+#' m_engine$add_exposure(c(SBS13 = 0.2, SBS1 = 0.8))
+#' m_engine$add_exposure(time = 50, c(SBS17b = 0.2, SBS3 = 0.8))
 #'
-#' forest = sim$get_sample_forest()
+#' forest <- sim$get_sample_forest()
 #' forest$get_samples_info()
-#' forest_muts = m_engine$place_mutations(forest, 1000, 500)
-#' tree_plot = plot_forest(forest)
+#' forest_muts <- m_engine$place_mutations(forest, 1000, 500)
+#' tree_plot <- plot_forest(forest)
 #' annotate_forest(tree_plot, forest_muts, samples = T, MRCAs = T,
-#'                 exposures = T, drivers=T, add_driver_label = T)
+#'                 exposures = T, drivers = T, add_driver_label = T)
 annotate_forest <- function(tree_plot, forest, samples = TRUE, MRCAs = TRUE,
                             exposures = FALSE, facet_signatures = TRUE,
                             drivers = TRUE, add_driver_label = TRUE) {

@@ -19,20 +19,18 @@ knitr::opts_chunk$set(
 )
 ```
 
-> *Disclaimer:* ProCESS/CLONES internally implements the
-> probability distributions using the C++11 random number
-> distribution classes. The standard does not specify their
-> algorithms, and the class implementations are left free
-> for the compiler. Thus, the simulation output depends on
-> the compiler used to compile [CLONES](https://github.com/albertocasagrande/CLONES), and because of that,
-> the results reported in this article may differ from
-> those obtained by the reader.
+> *Disclaimer:* ProCESS/CLONES implements probability distributions using the
+> C++11 random number distribution classes. Since the standard does not specify
+> the underlying algorithms, their implementations are left to the compiler.
+> Consequently, the simulation output depends on the compiler used to build
+> [CLONES](https://github.com/albertocasagrande/CLONES), and the results
+> reported in this article may differ from those obtained by the reader.
 
 We build a tumour with a single mutant `A` and grow it up to
 10 cells.
 
 ```{r}
-library(ProCESS)
+library("ProCESS")
 
 # set the seed of the random number generator for repeatability
 set.seed(0)
@@ -45,7 +43,7 @@ sim$history_delta <- 10
 # avoid drift
 sim$death_activation_level <- 50
 
-sim$add_mutant(name = "A", growth_rates = 0.12, death_rates = 0.05)
+sim$add_mutant("A", c(duplication = 0.12, death = 0.05))
 
 sim$place_cell("A", 300, 300)
 sim$run_up_to_size("A", 10)
@@ -54,8 +52,8 @@ sim$run_up_to_size("A", 10)
 We add a new mutant `B` as a sub-clone of `A` and let the simulation
 evolve until `B` reaches 30 cells.
 ```{r}
-sim$add_mutant(name = "B", growth_rates = 0.145, death_rates = 0.06)
-sim$mutate_progeny(sim$choose_cell_in("A"), "B")
+sim$add_mutant("B", c(duplication = 0.145, death = 0.06))
+sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
 
 sim$run_up_to_size("B", 30)
 ```
@@ -63,8 +61,8 @@ sim$run_up_to_size("B", 30)
 We add a further mutant `C` as a sub-clones for `A` and let the tumour
 grow again up to the point at which `C` consists of 25000 cells.
 ```{r}
-sim$add_mutant(name = "C", growth_rates = 0.15, death_rates = 0.06)
-sim$mutate_progeny(sim$choose_cell_in("A"), "C")
+sim$add_mutant("C", c(duplication = 0.15, death = 0.06))
+sim$mutate_progeny(sim$choose_border_cell_in("A"), "C")
 
 sim$run_up_to_size("C", 25000)
 ```
@@ -105,10 +103,10 @@ simulation continue to evolve until the sum of the cardinalities of mutants `C`
 and `D` is 100000, and sample the tissue again.
 
 ```{r, fig.width=3, fig.height=3, fig.alt=c("After collecting the samples S1 and S2, a more aggressive mutant D arises from B and a further sample S3, containing both D and C cells, is collected.", "The simulation state after collecting S3.")}
-sim$add_mutant(name = "D", growth_rates = 0.8, death_rates = 0.01)
-sim$mutate_progeny(sim$choose_cell_in("B", c(240, 130), c(250, 150)), "D")
+sim$add_mutant(name = "D", c(duplication = 0.8, death = 0.01))
+sim$mutate_progeny(sim$choose_border_cell_in("B"), "D")
 
-sim$run_until(sim$var("C") + sim$var("D") == 100000)
+sim$run_until(sim$var("C") + sim$var("D") == 1e5)
 
 sim$sample_cells("S3", c(360, 80), c(430, 150))
 

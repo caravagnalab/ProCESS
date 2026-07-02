@@ -37,17 +37,15 @@ articles:
   - SCOUT
 
 reference:
-- title: "Spatial simulation interface"
-  desc:  "Spatial simulation classes and methods"
+- title: "Tissue simulation interface"
+  desc:  "Tissue simulation classes and methods"
   contents:
   - annotate_forest
   - bbox_sampler
-  - load_samples_forest
-  - load_sample_forest
-  - starts_with("TissueRectangle")
-  - starts_with("SampleForest")
-  - SpatialSimulation
   - get_label_tour
+  - load_sample_forest
+  - starts_with("SampleForest")
+  - starts_with("TissueRectangle")
   - starts_with("TissueSimulation")
   - plot_firings
   - plot_muller

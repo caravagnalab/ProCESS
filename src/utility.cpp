@@ -119,23 +119,6 @@ CLONES::Mutations::AlleleId get_allele_id(const SEXP allele_id,
                "non-negative number or NILL.");
 }
 
-std::string ordinal_suffix(const size_t &ord)
-{
-    if ((ord % 100) / 10 == 1) {
-        return "th";
-    }
-    switch (ord % 10) {
-    case 1:
-        return "st";
-    case 2:
-        return "nd";
-    case 3:
-        return "rd";
-    default:
-        return "th";
-    }
-}
-
 void raise_error(const CLONES::Archive::WrongFileFormatDescr &exception,
                  const std::string &file_description)
 {

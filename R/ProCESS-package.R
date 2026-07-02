@@ -346,12 +346,10 @@
               logics_or(e1, e2)
             }, where = .GlobalEnv)
 
-
   #' @importFrom rlang .data
   setMethod("show", "Rcpp_TissueSimulation", function(object) {
     # If it can be simulated
-    sim_status <- (nrow(object$get_species())
-                   & nrow(object$get_cells()))
+    sim_status <- nrow(object$get_cells())
 
     # If it has samples assigned
     sam_status <- sim_status & nrow(object$get_samples_info())
@@ -392,34 +390,103 @@
       )
     )
 
-    species <- object$get_species()
-    if (nrow(species) > 0) {
-      counts_tab <- object$get_counts() %>%
+    species_name <- function(mutant, epistate) {
+      dplyr::if_else(is.na(epistate),
+                     epistate,
+                     paste0(mutant, "[", epistate, "]"))
+    }
+
+    counts_tab <- object$get_counts()
+    if (nrow(counts_tab) > 0) {
+      counts_tab <- counts_tab %>%
         dplyr::mutate(
           `%` = 100 * .data$counts / sum(.data$counts)
         )
 
-      my_tab <- species %>%
-        dplyr::left_join(counts_tab, by = c("mutant", "epistate")) %>%
-        dplyr::mutate(species = paste0(.data$mutant, .data$epistate)) %>%
-        dplyr::select(.data$species, .data$growth_rate,
-                      .data$death_rate, .data$switch_rate, .data$counts,
-                      .data$`%`)
-      colnames(my_tab)[2:4] <- c(" \u03BB ", " \u03B4 ", " \u03B5 ")
+      rates <- object$get_rates()
 
-      nspecies <- nrow(my_tab)
-      with_epigenetics <- max(nchar(species$epistate)) != 0
+      with_epigenetics <- "epistate" %in% colnames(rates)
+      if (with_epigenetics) {
+        with_epigenetics <- max(nchar(rates$epistate)) != 0
+      }
 
-      cli::cli_h3(text = paste0("Species: {.field {nspecies}}, ",
+      if (with_epigenetics) {
+        rates <- rates %>%
+          dplyr::mutate(species = species_name(.data$mutant, .data$epistate),
+                        dest = species_name(.data$mutant,
+                                            .data$first.child.epistate)) %>%
+          dplyr::select(.data$species, .data$event,
+                        .data$dest, .data$rate)
+        counts_tab <- counts_tab %>%
+          dplyr::mutate(species = species_name(.data$mutant,
+                                               .data$epistate)) %>%
+          dplyr::select(.data$species, .data$counts, .data$`%`)
+      } else {
+        rates <- rates %>%
+          dplyr::mutate(species = .data$mutant) %>%
+          dplyr::select(.data$species, .data$event, .data$rate)
+        counts_tab <- counts_tab %>%
+          dplyr::mutate(species = .data$mutant) %>%
+          dplyr::select(.data$species, .data$counts, .data$`%`)
+      }
+
+      death_rates <- rates %>% dplyr::filter(.data$event == "death") %>%
+        dplyr::mutate(death = .data$rate) %>%
+        dplyr::select(.data$species, .data$death)
+
+      duplication_rates <- rates %>%
+        dplyr::filter(.data$event == "duplication") %>%
+        dplyr::mutate(duplication = .data$rate) %>%
+        dplyr::select(.data$species, .data$duplication)
+
+      my_tab <- duplication_rates %>%
+        dplyr::full_join(death_rates, by = c("species")) %>%
+        dplyr::full_join(counts_tab, by = c("species")) %>%
+        dplyr::mutate(death = dplyr::coalesce(.data$death, 0),
+                      duplication = dplyr::coalesce(.data$duplication, 0)) %>%
+        dplyr::select(.data$species, .data$duplication,
+                      .data$death, .data$counts, .data$`%`) %>%
+        dplyr::arrange(.data$species)
+      rm(duplication_rates)
+      rm(death_rates)
+
+      colnames(my_tab)[2:3] <- c(" \u03BB ", " \u03B4 ") #, " \u03B5 ")
+
+      cli::cli_h3(text = paste0("Species: {.field {nrow(my_tab)}}, ",
                                 "{.field {ifelse(with_epigenetics, ",
                                 "crayon::green('with'), ",
                                 "crayon::red('without'))}} epigenetics"))
 
-      cat("   ", knitr::kable(my_tab, format = "rst", align = "rcrccc"),
+      cat("   ", knitr::kable(my_tab, format = "rst", align = "rcccc"),
           sep = "\n   ")
 
-      f_table <- object$get_firings() %>%
-        dplyr::mutate(species = paste0(.data$mutant, .data$epistate))
+      if (with_epigenetics) {
+
+        cli::cli_h3(text = "Epigenetic switches")
+        switch_rates <- rates %>%
+          dplyr::filter(.data$event != "death" & !is.na(.data$dest) &
+                        .data$species != .data$dest) %>%
+          dplyr::select(.data$species, .data$rate, .data$dest) %>%
+          dplyr::arrange(.data$species, .data$dest)
+
+        colnames(switch_rates)[2] <- " \u03B5 "
+
+        cat("   ", knitr::kable(switch_rates, format = "rst", align = "rcr"),
+            sep = "\n   ")
+
+        rm(switch_rates)
+      }
+
+      rm(rates)
+
+      f_table <- object$get_firings()
+
+      if (with_epigenetics) {
+        f_table <- f_table %>%
+          dplyr::mutate(species = species_name(.data$mutant, .data$epistate))
+      } else {
+        f_table <- f_table %>% dplyr::mutate(species = .data$mutant)
+      }
 
       cli::cli_h3(text = paste("Firings:", sum(f_table$fired), "total"))
 
@@ -432,7 +499,7 @@
 
           if (with_epigenetics) {
             sprintf(
-              paste0("\n\tSpecies [%s]: %", nch, "s (deaths), %",
+              paste0("\n\tSpecies %s: %", nch, "s (deaths), %",
                      nch, "s (duplications) and %", nch, "s (switches)"),
               s,
               s_ftab$fired[1],
@@ -441,7 +508,7 @@
             ) %>% cat()
           } else {
             sprintf(
-              paste0("\n\tSpecies [%s]: %", nch, "s (deaths) and %",
+              paste0("\n\tSpecies %s: %", nch, "s (deaths) and %",
                      nch, "s (duplications)"),
               s,
               s_ftab$fired[1],

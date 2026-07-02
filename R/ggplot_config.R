@@ -41,35 +41,55 @@ get_colors_for <- function(values, pal_name = "Dark2") {
   return(colors)
 }
 
-get_species_colors <- function(species) {
+species_name <- function(mutant, epistate) {
+  dplyr::if_else(is.na(epistate),
+                 epistate,
+                 paste0(mutant, "[", epistate, "]"))
+}
 
-  paired_species <- species %>%
-    dplyr::filter(!is.na(.data$epistate)) %>%
-    dplyr::mutate(
-      species = paste0(.data$mutant, .data$epistate)
-    ) %>%
-    dplyr::arrange(.data$mutant)
-
-  unpaired_species <- species %>%
-    dplyr::filter(is.na(.data$epistate)) %>%
-    dplyr::mutate(
-      species = paste0(.data$mutant, .data$epistate)
-    ) %>%
-    dplyr::arrange(.data$mutant)
-
-  # Unpaired
-  unp_colour <- NULL
-  if (nrow(unpaired_species) > 0) {
-    unp_colour <- get_colors_for(unpaired_species[, "mutant"], "Dark2")
+add_species_col <- function(data, col_name = "species") {
+  if ("epistate" %in% colnames(data)) {
+    new_data <- data %>% dplyr::mutate(
+      !!dplyr::sym(col_name) := species_name(.data$mutant, .data$epistate)
+    )
+  } else {
+    new_data <- data %>% dplyr::mutate(
+      !!dplyr::sym(col_name) := .data$mutant
+    )
   }
 
-  # Paired
-  pai_colour <- NULL
-  if (nrow(paired_species) > 0) {
-    pai_colour <- get_colors_for(paired_species[, "species"], "Paired")
-  }
+  new_data %>%
+    dplyr::arrange(.data$mutant)
+}
 
-  return(c(pai_colour, unp_colour))
+get_species <- function(simulation) {
+  stopifnot(inherits(simulation, "Rcpp_TissueSimulation"))
+
+  with_epigenetics <- nrow(simulation$get_epigenetic_states()) > 0
+
+  if (with_epigenetics) {
+    dplyr::cross_join(simulation$get_mutants(),
+                      simulation$get_epigenetic_states())
+  } else {
+    simulation$get_mutants()
+  }
+}
+
+get_species_colors <- function(data) {
+  if ("epistate" %in% colnames(data)) {
+    name_species <- data %>%
+      dplyr::mutate(
+        species = species_name(.data$mutant, .data$epistate)
+      ) %>%
+      dplyr::arrange(.data$mutant)
+
+    get_colors_for(name_species[, "species"], "Paired")
+  } else {
+    name_species <- data %>%
+      dplyr::arrange(.data$mutant)
+
+    get_colors_for(name_species[, "mutant"], "Dark2")
+  }
 }
 
 validate_chromosomes <- function(seq_res, chromosomes) {

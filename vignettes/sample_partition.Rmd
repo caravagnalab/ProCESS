@@ -23,42 +23,36 @@ knitr::opts_chunk$set(
 > *Note:* This article presents advanced topics on sequencing simulation.
 > Refer to [this article](sequencing.md) for an introduction on the subject.
 
-> *Disclaimer:* ProCESS/CLONES internally implements the
-> probability distributions using the C++11 random number
-> distribution classes. The standard does not specify their
-> algorithms, and the class implementations are left free
-> for the compiler. Thus, the simulation output depends on
-> the compiler used to compile [CLONES](https://github.com/albertocasagrande/CLONES), and
-> because of that, the results reported in this article may
-> differ from those obtained by the reader.
+> *Disclaimer:* ProCESS/CLONES implements probability distributions using the
+> C++11 random number distribution classes. Since the standard does not specify
+> the underlying algorithms, their implementations are left to the compiler.
+> Consequently, the simulation output depends on the compiler used to build
+> [CLONES](https://github.com/albertocasagrande/CLONES), and the results
+> reported in this article may differ from those obtained by the reader.
 
 
 ProCESS allows to partition samples according to cell features as 
 [FACS](https://www.sinobiological.com/category/fcm-facs-facs) does.
 The method  <code>[PhylogeneticForest$partition_samples()](../reference/PhylogeneticForest-cash-partition_samples.md)</code>
-takes 
-a labelling function, which accepts as input an object of the 
-class `SampledCell` and returns a string, and applies it 
-to the sampled cells. Then, it partitions the 
-forest samples by using the obtained labels.
-The resulting sub-samples are named according the format
-`<sample name>_<cell label>`.
+takes a labelling function, which accepts as input an object of the class
+`SampledCell` and returns a string, and applies it to the sampled cells. Then,
+it partitions the forest samples by using the obtained labels. The resulting
+sub-samples are named according the format `<sample name>_<cell label>`.
 
 The method <code>[PhylogeneticForest$partition_samples()](../reference/PhylogeneticForest-cash-partition_samples.md)</code>
-permanently changes the
-phylogenetic forest from which is called. If users want to preserve the 
-original forest, they must take care of it, for instance by copying or
-saving it in a file.
+permanently changes the phylogenetic forest from which is called. If users want
+to preserve the original forest, they must take care of it, for instance by
+copying or saving it in a file.
 
 ```{r, echo=FALSE, results='hide', message=FALSE}
-library(ProCESS)
+library("ProCESS")
 
 phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
 ```
 
-Let us assume to have built the phylogenetic forest `phylo_forest`
-as detailed in [this article](mutations.md). Information about the samples
-from which the forest has been built can be obtained by using the
+Let us assume to have built the phylogenetic forest `phylo_forest` as detailed
+in [this article](mutations.md). Information about the samples from which the
+forest has been built can be obtained by using the
 <code>[PhylogeneticForest$get_samples_info()](../reference/PhylogeneticForest-cash-get_samples_info.md)</code>.
 
 ```{r}
@@ -71,19 +65,7 @@ follows.
 ```{r}
 # the labelling function parameter has type `SampledCell`
 epi_labelling <- function(cell) {
-
-  # epigenetic state is "+", "-", "". However, "+" and "-"
-  # are not supported in R data frame column names, so, we
-  # can replace them by "P" and "N", respectively
-  if (cell$epistate == "+") {
-    return("P")
-  }
-
-  if (cell$epistate == "-") {
-    return("N")
-  }
-
-  return("")
+  cell$epistate
 }
 
 phylo_forest$partition_samples(epi_labelling)
@@ -100,7 +82,7 @@ phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
 
 # a mutant-name-based labelling function
 mutant_labelling <- function(cell) {
-  return(cell$mutant)
+  cell$mutant
 }
 
 phylo_forest$partition_samples(mutant_labelling)
@@ -127,7 +109,7 @@ birth_time_labelling <- function(cell) {
   return("OLD")
 }
 
-phylo_forest$partition_samples(mutant_labelling)
+phylo_forest$partition_samples(birth_time_labelling)
 
 phylo_forest$get_samples_info()
 ```
@@ -165,7 +147,7 @@ mutations_labelling <- function(cell) {
   return("MISSES_MUTATION")
 }
 
-phylo_forest$partition_samples(mutant_labelling)
+phylo_forest$partition_samples(mutations_labelling)
 
 phylo_forest$get_samples_info()
 ```

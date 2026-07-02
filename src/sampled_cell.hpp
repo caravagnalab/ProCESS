@@ -30,16 +30,11 @@ class SampledCell : private CLONES::Mutations::PhylogeneticForest::const_node
     SampledCell(const CLONES::Mutations::PhylogeneticForest &forest,
                 const CLONES::Mutants::CellId &cell_id);
 
-    inline std::string epistate() const
-    {
-        using namespace CLONES::Mutants;
-
-        return MutantProperties::signature_to_string(get_methylation_signature());
-    }
-
     inline std::string mutant() const { return get_mutant_name(); }
 
-    inline std::string species() const { return mutant() + epistate(); }
+    inline std::string epistate() const { return get_epistate_name(); }
+
+    inline std::string species() const { return get_species_name(); }
 
     inline const CLONES::Time &birth_time() const { return get_birth_time(); }
 

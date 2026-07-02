@@ -37,9 +37,9 @@ RCPP_MODULE(Mutations)
 
 //' @name Mutation$get_chromosome
 //' @title Getting the mutation chromosome
-//' @description This method returns the identifier of the chromosome
-//'   where the mutation occurs.
-//' @return The chromosome in which the mutation occurs.
+//' @description This method identify the chromosome where the mutation
+//'   occurred.
+//' @return The identifier of the chromosome in which the mutation occurred.
 //' @examples
 //' snv <- SNV("X", 20002, "T", "A")
 //'
@@ -51,8 +51,8 @@ RCPP_MODULE(Mutations)
 //' @name Mutation$get_position_in_chromosome
 //' @title Getting the mutation chromosome position
 //' @description This method returns the position in the chromosome where
-//'   the mutation occurs.
-//' @return The position in chromosome where the mutation occurs.
+//'   the mutation occurred.
+//' @return The position in chromosome where the mutation occurred.
 //' @examples
 //' snv <- SNV("X", 20002, "T", "A")
 //'
@@ -75,8 +75,8 @@ RCPP_MODULE(Mutations)
 
 //' @name Mutation$get_alt
 //' @title Getting the mutation altered sequence
-//' @description This method returns the sequence after the mutation occurs.
-//' @return The sequence after the mutation occurs.
+//' @description This method returns the sequence after the mutation occurred.
+//' @return The sequence after the mutation occurred.
 //' @examples
 //' snv <- SNV("X", 20002, "T", "A")
 //'
@@ -110,7 +110,7 @@ RCPP_MODULE(Mutations)
 //' @title Getting the mutation data frame
 //' @description This method builds a data frame representing the mutation.
 //' @details The data frame has the columns `chr`, `from`, `ref`, `alt`,
-//'   `type` (i.e., "`SNV`" and "`indel`"), and `cause`.
+//'   `type` (i.e., `SNV` and `indel`), and `cause`.
 //' @examples
 //' snv <- SNV("X", 20002, "T", "A")
 //'
@@ -123,7 +123,7 @@ RCPP_MODULE(Mutations)
 //' @name SNV
 //' @title Creating an SNV
 //' @description This function creates SNVs.
-//' @usage SNV(chr, chr_pos, alt, ref="?", allele=NULL, cause="")
+//' @usage SNV(chr, chr_pos, alt, ref="?", allele = NULL, cause="")
 //' @param chr The name of the chromosome in which the SNV occurs.
 //' @param chr_pos The position in the chromosome where the SNV occurs.
 //' @param alt The base after the mutation.
@@ -155,14 +155,14 @@ RCPP_MODULE(Mutations)
 //' @name Mutation
 //' @title Creating a SNV or a indel
 //' @description This function creates SNVs and indels.
-//' @details It generalizes the function `SNV()` by building SNVs and
-//'   indels. However, it requires the reference sequence specification
-//'   whereas `SNV()` can deduce it from the reference sequence itself.
+//' @details This function generalizes the function `SNV()` by constructing
+//'   SNVs and indels. However, it necessitates the specification of the
+//'   reference sequence, whereas `SNV()` can infer it from the reference
+//'   sequence itself.
 //'
-//'   Another difference with respect to `SNV()` is the `ref`-`alt`
-//'   parameter order: the `alt` parameter comes before the optional
-//'   `ref` parameter in `SNV()`; `Mutation()` adopts the reverse order.
-//' @usage Mutation(chr, chr_pos, ref, alt, allele=NULL, cause="")
+//'   Another distinction between this function and `SNV()` lies in the order
+//'   of the `ref`-`alt` parameter: in `SNV()`, the alt parameter precedes the
+//'   optional ref parameter, while `Mutation()` adopts the reverse order.
 //' @param chr The name of the chromosome in which the indel occurs.
 //' @param from The position in the chromosome where the indel occurs.
 //' @param ref The reference sequence.
@@ -194,7 +194,7 @@ RCPP_MODULE(Mutations)
 //' @name CNA
 //' @title Creating a CNA
 //' @description This function creates a CNA.
-//' @usage CNA(type, chr, chr_pos, len, allele=NULL, src_allele=NULL)
+//' @usage CNA(type, chr, chr_pos, len, allele = NULL, src_allele = NULL)
 //' @param type The CNA type: either `"A"` or `"D"` for amplification and
 //'   deletion, respectively.
 //' @param chr The name of the chromosome in which the CNA occurs.
@@ -223,7 +223,7 @@ RCPP_MODULE(Mutations)
 //' @name Amplification
 //' @title Creating a CNA amplification
 //' @description This function creates a CNA amplification.
-//' @usage Amplification(chr, chr_pos, len, allele=NULL, src_allele=NULL)
+//' @usage Amplification(chr, chr_pos, len, allele = NULL, src_allele = NULL)
 //' @param chr The name of the chromosome in which the CNA occurs.
 //' @param from The position in the chromosome where the CNA occurs.
 //' @param len The CNA length.
@@ -244,7 +244,7 @@ RCPP_MODULE(Mutations)
 //' @name Deletion
 //' @title Creating a CNA deletion
 //' @description This function creates a CNA deletion.
-//' @usage Deletion(chr, chr_pos, len, allele=NULL)
+//' @usage Deletion(chr, chr_pos, len, allele = NULL)
 //' @param chr The name of the chromosome in which the CNA occurs.
 //' @param from The position in the chromosome where the CNA occurs.
 //' @param len The CNA length.
@@ -268,8 +268,8 @@ RCPP_MODULE(Mutations)
 //' @name CNA$get_chromosome
 //' @title Getting the CNA chromosome
 //' @description This method returns the identifier of the chromosome
-//'   where the CNA occurs.
-//' @return The identifier of the chromosome in which the CNA occurs.
+//'   where the CNA occurred.
+//' @return The identifier of the chromosome in which the CNA occurred.
 //' @examples
 //' # create an amplification CNA
 //' cna <- CNA("A", "X", 20002, 100)
@@ -281,8 +281,8 @@ RCPP_MODULE(Mutations)
 //' @name CNA$get_position_in_chromosome
 //' @title Getting the CNA chromosome position
 //' @description This method returns the position in chromosome
-//'   where the CNA occurs.
-//' @return The position in chromosome where the CNA occurs.
+//'   where the CNA occurred.
+//' @return The position in chromosome where the CNA occurred.
 //' @examples
 //' # create an amplification CNA
 //' cna <- Amplification("X", 20002, 100, 1, 0)
@@ -307,11 +307,11 @@ RCPP_MODULE(Mutations)
 //' @name CNA$get_allele
 //' @title Getting the CNA allele
 //' @description This method returns the identifier of the allele in
-//'    which the CNA is occurs.
+//'    which the CNA occurred.
 //' @details If the CNA is an amplification corresponds to the new
 //'    allele identifier. If, instead, the CNA is a deletion is the
-//'    identifier of the allele on which the deletion occurs.
-//' @return The allele in which CNA occurs.
+//'    identifier of the allele on which the deletion occurred.
+//' @return The allele in which CNA occurred.
 //' @examples
 //' # create an amplification CNA
 //' cna <- Amplification("X", 20002, 100, 1, 0)
@@ -343,8 +343,8 @@ RCPP_MODULE(Mutations)
 //' @name CNA$get_dataframe
 //' @title Getting the CNA data frame
 //' @description This method builds a data frame representing the CNA.
-//' @details The data frame contains the  columns "`chr`", "`from`",
-//'   "`length`", "`alt_base`", "`allele`"", "`src_allele`", and "`type`".
+//' @details The data frame contains the  columns `chr`, `from`,
+//'   `length`, `alt_base`, `allele`", `src_allele`, and `type`.
 //' @examples
 //' # create an amplification CNA
 //' amp_cna <- Amplification("X", 20002, 100)
@@ -374,26 +374,24 @@ RCPP_MODULE(Mutations)
 //'   forest by mutations and produce a consistent phylogenetic forest.
 //' @details The mutations are randomly generated according to three
 //'   factors:
-//'   - the mutational rates of the species involved in the samples
+//'   1. the mutational rates of the species involved in the samples
 //'   forest
-//'   - the genotypical characterisation of the mutants involved in the
+//'   2. the genotypical specification of the mutants involved in the
 //'   sample forest, i.e., the somatic mutations characterising
 //'   the mutant genotypes
-//'   - the SBS and ID signatures active along the species simulation
+//'   3. the SBS and ID signatures active along the species simulation
 //'
-//'   These data are provided to a mutation engine by using the methods
-//'   [MutationEngine$add_exposure()] and
+//'   The data of points 1 and 2 are provided to the mutation engine by
+//'   the method [MutationEngine$add_mutant()].
+//'   Instead, the active signatures are defined by using the method
 //'   [MutationEngine$add_exposure()].
-//'   These data are provided by means of the
-//'    [MutationEngine$add_mutant()].
 //'
 //'   The initialisation of a `MutationEngine` object requires a reference
 //'   sequence and the SBS and ID mutational signatures. An SBS index and
 //'   a ID index of the reference sequence are then automatically built.
-//'   Thess processes may take time depending on the size of the reference
-//'   sequence. Because of this, the downloaded files together with the
-//'   context index are saved in a directory on the disk and they are
-//'   available for successive `MutationEngine` constructions.
+//'   This process may take time depending on the size of the reference
+//'   sequence. Hence, the downloaded files together with the built indices
+//'   are saved on the disk for subsequent `MutationEngine` constructions.
 //'
     class_<MutationEngine>("MutationEngine")
 
@@ -477,23 +475,34 @@ RCPP_MODULE(Mutations)
 //' # create a demonstrative mutation engine
 //' m_engine <- MutationEngine(setup_code = "demo")
 //'
-//' # add the mutant "A" characterized by two driver SNV on chromosome 22, two
-//' # indels on the same chromosome, a whole genome doubling event, and finally
-//' # two CNAs: an amplification and a deletion. The mutant has two epigenetic
-//' # states and its species "A+" and "A-" have passenger SNV rates 1e-9 and
-//' # 3e-8, respectively, and passenger CNA rates 0 and 1e-11, respectively.
-//' m_engine$add_mutant("A", list("+" = c(SNV = 1e-9, indel = 1e-10),
-//'   "-" = c(SNV = 3e-8, CNA = 1e-11)),
-//'   drivers = list("DGCR8 P26L",
-//'   Mutation("22", 16085675, "GCCTCCCGA",
-//'   "G"),
-//'   "EP300 S2346del",
-//'   WGD,
-//'   CNA(type = "A", chr = "22",
-//'   from = 10303470,
-//'   len = 200000),
-//'   SNV("22", 23657587, "C"),
-//'   CNA("D", "22", 5010000, 200000)))
+//' # define a list of mutations
+//' d_mutations <- list("DGCR8 P26L",
+//'                     Mutation("22", 16085675, "GCCTCCCGA", "G"),
+//'                     "EP300 S2346del",
+//'                     WGD,
+//'                     CNA(type = "A", chr = "22", from = 10303470,
+//'                         len = 200000),
+//'                     SNV("22", 23657587, "C"),
+//'                     CNA("D", "22", 5010000, 200000))
+//'
+//' # add the mutant "A" characterized by the mutations in `d_mutations`. The
+//' # mutations are applied according to `d_mutations`'s order. The mutant has
+//' # one epigenetic states and its species "A[E1]" and "A[E2]" have passenger
+//' # SNV rates 1e-9 and 3e-8, respectively, and passenger CNA rates 0 and
+//' # 1e-11, respectively.
+//' m_engine$add_mutant("A", passenger_rates =c(SNV = 1e-9, indel = 1e-10),
+//'                     drivers = d_mutations)
+//'
+//' m_engine
+//'
+//' # add the mutant "B" characterized by the mutations in `d_mutations`. The
+//' # mutations are applied according to `d_mutations`'s order. The mutant has
+//' # two epigenetic states and its species "B[E1]" and "B[E2]" have passenger
+//' # SNV rates 1e-9 and 3e-8, respectively, and passenger CNA rates 0 and
+//' # 1e-11, respectively.
+//' m_engine$add_mutant("B", list("E1" = c(SNV = 1e-9, indel = 1e-10),
+//'                               "E2" = c(SNV = 3e-8, CNA = 1e-11)),
+//'                     drivers = d_mutations)
 //'
 //' m_engine
         .method("add_mutant",
@@ -523,28 +532,33 @@ RCPP_MODULE(Mutations)
 //' # create a demonstrative mutation engine
 //' m_engine <- MutationEngine(setup_code = "demo")
 //'
-//' # add the mutant "A" characterized by two driver SNV on chromosome 22, two
-//' # indels on the same chromosome, a whole genome doubling event, and finally
-//' # two CNAs: an amplification and a deletion. The mutant has two epigenetic
-//' # states and its species "A+" and "A-" have passenger SNV rates 1e-9 and
-//' # 3e-8, respectively, and passenger CNA rates 0 and 1e-11, respectively.
-//' m_engine$add_mutant("A", list("+" = c(SNV = 1e-9, indel = 1e-10),
-//'   "-" = c(SNV = 3e-8, CNA = 1e-11)),
-//'   drivers = list("DGCR8 P26L",
-//'   Mutation("22", 16085675, "GCCTCCCGA",
-//'   "G"),
-//'   "EP300 S2346del",
-//'   WGD,
-//'   CNA(type = "A", chr = "22",
-//'   from = 10303470,
-//'   len = 200000),
-//'   SNV("22", 23657587, "C"),
-//'   CNA("D", "22", 5010000, 200000)))
+//' # define a list of mutations
+//' d_mutations <- list("DGCR8 P26L",
+//'                     Mutation("22", 16085675, "GCCTCCCGA", "G"),
+//'                     "EP300 S2346del",
+//'                     WGD,
+//'                     CNA(type = "A", chr = "22", from = 10303470,
+//'                         len = 200000),
+//'                     SNV("22", 23657587, "C"),
+//'                     CNA("D", "22", 5010000, 200000))
+//'
+//' # add the mutant "A" characterized by the mutations in `d_mutations`. The
+//' # mutations are applied according to `d_mutations`'s order. The mutant has
+//' # two epigenetic states and its species "A[E1]" and "A[E2]" have passenger
+//' # SNV rates 1e-9 and 3e-8, respectively, and passenger CNA rates 0 and
+//' # 1e-11, respectively.
+//' m_engine$add_mutant("A", list("E1" = c(SNV = 1e-9, indel = 1e-10),
+//'                               "E2" = c(SNV = 3e-8, CNA = 1e-11)),
+//'                     drivers = d_mutations)
 //'
 //' m_engine
 //'
-//' m_engine$change_rates_from(10, "A", list("+" = c(SNV = 4e-1,
-//'   indel = 4e-1)))
+//' # change the rates of "A[E1]" from time 10
+//' m_engine$change_rates_from(10, "A", list("E1" = c(SNV = 2e-9, indel = 4e-9)))
+//'
+//' # ... and those of "A[E2]" from time 13
+//' m_engine$change_rates_from(13, "A", list("E2" = c(SNV = 2e-9)))
+//'
 //' m_engine
         .method("change_rates_from",
                 (void (MutationEngine::*)(const CLONES::Time, const std::string &,
@@ -572,17 +586,21 @@ RCPP_MODULE(Mutations)
 //' # set the seed of the random number generator
 //' set.seed(0)
 //'
-//' # create a simulation
+//' # build a tissue simulation
 //' sim <- TissueSimulation()
-//' sim$add_mutant("A", c(SNV = 0.2), 0.01)
+//'
+//' # add mutant "A" and set its rates
+//' sim$add_mutant("A", c(duplication = 0.2, death = 0.01))
+//'
+//' # place a cell of species "A" in position (500,500)
 //' sim$place_cell("A", 500, 500)
 //'
-//' sim$death_activation_level <- 100
-//' sim$run_up_to_size(species = "A", num_of_cells = 50000)
+//' # run the simulation until "A" accounts for less than 50000 cells
+//' sim$run_up_to_size("A", 50000)
 //'
 //' # sample the region [450,500]x[475,550]
 //' sim$sample_cells("S1", lower_corner = c(450, 475),
-//'   upper_corner = c(500, 550))
+//'                  upper_corner = c(500, 550))
 //'
 //' # build the sample forest
 //' sample_forest <- sim$get_sample_forest()
@@ -595,7 +613,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # add the default set of SNV signature coefficients
 //' m_engine$add_exposure(c(SBS13 = 0.3, SBS1 = 0.7, ID2 = 0.3, ID21 = 0.5,
-//'   ID3 = 0.2))
+//'                         ID3 = 0.2))
 //'
 //' # place the mutations on the sample forest assuming 1000 pre-neoplastic
 //' # SNVs and 500 indels
@@ -635,8 +653,8 @@ RCPP_MODULE(Mutations)
 //' @title Getting the genome information
 //' @description This method returns information about the genome.
 //' @details This method returns a data frame reporting the name
-//'    (column "`name`"), the size (column "`size`"), and the number
-//'    of alleles (column "`num_of_alleles`") of each chromosome.
+//'    (column `name`), the size (column `size`), and the number
+//'    of alleles (column `num_of_alleles`) of each chromosome.
 //' @examples
 //' # build a mutation engine
 //' m_engine <- MutationEngine(setup_code = "demo")
@@ -793,14 +811,14 @@ RCPP_MODULE(Mutations)
 //' @details The mutation are returned in a data frame reporting
 //'   the known driver mutations together with their types,
 //'   associated tumours, affected genes, and code name. The
-//'   first three columns ("`chr`", "`from`", and "`to`")
+//'   first three columns ("`chr`", `from`, and `to`)
 //'   report the mutation chromosome, the initial position
 //'   and the final position, respectively. The next three
-//'   columns ("`ref`", "`alt`", and "`mutation_type`")
+//'   columns ("`ref`", `alt`, and `mutation_type`)
 //'   describe the reference sequence, the altered sequence,
 //'   and the type of the mutation. The last four columns
-//'   ("`driver_gene`", "`driver_code`", "`driver_CDS`", and
-//'   "`tumour_type`") detail the affected gene, the driver
+//'   ("`driver_gene`", `driver_code`, `driver_CDS`, and
+//'   `tumour_type`) detail the affected gene, the driver
 //'   code, which can be used to specify the mutation when
 //'   adding a mutant to the mutation engine, the variant code,
 //'   and the tumour type associated to the mutation.
@@ -884,7 +902,7 @@ RCPP_MODULE(Mutations)
 //'   `setup_code` is *not* provided).
 //' @param germline_subject The germline subject (optional).
 //' @param context_sampling The number of reference contexts per context in
-//'   the index (optional: default value is 100).
+//'   the index (optional: default value is 30).
 //' @param COSMIC_account A named list containing "email" and "password" of
 //'   a valid COSMIC account (required to download mutational signatures
 //'   from COSMIC site).
@@ -1006,7 +1024,7 @@ RCPP_MODULE(Mutations)
                           _["drivers_src"] = "", _["passenger_CNAs_src"] = "",
                           _["germline_src"] = "", _["setup_code"] = "",
                           _["COSMIC_account"] = R_NilValue, _["germline_subject"] = "",
-                          _["context_sampling"] = 100, _["max_motif_size"] = 50,
+                          _["context_sampling"] = 30, _["max_motif_size"] = 50,
                           _["max_repetition_storage"] = 500000,
                           _["driver_CNA_min_distance"] = 10000, _["tumour_type"] = "",
                           _["avoid_homozygous_losses"] = true, _["quiet"] = false),
@@ -1053,126 +1071,19 @@ RCPP_MODULE(Mutations)
 //'   for the first time on the cell represented by the node
 //'   itself. Moreover each leaf is also associated with the
 //'   genome mutations occurring in the corresponding cell.
-//' @field get_coalescent_cells Retrieve most recent common ancestors\itemize{
-//' \item \emph{Parameter:} \code{cell_ids} - The list of the identifiers of the
-//'   cells whose most recent common ancestors are aimed (optional).
-//' \item \emph{Return:} A data frame representing, for each of the identified
-//'   cells, the identified (column `cell_id`), whenever the
-//'   node is not a root, the ancestor identifier (column
-//'   `ancestor`), whenever the node was sampled, i.e., it is
-//'   one of the forest leaves, the name of the sample
-//'   containing the node, (column `sample`), the mutant
-//'   (column `mutant`), the epistate (column `epistate`),
-//'   and the birth time (column `birth_time`).
-//' }
-//' @field get_first_occurrences Gets the identifier of the cell in which a
-//'   mutation occurs for the first time\itemize{
-//' \item \emph{Parameter:} \code{mutation} - A mutation being a
-//'   SNV, a indel, or a CNA.
-//' \item \emph{Return:} The identifier of the cell in which a mutation
-//'   occurs for the first time.
-//' }
-//' @field get_germline_mutations Gets the germinal SNVs and indels\itemize{
-//' \item \emph{Return:} A data frame reporting `chr` (i.e., the
-//'   chromosome), `from`" (i.e., the position in the chromosome),
-//'   `allele` (in which the SNV occurs), `ref`, `alt`, `type` (i.e., either
-//'   `"SNV"` or `"indel"`) and `class` (i.e., `"germinal"`).
-//' }
-//' @field get_germline_subject Gets the germline subject name\itemize{
-//' \item \emph{Return:} The name of the subject whose germline is used.
-//' }
-//' @field get_nodes Get the forest nodes \itemize{
-//' \item \emph{Return:} A data frame representing, for each node
-//'   in the forest, the identified (column `id`),
-//'   whenever the node is not a root, the ancestor
-//'   identifier (column `ancestor`), the node's depth
-//'   (column "`depth`"), whenever the node
-//'   was sampled, i.e., it is one of the forest
-//'   leaves, the name of the sample containing the
-//'   node, (column `sample`), the mutant (column
-//'   `mutant`), the epistate (column `epistate`),
-//'   and the birth time (column `birth_time`).
-//' }
-//' @field get_sampled_cell_CNAs Gets the CNAs of the sampled cells \itemize{
-//' \item \emph{Returns:} A data frame reporting `cell_id`, `type` (`"A"` for
-//'   amplifications and `"D"` for deletions), `chr`, `begin`
-//'   (i.e., the first CNA locus in the chromosome), `end` (i.e., the
-//'   last CNA locus in the chromosome), `allele`, `src allele`
-//'   (the allele origin for amplifications, `NA` for deletions), and
-//'   `class` (i.e., `"driver"`, `"passenger"`, `"germinal"` or
-//'   `"pre-neoplastic"`).
-//' }
-//' @field get_sampled_cell_mutations Gets the SNVs and the indels of the
-//'   sampled cells\itemize{
-//' \item \emph{Returns:} A data frame reporting `cell_id`, `chr`, (i.e., the
-//'   mutation chromosome), `begin` (i.e., position in the chromosome),
-//'   `allele` (in which the SNV occurs), `ref`, `alt`, `type` (i.e., either
-//'   `"SNV"` or `"indel"`), `cause`, and `class` (i.e., `"driver"`,
-//'   `"passenger"`, `"germinal"` or `"pre-neoplastic"`) for each mutation
-//'   in the sampled cell genomes.
-//' }
-//' @field get_samples_info Retrieves information about the samples \itemize{
-//' \item \emph{Returns:} A data frame containing, for each sample collected
-//'   during the simulation, the columns "`name`", "`time`", "`ymin`",
-//'   "`xmin`", "`ymax`", "`xmax`", "`tumour_cells`", and
-//'   "`tumour_cells_in_bbox`". The columns "`ymin`", "`xmin`", "`ymax`",
-//'   "`xmax`" report the boundaries of the sample bounding box, while
-//'   "`tumour_cells`" and "`tumour_cells_in_bbox`" are the number of
-//'   tumour cells in the sample and in the bounding box, respectively.
-//' }
-//' @field get_driver_mutations Gets the driver mutations\itemize{
-//' \item \emph{Returns:} A data frame reporting `mutant`, `order`,
-//'   `type`, `CNA_type`, `chr`, `start`, `end`, `ref`, `alt`,
-//'   `allele`, `src_allele`, and `code` for each driver mutations.
-//' }
-//' @field get_species_info Gets the species data\itemize{
-//' \item \emph{Returns:} A data frame reporting `species`, `time`,
-//'   `SNV_rate`, `indel_rate`, and `CNA_rate` for each registered species.
-//' }
-//' @field get_sticks Computes the forest sticks \itemize{
-//' \item \emph{Returns:} The list of the forest sticks. Each stick is
-//'   represented as the list of cell identifiers labelling the nodes in
-//'   the stick from the higher to the deeper in the forest.
-//' }
-//' @field get_subforest_for Builds a sub-forest using as leaves some of the
-//'   original samples \itemize{
-//' \item \emph{Parameter:} \code{sample_names} - The names of the samples whose
-//'   cells will be used as leaves of the new forest.
-//' \item \emph{Returns:} A sample forest built on the samples mentioned in
-//'   `sample_names`.
-//' }
-//' @field partition_samples Partitions the samples in a phylogenetic forest
-//'   \itemize{
-//' \item \emph{Parameter:} \code{labelling_function} - An R labelling function
-//'   that maps any sampled cell to a labelling string.
-//' \item The method alters the original phylogenetic forest.
-//' }
-//' @field get_absolute_chromosome_positions Gets the absolute chromosome
-//'   positions \itemize{
-//' \item \emph{Returns:} A data frame reporting the name (column "`chr`"), the
-//'   length (column "`length`"), the initial absolute position (column
-//'   "`from`"), and the final absolute position (column "`to`") of each
-//'   chromosome.
-//' }
-//' @field save Saves a phylogenetic forest in a file \itemize{
-//' \item \emph{Parameter:} \code{filename} - The path of the file in which the
-//'   phylogenetic forest must be saved.
-//' }
     class_<PhylogeneticForest>("PhylogeneticForest")
 
 //' @name PhylogeneticForest$get_nodes
 //' @title Getting the forest nodes
 //' @description This method returns the nodes of the forest.
-//' @return A data frame representing, for each node
-//'   in the forest, the identified (column `cell_id`),
-//'   whenever the node is not a root, the ancestor
-//'   identifier (column `ancestor`), the node's depth
-//'   (column "`depth`"), whenever the node was sampled,
-//'   i.e., it is one of the forest leaves, the name of
-//'   the sample containing the node, (column `sample`),
-//'   the mutant (column `mutant`), the epistate (column
-//'   `epistate`), and the birth time (column
-//'   `birth_time`).
+//' @return A data frame representing, for each node in the
+//'   forest, the identified (column `cell_id`), the ancestor
+//'   identifier (column `ancestor`), the node's depth (column
+//'   `depth`), the name of the sample containing the node
+//'   (column `sample`), the mutant (column `mutant`), the
+//'   birth time (column `birth_time`), and, whenever the
+//'   simulation has epigenetic states, the epigenetic state
+//'   (column `epistate`).
 //' @seealso [SampleForest$get_nodes()] for usage examples.
         .method("get_nodes",
                 (List (PhylogeneticForest::*)() const)(&PhylogeneticForest::get_nodes),
@@ -1191,13 +1102,13 @@ RCPP_MODULE(Mutations)
 //' @param cell_ids The list of the identifiers of the cells whose
 //'   most recent common ancestors are aimed (optional).
 //' @return A data frame representing, for each of the identified
-//'   cells, the identified (column `cell_id`), whenever the
-//'   node is not a root, the ancestor identifier (column
-//'   `ancestor`), whenever the node was sampled, i.e., it is
-//'   one of the forest leaves, the name of the sample
-//'   containing the node, (column `sample`), the mutant
-//'   (column `mutant`), the epistate (column `epistate`),
-//'   and the birth time (column `birth_time`).
+//'   cells, the identified (column `cell_id`), the ancestor
+//'   identifier (column `ancestor`), the node's depth (column
+//'   `depth`), the name of the sample containing the node
+//'   (column `sample`), the mutant (column `mutant`), the
+//'   birth time (column `birth_time`), and, whenever the
+//'   simulation has epigenetic states, the epigenetic state
+//'   (column `epistate`).
 //' @seealso [SampleForest$get_coalescent_cells()] for
 //'   usage examples
         .method("get_coalescent_cells",
@@ -1239,17 +1150,17 @@ RCPP_MODULE(Mutations)
 //'   the samples whose cells were used as leaves
 //'   of the sample forest.
 //' @return A data frame containing, for each sample collected during the
-//'   simulation, the columns "`name`", "`time`", "`id`", "`ymin`", "`xmin`",
-//'    "`ymax`", "`ymax`", "`xmax`", "`tumour_cells`", "`tumour_cells_in_bbox`",
-//'   "`DNA_quantity`", and "`equivalent_normal_cells`". The columns "`ymin`",
-//'   "`xmin`", "`ymax`", and "`xmax`" report the boundaries of the sample
-//'   bounding box, while "`tumour_cells`" and "`tumour_cells_in_bbox`" are the
+//'   simulation, the columns `name`, `time`, `id`, `ymin`, `xmin`,
+//'    `ymax`, `ymax`, `xmax`, `tumour_cells`, `tumour_cells_in_bbox`,
+//'   `DNA_quantity`, and `equivalent_normal_cells`. The columns `ymin`,
+//'   `xmin`, `ymax`, and `xmax` report the boundaries of the sample
+//'   bounding box, while `tumour_cells` and `tumour_cells_in_bbox` are the
 //'   number of tumour cells in the sample and in the bounding box,
-//'   respectively. Finally, "`DNA_quantity`" contains the overall number of
+//'   respectively. Finally, `DNA_quantity` contains the overall number of
 //'   tumoral bases, i.e., the sum of the lengths of all the alleles of all the
-//'   sample tumoral cells, and "`equivalent_normal_cells`" contains the number
+//'   sample tumoral cells, and `equivalent_normal_cells` contains the number
 //'   of normal cells that contain as much DNA as the sample tumoral cells.
-//'   The "`DNA_quantity`" is stored as a real number despite being a natural
+//'   The `DNA_quantity` is stored as a real number despite being a natural
 //'   number as it usually exceeds the largest natural number that can be
 //'   natively represented by R.
 //' @seealso [SampleForest$get_samples_info()] for usage examples,
@@ -1265,10 +1176,10 @@ RCPP_MODULE(Mutations)
 //'    and `code`. Each row in the data frame reports one driver mutations.
 //'    The fields `mutant` and `order` report the name of the mutant and the
 //'    application order among the mutant driver mutations, respectively.
-//'    The column `type` declares the mutation type and contains "`SID`",
-//'    "`CNA`", or "`WGD`" when the mutation is an SNV/indel, a CNA, or
+//'    The column `type` declares the mutation type and contains `SID`,
+//'    `CNA`, or `WGD` when the mutation is an SNV/indel, a CNA, or
 //'    a whole genome duplication, respectively. When the mutation is a CNA,
-//'    the `CNA_type` can either be "`A`" (i.e., amplification) or "`D`"
+//'    the `CNA_type` can either be `A` (i.e., amplification) or `D`
 //'    (i.e., deletion). When the mutation is not a WGD, the fields `chr`,
 //'    `start`, and `end` contains the mutation chromosome, the initial and
 //'    the final position on the chromosome, respectively. When the mutation
@@ -1320,34 +1231,54 @@ RCPP_MODULE(Mutations)
 //'   deletions), and `class` (i.e., `"driver"`, `"passenger"`, `"germinal"`
 //'   or `"pre-neoplastic"`).
 //' @examples
-//' sim <- TissueSimulation()
+//' # set the seed of the random number generator
+//' set.seed(0)
 //'
-//' sim$add_mutant(name = "Clone_1",
-//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'   growth_rates = c("+" = 0.2, "-" = 0.08),
-//'   death_rates = c("+" = 0.05, "-" = 0.01))
-//' sim$place_cell("Clone_1+", 500, 500)
-//' sim$run_up_to_size("Clone_1-", 1000)
+//' # build a tissue simulation with epigenetic states "E1" and "E2"
+//' sim <- TissueSimulation(epigenetic_states = c("E1", "E2"))
 //'
-//' sim$sample_cells("Sample_A", c(475, 475), c(525, 525))
+//' # add mutant "A" and set its species rates
+//' sim$add_mutant("A",
+//'                list(E1 = list(duplication = 0.2, death = 0.05, E2 = 0.01),
+//'                     E2 = list(duplication = 0.08, death = 0.01, E1 = 0.01)))
+//'
+//' # place a cell of species "A[E1]" in position (500,500)
+//' sim$place_cell("A[E1]", 500, 500)
+//'
+//' # run the simulation until "A[E2]" accounts for less than 1000 cells
+//' sim$run_up_to_size("A[E2]", 1000)
+//'
+//' # sample the tissue
+//' sim$sample_cells("Sample_1", c(475, 475), c(525, 525))
+//'
+//' # build the sample forest
 //' sample_forest <- sim$get_sample_forest()
 //'
+//' # initialize a mutation engine with the "demo" setup
 //' m_engine <- MutationEngine(setup_code = "demo")
 //'
-//' m_engine$add_mutant("Clone_1", list("+" = c(SNV = 1e-7, indel = 1e-8),
-//'   "-" = c(SNV = 3e-7, CNA = 1e-11)),
-//'   list(SNV("22", 10510210, "C", allele = 1),
-//'   CNA("D", "22", 5010000, 200000,
-//'   allele = 1)))
+//' # add the genomic characterisation for the mutant "A"
+//' m_engine$add_mutant("A",
+//'                     list("E1" = c(SNV = 1e-7, indel = 1e-8),
+//'                          "E2" = c(SNV = 3e-7, CNA = 1e-11)),
+//'                     list(SNV("22", 10510210, "C", allele = 1),
+//'                          CNA("D", "22", 5010000, 200000,
+//'                              allele = 1)))
 //'
+//' # add the exposure
 //' m_engine$add_exposure(c(ID1 = 1, SBS1 = 0.5, SBS2 = 0.5))
 //'
+//' # build the phylogenetic forest
 //' phylo_forest <- m_engine$place_mutations(sample_forest, 1, 1)
 //'
-//' mutations <- phylo_forest$get_sampled_cell_CNAs()
+//' # get the CNAs in the sampled cells
+//' CNAs <- phylo_forest$get_sampled_cell_CNAs()
 //'
-//' head(mutations)
-//' @seealso [PhylogeneticForest$get_sampled_cell_mutations()]
+//' # show the first CNAs in the sampled cells
+//' CNAs %>% head()
+//' @seealso [PhylogeneticForest$get_sampled_cell_mutations()],
+//'   [PhylogeneticForest$get_cell_CNAs()],
+//'   [PhylogeneticForest$get_cell_mutations()]
         .method("get_sampled_cell_CNAs",
                 (List (PhylogeneticForest::*)()
                      const)(&PhylogeneticForest::get_sampled_cell_CNAs),
@@ -1368,34 +1299,60 @@ RCPP_MODULE(Mutations)
 //'   deletions), and `class` (i.e., `"driver"`, `"passenger"`, `"germinal"`
 //'   or `"pre-neoplastic"`).
 //' @examples
-//' sim <- TissueSimulation()
+//' # set the random seed for repeatability
+//' set.seed(0)
 //'
-//' sim$add_mutant(name = "Clone_1",
-//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'   growth_rates = c("+" = 0.2, "-" = 0.08),
-//'   death_rates = c("+" = 0.05, "-" = 0.01))
-//' sim$place_cell("Clone_1+", 500, 500)
-//' sim$run_up_to_size("Clone_1-", 1000)
+//' # build a tissue simulation with epigenetic states "E1" and "E2"
+//' sim <- TissueSimulation(epigenetic_states = c("E1", "E2"))
 //'
-//' sim$sample_cells("Sample_A", c(475, 475), c(525, 525))
+//' # add mutant "A" and set its species rates
+//' sim$add_mutant("A",
+//'                list(E1 = list(duplication = 0.2, death = 0.05, E2 = 0.01),
+//'                     E2 = list(duplication = 0.08, death = 0.01)))
+//'
+//' # place a cell of species "A[E1]" in position (500,500)
+//' sim$place_cell("A[E1]", 500, 500)
+//'
+//' # run the simulation until "A[E2]" accounts for less than 1000 cells
+//' sim$run_up_to_size("A[E2]", 1000)
+//'
+//' # sample the tissue
+//' sim$sample_cells("Sample_1", c(475, 475), c(525, 525))
+//'
+//' # build the sample forest
 //' sample_forest <- sim$get_sample_forest()
 //'
+//' # initialize a mutation engine with the "demo" setup
 //' m_engine <- MutationEngine(setup_code = "demo")
 //'
-//' m_engine$add_mutant("Clone_1", list("+" = c(SNV = 1e-7, indel = 1e-8),
-//'   "-" = c(SNV = 3e-7, CNA = 1e-11)),
-//'   list(SNV("22", 10510210, "C", allele = 1),
-//'   CNA("D", "22", 5010000, 200000,
-//'   allele = 1)))
+//' # add the genomic characterisation for the mutant "A"
+//' m_engine$add_mutant("A",
+//'                     list("E1" = c(SNV = 1e-7, indel = 1e-8),
+//'                          "E2" = c(SNV = 3e-7, CNA = 2e-8)),
+//'                     list(SNV("22", 10510210, "C", allele = 1),
+//'                          CNA("D", "22", 5010000, 200000,
+//'                              allele = 1)))
 //'
+//' # add the exposure
 //' m_engine$add_exposure(c(ID1 = 1, SBS1 = 0.5, SBS2 = 0.5))
 //'
+//' # build the phylogenetic forest
 //' phylo_forest <- m_engine$place_mutations(sample_forest, 1, 1)
 //'
-//' mutations <- phylo_forest$get_sampled_cell_CNAs()
+//' # load dplyr to use %>%
+//' library(dplyr)
 //'
-//' head(mutations)
-//' @seealso [PhylogeneticForest$get_sampled_cell_CNAs()]
+//' # get the node corresponding to the youngest non-sampled cell
+//' # belonging to "A[E2]"
+//' node <- phylo_forest$get_nodes() %>%
+//'   dplyr::filter(is.na(sample) & epistate == "E2") %>%
+//'   dplyr::slice_max(birth_time, n = 1)
+//'
+//' # gets the CNAs in it
+//' phylo_forest$get_cell_CNAs(node$cell_id)
+//' @seealso [PhylogeneticForest$get_cell_mutations()],
+//'   [PhylogeneticForest$get_sampled_cell_CNAs()],
+//'   [PhylogeneticForest$get_sampled_cell_mutations()]
         .method("get_cell_CNAs",
                 (List (PhylogeneticForest::*)(const CLONES::Mutants::CellId &)
                      const)(&PhylogeneticForest::get_cell_CNAs),
@@ -1416,34 +1373,54 @@ RCPP_MODULE(Mutations)
 //'   `"passenger"`, `"germinal"` or `"pre-neoplastic"`) for each mutation
 //'   in the sampled cell genomes.
 //' @examples
-//' sim <- TissueSimulation()
+//' # set the seed of the random number generator
+//' set.seed(0)
 //'
-//' sim$add_mutant(name = "Clone_1",
-//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'   growth_rates = c("+" = 0.2, "-" = 0.08),
-//'   death_rates = c("+" = 0.05, "-" = 0.01))
-//' sim$place_cell("Clone_1+", 500, 500)
-//' sim$run_up_to_size("Clone_1-", 1000)
+//' # build a tissue simulation with epigenetic states "E1" and "E2"
+//' sim <- TissueSimulation(epigenetic_states = c("E1", "E2"))
 //'
-//' sim$sample_cells("Sample_A", c(475, 475), c(525, 525))
+//' # add mutant "A" and set its species rates
+//' sim$add_mutant("A",
+//'                list(E1 = list(duplication = 0.2, death = 0.05, E2 = 0.01),
+//'                     E2 = list(duplication = 0.08, death = 0.01, E1 = 0.01)))
+//'
+//' # place a cell of species "A[E1]" in position (500,500)
+//' sim$place_cell("A[E1]", 500, 500)
+//'
+//' # run the simulation until "A[E2]" accounts for less than 1000 cells
+//' sim$run_up_to_size("A[E2]", 1000)
+//'
+//' # sample the tissue
+//' sim$sample_cells("Sample_1", c(475, 475), c(525, 525))
+//'
+//' # build the sample forest
 //' sample_forest <- sim$get_sample_forest()
 //'
+//' # initialize a mutation engine with the "demo" setup
 //' m_engine <- MutationEngine(setup_code = "demo")
 //'
-//' m_engine$add_mutant("Clone_1", list("+" = c(SNV = 1e-8, indel = 1e-8),
-//'   "-" = c(SNV = 3e-8, CNA = 1e-11)),
-//'   list(SNV("22", 10510210, "C", allele = 1),
-//'   CNA("D", "22", 5010000, 200000,
-//'   allele = 1)))
+//' # add the genomic characterisation for the mutant "A"
+//' m_engine$add_mutant("A",
+//'                     list("E1" = c(SNV = 1e-7, indel = 1e-8),
+//'                          "E2" = c(SNV = 3e-7, CNA = 1e-11)),
+//'                     list(SNV("22", 10510210, "C", allele = 1),
+//'                          CNA("D", "22", 5010000, 200000,
+//'                              allele = 1)))
 //'
+//' # add the exposure
 //' m_engine$add_exposure(c(ID1 = 1, SBS1 = 0.5, SBS2 = 0.5))
 //'
+//' # build the phylogenetic forest
 //' phylo_forest <- m_engine$place_mutations(sample_forest, 1, 1)
 //'
-//' mutations <- phylo_forest$get_sampled_cell_mutations()
+//' # get the SIDs in the sampled cells
+//' SIDs <- phylo_forest$get_sampled_cell_mutations()
 //'
-//' head(mutations)
-//' @seealso [PhylogeneticForest$get_sampled_cell_CNAs()]
+//' # show the first SIDs in the sampled cells
+//' SIDs %>% head()
+//' @seealso [PhylogeneticForest$get_cell_mutations()],
+//'   [PhylogeneticForest$get_sampled_cell_CNAs()],
+//'   [PhylogeneticForest$get_cell_CNAs()]
         .method("get_sampled_cell_mutations",
                 (List (PhylogeneticForest::*)()
                      const)(&PhylogeneticForest::get_sampled_cell_SIDs),
@@ -1467,34 +1444,56 @@ RCPP_MODULE(Mutations)
 //'   `"passenger"`, `"germinal"` or `"pre-neoplastic"`) for each mutation
 //'   in the sampled cell genomes.
 //' @examples
-//' sim <- TissueSimulation()
+//' # set the seed of the random number generator
+//' set.seed(0)
 //'
-//' sim$add_mutant(name = "Clone_1",
-//'   epigenetic_rates = c("+-" = 0.01, "-+" = 0.01),
-//'   growth_rates = c("+" = 0.2, "-" = 0.08),
-//'   death_rates = c("+" = 0.05, "-" = 0.01))
-//' sim$place_cell("Clone_1+", 500, 500)
-//' sim$run_up_to_size("Clone_1-", 1000)
+//' # build a tissue simulation with epigenetic states "E1" and "E2"
+//' sim <- TissueSimulation(epigenetic_states = c("E1", "E2"))
 //'
-//' sim$sample_cells("Sample_A", c(475, 475), c(525, 525))
+//' # add mutant "A" and set its species rates
+//' sim$add_mutant("A",
+//'                list(E1 = list(duplication = 0.2, death = 0.05, E2 = 0.01),
+//'                     E2 = list(duplication = 0.08, death = 0.01, E1 = 0.01)))
+//'
+//' # place a cell of species "A[E1]" in position (500,500)
+//' sim$place_cell("A[E1]", 500, 500)
+//'
+//' # run the simulation until "A[E2]" accounts for less than 1000 cells
+//' sim$run_up_to_size("A[E2]", 1000)
+//'
+//' # sample the tissue
+//' sim$sample_cells("Sample_1", c(475, 475), c(525, 525))
+//'
+//' # build the sample forest
 //' sample_forest <- sim$get_sample_forest()
 //'
+//' # initialize a mutation engine with the "demo" setup
 //' m_engine <- MutationEngine(setup_code = "demo")
 //'
-//' m_engine$add_mutant("Clone_1", list("+" = c(SNV = 1e-8, indel = 1e-8),
-//'   "-" = c(SNV = 3e-8, CNA = 1e-11)),
-//'   list(SNV("22", 10510210, "C", allele = 1),
-//'   CNA("D", "22", 5010000, 200000,
-//'   allele = 1)))
+//' # add the genomic characterisation for the mutant "A"
+//' m_engine$add_mutant("A",
+//'                     list("E1" = c(SNV = 1e-7, indel = 1e-8),
+//'                          "E2" = c(SNV = 3e-7, CNA = 1e-11)),
+//'                     list(SNV("22", 10510210, "C", allele = 1),
+//'                          CNA("D", "22", 5010000, 200000,
+//'                              allele = 1)))
 //'
+//' # add the exposure
 //' m_engine$add_exposure(c(ID1 = 1, SBS1 = 0.5, SBS2 = 0.5))
 //'
+//' # build the phylogenetic forest
 //' phylo_forest <- m_engine$place_mutations(sample_forest, 1, 1)
 //'
-//' mutations <- phylo_forest$get_cell_mutations(1)
+//' # get a node corresponding to a non-sampled cell
+//' node <- phylo_forest$get_nodes() %>%
+//'   dplyr::filter(is.na(sample)) %>%
+//'   dplyr::sample_n(1)
 //'
-//' head(mutations)
-//' @seealso [`vignette("sample_partition")`]
+//' # gets the SIDs in it
+//' phylo_forest$get_cell_mutations(node$cell_id)
+//' @seealso [PhylogeneticForest$get_cell_CNAs()],
+//'   [PhylogeneticForest$get_sampled_cell_mutations()],
+//'   [PhylogeneticForest$get_sampled_cell_CNAs()]
         .method("get_cell_mutations",
                 (List (PhylogeneticForest::*)(const CLONES::Mutants::CellId &)
                      const)(&PhylogeneticForest::get_cell_SIDs),
@@ -1507,10 +1506,10 @@ RCPP_MODULE(Mutations)
 //'   SNVs and indels of the cells represented in the phylogenetic forest.
 //'   The data frame also reports the allele in which the mutations occur to
 //'   support double occurrences due to CNAs.
-//' @return A data frame reporting "`chr`", "`from`" (i.e., the position in
-//'   the chromosome), "`allele`" (in which the mutation occurs), "`ref`",
-//'   "`alt`", "`cause`", "`type`" (i.e., either `"SNV"` or `"indel"`) and
-//'   "`class`" (i.e., `"germinal"`).
+//' @return A data frame reporting `chr`, `from` (i.e., the position in
+//'   the chromosome), `allele` (in which the mutation occurs), `ref`,
+//'   `alt`, `cause`, `type` (i.e., either `"SNV"` or `"indel"`) and
+//'   `class` (i.e., `"germinal"`).
 //' @seealso [`vignette("mutations")`] for usage examples.
         .method("get_germline_mutations", &PhylogeneticForest::get_germline_SIDs,
                 "Get the germinal SNVs and indels")
@@ -1521,9 +1520,9 @@ RCPP_MODULE(Mutations)
 //' @details Its builds a data frame reporting the name, the length, and the
 //'   initial and final absolute positions of each chromosome in the
 //'   reference genome.
-//' @return A data frame reporting the name (column "`chr`"), the length
-//'   (column "`length`"), the initial absolute position (column "`from`"),
-//'   and the final absolute position (column "`to`") of each chromosome.
+//' @return A data frame reporting the name (column `chr`), the length
+//'   (column `length`), the initial absolute position (column `from`),
+//'   and the final absolute position (column `to`) of each chromosome.
         .method("get_absolute_chromosome_positions",
                 &PhylogeneticForest::get_absolute_chromosome_positions,
                 "Get the absolute chromosome positions")
@@ -1609,7 +1608,7 @@ RCPP_MODULE(Mutations)
 //' @name PhylogeneticForest$get_first_occurrences
 //' @title Getting the cell in which a mutation emerged
 //' @description This method returns the identifier of the cell in which a
-//'   mutation occurs for the first time. 
+//'   mutation occurs for the first time. `$1`
 //' @param mutation A mutation being a SNV, a indel, or a CNA.
 //' @return The identifier of the cell in which a mutation
 //'   occurs for the first time.
@@ -1634,8 +1633,8 @@ RCPP_MODULE(Mutations)
 //' @title Getting the statistics about mutations on each node
 //' @description This method returns a dataframe reporting the statistics about
 //'   mutations on each node.
-//' @return A dataframe consisting of five columns "`cell_id`", "`new_SIDs`",
-//'   "`new_CNAs`", "`total_SIDs`", and "`total_CNAs`". Each row represents a
+//' @return A dataframe consisting of five columns `cell_id`, `new_SIDs`,
+//'   `new_CNAs`, `total_SIDs`, and `total_CNAs`. Each row represents a
 //'   node in the phylogenetic forest and reports the identifier of the
 //'   corresponding cell and contains the number of mutations (`new_SIDs`) and
 //'   CNAs (`new_CNAs`) appearing for the first time on the cell. Moreover, it
