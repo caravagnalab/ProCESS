@@ -11,7 +11,7 @@ Description: ProCESS is an R wrapper for CLONES and provides
         additional plotting functions. It supports spacial
         evolution of different mutants, different epigenetic
         mutant states, timed-triggered driver mutations.
-URL: https://caravagnalab.github.io/ProCESS
+URL: https://caravagnalab.github.io/ProCESS/1.3
 License: GPL-3 + file LICENSE
 LinkingTo: Rcpp
 Encoding: UTF-8
