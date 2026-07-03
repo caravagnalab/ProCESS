@@ -156,34 +156,34 @@ sim$get_epigenetic_states()
 ### Evolutionary parameters
 
 We use a notation common in linear birth-death processes. If a simulation has
-no epigenetic states, then any mutant `A` has exactly one species `A` and its
+no epigenetic states, then any mutant $A$ has exactly one species $A$ and its
 the stochastic behaviour is defined by the state-change rates
 
 $$
-\begin{align}
+\begin{aligned}
 \text{(duplication)}\quad A & \rightarrow_{\lambda_{A}} 2 A \\
 \text{(death)}\quad A & \rightarrow_{\delta_{A}} \emptyset
-\end{align}
+\end{aligned}
 $$
 
 where:
 
--   $\lambda_{A}>0$ is the cell duplication rate in `A`;
--   $\delta_{A}>0$ is the cell death rate in `A`.
+-   $\lambda_{A}>0$ is the cell duplication rate in $A$;
+-   $\delta_{A}>0$ is the cell death rate in $A$.
 
 Instead, if the simulation has $n$ epigenetic states $E_1$, $E_2$,..., $E_n$,
-then the species of the mutant `A` has $n$ species denoted $A[E_1]$, $A[E_2]$,
+then the species of the mutant $A$ has $n$ species denoted $A[E_1]$, $A[E_2]$,
 ..., $A[E_n]$, respectively. The stochastic behaviour of the species $A[E_i]$ is
 defined by the state-change rates
 
 $$
-\begin{align}
+\begin{aligned}
 \text{(duplication $E_i$)}\quad A[E_i] & \rightarrow_{\lambda_{A,i}} 2 A[E_i] \\
 \text{(death $E_i$)}\quad A[E_i] & \rightarrow_{\delta_{A,i}} \emptyset \\
 \text{(switch from $E_i$ to $E_1$)}\quad A[E_i] & \rightarrow_{\epsilon_{A,i,1}} A[E_1] + A[E_i] \\
 &\vdots\\
 \text{(switch from $Ei$ to $E_n$)}\quad A[Ei] & \rightarrow_{\epsilon_{A,i,n}} A[E_n] + A[E_i]
-\end{align}
+\end{aligned}
 $$
 
 where the rates $\lambda_{A,i}$ and $\delta_{A,i}$ are as above, and
