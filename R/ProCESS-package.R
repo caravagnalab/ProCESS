@@ -19,26 +19,29 @@
 .pkg_env$mutant_color_map <- NULL
 .pkg_env$epistate_shade_map <- NULL
 
+#' The Whole Genome Doubling constant
+#'
+#' A constant used to specify a Whole Genome Doubling
+#' @export
+WGD <- NULL
+
 .onLoad <- function(libname, pkgname) {
   loadModule("Mutants", TRUE)
   loadModule("Mutations", TRUE)
   loadModule("Sequencing", TRUE)
   loadModule("Logics", TRUE)
 
-  if (exists("WGD", envir = .GlobalEnv, inherits = FALSE)) {
-    message(paste(pkgname, "overwrites active binding \"WGD\"."))
+  ns <- asNamespace(pkgname)
 
-    rm("WGD", envir = .GlobalEnv)
-  }
+  cpp_WGD <- new(WholeGenomeDoubling)
 
-  wg_doubling <- function() new(WholeGenomeDoubling)
+  assign("WGD", cpp_WGD, envir = ns)
 
-  makeActiveBinding("WGD", wg_doubling, .GlobalEnv)
+  lockBinding("WGD", ns)
 
   ## usethis namespace: start
   ## usethis namespace: end
-    NULL
-
+  NULL
 }
 
 .onAttach <- function(libname, pkgname) {
