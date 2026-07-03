@@ -1,5 +1,6 @@
 ## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
-## Copyright (C) 2023-2025 - Giulio Caravagna <gcaravagna@units.it>
+## Copyright (C) 2023-2026 - Giulio Caravagna <gcaravagna@units.it>
+##                           Alberto Casagrande <alberto.casagrande@uniud.it>
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -54,7 +55,7 @@ plot_state <- function(simulation, color_map = NULL) {
     add_species_col()
 
   if (is.null(color_map)) {
-    color_map <- get_species_colors(get_species(simulation))
+    color_map <- get_species_colors(simulation)
   }
 
   counts$species <- factor(counts$species,

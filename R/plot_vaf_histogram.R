@@ -1,5 +1,6 @@
 ## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
-## Copyright (C) 2023-2025 - Giulio Caravagna <gcaravagna@units.it>
+## Copyright (C) 2023-2026 - Giulio Caravagna <gcaravagna@units.it>
+##                           Alberto Casagrande <alberto.casagrande@uniud.it>
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -98,11 +99,6 @@ add_driver_mutation_labels <- function(
     !all(unlist(lapply(g$grobs[matching_indices], inherits, "zeroGrob")))
   }
 
-  mutants <- driver_mutations %>%
-    dplyr::select(.data$mutant) %>% unique()
-
-  mutant_fill_map <- get_species_colors(mutants)
-
   plot <- plot +
     ggnewscale::new_scale_fill()
 
@@ -139,6 +135,9 @@ add_driver_mutation_labels <- function(
         force = 2
       )
   }
+
+  mutants <- driver_mutations %>%
+    dplyr::select(.data$mutant) %>% unique()
 
   plot +
     ggplot2::scale_fill_manual(values = get_species_colors(mutants),

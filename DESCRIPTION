@@ -27,6 +27,7 @@ Imports:
     cli,
     crayon,
     RColorBrewer,
+    colorspace,
     knitr,
     rlang,
     ggmuller,

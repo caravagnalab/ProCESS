@@ -1,5 +1,5 @@
 ## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
-## Copyright (C) 2023-2025 - Alberto Casagrande <alberto.casagrande@uniud.it>
+## Copyright (C) 2023-2026 - Alberto Casagrande <alberto.casagrande@uniud.it>
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -14,6 +14,10 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+.pkg_env <- new.env(parent = emptyenv())
+
+.pkg_env$mutant_color_map <- NULL
+.pkg_env$epistate_shade_map <- NULL
 
 .onLoad <- function(libname, pkgname) {
   loadModule("Mutants", TRUE)

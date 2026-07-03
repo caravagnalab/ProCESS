@@ -1,5 +1,6 @@
 ## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
 ## Copyright (C) 2023-2026 - Giulio Caravagna <gcaravagna@units.it>
+##                           Alberto Casagrande <alberto.casagrande@uniud.it>
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -51,7 +52,7 @@ plot_timeseries <- function(simulation, color_map = NULL) {
   time <- simulation$get_clock() %>% round(digits = 3)
 
   if (is.null(color_map)) {
-    color_map <- get_species_colors(get_species(simulation))
+    color_map <- get_species_colors(simulation)
   }
 
   counts$species <- factor(counts$species,

@@ -1,5 +1,6 @@
 ## This file is part of the ProCESS (https://github.com/caravagnalab/ProCESS/).
-## Copyright (C) 2023-2025 - Giulio Caravagna <gcaravagna@units.it>
+## Copyright (C) 2023-2026 - Giulio Caravagna <gcaravagna@units.it>
+##                           Alberto Casagrande <alberto.casagrande@uniud.it>
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -21,14 +22,15 @@ my_theme <- function() {
     )
 }
 
-get_colors_for <- function(values, pal_name = "Dark2") {
+get_colors_for <- function(values, pal_name = "Dark2",
+                           min_values = 4) {
   # Unpaired
   colors <- NULL
   if (length(values) > 0) {
     num_of_values <- values %>% length()
 
-    if (num_of_values < 3) {
-      colors <- RColorBrewer::brewer.pal(3, pal_name)
+    if (num_of_values < min_values) {
+      colors <- RColorBrewer::brewer.pal(min_values, pal_name)
 
       colors <- colors[seq_len(num_of_values)]
     } else {
@@ -38,7 +40,30 @@ get_colors_for <- function(values, pal_name = "Dark2") {
     names(colors) <- values
   }
 
-  return(colors)
+  colors
+}
+
+get_mutant_colors <- function(mutants, pal_name = "Dark2",
+                              max_mutants = 3) {
+
+  if (is.null(.pkg_env$mutant_color_map)) {
+    max_mutants <- max(max_mutants, length(mutants))
+    .pkg_env$mutant_color_map <- RColorBrewer::brewer.pal(max_mutants, pal_name)
+  } else {
+    if (length(mutants) > length(.pkg_env$mutant_color_map)) {
+      warning(paste0("The number of mutants changed since",
+                     " the last plot. The color map has changed."))
+
+      .pkg_env$mutant_color_map <- RColorBrewer::brewer.pal(length(mutants),
+                                                            pal_name)
+    }
+  }
+
+  colors <- .pkg_env$mutant_color_map[seq_along(mutants)]
+
+  names(colors) <- mutants
+
+  colors
 }
 
 species_name <- function(mutant, epistate) {
@@ -58,8 +83,7 @@ add_species_col <- function(data, col_name = "species") {
     )
   }
 
-  new_data %>%
-    dplyr::arrange(.data$mutant)
+  new_data
 }
 
 get_species <- function(simulation) {
@@ -75,40 +99,87 @@ get_species <- function(simulation) {
   }
 }
 
-get_species_colors <- function(data) {
-  if ("epistate" %in% colnames(data)) {
-    name_species <- data %>%
-      dplyr::mutate(
-        species = species_name(.data$mutant, .data$epistate)
-      ) %>%
-      dplyr::arrange(.data$mutant)
+get_epistate_shade_map <- function(epistates, min_light_value = 0.3) {
+  if (!is.null(.pkg_env$epistate_shade_map)) {
+    if (length(.pkg_env$epistate_shade_map) < length(epistates)) {
+      warning(paste0("The number of epigenetic states changed since",
+                     " the last plot. The color map has changed."))
 
-    get_colors_for(name_species[, "species"], "Paired")
+      .pkg_env$epistate_shade_map <- seq(min_light_value, 0,
+                                         length.out = length(epistates))
+
+      names(.pkg_env$epistate_shade_map) <- epistates
+    }
   } else {
-    name_species <- data %>%
-      dplyr::arrange(.data$mutant)
+    .pkg_env$epistate_shade_map <- seq(min_light_value, 0,
+                                       length.out = length(epistates))
 
-    get_colors_for(name_species[, "mutant"], "Dark2")
+    names(.pkg_env$epistate_shade_map) <- epistates
+  }
+
+  .pkg_env$epistate_shade_map
+}
+
+get_species_colors <- function(data, pal_name = "Dark2",
+                               max_mutants = 4) {
+  if (inherits(data, "Rcpp_TissueSimulation")) {
+    data <- data$get_counts() %>%
+      dplyr::select(-.data$counts, -.data$overall)
+  } else if (inherits(data, "Rcpp_SampleForest")) {
+    data <- data$get_species_info()
+  }
+
+  mutants <- data %>%
+    dplyr::pull(.data$mutant) %>% unique()
+
+  mutant_color_map <- get_mutant_colors(mutants, pal_name = pal_name,
+                                        max_mutants = max_mutants)
+
+  if ("epistate" %in% colnames(data)) {
+
+    epistates <- data %>%
+      dplyr::pull(.data$epistate) %>% unique()
+
+    epistate_shade_map <- get_epistate_shade_map(epistates)
+
+    species_names <- c()
+    species_color_map <- c()
+
+    for (i in seq_along(mutants)) {
+      for (j in seq_along(epistate_shade_map)) {
+        color <- colorspace::lighten(mutant_color_map[[mutants[i]]],
+                                     amount = epistate_shade_map[j])
+        species_color_map <- c(species_color_map, color)
+        species_names <- c(species_names,
+                           species_name(mutants[i], epistates[j]))
+      }
+    }
+
+    names(species_color_map) <- species_names
+
+    species_color_map
+  } else {
+    mutant_color_map
   }
 }
 
 validate_chromosomes <- function(seq_res, chromosomes) {
-  seq_res_chrs <- (seq_res["chr"] %>% unique())[,1]
+  seq_res_chrs <- (seq_res["chr"] %>% unique())[, 1]
   if (is.null(chromosomes)) {
     chromosomes <- seq_res_chrs
   } else {
     unknown_chrs <- dplyr::setdiff(chromosomes, seq_res_chrs)
 
-    if (length(unknown_chrs)>0) {
-        unknown_chrs_str <- paste0(unknown_chrs, collapse = ", ")
-        if (length(unknown_chrs)>1) {
-            msg <- paste0("The chromosomes ", unknown_chrs_str, " are")
-        } else {
-            msg <- paste0("The chromosome ", unknown_chrs_str, " is")
-        }
-        stop(paste0(msg, " not present in the sequence reference data."))
+    if (length(unknown_chrs) > 0) {
+      unknown_chrs_str <- paste0(unknown_chrs, collapse = ", ")
+      if (length(unknown_chrs) > 1) {
+        msg <- paste0("The chromosomes ", unknown_chrs_str, " are")
+      } else {
+        msg <- paste0("The chromosome ", unknown_chrs_str, " is")
+      }
+      stop(paste0(msg, " not present in the sequence reference data."))
     }
   }
 
-  return(chromosomes)
+  chromosomes
 }
