@@ -1737,8 +1737,8 @@ RCPP_MODULE(Mutations)
 
 //' @name PhylogeneticForestLabelTour
 //' @title An iterator class over sample forest labels
-//' @description This class represents iterators over sample forest labels. The objects of this
-//'   class are built by [get_label_tour()].
+//' @description This class represents iterators over sample forest labels. The objects
+//'   of this class are built by [get_label_tour()].
 //' @field \code{value} Get the pair `cell id`-`label` for the current node in the tour.
 //' @field \code{step} A method that moves to the next node in the tour.
 //' @field \code{done} A Boolean flag that is set to TRUE only when the tour ended.
@@ -1754,6 +1754,155 @@ RCPP_MODULE(Mutations)
             (bool (PhylogeneticForestLabelTour::*)() const)(&PhylogeneticForestLabelTour::done),
             "Test whether the tour ended");
 
+//' @name GenomeFragment
+//' @title Representing a genome fragment
+//' @description This class represents genome fragment.
+//'   The objects of this class are built by <code>[GenomeMutations]</code>.
+//' @seealso <code>[GenomeMutations]</code>
+    class_<GenomeFragment>("GenomeFragment")
+
+//' @name GenomeFragment$get_CIGAR
+//' @title Getting the fragment CIGAR
+//' @description This method returns the CIGAR code of the fragment with respect
+//'   to the reference genome.
+//' @return The CIGAR code of the fragment with respect to the reference genome.
+        .method("get_CIGAR", &GenomeFragment::get_CIGAR,
+                "Get the fragment CIGAR")
+
+//' @name GenomeFragment$get_sequence
+//' @title Getting the fragment sequence
+//' @description This method returns the fragment sequence.
+//' @return The fragment sequence.
+        .method("get_sequence", &GenomeFragment::get_sequence,
+                "Get the fragment sequence")
+
+//' @name GenomeFragment$get_mutations
+//' @title Getting the mutations laying on a fragment
+//' @description This method returns the data frame of the mutations
+//'   laying on the fragment.
+//' @return A data frame consisting of 7 columns: `chr`, `allele`, `from`, `ref`, `alt`,
+//'   `causes`, and `classes`. Each row represent a SID.
+        .method("get_mutations", &GenomeFragment::get_mutations,
+                "Get the mutations laying on the fragment")
+
+//' @name GenomeFragment$get_covered_reference_region
+//' @title Getting the reference region covered by the fragment
+//' @description This method returns the reference region covered by the fragment.
+//' @return A named list representing the reference region covered by the fragment.
+//'   The names of the list are `chr`, `from`, and `size`. They stores the name
+//'   of the chromosome from which the fragment comes, the position in the
+//'   chromosome of the fragment first base, and the size of the covered region,
+//'   respectively.
+        .method("get_covered_reference_region",
+                &GenomeFragment::get_covered_reference_region,
+                "Get the covered region")
+
+        .method("show", &GenomeFragment::show);
+
+//' @name GenomeMutations
+//' @title Representing cell genome
+//' @description This class represents genome mutations of phylogenetic forest's cells.
+//'   The objects of this class are built by <code>[GenomeMutationsTour]</code>.
+//' @seealso [get_genomes_tour()], <code>[GenomeMutationsTour]</code>
+    class_<GenomeMutations>("GenomeMutations")
+
+//' @name GenomeMutations$get_mutations
+//' @title Getting genome mutations
+//' @description This method returns a data frame representing the SIDs in the genome.
+//' @param only_leaves A Boolean flag to iterate only over forest leaves (default:
+//'   `FALSE`).
+//' @return A data frame consisting of 7 columns: `chr`, `allele`, `from`, `ref`, `alt`,
+//'   `causes`, and `classes`. Each row represent a SID.
+        .method("get_mutations",
+            (Rcpp::DataFrame (GenomeMutations::*)() const)(&GenomeMutations::get_mutations),
+            "Get the genome mutations")
+        .method("get_mutations",
+            (Rcpp::DataFrame (GenomeMutations::*)(const bool) const)(&GenomeMutations::get_mutations),
+            "Get the genome mutations")
+
+//' @name GenomeMutations$get_allele_fragments
+//' @title Getting genome allele fragments
+//' @description This method returns a data frame representing the allele fragments
+//'   in the genome.
+//' @return A data frame consisting of 5 columns: `chr`, `allele`, `src_allele`,
+//'   `from`, and `size`. Each row represent a allele fragment. The columns `chr`,
+//'   and `allele` represent the fragment's chromosome and allele, respectively.
+//'   The column `allele_src` stores the allele from which the allele of the
+//'   fragment is derived. The columns `from` and `size` maintain the first
+//'   position of the fragment in the wild-type allele and its size.
+        .method("get_allele_fragments",
+            (Rcpp::DataFrame (GenomeMutations::*)() const)(&GenomeMutations::get_allele_fragments),
+            "Get the genome allele fragments")
+
+//' @name GenomeMutations$get_fragment
+//' @title Getting genome fragment
+//' @description This method returns a fragment of the genome.
+//' @param chromosome_name The name of the chromosome of the aimed fragment.
+//' @param allele The allele of the aimed fragment.
+//' @param from The first position in the chromosome of the aimed fragment.
+//' @param size The size of the aimed fragment.
+//' @return The genome fragment matching the specifications.
+//' @seealso <code>[GenomeFragment]</code>,
+//'   [GenomeMutations$get_fragment_from_ref()]
+        .method("get_fragment",
+                &GenomeMutations::get_fragment,
+            "Get a genome fragment")
+
+//' @name GenomeMutations$get_fragment_from_ref
+//' @title Getting genome fragment
+//' @description This method returns a fragment of the genome.
+//' @param reference_fragment A reference fragment.
+//' @param fragment_offset The offset of the reference fragment with respect
+//'   to the chromosome first position.
+//' @param chromosome_name The name of the chromosome of the aimed fragment.
+//' @param allele The allele of the aimed fragment.
+//' @param from The first position in the chromosome of the aimed fragment.
+//' @param size The size of the aimed fragment.
+//' @return The genome fragment matching the specifications.
+//' @seealso <code>[GenomeFragment]</code>,
+//'   [GenomeMutations$get_fragment()]
+        .method("get_fragment_from_ref",
+                &GenomeMutations::get_fragment_from_ref,
+            "Get a genome fragment")
+
+        .method("show", &GenomeMutations::show);
+
+//' @name GenomeMutationsTour
+//' @title An iterator class over phylogenetic forest genome mutations
+//' @description This class represents iterators over phylogenetic forest genome mutations.
+//'   The objects of this class are built by [get_genomes_tour()].
+//' @field \code{value} Get the pair `cell id`-`genome` for the current node in the tour.
+//' @field \code{step} A method that moves to the next node in the tour.
+//' @field \code{done} A Boolean flag that is set to TRUE only when the tour ended.
+//' @seealso [get_genomes_tour()], <code>[GenomeMutations]</code>
+    class_<GenomeMutationsTour>("GenomeMutationsTour")
+        .property("value",
+            (Rcpp::List (GenomeMutationsTour::*)() const)(&GenomeMutationsTour::get_value),
+            "Get the pair `cell id`-`label` for the current node in the tour")
+        .method("step",
+            (void (GenomeMutationsTour::*)())(&GenomeMutationsTour::step),
+            "Go to the next node in the tour")
+        .property("done",
+            (bool (GenomeMutationsTour::*)() const)(&GenomeMutationsTour::done),
+            "Test whether the tour ended")
+        .method("show", &GenomeMutationsTour::show);
+
+//' @name get_genomes_tour
+//' @title Getting forest cell mutations
+//' @description This method generates a <code>[GenomeMutationsTour]</code>
+//' @usage get_genomes_tour(forest, only_leaves)
+//' @param forest A <code>[PhylogeneticForest]</code> object.
+//' @param only_leaves A Boolean value (default: `FALSE`).
+//' @return A <code>[GenomeMutationsTour]</code> iterates over the
+//'   genome mutations of the cells associated to the `forest`'s nodes.
+//'   The returned object exclusively iterates over `forest`'s
+//'   leaves if and only if `only_leaves` is set to `TRUE`.
+//' @examples
+//' @seealso [get_label_tour()], <code>[GenomeMutationsTour]</code>
+    function("get_genomes_tour", &(get_mutation_tour),
+            List::create(_["forest"], _["only_leaves"] = false),
+            "Get a genome mutations tour");
+
 //' @name load_phylogenetic_forest
 //' @title Loading a phylogenetic forest
 //' @description This method loads a phylogenetic forest from a file.
@@ -1768,7 +1917,6 @@ RCPP_MODULE(Mutations)
                                      const bool))&PhylogeneticForest::load,
              List::create(_["filename"] = "", _["quiet"] = false),
              "Recover a phylogenetic forest");
-
 
 //' @name SampledCell
 //' @title A sampled cell

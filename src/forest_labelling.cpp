@@ -21,9 +21,9 @@
 
 template<typename FOREST>
 inline SEXP get_label_tour_template(const SEXP& forest,
-                                     const Rcpp::Function& R_functor,
-                                     const Rcpp::RObject& init_label,
-                                     const bool only_leaves)
+                                    const Rcpp::Function& R_functor,
+                                    const Rcpp::RObject& init_label,
+                                    const bool only_leaves)
 {
     using namespace Rcpp;
 
@@ -61,7 +61,7 @@ SEXP get_label_tour(const SEXP& forest, const Rcpp::Function& R_functor,
 
                 return get_label_tour_template<PhylogeneticForest>(s4obj, R_functor,
                                                                    init_label, only_leaves);
-            }   
+            }
         }
         default:
             Rcpp::stop("Unsupported forest type: expected either a `SampleForest`"

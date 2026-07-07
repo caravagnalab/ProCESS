@@ -286,7 +286,7 @@ inline void fill_WGD_row(const std::string& mutant_name,
 void fill_mutation_list(const CLONES::Mutations::MutationList& mutations,
                         const std::string& mutant_name,
                         const std::map<CLONES::Mutations::SID, std::string>& driver_codes,
-                        Rcpp::CharacterVector &mutant_names, 
+                        Rcpp::CharacterVector &mutant_names,
                         Rcpp::CharacterVector &types, Rcpp::CharacterVector &CNA_types,
                         Rcpp::CharacterVector &chrs, Rcpp::CharacterVector &refs,
                         Rcpp::CharacterVector &alts, Rcpp::IntegerVector &application_order,
@@ -336,7 +336,7 @@ Rcpp::List PhylogeneticForest::const_node::arising_mutations() const
         alleles(num_of_rows), src_alleles(num_of_rows);
 
     size_t i{0}, mut_i{0};
-    fill_mutation_list(mutations, node.get_species_name(), forest->driver_codes, 
+    fill_mutation_list(mutations, node.get_species_name(), forest->driver_codes,
                        mutant_names, types, CNA_types, chrs, refs, alts,
                        application_order, starts, ends, alleles, src_alleles, natures,
                        causes, codes, i, mut_i);
@@ -1197,4 +1197,50 @@ void PhylogeneticForest::show() const
           << std::endl
           << "  # of emerged CNAs: " << get_CNA_first_cells().size() << std::endl
           << std::endl;
+}
+
+GenomeMutationsTour::GenomeMutationsTour(const PhylogeneticForest& forest, const bool only_leaves):
+    CommonLabelTour<CLONES::Mutations::PhylogeneticForest,
+                    CLONES::Mutations::MutationLabellingFunctor<GenomeMutations>>{}
+{
+    using FunctorType = CLONES::Mutations::MutationLabellingFunctor<GenomeMutations>;
+    using LabelTourType = CLONES::Mutations::MutationTour<GenomeMutations>;
+
+    set_label_name("genome");
+
+    FunctorType l_functor(true);
+
+    if (!std::filesystem::exists(forest.get_reference_path())) {
+        Rcpp::stop("The forest reference FASTA file \""
+                    + to_string(forest.get_reference_path())
+                    + "\" does not exists. Reset it in forest by "
+                    + "using `PhylogeneticForest::set_reference_path()`.");
+    }
+
+    GenomeMutations init_mutations{forest.get_reference_path(), forest.get_germline_mutations()};
+
+    reset_tour(std::make_shared<LabelTourType>(forest, l_functor, init_mutations, only_leaves));
+}
+
+GenomeMutationsTour
+get_mutation_tour(const SEXP& forest, const bool leaves_only)
+{
+    using namespace Rcpp;
+
+    switch (TYPEOF(forest)) {
+        case S4SXP:
+        {
+            S4 s4obj(forest);
+
+            if (s4obj.is("Rcpp_PhylogeneticForest")) {
+                Environment env(s4obj);
+
+                XPtr<PhylogeneticForest> forest_ptr(env.get(".pointer"));
+
+                return GenomeMutationsTour(*forest_ptr, leaves_only);
+            }
+        }
+        default:
+            Rcpp::stop("The first parameter must be a `PhylogeneticForest`.");
+    }
 }

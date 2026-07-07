@@ -2518,7 +2518,7 @@ RCPP_MODULE(Mutants)
 //'  is is a <code>[PhylogeneticForest]</code> object.
 //' @param init_value The initial value of the labelling process
 //'  (default: `NULL`).
-//' @param only_leaves A Boolean value.
+//' @param only_leaves A Boolean value  (default: `FALSE`).
 //' @return Either a <code>[SampleForestLabelTour]</code> or a
 //'   <code>[PhylogeneticForestLabelTour]</code> iterates
 //'   over `forest`'s nodes and applies labels from the root down to the
@@ -2638,7 +2638,8 @@ RCPP_MODULE(Mutants)
 //' print("Functor 4 - Only leaves")
 //' print(collect_labels(tour))
 //' @seealso <code>[SampleForestNode]</code>, <code>[SampleForestLabelTour]</code>,
-//'    <code>[PhylogeneticForestNode]</code>, <code>[PhylogeneticForestLabelTour]</code>
+//'    <code>[PhylogeneticForestNode]</code>, <code>[PhylogeneticForestLabelTour]</code>,
+//'    [get_genomes_tour()]
     function("get_label_tour", &(get_label_tour),
             List::create(
                  _["forest"], _["labelling_functor"],

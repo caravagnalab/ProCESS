@@ -29,7 +29,8 @@
 #include "forest.hpp"
 #include "genomic_data_storage.hpp"
 #include "sampled_cell.hpp"
-#include "sample_forest.hpp"
+#include "forest_labelling.hpp"
+#include "cell_mutations.hpp"
 
 class MutationEngine;
 
@@ -103,73 +104,73 @@ class PhylogeneticForest : public CLONES::Mutations::PhylogeneticForest
         const_node(const PhylogeneticForest& forest, const CLONES::Mutants::CellId cell_id):
             const_node{&forest, cell_id}
         {}
-    
+
         inline const_node parent() const
         {
             return {forest, node.parent()};
         }
-    
+
         std::vector<const_node> children() const
         {
             std::vector<const_node> children;
-    
+
             for (const auto child: node.children()) {
                 children.emplace_back(forest, child);
             }
-    
+
             return children;
         }
-    
+
         inline CLONES::Mutants::CellId get_id() const
         {
             return node.get_id();
         }
-    
+
         inline size_t get_height() const
         {
             return node.height();
         }
-    
+
         inline bool is_leaf() const
         {
             return node.is_leaf();
         }
-    
+
         inline bool is_root() const
         {
             return node.is_root();
         }
-    
+
         inline CLONES::Time get_birth_time() const
         {
             return node.get_birth_time();
         }
-    
+
         inline CLONES::Time get_death_time() const
         {
             return node.get_death_time();
         }
-    
+
         inline CLONES::Time get_life_span() const
         {
             return get_death_time()-get_birth_time();
         }
-    
+
         inline CLONES::Mutants::SpeciesId get_species_id() const
         {
             return node.get_species_id();
         }
-    
+
         inline CLONES::Mutants::MutantId get_mutant_id() const
         {
             return node.get_mutant_id();
         }
-    
+
         inline std::string get_species_name() const
         {
             return node.get_species_name();
         }
-    
+
         inline std::string get_mutant_name() const
         {
             return node.get_mutant_name();
@@ -279,9 +280,27 @@ class PhylogeneticForest : public CLONES::Mutations::PhylogeneticForest
     friend class PhylogeneticForest::const_node;
 };
 
+class GenomeMutationsTour : public CommonLabelTour<CLONES::Mutations::PhylogeneticForest,
+                                                   CLONES::Mutations::MutationLabellingFunctor<GenomeMutations>>
+{
+public:
+    GenomeMutationsTour(const PhylogeneticForest& forest, const bool only_leaves);
+
+    inline void show() const
+    {
+        Rcpp::Rcout << "GenomeMutationsTour";
+    }
+};
+
+GenomeMutationsTour
+get_mutation_tour(const SEXP& forest,
+                  const bool only_leaves = false);
+
 RCPP_EXPOSED_CLASS(PhylogeneticForest)
 RCPP_EXPOSED_CLASS_NODECL(PhylogeneticForest::const_node)
 RCPP_EXPOSED_CLASS_NODECL(LabelTour<PhylogeneticForest>)
+
+RCPP_EXPOSED_CLASS_NODECL(GenomeMutationsTour)
 
 using PhylogeneticForestNode = PhylogeneticForest::const_node;
 using PhylogeneticForestLabelTour = LabelTour<PhylogeneticForest>;

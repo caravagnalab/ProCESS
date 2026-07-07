@@ -61,7 +61,11 @@ reference:
   - Amplification
   - starts_with("CNA")
   - Deletion
+  - starts_with("GenomeFragment")
+  - starts_with("GenomeMutations")
+  - starts_with("GenomeMutationsTour")
   - get_available_tumours_in
+  - get_genomes_tour
   - get_mutation_engine_codes
   - get_relevant_branches
   - load_phylogenetic_forest

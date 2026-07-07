@@ -42,21 +42,31 @@ public:
     }
 };
 
-template<typename FOREST>
+template<typename FOREST, typename LABELLING_FUNCTOR>
     requires CLONES::Mutations::isForest<FOREST>
-class LabelTour
+class CommonLabelTour
 {
-    using CLONES_Tour = typename CLONES::Mutations::LabelTour<FOREST, LabellingFunctor<FOREST>>;
+protected:
+    std::string label_name;
 
-    std::shared_ptr<CLONES_Tour> tour;
-    std::shared_ptr<typename CLONES_Tour::const_iterator> tour_it;
+    using CLONES_Tour = typename CLONES::Mutations::LabelTour<FOREST, LABELLING_FUNCTOR>;
 
+    CommonLabelTour():
+        label_name{"label"}, tour{nullptr}, tour_it{nullptr}
+    {}
+
+    void reset_tour(std::shared_ptr<CLONES_Tour> tour)
+    {
+        this->tour = tour;
+        this->tour_it = std::make_shared<typename CLONES_Tour::const_iterator>(tour->begin());
+    }
 public:
-    using functor_type = LabellingFunctor<FOREST>;
-    using label_type = functor_type::label_type;
+    using functor_type = LABELLING_FUNCTOR;
+    using label_type = typename functor_type::label_type;
 
-    LabelTour(const FOREST& forest, const functor_type& functor,
-              const label_type& init_label, const bool only_leaves):
+    CommonLabelTour(const FOREST& forest, const LABELLING_FUNCTOR& functor,
+                    const label_type& init_label, const bool only_leaves):
+        label_name{"label"},
         tour{std::make_shared<CLONES_Tour>(forest, functor, init_label, only_leaves)},
         tour_it{std::make_shared<typename CLONES_Tour::const_iterator>(tour->begin())}
     {}
@@ -66,8 +76,8 @@ public:
         using namespace Rcpp;
         const auto& value = *(*tour_it);
 
-        return DataFrame::create(_["cell_id"] = value.first,
-                                 _["label"] = value.second);
+        return List::create(_["cell_id"] = value.first,
+                            _[label_name.c_str()] = value.second);
     }
 
     inline void step()
@@ -79,6 +89,41 @@ public:
     {
         return tour_it->is_end();
     }
+
+    inline const std::string& get_label_name() const
+    {
+        return label_name;
+    }
+
+    const std::string& set_label_name(const std::string& new_label_name)
+    {
+        if (label_name == "cell_id") {
+            Rcpp::stop("\"cell_id\" cannot be used as the label name.");
+        }
+
+        label_name = new_label_name;
+
+        return label_name;
+    }
+
+private:
+    std::shared_ptr<CLONES_Tour> tour;
+    std::shared_ptr<typename CLONES_Tour::const_iterator> tour_it;
+};
+
+template<typename FOREST>
+    requires CLONES::Mutations::isForest<FOREST>
+class LabelTour : public CommonLabelTour<FOREST, LabellingFunctor<FOREST>>
+{
+public:
+    using functor_type = LabellingFunctor<FOREST>;
+    using label_type = typename functor_type::label_type;
+
+    LabelTour(const FOREST& forest, const functor_type& functor,
+              const label_type& init_label, const bool only_leaves):
+        CommonLabelTour<FOREST, LabellingFunctor<FOREST>>{forest, functor,
+                                                          init_label, only_leaves}
+    {}
 };
 
 SEXP get_label_tour(const SEXP& forest, const Rcpp::Function& R_functor,
