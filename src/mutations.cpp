@@ -1694,7 +1694,8 @@ RCPP_MODULE(Mutations)
 //' @field \code{mutant_name} The name of the associated cell's mutant.
 //' @field \code{arising_mutations} The mutations arising for the first time in the
 //'   associated cell.
-//' @seealso [get_label_tour()], <code>[SampleForestNode]</code>
+//' @seealso [get_label_tour()], [get_genome_tour()], <code>[SampleForestNode]</code>,
+//'   [`vignette("node_labelling")`]
    class_<PhylogeneticForest::const_node>("PhylogeneticForestNode")
         .property("cell_id",
             (CLONES::Mutants::CellId (PhylogeneticForestNode::*)() const)(&PhylogeneticForestNode::get_id),
@@ -1745,8 +1746,8 @@ RCPP_MODULE(Mutations)
 //'   in the tour.
 //' @field \code{step} A method that moves to the next node in the tour.
 //' @field \code{done} A Boolean flag that is set to TRUE only when the tour ended.
-//' @seealso [get_label_tour()], <code>[PhylogeneticForestNode]</code>,
-//'   <code>[SampleForestLabelTour]</code>
+//' @seealso [get_label_tour()], [get_genome_tour()], <code>[PhylogeneticForestNode]</code>,
+//'   <code>[SampleForestLabelTour]</code>, [`vignette("node_labelling")`]
     class_<PhylogeneticForestLabelTour>("PhylogeneticForestLabelTour")
         .property("value",
             (Rcpp::List (PhylogeneticForestLabelTour::*)() const)(&PhylogeneticForestLabelTour::get_value),
@@ -1762,7 +1763,8 @@ RCPP_MODULE(Mutations)
 //' @title Representing a genome fragment
 //' @description This class represents genome fragment.
 //'   The objects of this class are built by <code>[GenomeMutations]</code>.
-//' @seealso <code>[GenomeMutations]</code>
+//' @seealso <code>[GenomeMutations]</code>, [get_label_tour()],
+//'   [get_genome_tour()], [`vignette("node_labelling")`]
     class_<GenomeFragment>("GenomeFragment")
 
 //' @name GenomeFragment$get_CIGAR
@@ -1806,8 +1808,9 @@ RCPP_MODULE(Mutations)
 //' @name GenomeMutations
 //' @title Representing cell genome
 //' @description This class represents genome mutations of phylogenetic forest's cells.
-//'   The objects of this class are built by <code>[LabelTour]</code>.
-//' @seealso [get_genome_tour()], <code>[LabelTour]</code>
+//'   The objects of this class are built by <code>[PhylogeneticForestLabelTour]</code>.
+//' @seealso [get_label_tour()], [get_genome_tour()],
+//'   <code>[PhylogeneticForestLabelTour]</code>, [`vignette("node_labelling")`]
     class_<GenomeMutations>("GenomeMutations")
 
 //' @name GenomeMutations$get_mutations
@@ -1873,16 +1876,17 @@ RCPP_MODULE(Mutations)
 
 //' @name get_genome_tour
 //' @title Getting forest cell mutations
-//' @description This method generates a <code>[LabelTour]</code>
+//' @description This method generates a <code>[PhylogeneticForestLabelTour]</code>
 //' @usage get_genome_tour(forest, only_leaves)
 //' @param forest A <code>[PhylogeneticForest]</code> object.
 //' @param only_leaves A Boolean value (default: `FALSE`).
-//' @return A <code>[LabelTour]</code> iterates over the
+//' @return A <code>[PhylogeneticForestLabelTour]</code> iterates over the
 //'   genome mutations of the cells associated to the `forest`'s nodes.
 //'   The returned object exclusively iterates over `forest`'s
 //'   leaves if and only if `only_leaves` is set to `TRUE`.
 //' @examples
-//' @seealso [get_label_tour()], <code>[LabelTour]</code>
+//' @seealso [get_label_tour()], <code>[PhylogeneticForestLabelTour]</code>,
+//'   [`vignette("node_labelling")`]
     function("get_genome_tour", &(get_genome_tour),
             List::create(_["forest"], _["only_leaves"] = false),
             "Get a genome mutations tour");

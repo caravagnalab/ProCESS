@@ -1,10 +1,10 @@
 ---
-title: "Forest Node Labelling"
+title: "Labelling Forest Nodes"
 output: rmarkdown::html_vignette
 description: >
   How to label forest nodes
 vignette: >
-  %\VignetteIndexEntry{Forest Node Labelling}
+  %\VignetteIndexEntry{Labelling Forest Nodes}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options:
@@ -225,7 +225,7 @@ nucleotides.
 
 ```{r}
 # extract a fragment from the genome
-fragment <- genome$get_fragment("22", 0, 16085655, 100)
+fragment <- genome$get_fragment("22", 1, 16085655, 100)
 
 fragment
 ```

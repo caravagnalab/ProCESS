@@ -2447,7 +2447,8 @@ RCPP_MODULE(Mutants)
 //' @field \code{species_name} The name of the associated cell's species.
 //' @field \code{mutant_id} The identifier of the associated cell's mutant.
 //' @field \code{mutant_name} The name of the associated cell's mutant.
-//' @seealso [get_label_tour()], <code>[PhylogeneticForestNode]</code>
+//' @seealso [get_label_tour()], <code>[PhylogeneticForestNode]</code>,
+//'   [`vignette("node_labelling")`]
    class_<SampleForest::const_node>("SampleForestNode")
         .property("cell_id",
             (CLONES::Mutants::CellId (SampleForestNode::*)() const)(&SampleForestNode::get_id),
@@ -2493,7 +2494,8 @@ RCPP_MODULE(Mutants)
 //' @field \code{value} A list `cell id`-`label` for the current node in the tour.
 //' @field \code{step} A method that moves to the next node in the tour.
 //' @field \code{done} A Boolean flag that is set to TRUE only when the tour ended.
-//' @seealso [get_label_tour()], <code>[PhylogeneticForestLabelTour]</code>
+//' @seealso [get_label_tour()], <code>[PhylogeneticForestLabelTour]</code>,
+//'   [`vignette("node_labelling")`]
     class_<SampleForestLabelTour>("SampleForestLabelTour")
         .property("value",
             (Rcpp::List (SampleForestLabelTour::*)() const)(&SampleForestLabelTour::get_value),
@@ -2508,7 +2510,8 @@ RCPP_MODULE(Mutants)
 //' @name get_label_tour
 //' @title Labelling forest nodes
 //' @description This method generates a <code>[SampleForestLabelTour]</code>
-//' @usage get_label_tour(forest, labelling_functor, init_value, only_leaves)
+//' @usage get_label_tour(forest, labelling_functor, init_value, only_leaves,
+//'                       with_genomes)
 //' @param forest Either a <code>[SampleForest]</code> or a
 //'  <code>[PhylogeneticForest]</code> object.
 //' @param labelling_functor Depending on the type of `forest`, a function
@@ -2643,7 +2646,7 @@ RCPP_MODULE(Mutants)
 //' print(collect_labels(tour))
 //' @seealso <code>[SampleForestNode]</code>, <code>[SampleForestLabelTour]</code>,
 //'    <code>[PhylogeneticForestNode]</code>, <code>[PhylogeneticForestLabelTour]</code>,
-//'    [get_genome_tour()]
+//'    [get_genome_tour()], [`vignette("node_labelling")`]
     function("get_label_tour", &(get_label_tour),
             List::create(
                  _["forest"], _["labelling_functor"],
