@@ -1,8 +1,3 @@
----
-  output: github_document
----
-  
-
 
 # ProCESS <a href="caravagnalab.github.io/ProCESS/tree/1.3"><img src="man/figures/logo.png" align="right" height="120" alt="" /></a>
 
@@ -79,7 +74,8 @@ sim$place_cell("A[E1]", 150, 150)
 
 # let the simulation evolve until the species "A[E2]" has less than 10 cells
 sim$run_up_to_size("A[E2]", 10)
-#>  [████████████████████████████████████████] 100% [00m:00s] Saving snapshot
+#> 
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot
 
 # add a mutant "B" and set its species rates
 sim$add_mutant("B", list(E1 = list(duplication = 3, death = 1, E2 = 0.12),
