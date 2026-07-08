@@ -38,7 +38,7 @@ sim$add_mutant("A", c(duplication = 0.08))
 sim$place_cell("A", 500, 500)
 sim$run_up_to_time(60)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                            
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
 
 sim$sample_cells("MySample", c(500, 500), c(510, 510))
 forest <- sim$get_sample_forest()

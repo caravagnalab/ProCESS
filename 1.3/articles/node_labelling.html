@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Forest Node Labelling • ProCESS</title>
+<title>Labelling Forest Nodes • ProCESS</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -16,7 +16,7 @@
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Forest Node Labelling">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Labelling Forest Nodes">
 <meta name="description" content="How to label forest nodes
 ">
 <meta property="og:description" content="How to label forest nodes
@@ -71,7 +71,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Forest Node Labelling</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Labelling Forest Nodes</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/caravagnalab/ProCESS/tree/1.3/vignettes/node_labelling.Rmd" class="external-link"><code>vignettes/node_labelling.Rmd</code></a></small>
@@ -158,7 +158,7 @@ using the following labelling function.</p>
 </h4>
 <p>Let us reload the phylogenetic forest produced in <a href="mutations.html">this article</a>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://caravagnalab.github.io/ProCESS/1.3">ProCESS</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://caravagnalab.github.io/ProCESS/1.3">"ProCESS"</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># load the phylogenetic forest produced by mutations.md</span></span>
 <span><span class="va">phylo_forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_phylogenetic_forest.html">load_phylogenetic_forest</a></span><span class="op">(</span><span class="st">"phylo_forest.sff"</span><span class="op">)</span></span>
@@ -342,13 +342,13 @@ the method <code><a href="../reference/GenomeMutations-cash-get_mutations.html">
 <p>Users can also extract a fragment of the cell genome. For instance,
 the following snippet generates a <code><a href="../reference/GenomeFragment.html">GenomeFragment</a></code> object
 representing the fragment beginning at position 16085655, chromosome 22,
-and allele 0 whose length is 100 nucleotides.</p>
+and allele 1 whose length is 100 nucleotides.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># extract a fragment from the genome</span></span>
-<span><span class="va">fragment</span> <span class="op">&lt;-</span> <span class="va">genome</span><span class="op">$</span><span class="fu">get_fragment</span><span class="op">(</span><span class="st">"22"</span>, <span class="fl">0</span>, <span class="fl">16085655</span>, <span class="fl">100</span><span class="op">)</span></span>
+<span><span class="va">fragment</span> <span class="op">&lt;-</span> <span class="va">genome</span><span class="op">$</span><span class="fu">get_fragment</span><span class="op">(</span><span class="st">"22"</span>, <span class="fl">1</span>, <span class="fl">16085655</span>, <span class="fl">100</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">fragment</span></span>
-<span><span class="co">#&gt; chr22(0)[16085655-16085755]</span></span></code></pre></div>
+<span><span class="co">#&gt; chr22(1)[16085655-16085755]</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="genome-fragment-data">Genome Fragment Data<a class="anchor" aria-label="anchor" href="#genome-fragment-data"></a>
@@ -364,26 +364,26 @@ occurring to it, and its CIGAR code <span class="citation">(Li et al.
 <span><span class="co">#&gt; [1] "22"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $allele</span></span>
-<span><span class="co">#&gt; [1] 0</span></span>
+<span><span class="co">#&gt; [1] 1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $from</span></span>
 <span><span class="co">#&gt; [1] 16085655</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $size</span></span>
-<span><span class="co">#&gt; [1] 100</span></span>
+<span><span class="co">#&gt; [1] 108</span></span>
 <span></span>
 <span><span class="co"># the fragment DNA sequence</span></span>
 <span><span class="va">fragment</span><span class="op">$</span><span class="fu">get_sequence</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] &quot;CATGCCATTCTCCTGCCTCAGGTAGCTGGGACTACTGGCACCCACCACTACGCCCGGATACTTTTTGTATTTTTAGTAGAGACGGGGTTTCACTGTGTTA&quot;</span></span>
+<span><span class="co">#&gt; [1] "CATGCCATTCTCCTGCCTCAGGTAGCTGGGACTACTGGCACCCACCACTACGCCCGGATACTTTTTGTATTTTTAGTAGAGACGGGGTTTCACTGTGTTA"</span></span>
 <span></span>
 <span><span class="co"># the mutations laying in the fragment</span></span>
 <span><span class="va">fragment</span><span class="op">$</span><span class="fu">get_mutations</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] chr     allele  from    ref     alt     causes  classes</span></span>
-<span><span class="co">#&gt; 1  22      0 16085675 GCCTCCCGA   G      A  driver</span></span>
+<span><span class="co">#&gt;   chr allele     from       ref alt causes classes</span></span>
+<span><span class="co">#&gt; 1  22      1 16085675 GCCTCCCGA   G      A  driver</span></span>
 <span></span>
 <span><span class="co"># the CIGAR code for the fragment</span></span>
 <span><span class="va">fragment</span><span class="op">$</span><span class="fu">get_CIGAR</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] &quot;21M8D79M&quot;</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "21M8D79M"</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="iterating-over-genomes-without-labels">Iterating over Genomes without Labels<a class="anchor" aria-label="anchor" href="#iterating-over-genomes-without-labels"></a>

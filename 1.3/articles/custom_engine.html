@@ -165,7 +165,7 @@ the germline data directory.</p>
 <span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:01s] Reading 22</span></span>
 <span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:01s] Reading 22</span></span>
 <span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:01s] RS index built</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:00s] Saving RS index [███████████████████████-----------------] 57% [00m:02s] Saving RS indexdone</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:00s] Saving RS index [██████████████████████████--------------] 64% [00m:02s] Saving RS indexdone</span></span>
 <span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:02s] RS index saved</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving germline [████████████████████████████████████████] 100% [00m:00s] Germline saved</span></span>
@@ -198,9 +198,38 @@ the reference genome that can be affected by simulated mutations. The
 specified during the <code><a href="../reference/MutationEngine.html">MutationEngine()</a></code> call.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m_engine</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MutationEngine.html">MutationEngine</a></span><span class="op">(</span>setup_code <span class="op">=</span> <span class="st">"demo"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading context index [████████████████████████████████████████] 100% [00m:00s] Context index loaded</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading RS index [████████████----------------------------] 29% [00m:01s] Loading RS index [█████████████████████████---------------] 60% [00m:02s] Loading RS index [████████████████████████████████████----] 88% [00m:03s] Loading RS index [████████████████████████████████████████] 100% [00m:03s] RS index loaded</span></span>
+<span><span class="co">#&gt; Downloading reference genome...</span></span>
+<span><span class="co">#&gt; Reference genome downloaded</span></span>
+<span><span class="co">#&gt; Decompressing reference genome...done</span></span>
+<span><span class="co">#&gt; Downloading signature files...</span></span>
+<span><span class="co">#&gt; Signature file downloaded</span></span>
+<span><span class="co">#&gt; Downloading driver mutation file...</span></span>
+<span><span class="co">#&gt; Driver mutation file downloaded</span></span>
+<span><span class="co">#&gt; Decompressing driver mutation file...done</span></span>
+<span><span class="co">#&gt; Downloading passenger CNAs file...</span></span>
+<span><span class="co">#&gt; Passenger CNAs file downloaded</span></span>
+<span><span class="co">#&gt; Decompressing passenger CNAs file...done</span></span>
+<span><span class="co">#&gt; Downloading germline...</span></span>
+<span><span class="co">#&gt; Germline downloaded</span></span>
+<span><span class="co">#&gt; Decompressing mutations...</span></span>
+<span><span class="co">#&gt; done</span></span>
+<span><span class="co">#&gt; Building context index...</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█████████████████-----------------------] 40% [00m:00s] Processing chr. 22 [█████████████████████████████████-------] 81% [00m:02s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:02s] Context index built</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving context index [████████████████████████████████████████] 100% [00m:00s] Context index saved</span></span>
+<span><span class="co">#&gt; done</span></span>
+<span><span class="co">#&gt; Building repeated sequence index...</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Reading 22 [████████████████████████████████████████] 100% [00m:01s] Reading 22</span></span>
+<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:01s] Reading 22</span></span>
+<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:01s] Reading 22</span></span>
+<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:01s] Reading 22</span></span>
+<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:01s] Reading 22</span></span>
+<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:01s] Reading 22</span></span>
+<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:01s] Reading 22</span></span>
+<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:01s] RS index built</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:00s] Saving RS index [██████████████████████████████----------] 73% [00m:02s] Saving RS indexdone</span></span>
+<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:02s] RS index saved</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving germline [████████████████████████████████████████] 100% [00m:00s] Germline saved</span></span>
 <span></span>
 <span><span class="co"># get the size of the context index when `context_sampling` is 100</span></span>
 <span><span class="fu">utils</span><span class="fu">:::</span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">format.object_size</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.info.html" class="external-link">file.size</a></span><span class="op">(</span><span class="st">"demo/context_index_100.cif"</span><span class="op">)</span>,</span>
@@ -212,10 +241,10 @@ specified during the <code><a href="../reference/MutationEngine.html">MutationEn
 <span><span class="co"># and setting context_sampling to 50</span></span>
 <span><span class="va">m_engine</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MutationEngine.html">MutationEngine</a></span><span class="op">(</span>setup_code <span class="op">=</span> <span class="st">"demo"</span>, context_sampling <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Building context index...</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█████████████████-----------------------] 40% [00m:01s] Processing chr. 22 [██████████████████████████████----------] 73% [00m:02s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:02s] Context index built</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [████████████████████--------------------] 49% [00m:01s] Processing chr. 22 [████████████████████████████████████----] 89% [00m:02s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:02s] Context index built</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving context index [████████████████████████████████████████] 100% [00m:00s] Context index saved</span></span>
 <span><span class="co">#&gt; done</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading RS index [████████████----------------------------] 29% [00m:01s] Loading RS index [████████████████████████----------------] 58% [00m:02s] Loading RS index [█████████████████████████████████-------] 82% [00m:03s] Loading RS index [████████████████████████████████████████] 100% [00m:03s] RS index loaded</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading RS index [███████████-----------------------------] 27% [00m:01s] Loading RS index [████████████████████████----------------] 58% [00m:02s] Loading RS index [███████████████████████████████████-----] 86% [00m:03s] Loading RS index [████████████████████████████████████████] 100% [00m:03s] RS index loaded</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded</span></span></code></pre></div>
 <p>The above call uses the already downloaded data in the directory
 <code>"demo"</code> to build the context and produces the file
@@ -264,10 +293,9 @@ during the <code><a href="../reference/MutationEngine.html">MutationEngine()</a>
 <span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:01s] Reading 22</span></span>
 <span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:01s] Reading 22</span></span>
 <span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:01s] Reading 22</span></span>
-<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:01s] Reading 22</span></span>
 <span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:01s] RS index built</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:02s] Saving RS index [█---------------------------------------] 0% [00m:02s] Saving RS index [█---------------------------------------] 0% [00m:04s] Saving RS index [█---------------------------------------] 0% [00m:05s] Saving RS index [██████----------------------------------] 14% [00m:06s] Saving RS index [█████████████████-----------------------] 41% [00m:07s] Saving RS index [████████████████████████████------------] 69% [00m:08s] Saving RS index [███████████████████████████████████████-] 96% [00m:09s] Saving RS indexdone</span></span>
-<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:09s] RS index saved</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:01s] Saving RS index [█---------------------------------------] 0% [00m:02s] Saving RS index [█---------------------------------------] 0% [00m:03s] Saving RS index [████------------------------------------] 9% [00m:05s] Saving RS index [███████████████-------------------------] 37% [00m:06s] Saving RS index [███████████████████████████-------------] 65% [00m:07s] Saving RS index [█████████████████████████████████████---] 91% [00m:08s] Saving RS indexdone</span></span>
+<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:08s] RS index saved</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded</span></span></code></pre></div>
 <p>The above call uses the already downloaded data in the directory
 <code>"demo"</code> to build the repeated sequence index and produces

@@ -51,7 +51,7 @@ sim$place_cell("A", 500, 500)
 # run the simulation until "A" has less than 15 cells
 sim$run_up_to_size("A", 15)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                            
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
 
 
 sim$get_clock()
@@ -66,7 +66,7 @@ sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
 # run the simulation until "B" has less than 100 cells
 sim$run_up_to_size("B", 30)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                            
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
 
 
 sim$get_clock()
@@ -81,7 +81,7 @@ sim$mutate_progeny(sim$choose_border_cell_in("B"), "C")
 # run the simulation until "C" has less than 2000 cells
 sim$run_up_to_size("C", 2000)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                            
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
 
 
 # search for a 33x33 region containing 50 cells in A and

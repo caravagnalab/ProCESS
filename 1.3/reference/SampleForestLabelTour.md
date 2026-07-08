@@ -21,4 +21,5 @@ of this class are built by
 ## See also
 
 [`get_label_tour()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_label_tour.md),
-[`PhylogeneticForestLabelTour`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestLabelTour.md)
+[`PhylogeneticForestLabelTour`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestLabelTour.md),
+[`vignette("node_labelling")`](https://caravagnalab.github.io/ProCESS/1.3/articles/node_labelling.md)

@@ -62,4 +62,6 @@ passed to the labelling function of
 ## See also
 
 [`get_label_tour()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_label_tour.md),
-[`SampleForestNode`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode.md)
+[`get_genome_tour()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_genome_tour.md),
+[`SampleForestNode`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode.md),
+[`vignette("node_labelling")`](https://caravagnalab.github.io/ProCESS/1.3/articles/node_labelling.md)

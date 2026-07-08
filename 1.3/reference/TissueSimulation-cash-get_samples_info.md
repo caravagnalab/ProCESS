@@ -36,7 +36,7 @@ sim$place_cell("A", 500, 500)
 # simulate the tissue until "A" consists of 50000 cells
 sim$run_up_to_size("A", 50000)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                            
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
 
 
 # sample the region [450,500]x[475,550]
@@ -46,7 +46,7 @@ sim$sample_cells("S1", lower_corner = c(450, 475),
 # simulate 1 time unit more
 sim$run_up_to_time(sim$get_clock()+1)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                            
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
 
 
 # sample the region [500,520]x[525,550]

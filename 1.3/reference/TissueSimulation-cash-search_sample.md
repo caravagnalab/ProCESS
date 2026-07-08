@@ -55,7 +55,7 @@ sim$place_cell("A", 500, 500)
 # simulate the tissue until "A" consists of 100 cells
 sim$run_up_to_size("A", 100)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                            
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
 
 
 # add mutant "B" and set its rates
@@ -67,7 +67,7 @@ sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
 # run the simulation until "B" consists of 1000 cells
 sim$run_up_to_size("B", 1000)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                            
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
 
 
 # find a 50x50 sample containing 80 "B" cells and 10 "A" cells at least

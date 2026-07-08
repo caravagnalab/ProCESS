@@ -45,7 +45,7 @@ sim$place_cell("A[E1]", 500, 500)
 # run the simulation until "A[E2]" accounts for less than 1000 cells
 sim$run_up_to_size("A[E2]", 1000)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                            
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
 
 
 # sample the tissue
@@ -57,25 +57,25 @@ sample_forest <- sim$get_sample_forest()
 # initialize a mutation engine with the "demo" setup
 m_engine <- MutationEngine(setup_code = "demo")
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading context index                                                                                                        
+ [█---------------------------------------] 0% [00m:00s] Loading context index                                
 
- [████████████████████████████████████████] 100% [00m:00s] Context index loaded                                                                                                       
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading RS index                                                                                                             
-
- [█████████████---------------------------] 31% [00m:01s] Loading RS index                                                                                                            
-
- [█████████████████████████---------------] 62% [00m:02s] Loading RS index                                                                                                            
-
- [█████████████████████████████████████---] 90% [00m:03s] Loading RS index                                                                                                            
-
- [████████████████████████████████████████] 100% [00m:03s] RS index loaded                                                                                                            
+ [████████████████████████████████████████] 100% [00m:00s] Context index loaded                               
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading germline                                                                                                             
+ [█---------------------------------------] 0% [00m:00s] Loading RS index                                     
 
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                                                            
+ [████████████----------------------------] 28% [00m:01s] Loading RS index                                    
+
+ [████████████████████████----------------] 58% [00m:02s] Loading RS index                                    
+
+ [███████████████████████████████████-----] 85% [00m:03s] Loading RS index                                    
+
+ [████████████████████████████████████████] 100% [00m:03s] RS index loaded                                    
+
+#> 
+ [█---------------------------------------] 0% [00m:00s] Loading germline                                     
+
+ [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                    
 
 
 # add the genomic characterisation for the mutant "A"
@@ -86,9 +86,9 @@ m_engine$add_mutant("A",
                          CNA("D", "22", 5010000, 200000,
                              allele = 1)))
 #> 
- [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs                                                                                                          
+ [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs                                  
 
- [████████████████████████████████████████] 100% [00m:00s] "A"'s SIDs validated                                                                                                       
+ [████████████████████████████████████████] 100% [00m:00s] "A"'s SIDs validated                               
 
 
 # add the exposure
@@ -97,9 +97,9 @@ m_engine$add_exposure(c(ID1 = 1, SBS1 = 0.5, SBS2 = 0.5))
 # build the phylogenetic forest
 phylo_forest <- m_engine$place_mutations(sample_forest, 1, 1)
 #> 
- [█---------------------------------------] 0% [00m:00s] Placing mutations                                                                                                            
+ [█---------------------------------------] 0% [00m:00s] Placing mutations                                    
 
- [████████████████████████████████████████] 100% [00m:00s] Mutations placed                                                                                                           
+ [████████████████████████████████████████] 100% [00m:00s] Mutations placed                                   
 
 
 # get the SIDs in the sampled cells

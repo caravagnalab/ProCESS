@@ -51,10 +51,10 @@
 
   How to partitioning samples, sorting cells, and simulate FACS
 
-- [Node
-  Labelling](https://caravagnalab.github.io/ProCESS/1.3/articles/node_labelling.md):
+- [Labelling Forest
+  Nodes](https://caravagnalab.github.io/ProCESS/1.3/articles/node_labelling.md):
 
-  How to simulate cell genomes
+  How to label forest nodes
 
 - [Time Series
   Analysis](https://caravagnalab.github.io/ProCESS/1.3/articles/time_series.md):

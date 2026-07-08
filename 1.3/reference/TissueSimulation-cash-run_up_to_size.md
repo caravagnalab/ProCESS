@@ -45,7 +45,7 @@ sim$place_cell("A[E1]", 500, 500)
 # contemporary cells
 sim$run_up_to_size(species = "A[E2]", num_of_cells = 100)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                            
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
 
 
 sim$get_counts()

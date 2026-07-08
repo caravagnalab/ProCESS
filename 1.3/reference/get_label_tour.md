@@ -6,7 +6,8 @@ This method generates a
 ## Usage
 
 ``` r
-get_label_tour(forest, labelling_functor, init_value, only_leaves)
+get_label_tour(forest, labelling_functor, init_value, only_leaves,
+                      with_genomes)
 ```
 
 ## Arguments
@@ -70,7 +71,8 @@ is set to `TRUE`.
 [`SampleForestLabelTour`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestLabelTour.md),
 [`PhylogeneticForestNode`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode.md),
 [`PhylogeneticForestLabelTour`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestLabelTour.md),
-[`get_genome_tour()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_genome_tour.md)
+[`get_genome_tour()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_genome_tour.md),
+[`vignette("node_labelling")`](https://caravagnalab.github.io/ProCESS/1.3/articles/node_labelling.md)
 
 ## Examples
 
@@ -90,7 +92,7 @@ sim$place_cell("A", 500, 500)
 # run the simulation until "A" has less than 15 cells
 sim$run_up_to_size("A", 15)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                            
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
 
 
 sim$sample_cells("S_1_1", bottom_left = c(500, 500),

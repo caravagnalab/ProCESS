@@ -84,6 +84,8 @@ plot_tissue(sim)
 
 ![Pre-sampling tissue.](reference/figures/README-tissue-1.png)
 
+plot of chunk tissue
+
 ``` r
 
 
@@ -97,6 +99,8 @@ plot_tissue(sim)
 ```
 
 ![Post-sampling tissue.](reference/figures/README-tissue-2.png)
+
+plot of chunk tissue
 
 The collected samples can be used to build a sample forest whose nodes
 represent simulated cells. The forest can be plot and annotate.
@@ -113,6 +117,8 @@ plot_forest(sample_forest) %>%
 
 ![Sample forest](reference/figures/README-forest-1.png)
 
+plot of chunk forest
+
 Finally, `ProCESS` can label each node in the forest by the genome of
 the corresponding cell and also simulate the DNA sequencing of the
 sampled cells.
@@ -127,13 +133,17 @@ Pages](https://img.shields.io/badge/GitHub%20Pages-https://caravagnalab.github.i
 
 #### Copyright and contacts
 
-- Alberto Casagrande, Computational Biology and <Bioinformatics@UniUd>.
+- Alberto Casagrande, Computational Biology and Bioinformatics at UniUd.
 - Giulio Caravagna, Cancer Data Science (CDS) Laboratory.
 
-[![](https://img.shields.io/badge/Github-albertocasagrande-seagreen.svg)](https://github.com/albertocasagrande/)
-[![](https://img.shields.io/badge/CDS%20Lab%20Github-caravagnalab-seagreen.svg)](https://github.com/caravagnalab/)
-[![](https://img.shields.io/badge/CBB%20Lab%20webpage-https://bioinf.dimi.uniud.it/-blue.svg)](https://bioinf.dimi.uniud.it/)
-[![](https://img.shields.io/badge/CDS%20Lab%20webpage-https://www.caravagnalab.org/-red.svg)](https://www.caravagnalab.org/)
+[![Alberto Casagrande’s
+GitHub](https://img.shields.io/badge/Github-albertocasagrande-seagreen.svg)](https://github.com/albertocasagrande/)
+[![CaravagnaLab
+GitHub](https://img.shields.io/badge/CDS%20Lab%20Github-caravagnalab-seagreen.svg)](https://github.com/caravagnalab/)
+[![Computational Biology and Bioinformatics at UniUd
+Page](https://img.shields.io/badge/CBB%20Lab%20webpage-https://bioinf.dimi.uniud.it/-blue.svg)](https://bioinf.dimi.uniud.it/)
+[![CaravagnaLab
+Page](https://img.shields.io/badge/CDS%20Lab%20webpage-https://www.caravagnalab.org/-red.svg)](https://www.caravagnalab.org/)
 
 # Package index
 
@@ -536,10 +546,10 @@ Simulation Logics
 
   How to partitioning samples, sorting cells, and simulate FACS
 
-- [Node
-  Labelling](https://caravagnalab.github.io/ProCESS/1.3/articles/node_labelling.md):
+- [Labelling Forest
+  Nodes](https://caravagnalab.github.io/ProCESS/1.3/articles/node_labelling.md):
 
-  How to simulate cell genomes
+  How to label forest nodes
 
 - [Time Series
   Analysis](https://caravagnalab.github.io/ProCESS/1.3/articles/time_series.md):

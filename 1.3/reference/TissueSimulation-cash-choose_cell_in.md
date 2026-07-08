@@ -65,7 +65,7 @@ sim$death_activation_level <- 100
 # run the simulation until "B[E2]" accounts for less than 1000 cells
 sim$run_up_to_size("B[E2]", 1000)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                            
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
 
 
 # Randomly choose one cell in "B" in the tissue

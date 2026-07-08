@@ -1,4 +1,4 @@
-# Forest Node Labelling
+# Labelling Forest Nodes
 
 > *Disclaimer:* ProCESS/CLONES implements probability distributions
 > using the C++11 random number distribution classes. Since the standard
@@ -91,7 +91,7 @@ article](https://caravagnalab.github.io/ProCESS/1.3/articles/mutations.md).
 
 ``` r
 
-library(ProCESS)
+library("ProCESS")
 
 # load the phylogenetic forest produced by mutations.md
 phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
@@ -302,15 +302,15 @@ Users can also extract a fragment of the cell genome. For instance, the
 following snippet generates a
 [`GenomeFragment`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeFragment.md)
 object representing the fragment beginning at position 16085655,
-chromosome 22, and allele 0 whose length is 100 nucleotides.
+chromosome 22, and allele 1 whose length is 100 nucleotides.
 
 ``` r
 
 # extract a fragment from the genome
-fragment <- genome$get_fragment("22", 0, 16085655, 100)
+fragment <- genome$get_fragment("22", 1, 16085655, 100)
 
 fragment
-#> chr22(0)[16085655-16085755]
+#> chr22(1)[16085655-16085755]
 ```
 
 #### Genome Fragment Data
@@ -329,13 +329,13 @@ fragment$get_covered_reference_region()
 #> [1] "22"
 #> 
 #> $allele
-#> [1] 0
+#> [1] 1
 #> 
 #> $from
 #> [1] 16085655
 #> 
 #> $size
-#> [1] 100
+#> [1] 108
 
 # the fragment DNA sequence
 fragment$get_sequence()
@@ -343,8 +343,8 @@ fragment$get_sequence()
 
 # the mutations laying in the fragment
 fragment$get_mutations()
-#> [1] chr     allele  from    ref     alt     causes  classes
-#> 1  22      0 16085675 GCCTCCCGA   G      A  driver
+#>   chr allele     from       ref alt causes classes
+#> 1  22      1 16085675 GCCTCCCGA   G      A  driver
 
 # the CIGAR code for the fragment
 fragment$get_CIGAR()

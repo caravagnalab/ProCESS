@@ -43,14 +43,14 @@ sim$add_mutant("A", c(duplication = 1))
 sim$place_cell("A", 500, 500)
 sim$run_up_to_size("A", 1e4)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                            
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
 
 sim$add_mutant("B", c(duplication = 3.5))
 sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
 
 sim$run_up_to_size("B",1e4)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                            
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
 
 
 # sample the tissue and build the sample forest
@@ -61,50 +61,48 @@ forest <- sim$get_sample_forest()
 # place the mutations
 m_engine <- MutationEngine(setup_code = "demo")
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading context index                                                                                                        
+ [█---------------------------------------] 0% [00m:00s] Loading context index                                
 
- [████████████████████████████████████████] 100% [00m:00s] Context index loaded                                                                                                       
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading RS index                                                                                                             
-
- [█████████-------------------------------] 20% [00m:01s] Loading RS index                                                                                                            
-
- [██████████████████----------------------] 43% [00m:02s] Loading RS index                                                                                                            
-
- [███████████████████████████-------------] 67% [00m:03s] Loading RS index                                                                                                            
-
- [█████████████████████████████████████---] 91% [00m:04s] Loading RS index                                                                                                            
-
- [████████████████████████████████████████] 100% [00m:04s] RS index loaded                                                                                                            
+ [████████████████████████████████████████] 100% [00m:00s] Context index loaded                               
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading germline                                                                                                             
+ [█---------------------------------------] 0% [00m:00s] Loading RS index                                     
 
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                                                            
+ [█████████████---------------------------] 31% [00m:01s] Loading RS index                                    
+
+ [█████████████████████████---------------] 62% [00m:02s] Loading RS index                                    
+
+ [█████████████████████████████████████---] 91% [00m:03s] Loading RS index                                    
+
+ [████████████████████████████████████████] 100% [00m:03s] RS index loaded                                    
+
+#> 
+ [█---------------------------------------] 0% [00m:00s] Loading germline                                     
+
+ [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                    
 
 m_engine$add_mutant(mutant_name = "A",
                     passenger_rates = c(SNV = 5e-8))
 #> 
- [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs                                                                                                          
+ [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs                                  
 
- [████████████████████████████████████████] 100% [00m:00s] "A"'s SIDs validated                                                                                                       
+ [████████████████████████████████████████] 100% [00m:00s] "A"'s SIDs validated                               
 
 m_engine$add_mutant(mutant_name = "B",
                     passenger_rates = c(SNV = 5e-8))
 #> 
- [█---------------------------------------] 0% [00m:00s] Retrieving "B" SIDs                                                                                                          
+ [█---------------------------------------] 0% [00m:00s] Retrieving "B" SIDs                                  
 
- [████████████████████████████████████████] 100% [00m:00s] "B"'s SIDs validated                                                                                                       
+ [████████████████████████████████████████] 100% [00m:00s] "B"'s SIDs validated                               
 
 
 m_engine$add_exposure(time = 0, c(SBS1 = 0.2,SBS5 = 0.8))
 
 phylo_forest <- m_engine$place_mutations(forest, 100, 10)
 #> 
- [█---------------------------------------] 0% [00m:00s] Placing mutations                                                                                                            
+ [█---------------------------------------] 0% [00m:00s] Placing mutations                                    
 
- [████████████████████████████████████████] 100% [00m:00s] Mutations placed                                                                                                           
+ [████████████████████████████████████████] 100% [00m:00s] Mutations placed                                   
 
 
 # simulate sequencing without the normal sample and avoid progress bar

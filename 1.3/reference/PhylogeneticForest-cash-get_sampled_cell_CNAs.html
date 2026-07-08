@@ -87,7 +87,7 @@ the leaves of the phylogenetic forest.</p>
 <span class="r-in"><span><span class="co"># run the simulation until "A[E2]" accounts for less than 1000 cells</span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"A[E2]"</span>, <span class="fl">1000</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                            
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># sample the tissue</span></span></span>
@@ -99,25 +99,25 @@ the leaves of the phylogenetic forest.</p>
 <span class="r-in"><span><span class="co"># initialize a mutation engine with the "demo" setup</span></span></span>
 <span class="r-in"><span><span class="va">m_engine</span> <span class="op">&lt;-</span> <span class="fu"><a href="MutationEngine.html">MutationEngine</a></span><span class="op">(</span>setup_code <span class="op">=</span> <span class="st">"demo"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 
- [█---------------------------------------] 0% [00m:00s] Loading context index                                                                                                        
+ [█---------------------------------------] 0% [00m:00s] Loading context index                                
 
- [████████████████████████████████████████] 100% [00m:00s] Context index loaded                                                                                                       
+ [████████████████████████████████████████] 100% [00m:00s] Context index loaded                               
 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 
- [█---------------------------------------] 0% [00m:00s] Loading RS index                                                                                                             
+ [█---------------------------------------] 0% [00m:00s] Loading RS index                                     
 
- [█████████████---------------------------] 30% [00m:01s] Loading RS index                                                                                                            
+ [█████████████---------------------------] 30% [00m:01s] Loading RS index                                    
 
- [█████████████████████████---------------] 61% [00m:02s] Loading RS index                                                                                                            
+ [█████████████████████████---------------] 60% [00m:02s] Loading RS index                                    
 
- [████████████████████████████████████----] 89% [00m:03s] Loading RS index                                                                                                            
+ [██████████████████████████████████------] 83% [00m:03s] Loading RS index                                    
 
- [████████████████████████████████████████] 100% [00m:03s] RS index loaded                                                                                                            
+ [████████████████████████████████████████] 100% [00m:04s] RS index loaded                                    
 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 
- [█---------------------------------------] 0% [00m:00s] Loading germline                                                                                                             
+ [█---------------------------------------] 0% [00m:00s] Loading germline                                     
 
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                                                            
+ [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                    
 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># add the genomic characterisation for the mutant "A"</span></span></span>
@@ -128,9 +128,9 @@ the leaves of the phylogenetic forest.</p>
 <span class="r-in"><span>                         <span class="fu"><a href="CNA.html">CNA</a></span><span class="op">(</span><span class="st">"D"</span>, <span class="st">"22"</span>, <span class="fl">5010000</span>, <span class="fl">200000</span>,</span></span>
 <span class="r-in"><span>                             allele <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 
- [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs                                                                                                          
+ [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs                                  
 
- [████████████████████████████████████████] 100% [00m:00s] "A"'s SIDs validated                                                                                                       
+ [████████████████████████████████████████] 100% [00m:00s] "A"'s SIDs validated                               
 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># add the exposure</span></span></span>
@@ -139,9 +139,9 @@ the leaves of the phylogenetic forest.</p>
 <span class="r-in"><span><span class="co"># build the phylogenetic forest</span></span></span>
 <span class="r-in"><span><span class="va">phylo_forest</span> <span class="op">&lt;-</span> <span class="va">m_engine</span><span class="op">$</span><span class="fu">place_mutations</span><span class="op">(</span><span class="va">sample_forest</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 
- [█---------------------------------------] 0% [00m:00s] Placing mutations                                                                                                            
+ [█---------------------------------------] 0% [00m:00s] Placing mutations                                    
 
- [████████████████████████████████████████] 100% [00m:00s] Mutations placed                                                                                                           
+ [████████████████████████████████████████] 100% [00m:00s] Mutations placed                                   
 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># get the CNAs in the sampled cells</span></span></span>
