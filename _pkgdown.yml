@@ -32,7 +32,7 @@ articles:
   - custom_engine
   - infinite_site_model
   - sample_partition
-  - simulating_genomes
+  - node_labelling
   - time_series
 - title: Tests and Examples
   contents:
@@ -66,7 +66,7 @@ reference:
   - starts_with("GenomeMutations")
   - starts_with("GenomeMutationsTour")
   - get_available_tumours_in
-  - get_genomes_tour
+  - get_genome_tour
   - get_mutation_engine_codes
   - get_relevant_branches
   - load_phylogenetic_forest

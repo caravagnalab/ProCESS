@@ -1,0 +1,285 @@
+---
+title: "Forest Node Labelling"
+output: rmarkdown::html_vignette
+description: >
+  How to label forest nodes
+vignette: >
+  %\VignetteIndexEntry{Forest Node Labelling}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options:
+  markdown:
+    wrap: 72
+bibliography: references.bib
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+> *Disclaimer:* ProCESS/CLONES implements probability distributions using the
+> C++11 random number distribution classes. Since the standard does not specify
+> the underlying algorithms, their implementations are left to the compiler.
+> Consequently, the simulation output depends on the compiler used to build
+> [CLONES](https://github.com/albertocasagrande/CLONES), and the results
+> reported in this article may differ from those obtained by the reader.
+
+ProCESS supports recursive labelling of forest nodes. The function
+`get_label_tour()` accepts a forest and a labelling function as input and
+generates an iterator over the forest node labels by applying the labelling
+function to the forest nodes in a depth-first visit order. The labelling
+function takes as input the label of the parent node, if available, and a node,
+and computes the label of the node itself. 
+
+#### Labelling Functions
+
+The labelling function assigns a label to each node within the forest and must
+have type `function(parent_label, node)` where the type of `node` is either a
+<code>[SampleForestNode](../reference/SampleForestNode.md)</code> object or a
+<code>[PhylogeneticForestNode](../reference/PhylogeneticForestNode.md)</code>
+object depending on the
+forest type. These two classes expose properties of cells represented by
+forest nodes. For instance, the cell identifiers or the cell species. The
+following examples only report some of the available properties. Please, refer
+to <code>[SampleForestNode](../reference/SampleForestNode.md)</code> 
+and <code>[PhylogeneticForestNode](../reference/PhylogeneticForestNode.md)</code>
+for a complete overview.
+
+A labelling function can label each node with the identifier of the
+corresponding cell.
+```{r}
+# a function that label each node by the identifier of the corresponding cell
+id_labelling <- function(label, node) {
+  node$cell_id
+}
+
+# a function that label each node by a list of the identifier and species
+# of the corresponding cell
+id_species_labelling <- function(parent_label, node) {
+  list(cell_id = node$cell_id, species = node$species)
+}
+
+# a function that label each node by the list containing its cell
+# identifier and the identifier of its ancestors
+ancestor_id_labelling <- function(parent_label, node) {
+  # when the node a root its parent label is NULL
+  if (is.null(parent_label)) {
+    list(node$cell_id)
+  } else {
+    append(parent_label, node$cell_id)
+  }
+}
+
+# a function to label each node by a list consisting of two Boolean values. The
+# first is named `leaf` and is `TRUE` if and only if the node is a leaf of the
+# forest. The second is named `root` and is `TRUE` if and only if the node is a
+# root.
+node_prop_labelling <- function(parent_label, node) {
+  list(leaf = node$is_leaf, root = node$is_root)
+}
+```
+
+The labelling function can also access to external variables. For instance,
+we can label forest nodes by using values sampled in a list by using the
+following labelling function.
+
+```{r}
+values <- 1:100
+
+# this labelling function labels each node by randomly sampling the
+# content of values 
+random_labelling <- function(parent_label, node) {
+  sample(values, 1)
+}
+```
+
+#### Iterating over Forest Nodes
+
+Let us reload the phylogenetic forest produced in
+[this article](mutations.md).
+
+```{r}
+library("ProCESS")
+
+# load the phylogenetic forest produced by mutations.md
+phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
+
+# show some information about the forest
+phylo_forest
+```
+
+Each node of the forest represents a cell that can be labelled by the
+function `get_label_tour()`. This function returns either a
+<code>[SampleForestLabelTour](../reference/SampleForestLabelTour.md)</code>
+or a
+<code>[PhylogeneticForestLabelTour](../reference/PhylogeneticForestLabelTour.md)</code>
+object depending on the type of the forest parameter.
+These classes implement iterators over the forest nodes and, at each
+instant, refer to one of the nodes.
+They provide the properties `value` and `done`, as well as the method
+`step()`. The property `value` is a named list consisting of both the
+identifier of the cell corresponding to the currently referred node (name
+`cell_id`) and the node label (name `label`). Instead, the property `done`
+is a Boolean value that is `TRUE` if and only if the end of the iteration
+has been reached. Finally, the method `step()` lets the iterator move to
+the next node when available.
+
+```{r}
+# generate a label tour labelling each node by the identifiers
+# of the corresponding cells
+label_tour <- get_label_tour(phylo_forest, id_labelling)
+
+# the first value of the labelling tour
+label_tour$value
+
+# test whether the tour has been completed
+label_tour$done
+
+# go to the next node
+label_tour$step()
+
+# the second value of the labelling tour
+label_tour$value
+
+# generate a label tour labelling each node by its properties
+label_tour <- get_label_tour(phylo_forest, node_prop_labelling)
+
+# the first value of the labelling tour. Notice that the first
+# node is a root, not a leaf
+label_tour$value
+```
+
+#### Iterating over Forest Leaves
+
+The function `get_label_tour()` has the optional Boolean parameter `only_leaves`
+that, when set to `TRUE` allows to iterate over the leaves.
+
+```{r}
+# generate a label tour labelling each forest leaf by its properties
+label_tour <- get_label_tour(phylo_forest, node_prop_labelling,
+                             only_leaves = TRUE)
+
+# since the parameter `only_leaves` is set to `TRUE`, in this case, the first
+# node is not a root, but a leaf
+label_tour$value
+
+# ... so are all labels in the tour
+label_tour$step()
+
+label_tour$value
+```
+
+### Producing the Simulated Genomes
+
+Behind the labels produced by the labelling function, 
+<code>[PhylogeneticForestLabelTour](../reference/PhylogeneticForestLabelTour.md)</code>
+can also label each node by the genome of the
+cell corresponding to the referred node. This is achieved by using the
+optional Boolean parameter `with_genome` of the function `get_label_tour()`.
+When `with_genome` is set to `TRUE`, the property `value` contains a further
+element, whose name is `genome`, representing the cell's
+genome. In particular, this value is a 
+<code>[GenomeMutations](../reference/GenomeMutations.md)</code> object.
+
+```{r}
+# generate a label tour labelling each forest leaf by its properties
+label_tour <- get_label_tour(phylo_forest, node_prop_labelling,
+                             only_leaves = TRUE, with_genomes = TRUE)
+
+label_tour$value
+```
+
+#### Accessing Cell Genome Data
+
+The class <code>[GenomeMutations](../reference/GenomeMutations.md)</code> provides methods to access cell genome data.
+
+The method
+<code>[GenomeMutations$get_allele_fragments()](../reference/GenomeMutations-cash-get_allele_fragments.md)</code>
+returns a data frame containing all the allele fragments in cell genome.
+
+```{r}
+# get the genome of the current label tour value
+genome <- label_tour$value$genome
+
+# see the genome structure (i.e., chromosomes, alleles, allele fragments).
+# Here we exclusively see chromosome 22 because of the mutation engine
+# demo setup.
+genome$get_allele_fragments()
+```
+
+The mutations accumulated in the cell genome can be obtained calling
+the method <code>[GenomeMutations$get_mutations()](../reference/GenomeMutations-cash-get_mutations.md)</code>.
+
+```{r}
+# get the first mutations in the genome
+head(genome$get_mutations())
+```
+
+Users can also extract a fragment of the cell genome. For instance, the
+following snippet generates a <code>[GenomeFragment](../reference/GenomeFragment.md)</code> object representing the fragment
+beginning at position 16085655, chromosome 22, and allele 1 whose length is 100
+nucleotides.
+
+```{r}
+# extract a fragment from the genome
+fragment <- genome$get_fragment("22", 0, 16085655, 100)
+
+fragment
+```
+
+#### Genome Fragment Data
+
+Behind its position, any <code>[GenomeFragment](../reference/GenomeFragment.md)</code>
+object maintains the DNA sequence
+corresponding to the fragment, the mutations occurring to it, and its CIGAR
+code [@li2009sam] with respect to the reference genome.
+
+```{r}
+# the region covered in the reference genome
+fragment$get_covered_reference_region()
+
+# the fragment DNA sequence
+fragment$get_sequence()
+
+# the mutations laying in the fragment
+fragment$get_mutations()
+
+# the CIGAR code for the fragment
+fragment$get_CIGAR()
+```
+
+#### Iterating over Genomes without Labels
+
+The function `get_genome_tour()` takes as input a
+<code>[PhylogeneticForest](../reference/PhylogeneticForest.md)</code>
+object and returns an iterator that produce the simulated cell genomes
+without any further node labels. The returned value is a
+<code>[PhylogeneticForestLabelTour](../reference/PhylogeneticForestLabelTour.md)</code>
+whose property `value` does not have the `label` element.
+
+```{r}
+genome_tour <- get_genome_tour(phylo_forest)
+
+genome_tour$value
+
+genome_tour$step()
+
+genome_tour$value
+```
+
+As in the case of `get_label_tour()`, the function `get_genome_tour()` as an
+optional Boolean parameter `only_leaves` that, when set to `TRUE`, allows
+to focus on the genomes of forest leaves.
+
+```{r}
+genome_tour <- get_genome_tour(phylo_forest, only_leaves = TRUE)
+
+genome_tour$value
+
+genome_tour$step()
+
+genome_tour$value
+```

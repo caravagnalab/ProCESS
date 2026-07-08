@@ -46,7 +46,7 @@ many ways. However, the vast majority of ProCESS users would aim for a standard
 setup, for instance, involving the human genome.
 
 Because of this, ProCESS provides some predefined setups.
-Their list can be obtained by invoking the function 
+A list containing them can be obtained by invoking the function
 `get_mutation_engine_codes()`.
 
 ```{r}

@@ -2490,14 +2490,14 @@ RCPP_MODULE(Mutants)
 //' @title An iterator class over sample forest labels
 //' @description This class represents iterators over sample forest labels. The objects of this
 //'   class are built by [get_label_tour()].
-//' @field \code{value} Get the pair `cell id`-`label` for the current node in the tour.
+//' @field \code{value} A list `cell id`-`label` for the current node in the tour.
 //' @field \code{step} A method that moves to the next node in the tour.
 //' @field \code{done} A Boolean flag that is set to TRUE only when the tour ended.
 //' @seealso [get_label_tour()], <code>[PhylogeneticForestLabelTour]</code>
     class_<SampleForestLabelTour>("SampleForestLabelTour")
         .property("value",
             (Rcpp::List (SampleForestLabelTour::*)() const)(&SampleForestLabelTour::get_value),
-            "Get the pair `cell id`-`label` for the current node in the tour")
+            "A list `cell id`-`label` for the current node in the tour")
         .method("step",
             (void (SampleForestLabelTour::*)())(&SampleForestLabelTour::step),
             "Go to the next node in the tour")
@@ -2518,7 +2518,11 @@ RCPP_MODULE(Mutants)
 //'  is is a <code>[PhylogeneticForest]</code> object.
 //' @param init_value The initial value of the labelling process
 //'  (default: `NULL`).
-//' @param only_leaves A Boolean value  (default: `FALSE`).
+//' @param only_leaves A Boolean flag to iterate exclusively over the
+//'   forest leaves (default: `FALSE`).
+//' @param with_genomes A Boolean flag to also generate the corresponding
+//'   cell genomes. It can be set to TRUE exclusively when `forest` is
+//'   a <code>[PhylogeneticForest]</code> object. (default: `FALSE`)
 //' @return Either a <code>[SampleForestLabelTour]</code> or a
 //'   <code>[PhylogeneticForestLabelTour]</code> iterates
 //'   over `forest`'s nodes and applies labels from the root down to the
@@ -2639,11 +2643,12 @@ RCPP_MODULE(Mutants)
 //' print(collect_labels(tour))
 //' @seealso <code>[SampleForestNode]</code>, <code>[SampleForestLabelTour]</code>,
 //'    <code>[PhylogeneticForestNode]</code>, <code>[PhylogeneticForestLabelTour]</code>,
-//'    [get_genomes_tour()]
+//'    [get_genome_tour()]
     function("get_label_tour", &(get_label_tour),
             List::create(
                  _["forest"], _["labelling_functor"],
-                 _["init_value"] = R_NilValue, _["only_leaves"] = false),
+                 _["init_value"] = R_NilValue, _["only_leaves"] = false,
+                 _["with_genomes"] = false),
             "Get a labelling tour");
 
 //' @name load_sample_forest

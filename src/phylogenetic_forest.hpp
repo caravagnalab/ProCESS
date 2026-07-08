@@ -29,8 +29,6 @@
 #include "forest.hpp"
 #include "genomic_data_storage.hpp"
 #include "sampled_cell.hpp"
-#include "forest_labelling.hpp"
-#include "cell_mutations.hpp"
 
 class MutationEngine;
 
@@ -280,29 +278,9 @@ class PhylogeneticForest : public CLONES::Mutations::PhylogeneticForest
     friend class PhylogeneticForest::const_node;
 };
 
-class GenomeMutationsTour : public CommonLabelTour<CLONES::Mutations::PhylogeneticForest,
-                                                   CLONES::Mutations::MutationLabellingFunctor<GenomeMutations>>
-{
-public:
-    GenomeMutationsTour(const PhylogeneticForest& forest, const bool only_leaves);
-
-    inline void show() const
-    {
-        Rcpp::Rcout << "GenomeMutationsTour";
-    }
-};
-
-GenomeMutationsTour
-get_mutation_tour(const SEXP& forest,
-                  const bool only_leaves = false);
-
 RCPP_EXPOSED_CLASS(PhylogeneticForest)
 RCPP_EXPOSED_CLASS_NODECL(PhylogeneticForest::const_node)
-RCPP_EXPOSED_CLASS_NODECL(LabelTour<PhylogeneticForest>)
-
-RCPP_EXPOSED_CLASS_NODECL(GenomeMutationsTour)
-
 using PhylogeneticForestNode = PhylogeneticForest::const_node;
-using PhylogeneticForestLabelTour = LabelTour<PhylogeneticForest>;
+
 
 #endif // __PROCESS_PHYLOGENETIC_FOREST__

@@ -25,7 +25,6 @@
 #include <phylogenetic_forest.hpp>
 
 #include "forest.hpp"
-#include "forest_labelling.hpp"
 
 class MutationEngine;
 
@@ -190,9 +189,8 @@ inline SampleForest load_samples_forest(const std::string &filename)
 
 RCPP_EXPOSED_CLASS(SampleForest)
 RCPP_EXPOSED_CLASS_NODECL(SampleForest::const_node)
-RCPP_EXPOSED_CLASS_NODECL(LabelTour<SampleForest>)
 
 using SampleForestNode = SampleForest::const_node;
-using SampleForestLabelTour = LabelTour<SampleForest>;
+
 
 #endif // __PROCESS_SAMPLES_FOREST__

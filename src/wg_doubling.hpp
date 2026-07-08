@@ -20,8 +20,6 @@
 
 #include <string>
 
-#include <cna.hpp>
-
 #include <Rcpp.h>
 
 class WholeGenomeDoubling

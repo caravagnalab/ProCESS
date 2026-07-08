@@ -19,9 +19,9 @@
 
 #include <Rcpp.h>
 
-#include "cna.hpp"
 #include "mutation_engine.hpp"
 #include "phylogenetic_forest.hpp"
+#include "forest_labelling.hpp"
 #include "sid.hpp"
 #include "wg_doubling.hpp"
 
@@ -1740,7 +1740,9 @@ RCPP_MODULE(Mutations)
 //' @title An iterator class over sample forest labels
 //' @description This class represents iterators over sample forest labels. The objects
 //'   of this class are built by [get_label_tour()].
-//' @field \code{value} Get the pair `cell id`-`label` for the current node in the tour.
+//' @field \code{value} A list consisting of the corresponding cell identifier, the
+//'   label, and, whenever requested, the corresponding cell genome of the current node
+//'   in the tour.
 //' @field \code{step} A method that moves to the next node in the tour.
 //' @field \code{done} A Boolean flag that is set to TRUE only when the tour ended.
 //' @seealso [get_label_tour()], <code>[PhylogeneticForestNode]</code>,
@@ -1748,7 +1750,7 @@ RCPP_MODULE(Mutations)
     class_<PhylogeneticForestLabelTour>("PhylogeneticForestLabelTour")
         .property("value",
             (Rcpp::List (PhylogeneticForestLabelTour::*)() const)(&PhylogeneticForestLabelTour::get_value),
-            "Get the pair `cell id`-`label` for the current node in the tour")
+            "A list containing the data of the  node in the tour")
         .method("step",
             (void (PhylogeneticForestLabelTour::*)())(&PhylogeneticForestLabelTour::step),
             "Go to the next node in the tour")
@@ -1804,8 +1806,8 @@ RCPP_MODULE(Mutations)
 //' @name GenomeMutations
 //' @title Representing cell genome
 //' @description This class represents genome mutations of phylogenetic forest's cells.
-//'   The objects of this class are built by <code>[GenomeMutationsTour]</code>.
-//' @seealso [get_genomes_tour()], <code>[GenomeMutationsTour]</code>
+//'   The objects of this class are built by <code>[LabelTour]</code>.
+//' @seealso [get_genome_tour()], <code>[LabelTour]</code>
     class_<GenomeMutations>("GenomeMutations")
 
 //' @name GenomeMutations$get_mutations
@@ -1869,39 +1871,19 @@ RCPP_MODULE(Mutations)
 
         .method("show", &GenomeMutations::show);
 
-//' @name GenomeMutationsTour
-//' @title An iterator class over phylogenetic forest genome mutations
-//' @description This class represents iterators over phylogenetic forest genome mutations.
-//'   The objects of this class are built by [get_genomes_tour()].
-//' @field \code{value} Get the pair `cell id`-`genome` for the current node in the tour.
-//' @field \code{step} A method that moves to the next node in the tour.
-//' @field \code{done} A Boolean flag that is set to TRUE only when the tour ended.
-//' @seealso [get_genomes_tour()], <code>[GenomeMutations]</code>
-    class_<GenomeMutationsTour>("GenomeMutationsTour")
-        .property("value",
-            (Rcpp::List (GenomeMutationsTour::*)() const)(&GenomeMutationsTour::get_value),
-            "Get the pair `cell id`-`label` for the current node in the tour")
-        .method("step",
-            (void (GenomeMutationsTour::*)())(&GenomeMutationsTour::step),
-            "Go to the next node in the tour")
-        .property("done",
-            (bool (GenomeMutationsTour::*)() const)(&GenomeMutationsTour::done),
-            "Test whether the tour ended")
-        .method("show", &GenomeMutationsTour::show);
-
-//' @name get_genomes_tour
+//' @name get_genome_tour
 //' @title Getting forest cell mutations
-//' @description This method generates a <code>[GenomeMutationsTour]</code>
-//' @usage get_genomes_tour(forest, only_leaves)
+//' @description This method generates a <code>[LabelTour]</code>
+//' @usage get_genome_tour(forest, only_leaves)
 //' @param forest A <code>[PhylogeneticForest]</code> object.
 //' @param only_leaves A Boolean value (default: `FALSE`).
-//' @return A <code>[GenomeMutationsTour]</code> iterates over the
+//' @return A <code>[LabelTour]</code> iterates over the
 //'   genome mutations of the cells associated to the `forest`'s nodes.
 //'   The returned object exclusively iterates over `forest`'s
 //'   leaves if and only if `only_leaves` is set to `TRUE`.
 //' @examples
-//' @seealso [get_label_tour()], <code>[GenomeMutationsTour]</code>
-    function("get_genomes_tour", &(get_mutation_tour),
+//' @seealso [get_label_tour()], <code>[LabelTour]</code>
+    function("get_genome_tour", &(get_genome_tour),
             List::create(_["forest"], _["only_leaves"] = false),
             "Get a genome mutations tour");
 
