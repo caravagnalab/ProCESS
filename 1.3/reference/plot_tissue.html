@@ -13,7 +13,7 @@ hexagonal heatmap of 2D bins."><meta property="og:image" content="https://carava
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -136,17 +136,19 @@ the legend (default: FALSE).</p></dd>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">place_cell</span><span class="op">(</span><span class="st">"A[E1]"</span>, <span class="fl">500</span>, <span class="fl">500</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"A[E2]"</span>, <span class="fl">60000</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 
- [█████████-------------------------------] 22% [00m:00s] Cells: 19845                             
+ [█████████-------------------------------] 21% [00m:00s] Cells: 19033                                                                                                                
 
- [█████████████████-----------------------] 41% [00m:00s] Cells: 33529                             
+ [█████████████████-----------------------] 40% [00m:01s] Cells: 32733                                                                                                                
 
- [████████████████████████----------------] 58% [00m:02s] Cells: 45752                             
+ [███████████████████████-----------------] 55% [00m:02s] Cells: 43446                                                                                                                
 
- [██████████████████████████████----------] 74% [00m:03s] Cells: 56464                             
+ [█████████████████████████████-----------] 70% [00m:03s] Cells: 53956                                                                                                                
 
- [█████████████████████████████████████---] 90% [00m:03s] Cells: 66613                             
+ [███████████████████████████████████-----] 85% [00m:04s] Cells: 63520                                                                                                                
 
- [████████████████████████████████████████] 100% [00m:04s] Saving snapshot                         
+ [████████████████████████████████████████] 99% [00m:05s] Cells: 72565                                                                                                                
+
+ [████████████████████████████████████████] 100% [00m:05s] Saving snapshot                                                                                                            
 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># collect 3 samples: "Sample_A", "Sample_B", and "Sample_C"</span></span></span>
@@ -158,11 +160,13 @@ the legend (default: FALSE).</p></dd>
 <span class="r-in"><span><span class="co"># for 80000 cells</span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"A[E2]"</span>, <span class="fl">80000</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 
- [████████████████████████████████--------] 79% [00m:00s] Cells: 78226                             
+ [████████████████████████████████--------] 78% [00m:00s] Cells: 77176                                                                                                                
 
- [█████████████████████████████████████---] 90% [00m:00s] Cells: 89437                             
+ [███████████████████████████████████-----] 87% [00m:01s] Cells: 86013                                                                                                                
 
- [████████████████████████████████████████] 100% [00m:01s] Saving snapshot                         
+ [███████████████████████████████████████-] 96% [00m:02s] Cells: 94871                                                                                                                
+
+ [████████████████████████████████████████] 100% [00m:02s] Saving snapshot                                                                                                            
 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot the tissue in the current status</span></span></span>

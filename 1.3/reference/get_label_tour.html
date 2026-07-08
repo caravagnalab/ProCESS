@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,7 +73,14 @@ is is a <code><a href="PhylogeneticForest.html">PhylogeneticForest</a></code> ob
 
 
 <dt id="arg-only-leaves">only_leaves<a class="anchor" aria-label="anchor" href="#arg-only-leaves"></a></dt>
-<dd><p>A Boolean value.</p></dd>
+<dd><p>A Boolean flag to iterate exclusively over the
+forest leaves (default: <code>FALSE</code>).</p></dd>
+
+
+<dt id="arg-with-genomes">with_genomes<a class="anchor" aria-label="anchor" href="#arg-with-genomes"></a></dt>
+<dd><p>A Boolean flag to also generate the corresponding
+cell genomes. It can be set to TRUE exclusively when <code>forest</code> is
+a <code><a href="PhylogeneticForest.html">PhylogeneticForest</a></code> object. (default: <code>FALSE</code>)</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -94,7 +101,8 @@ leaves if and only if <code>only_leaves</code> is set to <code>TRUE</code>.</p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="SampleForestNode.html">SampleForestNode</a></code>, <code><a href="SampleForestLabelTour.html">SampleForestLabelTour</a></code>,
-<code><a href="PhylogeneticForestNode.html">PhylogeneticForestNode</a></code>, <code><a href="PhylogeneticForestLabelTour.html">PhylogeneticForestLabelTour</a></code></p></div>
+<code><a href="PhylogeneticForestNode.html">PhylogeneticForestNode</a></code>, <code><a href="PhylogeneticForestLabelTour.html">PhylogeneticForestLabelTour</a></code>,
+<code><a href="get_genome_tour.html">get_genome_tour()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -114,7 +122,7 @@ leaves if and only if <code>only_leaves</code> is set to <code>TRUE</code>.</p>
 <span class="r-in"><span><span class="co"># run the simulation until "A" has less than 15 cells</span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"A"</span>, <span class="fl">15</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                         
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                            
 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">sample_cells</span><span class="op">(</span><span class="st">"S_1_1"</span>, bottom_left <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">500</span>, <span class="fl">500</span><span class="op">)</span>,</span></span>
@@ -159,18 +167,18 @@ leaves if and only if <code>only_leaves</code> is set to <code>TRUE</code>.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Functor 1 - All nodes"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Functor 1 - All nodes"</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">collect_labels</span><span class="op">(</span><span class="va">tour</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    cell_id label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        1     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        2     2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        6     6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4       11    11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5       13    13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6        7     7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7       16    16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8       22    22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9       24    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10      23    23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11      17    17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cell_id label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> total 1       1    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       2       2    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       6       6    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       11      11   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       13      13   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       7       7    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       16      16   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       22      22   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       24      24   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       23      23   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       17      17   </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># since `labelling_functor1` does not use `label`, we can omit the</span></span></span>
 <span class="r-in"><span><span class="co"># parameter `init_value`</span></span></span>
@@ -179,11 +187,11 @@ leaves if and only if <code>only_leaves</code> is set to <code>TRUE</code>.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Functor 1 - Only leaves"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Functor 1 - Only leaves"</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">collect_labels</span><span class="op">(</span><span class="va">tour</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   cell_id label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1      13    13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2      24    24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3      23    23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      17    17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cell_id label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> total 13      13   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       24      24   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       23      23   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       17      17   </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">labelling_functor2</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">label</span>, <span class="va">node</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="co"># the nodes are labelled by their visiting order</span></span></span>
@@ -198,11 +206,11 @@ leaves if and only if <code>only_leaves</code> is set to <code>TRUE</code>.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Functor 2 - Only leaves"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Functor 2 - Only leaves"</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">collect_labels</span><span class="op">(</span><span class="va">tour</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   cell_id label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1      13     5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2      24     6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3      23     5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      17     4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cell_id label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> total 13      5    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       24      6    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       23      5    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       17      4    </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fl">3.14</span></span></span>
 <span class="r-in"><span></span></span>
@@ -220,11 +228,11 @@ leaves if and only if <code>only_leaves</code> is set to <code>TRUE</code>.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Functor 3 - Only leaves"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Functor 3 - Only leaves"</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">collect_labels</span><span class="op">(</span><span class="va">tour</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   cell_id label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1      13 15.70</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2      24 18.84</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3      23 15.70</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      17 12.56</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cell_id label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> total 13      15.7 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       24      18.84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       23      15.7 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       17      12.56</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -240,11 +248,11 @@ leaves if and only if <code>only_leaves</code> is set to <code>TRUE</code>.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Functor 4 - Only leaves"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Functor 4 - Only leaves"</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">collect_labels</span><span class="op">(</span><span class="va">tour</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   cell_id label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1      13    39</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2      24    64</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3      23   110</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      17   -13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cell_id label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> total 13      39   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       24      64   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       23      110  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       17      -13  </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

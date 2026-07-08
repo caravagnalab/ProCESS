@@ -7,6 +7,7 @@ articles:
   growth_models: growth_models.html
   infinite_site_model: infinite_site_model.html
   mutations: mutations.html
+  node_labelling: node_labelling.html
   ProCESS: ProCESS.html
   run_until: run_until.html
   sample_partition: sample_partition.html
@@ -15,7 +16,7 @@ articles:
   sequencing: sequencing.html
   time_series: time_series.html
   tissue_simulation: tissue_simulation.html
-last_built: 2026-07-02T15:37Z
+last_built: 2026-07-08T15:03Z
 urls:
   reference: https://caravagnalab.github.io/ProCESS/1.3/reference
   article: https://caravagnalab.github.io/ProCESS/1.3/articles

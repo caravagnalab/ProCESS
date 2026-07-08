@@ -292,8 +292,30 @@ Mutation simulation classes and methods
   : Creating a CNA
 - [`Deletion()`](https://caravagnalab.github.io/ProCESS/1.3/reference/Deletion.md)
   : Creating a CNA deletion
+- [`GenomeFragment$get_CIGAR`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeFragment-cash-get_CIGAR.md)
+  : Getting the fragment CIGAR
+- [`GenomeFragment$get_covered_reference_region`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeFragment-cash-get_covered_reference_region.md)
+  : Getting the reference region covered by the fragment
+- [`GenomeFragment$get_mutations`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeFragment-cash-get_mutations.md)
+  : Getting the mutations laying on a fragment
+- [`GenomeFragment$get_sequence`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeFragment-cash-get_sequence.md)
+  : Getting the fragment sequence
+- [`GenomeFragment`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeFragment.md)
+  : Representing a genome fragment
+- [`GenomeMutations$get_allele_fragments`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations-cash-get_allele_fragments.md)
+  : Getting genome allele fragments
+- [`GenomeMutations$get_fragment`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations-cash-get_fragment.md)
+  : Getting genome fragment
+- [`GenomeMutations$get_fragment_from_ref`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations-cash-get_fragment_from_ref.md)
+  : Getting genome fragment
+- [`GenomeMutations$get_mutations`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations-cash-get_mutations.md)
+  : Getting genome mutations
+- [`GenomeMutations`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations.md)
+  : Representing cell genome
 - [`get_available_tumours_in()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_available_tumours_in.md)
   : Getting the tumour types available in a setup
+- [`get_genome_tour()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_genome_tour.md)
+  : Getting forest cell mutations
 - [`get_mutation_engine_codes()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_mutation_engine_codes.md)
   : Getting the supported setups
 - [`get_relevant_branches()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_relevant_branches.md)
@@ -404,8 +426,8 @@ Mutation simulation classes and methods
   : Annotate a plot of cell divisions
 - [`SNV()`](https://caravagnalab.github.io/ProCESS/1.3/reference/SNV.md)
   : Creating an SNV
-- [`WholeGenomeDoubling`](https://caravagnalab.github.io/ProCESS/1.3/reference/WholeGenomeDoubling.md)
-  : Whole genome doubling events
+- [`WGD`](https://caravagnalab.github.io/ProCESS/1.3/reference/WGD.md) :
+  The Whole Genome Doubling constant
 
 ## Sequencing simulation interface
 
@@ -513,6 +535,11 @@ Simulation Logics
   (FACS)](https://caravagnalab.github.io/ProCESS/1.3/articles/sample_partition.md):
 
   How to partitioning samples, sorting cells, and simulate FACS
+
+- [Node
+  Labelling](https://caravagnalab.github.io/ProCESS/1.3/articles/node_labelling.md):
+
+  How to simulate cell genomes
 
 - [Time Series
   Analysis](https://caravagnalab.github.io/ProCESS/1.3/articles/time_series.md):
