@@ -32,6 +32,7 @@ articles:
   - custom_engine
   - infinite_site_model
   - sample_partition
+  - simulating_genomes
   - time_series
 - title: Tests and Examples
   contents:
@@ -76,7 +77,7 @@ reference:
   - plot_forest
   - plot_sticks
   - SNV
-  - WholeGenomeDoubling
+  - WGD
 - title: "Sequencing simulation interface"
   desc:  "Sequencing simulation methods"
   contents:

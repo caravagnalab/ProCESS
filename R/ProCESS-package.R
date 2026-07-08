@@ -35,6 +35,10 @@ WGD <- NULL
 
   cpp_WGD <- new(WholeGenomeDoubling)
 
+  if (exists("WGD", envir = ns, inherits = FALSE)) {
+    unlockBinding("WGD", ns)
+  }
+
   assign("WGD", cpp_WGD, envir = ns)
 
   lockBinding("WGD", ns)

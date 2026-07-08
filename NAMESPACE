@@ -35,6 +35,7 @@ export(SNV)
 export(CNA)
 export(Amplification)
 export(Deletion)
+export(WGD)
 
 export(SampleForestNode)
 export(SampleForestLabelTour)

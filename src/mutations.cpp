@@ -364,6 +364,7 @@ RCPP_MODULE(Mutations)
 //' @description A whole genome doubling event (WGD)
 //'   produces the simultaneous duplication of all the
 //'   chromosome allele in a genome.
+//' @keywords internal
     class_<WholeGenomeDoubling>("WholeGenomeDoubling")
         .constructor()
         .method("show", &WholeGenomeDoubling::show);
@@ -1742,7 +1743,8 @@ RCPP_MODULE(Mutations)
 //' @field \code{value} Get the pair `cell id`-`label` for the current node in the tour.
 //' @field \code{step} A method that moves to the next node in the tour.
 //' @field \code{done} A Boolean flag that is set to TRUE only when the tour ended.
-//' @seealso [get_label_tour()], <code>[SampleForestLabelTour]</code>
+//' @seealso [get_label_tour()], <code>[PhylogeneticForestNode]</code>,
+//'   <code>[SampleForestLabelTour]</code>
     class_<PhylogeneticForestLabelTour>("PhylogeneticForestLabelTour")
         .property("value",
             (Rcpp::List (PhylogeneticForestLabelTour::*)() const)(&PhylogeneticForestLabelTour::get_value),
