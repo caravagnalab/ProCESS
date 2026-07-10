@@ -377,11 +377,19 @@ sampled_cells %>% head()
 # get the identifier of the 3rd cell in `sampled_cells`
 cell_id <- sampled_cells[3, 1]
 
+# get the node whose associated cell have `cell_id` as identifier
+node <- phylo_forest$get_node(cell_id)
+node
+
+# compute the genome of the cell having `cell_id` as identifier
+genome <- node$get_genome()
+genome
+
 # get the SNVs and the indels of the 3rd cell in `sampled_cells`
-phylo_forest$get_cell_mutations(cell_id) %>% head()
+genome$get_mutations() %>% head()
 
 # get the CNAs of the 3rd cell in `sampled_cells`
-phylo_forest$get_cell_CNAs(cell_id) %>% head()
+genome$get_CNAs() %>% head()
 ```
 
 The method
@@ -413,8 +421,11 @@ Users can also identify the cell in which a mutation emerged
 even when the cell was not sampled.
 
 ```{r}
+# get the genome of the cell having as the identifier `cell_id`
+genome <- phylo_forest$get_node(cell_id)$get_genome()
+
 # select one of the mutations
-mutation_row <- phylo_forest$get_cell_mutations(cell_id)[2, ]
+mutation_row <- genome$get_mutations(with_germline=FALSE)[2, ]
 
 # rebuild the corresponding mutation
 mutation <- Mutation(mutation_row["chr"][1, ],

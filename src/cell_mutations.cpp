@@ -32,83 +32,44 @@ GenomeMutations::GenomeMutations(const std::filesystem::path& reference_path,
     reference_path{reference_path}, germline{germline}, somatic{germline.copy_structure()}
 {}
 
-size_t GenomeMutations::count_mutations(const CLONES::Mutations::GenomeMutations& mutations)
+GenomeMutations::GenomeMutations(const std::filesystem::path& reference_path,
+                                 const CLONES::Mutations::GenomeMutations& germline,
+                                 const CLONES::Mutations::GenomeMutations& somatic):
+    reference_path{reference_path}, germline{germline}, somatic{somatic}
+{}
+
+size_t GenomeMutations::num_of_mutations(const bool with_germline) const
 {
-    size_t num_of_mutations{0};
-    for (const auto& [chr_id, chr_mutations] : mutations.get_chromosomes()) {
-        for (const auto& [allele_id, allele_mutations] : chr_mutations.get_alleles()) {
-            for (const auto& [pos, fragment_mutations]: allele_mutations.get_fragments()) {
-                num_of_mutations += fragment_mutations.get_mutations().size();
-            }
-        }
+    if (with_germline) {
+        return germline.num_of_mutations() + somatic.num_of_mutations();
     }
 
-    return num_of_mutations;
+    return somatic.num_of_mutations();
 }
 
-size_t GenomeMutations::fill_df(Rcpp::DataFrame df, size_t from,
-                                const CLONES::Mutations::GenomeMutations& mutations)
+size_t GenomeMutations::num_of_CNAs() const
 {
-    using namespace Rcpp;
-
-    IntegerVector chr_pos = df["from"], alleles = df["allele"];
-    CharacterVector chr_names = df["chr"], refs = df["ref"],
-        alts = df["alt"], causes = df["causes"], classes = df["classes"];
-
-    for (const auto& [chr_id, chr_mutations] : mutations.get_chromosomes()) {
-        const std::string chr_name = CLONES::Mutations::GenomicPosition::chrtos(chr_id);
-        for (const auto& [allele_id, allele_mutations] : chr_mutations.get_alleles()) {
-            for (const auto& [f_pos, fragment_mutations]: allele_mutations.get_fragments()) {
-                for (const auto& [pos, mutation_ptr]: fragment_mutations.get_mutations()) {
-                    chr_names[from] = chr_name;
-                    chr_pos[from] = pos.position;
-
-                    refs[from] = mutation_ptr->ref;
-                    alts[from] = mutation_ptr->alt;
-                    causes[from] = mutation_ptr->cause;
-                    classes[from] = CLONES::Mutations::Mutation::get_nature_description(mutation_ptr->nature);
-                    alleles[from] = allele_id;
-
-                    ++from;
-                }
-            }
-        }
-    }
-
-    return from;
-}
-
-Rcpp::DataFrame GenomeMutations::get_mutations(const bool with_germline) const
-{
-    size_t nrows{count_mutations(somatic)};
-
-    if (with_germline) {
-        nrows += count_mutations(germline);
-    }
-
-    using namespace Rcpp;
-
-    IntegerVector chr_pos(nrows), alleles(nrows);
-    CharacterVector chr_names(nrows), refs(nrows),
-        alts(nrows), causes(nrows), classes(nrows);
-
-    DataFrame df = DataFrame::create(_["chr"] = chr_names, _["allele"] = alleles,
-                                     _["from"] = chr_pos,
-                                     _["ref"] = refs, _["alt"] = alts,
-                                     _["causes"] = causes, _["classes"] = classes);
-
-    const size_t from = fill_df(df, 0, somatic);
-
-    if (with_germline) {
-        fill_df(df, from, germline);
-    }
-
-    return df;
+    return somatic.num_of_CNAs();
 }
 
 bool GenomeMutations::apply_contained(const CLONES::Mutations::MutationList& mutation_list)
 {
     return somatic.apply_contained(mutation_list);
+}
+
+std::list<CLONES::Mutations::AlleleId>
+GenomeMutations::get_alleles_covering_ref_region(const std::string& chromosome_name,
+                                                 const size_t& from,
+                                                 const size_t& size) const
+{
+    using namespace CLONES::Mutations;
+
+    const auto chr_id = GenomicPosition::stochr(chromosome_name);
+
+    const GenomicPosition begin_pos{chr_id, static_cast<ChrPosition>(from)};
+    const GenomicRegion fragment_region{begin_pos, static_cast<GenomicRegion::Length>(size)};
+
+    return somatic.get_alleles_containing(fragment_region);
 }
 
 GenomeFragment GenomeMutations::get_fragment(const std::string& chromosome_name,
@@ -229,8 +190,42 @@ Rcpp::DataFrame GenomeMutations::get_allele_fragments() const
     }
 
     return DataFrame::create(_["chr"] = chr_names, _["allele"] = alleles,
-                             _["src_allele"] = allele_srcs,
+                             _["src allele"] = allele_srcs,
                              _["from"] = chr_pos, _["size"] = sizes);
+}
+
+size_t GenomeMutations::fill_mutation_df(Rcpp::DataFrame &df, size_t index,
+                                         const bool with_germline) const
+{
+    index = fill_mutation_df(df, somatic, index);
+
+    if (with_germline) {
+        index = fill_mutation_df(df, germline, index);
+    }
+
+    return index;
+}
+
+Rcpp::DataFrame GenomeMutations::get_mutations(const bool with_germline) const
+{
+    const size_t nrows = num_of_mutations(with_germline);
+
+    auto df = create_mutation_df(nrows);
+
+    fill_mutation_df(df, 0, with_germline);
+
+    return df;
+}
+
+Rcpp::DataFrame GenomeMutations::get_CNAs() const
+{
+    const size_t nrows = num_of_CNAs();
+
+    auto df = create_CNA_df(nrows);
+
+    fill_CNA_df(df, 0);
+
+    return df;
 }
 
 void GenomeMutations::show() const
@@ -245,5 +240,98 @@ void GenomeMutations::show() const
         num_alleles += chr_mutation.get_alleles().size();
     }
 
-    Rcout << num_alleles << " alleles";
+    Rcout << num_alleles << " alleles" << std::endl;
+}
+
+Rcpp::DataFrame GenomeMutations::create_mutation_df(const size_t nrows)
+{
+    using namespace Rcpp;
+
+    IntegerVector chr_pos(nrows), alleles(nrows);
+    CharacterVector chr_names(nrows), refs(nrows), alts(nrows),
+                    causes(nrows), natures(nrows);
+
+    return DataFrame::create(_["chr"] = chr_names, _["from"] = chr_pos,
+                             _["allele"] = alleles, _["ref"] = refs,
+                             _["alt"] = alts, _["cause"] = causes,
+                             _["nature"] = natures);
+}
+
+Rcpp::DataFrame GenomeMutations::create_CNA_df(const size_t nrows)
+{
+    using namespace Rcpp;
+
+    IntegerVector CNA_begins(nrows), CNA_ends(nrows), src_alleles(nrows),
+                    dst_alleles(nrows);
+    CharacterVector chr_names(nrows), types(nrows), causes(nrows),
+                    natures(nrows);
+
+    return DataFrame::create(_["chr"] = chr_names, _["begin"] = CNA_begins,
+                             _["end"] = CNA_ends, _["type"] = types,
+                             _["allele"] = dst_alleles, _["src.allele"] = src_alleles, 
+                             _["cause"] = causes, _["nature"] = natures);
+}
+
+
+size_t GenomeMutations::fill_mutation_df(Rcpp::DataFrame &df,
+                                         const CLONES::Mutations::GenomeMutations &cell_mutations,
+                                         size_t index)
+{
+    using namespace Rcpp;
+
+    IntegerVector chr_pos = df["from"], alleles = df["allele"];
+    CharacterVector chr_names = df["chr"], refs = df["ref"], alts = df["alt"],
+                    causes = df["cause"], natures = df["nature"];
+
+    for (const auto &[chr_id, chromosome] : cell_mutations.get_chromosomes()) {
+        for (const auto &[allele_id, allele] : chromosome.get_alleles()) {
+            for (const auto &[fragment_pos, fragment] : allele.get_fragments()) {
+                for (const auto &[mutation_pos, mutation_ptr] :
+                     fragment.get_mutations()) {
+                    chr_names[index] = CLONES::Mutations::GenomicPosition::chrtos(chr_id);
+                    chr_pos[index] = mutation_ptr->position;
+                    alleles[index] = allele_id;
+                    refs[index] = mutation_ptr->ref;
+                    alts[index] = mutation_ptr->alt;
+                    causes[index] = mutation_ptr->cause;
+                    natures[index] = mutation_ptr->get_nature_description();
+
+                    ++index;
+                }
+            }
+        }
+    }
+
+    return index;
+}
+
+size_t GenomeMutations::fill_CNA_df(Rcpp::DataFrame &df,
+                                    const CLONES::Mutations::GenomeMutations &cell_mutations,
+                                    size_t index)
+{
+    using namespace Rcpp;
+
+    IntegerVector CNA_begins = df["begin"], CNA_ends = df["end"],
+                  dst_alleles = df["allele"], src_alleles = df["src.allele"];
+    CharacterVector chr_names = df["chr"], types = df["type"], causes = df["cause"],
+                    natures = df["nature"];
+
+    for (const auto &[chr_id, chromosome] : cell_mutations.get_chromosomes()) {
+        for (const auto &cna_ptr : chromosome.get_CNAs()) {
+            chr_names[index] = CLONES::Mutations::GenomicPosition::chrtos(chr_id);
+            CNA_begins[index] = cna_ptr->begin();
+            CNA_ends[index] = cna_ptr->end();
+            bool is_amp = cna_ptr->type == CLONES::Mutations::CNA::Type::AMPLIFICATION;
+            src_alleles[index] = (is_amp ? cna_ptr->source : NA_INTEGER);
+            dst_alleles[index] = cna_ptr->dest;
+            causes[index] = cna_ptr->cause;
+            natures[index] = cna_ptr->get_nature_description();
+
+            types[index] = (is_amp ? "A" : "D");
+
+            ++index;
+        }
+    }
+
+    return index;
 }

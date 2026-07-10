@@ -31,7 +31,7 @@ std::vector<SampleForest::const_node> SampleForest::get_roots() const
     std::vector<SampleForest::const_node> roots;
 
     for (const auto node : CLONES::Mutants::DescendantForest::get_roots()) {
-        roots.emplace_back(node);
+        roots.emplace_back(this, node);
     }
 
     return roots;

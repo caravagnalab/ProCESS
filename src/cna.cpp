@@ -66,7 +66,7 @@ Rcpp::List CNA::get_dataframe() const
     return DataFrame::create(_["chr"] = get_chromosome(),
                              _["from"] = get_position_in_chromosome(),
                              _["length"] = get_length(), _["allele"] = get_allele(),
-                             _["src_allele"] = get_src_allele(), _["type"] = get_type());
+                             _["src.allele"] = get_src_allele(), _["type"] = get_type());
 }
 
 void CNA::show() const

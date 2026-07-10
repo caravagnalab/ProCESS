@@ -237,14 +237,14 @@ head(seq_results$mutations)
 ProCESS allows to visualise the sequencing results.
 
 ```{r, fig.width=4, fig.height=7, fig.alt=c("The VAF histogram labelled by mutation class.")}
-plot_VAF_histogram(seq_results, labels = seq_results$mutations["classes"],
+plot_VAF_histogram(seq_results, labels = seq_results$mutations["nature"],
                    cuts = c(0.02, 1))
 ```
 
 Marginal distributions can also be plotted.
 
 ```{r, fig.width=4, fig.height=4, fig.alt=c("The VAF marginal distribution S1 vs S2 labelled by mutation class.", "The VAF marginal distribution S1 vs S3 labelled by mutation class.", "The VAF marginal distribution S2 vs S3 labelled by mutation class.")}
-plot_VAF_marginals(seq_results, labels = seq_results$mutations["classes"],
+plot_VAF_marginals(seq_results, labels = seq_results$mutations["nature"],
                    samples = c("S1", "S2", "S3"))
 ```
 
@@ -252,6 +252,6 @@ In S1 vs S3 figure, we can some spot passenger mutations occurring in both S1
 and S3. Let us identify these mutations.
 
 ```{r}
-seq_results$mutations %>% filter(classes == "passenger" &
+seq_results$mutations %>% filter(natures == "passenger" &
                                    S1.VAF > 0 & S3.VAF > 0)
 ```

@@ -29,25 +29,27 @@ class GenomeMutations
     std::filesystem::path reference_path;
     CLONES::Mutations::GenomeMutations germline;
     CLONES::Mutations::GenomeMutations somatic;
-
-    static size_t count_mutations(const CLONES::Mutations::GenomeMutations& mutations);
-
-    static size_t fill_df(Rcpp::DataFrame df, size_t from,
-                          const CLONES::Mutations::GenomeMutations& mutations);
 public:
     GenomeMutations();
 
     GenomeMutations(const std::filesystem::path& reference_path,
                     const CLONES::Mutations::GenomeMutations& germline);
 
+    GenomeMutations(const std::filesystem::path& reference_path,
+                    const CLONES::Mutations::GenomeMutations& germline,
+                    const CLONES::Mutations::GenomeMutations& somatic);
+
     inline Rcpp::DataFrame get_mutations() const
     {
         return get_mutations(true);
     }
 
-    Rcpp::DataFrame get_mutations(const bool with_germline) const;
-
     bool apply_contained(const CLONES::Mutations::MutationList& mutation_list);
+
+    std::list<CLONES::Mutations::AlleleId>
+    get_alleles_covering_ref_region(const std::string& chromosome_name,
+                                    const size_t& from,
+                                    const size_t& size) const;
 
     GenomeFragment get_fragment(const std::string& chromosome_name,
                                 const size_t& allele_id,
@@ -62,7 +64,33 @@ public:
 
     Rcpp::DataFrame get_allele_fragments() const;
 
+    size_t num_of_mutations(const bool with_germline = true) const;
+
+    size_t num_of_CNAs() const;
+
+    size_t fill_mutation_df(Rcpp::DataFrame &df, size_t index = 0, const bool with_germline = true) const;
+
+    inline size_t fill_CNA_df(Rcpp::DataFrame &df, size_t index = 0) const
+    {
+        // all CNAs appear as somatic CNAs
+        return fill_CNA_df(df, somatic, index);
+    }
+
+    Rcpp::DataFrame get_mutations(const bool with_germline = true) const;
+
+    Rcpp::DataFrame get_CNAs() const;
+
     void show() const;
+
+    static Rcpp::DataFrame create_mutation_df(const size_t nrows);
+
+    static Rcpp::DataFrame create_CNA_df(const size_t nrows);
+
+    static size_t fill_mutation_df(Rcpp::DataFrame &df, const CLONES::Mutations::GenomeMutations &mutations,
+                                   size_t index = 0);
+
+    static size_t fill_CNA_df(Rcpp::DataFrame &df, const CLONES::Mutations::GenomeMutations &mutations,
+                              size_t index = 0);
 };
 
 RCPP_EXPOSED_CLASS(GenomeMutations)

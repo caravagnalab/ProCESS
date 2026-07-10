@@ -33,9 +33,10 @@ knitr::opts_chunk$set(
 
 ProCESS allows to partition samples according to cell features as 
 [FACS](https://www.sinobiological.com/category/fcm-facs-facs) does.
-The method  <code>[PhylogeneticForest$partition_samples()](../reference/PhylogeneticForest-cash-partition_samples.md)</code>
+The method <code>[PhylogeneticForest$partition_samples()](../reference/PhylogeneticForest-cash-partition_samples.md)</code>
 takes a labelling function, which accepts as input an object of the class
-`SampledCell` and returns a string, and applies it to the sampled cells. Then,
+<code>[PhylogeneticForestNode](../reference/PhylogeneticForestNode.md)</code>
+and returns a string, and applies it to the sampled cells. Then,
 it partitions the forest samples by using the obtained labels. The resulting
 sub-samples are named according the format `<sample name>_<cell label>`.
 
@@ -63,9 +64,9 @@ The forest samples can be split by epigenetic state as it
 follows.
 
 ```{r}
-# the labelling function parameter has type `SampledCell`
+# the labelling function parameter has type `PhylogeneticForestNode`
 epi_labelling <- function(cell) {
-  cell$epistate
+  cell$epistate_name
 }
 
 phylo_forest$partition_samples(epi_labelling)
@@ -82,7 +83,7 @@ phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
 
 # a mutant-name-based labelling function
 mutant_labelling <- function(cell) {
-  cell$mutant
+  cell$mutant_name
 }
 
 phylo_forest$partition_samples(mutant_labelling)

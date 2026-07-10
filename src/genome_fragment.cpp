@@ -61,7 +61,7 @@ Rcpp::DataFrame GenomeFragment::get_mutations() const
 
     IntegerVector chr_pos(nrows), alleles(nrows);
     CharacterVector chr_names(nrows), refs(nrows),
-        alts(nrows), causes(nrows), classes(nrows);
+        alts(nrows), causes(nrows), natures(nrows);
 
     std::string chr_name;
     if (nrows > 0) {
@@ -76,7 +76,7 @@ Rcpp::DataFrame GenomeFragment::get_mutations() const
         refs[i] = sid.ref;
         alts[i] = sid.alt;
         causes[i] = sid.cause;
-        classes[i] = CLONES::Mutations::Mutation::get_nature_description(sid.nature);
+        natures[i] = CLONES::Mutations::Mutation::get_nature_description(sid.nature);
 
         ++i;
     }
@@ -84,7 +84,7 @@ Rcpp::DataFrame GenomeFragment::get_mutations() const
     return DataFrame::create(_["chr"] = chr_names, _["allele"] = alleles,
                              _["from"] = chr_pos,
                              _["ref"] = refs, _["alt"] = alts,
-                             _["causes"] = causes, _["classes"] = classes);
+                             _["cause"] = causes, _["nature"] = natures);
 }
 
 void GenomeFragment::show() const

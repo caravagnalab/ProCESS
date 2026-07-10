@@ -24,7 +24,7 @@
 #include "simulation.hpp"
 #include "tissue_rectangle.hpp"
 
-#include "forest_labelling.hpp"
+#include "node_tour.hpp"
 
 using namespace Rcpp;
 
@@ -2432,85 +2432,48 @@ RCPP_MODULE(Mutants)
 
 //' @name SampleForestNode
 //' @title The node of a sample forest
-//' @description This class represents the nodes of a sample forest. It does not have
-//'   a user constructor because its objects are produced by ProCESS and passed to the
-//'   labelling function of [get_label_tour()].
+//' @description This class represents the nodes of a sample forest. It does not
+//'   have a user constructor and its objects are produced by ProCESS and passed to
+//'   the labelling function of [get_node_tour()].
 //' @field \code{cell_id} The identifier of the associated cell.
 //' @field \code{parent} The node's parent.
 //' @field \code{children} A list of the node's children.
 //' @field \code{is_root} A flag that is set to TRUE if and only if the node is a root.
 //' @field \code{is_leaf} A flag that is set to TRUE if and only if the node is a leaf.
+//' @field \code{sample_name} The name of the sample that collected the associated cell.
 //' @field \code{birth_time} The birth time of the cell associated to the node.
 //' @field \code{death_time} The death time of the cell associated to the node.
 //' @field \code{life_span} The life span of the cell associated to the node.
 //' @field \code{species_id} The identifier of the associated cell's species.
 //' @field \code{species_name} The name of the associated cell's species.
+//' @field \code{epistate_name} The name of the associated cell's epigenetic state.
 //' @field \code{mutant_id} The identifier of the associated cell's mutant.
 //' @field \code{mutant_name} The name of the associated cell's mutant.
-//' @seealso [get_label_tour()], <code>[PhylogeneticForestNode]</code>,
-//'   [`vignette("node_labelling")`]
-   class_<SampleForest::const_node>("SampleForestNode")
-        .property("cell_id",
-            (CLONES::Mutants::CellId (SampleForestNode::*)() const)(&SampleForestNode::get_id),
-            "The identifier of the cell associated to the node (Read-only)")
-        .property("parent",
-            (SampleForestNode (SampleForestNode::*)() const)(&SampleForestNode::parent),
-            "The node's parent (Read-only)")
-        .property("children",
-            (std::vector<SampleForestNode> (SampleForestNode::*)() const)(&SampleForestNode::children),
-            "The node's children (Read-only)")
-        .property("is_root",
-            (bool (SampleForestNode::*)() const)(&SampleForestNode::is_root),
-            "A Boolean flag that is set to TRUE iff the node is a root (Read-only)")
-        .property("is_leaf",
-            (bool (SampleForestNode::*)() const)(&SampleForestNode::is_leaf),
-            "A Boolean flag that is set to TRUE iff the node is a leaf (Read-only)")
-        .property("birth_time",
-            (CLONES::Time (SampleForestNode::*)() const)(&SampleForestNode::get_birth_time),
-            "The birth time of the cell associated to the node (Read-only)")
-        .property("death_time",
-            (CLONES::Time (SampleForestNode::*)() const)(&SampleForestNode::get_death_time),
-            "The death time of the cell associated to the node (Read-only)")
-        .property("life_span",
-            (CLONES::Time (SampleForestNode::*)() const)(&SampleForestNode::get_death_time),
-            "The life span of the cell associated to the node (Read-only)")
-        .property("species_id",
-            (CLONES::Mutants::SpeciesId (SampleForestNode::*)() const)(&SampleForestNode::get_species_id),
-            "The identifier of the species to whom the cell associated to the node belong (Read-only)")
-        .property("species_name",
-            (std::string (SampleForestNode::*)() const)(&SampleForestNode::get_species_name),
-            "The name of the species to whom the cell associated to the node belong (Read-only)")
-        .property("mutant_id",
-            (CLONES::Mutants::MutantId (SampleForestNode::*)() const)(&SampleForestNode::get_mutant_id),
-            "The identifier of the mutant to whom the cell associated to the node belong (Read-only)")
-        .property("mutant_name",
-            (std::string (SampleForestNode::*)() const)(&SampleForestNode::get_mutant_name),
-            "The name of the mutant to whom the cell associated to the node belong (Read-only)");
+//' @seealso [get_node_tour()], <code>[SampleForestNodeTour]</code>,
+//'   <code>[PhylogeneticForestNode]</code>, [`vignette("node_labelling")`]
+   class_<SampleForestNode>("SampleForestNode")
+        REGISTER_NODE_COMMON_FIELDS(SampleForestNode);
 
-//' @name SampleForestLabelTour
-//' @title An iterator class over sample forest labels
-//' @description This class represents iterators over sample forest labels. The objects of this
-//'   class are built by [get_label_tour()].
-//' @field \code{value} A list `cell id`-`label` for the current node in the tour.
+//' @name SampleForestNodeTour
+//' @title An iterator class over sample forest nodes
+//' @description This class represents iterators over sample forest nodes.
+//'   The objects of this class are built by [get_node_tour()].
+//' @field \code{node} An object of the class <code>[SampleForestNode]</code>
+//'   representing the node pointed by the iterator.
+//' @field \code{label} (OPTIONAL) The label of the of the node pointed by the
+//'   iterator. The presence of this field depends on the [get_node_tour()]'s
+//'   parameters used to create the tour object.
 //' @field \code{step} A method that moves to the next node in the tour.
 //' @field \code{done} A Boolean flag that is set to TRUE only when the tour ended.
-//' @seealso [get_label_tour()], <code>[PhylogeneticForestLabelTour]</code>,
-//'   [`vignette("node_labelling")`]
-    class_<SampleForestLabelTour>("SampleForestLabelTour")
-        .property("value",
-            (Rcpp::List (SampleForestLabelTour::*)() const)(&SampleForestLabelTour::get_value),
-            "A list `cell id`-`label` for the current node in the tour")
-        .method("step",
-            (void (SampleForestLabelTour::*)())(&SampleForestLabelTour::step),
-            "Go to the next node in the tour")
-        .property("done",
-            (bool (SampleForestLabelTour::*)() const)(&SampleForestLabelTour::done),
-            "Test whether the tour ended");
+//' @seealso [get_node_tour()], <code>[SampleForestNode]</code>,
+//'   <code>[PhylogeneticForestNodeTour]</code>, [`vignette("node_labelling")`]
+    class_<SampleForestNodeTour>("SampleForestNodeTour")
+        REGISTER_TOUR_COMMON_FIELDS(SampleForestNodeTour);
 
-//' @name get_label_tour
+//' @name get_node_tour
 //' @title Labelling forest nodes
-//' @description This method generates a <code>[SampleForestLabelTour]</code>
-//' @usage get_label_tour(forest, labelling_functor, init_value, only_leaves,
+//' @description This method generates a <code>[SampleForestNodeTour]</code>
+//' @usage get_node_tour(forest, labelling_functor, init_value, only_leaves,
 //'                       with_genomes)
 //' @param forest Either a <code>[SampleForest]</code> or a
 //'  <code>[PhylogeneticForest]</code> object.
@@ -2518,7 +2481,7 @@ RCPP_MODULE(Mutants)
 //'  of the type `label_type (*)(label_type, SampleForestNode)`, when
 //'  `forest` is a <code>[SampleForest]</code> object, or
 //'  `label_type (*)(label_type, PhylogeneticForestNode)`, when `forest`
-//'  is is a <code>[PhylogeneticForest]</code> object.
+//'  is is a <code>[PhylogeneticForest]</code> object (default: `NULL`).
 //' @param init_value The initial value of the labelling process
 //'  (default: `NULL`).
 //' @param only_leaves A Boolean flag to iterate exclusively over the
@@ -2526,18 +2489,10 @@ RCPP_MODULE(Mutants)
 //' @param with_genomes A Boolean flag to also generate the corresponding
 //'   cell genomes. It can be set to TRUE exclusively when `forest` is
 //'   a <code>[PhylogeneticForest]</code> object. (default: `FALSE`)
-//' @return Either a <code>[SampleForestLabelTour]</code> or a
-//'   <code>[PhylogeneticForestLabelTour]</code> iterates
-//'   over `forest`'s nodes and applies labels from the root down to the
-//'   leaves. The labels are computed by using `labelling_functor`. For
-//'   each of `forest`'s nodes, `labelling_functor` takes as input the
-//'   parent label and the current node in the form of either a
-//'   <code>[SampleForestNode]</code> or <code>[PhylogeneticForestNode]</code>
-//'   object, depending on the types of `forest` and `labelling_functor`
-//'   and returns the label of the current node.
-//'   The value `init_label` may be used as parent label for all forest
-//'   roots. The returned object exclusively iterates over `forest`'s
-//'   leaves if and only if `only_leaves` is set to `TRUE`.
+//' @return Either a <code>[SampleForestNodeTour]</code> or a
+//'   <code>[PhylogeneticForestNodeTour]</code> iterating over `forest`'s
+//'   nodes. When `only_leaves` is set to `TRUE`, the returned tour
+//'   iterates over `forest`'s leaves.
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -2563,17 +2518,17 @@ RCPP_MODULE(Mutants)
 //' collect_labels <- function(tour) {
 //'   total <- NULL
 //'
-//'   # `SampleForestLabelTour$done` is `TRUE` iff the tour ended
+//'   # `SampleForestNodeTour$done` is `TRUE` iff the tour ended
 //'   while (!tour$done) {
 //'     if (is.null(total)) {
-//'       # `SampleForestLabelTour$value` is a pair cell
+//'       # `SampleForestNodeTour$value` is a pair cell
 //'       #  identifier for the current node and node label
 //'       total <- tour$value
 //'     } else {
 //'       total <- rbind(total, tour$value)
 //'     }
 //'
-//'     # `SampleForestLabelTour$step()` advances to the next node
+//'     # `SampleForestNodeTour$step()` advances to the next node
 //'     # in the tour
 //'     tour$step()
 //'   }
@@ -2590,14 +2545,14 @@ RCPP_MODULE(Mutants)
 //'
 //' # since `labelling_functor1` does not use `label`, we can omit the
 //' # parameter `init_value`
-//' tour <- get_label_tour(forest, labelling_functor1)
+//' tour <- get_node_tour(forest, labelling_functor1)
 //'
 //' print("Functor 1 - All nodes")
 //' print(collect_labels(tour))
 //'
 //' # since `labelling_functor1` does not use `label`, we can omit the
 //' # parameter `init_value`
-//' tour <- get_label_tour(forest, labelling_functor1, only_leaves = TRUE)
+//' tour <- get_node_tour(forest, labelling_functor1, only_leaves = TRUE)
 //'
 //' print("Functor 1 - Only leaves")
 //' print(collect_labels(tour))
@@ -2609,7 +2564,7 @@ RCPP_MODULE(Mutants)
 //'
 //' # `labelling_functor2` uses `label` and we must specify the
 //' # parameter `init_value`
-//' tour <- get_label_tour(forest, labelling_functor2,
+//' tour <- get_node_tour(forest, labelling_functor2,
 //'                        init_value = 0, only_leaves = TRUE)
 //'
 //' print("Functor 2 - Only leaves")
@@ -2625,7 +2580,7 @@ RCPP_MODULE(Mutants)
 //'   label + a
 //' }
 //'
-//' tour <- get_label_tour(forest, labelling_functor3,
+//' tour <- get_node_tour(forest, labelling_functor3,
 //'                        init_value = 0, only_leaves = TRUE)
 //'
 //' print("Functor 3 - Only leaves")
@@ -2639,17 +2594,17 @@ RCPP_MODULE(Mutants)
 //'   label + sample(-100:100, 1)
 //' }
 //'
-//' tour <- get_label_tour(forest, labelling_functor4,
+//' tour <- get_node_tour(forest, labelling_functor4,
 //'                        init_value = 0, only_leaves = TRUE)
 //'
 //' print("Functor 4 - Only leaves")
 //' print(collect_labels(tour))
-//' @seealso <code>[SampleForestNode]</code>, <code>[SampleForestLabelTour]</code>,
-//'    <code>[PhylogeneticForestNode]</code>, <code>[PhylogeneticForestLabelTour]</code>,
+//' @seealso <code>[SampleForestNode]</code>, <code>[SampleForestNodeTour]</code>,
+//'    <code>[PhylogeneticForestNode]</code>, <code>[PhylogeneticForestNodeTour]</code>,
 //'    [get_genome_tour()], [`vignette("node_labelling")`]
-    function("get_label_tour", &(get_label_tour),
+    function("get_node_tour", &get_node_tour,
             List::create(
-                 _["forest"], _["labelling_functor"],
+                 _["forest"], _["labelling_functor"] = R_NilValue,
                  _["init_value"] = R_NilValue, _["only_leaves"] = false,
                  _["with_genomes"] = false),
             "Get a labelling tour");

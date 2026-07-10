@@ -61,7 +61,7 @@ void add_SNV_data(
 
     IntegerVector chr_pos(num_of_mutations);
     CharacterVector chr_names(num_of_mutations), ref(num_of_mutations),
-        alt(num_of_mutations), causes(num_of_mutations), classes(num_of_mutations);
+        alt(num_of_mutations), causes(num_of_mutations), natures(num_of_mutations);
 
     size_t index{0};
     for (const auto &[mutation, data] : mutations) {
@@ -77,7 +77,7 @@ void add_SNV_data(
         }
 
         auto descr_set = get_descriptions(data.nature_set);
-        classes[index] = join(descr_set, ';');
+        natures[index] = join(descr_set, ';');
 
         ++index;
     }
@@ -86,8 +86,8 @@ void add_SNV_data(
     df.push_back(chr_pos, "from");
     df.push_back(ref, "ref");
     df.push_back(alt, "alt");
-    df.push_back(causes, "causes");
-    df.push_back(classes, "classes");
+    df.push_back(causes, "cause");
+    df.push_back(natures, "nature");
 }
 
 void add_wide_sample_statistics(
@@ -207,7 +207,7 @@ get_long_dataframe(const CLONES::Mutations::SequencingSimulations::SampleSetStat
                   coverages(num_of_rows);
     DoubleVector VAF(num_of_rows);
     CharacterVector samples(num_of_rows), chr_names(num_of_rows), ref(num_of_rows),
-                    alt(num_of_rows), causes(num_of_rows), classes(num_of_rows);
+                    alt(num_of_rows), causes(num_of_rows), natures(num_of_rows);
 
     size_t index{0};
     for (const auto &[sample_name, sample_stats] : sample_set_statistics) {
@@ -224,7 +224,7 @@ get_long_dataframe(const CLONES::Mutations::SequencingSimulations::SampleSetStat
             }
 
             const auto descr_set = get_descriptions(sid_data.nature_set);
-            classes[index] = join(descr_set, ';');
+            natures[index] = join(descr_set, ';');
             
             occurrences[index] = sid_data.num_of_occurrences;
 
@@ -244,8 +244,8 @@ get_long_dataframe(const CLONES::Mutations::SequencingSimulations::SampleSetStat
     return DataFrame::create(_["sample"] = samples,
                              _["chr"] = chr_names, _["from"] = chr_pos,
                              _["ref"] = ref, _["alt"] = alt,
-                             _["causes"] = causes,
-                             _["classes"] = classes, _["NV"] = occurrences,
+                             _["cause"] = causes,
+                             _["nature"] = natures, _["NV"] = occurrences,
                              _["DP"] = coverages, _["VAF"] = VAF);
 }
 
@@ -344,7 +344,7 @@ simulate_seq(CLONES::Mutations::SequencingSimulations::ReadSimulator<> &simulato
              const std::set<CLONES::Mutations::ChromosomeId> &chromosome_ids,
              const double& coverage, const bool& produce_normal_sample,
              const double& purity, const bool& with_pre_neoplastic,
-             const bool& with_germinal, const std::string &base_name,
+             const bool& with_germline, const std::string &base_name,
              const bool& missed_SID_statistics, const bool& germinal_statistics,
              std::ostream &progress_bar_stream,
              const int &seed, const bool quiet)
@@ -355,7 +355,7 @@ simulate_seq(CLONES::Mutations::SequencingSimulations::ReadSimulator<> &simulato
                                                             seed);
 
     return simulator(sequencer, forest, chromosome_ids, coverage, produce_normal_sample,
-                     purity, with_pre_neoplastic, with_germinal, base_name,
+                     purity, with_pre_neoplastic, with_germline, base_name,
                      missed_SID_statistics, germinal_statistics, progress_bar_stream,
                      quiet);
 }
@@ -366,7 +366,7 @@ CLONES::Mutations::SequencingSimulations::SampleSetStatistics simulate_seq(
     const std::set<CLONES::Mutations::ChromosomeId> &chromosome_ids,
     const double& coverage, const bool& produce_normal_sample,
     const double& purity, const bool& with_pre_neoplastic,
-    const bool& with_germinal, const std::string &base_name,
+    const bool& with_germline, const std::string &base_name,
     const bool& missed_SID_statistics, const bool& germinal_statistics,
     std::ostream &progress_bar_stream,
     const int &seed, const bool quiet)
@@ -385,13 +385,13 @@ CLONES::Mutations::SequencingSimulations::SampleSetStatistics simulate_seq(
             if (sequencer_ptr->producing_random_scores()) {
                 return simulate_seq<QualityScoreModel>(
                     simulator, sequencer_ptr, forest, chromosome_ids, coverage,
-                    produce_normal_sample, purity, with_pre_neoplastic, with_germinal,
+                    produce_normal_sample, purity, with_pre_neoplastic, with_germline,
                     base_name, missed_SID_statistics, germinal_statistics,
                     progress_bar_stream, seed, quiet);
             } else {
                 return simulate_seq<ConstantQualityScoreModel>(
                     simulator, sequencer_ptr, forest, chromosome_ids, coverage,
-                    produce_normal_sample, purity, with_pre_neoplastic, with_germinal,
+                    produce_normal_sample, purity, with_pre_neoplastic, with_germline,
                     base_name, missed_SID_statistics, germinal_statistics,
                     progress_bar_stream, seed, quiet);
             }
@@ -401,7 +401,7 @@ CLONES::Mutations::SequencingSimulations::SampleSetStatistics simulate_seq(
 
             return simulator(seq, forest, chromosome_ids, coverage,
                              produce_normal_sample, purity, with_pre_neoplastic,
-                             with_germinal, base_name, missed_SID_statistics,
+                             with_germline, base_name, missed_SID_statistics,
                              germinal_statistics, progress_bar_stream, quiet);
         }
 
@@ -412,7 +412,7 @@ CLONES::Mutations::SequencingSimulations::SampleSetStatistics simulate_seq(
         CLONES::Sequencers::Illumina::ErrorLessSequencer seq;
 
         return simulator(seq, forest, chromosome_ids, coverage, produce_normal_sample,
-                         purity, with_pre_neoplastic, with_germinal, base_name,
+                         purity, with_pre_neoplastic, with_germline, base_name,
                          missed_SID_statistics, germinal_statistics,
                          progress_bar_stream, quiet);
     }

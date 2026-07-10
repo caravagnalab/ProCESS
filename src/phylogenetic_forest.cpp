@@ -15,6 +15,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
+
 #include <utils.hpp>
 
 #include "cna.hpp"
@@ -113,7 +115,7 @@ Rcpp::IntegerVector fill_vector_by_value(const std::map<CLONES::Mutants::CellId,
     return vector;
 }
 
-Rcpp::List PhylogeneticForest::get_mutation_statistics() const
+Rcpp::DataFrame PhylogeneticForest::get_mutation_statistics() const
 {
     const auto new_SID_maps = get_new_mutations<CLONES::Mutations::SID>(get_mutation_first_cells());
     const auto total_SID_maps = get_total_mutations(new_SID_maps);
@@ -142,8 +144,11 @@ Rcpp::List PhylogeneticForest::get_mutation_statistics() const
                              _["total_CNAs"] = total_CNAs);
 }
 
-Rcpp::List PhylogeneticForest::get_samples_info() const
+Rcpp::DataFrame PhylogeneticForest::get_samples_info() const
 {
+    using namespace Rcpp;
+    using namespace CLONES::Mutations;
+
     auto info = TissueSimulation::get_samples_info(get_samples());
 
     const auto &samples = get_samples();
@@ -156,8 +161,6 @@ Rcpp::List PhylogeneticForest::get_samples_info() const
     for (size_t j = 0; j < samples.size(); ++j) {
         sample_name_map[samples[j].get_name()] = j;
     }
-
-    using namespace Rcpp;
 
     NumericVector DNA_quantities(DNA.size());
     NumericVector equivalent_normal_cells(DNA.size());
@@ -321,36 +324,7 @@ void fill_mutation_list(const CLONES::Mutations::MutationList& mutations,
     }
 }
 
-Rcpp::List PhylogeneticForest::const_node::arising_mutations() const
-{
-    using namespace Rcpp;
-
-    const auto& mutations = node.arising_mutations();
-
-    const size_t num_of_rows{mutations.size()};
-
-    CharacterVector mutant_names(num_of_rows), chrs(num_of_rows), types(num_of_rows),
-        CNA_types(num_of_rows), refs(num_of_rows), alts(num_of_rows), codes(num_of_rows),
-        natures(num_of_rows), causes(num_of_rows);
-    IntegerVector starts(num_of_rows), ends(num_of_rows), application_order(num_of_rows),
-        alleles(num_of_rows), src_alleles(num_of_rows);
-
-    size_t i{0}, mut_i{0};
-    fill_mutation_list(mutations, node.get_species_name(), forest->driver_codes,
-                       mutant_names, types, CNA_types, chrs, refs, alts,
-                       application_order, starts, ends, alleles, src_alleles, natures,
-                       causes, codes, i, mut_i);
-
-    return DataFrame::create(_["order"] = application_order,
-                             _["type"] = types, _["CNA_type"] = CNA_types,
-                             _["chr"] = chrs, _["start"] = starts, _["end"] = ends,
-                             _["ref"] = refs, _["alt"] = alts, _["allele"] = alleles,
-                             _["src_allele"] = src_alleles,
-                             _["nature"] = natures, _["cause"] = causes,
-                             _["code"] = codes);
-}
-
-Rcpp::List PhylogeneticForest::get_driver_mutations() const
+Rcpp::DataFrame PhylogeneticForest::get_driver_mutations() const
 {
     using namespace Rcpp;
     using namespace CLONES::Mutations;
@@ -384,7 +358,7 @@ Rcpp::List PhylogeneticForest::get_driver_mutations() const
                              _["type"] = types, _["CNA_type"] = CNA_types,
                              _["chr"] = chrs, _["start"] = starts, _["end"] = ends,
                              _["ref"] = refs, _["alt"] = alts, _["allele"] = alleles,
-                             _["src_allele"] = src_alleles, _["code"] = codes);
+                             _["src.allele"] = src_alleles, _["code"] = codes);
 }
 
 Rcpp::List PhylogeneticForest::get_species_info() const
@@ -406,63 +380,13 @@ PhylogeneticForest::get_subforest_for(const std::vector<std::string> &sample_nam
     return forest;
 }
 
-size_t count_mutations(const CLONES::Mutations::GenomeMutations &mutations)
-{
-    size_t counter{0};
-    for (const auto &[chr_id, chromosome] : mutations.get_chromosomes()) {
-        for (const auto &[allele_id, allele] : chromosome.get_alleles()) {
-            for (const auto &[fragment_pos, fragment] : allele.get_fragments()) {
-                counter += fragment.get_mutations().size();
-            }
-        }
-    }
-
-    return counter;
-}
-
-size_t
-count_mutations(const std::map<CLONES::Mutants::CellId,
-                               std::shared_ptr<CLONES::Mutations::CellGenomeMutations>>
-                    &genome_mutations)
-{
-    size_t counter{0};
-    for (const auto &[cell_id, mutations_ptr] : genome_mutations) {
-        counter += count_mutations(*mutations_ptr);
-    }
-
-    return counter;
-}
-
 size_t
 count_mutations(const CLONES::Mutations::MutationTour<CLONES::Mutations::GenomeMutations>& mutation_tour)
 {
     size_t counter{0};
 
     for (const auto& [cell_id, node_mutations] : mutation_tour) {
-        counter += count_mutations(node_mutations);
-    }
-
-    return counter;
-}
-
-
-size_t count_CNAs(const CLONES::Mutations::GenomeMutations &mutations)
-{
-    size_t counter{0};
-    for (const auto &[chr_id, chromosome] : mutations.get_chromosomes()) {
-        counter += chromosome.get_CNAs().size();
-    }
-
-    return counter;
-}
-
-size_t count_CNAs(const std::map<CLONES::Mutants::CellId,
-                                 std::shared_ptr<CLONES::Mutations::CellGenomeMutations>>
-                      &genome_mutations)
-{
-    size_t counter{0};
-    for (const auto &[cell_id, mutations_ptr] : genome_mutations) {
-        counter += count_CNAs(*mutations_ptr);
+        counter += node_mutations.num_of_mutations();
     }
 
     return counter;
@@ -473,71 +397,13 @@ size_t count_CNAs(const CLONES::Mutations::MutationTour<CLONES::Mutations::Genom
     size_t counter{0};
 
     for (const auto& [cell_id, node_mutations] : mutation_tour) {
-        counter += count_CNAs(node_mutations);
+        counter += node_mutations.num_of_CNAs();
     }
 
     return counter;
 }
 
-void fill_mutation_lists(const CLONES::Mutants::CellId &cell_id,
-                         const CLONES::Mutations::GenomeMutations &cell_mutations,
-                         Rcpp::IntegerVector &cell_ids, Rcpp::CharacterVector &chr_names,
-                         Rcpp::IntegerVector &chr_pos, Rcpp::IntegerVector &alleles,
-                         Rcpp::CharacterVector &ref, Rcpp::CharacterVector &alt,
-                         Rcpp::CharacterVector &types, Rcpp::CharacterVector &causes,
-                         Rcpp::CharacterVector &classes, size_t &index)
-{
-    using namespace CLONES::Mutations;
-
-    for (const auto &[chr_id, chromosome] : cell_mutations.get_chromosomes()) {
-        for (const auto &[allele_id, allele] : chromosome.get_alleles()) {
-            for (const auto &[fragment_pos, fragment] : allele.get_fragments()) {
-                for (const auto &[mutation_pos, mutation_ptr] :
-                     fragment.get_mutations()) {
-                    cell_ids[index] = cell_id;
-                    chr_names[index] = GenomicPosition::chrtos(chr_id);
-                    chr_pos[index] = mutation_ptr->position;
-                    alleles[index] = allele_id;
-                    ref[index] = mutation_ptr->ref;
-                    alt[index] = mutation_ptr->alt;
-                    types[index] = (mutation_ptr->is_SBS() ? "SNV" : "indel");
-                    causes[index] = mutation_ptr->cause;
-                    classes[index] = mutation_ptr->get_nature_description();
-
-                    ++index;
-                }
-            }
-        }
-    }
-}
-
-void fill_CNA_lists(const CLONES::Mutants::CellId &cell_id,
-                    const CLONES::Mutations::GenomeMutations &cell_mutations,
-                    Rcpp::IntegerVector &cell_ids, Rcpp::CharacterVector &chr_names,
-                    Rcpp::IntegerVector &CNA_begins, Rcpp::IntegerVector &CNA_ends,
-                    Rcpp::IntegerVector &src_alleles, Rcpp::IntegerVector &dst_alleles,
-                    Rcpp::CharacterVector &types, Rcpp::CharacterVector &classes,
-                    size_t &index)
-{
-    for (const auto &[chr_id, chromosome] : cell_mutations.get_chromosomes()) {
-        for (const auto &cna_ptr : chromosome.get_CNAs()) {
-            cell_ids[index] = cell_id;
-            chr_names[index] = CLONES::Mutations::GenomicPosition::chrtos(chr_id);
-            CNA_begins[index] = cna_ptr->begin();
-            CNA_ends[index] = cna_ptr->end();
-            bool is_amp = cna_ptr->type == CLONES::Mutations::CNA::Type::AMPLIFICATION;
-            src_alleles[index] = (is_amp ? cna_ptr->source : NA_INTEGER);
-            dst_alleles[index] = cna_ptr->dest;
-            classes[index] = cna_ptr->get_nature_description();
-
-            types[index] = (is_amp ? "A" : "D");
-
-            ++index;
-        }
-    }
-}
-
-Rcpp::List PhylogeneticForest::get_absolute_chromosome_positions() const
+Rcpp::DataFrame PhylogeneticForest::get_absolute_chromosome_positions() const
 {
     const auto &germline = get_germline_mutations();
 
@@ -564,169 +430,68 @@ Rcpp::List PhylogeneticForest::get_absolute_chromosome_positions() const
                              _["to"] = tos);
 }
 
-Rcpp::List PhylogeneticForest::get_germline_SIDs() const
+Rcpp::DataFrame PhylogeneticForest::get_germline_SIDs() const
 {
-    const auto &germline = get_germline_mutations();
-    size_t num_of_mutations{0};
-    for (const auto &[chr_id, chr] : germline.get_chromosomes()) {
-        for (const auto &[allele_id, allele] : chr.get_alleles()) {
-            for (const auto &[f_pos, fragment] : allele.get_fragments()) {
-                num_of_mutations += fragment.get_mutations().size();
-            }
-        }
-    }
+    GenomeMutations genome{get_reference_path(), this->get_germline_mutations()};
 
-    using namespace Rcpp;
-
-    IntegerVector chr_pos(num_of_mutations), alleles(num_of_mutations);
-    CharacterVector chr_names(num_of_mutations), ref(num_of_mutations),
-        alt(num_of_mutations), types(num_of_mutations), causes(num_of_mutations),
-        classes(num_of_mutations);
-
-    size_t index{0};
-    for (const auto &[chr_id, chr] : germline.get_chromosomes()) {
-        for (const auto &[allele_id, allele] : chr.get_alleles()) {
-            for (const auto &[f_pos, fragment] : allele.get_fragments()) {
-                for (const auto &[mutation_pos, mutation_ptr] :
-                     fragment.get_mutations()) {
-                    chr_names[index] = CLONES::Mutations::GenomicPosition::chrtos(chr_id);
-                    chr_pos[index] = mutation_ptr->position;
-                    alleles[index] = allele_id;
-                    ref[index] = mutation_ptr->ref;
-                    alt[index] = mutation_ptr->alt;
-                    types[index] = (mutation_ptr->is_SBS() ? "SNV" : "indel");
-                    causes[index] = mutation_ptr->cause;
-                    classes[index] = mutation_ptr->get_nature_description();
-
-                    ++index;
-                }
-            }
-        }
-    }
-
-    return DataFrame::create(_["chr"] = chr_names, _["from"] = chr_pos,
-                             _["allele"] = alleles, _["ref"] = ref, _["alt"] = alt,
-                             _["type"] = types, _["cause"] = causes,
-                             _["class"] = classes);
+    return genome.get_mutations(true);
 }
 
-Rcpp::List PhylogeneticForest::get_sampled_cell_SIDs() const
+Rcpp::DataFrame PhylogeneticForest::get_sampled_cell_SIDs(const bool with_germline) const
 {
-    //size_t num_of_mutations = count_mutations(get_leaves_mutations());
-    const auto leaf_tour = get_leaf_mutation_tour(*this);
+    const auto leaf_tour = CLONES::Mutations::get_leaf_mutation_tour(*this);
 
-    const size_t num_of_mutations = count_mutations(leaf_tour);
+    size_t nrows = count_mutations(leaf_tour);
 
-    using namespace Rcpp;
+    if (with_germline) {
+        nrows += get_germline_mutations().num_of_mutations()*num_of_leaves();
+    }
 
-    IntegerVector cell_ids(num_of_mutations), chr_pos(num_of_mutations),
-        alleles(num_of_mutations);
-    CharacterVector chr_names(num_of_mutations), ref(num_of_mutations),
-        alt(num_of_mutations), types(num_of_mutations), causes(num_of_mutations),
-        classes(num_of_mutations);
+    Rcpp::DataFrame df = GenomeMutations::create_mutation_df(nrows);
+
+    Rcpp::IntegerVector cell_ids(nrows);
+    df["cell_id"] = cell_ids;
 
     size_t index{0};
 
     for (const auto& [leaf_id, leaf_mutations] : leaf_tour) {
-        fill_mutation_lists(leaf_id, leaf_mutations, cell_ids, chr_names, chr_pos,
-                            alleles, ref, alt, types, causes, classes, index);
+        size_t next_index = GenomeMutations::fill_mutation_df(df, leaf_mutations,
+                                                              index);
+
+        if (with_germline) {
+            next_index = GenomeMutations::fill_mutation_df(df, get_germline_mutations(),
+                                                           next_index);
+        }
+
+        std::fill(cell_ids.begin() + index, cell_ids.begin() + next_index, leaf_id);
+
+        index = next_index;
     }
 
-    return DataFrame::create(_["cell_id"] = cell_ids, _["chr"] = chr_names,
-                             _["from"] = chr_pos, _["allele"] = alleles,
-                             _["ref"] = ref, _["alt"] = alt, _["type"] = types,
-                             _["cause"] = causes, _["class"] = classes);
+    return Rcpp::DataFrame(df);
 }
 
-Rcpp::List
-PhylogeneticForest::get_cell_SIDs(const CLONES::Mutants::CellId &cell_id) const
+Rcpp::DataFrame PhylogeneticForest::get_sampled_cell_CNAs() const
 {
-    try {
-        auto cell_mutations = get_cell_mutations(cell_id);
+    const auto leaf_tour = CLONES::Mutations::get_leaf_mutation_tour(*this);
 
-        return get_SID_dataframe(cell_mutations);
-    } catch (std::domain_error& ex) {
-         Rcpp::stop(ex.what());
-    }
-}
+    const size_t nrows = count_CNAs(leaf_tour);
 
-Rcpp::List PhylogeneticForest::get_SID_dataframe(
-    const CLONES::Mutations::CellGenomeMutations &cell_mutations)
-{
-    const size_t num_of_mutations = count_mutations(cell_mutations);
+    Rcpp::DataFrame df = GenomeMutations::create_CNA_df(nrows);
 
-    using namespace Rcpp;
-
-    IntegerVector cell_ids(num_of_mutations), chr_pos(num_of_mutations),
-        alleles(num_of_mutations);
-    CharacterVector chr_names(num_of_mutations), ref(num_of_mutations),
-        alt(num_of_mutations), types(num_of_mutations), causes(num_of_mutations),
-        classes(num_of_mutations);
-
-    size_t index{0};
-    fill_mutation_lists(cell_mutations.get_id(), cell_mutations, cell_ids,
-                        chr_names, chr_pos, alleles, ref, alt, types, causes,
-                        classes, index);
-
-    return DataFrame::create(_["cell_id"] = cell_ids, _["chr"] = chr_names,
-                             _["from"] = chr_pos, _["allele"] = alleles,
-                             _["ref"] = ref, _["alt"] = alt, _["type"] = types,
-                             _["cause"] = causes, _["class"] = classes);
-}
-
-Rcpp::List PhylogeneticForest::get_sampled_cell_CNAs() const
-{
-    const auto leaf_tour = get_leaf_mutation_tour(*this);
-    const size_t num_of_mutations = count_CNAs(leaf_tour);
-
-    using namespace Rcpp;
-
-    IntegerVector cell_ids(num_of_mutations), CNA_begins(num_of_mutations),
-        CNA_ends(num_of_mutations), src_alleles(num_of_mutations),
-        dst_alleles(num_of_mutations);
-    CharacterVector chr_names(num_of_mutations), types(num_of_mutations),
-        classes(num_of_mutations);
+    Rcpp::IntegerVector cell_ids(nrows);
+    df["cell_id"] = cell_ids;
 
     size_t index{0};
     for (const auto& [leaf_id, leaf_mutations] : leaf_tour) {
-        fill_CNA_lists(leaf_id, leaf_mutations, cell_ids, chr_names, CNA_begins,
-                       CNA_ends, src_alleles, dst_alleles, types, classes, index);
+        const size_t next_index = GenomeMutations::fill_CNA_df(df, leaf_mutations, index);
+
+        std::fill(cell_ids.begin() + index, cell_ids.begin() + next_index, leaf_id);
+
+        index = next_index;
     }
 
-    return DataFrame::create(_["cell_id"] = cell_ids, _["type"] = types,
-                             _["chr"] = chr_names, _["begin"] = CNA_begins,
-                             _["end"] = CNA_ends, _["allele"] = dst_alleles,
-                             _["src allele"] = src_alleles, _["class"] = classes);
-}
-
-Rcpp::List
-PhylogeneticForest::get_cell_CNAs(const CLONES::Mutants::CellId &cell_id) const
-{
-    CLONES::Mutations::CellGenomeMutations cell_mutations;
-    try {
-        cell_mutations = get_cell_mutations(cell_id);
-    } catch (std::domain_error& ex) {
-        Rcpp::stop(ex.what());
-    }
-
-    size_t num_of_mutations = count_CNAs(cell_mutations);
-
-    using namespace Rcpp;
-
-    IntegerVector cell_ids(num_of_mutations), CNA_begins(num_of_mutations),
-        CNA_ends(num_of_mutations), src_alleles(num_of_mutations),
-        dst_alleles(num_of_mutations);
-    CharacterVector chr_names(num_of_mutations), types(num_of_mutations),
-        classes(num_of_mutations);
-
-    size_t index{0};
-    fill_CNA_lists(cell_id, cell_mutations, cell_ids, chr_names, CNA_begins,
-                   CNA_ends, src_alleles, dst_alleles, types, classes, index);
-
-    return DataFrame::create(_["cell_id"] = cell_ids, _["type"] = types,
-                             _["chr"] = chr_names, _["begin"] = CNA_begins,
-                             _["end"] = CNA_ends, _["allele"] = dst_alleles,
-                             _["src allele"] = src_alleles, _["class"] = classes);
+    return Rcpp::DataFrame(df);
 }
 
 template <typename MUTATION_TYPE, typename R_MUTATION>

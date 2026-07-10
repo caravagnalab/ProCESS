@@ -21,6 +21,8 @@
 #include <random>
 #include <sstream>
 
+#include <cxxabi.h>
+
 #include <utils.hpp>
 
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
@@ -138,4 +140,24 @@ void raise_error(const CLONES::Archive::WrongFileFormatVersion &exception,
         ", expected version " + std::to_string(exception.expected_version) +
         ". Remove it and retry.";
     ::Rf_error("%s", err_msg.c_str());
+}
+
+std::string get_demangled_type_name(const std::type_info& type_info)
+{
+    int status;
+
+    const auto mangled_name = type_info.name();
+    char* demangled = abi::__cxa_demangle(mangled_name, 
+                                            nullptr, nullptr, &status);
+    
+    // if abi::__cxa_demangle did its magic
+    if (status == 0) {
+        std::string result(demangled);
+        free(demangled);
+
+        return result;
+    }
+    
+    // fallback
+    return mangled_name;
 }

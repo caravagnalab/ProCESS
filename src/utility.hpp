@@ -84,4 +84,6 @@ void raise_error(const CLONES::Archive::WrongFileFormatDescr &exception,
 void raise_error(const CLONES::Archive::WrongFileFormatVersion &exception,
                  const std::string &file_description);
 
+std::string get_demangled_type_name(const std::type_info& type_info);
+
 #endif // __PROCESS_UTILITY__

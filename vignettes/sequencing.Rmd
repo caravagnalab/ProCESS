@@ -125,9 +125,9 @@ plot_VAF(seq_results, samples = "S_2_2", cuts = c(0.02, 1))
 plot_VAF(seq_results, samples = "S_2_2", cuts = c(0.02, 1),
          driver_mutation_labels = FALSE)
 
-# plot the VAF and labels the point according to the mutation classes
+# plot the VAF and labels the point according to the mutation natures
 plot_VAF(seq_results, samples = "S_2_2", cuts = c(0.02, 1),
-         labels = seq_results$mutations["classes"])
+         labels = seq_results$mutations["nature"])
 
 ```
 
@@ -136,11 +136,11 @@ The VAF and the VAF marginal plots can be labelled.
 
 ```{r, fig.alt=c("The VAF histogram labelled by mutation class.", "The VAF marginal distribution S_1_1 vs S_1_2 labelled by mutation class.", "The VAF marginal distribution S_1_1 vs S_2_2 labelled by mutation class.", "The VAF marginal distribution S_1_2 vs S_2_2 labelled by mutation class.")}
 # plotting the VAF histogram with labels
-plot_VAF_histogram(seq_results, labels = seq_results$mutations["classes"],
+plot_VAF_histogram(seq_results, labels = seq_results$mutations["nature"],
                    cuts = c(0.02, 1))
 
 # plotting the VAF marginals and labelling it
-plot_VAF_marginals(seq_results, labels = seq_results$mutations["classes"],
+plot_VAF_marginals(seq_results, labels = seq_results$mutations["nature"],
                    samples = c("S_1_1", "S_1_2", "S_2_2"))
 ```
 
@@ -226,9 +226,9 @@ by setting the optional parameter `with_pre_neoplastic`.
 To simulate sequencing errors, users need to specify
 a sequencer to the function `simulate_seq()`.
 
-At the moment, there are only two classes implementing
+At the moment, there are only two natures implementing
 sequencers: the `ErrorlessIlluminaSequencer` class and
-the `BasicIlluminaSequencer` classes.
+the `BasicIlluminaSequencer` natures.
 
 #### The `ErrorlessIlluminaSequencer` Class
 

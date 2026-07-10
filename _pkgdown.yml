@@ -32,7 +32,7 @@ articles:
   - custom_engine
   - infinite_site_model
   - sample_partition
-  - node_labelling
+  - node_tour
   - time_series
 - title: Tests and Examples
   contents:
@@ -45,7 +45,7 @@ reference:
   contents:
   - annotate_forest
   - bbox_sampler
-  - get_label_tour
+  - get_node_tour
   - load_sample_forest
   - starts_with("SampleForest")
   - starts_with("TissueRectangle")
@@ -66,7 +66,6 @@ reference:
   - starts_with("GenomeMutations")
   - starts_with("GenomeMutationsTour")
   - get_available_tumours_in
-  - get_genome_tour
   - get_mutation_engine_codes
   - get_relevant_branches
   - load_phylogenetic_forest
@@ -89,7 +88,6 @@ reference:
   - plot_VAF
   - plot_VAF_histogram
   - plot_VAF_marginals
-  - starts_with("SampledCell")
   - simulate_seq
   - simulate_normal_seq
   - seq_to_long
