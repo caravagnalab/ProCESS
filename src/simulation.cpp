@@ -696,7 +696,7 @@ std::set<std::string> collect_mutants(const Rcpp::DataFrame& df_rates)
 
     CharacterVector mutant_col = df_rates["mutant"];
 
-    for (size_t i=0; i<mutant_col.size(); ++i) {
+    for (auto i=0; i<mutant_col.size(); ++i) {
         if (!CharacterVector::is_na(mutant_col[i])) {
             mutants.insert(as<std::string>(mutant_col[i]));
         }
@@ -715,7 +715,7 @@ std::set<std::string> collect_epigenetic_states(const Rcpp::DataFrame& df_rates)
         if (has_column(df_rates, col_name)) {
             CharacterVector epistates = df_rates[col_name];
 
-            for (size_t i=0; i<epistates.size(); ++i) {
+            for (auto i=0; i<epistates.size(); ++i) {
                 if (!CharacterVector::is_na(epistates[i])) {
                     epi_states.insert(as<std::string>(epistates[i]));
                 }
@@ -731,11 +731,7 @@ std::list<std::string> collect_strings(const Rcpp::List& string_list)
     using namespace Rcpp;
 
     std::list<std::string> strings;
-    if (!is<List>(string_list)) {
-        throw CLONES::Error<std::domain_error>("");
-    }
-
-    for (size_t i=0; i<string_list.size(); ++i) {
+    for (auto i=0; i<string_list.size(); ++i) {
         if (!is<String>(string_list[i])) {
             throw CLONES::Error<std::domain_error>("The " + ordinal_suffix(i+1)
                                                    + " element is not a string.");
@@ -1833,7 +1829,7 @@ std::set<std::string> collect_string_set(const Rcpp::CharacterVector &vector)
 {
     std::set<std::string> strings;
 
-    for (size_t i=0; i< vector.size(); ++i) {
+    for (auto i=0; i< vector.size(); ++i) {
         strings.insert(as<std::string>(vector[i]));
     }
 
@@ -1866,7 +1862,7 @@ void validate_column_names(const Rcpp::DataFrame &df, bool has_epistate)
     CharacterVector R_col_names = df.attr("names");
 
     std::set<std::string> df_names;
-    for (size_t i=0; i< R_col_names.size(); ++i) {
+    for (auto i=0; i< R_col_names.size(); ++i) {
         df_names.emplace(R_col_names[i]);
     }
 
@@ -1953,12 +1949,12 @@ void TissueSimulation::set_rates(const Rcpp::DataFrame &rates)
         CharacterVector epistate_col = rates["epistate"];
         CharacterVector fc_epistate_col = rates["first.child.epistate"];
 
-        for (size_t i=0; i< rates.nrows(); ++i) {
+        for (auto i=0; i< rates.nrows(); ++i) {
             set_rate_from_df_row(mutant_col[i], epistate_col[i], event_col[i],
                                  fc_epistate_col[i], rate_col[i], i);
         }
     } else {
-        for (size_t i=0; i< rates.nrows(); ++i) {
+        for (auto i=0; i< rates.nrows(); ++i) {
             set_rate_from_df_row(mutant_col[i], event_col[i], rate_col[i], i);
         }
     }

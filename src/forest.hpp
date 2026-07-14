@@ -105,7 +105,23 @@ class ForestCore
 public:
 
     template<typename FOREST>
+#if defined(__clang__)
+      /* clang and GCC have different ways of handling concept
+         verification on incomplete types. Clang uses lazy evaluation
+         and let us requiring a concept for a template parameter even
+         if the parameter is not completely defined. GCC, instead,
+         requires a fully defined parameter to verify the concept.
+         To defer evaluation of concepts, we can move concept
+         requirements from template parameter to constructors.
+         However, this solution does not work in clang which,
+         apparently, defers evaluation on template parameters, but
+         not over the constructors. At the moment, there are two
+         solutions: we can either 1) distinguish the two compilers
+         and apply ad-hoc code or 2) remove the isForest
+         requirement tout court */
+
       requires CLONES::Mutations::isForest<FOREST>
+#endif
     class const_node
     {
         constexpr inline static std::string get_forest_class_name()
@@ -113,24 +129,39 @@ public:
             return get_demangled_type_name(typeid(FOREST));
         }
     public:
-        const_node():
-            node{}, forest{nullptr}
+        const_node()
+#if !defined(__clang__) && defined(__GNUC__)
+            requires CLONES::Mutations::isForest<FOREST>
+#endif
+            : node{}, forest{nullptr}
         {}
 
-        const_node(const FOREST* forest, const FOREST::base_type::const_node& node):
-            node{node}, forest{forest}
+        const_node(const FOREST* forest, const FOREST::base_type::const_node& node)
+#if !defined(__clang__) && defined(__GNUC__)
+            requires CLONES::Mutations::isForest<FOREST>
+#endif
+            : node{node}, forest{forest}
         {}
 
-        const_node(const FOREST& forest, const FOREST::base_type::const_node& node):
-            const_node<FOREST>{&forest, node}
+        const_node(const FOREST& forest, const FOREST::base_type::const_node& node)
+#if !defined(__clang__) && defined(__GNUC__)
+            requires CLONES::Mutations::isForest<FOREST>
+#endif
+            : const_node<FOREST>{&forest, node}
         {}
 
-        const_node(const FOREST* forest, const CLONES::Mutants::CellId cell_id):
-            node{forest, cell_id}, forest{forest}
+        const_node(const FOREST* forest, const CLONES::Mutants::CellId cell_id)
+#if !defined(__clang__) && defined(__GNUC__)
+            requires CLONES::Mutations::isForest<FOREST>
+#endif
+            : node{forest, cell_id}, forest{forest}
         {}
 
-        const_node(const FOREST& forest, const CLONES::Mutants::CellId cell_id):
-            const_node<FOREST>{&forest, cell_id}
+        const_node(const FOREST& forest, const CLONES::Mutants::CellId cell_id)
+#if !defined(__clang__) && defined(__GNUC__)
+            requires CLONES::Mutations::isForest<FOREST>
+#endif
+            : const_node<FOREST>{&forest, cell_id}
         {}
 
         const_node<FOREST> parent() const
@@ -276,7 +307,7 @@ public:
                                         _["nature"] = natures, _["cause"] = causes,
                                         _["code"] = codes);
             }
-            
+
             std::ostringstream oss;
             oss << typeid(FOREST).name() << "Node does not "
                 << "support the method `arising_mutations()`.";

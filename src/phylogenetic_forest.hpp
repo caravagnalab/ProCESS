@@ -68,7 +68,7 @@ class PhylogeneticForest : public CLONES::Mutations::PhylogeneticForest
             new_mutations.emplace(cell_id, 0);
         }
 
-        for (const auto [mutation, cell_ids]: first_occurrences) {
+        for (const auto& [mutation, cell_ids]: first_occurrences) {
             for (const auto cell_id: cell_ids) {
                 ++(new_mutations[cell_id]);
             }
