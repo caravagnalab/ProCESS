@@ -20,6 +20,7 @@
 #include <Rcpp.h>
 
 #include <fasta_chr_reader.hpp>
+#include <union_map_proxy.hpp>
 
 #include "cell_mutations.hpp"
 
@@ -72,55 +73,21 @@ GenomeMutations::get_alleles_covering_ref_region(const std::string& chromosome_n
     return somatic.get_alleles_containing(fragment_region);
 }
 
-GenomeFragment GenomeMutations::get_fragment(const std::string& chromosome_name,
-                                             const size_t& allele_id,
-                                             const size_t& from,
-                                             const size_t& size) const
-{
-    using namespace CLONES::Mutations;
-    using namespace CLONES::IO;
-    using namespace CLONES::IO::FASTA;
-
-    IndexedReader<ChromosomeData<Sequence>> fasta_reader(reference_path);
-
-    const size_t delta{100};
-
-    size_t offset{(from<delta?0: from-delta)};
-
-    std::string reference_fragment;
-    fasta_reader.read(reference_fragment, chromosome_name, offset, size+delta+from-offset);
-
-    return get_fragment_from_ref(reference_fragment, offset,
-                                 chromosome_name, allele_id, from, size);
-}
-
 std::pair<std::map<CLONES::Mutations::GenomicPosition, std::shared_ptr<CLONES::Mutations::SID>> const *,
           CLONES::Mutations::AlleleId>
 get_mutations_in_fragment(const CLONES::Mutations::GenomeMutations& mutations,
                           const CLONES::Mutations::ChromosomeId& chr_id,
-                          const size_t& allele_id, const size_t& from, const size_t& size)
+                          const CLONES::Mutations::AlleleId& allele_id, const size_t& from)
 {
     using namespace CLONES::Mutations;
 
     const auto& chr_mutations = mutations.get_chromosome(chr_id);
 
-    const auto& allele_mutations = chr_mutations.get_allele(static_cast<AlleleId>(allele_id));
+    const auto& allele_mutations = chr_mutations.get_allele(allele_id);
 
     AlleleId src_allele_id = allele_mutations.get_history().front();
 
     GenomicPosition begin_pos{chr_id, static_cast<ChrPosition>(from)};
-    GenomicRegion fragment_region{begin_pos, static_cast<GenomicRegion::Length>(size)};
-    if (!allele_mutations.contains(fragment_region)) {
-
-        std::ostringstream oss;
-
-        oss << "The allele " << std::to_string(allele_id) << " of chromosome "
-            << CLONES::Mutations::GenomicPosition::chrtos(chr_id)
-            << " does not contain the region ["
-            << fragment_region.begin() << "," << fragment_region.end() << "].";
-
-        Rcpp::stop(oss.str());
-    }
 
     auto fragment_it = allele_mutations.get_fragments().upper_bound(begin_pos);
 
@@ -131,32 +98,198 @@ get_mutations_in_fragment(const CLONES::Mutations::GenomeMutations& mutations,
     return {&(fragment_it->second.get_mutations()), src_allele_id};
 }
 
-GenomeFragment GenomeMutations::get_fragment_from_ref(const std::string& reference_fragment,
-                                                      const size_t& fragment_offset,
-                                                      const std::string& chromosome_name,
-                                                      const size_t& allele_id,
-                                                      const size_t& from, const size_t& size) const
+std::pair<std::map<CLONES::Mutations::GenomicPosition, std::shared_ptr<CLONES::Mutations::SID>> const *,
+          std::map<CLONES::Mutations::GenomicPosition, std::shared_ptr<CLONES::Mutations::SID>> const *>
+get_mutations_in_fragment(const CLONES::Mutations::GenomeMutations& germline,
+                          const CLONES::Mutations::GenomeMutations& somatic,
+                          const CLONES::Mutations::ChromosomeId& chr_id,
+                          const CLONES::Mutations::AlleleId& allele_id, const size_t& from)
+{
+    auto [somatic_muts, src_allele_id] = get_mutations_in_fragment(somatic, chr_id,
+                                                                   allele_id, from);
+
+    auto [germline_muts, germline_allele_id] = get_mutations_in_fragment(germline, chr_id,
+                                                                         src_allele_id,
+                                                                         from);
+
+    return {germline_muts, somatic_muts};
+}
+
+CLONES::Mutations::GenomicRegion::Length
+get_reference_alignment_begin(const CLONES::union_map_proxy<CLONES::Mutations::GenomicPosition,
+                                                 std::shared_ptr<CLONES::Mutations::SID>>& mutations,
+                              CLONES::union_map_proxy<CLONES::Mutations::GenomicPosition,
+                                                 std::shared_ptr<CLONES::Mutations::SID>>::const_iterator mutation_it,
+                              CLONES::Mutations::GenomicRegion::Length from)
+{
+    if (mutation_it != mutations.begin()) {
+        --mutation_it;
+
+        from = std::max(from,
+                        (mutation_it->second)->get_region().end()+1);
+    }
+
+    return from;
+}
+
+GenomeMutations::mutation_map
+GenomeMutations::get_fragment_mutations(const CLONES::Mutations::ChromosomeId& chr_id,
+                                        const CLONES::Mutations::AlleleId& allele_id,
+                                        const size_t& from) const
+{
+    using namespace CLONES;
+    using namespace CLONES::Mutations;
+
+    auto [germline_muts, somatic_muts] = get_mutations_in_fragment(germline, somatic, chr_id, 
+                                                                   allele_id, from);
+
+    return union_map_proxy<GenomicPosition,
+                           std::shared_ptr<SID>>(*germline_muts, *somatic_muts);
+}
+
+Rcpp::List
+GenomeMutations::region_aligning_on_reference(const std::string& chromosome_name,
+                                              const size_t allele_id,
+                                              const size_t from,
+                                              const size_t size) const
+{
+    using namespace CLONES;
+    using namespace CLONES::Mutations;
+
+    const auto chr_id = GenomicPosition::stochr(chromosome_name);
+
+    const auto f_mutations = get_fragment_mutations(chr_id, static_cast<AlleleId>(allele_id), from);
+
+    GenomicPosition rbegin{chr_id, static_cast<ChrPosition>(from)};
+    auto mutation_it = f_mutations.lower_bound(rbegin);
+    rbegin.position = get_reference_alignment_begin(f_mutations, mutation_it, rbegin.position);
+
+    GenomicRegion::Length total_size{static_cast<GenomicRegion::Length>(size)};
+
+    size_t ins_bases{0}, del_bases{0};
+    const auto end_ref{rbegin.position + total_size};
+    while (mutation_it != f_mutations.end()) {
+        const auto& position = mutation_it->first.position;
+        if (position < end_ref) {
+            const SID& sid = *(mutation_it->second);
+
+            ins_bases += sid.alt.size();
+            del_bases += sid.ref.size();
+
+            ++mutation_it;
+        } else {
+            mutation_it = f_mutations.end();
+        }
+    }
+
+    total_size += ins_bases;
+    total_size = (total_size < del_bases?0:total_size - del_bases);
+
+    using namespace Rcpp;
+
+    return List::create(_["chr"] = chromosome_name, _["allele"] = allele_id,
+                        _["from"] = rbegin.position, _["length"] = total_size);
+}
+
+
+CLONES::Mutations::GenomicRegion
+GenomeMutations::ref_aligning_on_region(const CLONES::Mutations::ChromosomeId& chr_id,
+                                        const GenomeMutations::mutation_map& f_mutations,
+                                        const size_t from, const size_t size)
+{
+    using namespace CLONES;
+    using namespace CLONES::Mutations;
+
+    GenomicPosition rbegin{chr_id, static_cast<ChrPosition>(from)};
+    auto mutation_it = f_mutations.lower_bound(rbegin);
+    rbegin.position = get_reference_alignment_begin(f_mutations, mutation_it,
+                                                    rbegin.position);
+
+    GenomicRegion::Length total_size{static_cast<GenomicRegion::Length>(size)};
+
+    size_t end_ref{rbegin.position + total_size};
+    while (mutation_it != f_mutations.end()) {
+        const auto& position = mutation_it->first.position;
+        if (position < end_ref) {
+            const SID& sid = *(mutation_it->second);
+
+            end_ref += sid.ref.size();
+            end_ref = (end_ref<sid.alt.size()?0:end_ref-sid.alt.size());
+
+            ++mutation_it;
+        } else {
+            mutation_it = f_mutations.end();
+        }
+    }
+
+    return {rbegin, static_cast<GenomicRegion::Length>(end_ref - rbegin.position + 1)};
+}
+
+GenomeFragment GenomeMutations::get_fragment(const std::string& chromosome_name,
+                                             const size_t& allele_id,
+                                             const size_t& from,
+                                             const size_t& size) const
 {
     try {
-        using ChromosomeId = CLONES::Mutations::ChromosomeId;
-        using GenomicPosition = CLONES::Mutations::GenomicPosition;
+        using namespace CLONES::Mutations;
+        using namespace CLONES::IO;
+        using namespace CLONES::IO::FASTA;
 
-        const ChromosomeId chr_id = GenomicPosition::stochr(chromosome_name);
+        IndexedReader<ChromosomeData<Sequence>> fasta_reader(reference_path);
 
-        auto [somatic_muts, src_allele_id] = get_mutations_in_fragment(somatic, chr_id, allele_id,
-                                                                       from, size);
+        const size_t delta{100};
 
-        auto [germline_muts, germline_allele_id] = get_mutations_in_fragment(germline, chr_id,
-                                                                             src_allele_id,
-                                                                             from, size);
+        const auto chr_id = GenomicPosition::stochr(chromosome_name);
 
-        GenomicPosition begin_pos{chr_id, static_cast<CLONES::Mutations::ChrPosition>(from)};
+        const auto f_mutations = get_fragment_mutations(chr_id, static_cast<AlleleId>(allele_id), from);
 
-        return GenomeFragment{reference_fragment, fragment_offset, *germline_muts,
-                              *somatic_muts, allele_id, begin_pos, size};
+        auto ref_region = ref_aligning_on_region(chr_id, f_mutations, from, size);
+
+        size_t offset{(ref_region.begin()<delta?0:ref_region.begin()-delta)};
+        std::string reference_fragment;
+        fasta_reader.read(reference_fragment, chromosome_name, offset,
+                          ref_region.size()+ delta + ref_region.begin()-offset);
+
+        return get_fragment_from_ref(reference_fragment, offset, chr_id,
+                                     static_cast<AlleleId>(allele_id),
+                                     ref_region.begin(), size);
     } catch (const std::exception &ex) {
         Rcpp::stop(ex.what());
     }
+}
+
+GenomeFragment GenomeMutations::get_fragment(const std::string& chromosome_name,
+                                             const size_t& allele_id,
+                                             const size_t& from, const size_t& size,
+                                             const std::string& reference_fragment,
+                                             const size_t& fragment_offset) const
+{
+    try {
+        const auto chr_id = CLONES::Mutations::GenomicPosition::stochr(chromosome_name);
+
+        return get_fragment_from_ref(reference_fragment, fragment_offset, chr_id, 
+                                     static_cast<CLONES::Mutations::AlleleId>(allele_id),
+                                     from, size);
+    } catch (const std::exception &ex) {
+        Rcpp::stop(ex.what());
+    }
+}
+
+GenomeFragment GenomeMutations::get_fragment_from_ref(const std::string& reference_fragment,
+                                                      const size_t& fragment_offset,
+                                                      const CLONES::Mutations::ChromosomeId chr_id,
+                                                      const CLONES::Mutations::AlleleId allele_id,
+                                                      const size_t from, const size_t size) const
+{
+    using GenomicPosition = CLONES::Mutations::GenomicPosition;
+
+    auto [germline_muts, somatic_muts] = get_mutations_in_fragment(germline, somatic, chr_id,
+                                                                    allele_id, from);
+
+    GenomicPosition begin_pos{chr_id, static_cast<CLONES::Mutations::ChrPosition>(from)};
+
+    return GenomeFragment{reference_fragment, fragment_offset, *germline_muts,
+                            *somatic_muts, allele_id, begin_pos, size};
 }
 
 Rcpp::DataFrame GenomeMutations::get_allele_fragments() const

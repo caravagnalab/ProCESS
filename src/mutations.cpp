@@ -1656,12 +1656,12 @@ RCPP_MODULE(Mutations)
         .method("get_CIGAR", &GenomeFragment::get_CIGAR,
                 "Get the fragment CIGAR")
 
-//' @name GenomeFragment$get_sequence
-//' @title Getting the fragment sequence
-//' @description This method returns the fragment sequence.
+//' @name GenomeFragment$sequence
+//' @title The fragment sequence
+//' @description This property is the fragment sequence.
 //' @return The fragment sequence.
-        .method("get_sequence", &GenomeFragment::get_sequence,
-                "Get the fragment sequence")
+        .property("sequence", &GenomeFragment::get_sequence,
+                  "The fragment sequence")
 
 //' @name GenomeFragment$get_mutations
 //' @title Getting the mutations laying on a fragment
@@ -1730,6 +1730,23 @@ RCPP_MODULE(Mutations)
             (Rcpp::DataFrame (GenomeMutations::*)() const)(&GenomeMutations::get_allele_fragments),
             "Get the genome allele fragments")
 
+//' @name GenomeMutations$get_region_aligned_to_ref
+//' @title Getting information about the fragment aligning to the reference
+//' @description This method returns information about the fragment of the
+//'   current genome that align with the provided region in the reference.
+//' @param chromosome_name The name of the chromosome of the reference region.
+//' @param allele The allele of the reference region.
+//' @param from The first position in the chromosome of the reference region.
+//' @param size The size of the reference region.
+//' @return A named list whose names are `chr`, `allele`, `from`, and `length`
+//'   representing the fragment in the current genome that aligns on
+//'   the region in chromosome `chromosome_name`, allele `allele` from
+//'   position `from` and whose size is `size`.
+        .method("get_region_aligned_to_ref",
+                &GenomeMutations::region_aligning_on_reference,
+            "Get information about the fragment aligning to the specified "
+            "reference region")
+
 //' @name GenomeMutations$get_fragment
 //' @title Getting genome fragment
 //' @description This method returns a fragment of the genome.
@@ -1737,28 +1754,27 @@ RCPP_MODULE(Mutations)
 //' @param allele The allele of the aimed fragment.
 //' @param from The first position in the chromosome of the aimed fragment.
 //' @param size The size of the aimed fragment.
-//' @return The genome fragment matching the specifications.
-//' @seealso <code>[GenomeFragment]</code>,
-//'   [GenomeMutations$get_fragment_from_ref()]
-        .method("get_fragment",
-                &GenomeMutations::get_fragment,
-            "Get a genome fragment")
-
-//' @name GenomeMutations$get_fragment_from_ref
-//' @title Getting genome fragment
-//' @description This method returns a fragment of the genome.
-//' @param reference_fragment A reference fragment.
+//' @param reference_fragment A reference fragment (optional).
 //' @param fragment_offset The offset of the reference fragment with respect
-//'   to the chromosome first position.
-//' @param chromosome_name The name of the chromosome of the aimed fragment.
-//' @param allele The allele of the aimed fragment.
-//' @param from The first position in the chromosome of the aimed fragment.
-//' @param size The size of the aimed fragment.
+//'   to the chromosome first position (optional).
 //' @return The genome fragment matching the specifications.
-//' @seealso <code>[GenomeFragment]</code>,
-//'   [GenomeMutations$get_fragment()]
-        .method("get_fragment_from_ref",
-                &GenomeMutations::get_fragment_from_ref,
+//' @seealso <code>[GenomeFragment]</code>
+//'   <code>[GenomeMutations$get_region_aligned_to_ref()]</code>
+        .method("get_fragment",
+                (GenomeFragment (GenomeMutations::*)(const std::string& chromosome_name,
+                                                     const size_t& allele_id,
+                                                     const size_t& from,
+                                                     const size_t& size) const)
+                (&GenomeMutations::get_fragment),
+            "Get a genome fragment")
+        .method("get_fragment",
+                (GenomeFragment (GenomeMutations::*)(const std::string& chromosome_name,
+                                                     const size_t& allele_id,
+                                                     const size_t& from,
+                                                     const size_t& size,
+                                                     const std::string& reference_fragment,
+                                                     const size_t& fragment_offset) const)
+                (&GenomeMutations::get_fragment),
             "Get a genome fragment")
 
         .method("show", &GenomeMutations::show);

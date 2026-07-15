@@ -21,15 +21,14 @@
 #include <Rcpp.h>
 
 #include <genome_mutations.hpp>
+#include <union_map_proxy.hpp>
 
 #include "genome_fragment.hpp"
 
 class GenomeMutations
 {
-    std::filesystem::path reference_path;
-    CLONES::Mutations::GenomeMutations germline;
-    CLONES::Mutations::GenomeMutations somatic;
 public:
+
     GenomeMutations();
 
     GenomeMutations(const std::filesystem::path& reference_path,
@@ -38,6 +37,11 @@ public:
     GenomeMutations(const std::filesystem::path& reference_path,
                     const CLONES::Mutations::GenomeMutations& germline,
                     const CLONES::Mutations::GenomeMutations& somatic);
+
+    Rcpp::List region_aligning_on_reference(const std::string& chromosome_name,
+                                            const size_t allele_id,
+                                            const size_t from,
+                                            const size_t size) const;
 
     inline Rcpp::DataFrame get_mutations() const
     {
@@ -56,11 +60,11 @@ public:
                                 const size_t& from,
                                 const size_t& size) const;
 
-    GenomeFragment get_fragment_from_ref(const std::string& reference_fragment,
-                                         const size_t& fragment_offset,
-                                         const std::string& chromosome_name,
-                                         const size_t& allele_id,
-                                         const size_t& from, const size_t& size) const;
+    GenomeFragment get_fragment(const std::string& chromosome_name,
+                                const size_t& allele_id,
+                                const size_t& from, const size_t& size,
+                                const std::string& reference_fragment,
+                                const size_t& fragment_offset) const;
 
     Rcpp::DataFrame get_allele_fragments() const;
 
@@ -91,6 +95,28 @@ public:
 
     static size_t fill_CNA_df(Rcpp::DataFrame &df, const CLONES::Mutations::GenomeMutations &mutations,
                               size_t index = 0);
+private:
+    using mutation_map = CLONES::union_map_proxy<CLONES::Mutations::GenomicPosition,
+                                                 std::shared_ptr<CLONES::Mutations::SID>>;
+
+    mutation_map get_fragment_mutations(const CLONES::Mutations::ChromosomeId& chr_id,
+                                        const CLONES::Mutations::AlleleId& allele_id,
+                                        const size_t& from) const;
+
+    CLONES::Mutations::GenomicRegion
+    static ref_aligning_on_region(const CLONES::Mutations::ChromosomeId& chr_id,
+                                  const mutation_map& f_mutations,
+                                  const size_t from, const size_t size);
+
+    GenomeFragment get_fragment_from_ref(const std::string& reference_fragment,
+                                         const size_t& fragment_offset,
+                                         const CLONES::Mutations::ChromosomeId chr_id,
+                                         const CLONES::Mutations::AlleleId allele_id,
+                                         const size_t from, const size_t size) const;
+                        
+    std::filesystem::path reference_path;
+    CLONES::Mutations::GenomeMutations germline;
+    CLONES::Mutations::GenomeMutations somatic;
 };
 
 RCPP_EXPOSED_CLASS(GenomeMutations)
