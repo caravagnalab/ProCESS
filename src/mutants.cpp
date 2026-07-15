@@ -129,8 +129,8 @@ RCPP_MODULE(Mutants)
 //'
 //' # place a cell of species "A[E1]" in position (500,500)
 //' sim$place_cell("A[E1]", 500, 500)
-        .method("place_cell", &TissueSimulation::place_cell,
-                "Placing a cell in the tissue")
+        .method("place_cell", (void (TissueSimulation::*)(const SEXP&, const SEXP&, const SEXP&))
+                &TissueSimulation::place_cell, "Placing a cell in the tissue")
 
 //' @name TissueSimulation$add_mutant
 //' @title Adding a mutant and its species
@@ -178,11 +178,11 @@ RCPP_MODULE(Mutants)
 //'   [TissueSimulation$set_rate()], [TissueSimulation$set_rates()]
         .method(
             "add_mutant",
-            (void (TissueSimulation::*)(const std::string &))(&TissueSimulation::add_mutant),
+            (void (TissueSimulation::*)(const SEXP &))(&TissueSimulation::add_mutant),
             "Add a new mutant")
         .method(
             "add_mutant",
-            (void (TissueSimulation::*)(const std::string &, const Rcpp::List&))(&TissueSimulation::add_mutant),
+            (void (TissueSimulation::*)(const SEXP &, const SEXP&))(&TissueSimulation::add_mutant),
             "Add a new mutant")
 
 //' @name TissueSimulation$add_mutants

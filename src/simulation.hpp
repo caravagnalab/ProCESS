@@ -204,7 +204,11 @@ class TissueSimulation
 
     void add_mutant(const std::string &mutant_name);
 
+    void add_mutant(const SEXP &mutant_name);
+
     void add_mutant(const std::string &mutant_name, const Rcpp::List& rates);
+
+    void add_mutant(const SEXP &mutant_name, const SEXP& rates);
 
     inline void add_mutants(const std::list<std::string> &mutant_names)
     {
@@ -223,6 +227,8 @@ class TissueSimulation
     }
 
     inline CLONES::Time get_clock() const { return sim_ptr->get_time(); }
+
+    void place_cell(const SEXP &species_name, const SEXP &x, const SEXP &y);
 
     void place_cell(const std::string &species_name,
                     const CLONES::Mutants::Evolutions::AxisPosition &x,

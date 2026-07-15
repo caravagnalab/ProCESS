@@ -635,47 +635,6 @@ TissueSimulation::TissueSimulation(const std::string &simulation_name, const int
     init_history_rate_updates();
 }
 
-std::string get_string(const SEXP &parameter, const std::string parameter_name)
-{
-    using namespace Rcpp;
-
-    if (TYPEOF(parameter) != STRSXP) {
-        Rcpp::stop("The parameter \"" + parameter_name + "\" must be a string.");
-    }
-
-    return as<std::string>(parameter);
-}
-
-bool get_bool(const SEXP &parameter, const std::string parameter_name)
-{
-    using namespace Rcpp;
-
-    if (TYPEOF(parameter) != LGLSXP) {
-        Rcpp::stop("The parameter \"" + parameter_name + "\" must be a Boolean value.");
-    }
-
-    return as<int>(parameter);
-}
-
-size_t get_size(const SEXP &parameter, const std::string parameter_name)
-{
-    using namespace Rcpp;
-
-    if (TYPEOF(parameter) != INTSXP && TYPEOF(parameter) != REALSXP) {
-        Rcpp::stop("The parameter \"" + parameter_name +
-                   "\" must be a positive integer.");
-    }
-
-    auto c_value = as<long>(parameter);
-
-    if (c_value <= 0) {
-        Rcpp::stop("The parameter \"" + parameter_name +
-                   "\" must be a positive integer.");
-    }
-
-    return static_cast<size_t>(c_value);
-}
-
 bool has_column(const Rcpp::DataFrame &df, const std::string& col_name) {
     Rcpp::CharacterVector colnames = df.attr("names");
 
@@ -751,15 +710,15 @@ TissueSimulation TissueSimulation::build_simulation(const SEXP &simulation_name,
                                                     const SEXP &seed)
 {
     std::string c_name;
-    auto c_width = get_size(width, "width");
-    auto c_height = get_size(height, "height");
-    auto c_save = get_bool(save_snapshots, "save_snapshots");
+    auto c_width = FromSEXP::get<size_t>(width, "parameter \"width\"", "positive natural value");
+    auto c_height = FromSEXP::get<size_t>(height, "parameter \"height\"", "positive natural value");
+    auto c_save = FromSEXP::get<bool>(save_snapshots, "parameter \"save_snapshots\"", "Boolean value");
     auto c_seed = get_random_seed<int>(seed);
 
     if (TYPEOF(simulation_name) == NILSXP) {
         c_name = get_default_name();
     } else {
-        c_name = get_string(simulation_name, "name");
+        c_name = FromSEXP::get<std::string>(simulation_name, "parameter \"name\"", "string");
     }
 
     TissueSimulation sim(c_name, c_seed, c_save);
@@ -910,14 +869,28 @@ void TissueSimulation::add_mutant(const std::string &mutant_name)
     }
 }
 
+void TissueSimulation::add_mutant(const SEXP &mutant_name)
+{
+    const auto C_mutant_name = FromSEXP::get<std::string>(mutant_name, "parameter", "string");
+
+    add_mutant(C_mutant_name);
+}
+
 void TissueSimulation::add_mutant(const std::string &mutant_name, const Rcpp::List& rates)
 {
-    using namespace Rcpp;
-    using namespace CLONES::Mutants;
-
     add_mutant(mutant_name);
 
     set_rates(mutant_name, rates);
+}
+
+void TissueSimulation::add_mutant(const SEXP &mutant_name, const SEXP& rates)
+{
+    const auto C_mutant_name = FromSEXP::get<std::string>(mutant_name, "1st parameter", "string");
+    const auto C_rates = FromSEXP::get<Rcpp::List>(rates, "2nd parameter", "list");
+
+    add_mutant(C_mutant_name);
+
+    set_rates(C_mutant_name, C_rates);
 }
 
 void TissueSimulation::add_epistate(const std::string &epistate_name)
@@ -1186,6 +1159,21 @@ void TissueSimulation::place_cell(const std::string &species_name,
     const auto &species = sim_ptr->tissue().get_species(species_name);
 
     sim_ptr->place_cell(species.get_id(), {x, y});
+}
+
+void TissueSimulation::place_cell(const SEXP &species_name,  const SEXP &x, const SEXP &y)
+{
+    const auto C_species_name = FromSEXP::get<std::string>(species_name, "1st parameter", "string");
+    const auto C_x = FromSEXP::get<CLONES::Mutants::Evolutions::AxisPosition>(x, "2nd parameter", "natural number");
+    const auto C_y = FromSEXP::get<CLONES::Mutants::Evolutions::AxisPosition>(y, "3rd parameter", "natural number");
+
+    if (sim_ptr->tissue().num_of_mutated_cells() > 0) {
+        Rcpp::warning("Warning: the tissue already contains a cell.");
+    }
+
+    const auto &species = sim_ptr->tissue().get_species(C_species_name);
+
+    sim_ptr->place_cell(species.get_id(), {C_x, C_y});
 }
 
 Rcpp::List

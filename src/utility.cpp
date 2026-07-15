@@ -34,6 +34,15 @@
 
 #include "utility.hpp"
 
+
+bool FromSEXP::is_vowel(const char& c)
+{
+    char lower_c = std::tolower(static_cast<unsigned char>(c));
+
+    return (lower_c=='a' || lower_c=='e'
+            || lower_c=='i' || lower_c=='o' || lower_c=='u');
+}
+
 std::string get_user_name()
 {
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
@@ -147,9 +156,9 @@ std::string get_demangled_type_name(const std::type_info& type_info)
     int status;
 
     const auto mangled_name = type_info.name();
-    char* demangled = abi::__cxa_demangle(mangled_name, 
+    char* demangled = abi::__cxa_demangle(mangled_name,
                                             nullptr, nullptr, &status);
-    
+
     // if abi::__cxa_demangle did its magic
     if (status == 0) {
         std::string result(demangled);
@@ -157,7 +166,7 @@ std::string get_demangled_type_name(const std::type_info& type_info)
 
         return result;
     }
-    
+
     // fallback
     return mangled_name;
 }
