@@ -1539,8 +1539,7 @@ RCPP_MODULE(Mutations)
 //' @return The reference genome path.
 //' @seealso [PhylogeneticForest$set_reference_path()]
         .method("get_reference_path",
-                (std::string (PhylogeneticForest::*)()
-                     const)(&PhylogeneticForest::get_reference_path),
+                &PhylogeneticForest::get_reference_path,
                 "Get the reference genome path")
 
 //' @name PhylogeneticForest$get_mutation_statistics
@@ -1565,8 +1564,7 @@ RCPP_MODULE(Mutations)
 //' @return The reference genome path.
 //' @seealso [PhylogeneticForest$get_reference_path()]
         .method("set_reference_path",
-                (void (PhylogeneticForest::*)(const std::string))(
-                    &PhylogeneticForest::set_reference_path),
+                &PhylogeneticForest::set_reference_path,
                 "Set the reference genome path")
 
 //' @name PhylogeneticForest$save
@@ -1623,7 +1621,7 @@ RCPP_MODULE(Mutations)
 //' @description This class represents iterators over phylogenetic forest nodes.
 //'   The objects of this class are built by [get_node_tour()].
 //' @field \code{node} An object of the class <code>[PhylogeneticForestNode]</code>
-//'   representing the node pointed by the iterator. 
+//'   representing the node pointed by the iterator.
 //' @field \code{label} (OPTIONAL) The label of the of the node pointed by the
 //'   iterator. The presence of this field depends on the [get_node_tour()]'s
 //'   parameters used to create the tour object.

@@ -150,9 +150,12 @@ class PhylogeneticForest : public CLONES::Mutations::PhylogeneticForest
 
     Rcpp::List get_cell_allelic_fragmentation() const;
 
-    inline std::filesystem::path get_reference_path() const { return reference_path; }
+    inline std::string get_reference_path() const
+    {
+        return to_string(reference_path);
+    }
 
-    void set_reference_path(const std::filesystem::path reference_path);
+    void set_reference_path(const std::string& reference_path);
 
     inline const GermlineSubject &get_germline_subject() const
     {

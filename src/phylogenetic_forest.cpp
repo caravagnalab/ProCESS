@@ -875,10 +875,10 @@ Rcpp::List PhylogeneticForest::get_cell_allelic_fragmentation() const
                              _["major"] = major_counts, _["minor"] = minor_counts);
 }
 
-void PhylogeneticForest::set_reference_path(const std::filesystem::path reference_path)
+void PhylogeneticForest::set_reference_path(const std::string& reference_path)
 {
     if (!std::filesystem::exists(reference_path)) {
-        Rcpp::stop("The reference genome file \"" + to_string(reference_path) +
+        Rcpp::stop("The reference genome file \"" + reference_path +
                    "\" does not exists.");
     }
 
