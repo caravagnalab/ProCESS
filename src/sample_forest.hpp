@@ -35,6 +35,9 @@ class SampleForest : public CLONES::Mutants::DescendantForest
     Rcpp::List get_nodes(const std::vector<CLONES::Mutants::CellId> &cell_ids) const;
 
   public:
+    inline static const std::string file_format_header = "ProCESS Sample Forest";
+    inline static const uint8_t file_format_number = 0;
+
     using base_type = CLONES::Mutants::DescendantForest;
 
     using const_node = ForestCore::const_node<SampleForest>;
@@ -82,6 +85,11 @@ class SampleForest : public CLONES::Mutants::DescendantForest
     }
 
     SampleForest get_subforest_for(const std::vector<std::string> &sample_names) const;
+
+    inline void save(const std::string &filename) const
+    { 
+        save(filename, false);
+    }
 
     void save(const std::string &filename, const bool quiet) const;
 

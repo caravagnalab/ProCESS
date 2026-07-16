@@ -81,6 +81,9 @@ class PhylogeneticForest : public CLONES::Mutations::PhylogeneticForest
     get_total_mutations(const std::map<CLONES::Mutants::CellId, size_t>& new_mutations) const;
 
   public:
+    inline static const std::string file_format_header = "ProCESS Phylogenetic Forest";
+    inline static const uint8_t file_format_number = 0;
+
     using base_type = CLONES::Mutations::PhylogeneticForest;
 
     using const_node = ForestCore::const_node<PhylogeneticForest>;
@@ -172,7 +175,10 @@ class PhylogeneticForest : public CLONES::Mutations::PhylogeneticForest
         ForestCore::partition_samples_in_forest(*this, labelling_function);
     }
 
-    inline void save(const std::string &filename) const { save(filename, false); }
+    inline void save(const std::string &filename) const
+    { 
+        save(filename, false);
+    }
 
     void save(const std::string &filename, const bool quiet) const;
 

@@ -57,6 +57,9 @@ void SampleForest::save(const std::string &filename, const bool quiet) const
 {
     CLONES::Archive::Binary::Out out_archive(filename);
 
+    CLONES::Archive::Binary::Out::write_header(out_archive, file_format_header,
+                                               file_format_number);
+
     CLONES::UI::ProgressBar progress_bar(Rcpp::Rcout, quiet);
 
     out_archive.save(static_cast<const CLONES::Mutants::DescendantForest &>(*this),
@@ -79,6 +82,9 @@ SampleForest SampleForest::load(const std::string &filename, const bool quiet)
 
     try {
         CLONES::UI::ProgressBar progress_bar(Rcpp::Rcout, quiet); 
+
+        CLONES::Archive::Binary::In::read_header(in_archive, file_format_header,
+                                                 file_format_number);
 
         in_archive.load(static_cast<CLONES::Mutants::DescendantForest &>(forest),
                         progress_bar, "forest");

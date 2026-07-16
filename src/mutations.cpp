@@ -1780,12 +1780,14 @@ RCPP_MODULE(Mutations)
 //' @name load_phylogenetic_forest
 //' @title Loading a phylogenetic forest
 //' @description This method loads a phylogenetic forest from a file.
-//' @usage load_phylogenetic_forest(filename)
+//' @usage load_phylogenetic_forest(filename, quiet)
 //' @param filename The path of the file from which the phylogenetic
-//'   forest must be load.
+//'   forest must be loaded.
 //' @param quiet An optional Boolean flag to avoid the progress bar
 //'   (default: FALSE).
-//' @return The load phylogenetic forest
+//' @return The loaded phylogenetic forest
+//' @seealso [PhylogeneticForest$save()], [load_sample_forest()]
+//'   [load_forest()]
     function("load_phylogenetic_forest",
              (PhylogeneticForest (*)(const std::string &,
                                      const bool))&PhylogeneticForest::load,

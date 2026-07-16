@@ -20,7 +20,6 @@
 
 #include <sstream>
 #include <vector>
-#include <vector>
 
 #include <Rcpp.h>
 
@@ -455,6 +454,8 @@ public:
             Rcpp::stop("The parameter `labelling_function` must be a function.");
         }
     }
+
+    static SEXP load_forest(const std::string &filename, const bool quiet);
 };
 
 #endif // __PROCESS_FOREST__

@@ -2620,17 +2620,37 @@ RCPP_MODULE(Mutants)
 
 //' @name load_sample_forest
 //' @title Loading sample forests
-//' @description This method loads a sample forest in a file.
-//' @usage load_sample_forest(filename)
+//' @description This method loads a sample forest from a file.
+//' @usage load_sample_forest(filename, quiet)
 //' @param filename The path of the file from which the samples
-//'   forest must be load.
+//'   forest must be loaded.
 //' @param quiet An optional Boolean flag to avoid the progress bar
 //'   (default: FALSE).
-//' @return The load sample forest
-//' @seealso [SampleForest$save()]
+//' @return The loaded sample forest
+//' @seealso [SampleForest$save()], [load_phylogenetic_forest()]
+//'   [load_forest()]
     function("load_sample_forest",
              (SampleForest (*)(const std::string &,
                                      const bool))&SampleForest::load,
              List::create(_["filename"] = "", _["quiet"] = false),
              "Load a sample forest");
+
+//' @name load_forest
+//' @title Loading forests
+//' @description This method loads a forest from a file.
+//' @details This method loads a forest, being either a sample forest or a
+//'   phylogenetic forest, from a file.
+//' @usage load_forest(filename, quiet)
+//' @param filename The path of the file from which the forest must be
+//'   loaded.
+//' @param quiet An optional Boolean flag to avoid the progress bar
+//'   (default: FALSE).
+//' @return The loaded forest
+//' @seealso [SampleForest$save()], [PhylogeneticForest$save()],
+//'   [load_sample_forest()], [load_phylogenetic_forest()]
+    function("load_forest",
+             (SEXP (*)(const std::string &,
+                       const bool))&ForestCore::load_forest,
+             List::create(_["filename"] = "", _["quiet"] = false),
+             "Load a forest");
 }

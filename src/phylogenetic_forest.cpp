@@ -889,6 +889,9 @@ void PhylogeneticForest::save(const std::string &filename, const bool quiet) con
 {
     CLONES::Archive::Binary::Out out_archive(filename);
 
+    CLONES::Archive::Binary::Out::write_header(out_archive, file_format_header,
+                                               file_format_number);
+
     auto ref_str = to_string(reference_path);
 
     out_archive & germline_subject & ref_str & driver_codes & timed_exposures;
@@ -913,15 +916,18 @@ PhylogeneticForest PhylogeneticForest::load(const std::string &filename, const b
 
     PhylogeneticForest forest;
 
-    in_archive & forest.germline_subject;
-
-    std::string reference_path;
-    in_archive & reference_path;
-    forest.reference_path = reference_path;
-
-    in_archive & forest.driver_codes & forest.timed_exposures;
-
     try {
+        CLONES::Archive::Binary::In::read_header(in_archive, file_format_header,
+                                                 file_format_number);
+
+        in_archive & forest.germline_subject;
+
+        std::string reference_path;
+        in_archive & reference_path;
+        forest.reference_path = reference_path;
+
+        in_archive & forest.driver_codes & forest.timed_exposures;
+
         CLONES::UI::ProgressBar progress_bar(Rcpp::Rcout, quiet); 
 
         in_archive.load(static_cast<CLONES::Mutations::PhylogeneticForest &>(forest),

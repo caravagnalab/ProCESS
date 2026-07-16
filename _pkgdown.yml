@@ -47,6 +47,7 @@ reference:
   - bbox_sampler
   - get_node_tour
   - load_sample_forest
+  - load_forest
   - starts_with("SampleForest")
   - starts_with("TissueRectangle")
   - starts_with("TissueSimulation")
@@ -64,7 +65,6 @@ reference:
   - Deletion
   - starts_with("GenomeFragment")
   - starts_with("GenomeMutations")
-  - starts_with("GenomeMutationsTour")
   - get_available_tumours_in
   - get_mutation_engine_codes
   - get_relevant_branches
