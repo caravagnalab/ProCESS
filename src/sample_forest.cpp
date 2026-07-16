@@ -53,14 +53,17 @@ SampleForest::get_subforest_for(const std::vector<std::string> &sample_names) co
     return forest;
 }
 
-void SampleForest::save(const std::string &filename) const
+void SampleForest::save(const std::string &filename, const bool quiet) const
 {
     CLONES::Archive::Binary::Out out_archive(filename);
 
-    CLONES::Mutants::DescendantForest::save(out_archive);
+    CLONES::UI::ProgressBar progress_bar(Rcpp::Rcout, quiet);
+
+    out_archive.save(static_cast<const CLONES::Mutants::DescendantForest &>(*this),
+                     progress_bar, "forest");
 }
 
-SampleForest SampleForest::load(const std::string &filename)
+SampleForest SampleForest::load(const std::string &filename, const bool quiet)
 {
     SampleForest forest;
 
@@ -75,8 +78,10 @@ SampleForest SampleForest::load(const std::string &filename)
     CLONES::Archive::Binary::In in_archive(filename);
 
     try {
-        static_cast<CLONES::Mutants::DescendantForest &>(forest) =
-            CLONES::Mutants::DescendantForest::load(in_archive);
+        CLONES::UI::ProgressBar progress_bar(Rcpp::Rcout, quiet); 
+
+        in_archive.load(static_cast<CLONES::Mutants::DescendantForest &>(forest),
+                        progress_bar, "forest");
     } catch (CLONES::Archive::WrongFileFormatDescr &ex) {
         raise_error(ex, "sample forest");
     } catch (CLONES::Archive::WrongFileFormatVersion &ex) {

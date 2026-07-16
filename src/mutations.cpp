@@ -1571,16 +1571,16 @@ RCPP_MODULE(Mutations)
 //' @title Saving a phylogenetic forest
 //' @description This method saves a phylogenetic forest in a file.
 //' @param filename The path of the file in which the phylogenetic.
-//' @param quiet An optional  Boolean flag to avoid the progress bar
+//' @param quiet An optional Boolean flag to avoid the progress bar
 //'   (default: FALSE).
 //'   forest must be saved.
         .method("save",
-                (void (PhylogeneticForest::*)(const std::string &, const bool) const) &
-                    PhylogeneticForest::save,
+                (void (PhylogeneticForest::*)(const std::string &, const bool) const)
+                    &PhylogeneticForest::save,
                 "Save a phylogenetic forest")
         .method("save",
-                (void (PhylogeneticForest::*)(const std::string &) const) &
-                    PhylogeneticForest::save,
+                (void (PhylogeneticForest::*)(const std::string &) const)
+                    &PhylogeneticForest::save,
                 "Save a phylogenetic forest")
 
         // show
@@ -1783,12 +1783,12 @@ RCPP_MODULE(Mutations)
 //' @usage load_phylogenetic_forest(filename)
 //' @param filename The path of the file from which the phylogenetic
 //'   forest must be load.
-//' @param quiet An optional  Boolean flag to avoid the progress bar
+//' @param quiet An optional Boolean flag to avoid the progress bar
 //'   (default: FALSE).
 //' @return The load phylogenetic forest
     function("load_phylogenetic_forest",
              (PhylogeneticForest (*)(const std::string &,
                                      const bool))&PhylogeneticForest::load,
              List::create(_["filename"] = "", _["quiet"] = false),
-             "Recover a phylogenetic forest");
+             "Load a phylogenetic forest");
 }

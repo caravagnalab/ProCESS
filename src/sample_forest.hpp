@@ -83,22 +83,14 @@ class SampleForest : public CLONES::Mutants::DescendantForest
 
     SampleForest get_subforest_for(const std::vector<std::string> &sample_names) const;
 
-    void save(const std::string &filename) const;
+    void save(const std::string &filename, const bool quiet) const;
 
-    static SampleForest load(const std::string &filename);
+    static SampleForest load(const std::string &filename, const bool quiet);
 
     void show() const;
 
     friend class MutationEngine;
 };
-
-inline SampleForest load_samples_forest(const std::string &filename)
-{
-    Rcpp::warning("`load_samples_forest()` is deprecated. "
-                  "Please use `load_sample_forest()` instead.");
-
-    return SampleForest::load(filename);
-}
 
 RCPP_EXPOSED_CLASS(SampleForest)
 RCPP_EXPOSED_CLASS_NODECL(SampleForest::const_node)

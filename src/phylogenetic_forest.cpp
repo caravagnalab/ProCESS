@@ -922,7 +922,7 @@ PhylogeneticForest PhylogeneticForest::load(const std::string &filename, const b
     in_archive & forest.driver_codes & forest.timed_exposures;
 
     try {
-        CLONES::UI::ProgressBar progress_bar(Rcpp::Rcout, quiet);
+        CLONES::UI::ProgressBar progress_bar(Rcpp::Rcout, quiet); 
 
         in_archive.load(static_cast<CLONES::Mutations::PhylogeneticForest &>(forest),
                         progress_bar, "forest");

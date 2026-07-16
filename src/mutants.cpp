@@ -2425,8 +2425,17 @@ RCPP_MODULE(Mutants)
 //' @description This method saves a sample forest in a file.
 //' @param filename The path of the file in which the samples
 //'   forest must be saved.
+//' @param quiet An optional Boolean flag to avoid the progress bar
+//'   (default: FALSE).
 //' @seealso [load_sample_forest()]
-        .method("save", &SampleForest::save, "Save a sample forest")
+        .method("save",
+                (void (SampleForest::*)(const std::string &, const bool) const)
+                    &SampleForest::save,
+                "Save a sample forest")
+        .method("save",
+                (void (SampleForest::*)(const std::string &) const)
+                    &SampleForest::save,
+                "Save a sample forest")
 
         .method("show", &SampleForest::show, "Describe the SampleForest");
 
@@ -2615,7 +2624,13 @@ RCPP_MODULE(Mutants)
 //' @usage load_sample_forest(filename)
 //' @param filename The path of the file from which the samples
 //'   forest must be load.
+//' @param quiet An optional Boolean flag to avoid the progress bar
+//'   (default: FALSE).
 //' @return The load sample forest
 //' @seealso [SampleForest$save()]
-    function("load_sample_forest", &SampleForest::load, "Load a sample forest");
+    function("load_sample_forest",
+             (SampleForest (*)(const std::string &,
+                                     const bool))&SampleForest::load,
+             List::create(_["filename"] = "", _["quiet"] = false),
+             "Load a sample forest");
 }
