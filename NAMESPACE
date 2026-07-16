@@ -4,6 +4,9 @@ importFrom("dplyr", "%>%", "bind_rows")
 importFrom("rlang", ".data")
 import(methods, Rcpp)
 
+export(available_examples)
+export(example)
+
 export(TissueRectangle)
 export(TissueSimulation)
 export(SampleForest)

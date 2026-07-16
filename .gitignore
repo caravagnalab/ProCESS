@@ -5,7 +5,6 @@
 .DS_Store
 .vscode
 .*.swp
-*.gz
 RcppExports.*
 inst/doc
 vignettes/*.html

@@ -97,4 +97,8 @@ reference:
   - Expression
   - Formula
   - Variable
-
+- title: "Data Structure Examples"
+  desc:  "Methods providing data structure examples"
+  contents:
+  - available_examples
+  - example

@@ -1,15 +1,27 @@
-set -x
+set +x
 set -e
 
 which cmake
 
+setup_reference_example() {
+    _setup_reference_example_file="inst/extdata/example_ref.fasta.gz"
 
-if [ ! -d CLONES ]; then
+    if [ -f ${_setup_reference_example_file} ]; then
+        gunzip ${_setup_reference_example_file}
+    fi
+}
 
-    git clone https://github.com/albertocasagrande/CLONES.git
+download_CLONES() {
+    if [ ! -d CLONES ]; then
 
-    (cd CLONES; git checkout d23df38 && rm -rf .git )
+        git clone https://github.com/albertocasagrande/CLONES.git
 
-fi
+        (cd CLONES; git checkout d23df38 && rm -rf .git )
+    fi
+}
+
+setup_reference_example
+
+download_CLONES
 
 ${R_HOME}/bin/R --vanilla --silent -e 'Rcpp::compileAttributes()'
