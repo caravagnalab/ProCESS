@@ -134,6 +134,11 @@ class PhylogeneticForest : public CLONES::Mutations::PhylogeneticForest
 
     Rcpp::DataFrame get_germline_SIDs() const;
 
+    inline const std::map<CLONES::Mutations::SID, std::string>& get_driver_codes() const
+    {
+        return driver_codes;
+    }
+
     inline Rcpp::DataFrame get_sampled_cell_SIDs() const
     {
         return get_sampled_cell_SIDs(false);
@@ -192,7 +197,6 @@ class PhylogeneticForest : public CLONES::Mutations::PhylogeneticForest
     void show() const;
 
     friend class MutationEngine;
-    //friend class PhylogeneticForest::const_node;
 };
 
 RCPP_EXPOSED_CLASS(PhylogeneticForest)

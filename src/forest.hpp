@@ -26,6 +26,7 @@
 #include <cell.hpp>
 #include <label_tour.hpp>
 #include <mutant_properties.hpp>
+#include <mutation_list.hpp>
 
 #include "cell_mutations.hpp"
 #include "utility.hpp"
@@ -77,7 +78,7 @@
 
 template <typename T>
 concept hasArisingMutationMethod = requires(const T instance) {
-    { instance.arising_mutation() } -> std::same_as<Rcpp::List>;
+    { instance.arising_mutations() } -> std::same_as<CLONES::Mutations::MutationList>;
 };
 
 class ForestCore
@@ -102,6 +103,29 @@ class ForestCore
         }
     };
 public:
+    inline static void fill_mutation_list(Rcpp::DataFrame &df, const CLONES::Mutations::MutationList& mutations,
+                                          const std::string& mutant_name,
+                                          const std::map<CLONES::Mutations::SID, std::string>& driver_codes)
+    {
+        size_t i{0};
+
+        fill_mutation_list(df, mutations, mutant_name, driver_codes, i);
+    }
+
+    inline static void fill_mutation_list(Rcpp::DataFrame &df, const CLONES::Mutations::MutationList& mutations,
+                                          const std::string& mutant_name,
+                                          const std::map<CLONES::Mutations::SID, std::string>& driver_codes,
+                                          size_t &i)
+    {
+        size_t mut_i{1};
+
+        fill_mutation_list(df, mutations, mutant_name, driver_codes, i, mut_i);
+    }
+
+    static void fill_mutation_list(Rcpp::DataFrame &df, const CLONES::Mutations::MutationList& mutations,
+                                   const std::string& mutant_name,
+                                   const std::map<CLONES::Mutations::SID, std::string>& driver_codes,
+                                   size_t &i, size_t &mut_i);
 
     template<typename FOREST>
 #if defined(__clang__)
@@ -281,34 +305,35 @@ public:
         {
             using namespace Rcpp;
 
-            if constexpr (hasArisingMutationMethod<FOREST>) {
+            const std::string mutant_name{get_mutant_name()};
+
+            if constexpr (hasArisingMutationMethod<typename FOREST::base_type::const_node>) {
                 const auto& mutations = node.arising_mutations();
 
                 const size_t num_of_rows{mutations.size()};
 
-                CharacterVector mutant_names(num_of_rows), chrs(num_of_rows), types(num_of_rows),
+                CharacterVector chrs(num_of_rows), types(num_of_rows),
                     CNA_types(num_of_rows), refs(num_of_rows), alts(num_of_rows), codes(num_of_rows),
                     natures(num_of_rows), causes(num_of_rows);
                 IntegerVector starts(num_of_rows), ends(num_of_rows), application_order(num_of_rows),
                     alleles(num_of_rows), src_alleles(num_of_rows);
 
-                size_t i{0}, mut_i{0};
-                fill_mutation_list(mutations, node.get_species_name(), forest->driver_codes,
-                                mutant_names, types, CNA_types, chrs, refs, alts,
-                                application_order, starts, ends, alleles, src_alleles, natures,
-                                causes, codes, i, mut_i);
+                DataFrame df = DataFrame::create(_["order"] = application_order,
+                                                 _["type"] = types, _["CNA_type"] = CNA_types,
+                                                 _["chr"] = chrs, _["start"] = starts,
+                                                 _["end"] = ends, _["ref"] = refs,
+                                                 _["alt"] = alts, _["allele"] = alleles,
+                                                 _["src.allele"] = src_alleles,
+                                                 _["nature"] = natures, _["cause"] = causes,
+                                                 _["code"] = codes);
 
-                return DataFrame::create(_["order"] = application_order,
-                                        _["type"] = types, _["CNA_type"] = CNA_types,
-                                        _["chr"] = chrs, _["start"] = starts, _["end"] = ends,
-                                        _["ref"] = refs, _["alt"] = alts, _["allele"] = alleles,
-                                        _["src.allele"] = src_alleles,
-                                        _["nature"] = natures, _["cause"] = causes,
-                                        _["code"] = codes);
+                fill_mutation_list(df, mutations, mutant_name, forest->get_driver_codes());
+
+                return df;
             }
 
             std::ostringstream oss;
-            oss << typeid(FOREST).name() << "Node does not "
+            oss << get_demangled_type_name(typeid(FOREST)) << "Node does not "
                 << "support the method `arising_mutations()`.";
 
             stop(oss.str());
