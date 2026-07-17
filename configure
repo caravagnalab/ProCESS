@@ -4,10 +4,10 @@ set -e
 which cmake
 
 setup_reference_example() {
-    _setup_reference_example_file="inst/extdata/example_ref.fasta.gz"
+    _setup_reference_example_file="inst/extdata/example_ref.fasta"
 
-    if [ -f ${_setup_reference_example_file} ]; then
-        gunzip ${_setup_reference_example_file}
+    if [ ! -f ${_setup_reference_example_file} ]; then
+        gunzip "${_setup_reference_example_file}.gz"
     fi
 }
 
@@ -16,7 +16,7 @@ download_CLONES() {
 
         git clone https://github.com/albertocasagrande/CLONES.git
 
-        (cd CLONES; git checkout d23df38 && rm -rf .git )
+        (cd CLONES; git checkout 7b27f95 && rm -rf .git )
     fi
 }
 

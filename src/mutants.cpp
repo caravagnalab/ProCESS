@@ -2059,27 +2059,8 @@ RCPP_MODULE(Mutants)
 //'   the simulation has epigenetic states, the data frame also contains
 //'   the column `epistate`.
 //' @examples
-//' # set the seed of the random number generator
-//' set.seed(0)
-//'
-//' # create a simulation
-//' sim <- TissueSimulation()
-//'
-//' # add the mutant "A"
-//' sim$add_mutant("A", c(duplication = 0.2, death = 0.01))
-//'
-//' # place a cell in the tissue
-//' sim$place_cell("A", 500, 500)
-//'
-//' # run the simulation until "A" has less than 50000 cells
-//' sim$run_up_to_size("A", 50000)
-//'
-//' # sample the region [450,500]x[475,550]
-//' sim$sample_cells("S1", lower_corner = c(450, 475),
-//'                  upper_corner = c(500, 550))
-//'
-//' # build the sample forest
-//' forest <- sim$get_sample_forest()
+//' # use a sample forest example
+//' forest <- ProCESS::example("SampleForest")
 //'
 //' # print the first five nodes
 //' forest$get_nodes() %>% head(5)
@@ -2105,27 +2086,8 @@ RCPP_MODULE(Mutants)
 //'   has epigenetic states, the data frame also contains the column
 //'   `epistate`.
 //' @examples
-//' # set the seed of the random number generator
-//' set.seed(0)
-//'
-//' # create a simulation
-//' sim <- TissueSimulation()
-//'
-//' # add the mutant "A"
-//' sim$add_mutant("A", c(duplication = 0.2, death = 0.01))
-//'
-//' # place a cell in the tissue
-//' sim$place_cell("A", 500, 500)
-//'
-//' # run the simulation until "A" has less than 50000 cells
-//' sim$run_up_to_size("A", 50000)
-//'
-//' # sample the region [450,500]x[475,550]
-//' sim$sample_cells("S1", lower_corner = c(450, 475),
-//'                  upper_corner = c(500, 550))
-//'
-//' # build the sample forest
-//' forest <- sim$get_sample_forest()
+//' # use a sample forest example
+//' forest <- ProCESS::example("SampleForest")
 //'
 //' # get the most recent common ancestor of all the leaves in the forest
 //' forest$get_coalescent_cells()
@@ -2145,35 +2107,11 @@ RCPP_MODULE(Mutants)
 //'    as leaves of the new forest.
 //' @return A sample forest built on the samples mentioned in `sample_names`
 //' @examples
-//' # set the seed of the random number generator
-//' set.seed(0)
+//' # use a sample forest example
+//' forest <- ProCESS::example("SampleForest")
 //'
-//' # create a simulation
-//' sim <- TissueSimulation()
-//'
-//' # add the mutant "A"
-//' sim$add_mutant("A", c(duplication = 0.2, death = 0.01))
-//'
-//' # place a cell in the tissue
-//' sim$place_cell("A", 500, 500)
-//'
-//' # run the simulation until "A" has less than 50000 cells
-//' sim$run_up_to_size("A", 50000)
-//'
-//' # sample the region [450,500]x[475,550]
-//' sim$sample_cells("S1", lower_corner = c(450, 500), upper_corner = c(475, 550))
-//'
-//' # sample the region [550,650]x[600,675]
-//' sim$sample_cells("S2", lower_corner = c(550, 600), upper_corner = c(650, 675))
-//'
-//' # build the sample forest
-//' forest <- sim$get_sample_forest()
-//'
-//' # show the forest data
-//' forest
-//'
-//' # get the subforest for sample "S2"
-//' forest$get_subforest_for("S2")
+//' # get the subforest for sample "S_1_2"
+//' forest$get_subforest_for("S_1_2")
         .method("get_subforest_for", &SampleForest::get_subforest_for,
                 "Get the sub-forest for some of the original samples")
 
@@ -2193,29 +2131,11 @@ RCPP_MODULE(Mutants)
 //'   examples, [TissueSimulation$sample_cells()],
 //'   [TissueSimulation$get_samples_info()]
 //' @examples
-//' # set the seed of the random number generator
-//' set.seed(0)
+//' # use a sample forest example
+//' forest <- ProCESS::example("SampleForest")
 //'
-//' # create a simulation
-//' sim <- TissueSimulation()
-//'
-//' # add the mutant "A"
-//' sim$add_mutant("A", c(duplication = 0.2, death = 0.01))
-//'
-//' # place a cell in the tissue
-//' sim$place_cell("A", 500, 500)
-//'
-//' # run the simulation until "A" has less than 50000 cells
-//' sim$run_up_to_size("A", 50000)
-//'
-//' # sample the region [450,500]x[475,550]
-//' sim$sample_cells("S1", lower_corner = c(450, 500), upper_corner = c(475, 550))
-//'
-//' # build the sample forest
-//' forest <- sim$get_sample_forest()
-//'
-//' # get information about the sampled whose cells
-//' # are the forest leaves, i.e, S1 and S2
+//' # get information about the samples whose cells
+//' # are the forest leaves
 //' forest$get_samples_info()
         .method("get_samples_info", &SampleForest::get_samples_info,
                 "Get some pieces of information about the samples")
@@ -2227,107 +2147,16 @@ RCPP_MODULE(Mutants)
 //' @return A data frame reporting `mutant` and, if the simulation has
 //'   epigenetic states, `epistate` for each registered species.
 //' @examples
-//' # set the seed of the random number generator
-//' set.seed(0)
-//'
-//' # create a simulation
-//' sim <- TissueSimulation()
-//'
-//' # add the mutant "A"
-//' sim$add_mutant("A", c(duplication = 0.2, death = 0.01))
-//'
-//' # place a cell in the tissue
-//' sim$place_cell("A", 500, 500)
-//'
-//' # run the simulation until "A" has less than 15 cells
-//' sim$run_up_to_size("A", 15)
-//'
-//' # add the mutant "B"
-//' sim$add_mutant("B", c(duplication = 0.3, death = 0.01))
-//'
-//' # let one border cell of "A" generate a cell in "B"
-//' sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
-//'
-//' # run the simulation until "B" has less than 100 cells
-//' sim$run_up_to_size("B", 30)
-//'
-//' # add the mutant "C"
-//' sim$add_mutant("C", c(duplication = 0.4, death = 0.01))
-//'
-//' # let one border cell of "B" generate a cell in "C"
-//' sim$mutate_progeny(sim$choose_border_cell_in("B"), "C")
-//'
-//' # run the simulation until "C" has less than 2000 cells
-//' sim$run_up_to_size("C", 2000)
-//'
-//' # search for a 33x33 region containing 50 cells in A and
-//' # 50 cells in B at least and sample it
-//' region <- sim$search_sample(c(A = 50, B = 50), 33, 33)
-//' sim$sample_cells("S1", region$lower_corner, region$upper_corner)
-//'
-//' # search for a 33x33 region containing 50 cells in B and
-//' # 50 cells in C at least and sample it
-//' region <- sim$search_sample(c(B = 50, C = 50), 33, 33)
-//' sim$sample_cells("S2", region$lower_corner, region$upper_corner)
-//'
-//' # build the sample forest
-//' forest <- sim$get_sample_forest()
+//' # use a sample forest example
+//' forest <- ProCESS::example("SampleForest - no epistates")
 //'
 //' # get species information. Since the simulation has no epigenetic
 //' # state, the species correspond to the mutants
 //' forest$get_species_info()
 //'
 //' @examples
-//' # set the seed of the random number generator
-//' set.seed(0)
-//'
-//' # create a simulation
-//' sim <- TissueSimulation(epigenetic_states = c("E1", "E2"))
-//'
-//' # add the mutant "A"
-//' sim$add_mutant("A", list(E1 = list(duplication = 0.2, death = 0.01,
-//'                                    E2 = 0.05),
-//'                          E2 = list(duplication = 0.2, death = 0.01,
-//'                                    E2 = 0.01)))
-//'
-//' # place a cell in the tissue
-//' sim$place_cell("A[E1]", 500, 500)
-//'
-//' # run the simulation until "A" has less than 15 cells
-//' sim$run_up_to_size("A[E2]", 40)
-//'
-//' # add the mutant "B"
-//' sim$add_mutant("B", list(E2 = list(duplication = 0.3,
-//'                                    death = 0.01)))
-//'
-//' # let one border cell of "A[E2]" generate a cell in "B"
-//' sim$mutate_progeny(sim$choose_border_cell_in("A[E2]"), "B")
-//'
-//' # run the simulation until "B[E2]" has less than 100 cells
-//' sim$run_up_to_size("B[E2]", 50)
-//'
-//' # add the mutant "C"
-//' sim$add_mutant("C", list(E2 = list(duplication = 0.5,
-//'                                    death = 0.01)))
-//'
-//' # let one border cell of "B" generate a cell in "C"
-//' sim$mutate_progeny(sim$choose_border_cell_in("B"), "C")
-//'
-//' # run the simulation until "C" has less than 2000 cells
-//' sim$run_up_to_size("C[E2]", 2000)
-//'
-//' # search for a 33x33 region containing 50 cells in A and
-//' # 50 cells in B at least and sample it
-//' region <- sim$search_sample(c(A = 50, B = 50), 33, 33)
-//' sim$sample_cells("S1", region$lower_corner, region$upper_corner)
-//'
-//' # search for a 33x33 region containing 50 cells in B and
-//' # 50 cells in C at least and sample it
-//' region <- sim$search_sample(c(B = 50, C = 50), 33, 33)
-//' sim$sample_cells("S2", region$lower_corner, region$upper_corner)
-//'
-//' # build the sample forest
-//' forest <- sim$get_sample_forest()
+//' # use a sample forest example
+//' forest <- ProCESS::example("SampleForest")
 //'
 //' # get species information
 //' forest$get_species_info()
@@ -2355,60 +2184,13 @@ RCPP_MODULE(Mutants)
 //'   stick from the higher to the deeper in the forest.
 //' @seealso [PhylogeneticForest$get_sticks()]
 //' @examples
-//' # set the seed of the random number generator
-//' set.seed(0)
-//'
-//' # create a simulation
-//' sim <- TissueSimulation()
-//'
-//' # add the mutant "A"
-//' sim$add_mutant("A", c(duplication = 0.2, death = 0.01))
-//'
-//' # place a cell in the tissue
-//' sim$place_cell("A", 500, 500)
-//'
-//' # run the simulation until "A" has less than 15 cells
-//' sim$run_up_to_size("A", 15)
-//'
-//' sim$get_clock()
-//'
-//' # add the mutant "B"
-//' sim$add_mutant("B", c(duplication = 0.3, death = 0.01))
-//'
-//' # let one border cell of "A" generate a cell in "B"
-//' sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
-//'
-//' # run the simulation until "B" has less than 100 cells
-//' sim$run_up_to_size("B", 30)
-//'
-//' sim$get_clock()
-//'
-//' # add the mutant "C"
-//' sim$add_mutant("C", c(duplication = 0.4, death = 0.01))
-//'
-//' # let one border cell of "B" generate a cell in "C"
-//' sim$mutate_progeny(sim$choose_border_cell_in("B"), "C")
-//'
-//' # run the simulation until "C" has less than 2000 cells
-//' sim$run_up_to_size("C", 2000)
-//'
-//' # search for a 33x33 region containing 50 cells in A and
-//' # 50 cells in B at least and sample it
-//' region <- sim$search_sample(c(A = 50, B = 50), 33, 33)
-//' sim$sample_cells("S1", region$lower_corner, region$upper_corner)
-//'
-//' # search for a 33x33 region containing 50 cells in B and
-//' # 50 cells in C at least and sample it
-//' region <- sim$search_sample(c(B = 50, C = 50), 33, 33)
-//' sim$sample_cells("S2", region$lower_corner, region$upper_corner)
-//'
-//' # build the sample forest
-//' forest <- sim$get_sample_forest()
+//' # use a sample forest example
+//' forest <- ProCESS::example("SampleForest")
 //'
 //' # search for the forest sticks
-//' forest$get_sticks()
+//' forest$get_sticks() %>% head()
 //'
-//' # search for the forest sticks whose corresponding cells have
+//' # search for the forest sticks whose first node corresponding cells have
 //' # birth times 40 time units at most
 //' forest$get_sticks(40)
         .method("get_sticks",
@@ -2503,25 +2285,58 @@ RCPP_MODULE(Mutants)
 //'   nodes. When `only_leaves` is set to `TRUE`, the returned tour
 //'   iterates over `forest`'s leaves.
 //' @examples
-//' # set the seed of the random number generator
-//' set.seed(0)
+//' # use a sample forest example
+//' forest <- ProCESS::example("SampleForest")
 //'
-//' # create a simulation
-//' sim <- TissueSimulation()
+//' # get a tour of the forest nodes
+//' node_tour <- get_node_tour(forest)
 //'
-//' # add the mutant "A"
-//' sim$add_mutant("A", c(duplication = 0.2, death = 0.01))
+//' # the first node in the tour
+//' node_tour$node
 //'
-//' # place a cell in the tissue
-//' sim$place_cell("A", 500, 500)
+//' # the first node is not a leaf
+//' node_tour$node$is_leaf
 //'
-//' # run the simulation until "A" has less than 15 cells
-//' sim$run_up_to_size("A", 15)
+//' # move to the next node
+//' node_tour$step()
 //'
-//' sim$sample_cells("S_1_1", bottom_left = c(500, 500),
-//'                  top_right = c(502, 502))
+//' # not even the second node is a leaf
+//' node_tour$node$is_leaf
 //'
-//' forest <- sim$get_sample_forest()
+//' @examples
+//' # use a sample forest example
+//' forest <- ProCESS::example("SampleForest")
+//'
+//' # get a tour of the forest leaves
+//' node_tour <- get_node_tour(forest, only_leaves = TRUE)
+//'
+//' # the first node in the tour is a leaf
+//' node_tour$node
+//' node_tour$node$is_leaf
+//'
+//' # move to the next node
+//' node_tour$step()
+//'
+//' # the second node too
+//' node_tour$node$is_leaf
+//'
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # get a tour of the forest nodes with their genomes
+//' node_tour <- get_node_tour(forest, with_genomes = TRUE)
+//'
+//' # the first node in the tour is a leaf
+//' node_tour$node
+//'
+//' # the forest was build using the setup "demo". Thus, the
+//' # node genomes have only chromosome 22 
+//' node_tour$genome
+//'
+//' @examples
+//' # use a sample forest example
+//' forest <- ProCESS::example("SampleForest")
 //'
 //' # we define a function to collect the tour labels
 //' collect_labels <- function(tour) {

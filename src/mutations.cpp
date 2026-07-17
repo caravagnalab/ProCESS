@@ -1085,7 +1085,21 @@ RCPP_MODULE(Mutations)
 //'   birth time (column `birth_time`), and, whenever the
 //'   simulation has epigenetic states, the epigenetic state
 //'   (column `epistate`).
-//' @seealso [SampleForest$get_nodes()] for usage examples.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # print part of the data frame obtained by `get_nodes()`
+//' forest$get_nodes() %>% head()
+//'
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest - no epistates")
+//'
+//' # since the simulation has no epistate the result of
+//' # `get_nodes()` misses the epistate column
+//' forest$get_nodes() %>% head()
+//' @seealso [SampleForest$get_nodes()]
         .method("get_nodes", &PhylogeneticForest::get_nodes,
                 "Get the nodes of the forest")
 
@@ -1109,8 +1123,14 @@ RCPP_MODULE(Mutations)
 //'   birth time (column `birth_time`), and, whenever the
 //'   simulation has epigenetic states, the epigenetic state
 //'   (column `epistate`).
-//' @seealso [SampleForest$get_coalescent_cells()] for
-//'   usage examples
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # get the coalescent cells. Since this forest consists of
+//' # only one tree, we get a data frame containing one cell.
+//' forest$get_coalescent_cells()
+//' @seealso [SampleForest$get_coalescent_cells()]
         .method("get_coalescent_cells",
                 (List (PhylogeneticForest::*)(const std::list<CLONES::Mutants::CellId> &)
                      const)(&PhylogeneticForest::get_coalescent_cells),
@@ -1127,7 +1147,13 @@ RCPP_MODULE(Mutations)
 //' @param sample_names The names of the samples whose cells will be used
 //'   as leaves of the new forest
 //' @return A sample forest built on the samples mentioned in `sample_names`
-//' @seealso [SampleForest$get_subforest_for()] for usage examples.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # get the subforest for sample "S_1_2"
+//' forest$get_subforest_for("S_1_2")
+//' @seealso [SampleForest$get_subforest_for()]
         .method("get_subforest_for", &PhylogeneticForest::get_subforest_for,
                 "Get the sub-forest for some of the original samples")
 
@@ -1135,11 +1161,37 @@ RCPP_MODULE(Mutations)
 //' @title Partitioning forest samples
 //' @description This method partitions the samples in a phylogenetic forest.
 //' @details This method partitions the samples in a phylogenetic forest
-//'   according to a labelling function. It works in-place by altering the
-//'   phylogenetic forest from which the method is called.
-//' @param labelling_function An R labelling function that maps any sampled
-//'   cell to a labelling string.
-//' @seealso [SampleForest$get_subforest_for()] for usage examples.
+//'   according to a labelling function over the corresponding forest nodes.
+//'   It works in-place by altering the phylogenetic forest from which the
+//'   method is called.
+//' @param labelling_function An R labelling function that maps any forest
+//'   node to a labelling string.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # show information about samples
+//' forest$get_samples_info()
+//'
+//' # the labelling function parameter has type `PhylogeneticForestNode`
+//' birth_time_labelling <- function(node) {
+//'   if (node$birth_time > 421) {
+//'     return("YOUNG")
+//'   }
+//'
+//'   if (node$birth_time > 321) {
+//'     return("MIDDLE_AGED")
+//'   }
+//'
+//'   return("OLD")
+//' }
+//'
+//' # partition the samples according to the labelling function
+//' forest$partition_samples(birth_time_labelling)
+//'
+//' # show the new samples
+//' forest$get_samples_info()
+//' @seealso <code>[PhylogeneticForestNode]</code>
         .method("partition_samples",
                 &PhylogeneticForest::partition_samples,
                 "Partition each sample in the forest according to a labelling function")
@@ -1163,7 +1215,13 @@ RCPP_MODULE(Mutations)
 //'   The `DNA_quantity` is stored as a real number despite being a natural
 //'   number as it usually exceeds the largest natural number that can be
 //'   natively represented by R.
-//' @seealso [SampleForest$get_samples_info()] for usage examples,
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # show information about samples
+//' forest$get_samples_info()
+//' @seealso [SampleForest$get_samples_info()],
 //'   [TissueSimulation$get_samples_info()]
         .method("get_samples_info", &PhylogeneticForest::get_samples_info,
                 "Get some pieces of information about the samples")
@@ -1191,6 +1249,12 @@ RCPP_MODULE(Mutations)
 //'   identifiers of the new allele and of the original allele, respectively.
 //'   In all the remaining cases, the fields contains the value `NA`.
 //'   Finally, the column `code` reports the mutation code.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # show information about samples
+//' forest$get_driver_mutations()
         .method("get_driver_mutations", &PhylogeneticForest::get_driver_mutations,
                 "Get the applied driver mutations")
 
@@ -1205,6 +1269,12 @@ RCPP_MODULE(Mutations)
 //'   respectively.
 //' @return A data frame reporting `species`, `time`, `SNV_rate`,
 //'   `indel_rate`, and `CNA_rate` for each species.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # show information about samples
+//' forest$get_species_info()
 //' @seealso [MutationEngine$get_species_info()]
         .method("get_species_info", &PhylogeneticForest::get_species_info,
                 "Get the recorded species")
@@ -1215,6 +1285,12 @@ RCPP_MODULE(Mutations)
 //'   subject name (column "sample"), population (column "pop"),
 //'   super-population (column "super_pop"), and gender (column "gender").
 //' @return The name of the subject whose germline is used.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # get the germline subject
+//' forest$get_germline_subject()
         .method("get_germline_subject", &PhylogeneticForest::get_germline_subject_df,
                 "Get the germline subject")
 
@@ -1231,51 +1307,11 @@ RCPP_MODULE(Mutations)
 //'   deletions), and `class` (i.e., `"driver"`, `"passenger"`, `"germinal"`
 //'   or `"pre-neoplastic"`).
 //' @examples
-//' # set the seed of the random number generator
-//' set.seed(0)
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
 //'
-//' # build a tissue simulation with epigenetic states "E1" and "E2"
-//' sim <- TissueSimulation(epigenetic_states = c("E1", "E2"))
-//'
-//' # add mutant "A" and set its species rates
-//' sim$add_mutant("A",
-//'                list(E1 = list(duplication = 0.2, death = 0.05, E2 = 0.01),
-//'                     E2 = list(duplication = 0.08, death = 0.01, E1 = 0.01)))
-//'
-//' # place a cell of species "A[E1]" in position (500,500)
-//' sim$place_cell("A[E1]", 500, 500)
-//'
-//' # run the simulation until "A[E2]" accounts for less than 1000 cells
-//' sim$run_up_to_size("A[E2]", 1000)
-//'
-//' # sample the tissue
-//' sim$sample_cells("Sample_1", c(475, 475), c(525, 525))
-//'
-//' # build the sample forest
-//' sample_forest <- sim$get_sample_forest()
-//'
-//' # initialize a mutation engine with the "demo" setup
-//' m_engine <- MutationEngine(setup_code = "demo")
-//'
-//' # add the genomic characterisation for the mutant "A"
-//' m_engine$add_mutant("A",
-//'                     list("E1" = c(SNV = 1e-7, indel = 1e-8),
-//'                          "E2" = c(SNV = 3e-7, CNA = 1e-11)),
-//'                     list(SNV("22", 10510210, "C", allele = 1),
-//'                          CNA("D", "22", 5010000, 200000,
-//'                              allele = 1)))
-//'
-//' # add the exposure
-//' m_engine$add_exposure(c(ID1 = 1, SBS1 = 0.5, SBS2 = 0.5))
-//'
-//' # build the phylogenetic forest
-//' phylo_forest <- m_engine$place_mutations(sample_forest, 1, 1)
-//'
-//' # get the CNAs in the sampled cells
-//' CNAs <- phylo_forest$get_sampled_cell_CNAs()
-//'
-//' # show the first CNAs in the sampled cells
-//' CNAs %>% head()
+//' # get the first sampled cell CNAs
+//' forest$get_sampled_cell_CNAs() %>% head()
 //' @seealso [PhylogeneticForest$get_sampled_cell_mutations()]
         .method("get_sampled_cell_CNAs", &PhylogeneticForest::get_sampled_cell_CNAs,
                 "Get the CNAs of all sampled cells")
@@ -1297,51 +1333,11 @@ RCPP_MODULE(Mutations)
 //'   `"passenger"`, `"germinal"` or `"pre-neoplastic"`) for each mutation
 //'   in the sampled cell genomes.
 //' @examples
-//' # set the seed of the random number generator
-//' set.seed(0)
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
 //'
-//' # build a tissue simulation with epigenetic states "E1" and "E2"
-//' sim <- TissueSimulation(epigenetic_states = c("E1", "E2"))
-//'
-//' # add mutant "A" and set its species rates
-//' sim$add_mutant("A",
-//'                list(E1 = list(duplication = 0.2, death = 0.05, E2 = 0.01),
-//'                     E2 = list(duplication = 0.08, death = 0.01, E1 = 0.01)))
-//'
-//' # place a cell of species "A[E1]" in position (500,500)
-//' sim$place_cell("A[E1]", 500, 500)
-//'
-//' # run the simulation until "A[E2]" accounts for less than 1000 cells
-//' sim$run_up_to_size("A[E2]", 1000)
-//'
-//' # sample the tissue
-//' sim$sample_cells("Sample_1", c(475, 475), c(525, 525))
-//'
-//' # build the sample forest
-//' sample_forest <- sim$get_sample_forest()
-//'
-//' # initialize a mutation engine with the "demo" setup
-//' m_engine <- MutationEngine(setup_code = "demo")
-//'
-//' # add the genomic characterisation for the mutant "A"
-//' m_engine$add_mutant("A",
-//'                     list("E1" = c(SNV = 1e-7, indel = 1e-8),
-//'                          "E2" = c(SNV = 3e-7, CNA = 1e-11)),
-//'                     list(SNV("22", 10510210, "C", allele = 1),
-//'                          CNA("D", "22", 5010000, 200000,
-//'                              allele = 1)))
-//'
-//' # add the exposure
-//' m_engine$add_exposure(c(ID1 = 1, SBS1 = 0.5, SBS2 = 0.5))
-//'
-//' # build the phylogenetic forest
-//' phylo_forest <- m_engine$place_mutations(sample_forest, 1, 1)
-//'
-//' # get the SIDs in the sampled cells
-//' SIDs <- phylo_forest$get_sampled_cell_mutations()
-//'
-//' # show the first SIDs in the sampled cells
-//' SIDs %>% head()
+//' # get the first sampled cell mutations
+//' forest$get_sampled_cell_mutations() %>% head()
 //' @seealso [PhylogeneticForest$get_sampled_cell_CNAs()]
         .method("get_sampled_cell_mutations",
                 (Rcpp::DataFrame (PhylogeneticForest::*)() const)(
@@ -1361,55 +1357,12 @@ RCPP_MODULE(Mutations)
 //' @return The <code>[PhylogeneticForestNode]</code> object
 //'   associated to the cell whose identifier is `cell_id`.
 //' @examples
-//' # set the seed of the random number generator
-//' set.seed(0)
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
 //'
-//' # build a tissue simulation with epigenetic states "E1" and "E2"
-//' sim <- TissueSimulation(epigenetic_states = c("E1", "E2"))
-//'
-//' # add mutant "A" and set its species rates
-//' sim$add_mutant("A",
-//'                list(E1 = list(duplication = 0.2, death = 0.05, E2 = 0.01),
-//'                     E2 = list(duplication = 0.08, death = 0.01, E1 = 0.01)))
-//'
-//' # place a cell of species "A[E1]" in position (500,500)
-//' sim$place_cell("A[E1]", 500, 500)
-//'
-//' # run the simulation until "A[E2]" accounts for less than 1000 cells
-//' sim$run_up_to_size("A[E2]", 1000)
-//'
-//' # sample the tissue
-//' sim$sample_cells("Sample_1", c(475, 475), c(525, 525))
-//'
-//' # build the sample forest
-//' sample_forest <- sim$get_sample_forest()
-//'
-//' # initialize a mutation engine with the "demo" setup
-//' m_engine <- MutationEngine(setup_code = "demo")
-//'
-//' # add the genomic characterisation for the mutant "A"
-//' m_engine$add_mutant("A",
-//'                     list("E1" = c(SNV = 1e-7, indel = 1e-8),
-//'                          "E2" = c(SNV = 3e-7, CNA = 1e-11)),
-//'                     list(SNV("22", 10510210, "C", allele = 1),
-//'                          CNA("D", "22", 5010000, 200000,
-//'                              allele = 1)))
-//'
-//' # add the exposure
-//' m_engine$add_exposure(c(ID1 = 1, SBS1 = 0.5, SBS2 = 0.5))
-//'
-//' # build the phylogenetic forest
-//' phylo_forest <- m_engine$place_mutations(sample_forest, 1, 1)
-//'
-//' # get a node corresponding to a non-sampled cell
-//' node <- phylo_forest$get_nodes() %>%
-//'   dplyr::filter(is.na(sample)) %>%
-//'   dplyr::sample_n(1)
-//'
-//' # gets the SIDs in it
-//' phylo_forest$get_node(node$cell_id)
-//' @seealso [PhylogeneticForest$get_sampled_cell_mutations()],
-//'   [PhylogeneticForest$get_sampled_cell_CNAs()]
+//' # get the node corresponding to the cell having 2 as cell identifier
+//' forest$get_node(2)
+//' @seealso <code>[PhylogeneticForestNode]</code>
         .method("get_node", &PhylogeneticForest::get_node,
                 "Get node corresponding to a cell")
 
@@ -1424,7 +1377,12 @@ RCPP_MODULE(Mutations)
 //'   the chromosome), `allele` (in which the mutation occurs), `ref`,
 //'   `alt`, `cause`, `type` (i.e., either `"SNV"` or `"indel"`) and
 //'   `class` (i.e., `"germinal"`).
-//' @seealso [`vignette("mutations")`] for usage examples.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # get the first germline mutations
+//' forest$get_germline_mutations() %>% head()
         .method("get_germline_mutations", &PhylogeneticForest::get_germline_SIDs,
                 "Get the germinal SNVs and indels")
 
@@ -1437,6 +1395,14 @@ RCPP_MODULE(Mutations)
 //' @return A data frame reporting the name (column `chr`), the length
 //'   (column `length`), the initial absolute position (column `from`),
 //'   and the final absolute position (column `to`) of each chromosome.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # get absolute chromosome positions. Since this forest example was built
+//' # by using one single chromosome, the resulting data frame contains only
+//' # one line
+//' forest$get_absolute_chromosome_positions()
         .method("get_absolute_chromosome_positions",
                 &PhylogeneticForest::get_absolute_chromosome_positions,
                 "Get the absolute chromosome positions")
@@ -1460,7 +1426,17 @@ RCPP_MODULE(Mutations)
 //'   birth time smaller than or equal to `birth_threshold`. Each stick is
 //'   represented as the list of cell identifiers labelling the nodes in the
 //'   stick from the higher to the deeper in the forest.
-//' @seealso [SampleForest$get_sticks()] for usage examples.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # search for the forest sticks
+//' forest$get_sticks() %>% head()
+//'
+//' # search for the forest sticks whose first node corresponding cells have
+//' # birth times 40 time units at most
+//' forest$get_sticks(40)
+//' @seealso [SampleForest$get_sticks()]
         .method("get_sticks",
                 (std::list<std::list<CLONES::Mutants::CellId>> (PhylogeneticForest::*)(
                     const double) const)(&PhylogeneticForest::get_sticks),
@@ -1476,12 +1452,18 @@ RCPP_MODULE(Mutations)
 //'   evolution over time.
 //' @return A data frame reporting `time`, `signature`, `exposure` and,
 //'   `type`.
-//' @seealso [`vignette("mutations")`] for usage examples.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # get the exposures used to build the forest
+//' forest$get_exposures()
+//' @seealso [`vignette("mutations")`]
         .method("get_exposures", &PhylogeneticForest::get_timed_exposures,
                 "Get the timed exposure data frame")
 
 //' @name PhylogeneticForest$get_bulk_allelic_fragmentation
-//' @title Getting the bulk allelic fragmentation data frame
+//' @title Getting the genome bulk allelic fragmentation
 //' @description This method returns a data frame representing the bulk allelic
 //'   fragmentation of the genome.
 //' @param sample_name The name of the sample whose bulk allelic fragmentation
@@ -1493,7 +1475,13 @@ RCPP_MODULE(Mutations)
 //'   `minor`, respectively), and the ratio between the number of cells
 //'   exhibiting this allelic type and the total number of cells in the
 //'   sample.
-//' @seealso [`vignette("mutations")`] for usage examples.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # get the genome bulk allelic fragmentation
+//' forest$get_bulk_allelic_fragmentation()
+//' @seealso [`vignette("mutations")`]
         .method("get_bulk_allelic_fragmentation",
                 (Rcpp::List (PhylogeneticForest::*)(const std::string &)
                      const)(&PhylogeneticForest::get_bulk_allelic_fragmentation),
@@ -1513,7 +1501,13 @@ RCPP_MODULE(Mutations)
 //'   position (`begin`), the last base position (`end`), and the number
 //'   of copy of the major and minor alleles (`major` and `minor`,
 //'   respectively).
-//' @seealso [`vignette("mutations")`] for usage examples.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # print the first rows of the cell allelic fragmentation
+//' forest$get_cell_allelic_fragmentation() %>% head()
+//' @seealso [`vignette("mutations")`]
         .method("get_cell_allelic_fragmentation",
                 (Rcpp::List (PhylogeneticForest::*)()
                      const)(&PhylogeneticForest::get_cell_allelic_fragmentation),
@@ -1526,7 +1520,25 @@ RCPP_MODULE(Mutations)
 //' @param mutation A mutation being a SNV, a indel, or a CNA.
 //' @return The identifier of the cell in which a mutation
 //'   occurs for the first time.
-//' @seealso [`vignette("mutations")`] for usage examples.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # consider a mutation in the forest
+//' mutation <- Mutation("22", 30734921, ref = "CT", alt = "C")
+//' mutation 
+//'
+//' # get the identifiers of the cells in which the mutation arose, i.e.,
+//' # they have the mutation, but their parent have not
+//' cell_ids <- forest$get_first_occurrences(mutation)
+//' cell_ids
+//'
+//' # get the corresponding node
+//' node <- forest$get_node(cell_ids[[1]])
+//'
+//' # the mutation is among the arising mutation in the node
+//' node$arising_mutations
+//' @seealso [`vignette("mutations")`]
         .method("get_first_occurrences",
                 (Rcpp::List (PhylogeneticForest::*)(const SEXP &)
                      const)(&PhylogeneticForest::get_first_occurrence),
@@ -1537,6 +1549,12 @@ RCPP_MODULE(Mutations)
 //' @title Getting the reference genome path
 //' @description This method returns the reference genome path.
 //' @return The reference genome path.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # get the reference path
+//' forest$get_reference_path()
 //' @seealso [PhylogeneticForest$set_reference_path()]
         .method("get_reference_path",
                 &PhylogeneticForest::get_reference_path,
@@ -1651,6 +1669,18 @@ RCPP_MODULE(Mutations)
 //' @description This method returns the CIGAR code of the fragment with respect
 //'   to the reference genome.
 //' @return The CIGAR code of the fragment with respect to the reference genome.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # get the genome of the cell having 2 as the identifier
+//' genome <- forest$get_node(2)$get_genome()
+//'
+//' # get a fragment
+//' fragment <- get_fragment("22", 0, 16085625, 100)
+//'
+//' # get its CIGAR with respect to the reference genome
+//' fragment$get_CIGAR()
         .method("get_CIGAR", &GenomeFragment::get_CIGAR,
                 "Get the fragment CIGAR")
 
@@ -1658,6 +1688,18 @@ RCPP_MODULE(Mutations)
 //' @title The fragment sequence
 //' @description This property is the fragment sequence.
 //' @return The fragment sequence.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # get the genome of the cell having 2 as the identifier
+//' genome <- forest$get_node(2)$get_genome()
+//'
+//' # get a fragment
+//' fragment <- get_fragment("22", 0, 16085625, 100)
+//'
+//' # get the fragment sequence
+//' fragment$sequence
         .property("sequence", &GenomeFragment::get_sequence,
                   "The fragment sequence")
 
@@ -1667,6 +1709,18 @@ RCPP_MODULE(Mutations)
 //'   laying on the fragment.
 //' @return A data frame consisting of 7 columns: `chr`, `allele`, `from`, `ref`, `alt`,
 //'   `cause`, and `nature`. Each row represent a SID.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # get the genome of the cell having 2 as the identifier
+//' genome <- forest$get_node(2)$get_genome()
+//'
+//' # get a fragment
+//' fragment <- get_fragment("22", 0, 16085625, 100)
+//'
+//' # get the fragment mutations
+//' fragment$get_mutations()
         .method("get_mutations", &GenomeFragment::get_mutations,
                 "Get the mutations laying on the fragment")
 
@@ -1678,6 +1732,18 @@ RCPP_MODULE(Mutations)
 //'   of the chromosome from which the fragment comes, the position in the
 //'   chromosome of the fragment first base, and the size of the covered region,
 //'   respectively.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # get the genome of the cell having 2 as the identifier
+//' genome <- forest$get_node(2)$get_genome()
+//'
+//' # get a fragment
+//' fragment <- get_fragment("22", 0, 16085625, 100)
+//'
+//' # get the covered reference region
+//' fragment$get_covered_reference_region()
         .method("get_covered_reference_region",
                 &GenomeFragment::get_covered_reference_region,
                 "Get the covered region")
@@ -1698,6 +1764,15 @@ RCPP_MODULE(Mutations)
 //' @param with_germline A Boolean flag to add germline mutations (default: `TRUE`).
 //' @return A data frame consisting of 7 columns: `chr`, `allele`, `from`, `ref`, `alt`,
 //'   `cause`, and `nature`. Each row represent a SID.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # get the genome of the cell having 2 as the identifier
+//' genome <- forest$get_node(2)$get_genome()
+//'
+//' # get the first mutations in the genome
+//' genome$get_mutations() %>% head()
         .method("get_mutations",
             (Rcpp::DataFrame (GenomeMutations::*)() const)(&GenomeMutations::get_mutations),
             "Get the genome mutations")
@@ -1710,6 +1785,15 @@ RCPP_MODULE(Mutations)
 //' @description This method returns a data frame representing the CNAs in the genome.
 //' @return A data frame consisting of 8 columns: `chr`, `begin`, `end`, `type`,
 //'   `allele`, `src.allele`, `cause`, and `nature`. Each row represent a SID.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # get the genome of the cell having 2 as the identifier
+//' genome <- forest$get_node(2)$get_genome()
+//'
+//' # get the first CNAs in the genome
+//' genome$get_CNAs() %>% head()
         .method("get_CNAs",
             (Rcpp::DataFrame (GenomeMutations::*)() const)(&GenomeMutations::get_CNAs),
             "Get the genome CNAs")
@@ -1724,6 +1808,15 @@ RCPP_MODULE(Mutations)
 //'   The column `allele_src` stores the allele from which the allele of the
 //'   fragment is derived. The columns `from` and `size` maintain the first
 //'   position of the fragment in the wild-type allele and its size.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # get the genome of the cell having 2 as the identifier
+//' genome <- forest$get_node(2)$get_genome()
+//'
+//' # get the genome allele fragments
+//' genome$get_allele_fragments()
         .method("get_allele_fragments",
             (Rcpp::DataFrame (GenomeMutations::*)() const)(&GenomeMutations::get_allele_fragments),
             "Get the genome allele fragments")
@@ -1740,6 +1833,16 @@ RCPP_MODULE(Mutations)
 //'   representing the fragment in the current genome that aligns on
 //'   the region in chromosome `chromosome_name`, allele `allele` from
 //'   position `from` and whose size is `size`.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # get the genome of the cell having 2 as the identifier
+//' genome <- forest$get_node(2)$get_genome()
+//'
+//' # get the region in chromosome 22 allele 0 aligning to the
+//' # reference region from position 16085625 whose size is 100
+//' genome$get_region_aligned_to_ref("22", 0, 16085625, 100)
         .method("get_region_aligned_to_ref",
                 &GenomeMutations::region_aligning_on_reference,
             "Get information about the fragment aligning to the specified "
@@ -1754,6 +1857,18 @@ RCPP_MODULE(Mutations)
 //' @param size The size of the reference region.
 //' @return A list of allele identifiers. Each identifier in the list
 //'   corresponds to an allele containing the specified reference region.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # get the genome of the cell having 2 as the identifier
+//' genome <- forest$get_node(2)$get_genome()
+//'
+//' # the genome has 6 alleles
+//' genome
+//'
+//' # get the alleles in the genome which covers the specified region
+//' genome$get_alleles_covering_ref_region("22", 16085625, 100)
         .method("get_alleles_covering_ref_region",
                 &GenomeMutations::get_alleles_covering_ref_region,
             "Get the alleles covering a region of the reference genome")
@@ -1769,6 +1884,15 @@ RCPP_MODULE(Mutations)
 //' @param fragment_offset The offset of the reference fragment with respect
 //'   to the chromosome first position (optional).
 //' @return The genome fragment matching the specifications.
+//' @examples
+//' # use a phylogenetic forest example
+//' forest <- ProCESS::example("PhylogeneticForest")
+//'
+//' # get the genome of the cell having 2 as the identifier
+//' genome <- forest$get_node(2)$get_genome()
+//'
+//' # get a fragment
+//' get_fragment("22", 0, 16085625, 100)
 //' @seealso <code>[GenomeFragment]</code>
 //'   <code>[GenomeMutations$get_region_aligned_to_ref()]</code>
         .method("get_fragment",

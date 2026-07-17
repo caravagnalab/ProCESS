@@ -14,6 +14,29 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+example_list <- list(
+    "SampleForest" = list(
+        type = "SampleForest",
+        file = "p2_epi.sff",
+        description = paste("A sample forest with two mutations,",
+                            "two epigenetic states, and four samples.")),
+    "PhylogeneticForest" = list(
+        type = "PhylogeneticForest",
+        file = "p2_epi.pff",
+        description = paste("A phylogenetic forest with two mutations,",
+                            "two epigenetic states, and four samples.")),
+    "SampleForest - no epistates" = list(
+        type = "SampleForest",
+        file = "p2_no_epi.sff",
+        description = paste("A sample forest with two mutations,",
+                            "no epigenetic states, and four samples.")),
+    "PhylogeneticForest - no epistates" = list(
+        type = "PhylogeneticForest",
+        file = "p2_no_epi.pff",
+        description = paste("A phylogenetic forest with two mutations,",
+                            "no epigenetic states, and four samples."))
+)
+
 #' Get examples
 #'
 #' @description This function loads data structure examples.
@@ -35,17 +58,24 @@
 #' @seealso `available_examples()`
 #' @export
 example <- function(name) {
-  if (name == "SampleForest") {
-    forest_path <- system.file("extdata", "sample_forest_example.sff",
-                               package = "ProCESS")
+  index <- match(name, names(example_list))
 
-    return(load_sample_forest(forest_path, quiet = TRUE))
+  if (is.na(index)) {
+    stop(paste0("Unknown example \"", name, "\". Check the available ",
+                "examples using `available_examples()`."))
   }
-  if (name == "PhylogeneticForest") {
-    forest_path <- system.file("extdata", "phylo_forest_example.pff",
-                               package = "ProCESS")
 
-    forest <- load_phylogenetic_forest(forest_path, quiet = TRUE)
+  selected_example <- example_list[[index]]
+
+  file_path <- system.file("extdata", selected_example$file,
+                           package = "ProCESS")
+
+  if (selected_example$type == "SampleForest") {
+    return(load_sample_forest(file_path, quiet = TRUE))
+  }
+
+  if (selected_example$type == "PhylogeneticForest") {
+    forest <- load_phylogenetic_forest(file_path, quiet = TRUE)
 
     # we also need to set the reference path
     reference_path <- system.file("extdata", "example_ref.fasta",
@@ -56,7 +86,7 @@ example <- function(name) {
     return(forest)
   }
 
-  stop(paste0("Unknown example \"", name, "\"."))
+  stop(paste0("Unknown example type \"", selected_example$type, "\"."))
 }
 
 #' Get the available data structure examples
@@ -72,12 +102,14 @@ example <- function(name) {
 #' @seealso `example()`
 #' @export
 available_examples <- function() {
+  descriptions <- c()
+
+  for (example in example_list) {
+    descriptions <- c(descriptions, example$description)
+  }
+
   data.frame(
-    "name" = c("SampleForest", "PhylogeneticForest"),
-    "description" = c(paste0("The `SampleForest` object as build in ",
-                             "[vignette::sampling",
-                             "#two-populations-with-epigenetic-states]."),
-                      paste0("The `PhylogeneticForest` object as build ",
-                             "[vignette::mutations]."))
+    "name" = names(example_list),
+    "description" = descriptions
   )
 }
