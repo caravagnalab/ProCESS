@@ -98,5 +98,6 @@ void GenomeFragment::show() const
     Rcout << "chr" << CLONES::Mutations::GenomicPosition::chrtos(g_pos.chr_id)
           << "(" << static_cast<size_t>(allele_id) << ")["
           << from << "-"
-          << (from + CLONES::Mutations::GenomeFragment::size()) << "]";
+          << (from + CLONES::Mutations::GenomeFragment::size()) << "]"
+          << std::endl;
 }
