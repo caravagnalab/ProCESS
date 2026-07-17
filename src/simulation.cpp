@@ -883,10 +883,51 @@ void TissueSimulation::add_mutant(const std::string &mutant_name, const Rcpp::Li
     set_rates(mutant_name, rates);
 }
 
+Rcpp::List char_vector_to_list(Rcpp::NumericVector orig)
+{
+    Rcpp::List L(orig.size());
+    for(auto i = 0; i < orig.size(); ++i) {
+        L[i] = orig[i];
+    }
+
+    L.names() = orig.names();
+
+    return L;
+}
+
 void TissueSimulation::add_mutant(const SEXP &mutant_name, const SEXP& rates)
 {
     const auto C_mutant_name = FromSEXP::get<std::string>(mutant_name, "1st parameter", "string");
-    const auto C_rates = FromSEXP::get<Rcpp::List>(rates, "2nd parameter", "list");
+
+    bool valid{false};
+
+    Rcpp::List C_rates;
+    if (Rcpp::is<Rcpp::NumericVector>(rates)) {
+        auto nv = Rcpp::as<Rcpp::NumericVector>(rates);
+        if (nv.hasAttribute("names")) {
+            valid = true;
+            C_rates = char_vector_to_list(nv);
+        }
+
+        Rcpp::CharacterVector cv = C_rates.names();
+
+        for (auto i = 0; i < cv.size(); ++i) {
+            if (cv[i] == "") {
+                Rcpp::stop("If the second parameter is a numeric vector,"
+                           "all its values must have a name.");
+            }
+        }
+    } else {
+        if (Rcpp::is<Rcpp::List>(rates)) {
+            valid = true;   
+            C_rates = Rcpp::as<Rcpp::List>(rates);
+        }
+    }
+
+    if (!valid) {
+        Rcpp::stop("The 2nd parameter must be either a named list "
+                   "or a named vector.");
+    }
 
     add_mutant(C_mutant_name);
 
