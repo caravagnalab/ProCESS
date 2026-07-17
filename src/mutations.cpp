@@ -1745,6 +1745,19 @@ RCPP_MODULE(Mutations)
             "Get information about the fragment aligning to the specified "
             "reference region")
 
+//' @name GenomeMutations$get_alleles_covering_ref_region
+//' @title Getting the alleles covering a reference region
+//' @description This method returns the identifiers of the alleles that
+//'   containing the specified region of the reference genome
+//' @param chromosome_name The name of the chromosome of the reference region.
+//' @param from The first position in the chromosome of the reference region.
+//' @param size The size of the reference region.
+//' @return A list of allele identifiers. Each identifier in the list
+//'   corresponds to an allele containing the specified reference region.
+        .method("get_alleles_covering_ref_region",
+                &GenomeMutations::get_alleles_covering_ref_region,
+            "Get the alleles covering a region of the reference genome")
+
 //' @name GenomeMutations$get_fragment
 //' @title Getting genome fragment
 //' @description This method returns a fragment of the genome.
