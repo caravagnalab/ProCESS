@@ -52,6 +52,11 @@ class SampleForest : public CLONES::Mutants::DescendantForest
             static_cast<const CLONES::Mutants::DescendantForest &>(*this));
     }
 
+    inline const_node get_node(const CLONES::Mutants::CellId &cell_id) const
+    {
+        return SampleForest::const_node(*this, cell_id);
+    }
+
     Rcpp::List get_samples_info() const;
 
     inline Rcpp::List get_species_info() const

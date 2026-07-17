@@ -684,7 +684,7 @@ RCPP_MODULE(Mutants)
 //' cells <- sim$get_cells()
 //'
 //' # print some of them
-//' cells %>% head()
+//' head(cells)
 //'
 //' # let us define a function to print some statistics
 //' print_statistics <- function(cells) {
@@ -2062,10 +2062,31 @@ RCPP_MODULE(Mutants)
 //' # use a sample forest example
 //' forest <- ProCESS::example("SampleForest")
 //'
-//' # print the first five nodes
-//' forest$get_nodes() %>% head(5)
+//' # get the data frame of the nodes
+//' nodes <- forest$get_nodes()
+//'
+//' # print the first lines of the data frame
+//' head(nodes)
         .method("get_nodes", (List (SampleForest::*)() const)(&SampleForest::get_nodes),
                 "Get the nodes of the forest")
+
+//' @name SampleForest$get_node
+//' @title Getting a node of the forest
+//' @description This method returns the node of the forest
+//' @details This method returns the node of the forest whose
+//'    corresponding cell has a specified identifier.
+//' @param cell_id The identifier of the cell whose node is aimed.
+//' @return The <code>[SampleForestNode]</code> object
+//'   associated to the cell whose identifier is `cell_id`.
+//' @examples
+//' # use a sample forest example
+//' forest <- ProCESS::example("SampleForest")
+//'
+//' # get the node corresponding to the cell having 2 as cell identifier
+//' forest$get_node(2)
+//' @seealso <code>[SampleForestNode]</code>
+        .method("get_node", &SampleForest::get_node,
+                "Get node corresponding to a cell")
 
 //' @name SampleForest$get_coalescent_cells
 //' @title Retrieving the most recent common ancestors
@@ -2188,7 +2209,7 @@ RCPP_MODULE(Mutants)
 //' forest <- ProCESS::example("SampleForest")
 //'
 //' # search for the forest sticks
-//' forest$get_sticks() %>% head()
+//' head(forest$get_sticks())
 //'
 //' # search for the forest sticks whose first node corresponding cells have
 //' # birth times 40 time units at most
