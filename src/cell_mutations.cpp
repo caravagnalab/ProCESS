@@ -151,7 +151,7 @@ Rcpp::List
 GenomeMutations::region_aligning_on_reference(const std::string& chromosome_name,
                                               const size_t allele_id,
                                               const size_t from,
-                                              const size_t size) const
+                                              size_t size) const
 {
     using namespace CLONES;
     using namespace CLONES::Mutations;
@@ -162,7 +162,12 @@ GenomeMutations::region_aligning_on_reference(const std::string& chromosome_name
 
     GenomicPosition rbegin{chr_id, static_cast<ChrPosition>(from)};
     auto mutation_it = f_mutations.lower_bound(rbegin);
-    rbegin.position = get_reference_alignment_begin(f_mutations, mutation_it, rbegin.position);
+    const auto new_pos = get_reference_alignment_begin(f_mutations, mutation_it, rbegin.position);
+
+    const auto delta = new_pos - rbegin.position;
+    size = (size>delta?size-delta:0);
+
+    rbegin.position = new_pos;
 
     GenomicRegion::Length total_size{static_cast<GenomicRegion::Length>(size)};
 

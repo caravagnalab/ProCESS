@@ -41,7 +41,7 @@ public:
     Rcpp::List region_aligning_on_reference(const std::string& chromosome_name,
                                             const size_t allele_id,
                                             const size_t from,
-                                            const size_t size) const;
+                                            size_t size) const;
 
     inline Rcpp::DataFrame get_mutations() const
     {
