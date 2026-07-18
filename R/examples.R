@@ -34,7 +34,12 @@ example_list <- list(
         type = "PhylogeneticForest",
         file = "p2_no_epi.pff",
         description = paste("A phylogenetic forest with two mutations,",
-                            "no epigenetic states, and four samples."))
+                            "no epigenetic states, and four samples.")),
+    "Sequencing results" = list(
+        type = "sequencing results",
+        file = "s_p2_epi.rds",
+        description = paste("The result of a 10x sequencing of the",
+                            "example \"PhylogeneticForest\"."))
 )
 
 #' Get examples
@@ -84,6 +89,10 @@ example <- function(name) {
     forest$set_reference_path(reference_path)
 
     return(forest)
+  }
+
+  if (selected_example$type == "sequencing results") {
+    return(readRDS(file_path))
   }
 
   stop(paste0("Unknown example type \"", selected_example$type, "\"."))
