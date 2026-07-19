@@ -9,7 +9,7 @@ of the original samples."><meta property="og:image" content="https://caravagnala
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,9 +64,27 @@ as leaves of the new forest</p></dd>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="SampleForest-cash-get_subforest_for.html">SampleForest$get_subforest_for()</a></code> for usage examples.</p></div>
+    <div class="dont-index"><p><code><a href="SampleForest-cash-get_subforest_for.html">SampleForest$get_subforest_for()</a></code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># use a phylogenetic forest example</span></span></span>
+<span class="r-in"><span><span class="va">forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="example.html">example</a></span><span class="op">(</span><span class="st">"PhylogeneticForest"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># get the subforest for sample "S_1_2"</span></span></span>
+<span class="r-in"><span><span class="va">forest</span><span class="op">$</span><span class="fu">get_subforest_for</span><span class="op">(</span><span class="st">"S_1_2"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> PhylogeneticForest</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   # of trees: 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   # of nodes: 880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   # of leaves: 119</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   samples: {"S_1_2"}</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   # of emerged SNVs and indels: 2050</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   # of emerged CNAs: 5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

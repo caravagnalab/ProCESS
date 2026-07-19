@@ -32,4 +32,51 @@ the stick.
 ## See also
 
 [`SampleForest$get_sticks()`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest-cash-get_sticks.md)
-for usage examples.
+
+## Examples
+
+``` r
+# use a phylogenetic forest example
+forest <- example("PhylogeneticForest")
+
+# search for the forest sticks
+head(forest$get_sticks())
+#> [[1]]
+#> [1] 156 306
+#> 
+#> [[2]]
+#> [1] 102 156
+#> 
+#> [[3]]
+#> [1] 1848 1924
+#> 
+#> [[4]]
+#> [1] 18904 19052
+#> 
+#> [[5]]
+#>  [1]   6615   7064   7274   7282   7606   7855   8339   8406  10019  12170
+#> [11]  15672  55124  68994 103049 109325 118301 187675 196109 206870
+#> 
+#> [[6]]
+#> [1]  6615  7065  7184  9859 11810 16729 17848 18743 18904
+#> 
+
+# search for the forest sticks whose first node corresponding cells have
+# birth times 40 time units at most
+forest$get_sticks(40)
+#> [[1]]
+#> [1]  8 10 13 21 36 49 68
+#> 
+#> [[2]]
+#> [1]  8 11 17 22
+#> 
+#> [[3]]
+#> [1] 6 8
+#> 
+#> [[4]]
+#> [1] 1 2 6
+#> 
+#> [[5]]
+#> [1]  1  3  5 18 34
+#> 
+```

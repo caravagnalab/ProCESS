@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +65,7 @@
 
         <dt>
 
-          <code><a href="get_label_tour.html">get_label_tour()</a></code>
+          <code><a href="get_node_tour.html">get_node_tour()</a></code>
 
         </dt>
         <dd>Labelling forest nodes</dd>
@@ -79,10 +79,24 @@
 
         <dt>
 
+          <code><a href="load_forest.html">load_forest()</a></code>
+
+        </dt>
+        <dd>Loading forests</dd>
+
+        <dt>
+
           <code><a href="SampleForest-cash-get_coalescent_cells.html">SampleForest$get_coalescent_cells</a></code>
 
         </dt>
         <dd>Retrieving the most recent common ancestors</dd>
+
+        <dt>
+
+          <code><a href="SampleForest-cash-get_node.html">SampleForest$get_node</a></code>
+
+        </dt>
+        <dd>Getting a node of the forest</dd>
 
         <dt>
 
@@ -135,10 +149,80 @@
 
         <dt>
 
-          <code><a href="SampleForestLabelTour.html">SampleForestLabelTour</a></code>
+          <code><a href="SampleForestNode-cash-birth_time.html">SampleForestNode$birth_time</a></code>
 
         </dt>
-        <dd>An iterator class over sample forest labels</dd>
+        <dd>Getting the corresponding cell birth time</dd>
+
+        <dt>
+
+          <code><a href="SampleForestNode-cash-cell_id.html">SampleForestNode$cell_id</a></code>
+
+        </dt>
+        <dd>Getting the identifier of the associated cell</dd>
+
+        <dt>
+
+          <code><a href="SampleForestNode-cash-children.html">SampleForestNode$children</a></code>
+
+        </dt>
+        <dd>Getting the children of the node</dd>
+
+        <dt>
+
+          <code><a href="SampleForestNode-cash-death_time.html">SampleForestNode$death_time</a></code>
+
+        </dt>
+        <dd>Getting the corresponding cell death time</dd>
+
+        <dt>
+
+          <code><a href="SampleForestNode-cash-epistate_name.html">SampleForestNode$epistate_name</a></code>
+
+        </dt>
+        <dd>Getting the name of the corresponding cell epigenetic state</dd>
+
+        <dt>
+
+          <code><a href="SampleForestNode-cash-is_leaf.html">SampleForestNode$is_leaf</a></code>
+
+        </dt>
+        <dd>Checking whether the node is a leaf</dd>
+
+        <dt>
+
+          <code><a href="SampleForestNode-cash-is_root.html">SampleForestNode$is_root</a></code>
+
+        </dt>
+        <dd>Checking whether the node is a root</dd>
+
+        <dt>
+
+          <code><a href="SampleForestNode-cash-mutant_name.html">SampleForestNode$mutant_name</a></code>
+
+        </dt>
+        <dd>Getting the name of the corresponding cell mutant</dd>
+
+        <dt>
+
+          <code><a href="SampleForestNode-cash-parent.html">SampleForestNode$parent</a></code>
+
+        </dt>
+        <dd>Getting the parent node</dd>
+
+        <dt>
+
+          <code><a href="SampleForestNode-cash-sample_name.html">SampleForestNode$sample_name</a></code>
+
+        </dt>
+        <dd>Getting the corresponding cell sample</dd>
+
+        <dt>
+
+          <code><a href="SampleForestNode-cash-species_name.html">SampleForestNode$species_name</a></code>
+
+        </dt>
+        <dd>Getting the name of the corresponding cell species</dd>
 
         <dt>
 
@@ -146,6 +230,13 @@
 
         </dt>
         <dd>The node of a sample forest</dd>
+
+        <dt>
+
+          <code><a href="SampleForestNodeTour.html">SampleForestNodeTour</a></code>
+
+        </dt>
+        <dd>An iterator class over sample forest nodes</dd>
 
         <dt>
 
@@ -592,10 +683,10 @@
 
         <dt>
 
-          <code><a href="GenomeFragment-cash-get_sequence.html">GenomeFragment$get_sequence</a></code>
+          <code><a href="GenomeFragment-cash-sequence.html">GenomeFragment$sequence</a></code>
 
         </dt>
-        <dd>Getting the fragment sequence</dd>
+        <dd>The fragment sequence</dd>
 
         <dt>
 
@@ -606,10 +697,24 @@
 
         <dt>
 
+          <code><a href="GenomeMutations-cash-get_CNAs.html">GenomeMutations$get_CNAs</a></code>
+
+        </dt>
+        <dd>Getting genome mutations</dd>
+
+        <dt>
+
           <code><a href="GenomeMutations-cash-get_allele_fragments.html">GenomeMutations$get_allele_fragments</a></code>
 
         </dt>
         <dd>Getting genome allele fragments</dd>
+
+        <dt>
+
+          <code><a href="GenomeMutations-cash-get_alleles_covering_ref_region.html">GenomeMutations$get_alleles_covering_ref_region</a></code>
+
+        </dt>
+        <dd>Getting the alleles covering a reference region</dd>
 
         <dt>
 
@@ -620,17 +725,17 @@
 
         <dt>
 
-          <code><a href="GenomeMutations-cash-get_fragment_from_ref.html">GenomeMutations$get_fragment_from_ref</a></code>
-
-        </dt>
-        <dd>Getting genome fragment</dd>
-
-        <dt>
-
           <code><a href="GenomeMutations-cash-get_mutations.html">GenomeMutations$get_mutations</a></code>
 
         </dt>
         <dd>Getting genome mutations</dd>
+
+        <dt>
+
+          <code><a href="GenomeMutations-cash-get_region_aligned_to_ref.html">GenomeMutations$get_region_aligned_to_ref</a></code>
+
+        </dt>
+        <dd>Getting information about the fragment aligning to the reference</dd>
 
         <dt>
 
@@ -645,13 +750,6 @@
 
         </dt>
         <dd>Getting the tumour types available in a setup</dd>
-
-        <dt>
-
-          <code><a href="get_genome_tour.html">get_genome_tour()</a></code>
-
-        </dt>
-        <dd>Getting forest cell mutations</dd>
 
         <dt>
 
@@ -840,14 +938,7 @@
           <code><a href="PhylogeneticForest-cash-get_bulk_allelic_fragmentation.html">PhylogeneticForest$get_bulk_allelic_fragmentation</a></code>
 
         </dt>
-        <dd>Getting the bulk allelic fragmentation data frame</dd>
-
-        <dt>
-
-          <code><a href="PhylogeneticForest-cash-get_cell_CNAs.html">PhylogeneticForest$get_cell_CNAs</a></code>
-
-        </dt>
-        <dd>Getting the CNAs of a cell in the samples' phylogeny</dd>
+        <dd>Getting the genome bulk allelic fragmentation</dd>
 
         <dt>
 
@@ -855,13 +946,6 @@
 
         </dt>
         <dd>Getting the cell allelic fragmentation data frame</dd>
-
-        <dt>
-
-          <code><a href="PhylogeneticForest-cash-get_cell_mutations.html">PhylogeneticForest$get_cell_mutations</a></code>
-
-        </dt>
-        <dd>Getting the mutations of a cell in the samples' phylogeny</dd>
 
         <dt>
 
@@ -911,6 +995,13 @@
 
         </dt>
         <dd>Getting the statistics about mutations on each node</dd>
+
+        <dt>
+
+          <code><a href="PhylogeneticForest-cash-get_node.html">PhylogeneticForest$get_node</a></code>
+
+        </dt>
+        <dd>Getting a node of the forest</dd>
 
         <dt>
 
@@ -998,10 +1089,94 @@
 
         <dt>
 
-          <code><a href="PhylogeneticForestLabelTour.html">PhylogeneticForestLabelTour</a></code>
+          <code><a href="PhylogeneticForestNode-cash-arising_mutations.html">PhylogeneticForestNode$arising_mutations</a></code>
 
         </dt>
-        <dd>An iterator class over sample forest labels</dd>
+        <dd>Getting the mutations arising in the corresponding cell</dd>
+
+        <dt>
+
+          <code><a href="PhylogeneticForestNode-cash-birth_time.html">PhylogeneticForestNode$birth_time</a></code>
+
+        </dt>
+        <dd>Getting the corresponding cell birth time</dd>
+
+        <dt>
+
+          <code><a href="PhylogeneticForestNode-cash-cell_id.html">PhylogeneticForestNode$cell_id</a></code>
+
+        </dt>
+        <dd>Getting the identifier of the associated cell</dd>
+
+        <dt>
+
+          <code><a href="PhylogeneticForestNode-cash-children.html">PhylogeneticForestNode$children</a></code>
+
+        </dt>
+        <dd>Getting the children of the node</dd>
+
+        <dt>
+
+          <code><a href="PhylogeneticForestNode-cash-death_time.html">PhylogeneticForestNode$death_time</a></code>
+
+        </dt>
+        <dd>Getting the corresponding cell death time</dd>
+
+        <dt>
+
+          <code><a href="PhylogeneticForestNode-cash-epistate_name.html">PhylogeneticForestNode$epistate_name</a></code>
+
+        </dt>
+        <dd>Getting the name of the corresponding cell epigenetic state</dd>
+
+        <dt>
+
+          <code><a href="PhylogeneticForestNode-cash-get_genome.html">PhylogeneticForestNode$get_genome</a></code>
+
+        </dt>
+        <dd>Getting the corresponding cell genome</dd>
+
+        <dt>
+
+          <code><a href="PhylogeneticForestNode-cash-is_leaf.html">PhylogeneticForestNode$is_leaf</a></code>
+
+        </dt>
+        <dd>Checking whether the node is a leaf</dd>
+
+        <dt>
+
+          <code><a href="PhylogeneticForestNode-cash-is_root.html">PhylogeneticForestNode$is_root</a></code>
+
+        </dt>
+        <dd>Checking whether the node is a root</dd>
+
+        <dt>
+
+          <code><a href="PhylogeneticForestNode-cash-mutant_name.html">PhylogeneticForestNode$mutant_name</a></code>
+
+        </dt>
+        <dd>Getting the name of the corresponding cell mutant</dd>
+
+        <dt>
+
+          <code><a href="PhylogeneticForestNode-cash-parent.html">PhylogeneticForestNode$parent</a></code>
+
+        </dt>
+        <dd>Getting the parent node</dd>
+
+        <dt>
+
+          <code><a href="PhylogeneticForestNode-cash-sample_name.html">PhylogeneticForestNode$sample_name</a></code>
+
+        </dt>
+        <dd>Getting the corresponding cell sample</dd>
+
+        <dt>
+
+          <code><a href="PhylogeneticForestNode-cash-species_name.html">PhylogeneticForestNode$species_name</a></code>
+
+        </dt>
+        <dd>Getting the name of the corresponding cell species</dd>
 
         <dt>
 
@@ -1009,6 +1184,13 @@
 
         </dt>
         <dd>The node of a phylogenetic forest</dd>
+
+        <dt>
+
+          <code><a href="PhylogeneticForestNodeTour.html">PhylogeneticForestNodeTour</a></code>
+
+        </dt>
+        <dd>An iterator class over phylogenetic forest nodes</dd>
 
         <dt>
 
@@ -1126,48 +1308,6 @@
 
         <dt>
 
-          <code><a href="SampledCell-cash-birth_time.html">SampledCell$birth_time</a></code>
-
-        </dt>
-        <dd>Getting the sampled cell birth time</dd>
-
-        <dt>
-
-          <code><a href="SampledCell-cash-epistate.html">SampledCell$epistate</a></code>
-
-        </dt>
-        <dd>Getting the sampled cell epigenetic state</dd>
-
-        <dt>
-
-          <code><a href="SampledCell-cash-mutant.html">SampledCell$mutant</a></code>
-
-        </dt>
-        <dd>Getting the sampled cell mutant</dd>
-
-        <dt>
-
-          <code><a href="SampledCell-cash-mutations.html">SampledCell$mutations</a></code>
-
-        </dt>
-        <dd>Getting the sampled cell mutations</dd>
-
-        <dt>
-
-          <code><a href="SampledCell-cash-species.html">SampledCell$species</a></code>
-
-        </dt>
-        <dd>Getting the sampled cell species</dd>
-
-        <dt>
-
-          <code><a href="SampledCell.html">SampledCell</a></code>
-
-        </dt>
-        <dd>A sampled cell</dd>
-
-        <dt>
-
           <code><a href="simulate_seq.html">simulate_seq</a></code>
 
         </dt>
@@ -1216,6 +1356,29 @@
 
         </dt>
         <dd>Represent a simulation quantity</dd>
+      </dl></div><div class="section level2">
+      <h2 id="data-structure-examples">Data Structure Examples<a class="anchor" aria-label="anchor" href="#data-structure-examples"></a></h2>
+
+      <div class="section-desc"><p>Methods providing data structure examples</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="available_examples.html">available_examples()</a></code>
+
+        </dt>
+        <dd>Get the available data structure examples</dd>
+
+        <dt>
+
+          <code><a href="example.html">example()</a></code>
+
+        </dt>
+        <dd>Get examples</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

@@ -66,14 +66,14 @@ sim$place_cell("A[E1]", 500, 500)
 # run the simulation up to time 70
 sim$run_up_to_time(70)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
 
 
 # collect all cells in the tissue
 cells <- sim$get_cells()
 
 # print some of them
-cells %>% head()
+head(cells)
 #>   cell_id mutant epistate position_x position_y
 #> 1    8079      B       E1        473        499
 #> 2    8031      B       E1        473        500

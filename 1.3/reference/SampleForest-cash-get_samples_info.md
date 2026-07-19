@@ -22,35 +22,15 @@ for usage examples,
 ## Examples
 
 ``` r
-# set the seed of the random number generator
-set.seed(0)
+# use a sample forest example
+forest <- example("SampleForest")
 
-# create a simulation
-sim <- TissueSimulation()
-
-# add the mutant "A"
-sim$add_mutant("A", c(duplication = 0.2, death = 0.01))
-
-# place a cell in the tissue
-sim$place_cell("A", 500, 500)
-
-# run the simulation until "A" has less than 50000 cells
-sim$run_up_to_size("A", 50000)
-#> 
- [█████████████████████████████████████---] 90% [00m:00s] Cells: 45270                                        
-
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
-
-
-# sample the region [450,500]x[475,550]
-sim$sample_cells("S1", lower_corner = c(450, 500), upper_corner = c(475, 550))
-
-# build the sample forest
-forest <- sim$get_sample_forest()
-
-# get information about the sampled whose cells
-# are the forest leaves, i.e, S1 and S2
+# get information about the samples whose cells
+# are the forest leaves
 forest$get_samples_info()
-#>   name id xmin ymin xmax ymax tumour_cells tumour_cells_in_bbox     time
-#> 1   S1  7  450  500  475  550         1321                 1321 294.3848
+#>    name id xmin ymin xmax ymax tumour_cells tumour_cells_in_bbox     time
+#> 1 S_1_1  0  480  480  490  490          120                  120 552.3795
+#> 2 S_1_2  1  500  500  510  510          119                  119 552.3795
+#> 3 S_2_1  2  370  551  394  575          613                  613 741.0625
+#> 4 S_2_2  3  420  276  444  300          572                  572 741.0625
 ```

@@ -1,9 +1,9 @@
 # The node of a sample forest
 
 This class represents the nodes of a sample forest. It does not have a
-user constructor because its objects are produced by ProCESS and passed
-to the labelling function of
-[`get_label_tour()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_label_tour.md).
+user constructor and its objects are produced by ProCESS and passed to
+the labelling function of
+[`get_node_tour()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_node_tour.md).
 
 ## Fields
 
@@ -27,6 +27,10 @@ to the labelling function of
 
   A flag that is set to TRUE if and only if the node is a leaf.
 
+- `sample_name`:
+
+  The name of the sample that collected the associated cell.
+
 - `birth_time`:
 
   The birth time of the cell associated to the node.
@@ -47,6 +51,10 @@ to the labelling function of
 
   The name of the associated cell's species.
 
+- `epistate_name`:
+
+  The name of the associated cell's epigenetic state.
+
 - `mutant_id`:
 
   The identifier of the associated cell's mutant.
@@ -57,6 +65,7 @@ to the labelling function of
 
 ## See also
 
-[`get_label_tour()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_label_tour.md),
+[`get_node_tour()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_node_tour.md),
+[`SampleForestNodeTour`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNodeTour.md),
 [`PhylogeneticForestNode`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode.md),
-[`vignette("node_labelling")`](https://caravagnalab.github.io/ProCESS/1.3/articles/node_labelling.md)
+`vignette("node_labelling")`

@@ -47,7 +47,7 @@ plot_BAF(
 
   A function filtering mutations from the input data (default: a
   function filtering out "germinal" mutations, e.g.,
-  `function(x) x %>% dplyr::filter(classes != "germinal")`).
+  `function(x) x %>% dplyr::filter(nature != "germinal")`).
 
 - driver_mutations:
 
@@ -83,108 +83,28 @@ A ggplot2 object showing the BAF distribution across the genome.
 ## Examples
 
 ``` r
-# set the seed of the random number generator
-set.seed(0)
-
-sim <- TissueSimulation()
-sim$add_mutant("A", c(duplication = 0.2))
-sim$place_cell("A", 500, 500)
-sim$run_up_to_time(50)
-#> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
-
-
-# sampling tissue
-n_w <- n_h <- 10
-ncells <- 0.8 * n_w * n_h
-bbox <- sim$search_sample(c("A" = ncells), n_w, n_h)
-sim$sample_cells("Sample_A", bbox$lower_corner, bbox$upper_corner)
-
-# adding second mutant
-sim$add_mutant("B", c(duplication = 0.3))
-sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
-sim$run_up_to_time(300)
-#> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
-
-
-# sampling tissue again
-bbox <- sim$search_sample(c("B" = ncells), n_w, n_h)
-sim$sample_cells("Sample_B", bbox$lower_corner, bbox$upper_corner)
-
-forest <- sim$get_sample_forest()
-
-# placing mutations
-m_engine <- MutationEngine(setup_code = "demo")
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading context index                                
-
- [████████████████████████████████████████] 100% [00m:00s] Context index loaded                               
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading RS index                                     
-
- [█████████████---------------------------] 30% [00m:01s] Loading RS index                                    
-
- [█████████████████████████---------------] 61% [00m:02s] Loading RS index                                    
-
- [████████████████████████████████████----] 89% [00m:03s] Loading RS index                                    
-
- [████████████████████████████████████████] 100% [00m:03s] RS index loaded                                    
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading germline                                     
-
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                    
-
-
-m_engine$add_mutant(mutant_name="A", passenger_rates = c(SNV = 5e-8),
-                    drivers = list(SNV("22", 46510210, "C", "A", allele = 1),
-                                   "DGCR8 P26L"))
-#> 
- [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs                                  
-
- [████████████████████████████████████████] 100% [00m:00s] "A"'s SIDs validated                               
-
-m_engine$add_mutant(mutant_name="B", passenger_rates = c(SNV = 5e-9),
-                    drivers = list(list("DGCR8 A18V", allele = 1)))
-#> 
- [█---------------------------------------] 0% [00m:00s] Retrieving "B" SIDs                                  
-
- [████████████████████████████████████████] 100% [00m:00s] "B"'s SIDs validated                               
-
-m_engine$add_exposure(c(SBS1 = 0.2, SBS5 = 0.8))
-
-phylo_forest <- m_engine$place_mutations(forest, 10, 10)
-#> 
- [█---------------------------------------] 0% [00m:00s] Placing mutations                                    
-
- [████████████████████████████████████████] 100% [00m:00s] Mutations placed                                   
-
-
-# simulate sequencing and avoid progress bar
-seq_results <- simulate_seq(phylo_forest, coverage = 10,
-                            write_SAM = FALSE, quiet = TRUE)
+# use a sequencing result example
+seq_results <- example("Sequencing results")
 
 # plotting the BAF over all samples
 plot_BAF(seq_results)
 
 
-# plotting the BAF for Sample_B only
-plot_BAF(seq_results, samples = c("Sample_B"))
+# plotting the BAF for sample S_2_2 only
+plot_BAF(seq_results, samples = c("S_2_2"))
 
 
-# plotting the BAF for Sample_B with labels
-plot_BAF(seq_results, samples = "Sample_B",
-         labels = seq_results$mutations["classes"])
+# plotting the BAF for S_2_2 with labels
+plot_BAF(seq_results, samples = "S_2_2",
+         labels = seq_results$mutations["nature"])
 
 
 # let us define a function to filter germinal and pre-neoplastic
 # from the input data
 library(dplyr)
 filter_data <- function(data) {
-  data %>% dplyr::filter(!classes %in% list("germinal",
-                                            "pre-neoplastic"))
+  data %>% dplyr::filter(!nature %in% list("germinal",
+                                           "pre-neoplastic"))
 }
 
 # plotting the BAF without germinal and pre-neoplastic
@@ -196,12 +116,10 @@ plot_BAF(seq_results, mutation_filter = filter_data)
 
 # filter germinal mutations
 f_seq <- seq_results$mutations %>%
-   dplyr::filter(classes != "germinal")
+   dplyr::filter(nature != "germinal")
 
 # plotting the BAF
 plot_BAF(f_seq)
 #> Warning: Missing driver mutations. Disabling driver mutation labelling.
 
-
-unlink('demo', recursive = T)
 ```

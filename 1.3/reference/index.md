@@ -8,12 +8,16 @@ Tissue simulation classes and methods
   : Annotate a plot of cell divisions
 - [`bbox_sampler()`](https://caravagnalab.github.io/ProCESS/1.3/reference/bbox_sampler.md)
   : Bounding box sampler
-- [`get_label_tour()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_label_tour.md)
+- [`get_node_tour()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_node_tour.md)
   : Labelling forest nodes
 - [`load_sample_forest()`](https://caravagnalab.github.io/ProCESS/1.3/reference/load_sample_forest.md)
   : Loading sample forests
+- [`load_forest()`](https://caravagnalab.github.io/ProCESS/1.3/reference/load_forest.md)
+  : Loading forests
 - [`SampleForest$get_coalescent_cells`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest-cash-get_coalescent_cells.md)
   : Retrieving the most recent common ancestors
+- [`SampleForest$get_node`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest-cash-get_node.md)
+  : Getting a node of the forest
 - [`SampleForest$get_nodes`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest-cash-get_nodes.md)
   : Getting forest nodes
 - [`SampleForest$get_samples_info`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest-cash-get_samples_info.md)
@@ -28,10 +32,32 @@ Tissue simulation classes and methods
   : Saving sample forests
 - [`SampleForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest.md)
   : The sample cell ancestor forest
-- [`SampleForestLabelTour`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestLabelTour.md)
-  : An iterator class over sample forest labels
+- [`SampleForestNode$birth_time`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-birth_time.md)
+  : Getting the corresponding cell birth time
+- [`SampleForestNode$cell_id`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-cell_id.md)
+  : Getting the identifier of the associated cell
+- [`SampleForestNode$children`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-children.md)
+  : Getting the children of the node
+- [`SampleForestNode$death_time`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-death_time.md)
+  : Getting the corresponding cell death time
+- [`SampleForestNode$epistate_name`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-epistate_name.md)
+  : Getting the name of the corresponding cell epigenetic state
+- [`SampleForestNode$is_leaf`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-is_leaf.md)
+  : Checking whether the node is a leaf
+- [`SampleForestNode$is_root`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-is_root.md)
+  : Checking whether the node is a root
+- [`SampleForestNode$mutant_name`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-mutant_name.md)
+  : Getting the name of the corresponding cell mutant
+- [`SampleForestNode$parent`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-parent.md)
+  : Getting the parent node
+- [`SampleForestNode$sample_name`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-sample_name.md)
+  : Getting the corresponding cell sample
+- [`SampleForestNode$species_name`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-species_name.md)
+  : Getting the name of the corresponding cell species
 - [`SampleForestNode`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode.md)
   : The node of a sample forest
+- [`SampleForestNodeTour`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNodeTour.md)
+  : An iterator class over sample forest nodes
 - [`TissueRectangle$lower_corner`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueRectangle-cash-lower_corner.md)
   : The tissue rectangle lower corner
 - [`TissueRectangle$new`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueRectangle-cash-new.md)
@@ -161,24 +187,26 @@ Mutation simulation classes and methods
   : Getting the reference region covered by the fragment
 - [`GenomeFragment$get_mutations`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeFragment-cash-get_mutations.md)
   : Getting the mutations laying on a fragment
-- [`GenomeFragment$get_sequence`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeFragment-cash-get_sequence.md)
-  : Getting the fragment sequence
+- [`GenomeFragment$sequence`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeFragment-cash-sequence.md)
+  : The fragment sequence
 - [`GenomeFragment`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeFragment.md)
   : Representing a genome fragment
+- [`GenomeMutations$get_CNAs`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations-cash-get_CNAs.md)
+  : Getting genome mutations
 - [`GenomeMutations$get_allele_fragments`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations-cash-get_allele_fragments.md)
   : Getting genome allele fragments
+- [`GenomeMutations$get_alleles_covering_ref_region`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations-cash-get_alleles_covering_ref_region.md)
+  : Getting the alleles covering a reference region
 - [`GenomeMutations$get_fragment`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations-cash-get_fragment.md)
-  : Getting genome fragment
-- [`GenomeMutations$get_fragment_from_ref`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations-cash-get_fragment_from_ref.md)
   : Getting genome fragment
 - [`GenomeMutations$get_mutations`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations-cash-get_mutations.md)
   : Getting genome mutations
+- [`GenomeMutations$get_region_aligned_to_ref`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations-cash-get_region_aligned_to_ref.md)
+  : Getting information about the fragment aligning to the reference
 - [`GenomeMutations`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations.md)
   : Representing cell genome
 - [`get_available_tumours_in()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_available_tumours_in.md)
   : Getting the tumour types available in a setup
-- [`get_genome_tour()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_genome_tour.md)
-  : Getting forest cell mutations
 - [`get_mutation_engine_codes()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_mutation_engine_codes.md)
   : Getting the supported setups
 - [`get_relevant_branches()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_relevant_branches.md)
@@ -232,13 +260,9 @@ Mutation simulation classes and methods
 - [`PhylogeneticForest$get_absolute_chromosome_positions`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_absolute_chromosome_positions.md)
   : Getting the absolute chromosome positions
 - [`PhylogeneticForest$get_bulk_allelic_fragmentation`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_bulk_allelic_fragmentation.md)
-  : Getting the bulk allelic fragmentation data frame
-- [`PhylogeneticForest$get_cell_CNAs`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_cell_CNAs.md)
-  : Getting the CNAs of a cell in the samples' phylogeny
+  : Getting the genome bulk allelic fragmentation
 - [`PhylogeneticForest$get_cell_allelic_fragmentation`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_cell_allelic_fragmentation.md)
   : Getting the cell allelic fragmentation data frame
-- [`PhylogeneticForest$get_cell_mutations`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_cell_mutations.md)
-  : Getting the mutations of a cell in the samples' phylogeny
 - [`PhylogeneticForest$get_coalescent_cells`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_coalescent_cells.md)
   : Retrieving the most recent common ancestors
 - [`PhylogeneticForest$get_driver_mutations`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_driver_mutations.md)
@@ -253,6 +277,8 @@ Mutation simulation classes and methods
   : Getting the germline subject
 - [`PhylogeneticForest$get_mutation_statistics`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_mutation_statistics.md)
   : Getting the statistics about mutations on each node
+- [`PhylogeneticForest$get_node`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_node.md)
+  : Getting a node of the forest
 - [`PhylogeneticForest$get_nodes`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_nodes.md)
   : Getting the forest nodes
 - [`PhylogeneticForest$get_reference_path`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_reference_path.md)
@@ -277,10 +303,36 @@ Mutation simulation classes and methods
   : Setting the reference genome path
 - [`PhylogeneticForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest.md)
   : The phylogenetic forest of cells in samples
-- [`PhylogeneticForestLabelTour`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestLabelTour.md)
-  : An iterator class over sample forest labels
+- [`PhylogeneticForestNode$arising_mutations`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode-cash-arising_mutations.md)
+  : Getting the mutations arising in the corresponding cell
+- [`PhylogeneticForestNode$birth_time`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode-cash-birth_time.md)
+  : Getting the corresponding cell birth time
+- [`PhylogeneticForestNode$cell_id`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode-cash-cell_id.md)
+  : Getting the identifier of the associated cell
+- [`PhylogeneticForestNode$children`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode-cash-children.md)
+  : Getting the children of the node
+- [`PhylogeneticForestNode$death_time`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode-cash-death_time.md)
+  : Getting the corresponding cell death time
+- [`PhylogeneticForestNode$epistate_name`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode-cash-epistate_name.md)
+  : Getting the name of the corresponding cell epigenetic state
+- [`PhylogeneticForestNode$get_genome`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode-cash-get_genome.md)
+  : Getting the corresponding cell genome
+- [`PhylogeneticForestNode$is_leaf`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode-cash-is_leaf.md)
+  : Checking whether the node is a leaf
+- [`PhylogeneticForestNode$is_root`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode-cash-is_root.md)
+  : Checking whether the node is a root
+- [`PhylogeneticForestNode$mutant_name`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode-cash-mutant_name.md)
+  : Getting the name of the corresponding cell mutant
+- [`PhylogeneticForestNode$parent`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode-cash-parent.md)
+  : Getting the parent node
+- [`PhylogeneticForestNode$sample_name`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode-cash-sample_name.md)
+  : Getting the corresponding cell sample
+- [`PhylogeneticForestNode$species_name`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode-cash-species_name.md)
+  : Getting the name of the corresponding cell species
 - [`PhylogeneticForestNode`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode.md)
   : The node of a phylogenetic forest
+- [`PhylogeneticForestNodeTour`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNodeTour.md)
+  : An iterator class over phylogenetic forest nodes
 - [`plot_exposure_timeline()`](https://caravagnalab.github.io/ProCESS/1.3/reference/plot_exposure_timeline.md)
   : Plot the signature exposure timeline of a phylogenetic forest
 - [`plot_forest()`](https://caravagnalab.github.io/ProCESS/1.3/reference/plot_forest.md)
@@ -316,18 +368,6 @@ Sequencing simulation methods
   : Plot a Variant Allele Frequency (VAF) histogram
 - [`plot_VAF_marginals()`](https://caravagnalab.github.io/ProCESS/1.3/reference/plot_VAF_marginals.md)
   : Plot Marginals of Variant Allele Frequency (VAF)
-- [`SampledCell$birth_time`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampledCell-cash-birth_time.md)
-  : Getting the sampled cell birth time
-- [`SampledCell$epistate`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampledCell-cash-epistate.md)
-  : Getting the sampled cell epigenetic state
-- [`SampledCell$mutant`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampledCell-cash-mutant.md)
-  : Getting the sampled cell mutant
-- [`SampledCell$mutations`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampledCell-cash-mutations.md)
-  : Getting the sampled cell mutations
-- [`SampledCell$species`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampledCell-cash-species.md)
-  : Getting the sampled cell species
-- [`SampledCell`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampledCell.md)
-  : A sampled cell
 - [`simulate_seq`](https://caravagnalab.github.io/ProCESS/1.3/reference/simulate_seq.md)
   : Simulating the sequencing of sampled cells
 - [`simulate_normal_seq`](https://caravagnalab.github.io/ProCESS/1.3/reference/simulate_normal_seq.md)
@@ -345,3 +385,12 @@ Simulation Logics
   : First-order simulation state formulas
 - [`Variable`](https://caravagnalab.github.io/ProCESS/1.3/reference/Variable.md)
   : Represent a simulation quantity
+
+## Data Structure Examples
+
+Methods providing data structure examples
+
+- [`available_examples()`](https://caravagnalab.github.io/ProCESS/1.3/reference/available_examples.md)
+  : Get the available data structure examples
+- [`example()`](https://caravagnalab.github.io/ProCESS/1.3/reference/example.md)
+  : Get examples

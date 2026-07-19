@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -105,38 +105,38 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://caravagnalab.github.io/ProCESS/1.3">ProCESS</a></span><span class="op">)</span></span></code></pre></div>
 <p>Then, we can define a tissue model with 2 epigenetic states, <code>E1</code> and <code>E2</code>, and 2 mutants, <code>A</code> and <code>B</code>, and let the model evolve until the number of cells in mutant <code>B</code> with epigenetic state <code>E1</code> are less than 20k. The resulting simulated tissue can be sampled.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># set the seed of the random number generator for repeatability</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># create a tissue simulation with two epigenetic states</span></span>
-<span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/TissueSimulation.html">TissueSimulation</a></span><span class="op">(</span>epigenetic_states <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E1"</span>, <span class="st">"E2"</span><span class="op">)</span>,</span>
-<span>                        width <span class="op">=</span> <span class="fl">300</span>, height <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># add a mutant "A" and set its species rates</span></span>
-<span><span class="va">sim</span><span class="op">$</span><span class="fu">add_mutant</span><span class="op">(</span><span class="st">"A"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>E1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>duplication <span class="op">=</span> <span class="fl">2</span>, death <span class="op">=</span> <span class="fl">1</span>, E2 <span class="op">=</span> <span class="fl">0.12</span><span class="op">)</span>,</span>
-<span>                         E2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>duplication <span class="op">=</span> <span class="fl">0.8</span>, death <span class="op">=</span> <span class="fl">0.1</span>, E1 <span class="op">=</span> <span class="fl">0.12</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># place one cell of "A" in epigenetic state "E1"</span></span>
-<span><span class="va">sim</span><span class="op">$</span><span class="fu">place_cell</span><span class="op">(</span><span class="st">"A[E1]"</span>, <span class="fl">150</span>, <span class="fl">150</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># let the simulation evolve until the species "A[E2]" has less than 10 cells</span></span>
-<span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"A[E2]"</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [████████████████████████████████████████] 100% [00m:00s] Saving snapshot</span></span>
-<span></span>
-<span><span class="co"># add a mutant "B" and set its species rates</span></span>
-<span><span class="va">sim</span><span class="op">$</span><span class="fu">add_mutant</span><span class="op">(</span><span class="st">"B"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>E1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>duplication <span class="op">=</span> <span class="fl">3</span>, death <span class="op">=</span> <span class="fl">1</span>, E2 <span class="op">=</span> <span class="fl">0.12</span><span class="op">)</span>,</span>
-<span>                         E2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>duplication <span class="op">=</span> <span class="fl">1.3</span>, death <span class="op">=</span> <span class="fl">1</span>, E1 <span class="op">=</span> <span class="fl">0.12</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># choose a border cell in "A" and let one of its progeny mutate in "B"</span></span>
-<span><span class="va">sim</span><span class="op">$</span><span class="fu">mutate_progeny</span><span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="fu">choose_border_cell_in</span><span class="op">(</span><span class="st">"A"</span><span class="op">)</span>, <span class="st">"B"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># let the simulation evolve until the species "A[E2]" has less than 3000 cells</span></span>
-<span><span class="co"># avoid the progress bar</span></span>
-<span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"B[E1]"</span>, <span class="fl">2e4</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># plot the tissue</span></span>
-<span><span class="fu"><a href="reference/plot_tissue.html">plot_tissue</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># set the seed of the random number generator for repeatability</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co"># create a tissue simulation with two epigenetic states</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">TissueSimulation</span>(<span class="at">epigenetic_states =</span> <span class="fu">c</span>(<span class="st">"E1"</span>, <span class="st">"E2"</span>),</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>                        <span class="at">width =</span> <span class="dv">300</span>, <span class="at">height =</span> <span class="dv">300</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co"># add a mutant "A" and set its species rates</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>sim<span class="sc">$</span><span class="fu">add_mutant</span>(<span class="st">"A"</span>, <span class="fu">list</span>(<span class="at">E1 =</span> <span class="fu">list</span>(<span class="at">duplication =</span> <span class="dv">2</span>, <span class="at">death =</span> <span class="dv">1</span>, <span class="at">E2 =</span> <span class="fl">0.12</span>),</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>                         <span class="at">E2 =</span> <span class="fu">list</span>(<span class="at">duplication =</span> <span class="fl">0.8</span>, <span class="at">death =</span> <span class="fl">0.1</span>, <span class="at">E1 =</span> <span class="fl">0.12</span>)))</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co"># place one cell of "A" in epigenetic state "E1"</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>sim<span class="sc">$</span><span class="fu">place_cell</span>(<span class="st">"A[E1]"</span>, <span class="dv">150</span>, <span class="dv">150</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co"># let the simulation evolve until the species "A[E2]" has less than 10 cells</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>sim<span class="sc">$</span><span class="fu">run_up_to_size</span>(<span class="st">"A[E2]"</span>, <span class="dv">10</span>)</span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a> [████████████████████████████████████████] <span class="dv">100</span>% [<span class="dv">00</span>m<span class="sc">:</span><span class="dv">00</span>s] Saving snapshot</span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co"># add a mutant "B" and set its species rates</span></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>sim<span class="sc">$</span><span class="fu">add_mutant</span>(<span class="st">"B"</span>, <span class="fu">list</span>(<span class="at">E1 =</span> <span class="fu">list</span>(<span class="at">duplication =</span> <span class="dv">3</span>, <span class="at">death =</span> <span class="dv">1</span>, <span class="at">E2 =</span> <span class="fl">0.12</span>),</span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a>                         <span class="at">E2 =</span> <span class="fu">list</span>(<span class="at">duplication =</span> <span class="fl">1.3</span>, <span class="at">death =</span> <span class="dv">1</span>, <span class="at">E1 =</span> <span class="fl">0.12</span>)))</span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co"># choose a border cell in "A" and let one of its progeny mutate in "B"</span></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a>sim<span class="sc">$</span><span class="fu">mutate_progeny</span>(sim<span class="sc">$</span><span class="fu">choose_border_cell_in</span>(<span class="st">"A"</span>), <span class="st">"B"</span>)</span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a><span class="co"># let the simulation evolve until the species "A[E2]" has less than 3000 cells</span></span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a><span class="co"># avoid the progress bar</span></span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a>sim<span class="sc">$</span><span class="fu">run_up_to_size</span>(<span class="st">"B[E1]"</span>, <span class="fl">2e4</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a><span class="co"># plot the tissue</span></span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a><span class="fu">plot_tissue</span>(sim)</span></code></pre></div>
 <div class="figure">
 <img src="reference/figures/README-tissue-1.png" alt="Pre-sampling tissue." width="100%"><p class="caption">
 plot of chunk tissue

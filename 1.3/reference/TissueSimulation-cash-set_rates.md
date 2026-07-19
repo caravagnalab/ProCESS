@@ -138,14 +138,25 @@ sim$add_epigenetic_states(c("E1", "E2", "E3"))
 df_rates[["epistate"]] <- c("E1", "E1", "E2")
 df_rates[["first.child.epistate"]] <- c("E1", NA, "E2")
 
+# load dplyr to simplify the next part of the example
+library(dplyr)
+#> 
+#> Attaching package: ‘dplyr’
+#> The following objects are masked from ‘package:stats’:
+#> 
+#>     filter, lag
+#> The following objects are masked from ‘package:base’:
+#> 
+#>     intersect, setdiff, setequal, union
+
 # we also may set some switch rates
 df_rates <- df_rates %>%
-  dplyr::add_row(mutant = "A", epistate = "E1", event = "switch",
-                 first.child.epistate = "E2", rate = 0.01) %>%
-  dplyr::add_row(mutant = "A", epistate = "E1", event = "switch",
-                 first.child.epistate = "E3", rate = 0.04) %>%
-  dplyr::add_row(mutant = "B", epistate = "E2", event = "switch",
-                 first.child.epistate = "E3", rate = 0.01)
+  add_row(mutant = "A", epistate = "E1", event = "switch",
+          first.child.epistate = "E2", rate = 0.01) %>%
+  add_row(mutant = "A", epistate = "E1", event = "switch",
+          first.child.epistate = "E3", rate = 0.04) %>%
+  add_row(mutant = "B", epistate = "E2", event = "switch",
+          first.child.epistate = "E3", rate = 0.01)
 
 df_rates
 #>   mutant       event rate epistate first.child.epistate

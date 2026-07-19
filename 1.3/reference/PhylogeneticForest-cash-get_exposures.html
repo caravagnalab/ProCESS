@@ -9,7 +9,7 @@ evolution over time."><meta property="og:image" content="https://caravagnalab.gi
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,9 +56,32 @@ evolution over time.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="../articles/mutations.html">vignette("mutations")</a></code> for usage examples.</p></div>
+    <div class="dont-index"><p><code><a href="../articles/mutations.html">vignette("mutations")</a></code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># use a phylogenetic forest example</span></span></span>
+<span class="r-in"><span><span class="va">forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="example.html">example</a></span><span class="op">(</span><span class="st">"PhylogeneticForest"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># get the exposures used to build the forest</span></span></span>
+<span class="r-in"><span><span class="va">forest</span><span class="op">$</span><span class="fu">get_exposures</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    time signature exposure  type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     0      SBS1      0.8   SNV</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     0     SBS13      0.2   SNV</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   100      SBS2      0.2   SNV</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   100      SBS3      0.5   SNV</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   100      SBS5      0.3   SNV</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   120      SBS2      0.2   SNV</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   120      SBS3      0.5   SNV</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   120      SBS5      0.3   SNV</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9     0      ID13      0.2 indel</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10    0       ID2      0.6 indel</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11    0      ID21      0.2 indel</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  120       ID1      0.8 indel</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  120       ID9      0.2 indel</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

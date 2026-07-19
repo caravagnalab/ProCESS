@@ -36,80 +36,47 @@ the stick.
 ## Examples
 
 ``` r
-# set the seed of the random number generator
-set.seed(0)
-
-# create a simulation
-sim <- TissueSimulation()
-
-# add the mutant "A"
-sim$add_mutant("A", c(duplication = 0.2, death = 0.01))
-
-# place a cell in the tissue
-sim$place_cell("A", 500, 500)
-
-# run the simulation until "A" has less than 15 cells
-sim$run_up_to_size("A", 15)
-#> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
-
-
-sim$get_clock()
-#> [1] 15.26943
-
-# add the mutant "B"
-sim$add_mutant("B", c(duplication = 0.3, death = 0.01))
-
-# let one border cell of "A" generate a cell in "B"
-sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
-
-# run the simulation until "B" has less than 100 cells
-sim$run_up_to_size("B", 30)
-#> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
-
-
-sim$get_clock()
-#> [1] 49.39972
-
-# add the mutant "C"
-sim$add_mutant("C", c(duplication = 0.4, death = 0.01))
-
-# let one border cell of "B" generate a cell in "C"
-sim$mutate_progeny(sim$choose_border_cell_in("B"), "C")
-
-# run the simulation until "C" has less than 2000 cells
-sim$run_up_to_size("C", 2000)
-#> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
-
-
-# search for a 33x33 region containing 50 cells in A and
-# 50 cells in B at least and sample it
-region <- sim$search_sample(c(A = 50, B = 50), 33, 33)
-sim$sample_cells("S1", region$lower_corner, region$upper_corner)
-
-# search for a 33x33 region containing 50 cells in B and
-# 50 cells in C at least and sample it
-region <- sim$search_sample(c(B = 50, C = 50), 33, 33)
-sim$sample_cells("S2", region$lower_corner, region$upper_corner)
-
-# build the sample forest
-forest <- sim$get_sample_forest()
+# use a sample forest example
+forest <- example("SampleForest")
 
 # search for the forest sticks
-forest$get_sticks()
+head(forest$get_sticks())
 #> [[1]]
-#>  [1]   30   46  201  253  544  659  731  758  884  919 1111 1383 1428
+#> [1] 156 306
 #> 
 #> [[2]]
-#> [1]  1  2  6 10 26 30
+#> [1] 102 156
+#> 
+#> [[3]]
+#> [1] 1848 1924
+#> 
+#> [[4]]
+#> [1] 18904 19052
+#> 
+#> [[5]]
+#>  [1]   6615   7064   7274   7282   7606   7855   8339   8406  10019  12170
+#> [11]  15672  55124  68994 103049 109325 118301 187675 196109 206870
+#> 
+#> [[6]]
+#> [1]  6615  7065  7184  9859 11810 16729 17848 18743 18904
 #> 
 
-# search for the forest sticks whose corresponding cells have
+# search for the forest sticks whose first node corresponding cells have
 # birth times 40 time units at most
 forest$get_sticks(40)
 #> [[1]]
-#> [1]  1  2  6 10 26 30
+#> [1]  8 10 13 21 36 49 68
+#> 
+#> [[2]]
+#> [1]  8 11 17 22
+#> 
+#> [[3]]
+#> [1] 6 8
+#> 
+#> [[4]]
+#> [1] 1 2 6
+#> 
+#> [[5]]
+#> [1]  1  3  5 18 34
 #> 
 ```

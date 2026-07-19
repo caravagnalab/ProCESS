@@ -50,11 +50,11 @@ sim$place_cell("A[E1]", 500, 500)
 sim$run_up_to_event(event = "switch", species = "A[E2]",
                     num_of_events = 100)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
 
 
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260709-003915 ──────────────────────────────────── ▣  [1000x1000]  ⏱ 149 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260719-003938 ───────────── ▣  [1000x1000]  ⏱ 149 ──
 #> 
 #> ── Species: 2, with epigenetics 
 #>    

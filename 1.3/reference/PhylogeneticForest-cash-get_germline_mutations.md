@@ -16,7 +16,19 @@ the cells represented in the phylogenetic forest. The data frame also
 reports the allele in which the mutations occur to support double
 occurrences due to CNAs.
 
-## See also
+## Examples
 
-[`vignette("mutations")`](https://caravagnalab.github.io/ProCESS/1.3/articles/mutations.md)
-for usage examples.
+``` r
+# use a phylogenetic forest example
+forest <- example("PhylogeneticForest")
+
+# get the first germline mutations
+head(forest$get_germline_mutations())
+#>   chr     from allele ref   alt cause   nature
+#> 1  22 16051493      0   G     A       germinal
+#> 2  22 16052167      0   A AAAAC       germinal
+#> 3  22 16053659      0   A     C       germinal
+#> 4  22 16054740      0   A     G       germinal
+#> 5  22 16055942      0   C     T       germinal
+#> 6  22 16058070      0   A     G       germinal
+```

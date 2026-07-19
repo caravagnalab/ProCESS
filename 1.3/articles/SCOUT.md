@@ -3,6 +3,11 @@
 ``` r
 
 library(ProCESS)
+#> 
+#> Attaching package: 'ProCESS'
+#> The following object is masked from 'package:utils':
+#> 
+#>     example
 ```
 
 The Simulated Cohort of Universal Tumours (SCOUT) is a ProCESS-generated

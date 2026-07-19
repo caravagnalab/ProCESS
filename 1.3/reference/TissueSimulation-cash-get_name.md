@@ -15,5 +15,5 @@ sim <- TissueSimulation()
 
 # Expecting "test"
 sim$get_name()
-#> [1] "ProCESS_20260709-003903"
+#> [1] "ProCESS_20260719-003927"
 ```

@@ -20,9 +20,7 @@ sim$place_cell("A", 500, 500)
 sim$death_activation_level <- 100
 sim$run_up_to_size("A", 50000)
 #> 
- [████████████████████████████████████----] 89% [00m:00s] Cells: 44719                                        
-
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
 
 
 # sample the region [450,500]x[475,550]

@@ -34,6 +34,11 @@ states: E1 and E2.
 ``` r
 
 library("ProCESS")
+#> 
+#> Attaching package: 'ProCESS'
+#> The following object is masked from 'package:utils':
+#> 
+#>     example
 
 set.seed(0)
 
@@ -94,7 +99,7 @@ sim$add_mutant("B", list("E1" = list(duplication = 0.8, death = 0.05,
 sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
 
 sim$run_up_to_size("B[E1]", 5000)
-#>  [█---------------------------------------] 1% [00m:00s] Cells: 121437 [███████████-----------------------------] 27% [00m:01s] Cells: 176120 [████████████████████████████████████████] 100% [00m:01s] Saving snapshot
+#>  [█---------------------------------------] 2% [00m:00s] Cells: 127251 [██████████████--------------------------] 33% [00m:01s] Cells: 181042 [████████████████████████████████████████] 100% [00m:01s] Saving snapshot
 
 ncells <- 0.9 * bbox_width * bbox_width
 
@@ -217,7 +222,7 @@ Let us repeat what we did in the homogeneous growth model example.
 ``` r
 
 # add a mutant
-sim$add_mutant("A", list("E1" = list(duplication = 0.1, death = 0.08, 
+sim$add_mutant("A", list("E1" = list(duplication = 0.1, death = 0.08,
                                      E2 = 0.01),
                          "E2" = list(duplication = 0.1, death = 0.01,
                                      E1 = 0.01)))
@@ -226,7 +231,7 @@ sim$place_cell("A[E1]", 500, 500)
 
 # let the simulation evolve until "A[E1]" consists of 1300 cells
 sim$run_up_to_size("A[E1]", 1300)
-#>  [████████████████████████████------------] 69% [00m:00s] Cells: 30658 [████████████████████████████████████████] 100% [00m:00s] Saving snapshot
+#>  [███████████████████████████████---------] 75% [00m:00s] Cells: 32785 [████████████████████████████████████████] 100% [00m:00s] Saving snapshot
 
 bbox_width <- 15
 

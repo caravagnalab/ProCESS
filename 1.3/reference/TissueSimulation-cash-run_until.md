@@ -76,11 +76,11 @@ c5
 # run the simulation while c5 does not hold
 sim$run_until(c5)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
 
 
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260709-003914 ─────────────────────────────────── ▣  [1000x1000]  ⏱ 40.1 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260719-003937 ──────────── ▣  [1000x1000]  ⏱ 40.1 ──
 #> 
 #> ── Species: 2, with epigenetics 
 #>    

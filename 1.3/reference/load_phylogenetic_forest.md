@@ -5,14 +5,15 @@ This method loads a phylogenetic forest from a file.
 ## Usage
 
 ``` r
-load_phylogenetic_forest(filename)
+load_phylogenetic_forest(filename, quiet)
 ```
 
 ## Arguments
 
 - filename:
 
-  The path of the file from which the phylogenetic forest must be load.
+  The path of the file from which the phylogenetic forest must be
+  loaded.
 
 - quiet:
 
@@ -20,4 +21,10 @@ load_phylogenetic_forest(filename)
 
 ## Value
 
-The load phylogenetic forest
+The loaded phylogenetic forest
+
+## See also
+
+[`PhylogeneticForest$save()`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-save.md),
+[`load_sample_forest()`](https://caravagnalab.github.io/ProCESS/1.3/reference/load_sample_forest.md)
+[`load_forest()`](https://caravagnalab.github.io/ProCESS/1.3/reference/load_forest.md)

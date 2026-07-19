@@ -51,8 +51,8 @@
 
   How to partitioning samples, sorting cells, and simulate FACS
 
-- [Labelling Forest
-  Nodes](https://caravagnalab.github.io/ProCESS/1.3/articles/node_labelling.md):
+- [Iterating over Forest
+  Nodes](https://caravagnalab.github.io/ProCESS/1.3/articles/node_tour.md):
 
   How to label forest nodes
 

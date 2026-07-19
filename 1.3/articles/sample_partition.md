@@ -18,9 +18,11 @@ ProCESS allows to partition samples according to cell features as
 method
 [`PhylogeneticForest$partition_samples()`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-partition_samples.md)
 takes a labelling function, which accepts as input an object of the
-class `SampledCell` and returns a string, and applies it to the sampled
-cells. Then, it partitions the forest samples by using the obtained
-labels. The resulting sub-samples are named according the format
+class
+[`PhylogeneticForestNode`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode.md)
+and returns a string, and applies it to the sampled cells. Then, it
+partitions the forest samples by using the obtained labels. The
+resulting sub-samples are named according the format
 `<sample name>_<cell label>`.
 
 The method
@@ -45,9 +47,9 @@ phylo_forest$get_samples_info()
 #> 3 S_2_1  2  399  540  423  564          620                  620 506.0268
 #> 4 S_2_2  3  549  365  573  389          620                  620 506.0268
 #>   DNA_quantity equivalent_normal_cells
-#> 1 528968984885                5155.184
-#> 2 330460533638                3220.576
-#> 3 128456775117                1251.904
+#> 1 531196062192                5176.889
+#> 2 330425908811                3220.239
+#> 3 127222173306                1239.872
 #> 4 127235323680                1240.000
 ```
 
@@ -55,9 +57,9 @@ The forest samples can be split by epigenetic state as it follows.
 
 ``` r
 
-# the labelling function parameter has type `SampledCell`
-epi_labelling <- function(cell) {
-  cell$epistate
+# the labelling function parameter has type `PhylogeneticForestNode`
+epi_labelling <- function(forest_node) {
+  forest_node$epistate_name
 }
 
 phylo_forest$partition_samples(epi_labelling)
@@ -73,12 +75,12 @@ phylo_forest$get_samples_info()
 #> 7 S_2_2_E1 11  549  365  573  389          547                  620 506.0268
 #> 8 S_2_2_E2 10  549  365  573  389           73                  620 506.0268
 #>   DNA_quantity equivalent_normal_cells
-#> 1   9031332253                88.01685
-#> 2 519937652632              5067.16744
-#> 3   5758351651                56.11929
-#> 4 324702181987              3164.45696
-#> 5   2493581895                24.30175
-#> 6 125963193222              1227.60217
+#> 1   9074081066                88.43346
+#> 2 522121981126              5088.45530
+#> 3   5751057816                56.04821
+#> 4 324674850995              3164.19060
+#> 5   2462619168                24.00000
+#> 6 124759554138              1215.87184
 #> 7 112254390408              1094.00000
 #> 8  14980933272               146.00000
 ```
@@ -89,12 +91,12 @@ mutant name…
 ``` r
 
 # loading again the original forest
-phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
+phylo_forest <- load_forest("phylo_forest.pff")
 #>  [█---------------------------------------] 0% [00m:00s] Loading forest [████████████████████████████████████████] 100% [00m:00s] Forest loaded
 
 # a mutant-name-based labelling function
-mutant_labelling <- function(cell) {
-  cell$mutant
+mutant_labelling <- function(forest_node) {
+  forest_node$mutant_name
 }
 
 phylo_forest$partition_samples(mutant_labelling)
@@ -107,9 +109,9 @@ phylo_forest$get_samples_info()
 #> 4 S_2_2_A 19  549  365  573  389           11                  620 506.0268
 #> 5 S_2_2_B 20  549  365  573  389          609                  620 506.0268
 #>   DNA_quantity equivalent_normal_cells
-#> 1 528968984885                5155.184
-#> 2 330460533638                3220.576
-#> 3 128456775117                1251.904
+#> 1 531196062192                5176.889
+#> 2 330425908811                3220.239
+#> 3 127222173306                1239.872
 #> 4   2257400904                  22.000
 #> 5 124977922776                1218.000
 ```
@@ -119,16 +121,16 @@ phylo_forest$get_samples_info()
 ``` r
 
 # loading again the original forest
-phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
+phylo_forest <- load_forest("phylo_forest.pff")
 #>  [█---------------------------------------] 0% [00m:00s] Loading forest [████████████████████████████████████████] 100% [00m:00s] Forest loaded
 
 # a birth-time-based labelling function
-birth_time_labelling <- function(cell) {
-  if (cell$birth_time > 421) {
+birth_time_labelling <- function(forest_node) {
+  if (forest_node$birth_time > 421) {
     return("YOUNG")
   }
 
-  if (cell$birth_time > 321) {
+  if (forest_node$birth_time > 321) {
     return("MIDDLE_AGED")
   }
 
@@ -149,15 +151,15 @@ phylo_forest$get_samples_info()
 #> 8       S_2_1_YOUNG 31  399  540  423  564          598                  620
 #> 9       S_2_2_YOUNG 33  549  365  573  389          620                  620
 #>       time DNA_quantity equivalent_normal_cells
-#> 1 445.2994 275352014303              2683.50398
-#> 2 445.2994  36611777738               356.80818
-#> 3 445.2994 217005192844              2114.87212
-#> 4 445.2994 175840546579              1713.69295
-#> 5 445.2994  21761051636               212.07714
-#> 6 445.2994 132858935423              1294.80615
-#> 7 506.0268   4532003323                44.16764
-#> 8 506.0268 123924771794              1207.73628
-#> 9 506.0268 127235323680              1240.00000
+#> 1 445.2994 276897757834               2698.5684
+#> 2 445.2994  36675607392                357.4302
+#> 3 445.2994 217622696966               2120.8901
+#> 4 445.2994 175779746283               1713.1004
+#> 5 445.2994  21764677640                212.1125
+#> 6 445.2994 132881484888               1295.0259
+#> 7 506.0268   4514801808                 44.0000
+#> 8 506.0268 122707371498               1195.8718
+#> 9 506.0268 127235323680               1240.0000
 ```
 
 …, mutations…
@@ -165,7 +167,7 @@ phylo_forest$get_samples_info()
 ``` r
 
 # loading again the original forest
-phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
+phylo_forest <- load_forest("phylo_forest.pff")
 #>  [█---------------------------------------] 0% [00m:00s] Loading forest [████████████████████████████████████████] 100% [00m:00s] Forest loaded
 
 library(dplyr)
@@ -180,25 +182,30 @@ library(dplyr)
 
 # collect all the sample passenger indels
 passenger_indels <- phylo_forest$get_sampled_cell_mutations() %>%
-  filter(class == "passenger", type == "indel")
+  filter(nature == "passenger", nchar(ref) != nchar(alt))
 
-# get one of the passenger indels
-p_indel <- passenger_indels[sample(seq_len(nrow(passenger_indels)), 1), ]
+# get one of the passenger indels and build the mutation
+p_indel <- passenger_indels[sample(seq_along(passenger_indels), 1), ]
 
-p_indel
-#>      cell_id chr     from allele  ref alt  type cause     class
-#> 5293  173106  22 35124166      0 AAGG   A indel  ID13 passenger
+mutation <- Mutation(chr = p_indel[["chr"]], from = p_indel[["from"]],
+                     ref = p_indel[["ref"]], alt = p_indel[["alt"]])
+
+mutation
+#> indel(chr: 22, from: 46070274, allele: random, ref: T, alt: TTG)
+
+# find the nodes where the mutation occurs for the first time
+first_node_ids <- phylo_forest$get_first_occurrences(mutation)
 
 # a mutation-based labelling function that discriminates sampled cells
-# containing indel `p_indel` from the other sampled cells
-mutations_labelling <- function(cell) {
-  has_indel <- nrow(cell$mutations %>%
-                      filter(chr == p_indel[["chr"]],
-                             from == p_indel[["from"]],
-                             ref == p_indel[["ref"]],
-                             alt == p_indel[["alt"]])) > 0
+# that are descendant of the first nodes in which the mutation occurs, i.e.,
+# sampled cells containing indel `p_indel`, from the other sampled cells
+mutations_labelling <- function(forest_node) {
 
-  if (has_indel) {
+  while (forest_node$cell_id < first_node_ids) {
+    forest_node <- forest_node$parent
+  }
+
+  if (forest_node$cell_id == first_node_ids) {
     return("HAS_MUTATION");
   }
 
@@ -209,19 +216,15 @@ phylo_forest$partition_samples(mutations_labelling)
 
 phylo_forest$get_samples_info()
 #>                    name id xmin ymin xmax ymax tumour_cells
-#> 1    S_1_1_HAS_MUTATION 38  480  480  530  530          660
-#> 2 S_1_1_MISSES_MUTATION 39  480  480  530  530         1916
-#> 3    S_1_2_HAS_MUTATION 40  500  500  550  550         1284
-#> 4 S_1_2_MISSES_MUTATION 41  500  500  550  550          325
-#> 5 S_2_1_MISSES_MUTATION 42  399  540  423  564          620
-#> 6 S_2_2_MISSES_MUTATION 43  549  365  573  389          620
+#> 1 S_1_1_MISSES_MUTATION 38  480  480  530  530         2576
+#> 2 S_1_2_MISSES_MUTATION 39  500  500  550  550         1609
+#> 3 S_2_1_MISSES_MUTATION 40  399  540  423  564          620
+#> 4 S_2_2_MISSES_MUTATION 41  549  365  573  389          620
 #>   tumour_cells_in_bbox     time DNA_quantity equivalent_normal_cells
-#> 1                 2576 445.2994 135485896128               1320.4078
-#> 2                 2576 445.2994 393483088757               3834.7765
-#> 3                 1609 445.2994 263763522328               2570.5658
-#> 4                 1609 445.2994  66697011310                650.0105
-#> 5                  620 506.0268 128456775117               1251.9039
-#> 6                  620 506.0268 127235323680               1240.0000
+#> 1                 2576 445.2994 531196062192                5176.889
+#> 2                 1609 445.2994 330425908811                3220.239
+#> 3                  620 506.0268 127222173306                1239.872
+#> 4                  620 506.0268 127235323680                1240.000
 ```
 
 … or combination of these properties.

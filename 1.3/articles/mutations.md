@@ -34,6 +34,11 @@ containing them can be obtained by invoking the function
 ``` r
 
 library("ProCESS")
+#> 
+#> Attaching package: 'ProCESS'
+#> The following object is masked from 'package:utils':
+#> 
+#>     example
 
 get_mutation_engine_codes()
 #>     name            description
@@ -76,7 +81,7 @@ m_engine <- MutationEngine(setup_code = "demo")
 #>  [████████████████████████████████████████] 100% [00m:01s] Reading 22
 #>  [████████████████████████████████████████] 100% [00m:01s] Reading 22
 #>  [████████████████████████████████████████] 100% [00m:01s] RS index built
-#>  [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:00s] Saving RS index [███████████████████████████████---------] 75% [00m:02s] Saving RS indexdone
+#>  [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:01s] Saving RS index [████████████████████--------------------] 48% [00m:02s] Saving RS indexdone
 #>  [████████████████████████████████████████] 100% [00m:02s] RS index saved
 #>  [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded
 #>  [█---------------------------------------] 0% [00m:00s] Saving germline [████████████████████████████████████████] 100% [00m:00s] Germline saved
@@ -123,7 +128,7 @@ already fulfilled.
 # building a mutation engine by using the "demo" set-up configuration
 m_engine <- MutationEngine(setup_code = "demo")
 #>  [█---------------------------------------] 0% [00m:00s] Loading context index [████████████████████████████████████████] 100% [00m:00s] Context index loaded
-#>  [█---------------------------------------] 0% [00m:00s] Loading RS index [████████████----------------------------] 29% [00m:01s] Loading RS index [█████████████████████████---------------] 60% [00m:02s] Loading RS index [████████████████████████████████████----] 88% [00m:03s] Loading RS index [████████████████████████████████████████] 100% [00m:03s] RS index loaded
+#>  [█---------------------------------------] 0% [00m:00s] Loading RS index [█████████████---------------------------] 30% [00m:01s] Loading RS index [█████████████████████████---------------] 62% [00m:02s] Loading RS index [█████████████████████████████████████---] 92% [00m:03s] Loading RS index [████████████████████████████████████████] 100% [00m:03s] RS index loaded
 #>  [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded
 ```
 
@@ -181,7 +186,7 @@ m_engine$add_mutant(mutant_name = "A",
                                    CNA("D", "22", 5010000, 200000,
                                        allele = 1),
                                    WGD))
-#>  [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs [█---------------------------------------] 0% [00m:00s] Found 22 [█---------------------------------------] 0% [00m:00s] Reading 22 [██████████████--------------------------] 33% [00m:01s] Reading 22 [███████████████████████████-------------] 66% [00m:02s] Reading 22 [████████████████████████████████████████] 100% [00m:02s] "A"'s SIDs validated
+#>  [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs [█---------------------------------------] 0% [00m:00s] Found 22 [█---------------------------------------] 0% [00m:00s] Reading 22 [██████████████--------------------------] 33% [00m:01s] Reading 22 [██████████████████████████--------------] 64% [00m:02s] Reading 22 [███████████████████████████████████████-] 97% [00m:03s] Reading 22 [████████████████████████████████████████] 100% [00m:03s] "A"'s SIDs validated
 
 m_engine
 #> MutationEngine
@@ -601,7 +606,8 @@ saved there.
 
 ``` r
 
-sample_forest <- load_sample_forest("sample_forest.sff")
+sample_forest <- load_forest("sample_forest.sff")
+#>  [█---------------------------------------] 0% [00m:00s] Loading forest [████████████████████████████████████████] 100% [00m:00s] Forest loaded
 
 # place mutations on the sample forest assuming 1000 pre-neoplastic SNVs and
 # 500 indels
@@ -615,8 +621,8 @@ phylo_forest
 #>   # of leaves: 5425
 #>   samples: {"S_1_1", "S_1_2", "S_2_1", "S_2_2"}
 #> 
-#>   # of emerged SNVs and indels: 16669
-#>   # of emerged CNAs: 54
+#>   # of emerged SNVs and indels: 16731
+#>   # of emerged CNAs: 37
 ```
 
 The phylogenetic forest stores all mutations, labelling the sampled
@@ -631,24 +637,24 @@ library(dplyr)
 # select the first mutations among all the mutations occurring in
 # the genomes of the sampled cells
 phylo_forest$get_sampled_cell_mutations() %>% head()
-#>   cell_id chr     from allele ref alt  type cause          class
-#> 1   23281  22 16133982      0   T   A   SNV  SBS1 pre-neoplastic
-#> 2   23281  22 16270440      0   T   A   SNV  SBS1 pre-neoplastic
-#> 3   23281  22 16277531      0   C  CT indel   ID1 pre-neoplastic
-#> 4   23281  22 16391790      0   A   C   SNV  SBS1 pre-neoplastic
-#> 5   23281  22 16440524      0   T   C   SNV  SBS1 pre-neoplastic
-#> 6   23281  22 16507752      0   A   T   SNV  SBS1 pre-neoplastic
+#>   chr     from allele ref alt cause         nature cell_id
+#> 1  22 16133982      0   T   A  SBS1 pre-neoplastic   23281
+#> 2  22 16270440      0   T   A  SBS1 pre-neoplastic   23281
+#> 3  22 16277531      0   C  CT   ID1 pre-neoplastic   23281
+#> 4  22 16391790      0   A   C  SBS1 pre-neoplastic   23281
+#> 5  22 16440524      0   T   C  SBS1 pre-neoplastic   23281
+#> 6  22 16507752      0   A   T  SBS1 pre-neoplastic   23281
 
 # select the first CNAs among all the mutations occurring in
 # the genomes of the sampled cells
 phylo_forest$get_sampled_cell_CNAs() %>% head()
-#>   cell_id type chr    begin      end allele src.allele  class
-#> 1   23281    A  22 10303470 10503469      2          0 driver
-#> 2   23281    D  22  5010000  5209999      1         NA driver
-#> 3   56990    A  22 10303470 10503469      2          0 driver
-#> 4   56990    D  22  5010000  5209999      1         NA driver
-#> 5   92307    A  22 10303470 10503469      2          0 driver
-#> 6   92307    D  22  5010000  5209999      1         NA driver
+#>   chr    begin      end type allele src.allele cause nature cell_id
+#> 1  22 10303470 10503469    A      2          0       driver   23281
+#> 2  22  5010000  5209999    D      1         NA       driver   23281
+#> 3  22 10303470 10503469    A      2          0       driver   56990
+#> 4  22  5010000  5209999    D      1         NA       driver   56990
+#> 5  22 10303470 10503469    A      2          0       driver   92307
+#> 6  22  5010000  5209999    D      1         NA       driver   92307
 
 # get the sampled cells
 sampled_cells <- phylo_forest$get_nodes() %>%
@@ -667,21 +673,31 @@ sampled_cells %>% head()
 # get the identifier of the 3rd cell in `sampled_cells`
 cell_id <- sampled_cells[3, 1]
 
+# get the node whose associated cell have `cell_id` as identifier
+node <- phylo_forest$get_node(cell_id)
+node
+#> PhylogeneticForestNode(cell_id = 10018, species = "A[E2]")
+
+# compute the genome of the cell having `cell_id` as identifier
+genome <- node$get_genome()
+genome
+#> GenomeMutations: 1 chrs 6 alleles
+
 # get the SNVs and the indels of the 3rd cell in `sampled_cells`
-phylo_forest$get_cell_mutations(cell_id) %>% head()
-#>   cell_id chr     from allele ref alt  type cause          class
-#> 1   10018  22 16133982      0   T   A   SNV  SBS1 pre-neoplastic
-#> 2   10018  22 16270440      0   T   A   SNV  SBS1 pre-neoplastic
-#> 3   10018  22 16277531      0   C  CT indel   ID1 pre-neoplastic
-#> 4   10018  22 16391790      0   A   C   SNV  SBS1 pre-neoplastic
-#> 5   10018  22 16440524      0   T   C   SNV  SBS1 pre-neoplastic
-#> 6   10018  22 16507752      0   A   T   SNV  SBS1 pre-neoplastic
+genome$get_mutations() %>% head()
+#>   chr     from allele ref alt cause         nature
+#> 1  22 16133982      0   T   A  SBS1 pre-neoplastic
+#> 2  22 16270440      0   T   A  SBS1 pre-neoplastic
+#> 3  22 16277531      0   C  CT   ID1 pre-neoplastic
+#> 4  22 16391790      0   A   C  SBS1 pre-neoplastic
+#> 5  22 16440524      0   T   C  SBS1 pre-neoplastic
+#> 6  22 16507752      0   A   T  SBS1 pre-neoplastic
 
 # get the CNAs of the 3rd cell in `sampled_cells`
-phylo_forest$get_cell_CNAs(cell_id) %>% head()
-#>   cell_id type chr    begin      end allele src.allele  class
-#> 1   10018    A  22 10303470 10503469      2          0 driver
-#> 2   10018    D  22  5010000  5209999      1         NA driver
+genome$get_CNAs() %>% head()
+#>   chr    begin      end type allele src.allele cause nature
+#> 1  22 10303470 10503469    A      2          0       driver
+#> 2  22  5010000  5209999    D      1         NA       driver
 ```
 
 The method
@@ -705,9 +721,9 @@ phylo_forest$get_samples_info()
 #> 3 S_2_1  2  399  540  423  564          620                  620 506.0268
 #> 4 S_2_2  3  549  365  573  389          620                  620 506.0268
 #>   DNA_quantity equivalent_normal_cells
-#> 1 528968984885                5155.184
-#> 2 330460533638                3220.576
-#> 3 128456775117                1251.904
+#> 1 531196062192                5176.889
+#> 2 330425908811                3220.239
+#> 3 127222173306                1239.872
 #> 4 127235323680                1240.000
 ```
 
@@ -719,13 +735,13 @@ returns the SNVs and the indels in the germline.
 
 # extract the germline mutation
 phylo_forest$get_germline_mutations() %>% head()
-#>   chr     from allele ref   alt  type cause    class
-#> 1  22 16051493      0   G     A   SNV       germinal
-#> 2  22 16052167      0   A AAAAC indel       germinal
-#> 3  22 16053659      0   A     C   SNV       germinal
-#> 4  22 16054740      0   A     G   SNV       germinal
-#> 5  22 16055942      0   C     T   SNV       germinal
-#> 6  22 16058070      0   A     G   SNV       germinal
+#>   chr     from allele ref   alt cause   nature
+#> 1  22 16051493      0   G     A       germinal
+#> 2  22 16052167      0   A AAAAC       germinal
+#> 3  22 16053659      0   A     C       germinal
+#> 4  22 16054740      0   A     G       germinal
+#> 5  22 16055942      0   C     T       germinal
+#> 6  22 16058070      0   A     G       germinal
 ```
 
 Users can also identify the cell in which a mutation emerged even when
@@ -733,8 +749,11 @@ the cell was not sampled.
 
 ``` r
 
+# get the genome of the cell having as the identifier `cell_id`
+genome <- phylo_forest$get_node(cell_id)$get_genome()
+
 # select one of the mutations
-mutation_row <- phylo_forest$get_cell_mutations(cell_id)[2, ]
+mutation_row <- genome$get_mutations(with_germline=FALSE)[2, ]
 
 # rebuild the corresponding mutation
 mutation <- Mutation(mutation_row["chr"][1, ],
@@ -783,13 +802,13 @@ sample_name <- phylo_forest$get_samples_info()[["name"]][1]
 
 # print the bulk allelic fragmentation
 phylo_forest$get_bulk_allelic_fragmentation(sample_name) %>% head()
-#>   chr    begin      end major minor ratio
-#> 1  22        1  5009999     2     2     1
-#> 2  22  5010000  5209999     2     0     1
-#> 3  22  5210000 10303469     2     2     1
-#> 4  22 10303470 10503469     4     2     1
-#> 5  22 10503470 17341892     2     2     1
-#> 6  22 17341893 17369653     2     2     1
+#>   chr    begin      end major minor     ratio
+#> 1  22        1  5009999     2     2 1.0000000
+#> 2  22  5010000  5209999     2     0 1.0000000
+#> 3  22  5210000 10303469     2     2 1.0000000
+#> 4  22 10303470 10503469     4     2 1.0000000
+#> 5  22 10503470 17098700     2     2 1.0000000
+#> 6  22 17098701 17899999     2     2 0.9996118
 ```
 
 Instead, the method
@@ -854,16 +873,16 @@ As in the case of the sample forests, the phylogenetic forests can be
 saved by using the method
 [`PhylogeneticForest$save()`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-save.md)
 and load by the function
-[`load_phylogenetic_forest()`](https://caravagnalab.github.io/ProCESS/1.3/reference/load_phylogenetic_forest.md).
+[`load_forest()`](https://caravagnalab.github.io/ProCESS/1.3/reference/load_forest.md).
 
 ``` r
 
-# save the phylogenetic forest in the file "phylo_forest.sff"
-phylo_forest$save("phylo_forest.sff")
+# save the phylogenetic forest in the file "phylo_forest.pff"
+phylo_forest$save("phylo_forest.pff")
 #>  [█---------------------------------------] 0% [00m:00s] Saving forest [████████████████████████████████████████] 100% [00m:00s] Forest saved
 
 # loading the saved forest
-loaded_phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
+loaded_phylo_forest <- load_forest("phylo_forest.pff")
 #>  [█---------------------------------------] 0% [00m:00s] Loading forest [████████████████████████████████████████] 100% [00m:00s] Forest loaded
 
 loaded_phylo_forest
@@ -873,8 +892,8 @@ loaded_phylo_forest
 #>   # of leaves: 5425
 #>   samples: {"S_1_1", "S_1_2", "S_2_1", "S_2_2"}
 #> 
-#>   # of emerged SNVs and indels: 16669
-#>   # of emerged CNAs: 54
+#>   # of emerged SNVs and indels: 16731
+#>   # of emerged CNAs: 37
 ```
 
 ### Getting and Setting the Reference Genome Path

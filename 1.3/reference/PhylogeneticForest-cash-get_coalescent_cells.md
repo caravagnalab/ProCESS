@@ -29,4 +29,16 @@ method find the most recent common ancestors of the forest leaves.
 ## See also
 
 [`SampleForest$get_coalescent_cells()`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest-cash-get_coalescent_cells.md)
-for usage examples
+
+## Examples
+
+``` r
+# use a phylogenetic forest example
+forest <- example("PhylogeneticForest")
+
+# get the coalescent cells. Since this forest consists of
+# only one tree, we get a data frame containing one cell.
+forest$get_coalescent_cells()
+#>   cell_id ancestor depth mutant epistate sample birth_time
+#> 1       1       NA     0      A       E1   <NA>          0
+```

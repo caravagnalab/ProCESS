@@ -9,7 +9,7 @@ to the reference genome."><meta property="og:image" content="https://caravagnala
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,24 @@ to the reference genome.</p>
     <p>The CIGAR code of the fragment with respect to the reference genome.</p>
     </div>
 
-  </main></div>
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># use a phylogenetic forest example</span></span></span>
+<span class="r-in"><span><span class="va">forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="example.html">example</a></span><span class="op">(</span><span class="st">"PhylogeneticForest"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># get the genome of the cell having 2 as the identifier</span></span></span>
+<span class="r-in"><span><span class="va">genome</span> <span class="op">&lt;-</span> <span class="va">forest</span><span class="op">$</span><span class="fu">get_node</span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">$</span><span class="fu">get_genome</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># get a fragment</span></span></span>
+<span class="r-in"><span><span class="va">fragment</span> <span class="op">&lt;-</span> <span class="va">genome</span><span class="op">$</span><span class="fu">get_fragment</span><span class="op">(</span><span class="st">"22"</span>, <span class="fl">0</span>, <span class="fl">16085625</span>, <span class="fl">100</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># get its CIGAR with respect to the reference genome</span></span></span>
+<span class="r-in"><span><span class="va">fragment</span><span class="op">$</span><span class="fu">get_CIGAR</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "51M8D49M"</span>
+</code></pre></div>
+    </div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

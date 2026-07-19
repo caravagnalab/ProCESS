@@ -33,22 +33,15 @@ A `ggraph` tree plot.
 ## Examples
 
 ``` r
-sim <- TissueSimulation()
-sim$add_mutant("A", c(duplication = 0.08))
-sim$place_cell("A", 500, 500)
-sim$run_up_to_time(60)
-#> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
+# use a sample forest example
+forest <- example("SampleForest")
 
-sim$sample_cells("MySample", c(500, 500), c(510, 510))
-forest <- sim$get_sample_forest()
-
+# plot the forest
 plot_forest(forest)
 
 
-# define a custom color map
-color_map <- c("#B2DF8A")
-names(color_map) <- c("A")
+# define a custom color map for the forest species
+color_map <- c("#7FC97F", "#BEAED4", "#FDC086", "#FFFF99")
 
 plot_forest(forest, color_map = color_map)
 ```

@@ -95,20 +95,19 @@ A named list of two elements: the sequencing output data frame (name
 If `wide_format` is set to `true`, the sequencing output data frame
 reports, for each of the observed SNVs and indels, the chromosome and
 the position in which it occurs (columns `chr` and `from`), the
-reference and the alternative sequence, the causes, and the classes of
-the mutation (columns `ref`, `alt`, `causes`, and `classes`,
-respectively). Moreover, the returned data frame contains three columns:
-the number of reads in which the corresponding SNV occurs (column
-`normal.sample.NV`), the coverage of the SNV locus (column
-`normal.sample.DP`), and the corresponding VAF (column
-`normal.sample.VAF`).
+reference and the alternative sequence, the cause, and the nature of the
+mutation (columns `ref`, `alt`, `cause`, and `nature`, respectively).
+Moreover, the returned data frame contains three columns: the number of
+reads in which the corresponding SNV occurs (column `normal.sample.NV`),
+the coverage of the SNV locus (column `normal.sample.DP`), and the
+corresponding VAF (column `normal.sample.VAF`).
 
 Instead, when `wide_format` is set to `false`, the output data frame
 contains a row for each mutation in each sample and consists of 10
-columns: `sample`, `chr`, `from`, `ref`, `alt`, `causes`, `classes`,
-`NV`, `DP`, and `VAF`. The column `sample` contains the name of the
-sample in which the mutation has been identified. The columns `chr`,
-from`, `ref`, `alt`, `causes`, and `classes` correspond to those of the wide_format`
+columns: `sample`, `chr`, `from`, `ref`, `alt`, `cause`, `nature`, `NV`,
+`DP`, and `VAF`. The column `sample` contains the name of the sample in
+which the mutation has been identified. The columns `chr`,
+from`, `ref`, `alt`, `cause`, and `nature` correspond to those of the wide_format`
 output. The columns `NV`, `DP`, and `VAF` maintain the number of
 occurrences, the coverage, and the VAF of the mutation in cited sample.
 

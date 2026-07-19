@@ -28,6 +28,21 @@ to build a mutation engine
 ``` r
 # get the types available for the "demo" set-up code
 get_available_tumours_in("demo")
+#> Downloading reference genome...
+#> Reference genome downloaded
+#> Decompressing reference genome...done
+#> Downloading signature files...
+#> Signature file downloaded
+#> Downloading driver mutation file...
+#> Driver mutation file downloaded
+#> Decompressing driver mutation file...done
+#> Downloading passenger CNAs file...
+#> Passenger CNAs file downloaded
+#> Decompressing passenger CNAs file...done
+#> Downloading germline...
+#> Germline downloaded
+#> Decompressing mutations...
+#> done
 #>           type
 #> 1          ACC
 #> 2          AML

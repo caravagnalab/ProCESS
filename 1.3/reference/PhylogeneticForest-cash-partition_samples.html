@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,21 +51,76 @@
 
 
 <dl><dt id="arg-labelling-function">labelling_function<a class="anchor" aria-label="anchor" href="#arg-labelling-function"></a></dt>
-<dd><p>An R labelling function that maps any sampled
-cell to a labelling string.</p></dd>
+<dd><p>An R labelling function that maps any forest
+node to a labelling string.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This method partitions the samples in a phylogenetic forest
-according to a labelling function. It works in-place by altering the
-phylogenetic forest from which the method is called.</p>
+according to a labelling function over the corresponding forest nodes.
+It works in-place by altering the phylogenetic forest from which the
+method is called.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="SampleForest-cash-get_subforest_for.html">SampleForest$get_subforest_for()</a></code> for usage examples.</p></div>
+    <div class="dont-index"><p><code><a href="PhylogeneticForestNode.html">PhylogeneticForestNode</a></code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># use a phylogenetic forest example</span></span></span>
+<span class="r-in"><span><span class="va">forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="example.html">example</a></span><span class="op">(</span><span class="st">"PhylogeneticForest"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># show information about samples</span></span></span>
+<span class="r-in"><span><span class="va">forest</span><span class="op">$</span><span class="fu">get_samples_info</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    name id xmin ymin xmax ymax tumour_cells tumour_cells_in_bbox     time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 S_1_1  0  480  480  490  490          120                  120 552.3795</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 S_1_2  1  500  500  510  510          119                  119 552.3795</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 S_2_1  2  370  551  394  575          613                  613 741.0625</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 S_2_2  3  420  276  444  300          572                  572 741.0625</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   DNA_quantity equivalent_normal_cells</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  24672048948                240.4469</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  24383999806                237.6397</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 125944671782               1227.4217</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 117384847008               1144.0000</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># the labelling function parameter has type `PhylogeneticForestNode`</span></span></span>
+<span class="r-in"><span><span class="va">birth_time_labelling</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">node</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="kw">if</span> <span class="op">(</span><span class="va">node</span><span class="op">$</span><span class="va">birth_time</span> <span class="op">&gt;</span> <span class="fl">421</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="st">"YOUNG"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="kw">if</span> <span class="op">(</span><span class="va">node</span><span class="op">$</span><span class="va">birth_time</span> <span class="op">&gt;</span> <span class="fl">321</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="st">"MIDDLE_AGED"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="st">"OLD"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># partition the samples according to the labelling function</span></span></span>
+<span class="r-in"><span><span class="va">forest</span><span class="op">$</span><span class="fu">partition_samples</span><span class="op">(</span><span class="va">birth_time_labelling</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># show the new samples</span></span></span>
+<span class="r-in"><span><span class="va">forest</span><span class="op">$</span><span class="fu">get_samples_info</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                name  id xmin ymin xmax ymax tumour_cells tumour_cells_in_bbox</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 S_1_1_MIDDLE_AGED 122  480  480  490  490            7                  120</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       S_1_1_YOUNG 125  480  480  490  490          113                  120</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 S_1_2_MIDDLE_AGED 123  500  500  510  510            6                  119</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         S_1_2_OLD 121  500  500  510  510            1                  119</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       S_1_2_YOUNG 124  500  500  510  510          112                  119</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       S_2_1_YOUNG 126  370  551  394  575          613                  613</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7       S_2_2_YOUNG 127  420  276  444  300          572                  572</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       time DNA_quantity equivalent_normal_cells</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 552.3795   1436527848                 14.0000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 552.3795  23235521100                226.4469</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 552.3795   1231309584                 12.0000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 552.3795    205218264                  2.0000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 552.3795  22947471958                223.6397</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 741.0625 125944671782               1227.4217</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7 741.0625 117384847008               1144.0000</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

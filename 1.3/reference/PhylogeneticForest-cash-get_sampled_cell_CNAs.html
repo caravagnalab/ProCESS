@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,99 +63,26 @@ the leaves of the phylogenetic forest.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="PhylogeneticForest-cash-get_sampled_cell_mutations.html">PhylogeneticForest$get_sampled_cell_mutations()</a></code>,
-<code><a href="PhylogeneticForest-cash-get_cell_CNAs.html">PhylogeneticForest$get_cell_CNAs()</a></code>,
-<code><a href="PhylogeneticForest-cash-get_cell_mutations.html">PhylogeneticForest$get_cell_mutations()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="PhylogeneticForest-cash-get_sampled_cell_mutations.html">PhylogeneticForest$get_sampled_cell_mutations()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># set the seed of the random number generator</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># use a phylogenetic forest example</span></span></span>
+<span class="r-in"><span><span class="va">forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="example.html">example</a></span><span class="op">(</span><span class="st">"PhylogeneticForest"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># build a tissue simulation with epigenetic states "E1" and "E2"</span></span></span>
-<span class="r-in"><span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="TissueSimulation.html">TissueSimulation</a></span><span class="op">(</span>epigenetic_states <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"E1"</span>, <span class="st">"E2"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># get the sampled cell CNAs</span></span></span>
+<span class="r-in"><span><span class="va">CNAs</span> <span class="op">&lt;-</span> <span class="va">forest</span><span class="op">$</span><span class="fu">get_sampled_cell_CNAs</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># add mutant "A" and set its species rates</span></span></span>
-<span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">add_mutant</span><span class="op">(</span><span class="st">"A"</span>,</span></span>
-<span class="r-in"><span>               <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>E1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>duplication <span class="op">=</span> <span class="fl">0.2</span>, death <span class="op">=</span> <span class="fl">0.05</span>, E2 <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                    E2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>duplication <span class="op">=</span> <span class="fl">0.08</span>, death <span class="op">=</span> <span class="fl">0.01</span>, E1 <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># place a cell of species "A[E1]" in position (500,500)</span></span></span>
-<span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">place_cell</span><span class="op">(</span><span class="st">"A[E1]"</span>, <span class="fl">500</span>, <span class="fl">500</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># run the simulation until "A[E2]" accounts for less than 1000 cells</span></span></span>
-<span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"A[E2]"</span>, <span class="fl">1000</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
-</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># sample the tissue</span></span></span>
-<span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">sample_cells</span><span class="op">(</span><span class="st">"Sample_1"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">475</span>, <span class="fl">475</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">525</span>, <span class="fl">525</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># build the sample forest</span></span></span>
-<span class="r-in"><span><span class="va">sample_forest</span> <span class="op">&lt;-</span> <span class="va">sim</span><span class="op">$</span><span class="fu">get_sample_forest</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># initialize a mutation engine with the "demo" setup</span></span></span>
-<span class="r-in"><span><span class="va">m_engine</span> <span class="op">&lt;-</span> <span class="fu"><a href="MutationEngine.html">MutationEngine</a></span><span class="op">(</span>setup_code <span class="op">=</span> <span class="st">"demo"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 
- [█---------------------------------------] 0% [00m:00s] Loading context index                                
-
- [████████████████████████████████████████] 100% [00m:00s] Context index loaded                               
-</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 
- [█---------------------------------------] 0% [00m:00s] Loading RS index                                     
-
- [█████████████---------------------------] 30% [00m:01s] Loading RS index                                    
-
- [█████████████████████████---------------] 60% [00m:02s] Loading RS index                                    
-
- [██████████████████████████████████------] 83% [00m:03s] Loading RS index                                    
-
- [████████████████████████████████████████] 100% [00m:04s] RS index loaded                                    
-</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 
- [█---------------------------------------] 0% [00m:00s] Loading germline                                     
-
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                    
-</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># add the genomic characterisation for the mutant "A"</span></span></span>
-<span class="r-in"><span><span class="va">m_engine</span><span class="op">$</span><span class="fu">add_mutant</span><span class="op">(</span><span class="st">"A"</span>,</span></span>
-<span class="r-in"><span>                    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"E1"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>SNV <span class="op">=</span> <span class="fl">1e-7</span>, indel <span class="op">=</span> <span class="fl">1e-8</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                         <span class="st">"E2"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>SNV <span class="op">=</span> <span class="fl">3e-7</span>, CNA <span class="op">=</span> <span class="fl">1e-11</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="SNV.html">SNV</a></span><span class="op">(</span><span class="st">"22"</span>, <span class="fl">10510210</span>, <span class="st">"C"</span>, allele <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                         <span class="fu"><a href="CNA.html">CNA</a></span><span class="op">(</span><span class="st">"D"</span>, <span class="st">"22"</span>, <span class="fl">5010000</span>, <span class="fl">200000</span>,</span></span>
-<span class="r-in"><span>                             allele <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 
- [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs                                  
-
- [████████████████████████████████████████] 100% [00m:00s] "A"'s SIDs validated                               
-</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># add the exposure</span></span></span>
-<span class="r-in"><span><span class="va">m_engine</span><span class="op">$</span><span class="fu">add_exposure</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>ID1 <span class="op">=</span> <span class="fl">1</span>, SBS1 <span class="op">=</span> <span class="fl">0.5</span>, SBS2 <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># build the phylogenetic forest</span></span></span>
-<span class="r-in"><span><span class="va">phylo_forest</span> <span class="op">&lt;-</span> <span class="va">m_engine</span><span class="op">$</span><span class="fu">place_mutations</span><span class="op">(</span><span class="va">sample_forest</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 
- [█---------------------------------------] 0% [00m:00s] Placing mutations                                    
-
- [████████████████████████████████████████] 100% [00m:00s] Mutations placed                                   
-</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># get the CNAs in the sampled cells</span></span></span>
-<span class="r-in"><span><span class="va">CNAs</span> <span class="op">&lt;-</span> <span class="va">phylo_forest</span><span class="op">$</span><span class="fu">get_sampled_cell_CNAs</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># show the first CNAs in the sampled cells</span></span></span>
-<span class="r-in"><span><span class="va">CNAs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   cell_id type chr   begin     end allele src.allele  class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   19170    D  22 5010000 5209999      1         NA driver</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   11472    D  22 5010000 5209999      1         NA driver</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   17632    D  22 5010000 5209999      1         NA driver</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   17633    D  22 5010000 5209999      1         NA driver</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   20890    D  22 5010000 5209999      1         NA driver</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   23064    D  22 5010000 5209999      1         NA driver</span>
+<span class="r-in"><span><span class="co"># print the first lines of the data frame</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">CNAs</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   chr    begin      end type allele src.allele cause nature cell_id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  22 10303470 10503469    A      2          0       driver  183352</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  22  5010000  5209999    D      1         NA       driver  183352</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  22 10303470 10503469    A      2          0       driver  165816</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  22  5010000  5209999    D      1         NA       driver  165816</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  22 10303470 10503469    A      2          0       driver  177858</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  22  5010000  5209999    D      1         NA       driver  177858</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

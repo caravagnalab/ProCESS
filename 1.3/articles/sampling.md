@@ -31,6 +31,11 @@ We consider a simple monoclonal model, without an epi-state.
 ``` r
 
 library("ProCESS")
+#> 
+#> Attaching package: 'ProCESS'
+#> The following object is masked from 'package:utils':
+#> 
+#>     example
 
 # set the seed of the random number generator
 set.seed(0)
@@ -42,7 +47,7 @@ sim$add_mutant("A", c(duplication = 0.1, death = 0.01))
 
 sim$place_cell("A", 500, 500)
 sim$run_up_to_size("A", 60000)
-#>  [███████████████████████-----------------] 56% [00m:00s] Cells: 34142 [█████████████████████████████████████---] 91% [00m:01s] Cells: 54709 [████████████████████████████████████████] 100% [00m:01s] Saving snapshot
+#>  [█████████████████████████---------------] 61% [00m:00s] Cells: 36827 [███████████████████████████████████████-] 97% [00m:01s] Cells: 58787 [████████████████████████████████████████] 100% [00m:01s] Saving snapshot
 ```
 
 ``` r
@@ -275,7 +280,7 @@ sim$add_mutant("A", c(duplication = 0.1, death = 0.01))
 
 sim$place_cell("A", 500, 500)
 sim$run_up_to_size("A", 60000)
-#>  [███████████████████████-----------------] 55% [00m:00s] Cells: 33526 [████████████████████████████████████----] 88% [00m:01s] Cells: 53386 [████████████████████████████████████████] 100% [00m:01s] Saving snapshot
+#>  [████████████████████████----------------] 58% [00m:00s] Cells: 35902 [███████████████████████████████████████-] 95% [00m:01s] Cells: 57110 [████████████████████████████████████████] 100% [00m:01s] Saving snapshot
 ```
 
 We include a new mutant and let it grow. This new mutant has much higher
@@ -433,7 +438,7 @@ sim$add_mutant("A", list(E1 = list(duplication = 0.1, death = 0.1, E2 = 0.01),
 
 sim$place_cell("A[E1]", 500, 500)
 sim$run_up_to_size("A[E1]", 1000)
-#>  [████████████████████████████████--------] 79% [00m:00s] Cells: 25730 [████████████████████████████████████████] 100% [00m:00s] Saving snapshot
+#>  [█████████████████████████████████-------] 81% [00m:00s] Cells: 27330 [████████████████████████████████████████] 100% [00m:00s] Saving snapshot
 plot_tissue(sim, num_of_bins = 500)
 ```
 
@@ -485,7 +490,7 @@ sim$mutate_progeny(cell, "B")
 
 # let it grow more
 sim$run_up_to_size("B[E1]", 7000)
-#>  [████------------------------------------] 8% [00m:00s] Cells: 52462 [████████████████------------------------] 38% [00m:01s] Cells: 66552 [████████████████████████████------------] 68% [00m:02s] Cells: 78685 [███████████████████████████████████████-] 97% [00m:03s] Cells: 89394 [████████████████████████████████████████] 100% [00m:03s] Saving snapshot
+#>  [██████----------------------------------] 14% [00m:00s] Cells: 55605 [███████████████████---------------------] 45% [00m:01s] Cells: 69989 [█████████████████████████████████-------] 81% [00m:02s] Cells: 83603 [████████████████████████████████████████] 100% [00m:02s] Saving snapshot
 
 plot_tissue(sim, num_of_bins = 500)
 ```
@@ -546,6 +551,7 @@ file.exists("sample_forest.sff")
 
 # save the sample forest in the file "sample_forest.sff"
 forest$save("sample_forest.sff")
+#>  [█---------------------------------------] 0% [00m:00s] Saving forest [████████████████████████████████████████] 100% [00m:00s] Forest saved
 
 # check the file existence. It now exists.
 file.exists("sample_forest.sff")
@@ -553,12 +559,13 @@ file.exists("sample_forest.sff")
 ```
 
 The saved sample forest can successively be loaded by using the function
-[`load_sample_forest()`](https://caravagnalab.github.io/ProCESS/1.3/reference/load_sample_forest.md).
+[`load_forest()`](https://caravagnalab.github.io/ProCESS/1.3/reference/load_forest.md).
 
 ``` r
 
 # load the sample forest from "sample_forest.sff" and store it in `forest2`
-forest2 <- load_sample_forest("sample_forest.sff")
+forest2 <- load_forest("sample_forest.sff")
+#>  [█---------------------------------------] 0% [00m:00s] Loading forest [████████████████████████████████████████] 100% [00m:00s] Forest loaded
 
 # let us now compare the sample forests stored in `forest` and `forest2`;
 # they should be the same.

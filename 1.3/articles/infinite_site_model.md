@@ -36,7 +36,9 @@ test_infinite_sites_model <- function(phylo_forest) {
   # extract non-germinal SNVs that appear multiple times either
   # in the same cell or different cells
   snvs <- phylo_forest$get_sampled_cell_mutations() %>%
-    filter(class != "germinal", .data$type == "SNV") %>%
+    filter(nature != "germinal",
+           nchar(.data$ref) == 1,
+           nchar(.data$alt) == 1) %>%
     count(.data$chr, .data$from, .data$ref, .data$alt) %>%
     filter(n > 1)
 
@@ -104,5 +106,5 @@ phylo_forest2 <- m_engine$place_mutations(sample_forest, 1000, 500)
 
 # test whether the infinite sites conditions hold in the new forest
 test_infinite_sites_model(phylo_forest2)
-#> [1] "SNV('22'',16109191,'T','A') independently arises in cells 21872 and 134446"
+#> [1] "SNV('22'',16144992,'C','T') independently arises in cells 114456 and 169972"
 ```

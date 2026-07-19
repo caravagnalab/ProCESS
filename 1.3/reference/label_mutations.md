@@ -33,104 +33,34 @@ based on phylogenetic sticks (column "`label`").
 ## Examples
 
 ``` r
-# set the seed of the random number generator
-set.seed(0)
-
-# simulate a tissue
-sim <- TissueSimulation()
-
-sim$add_mutant("A", c(duplication = 1))
-sim$place_cell("A", 500, 500)
-sim$run_up_to_size("A", 1e4)
-#> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
-
-sim$add_mutant("B", c(duplication = 3.5))
-sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
-
-sim$run_up_to_size("B",1e4)
-#> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                    
-
-
-# sample the tissue and build the sample forest
-bbox <- sim$search_sample(c("A" = 100,"B" = 100), 50, 50)
-sim$sample_cells("Sampling", bbox$lower_corner, bbox$upper_corner)
-forest <- sim$get_sample_forest()
-
-# place the mutations
-m_engine <- MutationEngine(setup_code = "demo")
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading context index                                
-
- [████████████████████████████████████████] 100% [00m:00s] Context index loaded                               
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading RS index                                     
-
- [█████████████---------------------------] 31% [00m:01s] Loading RS index                                    
-
- [█████████████████████████---------------] 62% [00m:02s] Loading RS index                                    
-
- [█████████████████████████████████████---] 91% [00m:03s] Loading RS index                                    
-
- [████████████████████████████████████████] 100% [00m:03s] RS index loaded                                    
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading germline                                     
-
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                    
-
-m_engine$add_mutant(mutant_name = "A",
-                    passenger_rates = c(SNV = 5e-8))
-#> 
- [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs                                  
-
- [████████████████████████████████████████] 100% [00m:00s] "A"'s SIDs validated                               
-
-m_engine$add_mutant(mutant_name = "B",
-                    passenger_rates = c(SNV = 5e-8))
-#> 
- [█---------------------------------------] 0% [00m:00s] Retrieving "B" SIDs                                  
-
- [████████████████████████████████████████] 100% [00m:00s] "B"'s SIDs validated                               
-
-
-m_engine$add_exposure(time = 0, c(SBS1 = 0.2,SBS5 = 0.8))
-
-phylo_forest <- m_engine$place_mutations(forest, 100, 10)
-#> 
- [█---------------------------------------] 0% [00m:00s] Placing mutations                                    
-
- [████████████████████████████████████████] 100% [00m:00s] Mutations placed                                   
-
-
-# simulate sequencing without the normal sample and avoid progress bar
-seq_results <- simulate_seq(phylo_forest, coverage = 30, write_SAM = F,
-                            with_normal_sample = FALSE, quiet = TRUE)
+# use the phylogenetic forest example and its 10x sequencing results
+forest <- example("PhylogeneticForest")
+seq_results <- example("Sequencing results")
 
 # label filtered mutations using phylogenetic forest data
-labels <- label_mutations(seq_results$mutations, phylo_forest)
+labels <- label_mutations(seq_results$mutations, forest)
 labels
-#> # A tibble: 2,399 × 16
-#>    chr      from ref   alt   causes classes Sampling.NV Sampling.DP Sampling.VAF
-#>    <chr>   <int> <chr> <chr> <chr>  <chr>         <int>       <int>        <dbl>
-#>  1 22     1.61e7 T     A     SBS5   passen…           5          33       0.152 
-#>  2 22     1.61e7 C     A     SBS5   passen…           1          31       0.0323
-#>  3 22     1.61e7 T     C     SBS5   passen…           1          31       0.0323
-#>  4 22     1.61e7 A     C     SBS1   pre-ne…          13          32       0.406 
-#>  5 22     1.61e7 A     C     SBS5   passen…          16          37       0.432 
-#>  6 22     1.61e7 G     A     SBS5   passen…           1          25       0.04  
-#>  7 22     1.62e7 A     T     SBS5   passen…           2          31       0.0645
-#>  8 22     1.62e7 G     C     SBS1   pre-ne…          15          31       0.484 
-#>  9 22     1.62e7 A     T     SBS5   passen…          16          39       0.410 
-#> 10 22     1.62e7 A     G     SBS5   passen…           1          30       0.0333
-#> # ℹ 2,389 more rows
-#> # ℹ 7 more variables: cell_id <dbl>, ancestor <int>, depth <int>, mutant <chr>,
-#> #   sample <chr>, birth_time <dbl>, label <chr>
+#> # A tibble: 2,365 × 29
+#>    chr       from ref    alt   cause nature S_1_1.NV S_1_1.DP S_1_1.VAF S_1_2.NV
+#>    <chr>    <int> <chr>  <chr> <chr> <chr>     <int>    <int>     <dbl>    <int>
+#>  1 22    16066874 G      T     SBS1  pre-n…        8       10     0.8          5
+#>  2 22    16080730 GACT   G     ID1   pre-n…        4        9     0.444        5
+#>  3 22    16085675 GCCTC… G     A     driver        4        8     0.5          7
+#>  4 22    16095655 T      A     SBS1  pre-n…        5       11     0.455        2
+#>  5 22    16099091 G      GATA  ID1   pre-n…        5       13     0.385        7
+#>  6 22    16099402 A      C     SBS1  pre-n…        6        9     0.667        7
+#>  7 22    16119735 A      G     SBS1  pre-n…        6       11     0.545        2
+#>  8 22    16122890 C      A     SBS5  passe…        0       16     0            0
+#>  9 22    16127180 T      G     SBS1  pre-n…        5        8     0.625        5
+#> 10 22    16142082 A      T     SBS3  passe…        0       12     0            0
+#> # ℹ 2,355 more rows
+#> # ℹ 19 more variables: S_1_2.DP <int>, S_1_2.VAF <dbl>, S_2_1.NV <int>,
+#> #   S_2_1.DP <int>, S_2_1.VAF <dbl>, S_2_2.NV <int>, S_2_2.DP <int>,
+#> #   S_2_2.VAF <dbl>, normal.sample.NV <int>, normal.sample.DP <int>,
+#> #   normal.sample.VAF <dbl>, cell_id <dbl>, ancestor <int>, depth <int>,
+#> #   mutant <chr>, epistate <chr>, sample <chr>, birth_time <dbl>, label <chr>
 
 # plotting histogram of the VAF with phylogenetic labels
 plot_VAF_histogram(seq_results, labels = labels["label"],
                    cuts = c(0.02, 1))
-#> Warning: No shared levels found between `names(values)` of the manual scale and the data's fill values.
 ```

@@ -44,6 +44,11 @@ variable is returned.
 ``` r
 
 library("ProCESS")
+#> 
+#> Attaching package: 'ProCESS'
+#> The following object is masked from 'package:utils':
+#> 
+#>     example
 
 # set the seed of the random number generator
 set.seed(0)
@@ -197,7 +202,7 @@ sim$run_until(c5)
 #>  [████████████████████████████████████████] 100% [00m:00s] Saving snapshot
 
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260709-010206 ─────── ▣  [1000x1000]  ⏱ 40 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260719-005215 ─────── ▣  [1000x1000]  ⏱ 40 ──
 #> 
 #> ── Species: 2, with epigenetics
 #>    
