@@ -32,22 +32,21 @@
 #' @export
 #'
 #' @examples
-#' sim <- TissueSimulation()
-#' sim$add_mutant("A", c(duplication = 0.08))
-#' sim$place_cell("A", 500, 500)
-#' sim$run_up_to_time(60)
-#' sim$sample_cells("MySample", c(500, 500), c(510, 510))
-#' forest <- sim$get_sample_forest()
+#' # use a sample forest example
+#' forest <- example("SampleForest")
 #'
+#' # plot the forest
 #' plot_forest(forest)
 #'
-#' # define a custom color map
-#' color_map <- c("#B2DF8A")
-#' names(color_map) <- c("A")
+#' # define a custom color map for the forest species
+#' color_map <- c("#7FC97F", "#BEAED4", "#FDC086", "#FFFF99")
 #'
 #' plot_forest(forest, color_map = color_map)
 plot_forest <- function(forest, highlight_sample = NULL, color_map = NULL) {
-  stopifnot(inherits(forest, "Rcpp_SampleForest"))
+  if (!inherits(forest, "Rcpp_SampleForest")
+        && !inherits(forest, "Rcpp_PhylogeneticForest")) {
+    stop("The parameter \"forest\" is not a ProCESS forest.")
+  }
 
   forest_data <- forest$get_nodes()
 

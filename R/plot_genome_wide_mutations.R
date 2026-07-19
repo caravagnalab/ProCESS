@@ -30,69 +30,32 @@
 #'   is associated to a different colour in the plot (default: `NULL`).
 #' @param mutation_filter A function filtering mutations from the input
 #'   data (default: a function filtering out "germinal" mutations, e.g.,
-#'   `function(x) x %>% dplyr::filter(classes != "germinal")`).
+#'   `function(x) x %>% dplyr::filter(nature != "germinal")`).
 #' @param cuts A numeric vector specifying the range of VAF values to
 #'   include in the plot (default: `c(0, 1)`).
 #' @param N The number of mutations to sample for plotting (default: 5000).
 #' @return A ggplot2 object showing the DR distribution across the genome.
 #' @seealso `plot_VAF()`, `plot_BAF()`
 #' @export
-#'
-#' @examples
-#' # set the seed of the random number generator
-#' set.seed(0)
-#'
-#' sim <- TissueSimulation()
-#' sim$add_mutant("A", c(duplication = 0.1))
-#' sim$place_cell("A", 500, 500)
-#' sim$run_up_to_time(100)
-#'
-#' # sampling tissue
-#' n_w <- n_h <- 10
-#' ncells <- 0.8 * n_w * n_h
-#' bbox <- sim$search_sample(c("A" = ncells), n_w, n_h)
-#' sim$sample_cells("Sample_A", bbox$lower_corner, bbox$upper_corner)
-#'
-#' # adding second mutant
-#' sim$add_mutant("B", c(duplication = 0.3))
-#' sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
-#' sim$run_up_to_time(300)
-#'
-#' # sampling tissue again
-#' bbox <- sim$search_sample(c("B" = ncells), n_w, n_h)
-#' sim$sample_cells("Sample_B", bbox$lower_corner, bbox$upper_corner)
-#'
-#' forest <- sim$get_sample_forest()
-#'
-#' # placing mutations
-#' m_engine <- MutationEngine(setup_code = "demo")
-#'
-#' m_engine$add_mutant("A", passenger_rates = c(SNV = 5e-8))
-#' m_engine$add_mutant("B", passenger_rates = c(SNV = 5e-9))
-#' m_engine$add_exposure(c(SBS1 = 0.2, SBS5 = 0.8))
-#'
-#' phylo_forest <- m_engine$place_mutations(forest, 10, 10)
-#'
-#' # simulate sequencing and avoid progress bar
-#' seq_results <- simulate_seq(phylo_forest, coverage = 10,
-#'                             write_SAM = FALSE, quiet = TRUE)
+#' # use a sequencing result example
+#' seq_results <- example("Sequencing results")
 #'
 #' # plotting the depth ratio over all samples
 #' plot_DR(seq_results)
 #'
-#' # plotting the depth ratio for Sample_B only
-#' plot_DR(seq_results, samples = "Sample_B")
+#' # plotting the depth ratio for sample S_2_2 only
+#' plot_DR(seq_results, samples = "S_2_2")
 #'
-#' # plotting the depth ratio for Sample_B with labels
-#' plot_DR(seq_results, samples = "Sample_B",
-#'         labels = seq_results$mutations["classes"])
+#' # plotting the depth ratio for S_2_2 with labels
+#' plot_DR(seq_results, samples = "S_2_2",
+#'         labels = seq_results$mutations["nature"])
 #'
 #' # let us define a function to filter germinal and pre-neoplastic
 #' # from the input data
 #' library(dplyr)
 #' filter_data <- function(data) {
-#'   data %>% dplyr::filter(!classes %in% list("germinal",
-#'                                             "pre-neoplastic"))
+#'   data %>% dplyr::filter(!nature %in% list("germinal",
+#'                                            "pre-neoplastic"))
 #' }
 #'
 #' # plotting the depth ratio without germinal and pre-neoplastic
@@ -103,12 +66,11 @@
 #'
 #' # filter germinal mutations
 #' f_seq <- seq_results$mutations %>%
-#'    dplyr::filter(classes != "germinal")
+#'    dplyr::filter(nature != "germinal")
 #'
 #' # plotting the depth ratio
 #' plot_DR(f_seq)
 #'
-#' unlink('demo', recursive = T)
 plot_DR <- function(
     seq_result,
     chromosomes = NULL,
@@ -196,7 +158,7 @@ plot_DR <- function(
 #'   is associated to a different colour in the plot (default: `NULL`).
 #' @param mutation_filter A function filtering mutations from the input
 #'   data (default: a function filtering out "germinal" mutations, e.g.,
-#'   `function(x) x %>% dplyr::filter(classes != "germinal")`).
+#'   `function(x) x %>% dplyr::filter(nature != "germinal")`).
 #' @param driver_mutations The data frame of the driver mutations as
 #'   returned by `PhylogeneticForest$get_driver_mutations()`.
 #'   This parameter can be avoided when `seq_result` is the result
@@ -211,63 +173,25 @@ plot_DR <- function(
 #' @export
 #'
 #' @examples
-#' # set the seed of the random number generator
-#' set.seed(0)
-#'
-#' sim <- TissueSimulation()
-#' sim$add_mutant("A", c(duplication = 0.2))
-#' sim$place_cell("A", 500, 500)
-#' sim$run_up_to_time(50)
-#'
-#' # sampling tissue
-#' n_w <- n_h <- 10
-#' ncells <- 0.8 * n_w * n_h
-#' bbox <- sim$search_sample(c("A" = ncells), n_w, n_h)
-#' sim$sample_cells("Sample_A", bbox$lower_corner, bbox$upper_corner)
-#'
-#' # adding second mutant
-#' sim$add_mutant("B", c(duplication = 0.3))
-#' sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
-#' sim$run_up_to_time(300)
-#'
-#' # sampling tissue again
-#' bbox <- sim$search_sample(c("B" = ncells), n_w, n_h)
-#' sim$sample_cells("Sample_B", bbox$lower_corner, bbox$upper_corner)
-#'
-#' forest <- sim$get_sample_forest()
-#'
-#' # placing mutations
-#' m_engine <- MutationEngine(setup_code = "demo")
-#'
-#' m_engine$add_mutant(mutant_name="A", passenger_rates = c(SNV = 5e-8),
-#'                     drivers = list(SNV("22", 46510210, "C", "A", allele = 1),
-#'                                    "DGCR8 P26L"))
-#' m_engine$add_mutant(mutant_name="B", passenger_rates = c(SNV = 5e-9),
-#'                     drivers = list(list("DGCR8 A18V", allele = 1)))
-#' m_engine$add_exposure(c(SBS1 = 0.2, SBS5 = 0.8))
-#'
-#' phylo_forest <- m_engine$place_mutations(forest, 10, 10)
-#'
-#' # simulate sequencing and avoid progress bar
-#' seq_results <- simulate_seq(phylo_forest, coverage = 10,
-#'                             write_SAM = FALSE, quiet = TRUE)
+#' # use a sequencing result example
+#' seq_results <- example("Sequencing results")
 #'
 #' # plotting the BAF over all samples
 #' plot_BAF(seq_results)
 #'
-#' # plotting the BAF for Sample_B only
-#' plot_BAF(seq_results, samples = c("Sample_B"))
+#' # plotting the BAF for sample S_2_2 only
+#' plot_BAF(seq_results, samples = c("S_2_2"))
 #'
-#' # plotting the BAF for Sample_B with labels
-#' plot_BAF(seq_results, samples = "Sample_B",
-#'          labels = seq_results$mutations["classes"])
+#' # plotting the BAF for S_2_2 with labels
+#' plot_BAF(seq_results, samples = "S_2_2",
+#'          labels = seq_results$mutations["nature"])
 #'
 #' # let us define a function to filter germinal and pre-neoplastic
 #' # from the input data
 #' library(dplyr)
 #' filter_data <- function(data) {
-#'   data %>% dplyr::filter(!classes %in% list("germinal",
-#'                                             "pre-neoplastic"))
+#'   data %>% dplyr::filter(!nature %in% list("germinal",
+#'                                            "pre-neoplastic"))
 #' }
 #'
 #' # plotting the BAF without germinal and pre-neoplastic
@@ -278,12 +202,11 @@ plot_DR <- function(
 #'
 #' # filter germinal mutations
 #' f_seq <- seq_results$mutations %>%
-#'    dplyr::filter(classes != "germinal")
+#'    dplyr::filter(nature != "germinal")
 #'
 #' # plotting the BAF
 #' plot_BAF(f_seq)
 #'
-#' unlink('demo', recursive = T)
 plot_BAF <- function(
     seq_result,
     chromosomes = NULL,
@@ -304,7 +227,7 @@ plot_BAF <- function(
   tumour_data$BAF <- pmin(tumour_data$VAF, 1 - tumour_data$VAF)
 
   tumour_data_no_drivers <- tumour_data %>%
-    dplyr::filter(.data$classes != "driver")
+    dplyr::filter(.data$nature != "driver")
 
   N <- min(N, nrow(tumour_data_no_drivers))
 
@@ -312,7 +235,7 @@ plot_BAF <- function(
     dplyr::sample_n(N)
 
   driver_data <- tumour_data %>%
-    dplyr::filter(.data$classes == "driver")
+    dplyr::filter(.data$nature == "driver")
 
   data <- dplyr::bind_rows(data, driver_data) %>%
     dplyr::arrange(.data$chr, .data$from) %>%
@@ -379,7 +302,7 @@ plot_BAF <- function(
 #'   is associated to a different colour in the plot (default: `NULL`).
 #' @param mutation_filter A function filtering mutations from the input
 #'   data (default: a function filtering out "germinal" mutations, e.g.,
-#'   `function(x) x %>% dplyr::filter(classes != "germinal")`).
+#'   `function(x) x %>% dplyr::filter(nature != "germinal")`).
 #' @param driver_mutations The data frame of the driver mutations as
 #'   returned by `PhylogeneticForest$get_driver_mutations()`.
 #'   This parameter can be avoided when `seq_result` is the result
@@ -391,66 +314,26 @@ plot_BAF <- function(
 #' @param N The number of mutations to sample for plotting (default: 5000).
 #' @return A ggplot2 object showing the BAF distribution across the genome.
 #' @seealso `plot_BAF()`, `plot_DR()`, `plot_VAF_histogram()`
-#' @export
-#'
 #' @examples
-#' # set the seed of the random number generator
-#' set.seed(0)
-#'
-#' sim <- TissueSimulation()
-#' sim$add_mutant("A", c(duplication = 0.2))
-#' sim$place_cell("A", 500, 500)
-#' sim$run_up_to_time(50)
-#'
-#' # sampling tissue
-#' n_w <- n_h <- 10
-#' ncells <- 0.8 * n_w * n_h
-#' bbox <- sim$search_sample(c("A" = ncells), n_w, n_h)
-#' sim$sample_cells("Sample_A", bbox$lower_corner, bbox$upper_corner)
-#'
-#' # adding second mutant
-#' sim$add_mutant("B", c(duplication = 0.3))
-#' sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
-#' sim$run_up_to_time(300)
-#'
-#' # sampling tissue again
-#' bbox <- sim$search_sample(c("B" = ncells), n_w, n_h)
-#' sim$sample_cells("Sample_B", bbox$lower_corner, bbox$upper_corner)
-#'
-#' forest <- sim$get_sample_forest()
-#'
-#' # placing mutations
-#' m_engine <- MutationEngine(setup_code = "demo")
-#'
-#' m_engine$add_mutant("A", passenger_rates = c(SNV = 5e-8),
-#'                     drivers = list(SNV("22", 46510210, "C", "A", allele = 1),
-#'                                    "DGCR8 P26L"))
-#' m_engine$add_mutant("B", passenger_rates = c(SNV = 5e-9),
-#'                     drivers = list(list("DGCR8 A18V", allele = 1)))
-#' m_engine$add_exposure(c(SBS1 = 0.2, SBS5 = 0.8))
-#'
-#' phylo_forest <- m_engine$place_mutations(forest, 10, 10)
-#'
-#' # simulate sequencing and avoid progress bar
-#' seq_results <- simulate_seq(phylo_forest, coverage = 10,
-#'                             write_SAM = FALSE, quiet = TRUE)
+#' # use a sequencing result example
+#' seq_results <- example("Sequencing results")
 #'
 #' # plotting the VAF over all samples
 #' plot_VAF(seq_results)
 #'
-#' # plotting the VAF for Sample_B only
-#' plot_VAF(seq_results, samples = c("Sample_B"))
+#' # plotting the VAF for sample S_2_2 only
+#' plot_VAF(seq_results, samples = c("S_2_2"))
 #'
-#' # plotting the VAF for Sample_B with labels
-#' plot_VAF(seq_results, samples = "Sample_B",
-#'          labels = seq_results$mutations["classes"])
+#' # plotting the VAF for S_2_2 with labels
+#' plot_VAF(seq_results, samples = "S_2_2",
+#'          labels = seq_results$mutations["nature"])
 #'
 #' # let us define a function to filter germinal and pre-neoplastic
 #' # from the input data
 #' library(dplyr)
 #' filter_data <- function(data) {
-#'   data %>% dplyr::filter(!classes %in% list("germinal",
-#'                                             "pre-neoplastic"))
+#'   data %>% dplyr::filter(!nature %in% list("germinal",
+#'                                            "pre-neoplastic"))
 #' }
 #'
 #' # plotting the VAF without germinal and pre-neoplastic
@@ -461,12 +344,12 @@ plot_BAF <- function(
 #'
 #' # filter germinal mutations
 #' f_seq <- seq_results$mutations %>%
-#'    dplyr::filter(classes != "germinal")
+#'    dplyr::filter(nature != "germinal")
 #'
 #' # plotting the VAF
 #' plot_VAF(f_seq)
 #'
-#' unlink('demo', recursive = T)
+#' @export
 plot_VAF <- function(
     seq_result,
     chromosomes = NULL,
@@ -485,7 +368,7 @@ plot_VAF <- function(
     dplyr::filter(.data$sample != "normal.sample")
 
   tumour_data_no_drivers <- tumour_data %>%
-    dplyr::filter(.data$classes != "driver")
+    dplyr::filter(.data$nature != "driver")
 
   N <- min(N, nrow(tumour_data_no_drivers))
 
@@ -493,7 +376,7 @@ plot_VAF <- function(
     dplyr::sample_n(N)
 
   driver_data <- tumour_data %>%
-    dplyr::filter(.data$classes == "driver")
+    dplyr::filter(.data$nature == "driver")
 
   data <- dplyr::bind_rows(data, driver_data) %>%
     dplyr::arrange(.data$chr, .data$from) %>%

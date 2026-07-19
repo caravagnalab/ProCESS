@@ -72,7 +72,7 @@ bool select_column(Rcpp::CharacterVector& column, Rcpp::DataFrame &df, const cha
     return false;
 }
 
-inline void fill_SID_row(Rcpp::DataFrame& df, 
+inline void fill_SID_row(Rcpp::DataFrame& df,
                          const CLONES::Mutations::MutationSpec<CLONES::Mutations::SID> &sid,
                          const std::map<CLONES::Mutations::SID, std::string> &driver_codes,
                          const size_t &i)
@@ -89,7 +89,7 @@ inline void fill_SID_row(Rcpp::DataFrame& df,
 
     IntegerVector starts = df["start"], ends = df["end"], alleles = df["allele"],
                   src_alleles = df["src.allele"];
-    
+
     types[i] = "SID";
     CNA_types[i] = NA_STRING;
     refs[i] = sid.ref;

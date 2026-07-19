@@ -40,13 +40,13 @@ Let us reload the sample forest produced in
 library("ProCESS")
 
 # load the phylogenetic forest produced by sampling.md
-sample_forest <- load_sample_forest("sample_forest.sff")
+sample_forest <- load_forest("sample_forest.sff")
 
 # show some information about the forest
 sample_forest
 ```
 
-The function `get_node_tour()` accepts as parameter a forest and 
+The function `get_node_tour()` accepts as parameter a forest and
 returns either a
 <code>[SampleForestNodeTour](../reference/SampleForestNodeTour.md)</code>
 or a
@@ -85,7 +85,7 @@ node_tour$node
 
 Since the forest type is
 <code>[SampleForest](../reference/SampleForest.md)</code>,
-`get_node_tour()` returns a 
+`get_node_tour()` returns a
 <code>[SampleForestNodeTour](../reference/SampleForestNodeTour.md)</code>
 object and the property `node` has type
 <code>[SampleForestNode](../reference/SampleForestNode.md)</code>.
@@ -95,7 +95,7 @@ Let us reload the phylogenetic forest produced in
 
 ```{r}
 # load the phylogenetic forest produced by mutations.md
-phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
+phylo_forest <- load_forest("phylo_forest.pff")
 
 # show some information about the forest
 phylo_forest
@@ -192,7 +192,7 @@ following labelling function.
 values <- 1:100
 
 # this labelling function labels each node by randomly sampling the
-# content of values 
+# content of values
 random_labelling <- function(parent_label, node) {
   sample(values, 1)
 }
@@ -222,7 +222,7 @@ node_tour$label
 # generate a node tour labelling each node by the ids of its ancestors
 node_tour <- get_node_tour(phylo_forest, ancestor_species_labelling)
 
-# go to the first node whose associated cell belongs to "B[E1]" 
+# go to the first node whose associated cell belongs to "B[E1]"
 while (node_tour$node$species_name != "B[E1]") {
   node_tour$step()
 }
@@ -235,11 +235,11 @@ node_tour$label[1:5]
 
 #### Producing the Simulated Genomes
 
-Behind the labels produced by the labelling function, 
+Behind the labels produced by the labelling function,
 <code>[PhylogeneticForestNodeTour](../reference/PhylogeneticForestNodeTour.md)</code>
 can also generate the genomes of the forest nodes. This is achieved by using the
 `get_node_tour()`'s optional Boolean parameter `with_genomes`.
-When `with_genomes` is set to `TRUE`, the tour additional property `genome` contains a 
+When `with_genomes` is set to `TRUE`, the tour additional property `genome` contains a
 <code>[GenomeMutations](../reference/GenomeMutations.md)</code> object
 representing the genome of the cell modelled by the pointed node.
 
@@ -310,7 +310,7 @@ code [@li2009sam] with respect to the reference genome.
 fragment$get_covered_reference_region()
 
 # the fragment DNA sequence
-fragment$get_sequence()
+fragment$sequence
 
 # the mutations laying in the fragment
 fragment$get_mutations()

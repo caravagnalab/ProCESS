@@ -97,7 +97,7 @@ NULL
 #' @example nobuild/roxygen/PhylogeneticForestNode-setup.R
 #' @examples
 #'
-#' # the corresponing cell was not collected and the property is `NA`
+#' # the corresponding cell was not collected and the property is `NA`
 #' node$sample_name
 #'
 #' # get a tour over forest leaves

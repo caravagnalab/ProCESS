@@ -97,7 +97,7 @@ declare species mutation rates.
 Let us consider the simulation of Section "_Two populations with
 epigenetic state_" in [this article](sampling.md). It involves the two
 mutants `A` and `B`. Both of them have two possible epigenetic states,
-`E1` and `E2`, leading to the four species `A[E1]`, `A[E2]`, `B[E1]`, and 
+`E1` and `E2`, leading to the four species `A[E1]`, `A[E2]`, `B[E1]`, and
 `B[E2]`, respectively.
 Each of these species has a passenger mutation rate that must be
 declared to the mutation engine before the sample forest is labelled.
@@ -341,7 +341,7 @@ we can load its sample forest from the file `"sample_forest.sff"` as saved
 there.
 
 ```{r}
-sample_forest <- load_sample_forest("sample_forest.sff")
+sample_forest <- load_forest("sample_forest.sff")
 
 # place mutations on the sample forest assuming 1000 pre-neoplastic SNVs and
 # 500 indels
@@ -446,7 +446,7 @@ phylogenetic forest can be obtained by using the method
 phylo_forest$get_exposures()
 ```
 
-The method <code>[MutationEngine$get_bulk_allelic_fragmentation()](../reference/MutationEngine-cash-get_bulk_allelic_fragmentation.md)</code> 
+The method <code>[MutationEngine$get_bulk_allelic_fragmentation()](../reference/MutationEngine-cash-get_bulk_allelic_fragmentation.md)</code>
 returns a data frame
 reporting the allelic type per genome fragment.
 
@@ -458,7 +458,7 @@ sample_name <- phylo_forest$get_samples_info()[["name"]][1]
 phylo_forest$get_bulk_allelic_fragmentation(sample_name) %>% head()
 ```
 
-Instead, the method <code>[MutationEngine$get_cell_allelic_fragmentation()](../reference/MutationEngine-cash-get_cell_allelic_fragmentation.md)</code> 
+Instead, the method <code>[MutationEngine$get_cell_allelic_fragmentation()](../reference/MutationEngine-cash-get_cell_allelic_fragmentation.md)</code>
 returns the allelic fragmentation per cell.
 
 ```{r}
@@ -468,7 +468,7 @@ phylo_forest$get_cell_allelic_fragmentation() %>% head()
 
 The details about the SNV and indel signatures adopted during the evolution are
 available in the mutation engine and they can be retrieved by using the methods
-<code>[MutationEngine$get_SNV_signatures()](../reference/MutationEngine-cash-get_SNV_signatures.md)</code> 
+<code>[MutationEngine$get_SNV_signatures()](../reference/MutationEngine-cash-get_SNV_signatures.md)</code>
 and
 <code>[MutationEngine$get_indel_signatures()](../reference/MutationEngine-cash-get_indel_signatures.md)</code>.
 
@@ -493,16 +493,16 @@ phylo_forest$get_germline_subject()
 ### Storing Phylogenetic Forests
 
 As in the case of the sample forests, the phylogenetic forests
-can be saved by using the method 
-<code>[PhylogeneticForest$save()](../reference/PhylogeneticForest-cash-save.md)</code> 
-and load by the function `load_phylogenetic_forest()`.
+can be saved by using the method
+<code>[PhylogeneticForest$save()](../reference/PhylogeneticForest-cash-save.md)</code>
+and load by the function `load_forest()`.
 
 ```{r}
-# save the phylogenetic forest in the file "phylo_forest.sff"
-phylo_forest$save("phylo_forest.sff")
+# save the phylogenetic forest in the file "phylo_forest.pff"
+phylo_forest$save("phylo_forest.pff")
 
 # loading the saved forest
-loaded_phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
+loaded_phylo_forest <- load_forest("phylo_forest.pff")
 
 loaded_phylo_forest
 ```
@@ -510,9 +510,9 @@ loaded_phylo_forest
 ### Getting and Setting the Reference Genome Path
 
 The phylogenetic forest object contains the reference genome FASTA file path.
-The methods 
+The methods
 <code>[PhylogeneticForest$get_reference_path()](../reference/PhylogeneticForest-cash-get_reference_path.md)</code> and
-<code>[PhylogeneticForest$set_reference_path()](../reference/PhylogeneticForest-cash-set_reference_path.md)</code> 
+<code>[PhylogeneticForest$set_reference_path()](../reference/PhylogeneticForest-cash-set_reference_path.md)</code>
 can be used to get the path and set it, respectively.
 ```{r}
 phylo_forest$get_reference_path()

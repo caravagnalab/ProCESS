@@ -919,7 +919,7 @@ void TissueSimulation::add_mutant(const SEXP &mutant_name, const SEXP& rates)
         }
     } else {
         if (Rcpp::is<Rcpp::List>(rates)) {
-            valid = true;   
+            valid = true;
             C_rates = Rcpp::as<Rcpp::List>(rates);
         }
     }

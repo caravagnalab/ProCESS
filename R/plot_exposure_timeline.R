@@ -61,48 +61,18 @@ get_exposure_ends <- function(phylo_forest) {
 #'
 #' @return A `ggplot2` plot.
 #' @examples
-#' sim <- TissueSimulation()
-#'
-#' sim$add_mutant("A", c(duplication = 0.2))
-#' sim$place_cell("A", 500, 500)
-#'
-#' sim$run_up_to_time(150)
-#'
-#' # sampling tissue
-#'
-#' n_w <- n_h <- 50
-#' ncells <- 0.8 * n_w * n_h
-#' bbox <- sim$search_sample(c("A" = ncells), n_w, n_h)
-#'
-#' sim$sample_cells("Sampling", bbox$lower_corner, bbox$upper_corner)
-#'
-#' forest <- sim$get_sample_forest()
-#'
-#' # placing mutations
-#'
-#' m_engine <- MutationEngine(setup_code = "demo")
-#'
-#' m_engine$add_mutant(mutant_name = "A",
-#'                     passenger_rates = c(SNV = 8e-8))
-#'
-#' m_engine$add_exposure(c(SBS1 = 0.2, SBS5 = 0.8, ID3 = 1))
-#' m_engine$add_exposure(time = 50,
-#'                       c(SBS5 = 0.3, SBS2 = 0.2, SBS3 = 0.5,
-#'                         ID2 = 0.8, ID21 = 0.2))
-#' phylo_forest <- m_engine$place_mutations(forest, 500, 10)
+#' # use a phylogenetic forest example
+#' forest <- example("PhylogeneticForest")
 #'
 #' # plotting the phylogenetic forest
-#' plot_exposure_timeline(phylo_forest)
+#' plot_exposure_timeline(forest)
 #'
-#' # plotting the phylogenetic forest emphatizing the exposure switches
-#' plot_exposure_timeline(phylo_forest, emphasize_switches = TRUE)
-#'
-#' # deleting the mutation engine directory
-#' unlink("demo", recursive = TRUE)
+#' # plotting the phylogenetic forest emphasizing the exposure switches
+#' plot_exposure_timeline(forest, emphasize_switches = TRUE)
 #' @export
 plot_exposure_timeline <- function(phylogenetic_forest, linewidth = 0.8,
                                    emphasize_switches = FALSE,
-                                   pal_name = "Dark2") {
+                                   pal_name = "Set3") {
   stopifnot(inherits(phylogenetic_forest, "Rcpp_PhylogeneticForest"))
 
   exposure_df <- get_exposure_ends(phylogenetic_forest)
@@ -128,7 +98,7 @@ plot_exposure_timeline <- function(phylogenetic_forest, linewidth = 0.8,
     ggplot2::theme_minimal()  # Apply a minimal theme
 
   if (emphasize_switches) {
-    switching_times <- exposure_df["time"] %>% filter(time != 0)
+    switching_times <- exposure_df["time"] %>% dplyr::filter(time != 0)
     for (switching_time in switching_times) {
       p <- p +
         ggplot2::geom_vline(xintercept = switching_time, linetype = "dotted")

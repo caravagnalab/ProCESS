@@ -17,9 +17,15 @@
 # add labels for driver mutations
 add_marginals_driver_mutation_labels <- function(plot, data, driver_mutations) {
 
-  drivers <- data %>% dplyr::filter(.data$classes == "driver")
+  drivers <- data %>% dplyr::filter(.data$nature == "driver")
+
+  if (!"mutant" %in% colnames(drivers)) {
+    drivers <- drivers %>%
+      dplyr::mutate(mutant = .data$cause)
+  }
 
   if (!is.null(driver_mutations)) {
+
     drivers <- dplyr::left_join(drivers, driver_mutations,
                                 by = c("chr" = "chr",
                                        "from" = "start",
@@ -44,21 +50,23 @@ add_marginals_driver_mutation_labels <- function(plot, data, driver_mutations) {
         x = VAF.x,
         y = VAF.y,
         label = code,
-        fill = causes
+        fill = mutant
       ),
       color = 'black',
       size = 2,
       min.segment.length = 0,
       segment.color = "grey50", # Color of the connecting segment
       segment.linetype = "dashed", # Line type of the segment
+      key_glyph = "rect",
       nudge_x = 0.1,
       nudge_y = 0.1,
-      show.legend = FALSE,
+      #show.legend = FALSE,
       segment.curvature = 0,
       segment.ncp = 1,
       segment.square = TRUE,
       segment.inflect = TRUE,
-      direction = "both"
+      direction = "both",
+      box.padding = 0.5
     )
 
   return(plot)
@@ -80,7 +88,7 @@ add_marginals_driver_mutation_labels <- function(plot, data, driver_mutations) {
 #'   is associated to a different colour in the plot (default: `NULL`).
 #' @param mutation_filter A function filtering mutations from the input
 #'   data (default: a function filtering out "germinal" mutations, e.g.,
-#'   `function(x) x %>% dplyr::filter(classes != "germinal")`).
+#'   `function(x) x %>% dplyr::filter(nature != "germinal")`).
 #' @param driver_mutations The data frame of the driver mutations as
 #'   returned by `PhylogeneticForest$get_driver_mutations()`.
 #'   This parameter can be avoided when `seq_result` is the result
@@ -97,46 +105,8 @@ add_marginals_driver_mutation_labels <- function(plot, data, driver_mutations) {
 #' @export
 #'
 #' @examples
-#' # set the seed of the random number generator
-#' set.seed(0)
-#'
-#' sim <- TissueSimulation()
-#' sim$add_mutant("A", c(duplication = 0.1))
-#' sim$place_cell("A", 500, 500)
-#' sim$run_up_to_time(100)
-#'
-#' # sampling tissue
-#' n_w <- n_h <- 10
-#' ncells <- 0.8 * n_w * n_h
-#' bbox <- sim$search_sample(c("A" = ncells), n_w, n_h)
-#' sim$sample_cells("SampleA", bbox$lower_corner, bbox$upper_corner)
-#'
-#' # adding second mutant
-#' sim$add_mutant("B", c(duplication = 0.3))
-#' sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
-#' sim$run_up_to_time(300)
-#'
-#' # sampling tissue again
-#' bbox <- sim$search_sample(c("B" = ncells), n_w, n_h)
-#' sim$sample_cells("SampleB", bbox$lower_corner, bbox$upper_corner)
-#'
-#' forest <- sim$get_sample_forest()
-#'
-#' # placing mutations
-#' m_engine <- MutationEngine(setup_code = "demo")
-#'
-#' m_engine$add_mutant("A", passenger_rates = c(SNV = 5e-8),
-#'                     drivers = list(SNV("22", 16510210, "C", "T", allele = 1),
-#'                                    "DGCR8 P26L"))
-#' m_engine$add_mutant("B", passenger_rates = c(SNV = 5e-9),
-#'                     drivers = list("DGCR8 A18V"))
-#' m_engine$add_exposure(c(SBS1 = 0.2, SBS5 = 0.8))
-#'
-#' phylo_forest <- m_engine$place_mutations(forest, 10, 10)
-#'
-#' # simulating sequencing without the normal sample
-#' seq_results <- simulate_seq(phylo_forest, coverage = 10, write_SAM = F,
-#'                             with_normal_sample = FALSE, quiet = TRUE)
+#' # use a sequencing result example
+#' seq_results <- example("Sequencing results")
 #'
 #' # plotting the VAF marginals without germinal mutations
 #' plot_VAF_marginals(seq_results)
@@ -145,8 +115,8 @@ add_marginals_driver_mutation_labels <- function(plot, data, driver_mutations) {
 #' # from the input data
 #' library(dplyr)
 #' filter_data <- function(data) {
-#'   data %>% dplyr::filter(!classes %in% list("germinal",
-#'                                             "pre-neoplastic"))
+#'   data %>% dplyr::filter(!nature %in% list("germinal",
+#'                                            "pre-neoplastic"))
 #' }
 #'
 #' # plotting the VAF marginals without germinal and pre-neoplastic
@@ -157,35 +127,36 @@ add_marginals_driver_mutation_labels <- function(plot, data, driver_mutations) {
 #' plot_VAF_marginals(seq_results, cuts = c(0.2, 1))
 #'
 #' # plotting the VAF marginals with labels
-#' plot_VAF_marginals(seq_results, labels = seq_results$mutations["causes"])
+#' plot_VAF_marginals(seq_results, labels = seq_results$mutations["cause"])
 #'
 #' # avoid the driver mutation labels
-#' plot_VAF_marginals(seq_results, labels = seq_results$mutations["causes"],
+#' plot_VAF_marginals(seq_results, labels = seq_results$mutations["cause"],
 #'                    driver_mutation_labels = FALSE)
 #'
 #' # the same plots can be drawn by using the mutations data frame
 #' # in place of the `simulate_seq()` output
 #'
+#' # get driver mutations
+#' driver_mutations <- seq_results$parameters$driver_mutations
+#'
 #' # filter germinal mutations
 #' f_seq <- seq_results$mutations %>%
-#'    dplyr::filter(classes!="germinal")
+#'    dplyr::filter(nature!="germinal")
 #'
 #' # plotting the VAF histogram filtering out VAFs below 0.02
 #' plot_VAF_marginals(f_seq, cuts = c(0.2, 1))
 #'
 #' # plotting the VAF histogram with labels
-#' plot_VAF_marginals(f_seq, labels = f_seq["causes"])
+#' plot_VAF_marginals(f_seq, labels = f_seq["cause"])
 #'
 #' # use the driver codes in the driver mutation labels
-#' plot_VAF_marginals(f_seq, labels = f_seq["causes"],
-#'                    driver_mutations = phylo_forest$get_driver_mutations())
+#' plot_VAF_marginals(f_seq, labels = f_seq["cause"],
+#'                    driver_mutations = driver_mutations)
 #'
 #' # avoid the driver mutation labels
-#' plot_VAF_marginals(f_seq, labels = f_seq["causes"],
+#' plot_VAF_marginals(f_seq, labels = f_seq["cause"],
 #'                    driver_mutation_labels = FALSE)
 #'
-#' # deleting the mutation engine directory
-#' unlink('demo', recursive = T)
 plot_VAF_marginals <- function(
     seq_result,
     chromosomes = NULL,
@@ -215,7 +186,7 @@ plot_VAF_marginals <- function(
     d2 <- data %>% dplyr::filter(.data$sample == couple[2])
 
     djoin <- dplyr::full_join(d1, d2, by = c("chr", "from", "ref", "alt",
-                                             "classes", "causes")) %>%
+                                             "nature", "cause")) %>%
       dplyr::mutate(VAF.x = ifelse(is.na(.data$VAF.x), 0, .data$VAF.x)) %>%
       dplyr::mutate(VAF.y = ifelse(is.na(.data$VAF.y), 0, .data$VAF.y))
 

@@ -86,7 +86,7 @@ NULL
 NULL
 
 #' @name SampleForestNode$sample_name
-#' @title Getting the corresponding cell sample 
+#' @title Getting the corresponding cell sample
 #' @description This property is the name of the sample that collected
 #'   the corresponding cell.
 #' @details This property is the name of the sample that collected
@@ -97,7 +97,7 @@ NULL
 #' @example nobuild/roxygen/SampleForestNode-setup.R
 #' @examples
 #'
-#' # the corresponing cell was not collected and the property is `NA`
+#' # the corresponding cell was not collected and the property is `NA`
 #' node$sample_name
 #'
 #' # get a tour over forest leaves
@@ -123,7 +123,7 @@ NULL
 #' @title Getting the corresponding cell death time
 #' @description This property is the simulated time at which the corresponding
 #'   time died.
-#' @return The simulated time at which the corresponding time died or the 
+#' @return The simulated time at which the corresponding time died or the
 #'   sampling time.
 #' @example nobuild/roxygen/SampleForestNode-setup.R
 #' @examples

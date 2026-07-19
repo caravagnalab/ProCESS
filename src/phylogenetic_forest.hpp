@@ -181,7 +181,7 @@ class PhylogeneticForest : public CLONES::Mutations::PhylogeneticForest
     }
 
     inline void save(const std::string &filename) const
-    { 
+    {
         save(filename, false);
     }
 

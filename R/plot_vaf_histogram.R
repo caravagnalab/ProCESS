@@ -47,6 +47,11 @@ add_driver_mutation_labels <- function(
     return(plot)
   }
 
+  if (!"mutant" %in% colnames(driver_mutations)) {
+    driver_mutations <- driver_mutations %>%
+        dplyr::mutate(mutant = .data$cause)
+  }
+
   ggb <- ggplot2::ggplot_build(plot)
 
   facet_p <- ggb$layout$layout %>% dplyr::mutate(y_max = NA)
@@ -54,7 +59,7 @@ add_driver_mutation_labels <- function(
     facet_p$y_max[i] <- ggb$layout$panel_params[[i]]$y.range[2]
   }
 
-  drivers <- data %>% dplyr::filter(.data$classes == "driver") %>%
+  drivers <- data %>% dplyr::filter(.data$nature == "driver") %>%
     dplyr::left_join(facet_p %>% dplyr::select(.data$sample,
                                                .data$y_max,
                                                .data$PANEL),
@@ -115,7 +120,7 @@ add_driver_mutation_labels <- function(
           x = !!x_expr,
           y = !!y_expr,
           label = code,
-          fill = causes
+          fill = mutant
         ),
         color = 'black',
         ylim = c(y_max_count * 0.5,
@@ -149,7 +154,7 @@ add_driver_mutation_labels <- function(
 
 # filter germinal mutations from data
 filter_germinal <- function(data) {
-  data %>% dplyr::filter(.data$classes != "germinal")
+  data %>% dplyr::filter(.data$nature != "germinal")
 }
 
 # setup input data for plotting
@@ -282,7 +287,7 @@ setup_VAF_data_for_plotting <- function(
 #'   maximum coverage reported in the data frame (default: `NULL`).
 #' @param mutation_filter A function filtering mutations from the input
 #'   data (default: a function filtering out "germinal" mutations, e.g.,
-#'   `function(x) x %>% dplyr::filter(classes != "germinal")`).
+#'   `function(x) x %>% dplyr::filter(nature != "germinal")`).
 #' @param driver_mutations The data frame of the driver mutations as
 #'   returned by `PhylogeneticForest$get_driver_mutations()`.
 #'   This parameter can be avoided when `seq_result` is the result
@@ -296,46 +301,8 @@ setup_VAF_data_for_plotting <- function(
 #' @export
 #'
 #' @examples
-#' # set the seed of the random number generator
-#' set.seed(0)
-#'
-#' sim <- TissueSimulation()
-#' sim$add_mutant("A", c(duplication = 0.1))
-#' sim$place_cell("A", 500, 500)
-#' sim$run_up_to_time(100)
-#'
-#' # sampling tissue
-#' n_w <- n_h <- 10
-#' ncells <- 0.8 * n_w * n_h
-#' bbox <- sim$search_sample(c("A" = ncells), n_w, n_h)
-#' sim$sample_cells("SampleA", bbox$lower_corner, bbox$upper_corner)
-#'
-#' # adding second mutant
-#' sim$add_mutant("B", c(duplication = 0.3))
-#' sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
-#' sim$run_up_to_time(300)
-#'
-#' # sampling tissue again
-#' bbox <- sim$search_sample(c("B" = ncells), n_w, n_h)
-#' sim$sample_cells("SampleB", bbox$lower_corner, bbox$upper_corner)
-#'
-#' forest <- sim$get_sample_forest()
-#'
-#' # placing mutations
-#' m_engine <- MutationEngine(setup_code = "demo")
-#'
-#' m_engine$add_mutant("A", passenger_rates = c(SNV = 5e-8),
-#'                     drivers = list(SNV("22", 16510210, "C", "T", allele = 1),
-#'                                    "DGCR8 P26L"))
-#' m_engine$add_mutant(mutant_name = "B", passenger_rates = c(SNV = 5e-9),
-#'                     drivers = list("DGCR8 A18V"))
-#' m_engine$add_exposure(c(SBS1 = 0.2, SBS5 = 0.8))
-#'
-#' phylo_forest <- m_engine$place_mutations(forest, 10, 10)
-#'
-#' # simulating sequencing without the normal sample
-#' seq_results <- simulate_seq(phylo_forest, coverage = 10, write_SAM = F,
-#'                             with_normal_sample = FALSE, quiet = TRUE)
+#' # use a sequencing result example
+#' seq_results <- example("Sequencing results")
 #'
 #' # plotting the VAF histogram without germinal mutations
 #' plot_VAF_histogram(seq_results)
@@ -344,8 +311,8 @@ setup_VAF_data_for_plotting <- function(
 #' # from the input data
 #' library(dplyr)
 #' filter_data <- function(data) {
-#'   data %>% dplyr::filter(!classes %in% list("germinal",
-#'                                             "pre-neoplastic"))
+#'   data %>% dplyr::filter(!nature %in% list("germinal",
+#'                                            "pre-neoplastic"))
 #' }
 #'
 #' # plotting the VAF histogram without germinal and pre-neoplastic
@@ -356,36 +323,37 @@ setup_VAF_data_for_plotting <- function(
 #'
 #' # plotting the VAF histogram with labels
 #' plot_VAF_histogram(seq_results, cuts = c(0.02, 1),
-#'                    labels = seq_results$mutations["causes"])
+#'                    labels = seq_results$mutations["cause"])
 #'
 #' # avoid the driver mutation labels
 #' plot_VAF_histogram(seq_results, cuts = c(0.02, 1),
-#'                    labels = seq_results$mutations["causes"],
+#'                    labels = seq_results$mutations["cause"],
 #'                    driver_mutation_labels = FALSE)
 #'
 #' # the same plots can be drawn by using the mutations data frame
 #' # in place of the `simulate_seq()` output
 #'
+#' # get the driver mutations
+#' driver_mutations <- seq_results$parameters$driver_mutations
+#'
 #' # filter germinal mutations
 #' f_seq <- seq_results$mutations %>%
-#'    dplyr::filter(classes!="germinal")
+#'    dplyr::filter(nature!="germinal")
 #'
 #' # plotting the VAF histogram filtering out VAFs below 0.02
 #' plot_VAF_histogram(f_seq, cuts = c(0.02, 1))
 #'
 #' # plotting the VAF histogram with labels
-#' plot_VAF_histogram(f_seq, labels = f_seq["causes"], cuts = c(0.02, 1))
+#' plot_VAF_histogram(f_seq, labels = f_seq["cause"], cuts = c(0.02, 1))
 #'
 #' # use the driver codes in the driver mutation labels
-#' plot_VAF_histogram(f_seq, labels = f_seq["causes"], cuts = c(0.02, 1),
-#'                    driver_mutations = phylo_forest$get_driver_mutations())
+#' plot_VAF_histogram(f_seq, labels = f_seq["cause"], cuts = c(0.02, 1),
+#'                    driver_mutations = driver_mutations)
 #'
 #' # avoid the driver mutation labels
-#' plot_VAF_histogram(f_seq, labels = f_seq["causes"], cuts = c(0.02, 1),
+#' plot_VAF_histogram(f_seq, labels = f_seq["cause"], cuts = c(0.02, 1),
 #'                    driver_mutation_labels = FALSE)
 #'
-#' # deleting the mutation engine directory
-#' unlink('demo', recursive = T)
 plot_VAF_histogram <- function(
   seq_result,
   chromosomes = NULL,

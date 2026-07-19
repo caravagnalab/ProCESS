@@ -81,7 +81,7 @@ SampleForest SampleForest::load(const std::string &filename, const bool quiet)
     CLONES::Archive::Binary::In in_archive(filename);
 
     try {
-        CLONES::UI::ProgressBar progress_bar(Rcpp::Rcout, quiet); 
+        CLONES::UI::ProgressBar progress_bar(Rcpp::Rcout, quiet);
 
         CLONES::Archive::Binary::In::read_header(in_archive, file_format_header,
                                                  file_format_number);

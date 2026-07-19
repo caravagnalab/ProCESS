@@ -31,7 +31,7 @@ knitr::opts_chunk$set(
 > reported in this article may differ from those obtained by the reader.
 
 
-ProCESS allows to partition samples according to cell features as 
+ProCESS allows to partition samples according to cell features as
 [FACS](https://www.sinobiological.com/category/fcm-facs-facs) does.
 The method <code>[PhylogeneticForest$partition_samples()](../reference/PhylogeneticForest-cash-partition_samples.md)</code>
 takes a labelling function, which accepts as input an object of the class
@@ -48,7 +48,7 @@ copying or saving it in a file.
 ```{r, echo=FALSE, results='hide', message=FALSE}
 library("ProCESS")
 
-phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
+phylo_forest <- load_forest("phylo_forest.pff", quiet = TRUE)
 ```
 
 Let us assume to have built the phylogenetic forest `phylo_forest` as detailed
@@ -65,8 +65,8 @@ follows.
 
 ```{r}
 # the labelling function parameter has type `PhylogeneticForestNode`
-epi_labelling <- function(cell) {
-  cell$epistate_name
+epi_labelling <- function(forest_node) {
+  forest_node$epistate_name
 }
 
 phylo_forest$partition_samples(epi_labelling)
@@ -79,11 +79,11 @@ by mutant name...
 
 ```{r}
 # loading again the original forest
-phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
+phylo_forest <- load_forest("phylo_forest.pff")
 
 # a mutant-name-based labelling function
-mutant_labelling <- function(cell) {
-  cell$mutant_name
+mutant_labelling <- function(forest_node) {
+  forest_node$mutant_name
 }
 
 phylo_forest$partition_samples(mutant_labelling)
@@ -95,15 +95,15 @@ phylo_forest$get_samples_info()
 
 ```{r}
 # loading again the original forest
-phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
+phylo_forest <- load_forest("phylo_forest.pff")
 
 # a birth-time-based labelling function
-birth_time_labelling <- function(cell) {
-  if (cell$birth_time > 421) {
+birth_time_labelling <- function(forest_node) {
+  if (forest_node$birth_time > 421) {
     return("YOUNG")
   }
 
-  if (cell$birth_time > 321) {
+  if (forest_node$birth_time > 321) {
     return("MIDDLE_AGED")
   }
 
@@ -119,29 +119,35 @@ phylo_forest$get_samples_info()
 
 ```{r}
 # loading again the original forest
-phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
+phylo_forest <- load_forest("phylo_forest.pff")
 
 library(dplyr)
 
 # collect all the sample passenger indels
 passenger_indels <- phylo_forest$get_sampled_cell_mutations() %>%
-  filter(class == "passenger", type == "indel")
+  filter(nature == "passenger", nchar(ref) != nchar(alt))
 
-# get one of the passenger indels
-p_indel <- passenger_indels[sample(seq_len(nrow(passenger_indels)), 1), ]
+# get one of the passenger indels and build the mutation
+p_indel <- passenger_indels[sample(seq_along(passenger_indels), 1), ]
 
-p_indel
+mutation <- Mutation(chr = p_indel[["chr"]], from = p_indel[["from"]],
+                     ref = p_indel[["ref"]], alt = p_indel[["alt"]])
+
+mutation
+
+# find the nodes where the mutation occurs for the first time
+first_node_ids <- phylo_forest$get_first_occurrences(mutation)
 
 # a mutation-based labelling function that discriminates sampled cells
-# containing indel `p_indel` from the other sampled cells
-mutations_labelling <- function(cell) {
-  has_indel <- nrow(cell$mutations %>%
-                      filter(chr == p_indel[["chr"]],
-                             from == p_indel[["from"]],
-                             ref == p_indel[["ref"]],
-                             alt == p_indel[["alt"]])) > 0
+# that are descendant of the first nodes in which the mutation occurs, i.e.,
+# sampled cells containing indel `p_indel`, from the other sampled cells
+mutations_labelling <- function(forest_node) {
 
-  if (has_indel) {
+  while (forest_node$cell_id < first_node_ids) {
+    forest_node <- forest_node$parent
+  }
+
+  if (forest_node$cell_id == first_node_ids) {
     return("HAS_MUTATION");
   }
 

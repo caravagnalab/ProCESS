@@ -140,7 +140,7 @@ GenomeMutations::get_fragment_mutations(const CLONES::Mutations::ChromosomeId& c
     using namespace CLONES;
     using namespace CLONES::Mutations;
 
-    auto [germline_muts, somatic_muts] = get_mutations_in_fragment(germline, somatic, chr_id, 
+    auto [germline_muts, somatic_muts] = get_mutations_in_fragment(germline, somatic, chr_id,
                                                                    allele_id, from);
 
     return union_map_proxy<GenomicPosition,
@@ -272,7 +272,7 @@ GenomeFragment GenomeMutations::get_fragment(const std::string& chromosome_name,
     try {
         const auto chr_id = CLONES::Mutations::GenomicPosition::stochr(chromosome_name);
 
-        return get_fragment_from_ref(reference_fragment, fragment_offset, chr_id, 
+        return get_fragment_from_ref(reference_fragment, fragment_offset, chr_id,
                                      static_cast<CLONES::Mutations::AlleleId>(allele_id),
                                      from, size);
     } catch (const std::exception &ex) {
@@ -406,7 +406,7 @@ Rcpp::DataFrame GenomeMutations::create_CNA_df(const size_t nrows)
 
     return DataFrame::create(_["chr"] = chr_names, _["begin"] = CNA_begins,
                              _["end"] = CNA_ends, _["type"] = types,
-                             _["allele"] = dst_alleles, _["src.allele"] = src_alleles, 
+                             _["allele"] = dst_alleles, _["src.allele"] = src_alleles,
                              _["cause"] = causes, _["nature"] = natures);
 }
 

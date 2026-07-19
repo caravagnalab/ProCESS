@@ -169,7 +169,7 @@ public:
         if (label_tour_it != nullptr) {
             label_tour_it->operator++();
         }
-    
+
         if (genome_tour_it != nullptr) {
             genome_tour_it->operator++();
         }
@@ -193,7 +193,7 @@ public:
 
     void show() const
     {
-        Rcpp::Rcout << get_demangled_type_name(typeid(FOREST)) 
+        Rcpp::Rcout << get_demangled_type_name(typeid(FOREST))
                     << "NodeTour(with_labels = "
                     << (label_tour != nullptr?"TRUE":"FALSE");
 

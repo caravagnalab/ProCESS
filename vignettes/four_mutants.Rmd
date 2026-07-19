@@ -252,6 +252,6 @@ In S1 vs S3 figure, we can some spot passenger mutations occurring in both S1
 and S3. Let us identify these mutations.
 
 ```{r}
-seq_results$mutations %>% filter(natures == "passenger" &
+seq_results$mutations %>% filter(nature == "passenger" &
                                    S1.VAF > 0 & S3.VAF > 0)
 ```

@@ -31,42 +31,12 @@
 #'   based on phylogenetic sticks (column "`label`").
 #' @export
 #' @examples
-#' # set the seed of the random number generator
-#' set.seed(0)
-#'
-#' # simulate a tissue
-#' sim <- TissueSimulation()
-#'
-#' sim$add_mutant("A", c(duplication = 1))
-#' sim$place_cell("A", 500, 500)
-#' sim$run_up_to_size("A", 1e4)
-#' sim$add_mutant("B", c(duplication = 3.5))
-#' sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
-#'
-#' sim$run_up_to_size("B",1e4)
-#'
-#' # sample the tissue and build the sample forest
-#' bbox <- sim$search_sample(c("A" = 100,"B" = 100), 50, 50)
-#' sim$sample_cells("Sampling", bbox$lower_corner, bbox$upper_corner)
-#' forest <- sim$get_sample_forest()
-#'
-#' # place the mutations
-#' m_engine <- MutationEngine(setup_code = "demo")
-#' m_engine$add_mutant(mutant_name = "A",
-#'                     passenger_rates = c(SNV = 5e-8))
-#' m_engine$add_mutant(mutant_name = "B",
-#'                     passenger_rates = c(SNV = 5e-8))
-#'
-#' m_engine$add_exposure(time = 0, c(SBS1 = 0.2,SBS5 = 0.8))
-#'
-#' phylo_forest <- m_engine$place_mutations(forest, 100, 10)
-#'
-#' # simulate sequencing without the normal sample and avoid progress bar
-#' seq_results <- simulate_seq(phylo_forest, coverage = 30, write_SAM = F,
-#'                             with_normal_sample = FALSE, quiet = TRUE)
+#' # use the phylogenetic forest example and its 10x sequencing results
+#' forest <- example("PhylogeneticForest")
+#' seq_results <- example("Sequencing results")
 #'
 #' # label filtered mutations using phylogenetic forest data
-#' labels <- label_mutations(seq_results$mutations, phylo_forest)
+#' labels <- label_mutations(seq_results$mutations, forest)
 #' labels
 #'
 #' # plotting histogram of the VAF with phylogenetic labels

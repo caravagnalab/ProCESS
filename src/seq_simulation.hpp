@@ -50,7 +50,7 @@ Rcpp::List simulate_normal_seq(const PhylogeneticForest &forest, SEXP &sequencer
                                const std::string &template_name_prefix,
                                const bool &missed_SID_statistics,
                                const bool &germline_statistics,
-                               const bool &wide_format, 
+                               const bool &wide_format,
                                const SEXP &seed, const bool quiet);
 
 #endif // __PROCESS_SEQ_SIMULATION__

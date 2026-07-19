@@ -225,7 +225,7 @@ get_long_dataframe(const CLONES::Mutations::SequencingSimulations::SampleSetStat
 
             const auto descr_set = get_descriptions(sid_data.nature_set);
             natures[index] = join(descr_set, ';');
-            
+
             occurrences[index] = sid_data.num_of_occurrences;
 
             const auto coverage = sample_stats.get_coverage(sid);
@@ -597,7 +597,7 @@ Rcpp::List simulate_seq(const PhylogeneticForest &forest, SEXP &sequencer,
         _["seed"] = c_seed, _["quiet"] = quiet,
         _["driver_mutations"] = forest.get_driver_mutations());
 
-    return List::create(_["mutations"] = 
+    return List::create(_["mutations"] =
                             (wide_format?get_wide_dataframe(result, missed_SID_statistics):
                                          get_long_dataframe(result)),
                         _["parameters"] = parameters);

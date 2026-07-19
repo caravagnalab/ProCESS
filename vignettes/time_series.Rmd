@@ -212,7 +212,7 @@ plot_muller(sim) +
 The rates of any species may change over time. For instance, this
 happens when a population is subject to a targeted treatment.
 
-For instance, going back to the example simulation, we can increase the death 
+For instance, going back to the example simulation, we can increase the death
 rates of `C[E1]`, `C[E2]`, `B[E1]`, and `B[E2]`.
 
 ```{r,  fig.height=4, fig.width=6, message=FALSE, warning=FALSE, fig.alt=c("The Muller plot for the last quarter of the simulation after changing the death rates of B and C species.", "The Muller plot in log-scale  for the last quater of the simulation after changing the death rates of B and C species.")}

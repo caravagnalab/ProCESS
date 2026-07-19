@@ -20,7 +20,7 @@
 #' It annotates a plot of cell divisions with information from sampling
 #' times and MRCAs for all available samples
 #'
-#' @param tree_plot The output of `plot_forest`.
+#' @param forest_plot The output of `plot_forest`.
 #' @param forest The original forest object from which the input to
 #'   `plot_forest`has been derived.
 #' @param samples If `TRUE` it annotates samples.
@@ -37,28 +37,15 @@
 #' @export
 #'
 #' @examples
-#' sim <- TissueSimulation()
-#' sim$add_mutant("A", c(duplication = 0.08, death = 0.01))
-#' sim$place_cell("A", 500, 500)
-#' sim$run_up_to_time(60)
-#' sim$sample_cells("MySample", c(500, 500), c(510, 510))
-#' m_engine <- MutationEngine(setup_code = "demo")
+#' # use a phylogenetic forest example
+#' forest <- example("PhylogeneticForest")
 #'
-#' m_engine$add_mutant(mutant_name = "A",
-#'                     passenger_rates = c(SNV = 1e-9),
-#'                     drivers = list(SNV("22", 10510210, "C"),
-#'                                    CNA(type = "A", "22", from = 10303470,
-#'                                        len = 200000)))
-#' m_engine$add_exposure(c(SBS13 = 0.2, SBS1 = 0.8))
-#' m_engine$add_exposure(time = 50, c(SBS17b = 0.2, SBS3 = 0.8))
+#' # generate a plot for the forest
+#' plot <- plot_forest(forest)
 #'
-#' forest <- sim$get_sample_forest()
-#' forest$get_samples_info()
-#' forest_muts <- m_engine$place_mutations(forest, 1000, 500)
-#' tree_plot <- plot_forest(forest)
-#' annotate_forest(tree_plot, forest_muts, samples = T, MRCAs = T,
-#'                 exposures = T, drivers = T, add_driver_label = T)
-annotate_forest <- function(tree_plot, forest, samples = TRUE, MRCAs = TRUE,
+#' # annotate the forest plot
+#' annotate_forest(plot, forest)
+annotate_forest <- function(forest_plot, forest, samples = TRUE, MRCAs = TRUE,
                             exposures = FALSE, facet_signatures = TRUE,
                             drivers = TRUE, add_driver_label = TRUE) {
 
@@ -67,9 +54,9 @@ annotate_forest <- function(tree_plot, forest, samples = TRUE, MRCAs = TRUE,
   # Sampling times
   if (samples) {
 
-    max_Y <- max(tree_plot$data$y, na.rm = TRUE)
+    max_Y <- max(forest_plot$data$y, na.rm = TRUE)
 
-    tree_plot <- tree_plot +
+    forest_plot <- forest_plot +
       ggplot2::geom_hline(
         yintercept = max_Y - samples_info$time,
         color = "indianred3",
@@ -100,15 +87,15 @@ annotate_forest <- function(tree_plot, forest, samples = TRUE, MRCAs = TRUE,
         label = paste0("    ", .data$sample, collapse = "\n")
       )
 
-    layout <- tree_plot$data %>%
+    layout <- forest_plot$data %>%
       dplyr::select(.data$x, .data$y, .data$name) %>%
       dplyr::mutate(cell_id = paste(.data$name)) %>%
       dplyr::filter(.data$name %in% MRCAs_cells$cell_id) %>%
       dplyr::left_join(MRCAs_cells, by = "cell_id")
 
 
-    tree_plot <-
-      tree_plot +
+    forest_plot <-
+      forest_plot +
       ggplot2::geom_point(
         data = layout,
         ggplot2::aes(x = .data$x, y = .data$y),
@@ -129,13 +116,14 @@ annotate_forest <- function(tree_plot, forest, samples = TRUE, MRCAs = TRUE,
 
   if (exposures) {
     if (inherits(forest, "Rcpp_PhylogeneticForest")) {
-      max_Y <- max(tree_plot$data$y, na.rm = TRUE)
+      max_Y <- max(forest_plot$data$y, na.rm = TRUE)
       # Get exposures table
       exposures <- forest$get_exposures()
 
       exposure_colors <- get_colors_for(exposures %>%
                                           dplyr::pull(signature) %>%
-                                          unique)
+                                          unique,
+                                        pal_name = "Set3")
 
       # Add exposures start and end times for each signature
       times <- exposures$time %>%  unique() %>%  sort()
@@ -155,7 +143,7 @@ annotate_forest <- function(tree_plot, forest, samples = TRUE, MRCAs = TRUE,
       breaks <- sort(unique(exposures$exposure))
 
       # Annotate exposures on tree
-      tree_plot <- tree_plot +
+      forest_plot <- forest_plot +
         ggplot2::geom_rect(
           data = exposures,
           ggplot2::aes(
@@ -174,14 +162,14 @@ annotate_forest <- function(tree_plot, forest, samples = TRUE, MRCAs = TRUE,
                         alpha = ggplot2::guide_legend(title = "Exposure"))
 
       if (facet_signatures) {
-        tree_plot <- tree_plot + ggplot2::facet_wrap(~ signature)
+        forest_plot <- forest_plot + ggplot2::facet_wrap(~ signature)
       }
       # Push exposure rectangles to the back
-      layers_new <- list(tree_plot$layers[[length(tree_plot$layers)]])
+      layers_new <- list(forest_plot$layers[[length(forest_plot$layers)]])
       layers_new <- c(layers_new,
-                      tree_plot$layers[1:(length(tree_plot$layers) - 1)])
+                      forest_plot$layers[1:(length(forest_plot$layers) - 1)])
 
-      tree_plot$layers <- layers_new
+      forest_plot$layers <- layers_new
     }
   }
 
@@ -190,15 +178,19 @@ annotate_forest <- function(tree_plot, forest, samples = TRUE, MRCAs = TRUE,
       drivers_mutations = drivers_CNAs = data.frame()
       try(expr = {
         drivers_mutations <- forest$get_sampled_cell_mutations() %>%
-          dplyr::filter(class == "driver") %>%
+          dplyr::filter(nature == "driver") %>%
           dplyr::mutate(driver_id = paste0(chr, ":", from, ":",
                                            ref, ">", alt),
-                        driver_type = type) %>%
+                        driver_type = case_when(
+                            nchar(ref) > nchar(alt) ~ "ins",
+                            nchar(ref) < nchar(alt) ~ "del",
+                            TRUE               ~ "SNV"
+                        )) %>%
           dplyr::select(cell_id, driver_id, driver_type)
       })
       try(expr = {
         drivers_CNAs <- forest$get_sampled_cell_CNAs() %>%
-          dplyr::filter(class == "driver") %>%
+          dplyr::filter(nature == "driver") %>%
           dplyr::mutate(driver_id = paste0(chr, ":", begin, "-",
                                            end, ":", allele),
                         driver_type = "CNA") %>%
@@ -224,13 +216,13 @@ annotate_forest <- function(tree_plot, forest, samples = TRUE, MRCAs = TRUE,
         dplyr::group_by(cell_id) %>%
         dplyr::summarise(driver_id = paste0(driver_id, collapse = "\n"))
 
-      layout <- tree_plot$data %>%
+      layout <- forest_plot$data %>%
         dplyr::select(x, y, name) %>%
         dplyr::mutate(cell_id = paste(name), has_driver = TRUE) %>%
         dplyr::filter(name %in% drivers_start_nodes$cell_id) %>%
         dplyr::left_join(drivers_start_nodes, by = "cell_id")
 
-      tree_plot <- tree_plot +
+      forest_plot <- forest_plot +
         ggplot2::geom_point(
           data = layout,
           ggplot2::aes(x = .data$x, y = .data$y),
@@ -241,8 +233,8 @@ annotate_forest <- function(tree_plot, forest, samples = TRUE, MRCAs = TRUE,
         )
 
       if (add_driver_label) {
-        nudge_x <- (max(tree_plot$data$x) - min(tree_plot$data$x)) * .15
-        tree_plot <- tree_plot +
+        nudge_x <- (max(forest_plot$data$x) - min(forest_plot$data$x)) * .15
+        forest_plot <- forest_plot +
           ggrepel::geom_label_repel(
             data = layout,
             ggplot2::aes(x = .data$x, y = .data$y,
@@ -257,5 +249,5 @@ annotate_forest <- function(tree_plot, forest, samples = TRUE, MRCAs = TRUE,
     }
   }
 
-  tree_plot
+  forest_plot
 }

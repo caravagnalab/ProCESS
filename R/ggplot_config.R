@@ -125,7 +125,8 @@ get_species_colors <- function(data, pal_name = "Dark2",
   if (inherits(data, "Rcpp_TissueSimulation")) {
     data <- data$get_counts() %>%
       dplyr::select(-.data$counts, -.data$overall)
-  } else if (inherits(data, "Rcpp_SampleForest")) {
+  } else if (inherits(data, "Rcpp_SampleForest")
+             ||inherits(data, "Rcpp_PhylogeneticForest")) {
     data <- data$get_species_info()
   }
 

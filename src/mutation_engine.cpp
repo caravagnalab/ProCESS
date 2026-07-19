@@ -1250,14 +1250,22 @@ Rcpp::List MutationEngine::get_species_info(const CLONES::Mutations::MutationalP
                 std::views::values(m_properties.get_passenger_rates())) {
         num_of_rows += timed_p_rates.num_of_values();
     }
-    CharacterVector species_names(num_of_rows);
+    CharacterVector mutant_names(num_of_rows), epistate_names(num_of_rows);
     NumericVector SNV_rates(num_of_rows), CNA_rates(num_of_rows),
         indel_rates(num_of_rows), times(num_of_rows);
 
+    bool with_epistate{false};
     size_t i{0};
     for (const auto &[species_name, timed_p_rates] : m_properties.get_passenger_rates()) {
+        CLONES::Mutants::SpeciesName sname{species_name};
+        if (sname.get_epistate_name() != "") {
+            with_epistate = true;
+        }
         for (const auto &[time, p_rates] : timed_p_rates) {
-            species_names[i] = species_name;
+            mutant_names[i] = sname.get_mutant_name();
+            if (with_epistate) {
+                epistate_names[i] = sname.get_epistate_name();
+            }
             times[i] = time;
             SNV_rates[i] = p_rates.snv;
             CNA_rates[i] = p_rates.cna;
@@ -1266,7 +1274,13 @@ Rcpp::List MutationEngine::get_species_info(const CLONES::Mutations::MutationalP
         }
     }
 
-    return DataFrame::create(_["species"] = species_names, _["time"] = times,
+    if (with_epistate) {
+        return DataFrame::create(_["mutant"] = mutant_names, _["epistate"] = epistate_names,
+                                 _["time"] = times, _["SNV_rate"] = SNV_rates,
+                                 _["indel_rate"] = indel_rates, _["CNA_rate"] = CNA_rates);
+    }
+
+    return DataFrame::create(_["mutant"] = mutant_names, _["time"] = times,
                              _["SNV_rate"] = SNV_rates, _["indel_rate"] = indel_rates,
                              _["CNA_rate"] = CNA_rates);
 }

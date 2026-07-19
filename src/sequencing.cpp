@@ -193,7 +193,7 @@ RCPP_MODULE(Sequencing)
 //'   `sample` contains the name of the sample in which the
 //'   mutation has been identified. The columns `chr`, from`, `ref`,
 //'   `alt`, `cause`, and `nature` correspond to those of the
-//'   wide_format` output. The columns `NV`, `DP`, and `VAF` 
+//'   wide_format` output. The columns `NV`, `DP`, and `VAF`
 //'   maintain the number of occurrences, the coverage, and the VAF
 //'   of the mutation in cited sample.
 //' @seealso [BasicIlluminaSequencer()] and
@@ -279,7 +279,7 @@ RCPP_MODULE(Sequencing)
 //'   `sample` contains the name of the sample in which the
 //'   mutation has been identified. The columns `chr`, from`, `ref`,
 //'   `alt`, `cause`, and `nature` correspond to those of the
-//'   wide_format` output. The columns `NV`, `DP`, and `VAF` 
+//'   wide_format` output. The columns `NV`, `DP`, and `VAF`
 //'   maintain the number of occurrences, the coverage, and the VAF
 //'   of the mutation in cited sample.
 //' @seealso [BasicIlluminaSequencer()] and

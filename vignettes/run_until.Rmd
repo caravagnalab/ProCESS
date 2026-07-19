@@ -41,7 +41,7 @@ A formula in this language is either a relation, the conjunction
 of two formulas (`&`), or the disjunction of two formulas (`|`).
 
 Any formula in the above language expresses a condition on the simulation
-status. It can be used as a parameter of the method 
+status. It can be used as a parameter of the method
 <code>[TissueSimulation$run_until()](../reference/TissueSimulation-cash-run_until.md)</code>
 to let the simulation evolve until the condition no longer holds.
 
@@ -53,7 +53,7 @@ The variables represent one of the following quantities:
 -  the number of fired deaths, duplications, or switches in a species;
 -  the elapse simulation time.
 
-All the above variables can be built by using the method 
+All the above variables can be built by using the method
 <code>[TissueSimulation$var()](../reference/TissueSimulation-cash-var.md)</code>.
 When the parameter is the string `"Time"`, the elapsed simulation time
 variable is returned.
@@ -95,8 +95,8 @@ va2
 
 Finally, when the parameter is the name of a species followed by
 a `.` and the name of an event among `deaths`, `duplications`,
-or `switches`, 
-<code>[TissueSimulation$var()](../reference/TissueSimulation-cash-var.md)</code> 
+or `switches`,
+<code>[TissueSimulation$var()](../reference/TissueSimulation-cash-var.md)</code>
 returns the variable associated with the number of
 the corresponding event in the specified species.
 
@@ -135,7 +135,7 @@ A formula is:
 ### The method <code>[TissueSimulation$run_until()](../reference/TissueSimulation-cash-run_until.md)</code>
 
 The method <code>[TissueSimulation$run_until()](../reference/TissueSimulation-cash-run_until.md)</code>
-takes a formula as a parameter and 
+takes a formula as a parameter and
 runs the simulation until the formula no longer holds.
 
 We can build a condition stating that the cardinality of `A[E1]` doubles that

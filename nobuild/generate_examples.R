@@ -171,6 +171,13 @@ generate_phylo_forest_example_without_epistates <- function(sample_forest) {
   m_engine$place_mutations(sample_forest, 1000, 500)
 }
 
+generate_sequencing <- function(forest)
+{
+  # set the seed of the random number generator
+  set.seed(0)
+
+  simulate_seq(forest, coverage = 10, quiet = TRUE)
+}
 
 # create the data dir
 data_dir <- file.path("inst", "extdata")
@@ -179,17 +186,25 @@ if (!dir.exists(data_dir)) {
 }
 
 examples <- list("p2_epi" = list(sample = get_two_populations_with_epistates,
-                                 phylo = generate_phylo_forest_example_with_epistates),
+                                 phylo = generate_phylo_forest_example_with_epistates,
+                                 sequencing = generate_sequencing),
                  "p2_no_epi" = list(sample = get_two_populations_without_epistates,
                                     phylo = generate_phylo_forest_example_without_epistates))
 
 example_names <- names(examples)
 for (i in seq_along(examples)) {
     sample_forest <- examples[[i]]$sample()
-    phylo_forest <- examples[[i]]$phylo(sample_forest)
-
     sample_forest$save(file.path(data_dir, paste0(example_names[[i]], ".sff")))
+
+    phylo_forest <- examples[[i]]$phylo(sample_forest)
     phylo_forest$save(file.path(data_dir, paste0(example_names[[i]], ".pff")))
+
+    if ("sequencing" %in% names(examples[[i]])) {
+        seq_results <- examples[[i]]$sequencing(phylo_forest)
+
+        saveRDS(seq_results,
+                file.path(data_dir, paste0("s_", example_names[[i]], ".rds")))
+    }
 }
 
 # copy reference and reference index from "demo" to inst/extdata

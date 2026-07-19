@@ -177,7 +177,7 @@ example.
 
 ```{r}
 # add a mutant
-sim$add_mutant("A", list("E1" = list(duplication = 0.1, death = 0.08, 
+sim$add_mutant("A", list("E1" = list(duplication = 0.1, death = 0.08,
                                      E2 = 0.01),
                          "E2" = list(duplication = 0.1, death = 0.01,
                                      E1 = 0.01)))

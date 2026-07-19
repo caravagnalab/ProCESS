@@ -23,35 +23,25 @@
 #'
 #' @param seq_results A data frame containing sequencing results in wide format.
 #' @return A data frame in long format with columns "`chr`", "`from`", "`to`",
-#' "`ref`", "`alt`", "`NV`", "`DP`", "`VAF`", "`sample`", "`causes`", and
-#' "`classes`".
+#' "`ref`", "`alt`", "`NV`", "`DP`", "`VAF`", "`sample`", "`cause`", and
+#' "`nature`".
 #' @export
 #'
 #' @examples
-#' # Example data frame in wide format
-#' seq_results <- data.frame(chr = c("chr1", "chr2"),
-#'                           from = c(100, 200),
-#'                           ref = c("A", "C"),
-#'                           alt = c("T", "G"),
-#'                           causes = c("SBS5", "SBS1"),
-#'                           classes = c("germinal", "passenger"),
-#'                           Sample.A.NV = c(10, 90),
-#'                           Sample.A.DP = c(100, 100),
-#'                           Sample.A.VAF = c(0.1, 0.9),
-#'                           normal.sample.NV = c(45, 52),
-#'                           normal.sample.DP = c(100, 100),
-#'                           normal.sample.VAF = c(0.45, 0.52))
-#' seq_results
+#' # use a sequencing result example
+#' seq_results <- example("Sequencing results")
+#' head(seq_results)
 #'
 #' # Convert to long format
-#' seq_to_long(seq_results)
+#' seq_long <- seq_to_long(seq_results)
+#' head(seq_long)
 seq_to_long <- function(seq_results) {
 
   # if the type of seq_res is a list and seq_res contains a field "mutations"
   if (is.list(seq_results) && ("mutations" %in% names(seq_results))) {
 
     # extract the field
-    seq_res <- seq_results["mutations"]
+    seq_res <- seq_results$mutations
   } else {
     seq_res <- seq_results
   }
@@ -65,13 +55,13 @@ seq_to_long <- function(seq_results) {
   # Process each sample separately to create a list of data frames
   seq_df <- lapply(sample_names, function(sn) {
     # Select relevant columns for the current sample
-    cc <- c("chr", "from", "ref", "alt", "causes", "classes",
+    cc <- c("chr", "from", "ref", "alt", "cause", "nature",
             colnames(seq_res)[grepl(paste0(sn, "."),
                                     colnames(seq_res), fixed = TRUE)])
 
     # Rename columns and add sample column
     seq_res[, cc] %>%
-      `colnames<-`(c("chr", "from", "ref", "alt", "causes", "classes",
+      `colnames<-`(c("chr", "from", "ref", "alt", "cause", "nature",
                      "NV", "DP", "VAF")) %>%
       dplyr::mutate(sample = sn)
   }) %>% do.call("bind_rows", .)

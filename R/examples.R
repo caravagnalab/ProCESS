@@ -50,7 +50,7 @@ example_list <- list(
 #' @return An example object of the specified data type.
 #' @examples
 #' # get an example of `SampleForest` object
-#' forest <- ProCESS::example("SampleForest")
+#' forest <- example("SampleForest")
 #'
 #' # see the forest
 #' forest
@@ -59,7 +59,7 @@ example_list <- list(
 #' head(forest$get_nodes())
 #'
 #' # load an example of `PhylogeneticForest` object
-#' forest <- ProCESS::example("PhylogeneticForest")
+#' forest <- example("PhylogeneticForest")
 #' @seealso `available_examples()`
 #' @export
 example <- function(name) {

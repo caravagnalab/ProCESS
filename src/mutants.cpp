@@ -1704,14 +1704,17 @@ RCPP_MODULE(Mutants)
 //' df_rates[["epistate"]] <- c("E1", "E1", "E2")
 //' df_rates[["first.child.epistate"]] <- c("E1", NA, "E2")
 //'
+//' # load dplyr to simplify the next part of the example
+//' library(dplyr)
+//'
 //' # we also may set some switch rates
 //' df_rates <- df_rates %>%
-//'   dplyr::add_row(mutant = "A", epistate = "E1", event = "switch",
-//'                  first.child.epistate = "E2", rate = 0.01) %>%
-//'   dplyr::add_row(mutant = "A", epistate = "E1", event = "switch",
-//'                  first.child.epistate = "E3", rate = 0.04) %>%
-//'   dplyr::add_row(mutant = "B", epistate = "E2", event = "switch",
-//'                  first.child.epistate = "E3", rate = 0.01)
+//'   add_row(mutant = "A", epistate = "E1", event = "switch",
+//'           first.child.epistate = "E2", rate = 0.01) %>%
+//'   add_row(mutant = "A", epistate = "E1", event = "switch",
+//'           first.child.epistate = "E3", rate = 0.04) %>%
+//'   add_row(mutant = "B", epistate = "E2", event = "switch",
+//'           first.child.epistate = "E3", rate = 0.01)
 //'
 //' df_rates
 //'
@@ -2060,7 +2063,7 @@ RCPP_MODULE(Mutants)
 //'   the column `epistate`.
 //' @examples
 //' # use a sample forest example
-//' forest <- ProCESS::example("SampleForest")
+//' forest <- example("SampleForest")
 //'
 //' # get the data frame of the nodes
 //' nodes <- forest$get_nodes()
@@ -2080,7 +2083,7 @@ RCPP_MODULE(Mutants)
 //'   associated to the cell whose identifier is `cell_id`.
 //' @examples
 //' # use a sample forest example
-//' forest <- ProCESS::example("SampleForest")
+//' forest <- example("SampleForest")
 //'
 //' # get the node corresponding to the cell having 2 as cell identifier
 //' forest$get_node(2)
@@ -2108,7 +2111,7 @@ RCPP_MODULE(Mutants)
 //'   `epistate`.
 //' @examples
 //' # use a sample forest example
-//' forest <- ProCESS::example("SampleForest")
+//' forest <- example("SampleForest")
 //'
 //' # get the most recent common ancestor of all the leaves in the forest
 //' forest$get_coalescent_cells()
@@ -2129,7 +2132,7 @@ RCPP_MODULE(Mutants)
 //' @return A sample forest built on the samples mentioned in `sample_names`
 //' @examples
 //' # use a sample forest example
-//' forest <- ProCESS::example("SampleForest")
+//' forest <- example("SampleForest")
 //'
 //' # get the subforest for sample "S_1_2"
 //' forest$get_subforest_for("S_1_2")
@@ -2153,7 +2156,7 @@ RCPP_MODULE(Mutants)
 //'   [TissueSimulation$get_samples_info()]
 //' @examples
 //' # use a sample forest example
-//' forest <- ProCESS::example("SampleForest")
+//' forest <- example("SampleForest")
 //'
 //' # get information about the samples whose cells
 //' # are the forest leaves
@@ -2169,7 +2172,7 @@ RCPP_MODULE(Mutants)
 //'   epigenetic states, `epistate` for each registered species.
 //' @examples
 //' # use a sample forest example
-//' forest <- ProCESS::example("SampleForest - no epistates")
+//' forest <- example("SampleForest - no epistates")
 //'
 //' # get species information. Since the simulation has no epigenetic
 //' # state, the species correspond to the mutants
@@ -2177,7 +2180,7 @@ RCPP_MODULE(Mutants)
 //'
 //' @examples
 //' # use a sample forest example
-//' forest <- ProCESS::example("SampleForest")
+//' forest <- example("SampleForest")
 //'
 //' # get species information
 //' forest$get_species_info()
@@ -2206,7 +2209,7 @@ RCPP_MODULE(Mutants)
 //' @seealso [PhylogeneticForest$get_sticks()]
 //' @examples
 //' # use a sample forest example
-//' forest <- ProCESS::example("SampleForest")
+//' forest <- example("SampleForest")
 //'
 //' # search for the forest sticks
 //' head(forest$get_sticks())
@@ -2307,7 +2310,7 @@ RCPP_MODULE(Mutants)
 //'   iterates over `forest`'s leaves.
 //' @examples
 //' # use a sample forest example
-//' forest <- ProCESS::example("SampleForest")
+//' forest <- example("SampleForest")
 //'
 //' # get a tour of the forest nodes
 //' node_tour <- get_node_tour(forest)
@@ -2326,7 +2329,7 @@ RCPP_MODULE(Mutants)
 //'
 //' @examples
 //' # use a sample forest example
-//' forest <- ProCESS::example("SampleForest")
+//' forest <- example("SampleForest")
 //'
 //' # get a tour of the forest leaves
 //' node_tour <- get_node_tour(forest, only_leaves = TRUE)
@@ -2343,7 +2346,7 @@ RCPP_MODULE(Mutants)
 //'
 //' @examples
 //' # use a phylogenetic forest example
-//' forest <- ProCESS::example("PhylogeneticForest")
+//' forest <- example("PhylogeneticForest")
 //'
 //' # get a tour of the forest nodes with their genomes
 //' node_tour <- get_node_tour(forest, with_genomes = TRUE)
@@ -2352,12 +2355,12 @@ RCPP_MODULE(Mutants)
 //' node_tour$node
 //'
 //' # the forest was build using the setup "demo". Thus, the
-//' # node genomes have only chromosome 22 
+//' # node genomes have only chromosome 22
 //' node_tour$genome
 //'
 //' @examples
 //' # use a sample forest example
-//' forest <- ProCESS::example("SampleForest")
+//' forest <- example("SampleForest")
 //'
 //' # we define a function to collect the tour labels
 //' collect_labels <- function(tour) {
@@ -2366,11 +2369,10 @@ RCPP_MODULE(Mutants)
 //'   # `SampleForestNodeTour$done` is `TRUE` iff the tour ended
 //'   while (!tour$done) {
 //'     if (is.null(total)) {
-//'       # `SampleForestNodeTour$value` is a pair cell
-//'       #  identifier for the current node and node label
-//'       total <- tour$value
+//'       # `SampleForestNodeTour$label` is the node label
+//'       total <- tour$label
 //'     } else {
-//'       total <- rbind(total, tour$value)
+//'       total <- rbind(total, tour$label)
 //'     }
 //'
 //'     # `SampleForestNodeTour$step()` advances to the next node

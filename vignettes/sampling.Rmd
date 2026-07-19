@@ -228,7 +228,7 @@ current <- plot_tissue(sim)
 current
 ```
 
-ProCESS provides a 
+ProCESS provides a
 <code>[TissueSimulation$search_sample()](../reference/TissueSimulation-cash-search_sample.md)</code>
 function to sample bounding boxes that contain a desired number of cells. The
 function takes in input:
@@ -410,7 +410,7 @@ plot_forest(forest) %>%
 
 ### Storing Samples Forests
 
-A sample forest can be saved in a file by using the method 
+A sample forest can be saved in a file by using the method
 <code>[SampleForest$save()](../reference/SampleForest-cash-save.md)</code>.
 
 ```{r, echo=FALSE,  results='hide', message=FALSE}
@@ -429,11 +429,11 @@ file.exists("sample_forest.sff")
 ```
 
 The saved sample forest can successively be loaded by using the function
-`load_sample_forest()`.
+`load_forest()`.
 
 ```{r}
 # load the sample forest from "sample_forest.sff" and store it in `forest2`
-forest2 <- load_sample_forest("sample_forest.sff")
+forest2 <- load_forest("sample_forest.sff")
 
 # let us now compare the sample forests stored in `forest` and `forest2`;
 # they should be the same.

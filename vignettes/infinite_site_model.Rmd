@@ -48,7 +48,7 @@ sim <- TissueSimulation(epigenetic_states = c("E1", "E2"))
 sim$death_activation_level <- 20
 
 # add mutant "A" and set its species rates
-sim$add_mutant("A", list("E1" = list(duplication = 0.1, death = 0.08, 
+sim$add_mutant("A", list("E1" = list(duplication = 0.1, death = 0.08,
                                      E2 = 0.01),
                          "E2" = list(duplication = 0.1, death = 0.01,
                                      E1 = 0.01)))
@@ -107,7 +107,7 @@ m_engine <- MutationEngine(setup_code = "demo")
 # deletion on the allele 1 of chromosome 22 and an amplification on a
 # random allele of the same chromosome. The mutant has two epigenetic states
 # and its species "A[E1]" and "A[E2]" have passenger SNV rates 1e-9 and 3e-8,
-# respectively, passenger indel rates 1e-9 and 1e-11, respectively, and 
+# respectively, passenger indel rates 1e-9 and 1e-11, respectively, and
 # passenger CNA rates 0 and 1e-11, respectively.
 m_engine$add_mutant(mutant_name = "A",
                     passenger_rates = list("E1" = c(SNV = 1e-9, indel = 1e-9),
@@ -145,7 +145,7 @@ subjects <- m_engine$get_germline_subjects()
 
 m_engine$set_germline_subject(subjects[2, "sample"])
 
-sample_forest <- load_sample_forest("sample_forest.sff")
+sample_forest <- load_forest("sample_forest.sff")
 
 # place mutations on the sample forest assuming 1000 pre-neoplastic SNVs and
 # 500 indels
@@ -161,7 +161,9 @@ test_infinite_sites_model <- function(phylo_forest) {
   # extract non-germinal SNVs that appear multiple times either
   # in the same cell or different cells
   snvs <- phylo_forest$get_sampled_cell_mutations() %>%
-    filter(class != "germinal", .data$type == "SNV") %>%
+    filter(nature != "germinal",
+           nchar(.data$ref) == 1,
+           nchar(.data$alt) == 1) %>%
     count(.data$chr, .data$from, .data$ref, .data$alt) %>%
     filter(n > 1)
 

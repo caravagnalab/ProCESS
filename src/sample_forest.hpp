@@ -92,7 +92,7 @@ class SampleForest : public CLONES::Mutants::DescendantForest
     SampleForest get_subforest_for(const std::vector<std::string> &sample_names) const;
 
     inline void save(const std::string &filename) const
-    { 
+    {
         save(filename, false);
     }
 

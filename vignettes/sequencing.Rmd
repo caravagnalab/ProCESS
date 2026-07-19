@@ -44,7 +44,7 @@ Let us reload the phylogenetic forest produced in
 ```{r}
 library(ProCESS)
 
-phylo_forest <- load_phylogenetic_forest("phylo_forest.sff")
+phylo_forest <- load_forest("phylo_forest.pff")
 
 phylo_forest
 ```
@@ -64,7 +64,7 @@ library(dplyr)
 
 seq_results$parameters
 
-seq_results$mutations %>% head
+seq_results$mutations %>% head()
 ```
 
 The function `simulate_seq()` returns a named list of two elements:
@@ -113,7 +113,7 @@ plot_VAF_histogram(seq_results)
 plot_VAF_marginals(seq_results, samples = c("S_1_1", "S_1_2", "S_2_2"))
 ```
 
-All above plotting functions allow to focus on specific samples, 
+All above plotting functions allow to focus on specific samples,
 filter the data, and label the plotted points.
 
 ```{r, fig.alt=c("A plot depicting the Variant Allele Frequency (VAF) of the sample S_2_2.", "A plot depicting the Variant Allele Frequency (VAF) of the sample S_2_2 missing of the driver mutation labels.", "A plot depicting the Variant Allele Frequency (VAF) of the sample S_2_2 labelled by mutation class.")}
@@ -171,7 +171,7 @@ for (line in readLines(ex_file, n = 10)) {
 ```
 
 Each SAM file contains the reads produced by simulating the sequencing
-of *all* the samples. The command-line tools 
+of *all* the samples. The command-line tools
 [`samtools`](http://www.htslib.org) can be used to split the reads by sample.
 
 ```{bash, eval = FALSE}
@@ -322,6 +322,6 @@ list.files("ProCESS_SAM/")
 unlink("SAM_0.7", recursive = TRUE)
 unlink("ProCESS_SAM", recursive = TRUE)
 unlink("demo", recursive = TRUE)
-unlink("phylo_forest.sff")
+unlink("phylo_forest.pff")
 unlink("sample_forest.sff")
 ```

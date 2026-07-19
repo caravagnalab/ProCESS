@@ -113,7 +113,7 @@ private:
                                          const CLONES::Mutations::ChromosomeId chr_id,
                                          const CLONES::Mutations::AlleleId allele_id,
                                          const size_t from, const size_t size) const;
-                        
+
     std::filesystem::path reference_path;
     CLONES::Mutations::GenomeMutations germline;
     CLONES::Mutations::GenomeMutations somatic;
