@@ -54,28 +54,42 @@ get_exposure_ends <- function(phylo_forest) {
 #' forest.
 #'
 #' @param phylogenetic_forest A phylogenetic forest.
-#' @param linewidth The width of the lines in the plot.
+#' @param linewidth The width of the lines in the plot (default:
+#'   `0.8`).
 #' @param emphasize_switches A Boolean flag to emphasize the
-#'   exposure switches.
-#' @param pal_name The name of a `RColorBrewer` palette.
+#'   exposure switches (default: `FALSE`).
+#' @param mutation_type The type of mutations whose exposure
+#'   plot is requested. It can be `"all"`, `"indel"`, or `"SNV"`
+#'   (default: `"all"`)
+#' @param pal_name The name of a `RColorBrewer` palette (default:
+#'   `"Set3"`).
 #'
 #' @return A `ggplot2` plot.
 #' @examples
 #' # use a phylogenetic forest example
 #' forest <- example("PhylogeneticForest")
 #'
-#' # plotting the phylogenetic forest
+#' # plotting the forest exposure timeline
 #' plot_exposure_timeline(forest)
 #'
-#' # plotting the phylogenetic forest emphasizing the exposure switches
+#' # plotting the forest exposure timeline emphasizing the exposure switches
 #' plot_exposure_timeline(forest, emphasize_switches = TRUE)
+#'
+#' # plotting the forest exposure timeline of SNVs
+#' plot_exposure_timeline(forest, mutation_type = "SNV")
 #' @export
 plot_exposure_timeline <- function(phylogenetic_forest, linewidth = 0.8,
                                    emphasize_switches = FALSE,
+                                   mutation_type = "all",
                                    pal_name = "Set3") {
   stopifnot(inherits(phylogenetic_forest, "Rcpp_PhylogeneticForest"))
 
   exposure_df <- get_exposure_ends(phylogenetic_forest)
+
+  if (mutation_type != "all") {
+    exposure_df <- exposure_df %>%
+      dplyr::filter(.data$type == mutation_type)
+  }
 
   signames <- exposure_df %>% dplyr::pull(signature) %>% unique
   colors <- get_colors_for(signames, pal_name = pal_name)
