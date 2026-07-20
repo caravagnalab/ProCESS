@@ -36,7 +36,7 @@
 #' @param N The number of mutations to sample for plotting (default: 5000).
 #' @return A ggplot2 object showing the DR distribution across the genome.
 #' @seealso `plot_VAF()`, `plot_BAF()`
-#' @export
+#' @examples
 #' # use a sequencing result example
 #' seq_results <- example("Sequencing results")
 #'
@@ -70,6 +70,8 @@
 #'
 #' # plotting the depth ratio
 #' plot_DR(f_seq)
+#'
+#' @export
 #'
 plot_DR <- function(
     seq_result,
@@ -170,8 +172,6 @@ plot_DR <- function(
 #' @param N The number of mutations to sample for plotting (default: 5000).
 #' @return A ggplot2 object showing the BAF distribution across the genome.
 #' @seealso `plot_VAF()`, `plot_DR()`
-#' @export
-#'
 #' @examples
 #' # use a sequencing result example
 #' seq_results <- example("Sequencing results")
@@ -206,6 +206,8 @@ plot_DR <- function(
 #'
 #' # plotting the BAF
 #' plot_BAF(f_seq)
+#'
+#' @export
 #'
 plot_BAF <- function(
     seq_result,
@@ -350,6 +352,7 @@ plot_BAF <- function(
 #' plot_VAF(f_seq)
 #'
 #' @export
+#'
 plot_VAF <- function(
     seq_result,
     chromosomes = NULL,
