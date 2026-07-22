@@ -1,0 +1,98 @@
+#' @name ${CLASS_TYPE}$node
+#' @title Getting the node pointed by the tour
+#' @description This field stores the node pointed by the tour.
+#' @return The node pointed by the tour.
+#' @example nobuild/roxygen/setups/${CLASS_TYPE}-setup.R
+#' @examples
+#'
+#' # build a tour for the forest nodes
+#' node_tour <- get_node_tour(forest)
+#'
+#' # show the first node in the tour
+#' node_tour$node
+#' @seealso <code>[${CLASS_TYPE}]</code>, [get_node_tour()],
+#'   <code>[`vignette("node_tour")`]</code>
+NULL
+
+#' @name ${CLASS_TYPE}$step
+#' @title Moving to the next node in the tour
+#' @description This method moves to the next node in the tour.
+#' @example nobuild/roxygen/setups/${CLASS_TYPE}-setup.R
+#' @examples
+#'
+#' # build a tour for the forest nodes
+#' node_tour <- get_node_tour(forest)
+#'
+#' # show the first node in the tour
+#' node_tour$node
+#'
+#' # move to the next node in the tour
+#' node_tour$step()
+#'
+#' # show the second node in the tour
+#' node_tour$node
+#' @seealso <code>[${CLASS_TYPE}]</code>, [get_node_tour()],
+#'   <code>[`vignette("node_tour")`]</code>
+NULL
+
+#' @name ${CLASS_TYPE}$done
+#' @title Testing whether the tour end has been reached
+#' @description A Boolean flag representing the tour end.
+#' @details This Boolean property is set to `TRUE` if and only if
+#'   the end of the tour has been reached.
+#' @return 
+#' @example nobuild/roxygen/setups/${CLASS_TYPE}-setup.R
+#' @examples
+#'
+#' # build a tour for the forest nodes
+#' node_tour <- get_node_tour(forest)
+#'
+#' # set the counter to 0
+#' counter <- 0
+#'
+#' # repeat until the end has been reached
+#' while(!node_tour$done) {
+#'   # increase the counter
+#'   counter <- counter + 1
+#'  
+#'   # move to the next node
+#'   node_tour$step()  
+#' }
+#'
+#' # show the node count
+#' counter
+#'
+#' # show the forest (and the number of its nodes)
+#' forest
+#' @seealso <code>[${CLASS_TYPE}]</code>, [get_node_tour()],
+#'   <code>[`vignette("node_tour")`]</code>
+NULL
+
+#' @name ${CLASS_TYPE}$label
+#' @title Getting node labelling
+#' @description The current node labelling.
+#' @details This property represents the labelling of the node
+#'   currently pointed by the tour and is optional.
+#'   It is available only if the `get_node_tour()`'s optional
+#'   parameter `labelling_functor` was set.
+#' @example nobuild/roxygen/setups/${CLASS_TYPE}-setup.R
+#' @examples
+#'
+#' l_funct <- function(parent_label, node) {
+#'   node$cell_id
+#' }
+#'
+#' # build a tour for the forest nodes
+#' node_tour <- get_node_tour(forest, labelling_functor = l_funct)
+#'
+#' # get the label of the first node in the tour
+#' node_tour$label
+#'
+#' # move to the next node
+#' node_tour$step()
+#'
+#' # get the label of the second node in the tour node 
+#' node_tour$label
+#' @seealso <code>[${CLASS_TYPE}]</code>, [get_node_tour()],
+#'   <code>[`vignette("node_tour")`]</code>
+NULL

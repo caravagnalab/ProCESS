@@ -57,6 +57,7 @@ reference:
   - plot_timeseries
   - plot_tissue
   - recover_simulation
+  - -matches(".*_class")
 - title: "Mutation simulation interface"
   desc:  "Mutation simulation classes and methods"
   contents:
@@ -77,6 +78,7 @@ reference:
   - plot_sticks
   - SNV
   - WGD
+  - -matches(".*_class")
 - title: "Sequencing simulation interface"
   desc:  "Sequencing simulation methods"
   contents:
@@ -91,6 +93,7 @@ reference:
   - simulate_seq
   - simulate_normal_seq
   - seq_to_long
+  - -matches(".*_class")
 - title: "Simulation Logics"
   desc:  "Simulation Logics"
   contents:

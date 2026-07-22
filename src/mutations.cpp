@@ -30,8 +30,26 @@ using namespace Rcpp;
 RCPP_MODULE(Mutations)
 {
 
-//' @name Mutation
-//' @title Either an SBS or an indel
+//' @name Mutation_class
+//' @title Either an SNV or an indel
+//' @description A class to represents SNVs and indels
+//' @details The objects of this class represent either an
+//'   SNV or an indel and can be created by [SNV()] and [Mutation()].
+//'   They provide the following methods:
+//'   - <code>[get_alt()](Mutation-cash-get_alt.md)</code> returns
+//'     the sequence as altered by the mutation.
+//'   - <code>[get_cause()](Mutation-cash-get_cause.md)</code> returns
+//'     the cause of the mutation.
+//'   - <code>[get_chromosome()](Mutation-cash-get_chromosome.md)</code>
+//'     returns the chromosome in which the mutation occurred.
+//'   - <code>[get_dataframe()](Mutation-cash-get_dataframe.md)</code>
+//'     returns a data frame representing the mutation.
+//'   - <code>[get_position_in_chromosome()](Mutation-cash-get_position_in_chromosome.md)</code>
+//'     returns the position in the chromosome of the mutation.
+//'   - <code>[get_ref()](Mutation-cash-get_ref.md)</code> returns
+//'     the sequence as it was before the mutation.
+//' @keywords internal
+//' @seealso [Mutation()]
     class_<SIDMut>("Mutation")
         .constructor()
 
@@ -45,6 +63,8 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the chromosome in which `snv` occurs (i.e., "X")
 //' snv$get_chromosome()
+//' @keywords internal
+//' @seealso <code>[Mutation](Mutation_class.md)</code>
         .method("get_chromosome", &SIDMut::get_chromosome,
                 "Get the chromosome of the mutation")
 
@@ -58,6 +78,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the position in chromosome where `snv` occurs (i.e., 20002)
 //' snv$get_position_in_chromosome()
+//' @seealso <code>[Mutation](Mutation_class.md)</code>
         .method("get_position_in_chromosome", &SIDMut::get_position_in_chromosome,
                 "Get the mutation position in the chromosome")
 
@@ -71,6 +92,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the reference base in which `snv` occurs (i.e., "A")
 //' snv$get_ref()
+//' @seealso <code>[Mutation](Mutation_class.md)</code>
         .method("get_ref", &SIDMut::get_ref, "Get the mutation reference sequence")
 
 //' @name Mutation$get_alt
@@ -82,6 +104,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the sequence after `snv` occurs (i.e., "T")
 //' snv$get_alt()
+//' @seealso <code>[Mutation](Mutation_class.md)</code>
         .method("get_alt", &SIDMut::get_alt, "Get the mutation altered sequence")
 
 //' @name Mutation$get_cause
@@ -104,6 +127,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the cause of `snv` (i.e., "SBS13")
 //' snv$get_cause()
+//' @seealso <code>[Mutation](Mutation_class.md)</code>
         .method("get_cause", &SIDMut::get_cause, "Get the cause of the mutation")
 
 //' @name Mutation$get_dataframe
@@ -115,6 +139,7 @@ RCPP_MODULE(Mutations)
 //' snv <- SNV("X", 20002, "T", "A")
 //'
 //' snv$get_dataframe()
+//' @seealso <code>[Mutation](Mutation_class.md)</code>
         .method("get_dataframe", &SIDMut::get_dataframe,
                 "Get a data frame representing the mutation")
         .method("show", &SIDMut::show);
@@ -130,7 +155,8 @@ RCPP_MODULE(Mutations)
 //' @param ref The base before the mutation (optional).
 //' @param allele The allele in which the SNV must occur (optional).
 //' @param cause The cause of the SNV (optional).
-//' @seealso `Mutation()` for SNV and indel creation.
+//' @seealso [Mutation()] for building SNVs and indels,
+//'   <code>[Mutation](Mutation_class.md)</code>
 //' @examples
 //' # create a SNV without specifying the cause and context
 //' snv <- SNV("X", 20002, "T")
@@ -155,21 +181,21 @@ RCPP_MODULE(Mutations)
 //' @name Mutation
 //' @title Creating a SNV or a indel
 //' @description This function creates SNVs and indels.
-//' @details This function generalizes the function `SNV()` by constructing
+//' @details This function generalizes the function [SNV()] by constructing
 //'   SNVs and indels. However, it necessitates the specification of the
-//'   reference sequence, whereas `SNV()` can infer it from the reference
+//'   reference sequence, whereas [SNV()] can infer it from the reference
 //'   sequence itself.
 //'
-//'   Another distinction between this function and `SNV()` lies in the order
-//'   of the `ref`-`alt` parameter: in `SNV()`, the alt parameter precedes the
+//'   Another distinction between this function and [SNV()] lies in the order
+//'   of the `ref`-`alt` parameter: in [SNV()], the alt parameter precedes the
 //'   optional ref parameter, while `Mutation()` adopts the reverse order.
+//' @usage Mutation(chr, from, ref, alt, allele, cause)
 //' @param chr The name of the chromosome in which the indel occurs.
 //' @param from The position in the chromosome where the indel occurs.
 //' @param ref The reference sequence.
 //' @param alt The mutation altered sequence.
 //' @param allele The allele in which the mutation must occur (optional).
 //' @param cause The cause of the mutation (optional).
-//' @seealso `SNV()` for SNV creation.
 //' @examples
 //' # create a deletion without specifying the cause
 //' mutation <- Mutation("X", 20002, "TAC", "T")
@@ -186,6 +212,7 @@ RCPP_MODULE(Mutations)
 //' # create an insertion with a cause
 //' mutation <- Mutation("X", 20002, "A", "AT", cause = "SBS1")
 //' mutation
+//' @seealso [SNV()] for SNV creation, <code>[Mutation](Mutation_class.md)</code>
     function("Mutation", &SIDMut::build_SID,
              List::create(_["chr"], _["from"], _["ref"], _["alt"],
                           _["allele"] = R_NilValue, _["cause"] = ""),
@@ -193,7 +220,7 @@ RCPP_MODULE(Mutations)
 
 //' @name CNA
 //' @title Creating a CNA
-//' @description This function creates a CNA.
+//' @description This function creates a <code>[CNA](CNA_class.md)</code> object.
 //' @usage CNA(type, chr, chr_pos, len, allele = NULL, src_allele = NULL)
 //' @param type The CNA type: either `"A"` or `"D"` for amplification and
 //'   deletion, respectively.
@@ -203,8 +230,6 @@ RCPP_MODULE(Mutations)
 //' @param allele The allele in which the CNA occurs. (optional)
 //' @param src_allele The allele from which the region is amplified. (optional,
 //'   for amplification only)
-//' @seealso  [Amplification()] to build an amplification;
-//'   [Deletion()] to build a deletion.
 //' @examples
 //' # create an amplification
 //' cna <- CNA("A", "X", 20002, 100)
@@ -215,6 +240,8 @@ RCPP_MODULE(Mutations)
 //' cna <- CNA("D", "Y", 101310, 205, allele = 0)
 //'
 //' cna
+//' @seealso [Amplification()], 
+//'   [Deletion()], <code>[CNA](CNA_class.md)</code>
     function("CNA", &CNA::build_CNA,
              List::create(_["type"], _["chr"], _["from"], _["len"],
                           _["allele"] = R_NilValue, _["src_allele"] = R_NilValue),
@@ -229,13 +256,12 @@ RCPP_MODULE(Mutations)
 //' @param len The CNA length.
 //' @param allele The allele in which the amplification is placed. (optional)
 //' @param src_allele The allele from which the region is amplified. (optional)
-//' @seealso  [Deletion()] to build a deletion; [CNA()]
-//'   to build both amplifications and deletions.
 //' @examples
 //' # create an amplification CNA
 //' cna <- Amplification("X", 20002, 100)
 //'
 //' cna
+//' @seealso  [Deletion()], [CNA()], <code>[CNA](CNA_class.md)</code>
     function("Amplification", &CNA::build_amplification,
              List::create(_["chr"], _["from"], _["len"], _["allele"] = R_NilValue,
                           _["src_allele"] = R_NilValue),
@@ -249,19 +275,36 @@ RCPP_MODULE(Mutations)
 //' @param from The position in the chromosome where the CNA occurs.
 //' @param len The CNA length.
 //' @param allele The allele in which the deletion occurs. (optional)
-//' @seealso  [Amplification()] to build an amplification;
-//'   [CNA()] to build both amplifications and deletions.
 //' @examples
 //' # create a deletion CNA
 //' cna <- Deletion("Y", 40020, 200)
 //'
 //' cna
+//' @seealso  [Amplification()], [CNA()], <code>[CNA](CNA_class.md)</code>
     function("Deletion", &CNA::build_deletion,
              List::create(_["chr"], _["from"], _["len"], _["allele"] = R_NilValue),
              "Create a CNA deletion");
 
-//' @name CNA
+//' @name CNA_class
 //' @title A copy number alteration
+//' @description A class to represent CNA
+//' @details This class represents copy number alterations (CNA).
+//'   The objects of this class are built by [CNA()], [Amplification()],
+//'   and [Deletion()]. They provide the following methods:
+//'   - <code>[get_allele()](CNA-cash-get_allele.md)</code> returns the
+//'     identifier of the CNA allele.
+//'   - <code>[get_dataframe()](CNA-cash-get_dataframe.md)</code> returns
+//'     a data frame representing the CNA.
+//'   - <code>[get_length()](CNA-cash-get_length.md)</code> returns the
+//'     length of the CNA.
+//'   - <code>[get_position_in_chromosome()](CNA-cash-get_length.md)</code>
+//'     returns the position of the CNA in its chromosome.
+//'   - <code>[get_src_allele()](CNA-cash-get_src_allele.md)</code> returns
+//'     the identifier of the allele from which the new allele is copied when
+//'     the CNA is an amplification.
+//'
+//' @keywords internal
+//' @seealso [CNA()], [Amplification()], [Deletion()]
     class_<CNA>("CNA")
         .constructor()
 
@@ -276,6 +319,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the chromosome in which `cna` occurs (i.e., "X")
 //' cna$get_chromosome()
+//' @seealso <code>[CNA](CNA_class.md)</code>
         .method("get_chromosome", &CNA::get_chromosome, "Get the chromosome of the CNA")
 
 //' @name CNA$get_position_in_chromosome
@@ -289,6 +333,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the position in chromosome where `cna` occurs (i.e., 20002)
 //' cna$get_position_in_chromosome()
+//' @seealso <code>[CNA](CNA_class.md)</code>
         .method("get_position_in_chromosome", &CNA::get_position_in_chromosome,
                 "Get the CNA position in the chromosome")
 
@@ -302,6 +347,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the length of `cna` (i.e., 100)
 //' cna$get_length()
+//' @seealso <code>[CNA](CNA_class.md)</code>
         .method("get_length", &CNA::get_length, "Get the CNA length")
 
 //' @name CNA$get_allele
@@ -318,6 +364,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the allele in which `cna` occurs (i.e., 1)
 //' cna$get_allele()
+//' @seealso <code>[CNA](CNA_class.md)</code>
         .method("get_allele", &CNA::get_allele, "Get the alteration allele")
 
 //' @name CNA$get_src_allele
@@ -337,6 +384,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # the deletions have no sources and the method returns NA
 //' del_cna$get_src_allele()
+//' @seealso <code>[CNA](CNA_class.md)</code>
         .method("get_src_allele", &CNA::get_src_allele,
                 "Get the source allele (for amplifications)")
 
@@ -355,6 +403,7 @@ RCPP_MODULE(Mutations)
 //' del_cna <- Deletion("Y", 40020, 200, 0)
 //'
 //' del_cna$get_dataframe()
+//' @seealso <code>[CNA](CNA_class.md)</code>
         .method("get_dataframe", &CNA::get_dataframe,
                 "Get a data frame representing the CNA")
         .method("show", &CNA::show);
@@ -369,7 +418,7 @@ RCPP_MODULE(Mutations)
         .constructor()
         .method("show", &WholeGenomeDoubling::show);
 
-//' @name MutationEngine
+//' @name MutationEngine_class
 //' @title Generating phylogenetic forests
 //' @description A mutation engine can label every node of a samples
 //'   forest by mutations and produce a consistent phylogenetic forest.
@@ -387,13 +436,48 @@ RCPP_MODULE(Mutations)
 //'   Instead, the active signatures are defined by using the method
 //'   [MutationEngine$add_exposure()].
 //'
-//'   The initialisation of a `MutationEngine` object requires a reference
-//'   sequence and the SBS and ID mutational signatures. An SBS index and
-//'   a ID index of the reference sequence are then automatically built.
-//'   This process may take time depending on the size of the reference
-//'   sequence. Hence, the downloaded files together with the built indices
-//'   are saved on the disk for subsequent `MutationEngine` constructions.
+//'   The initialisation of a <code>[MutationEngine](MutationEngine_class.md)</code>
+//'   object requires a reference sequence and the SBS and ID mutational
+//'   signatures. An SBS index and a ID index of the reference sequence
+//'   are then automatically built. This process may take time depending
+//'   on the size of the reference sequence. Hence, the downloaded files
+//'   together with the built indices are saved on the disk for subsequent
+//'   <code>[MutationEngine](MutationEngine_class.md)</code> constructions.
 //'
+//'   The objects of this class are generated by the function
+//'   [MutationEngine()] and provide the following methods and properties:
+//'   - <code>[add_exposure()](MutationEngine-cash-add_exposure.md)</code>
+//'     adds exposures to the mutation engine.
+//'   - <code>[add_mutant()](MutationEngine-cash-add_mutant.md)</code> adds
+//'     a mutant genomic specification to the mutation engine.
+//'   - <code>[change_rates_from()](MutationEngine-cash-change_rates_from.md)</code>
+//'     changes the passenger rates from a specified time.
+//'   - <code>[get_SNV_signatures()](MutationEngine-cash-get_SNV_signatures.md)</code>
+//'     returns the SNV signatures.
+//'   - <code>[get_active_germline()](MutationEngine-cash-get_active_germline.md)</code>
+//'     returns the active germline subject.
+//'   - <code>[get_genome_info()](MutationEngine-cash-get_genome_info.md)</code>
+//'     returns a data frame reporting reference genome information.
+//'   - <code>[get_germline_subjects()](MutationEngine-cash-get_germline_subjects.md)</code>
+//'     returns the available germline subjects.
+//'   - <code>[get_indel_signatures()](MutationEngine-cash-get_indel_signatures.md)</code>
+//'     returns the indel signatures.
+//'   - <code>[get_known_drivers()](MutationEngine-cash-get_known_drivers.md)</code>
+//'     returns the data frame of the known driver mutations.
+//'   - <code>[get_population_descriptions()](MutationEngine-cash-get_population_descriptions.md)</code>
+//'     returns the available population descriptions.
+//'   - <code>[get_species_info()](MutationEngine-cash-get_species_info.md)</code>
+//'     returns the registered species and their rates.
+//'   - <code>[infinite_sites_model](MutationEngine-cash-infinite_sites_model.md)</code>
+//'     is a Boolean property to enable/disable the infinite sites model.
+//'   - <code>[place_mutations()](MutationEngine-cash-place_mutations.md)</code>
+//'     places mutations on a <code>[SampleForest]</code> object and generates
+//'     a <code>[PhylogeneticForest]</code> object.
+//'   - <code>[set_germline_subject()](MutationEngine-cash-set_germline_subject.md)</code>
+//'     sets the active germline subject.
+//'
+//' @keywords internal
+//' @seealso [MutationEngine()]
     class_<MutationEngine>("MutationEngine")
 
 //' @name MutationEngine$infinite_sites_model
@@ -412,6 +496,7 @@ RCPP_MODULE(Mutations)
 //' m_engine$infinite_sites_model <- FALSE
 //'
 //' m_engine$infinite_sites_model
+//' @seealso <code>[MutationEngine](MutationEngine_class.md)</code>
         .property("infinite_sites_model", &MutationEngine::get_infinite_sites_model,
                   &MutationEngine::set_infinite_sites_model,
                   "A flag to enable/disable the infinite sites model")
@@ -448,6 +533,7 @@ RCPP_MODULE(Mutations)
 //' m_engine$add_exposure(3.2, c(SBS5 = 0.3, SBS2 = 0.2, SBS3 = 0.5))
 //'
 //' m_engine
+//' @seealso <code>[MutationEngine](MutationEngine_class.md)</code>
         .method("add_exposure",
                 (void (MutationEngine::*)(const List &))(&MutationEngine::add_exposure),
                 "Add an exposure")
@@ -471,7 +557,6 @@ RCPP_MODULE(Mutations)
 //'   does not have an epigenetic state.
 //' @param drivers The list of the driver SNVs, indels, CNAs, and the whole
 //'   genome doubling events (WGD) characterizing the mutant (optional).
-//' @seealso [MutationEngine$change_rates_from()]
 //' @examples
 //' # create a demonstrative mutation engine
 //' m_engine <- MutationEngine(setup_code = "demo")
@@ -506,6 +591,8 @@ RCPP_MODULE(Mutations)
 //'                     drivers = d_mutations)
 //'
 //' m_engine
+//' @seealso [MutationEngine$change_rates_from()],
+//'   <code>[MutationEngine](MutationEngine_class.md)</code>
         .method("add_mutant",
                 (void (MutationEngine::*)(const std::string &,
                                           const Rcpp::List &))(
@@ -518,7 +605,7 @@ RCPP_MODULE(Mutations)
                 "Add mutant")
 
 //' @name MutationEngine$change_rates_from
-//' @title Change the passenger rates from a specified time
+//' @title Changing the passenger rates from a specified time
 //' @description This method changes the passenger rates from a specified time.
 //' @details This method changes the passenger rates from a specified time. The
 //'   rates before the specified time and those of the unspecified epigenetic
@@ -528,7 +615,6 @@ RCPP_MODULE(Mutations)
 //' @param passenger_rates The list of the passenger rates whose names are the
 //'   epigenetic states of the species or a single rate, if the mutant
 //'   does not have an epigenetic state.
-//' @seealso [MutationEngine$add_mutant()]
 //' @examples
 //' # create a demonstrative mutation engine
 //' m_engine <- MutationEngine(setup_code = "demo")
@@ -561,6 +647,8 @@ RCPP_MODULE(Mutations)
 //' m_engine$change_rates_from(13, "A", list("E2" = c(SNV = 2e-9)))
 //'
 //' m_engine
+//' @seealso [MutationEngine$add_mutant()],
+//'   <code>[MutationEngine](MutationEngine_class.md)</code>
         .method("change_rates_from",
                 (void (MutationEngine::*)(const CLONES::Time, const std::string &,
                                           const Rcpp::List &))(
@@ -621,6 +709,7 @@ RCPP_MODULE(Mutations)
 //' phylogenetic_forest <- m_engine$place_mutations(sample_forest, 1000, 500)
 //'
 //' phylogenetic_forest
+//' @seealso <code>[MutationEngine](MutationEngine_class.md)</code>
         .method("place_mutations",
                 (PhylogeneticForest (MutationEngine::*)(
                     const SampleForest &forest, const size_t &num_of_pre_neoplastic_SNVs,
@@ -662,6 +751,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the genome information
 //' m_engine$get_genome_info()
+//' @seealso <code>[MutationEngine](MutationEngine_class.md)</code>
         .method("get_genome_info", &MutationEngine::get_genome_info)
 
 //' @name MutationEngine$get_active_germline
@@ -673,16 +763,15 @@ RCPP_MODULE(Mutations)
 //'   subject population and super population, respectively, and
 //'   the column `gender` declares the subject gender.
 //' @return A data frame the active germline subject.
-//' @seealso [MutationEngine$get_germline_subjects()] to
-//'   get the available germline subjects;
-//'   [MutationEngine$set_germline_subject()] to set the
-//'   active germline subject.
 //' @examples
 //' # build a mutation engine
 //' m_engine <- MutationEngine(setup_code = "demo")
 //'
 //' # get the active germline subject data frame
 //' head(m_engine$get_active_germline(), 5)
+//' @seealso [MutationEngine$get_germline_subjects()],
+//'   [MutationEngine$set_germline_subject()],
+//'   <code>[MutationEngine](MutationEngine_class.md)</code>
         .method("get_active_germline", &MutationEngine::get_active_germline)
 
 //' @name MutationEngine$set_germline_subject
@@ -691,16 +780,15 @@ RCPP_MODULE(Mutations)
 //' @details The subject must be one among those reported by
 //'   [MutationEngine$get_germline_subjects()].
 //' @return Set the germline subject.
-//' @seealso [MutationEngine$get_germline_subjects()] to
-//'   get the available germline subjects;
-//'   [MutationEngine$get_active_germline()] to get the
-//'   active germline subject.
 //' @examples
 //' # build a mutation engine
 //' m_engine <- MutationEngine(setup_code = "demo")
 //'
 //' # set the active germline subject data frame
 //' m_engine$set_germline_subject("NA18941")
+//' @seealso [MutationEngine$get_germline_subjects()],
+//'   [MutationEngine$get_active_germline()],
+//'   <code>[MutationEngine](MutationEngine_class.md)</code>
         .method("set_germline_subject", &MutationEngine::set_germline_subject)
 
 //' @name MutationEngine$get_germline_subjects
@@ -712,16 +800,15 @@ RCPP_MODULE(Mutations)
 //'   contain the subject population and super population,
 //'   respectively; the column `gender` declares the subject gender.
 //' @return A data frame the available germline subjects.
-//' @seealso [MutationEngine$get_active_germline()] to get the
-//'   available germline subjects;
-//'   [MutationEngine$set_germline_subject()]
-//'   to set the active germline.
 //' @examples
 //' # build a mutation engine
 //' m_engine <- MutationEngine(setup_code = "demo")
 //'
 //' # get the active germline subject data frame
 //' head(m_engine$get_germline_subjects(), 5)
+//' @seealso [MutationEngine$get_active_germline()],
+//'   [MutationEngine$set_germline_subject()],
+//'   <code>[MutationEngine](MutationEngine_class.md)</code>
         .method("get_germline_subjects", &MutationEngine::get_germline_subjects)
 
 //' @name MutationEngine$get_population_descriptions
@@ -739,6 +826,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the active germline subject data frame
 //' head(m_engine$get_population_descriptions(), 5)
+//' @seealso <code>[MutationEngine](MutationEngine_class.md)</code>
         .method("get_population_descriptions",
                 &MutationEngine::get_population_descriptions)
 
@@ -762,7 +850,9 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the active germline subject data frame
 //' head(m_engine$get_species_info(), 5)
-//' @seealso [PhylogeneticForest$get_species_info()]
+//' @seealso [SampleForest$get_species_info()],
+//'   [PhylogeneticForest$get_species_info()],
+//'   <code>[MutationEngine](MutationEngine_class.md)</code>
         .method("get_species_info", &MutationEngine::get_species_info)
 
 //' @name MutationEngine$get_SNV_signatures
@@ -784,6 +874,8 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the indel data frame
 //' head(m_engine$get_SNV_signatures(), 5)
+//' @seealso [SampleForest$get_indel_signatures()],
+//'   <code>[MutationEngine](MutationEngine_class.md)</code>
         .method("get_SNV_signatures", &MutationEngine::get_SNV_signatures_dataframe,
                 "Get the SNV signatures data frame")
 
@@ -805,6 +897,8 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the indel data frame
 //' head(m_engine$get_indel_signatures(), 5)
+//' @seealso [SampleForest$get_SNV_signatures()],
+//'   <code>[MutationEngine](MutationEngine_class.md)</code>
         .method("get_indel_signatures", &MutationEngine::get_indel_signatures_dataframe,
                 "Get the indel signatures data frame")
 
@@ -834,6 +928,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the known driver data frame
 //' head(m_engine$get_known_drivers(), 5)
+//' @seealso <code>[MutationEngine](MutationEngine_class.md)</code>
         .method("get_known_drivers", &MutationEngine::get_known_driver_mutations,
                 "Get the known driver data frame")
 
@@ -842,9 +937,9 @@ RCPP_MODULE(Mutations)
 //' @name MutationEngine
 //' @title Creating a mutation engine
 //' @description This function downloads and sets up the data
-//'   requires by a mutation engine. Finally, it builds mutation
-//'   engine itself.
-//'
+//'   requires by a mutation engine. Finally, it builds an object
+//'   of the class <code>[MutationEngine](MutationEngine_class.md)</code>
+//'   itself.
 //' @details There are two building modalities: the first one is more
 //'   general, but it requires to specify all the data sources; the
 //'   second one adopts some pre-set configurations, but it is
@@ -1022,6 +1117,7 @@ RCPP_MODULE(Mutations)
 //' # remove the "Test" and "demo" directories
 //' unlink("Test", recursive = TRUE)
 //' unlink("demo", recursive = TRUE)
+//' @seealso <code>[MutationEngine](MutationEngine_class.md)</code>
     function("MutationEngine", &MutationEngine::build_MutationEngine,
              List::create(_["directory"] = "", _["reference_src"] = "",
                           _["SBS_signatures_src"] = "", _["indel_signatures_src"] = "",
@@ -1042,11 +1138,12 @@ RCPP_MODULE(Mutations)
 //' @param setup_code The set-up code whose available tumour types are
 //'   requested.
 //' @return A data frame reporting the types available for a set-up code.
-//' @seealso [MutationEngine()] to build a mutation engine
 //' @export
 //' @examples
 //' # get the types available for the "demo" set-up code
 //' get_available_tumours_in("demo")
+//' @seealso <code>[MutationEngine](MutationEngine_class.md)</code>
+//'   [MutationEngine()]
     function("get_available_tumours_in", &MutationEngine::get_available_tumour_type,
              List::create(_["setup_code"]),
              "Get the set of tumour types for a set-up code.");
@@ -1062,6 +1159,8 @@ RCPP_MODULE(Mutations)
 //' @examples
 //' # get the list of supported mutation engine set-up codes
 //' get_mutation_engine_codes()
+//' @seealso <code>[MutationEngine](MutationEngine_class.md)</code>
+//'   [MutationEngine()]
     function("get_mutation_engine_codes", &MutationEngine::get_supported_setups,
              "Get mutation engine supported codes");
 
@@ -1075,284 +1174,67 @@ RCPP_MODULE(Mutations)
 //'   for the first time on the cell represented by the node
 //'   itself. Moreover each leaf is also associated with the
 //'   genome mutations occurring in the corresponding cell.
+//'
+//'
+//'   The objects of this class are built by using
+//'   [MutationEngine] objects (see `[vignette("mutations")]`)
+//'   and provide the following methods and properties:
+//'   - <code>[get_absolute_chromosome_positions()](PhylogeneticForest-cash-get_absolute_chromosome_positions.md)</code>
+//'     returns the absolute chromosome positions.
+//'   - <code>[get_bulk_allelic_fragmentation()](PhylogeneticForest-cash-get_bulk_allelic_fragmentation.md)</code>
+//'     returns the genome bulk allelic fragmentation.
+//'   - <code>[get_cell_allelic_fragmentation()](PhylogeneticForest-cash-get_cell_allelic_fragmentation.md)</code>
+//'     returns the cell allelic fragmentation.
+//'   - <code>[get_coalescent_cells()](PhylogeneticForest-cash-get_coalescent_cells.md)</code>
+//'     returns the most recent common ancestors of the sampled cells.
+//'   - <code>[get_driver_mutations()](PhylogeneticForest-cash-get_driver_mutations.md)</code>
+//'     returns the data frame of the driver mutations.
+//'   - <code>[get_exposures()](PhylogeneticForest-cash-get_exposures.md)</code>
+//'     returns the timed exposure data frame.
+//'   - <code>[get_first_occurrences()](PhylogeneticForest-cash-get_first_occurrences.md)</code>
+//'     returns the identifier of the first cell in which a mutation emerged.
+//'   - <code>[get_germline_mutations()](PhylogeneticForest-cash-get_germline_mutations.md)</code>
+//'     returns the data frame of the forest germinal mutations.
+//'   - <code>[get_germline_subject()](PhylogeneticForest-cash-get_germline_subject.md)</code>
+//'     returns the germline subject of the phylogenetic forest.
+//'   - <code>[get_mutation_statistics()](PhylogeneticForest-cash-get_mutation_statistics.md)</code>
+//'     returns the statistics about mutations on each node.
+//'   - <code>[get_node()](PhylogeneticForest-cash-get_node.md)</code>
+//'     returns an object of type <code>[PhylogeneticForestNode]</code>.
+//'   - <code>[get_nodes()](PhylogeneticForest-cash-get_nodes.md)</code>
+//'     returns information about the nodes in the forest.
+//'   - <code>[get_reference_path()](PhylogeneticForest-cash-get_reference_path.md)</code>
+//'     returns the path to the reference genome FASTA file.
+//'   - <code>[get_sampled_cell_CNAs()](PhylogeneticForest-cash-get_sampled_cell_CNAs.md)</code>
+//'     returns the data frame of the CNAs in the sampled cells.
+//'   - <code>[get_sampled_cell_mutations()](PhylogeneticForest-cash-get_sampled_cell_mutations.md)</code>
+//'     returns the data frame of the SNVs and indels in the sampled cells.
+//'   - <code>[get_samples_info()](PhylogeneticForest-cash-get_samples_info.md)</code>
+//'     returns information about the samples generating the forest.
+//'   - <code>[get_species_info()](PhylogeneticForest-cash-get_species_info.md)</code>
+//'     returns information about the simulated species.
+//'   - <code>[get_sticks()](PhylogeneticForest-cash-get_sticks.md)</code>
+//'     computes the forest sticks.
+//'   - <code>[get_subforest_for()](PhylogeneticForest-cash-get_subforest_for.md)</code>
+//'     extracts a sub-forest for some of the samples.
+//'   - <code>[partition_samples()](PhylogeneticForest-cash-partition_samples.md)</code>
+//'     partitions the samples according to a labelling.
+//'   - <code>[save()](PhylogeneticForest-cash-save.md)</code>
+//'     saves the forest.
+//'   - <code>[set_reference_path()](PhylogeneticForest-cash-set_reference_path.md)</code>
+//'     sets the path to the reference genome FASTA file.
+//' @seealso <code>[SampleForest]</code>, [MutationEngine$place_mutations()]
     class_<PhylogeneticForest>("PhylogeneticForest")
-
-//' @name PhylogeneticForest$get_nodes
-//' @title Getting the forest nodes
-//' @description This method returns the nodes of the forest.
-//' @return A data frame representing, for each node in the
-//'   forest, the identified (column `cell_id`), the ancestor
-//'   identifier (column `ancestor`), the node's depth (column
-//'   `depth`), the name of the sample containing the node
-//'   (column `sample`), the mutant (column `mutant`), the
-//'   birth time (column `birth_time`), and, whenever the
-//'   simulation has epigenetic states, the epigenetic state
-//'   (column `epistate`).
-//' @examples
-//' # use a phylogenetic forest example
-//' forest <- example("PhylogeneticForest")
-//'
-//' # get the data frame of the nodes
-//' nodes <- forest$get_nodes()
-//'
-//' # print the first lines of the data frame
-//' head(nodes)
-//'
-//' @examples
-//' # use a phylogenetic forest example
-//' forest <- example("PhylogeneticForest - no epistates")
-//'
-//' # get the data frame of the nodes
-//' nodes <- forest$get_nodes()
-//'
-//' # print the first lines of the data frame
-//' head(nodes)
-//' @seealso [SampleForest$get_nodes()]
-        .method("get_nodes", &PhylogeneticForest::get_nodes,
-                "Get the nodes of the forest")
-
-//' @name PhylogeneticForest$get_coalescent_cells
-//' @title Retrieving the most recent common ancestors
-//' @description This method retrieves the most recent common ancestors
-//'   of a set of cells.
-//' @details If the optional parameter `cell_ids` is
-//'   used, this method find the most recent common ancestors of
-//'   the cells having an identifier among those in `cell_ids`.
-//'   If, otherwise, the optional parameter is not used, this
-//'   method find the most recent common ancestors of the forest
-//'   leaves.
-//' @param cell_ids The list of the identifiers of the cells whose
-//'   most recent common ancestors are aimed (optional).
-//' @return A data frame representing, for each of the identified
-//'   cells, the identified (column `cell_id`), the ancestor
-//'   identifier (column `ancestor`), the node's depth (column
-//'   `depth`), the name of the sample containing the node
-//'   (column `sample`), the mutant (column `mutant`), the
-//'   birth time (column `birth_time`), and, whenever the
-//'   simulation has epigenetic states, the epigenetic state
-//'   (column `epistate`).
-//' @examples
-//' # use a phylogenetic forest example
-//' forest <- example("PhylogeneticForest")
-//'
-//' # get the coalescent cells. Since this forest consists of
-//' # only one tree, we get a data frame containing one cell.
-//' forest$get_coalescent_cells()
-//' @seealso [SampleForest$get_coalescent_cells()]
-        .method("get_coalescent_cells",
-                (List (PhylogeneticForest::*)(const std::list<CLONES::Mutants::CellId> &)
-                     const)(&PhylogeneticForest::get_coalescent_cells),
-                "Get the most recent common ancestor of some cells")
-        .method("get_coalescent_cells",
-                (List (PhylogeneticForest::*)()
-                     const)(&PhylogeneticForest::get_coalescent_cells),
-                "Get the most recent common ancestor of all the forest trees")
-
-//' @name PhylogeneticForest$get_subforest_for
-//' @title Building sub-forests
-//' @description This method builds a sub-forest using as leaves some
-//'   of the original samples.
-//' @param sample_names The names of the samples whose cells will be used
-//'   as leaves of the new forest
-//' @return A sample forest built on the samples mentioned in `sample_names`
-//' @examples
-//' # use a phylogenetic forest example
-//' forest <- example("PhylogeneticForest")
-//'
-//' # get the subforest for sample "S_1_2"
-//' forest$get_subforest_for("S_1_2")
-//' @seealso [SampleForest$get_subforest_for()]
-        .method("get_subforest_for", &PhylogeneticForest::get_subforest_for,
-                "Get the sub-forest for some of the original samples")
-
-//' @name PhylogeneticForest$partition_samples
-//' @title Partitioning forest samples
-//' @description This method partitions the samples in a phylogenetic forest.
-//' @details This method partitions the samples in a phylogenetic forest
-//'   according to a labelling function over the corresponding forest nodes.
-//'   It works in-place by altering the phylogenetic forest from which the
-//'   method is called.
-//' @param labelling_function An R labelling function that maps any forest
-//'   node to a labelling string.
-//' @examples
-//' # use a phylogenetic forest example
-//' forest <- example("PhylogeneticForest")
-//'
-//' # show information about samples
-//' forest$get_samples_info()
-//'
-//' # the labelling function parameter has type `PhylogeneticForestNode`
-//' birth_time_labelling <- function(node) {
-//'   if (node$birth_time > 421) {
-//'     return("YOUNG")
-//'   }
-//'
-//'   if (node$birth_time > 321) {
-//'     return("MIDDLE_AGED")
-//'   }
-//'
-//'   return("OLD")
-//' }
-//'
-//' # partition the samples according to the labelling function
-//' forest$partition_samples(birth_time_labelling)
-//'
-//' # show the new samples
-//' forest$get_samples_info()
-//' @seealso <code>[PhylogeneticForestNode]</code>
+        REGISTER_FOREST_COMMON_FIELD(PhylogeneticForest)
         .method("partition_samples",
                 &PhylogeneticForest::partition_samples,
                 "Partition each sample in the forest according to a labelling function")
-
-//' @name PhylogeneticForest$get_samples_info
-//' @title Retrieving sample information
-//' @description This method retrieves information about
-//'   the samples whose cells were used as leaves
-//'   of the sample forest.
-//' @return A data frame containing, for each sample collected during the
-//'   simulation, the columns `name`, `time`, `id`, `ymin`, `xmin`,
-//'    `ymax`, `ymax`, `xmax`, `tumour_cells`, `tumour_cells_in_bbox`,
-//'   `DNA_quantity`, and `equivalent_normal_cells`. The columns `ymin`,
-//'   `xmin`, `ymax`, and `xmax` report the boundaries of the sample
-//'   bounding box, while `tumour_cells` and `tumour_cells_in_bbox` are the
-//'   number of tumour cells in the sample and in the bounding box,
-//'   respectively. Finally, `DNA_quantity` contains the overall number of
-//'   tumoral bases, i.e., the sum of the lengths of all the alleles of all the
-//'   sample tumoral cells, and `equivalent_normal_cells` contains the number
-//'   of normal cells that contain as much DNA as the sample tumoral cells.
-//'   The `DNA_quantity` is stored as a real number despite being a natural
-//'   number as it usually exceeds the largest natural number that can be
-//'   natively represented by R.
-//' @examples
-//' # use a phylogenetic forest example
-//' forest <- example("PhylogeneticForest")
-//'
-//' # show information about samples
-//' forest$get_samples_info()
-//' @seealso [SampleForest$get_samples_info()],
-//'   [TissueSimulation$get_samples_info()]
-        .method("get_samples_info", &PhylogeneticForest::get_samples_info,
-                "Get some pieces of information about the samples")
-
-//' @name PhylogeneticForest$get_driver_mutations
-//' @title Getting the driver mutations
-//' @description This method returns the applied driver mutations.
-//' @return A data frame consisting in eight columns `order`, `type`,
-//'   `CNA_type`, `chr`, `start`, `end`, `ref`, `alt`, `allele`, `allele_srd`,
-//'   `cause`, and `code`. Each row in the data frame reports one driver
-//'   mutations. The fields `cause` and `order` report the name of the mutant
-//'   and the application order among the mutant driver mutations,
-//'   respectively. The column `type` declares the mutation type and contains
-//'   `SID`, `CNA`, or `WGD` when the mutation is an SNV/indel, a CNA, or
-//'   a whole genome duplication, respectively. When the mutation is a CNA,
-//'   the `CNA_type` can either be `A` (i.e., amplification) or `D`
-//'   (i.e., deletion). When the mutation is not a WGD, the fields `chr`,
-//'   `start`, and `end` contains the mutation chromosome, the initial and
-//'   the final position on the chromosome, respectively. When the mutation
-//'   is a SID , the fields `ref` and `alt` contains the mutation reference
-//'   genome and alternate sequences, respectively. When the mutation is a
-//'   SID or a CNA deletion, the field `allele` stores the allele in which
-//'   the mutation was applied. When instead the mutation is a CNA
-//'   amplification, the fields `allele` and `src_allele` reports the
-//'   identifiers of the new allele and of the original allele, respectively.
-//'   In all the remaining cases, the fields contains the value `NA`.
-//'   Finally, the column `code` reports the mutation code.
-//' @examples
-//' # use a phylogenetic forest example
-//' forest <- example("PhylogeneticForest")
-//'
-//' # show information about samples
-//' forest$get_driver_mutations()
         .method("get_driver_mutations", &PhylogeneticForest::get_driver_mutations,
                 "Get the applied driver mutations")
-
-//' @name PhylogeneticForest$get_species_info
-//' @title Getting the species and their rates
-//' @description This method returns the species and their rates.
-//' @details This method returns the species and their rates during
-//'   the simulation are returned in a data frame. The column `species`
-//'   contains the species names; the columns `time`, `SNV_rate`,
-//'   `indel_rate`, and `CNA_rate` store the time from which rates
-//'   hold, and the corresponding the SNV, indel, and CNA rates,
-//'   respectively.
-//' @return A data frame reporting `species`, `time`, `SNV_rate`,
-//'   `indel_rate`, and `CNA_rate` for each species.
-//' @examples
-//' # use a phylogenetic forest example
-//' forest <- example("PhylogeneticForest")
-//'
-//' # show information about samples
-//' forest$get_species_info()
-//' @seealso [MutationEngine$get_species_info()]
-        .method("get_species_info", &PhylogeneticForest::get_species_info,
-                "Get the recorded species")
-
-//' @name PhylogeneticForest$get_germline_subject
-//' @title Getting the germline subject
-//' @description This method returns a data frame reporting the germline
-//'   subject name (column "sample"), population (column "pop"),
-//'   super-population (column "super_pop"), and gender (column "gender").
-//' @return The name of the subject whose germline is used.
-//' @examples
-//' # use a phylogenetic forest example
-//' forest <- example("PhylogeneticForest")
-//'
-//' # get the germline subject
-//' forest$get_germline_subject()
         .method("get_germline_subject", &PhylogeneticForest::get_germline_subject_df,
                 "Get the germline subject")
-
-//' @name PhylogeneticForest$get_sampled_cell_CNAs
-//' @title Getting the sampled cells' CNAs
-//' @description This method returns the CNAs of the sample cells.
-//' @details This method builds a data frame representing all the CNAs
-//'   in the cells sampled during the simulation and represented by
-//'   the leaves of the phylogenetic forest.
-//' @return A data frame reporting `cell_id`, `type` (`"A"` for amplifications
-//'   and `"D"` for deletions), `chr`, `begin` (i.e., the first CNA
-//'   locus in the chromosome), `end` (i.e., last CNA locus in the chromosome),
-//'   `allele`, `src allele` (the allele origin for amplifications, `NA` for
-//'   deletions), and `class` (i.e., `"driver"`, `"passenger"`, `"germinal"`
-//'   or `"pre-neoplastic"`).
-//' @examples
-//' # use a phylogenetic forest example
-//' forest <- example("PhylogeneticForest")
-//'
-//' # get the sampled cell CNAs
-//' CNAs <- forest$get_sampled_cell_CNAs()
-//'
-//' # print the first lines of the data frame
-//' head(CNAs)
-//' @seealso [PhylogeneticForest$get_sampled_cell_mutations()]
         .method("get_sampled_cell_CNAs", &PhylogeneticForest::get_sampled_cell_CNAs,
                 "Get the CNAs of all sampled cells")
-
-//' @name PhylogeneticForest$get_sampled_cell_mutations
-//' @title Getting the sampled cells' mutations
-//' @description This method returns the mutations of the sample cells.
-//' @details This method builds a data frame representing all the SNV
-//'   and the indel mutations in the cells sampled during the simulation
-//'   and represented by the leaves of the phylogenetic forest.
-//'   The data frame also reports the allele in which the mutations occur to
-//'   support double occurrences due to CNAs.
-//' @param with_germline A Boolean flag to report germline mutations too
-//'   (default: `FALSE`).
-//' @return A data frame reporting `cell_id`, `chr`, (i.e., the mutation
-//'   chromosome), `from` (i.e., position in the chromosome), `allele`
-//'   (in which the mutation occurs), `ref`, `alt`, `type` (i.e., either
-//'   `"SNV"` or `"indel"`), `cause`, and `class` (i.e., `"driver"`,
-//'   `"passenger"`, `"germinal"` or `"pre-neoplastic"`) for each mutation
-//'   in the sampled cell genomes.
-//' @examples
-//' # use a phylogenetic forest example
-//' forest <- example("PhylogeneticForest")
-//'
-//' # get the sampled cell mutations
-//' mutations <- forest$get_sampled_cell_mutations()
-//'
-//' # print the first lines of the data frame
-//' head(mutations)
-//' @seealso [PhylogeneticForest$get_sampled_cell_CNAs()]
         .method("get_sampled_cell_mutations",
                 (Rcpp::DataFrame (PhylogeneticForest::*)() const)(
                     &PhylogeneticForest::get_sampled_cell_SIDs),
@@ -1361,141 +1243,13 @@ RCPP_MODULE(Mutations)
                 (Rcpp::DataFrame (PhylogeneticForest::*)(const bool) const)(
                     &PhylogeneticForest::get_sampled_cell_SIDs),
                 "Get the SNVs and indels of all the sampled cells")
-
-//' @name PhylogeneticForest$get_node
-//' @title Getting a node of the forest
-//' @description This method returns the node of the forest
-//' @details This method returns the node of the forest whose
-//'    corresponding cell has a specified identifier.
-//' @param cell_id The identifier of the cell whose node is aimed.
-//' @return The <code>[PhylogeneticForestNode]</code> object
-//'   associated to the cell whose identifier is `cell_id`.
-//' @examples
-//' # use a phylogenetic forest example
-//' forest <- example("PhylogeneticForest")
-//'
-//' # get the node corresponding to the cell having 2 as cell identifier
-//' forest$get_node(2)
-//' @seealso <code>[PhylogeneticForestNode]</code>
-        .method("get_node", &PhylogeneticForest::get_node,
-                "Get node corresponding to a cell")
-
-//' @name PhylogeneticForest$get_germline_mutations
-//' @title Getting the germinal mutations
-//' @description This method returns the forest SNVs and indels.
-//' @details Its builds a data frame representing all the germinal
-//'   SNVs and indels of the cells represented in the phylogenetic forest.
-//'   The data frame also reports the allele in which the mutations occur to
-//'   support double occurrences due to CNAs.
-//' @return A data frame reporting `chr`, `from` (i.e., the position in
-//'   the chromosome), `allele` (in which the mutation occurs), `ref`,
-//'   `alt`, `cause`, `type` (i.e., either `"SNV"` or `"indel"`) and
-//'   `class` (i.e., `"germinal"`).
-//' @examples
-//' # use a phylogenetic forest example
-//' forest <- example("PhylogeneticForest")
-//'
-//' # get the first germline mutations
-//' head(forest$get_germline_mutations())
         .method("get_germline_mutations", &PhylogeneticForest::get_germline_SIDs,
                 "Get the germinal SNVs and indels")
-
-//' @name PhylogeneticForest$get_absolute_chromosome_positions
-//' @title Getting the absolute chromosome positions
-//' @description This method returns the absolute chromosome positions.
-//' @details Its builds a data frame reporting the name, the length, and the
-//'   initial and final absolute positions of each chromosome in the
-//'   reference genome.
-//' @return A data frame reporting the name (column `chr`), the length
-//'   (column `length`), the initial absolute position (column `from`),
-//'   and the final absolute position (column `to`) of each chromosome.
-//' @examples
-//' # use a phylogenetic forest example
-//' forest <- example("PhylogeneticForest")
-//'
-//' # get absolute chromosome positions. Since this forest example was built
-//' # by using one single chromosome, the resulting data frame contains only
-//' # one line
-//' forest$get_absolute_chromosome_positions()
         .method("get_absolute_chromosome_positions",
                 &PhylogeneticForest::get_absolute_chromosome_positions,
                 "Get the absolute chromosome positions")
-
-//' @name PhylogeneticForest$get_sticks
-//' @title Computing the forest sticks
-//' @description This method computes the sticks of the forest.
-//' @details A _crucial node_ of a forest is a root of the forest, a node
-//'   whose parent belongs to a different species, or the most recent common
-//'   ancestor of two crucial nodes.
-//'
-//'   A _stick_ is a path of the forest in which the only crucial nodes are
-//'   the first and the last one.
-//'
-//'   This method returns the list of the forest sticks. Each stick is
-//'   represented by the sequence of cell identifiers labelling the nodes in
-//'   the stick.
-//' @param birth_threshold The maximum birth time for the cells associated to
-//'   the returned sticks (optional).
-//' @return The list of the forest sticks whose associated cells have
-//'   birth time smaller than or equal to `birth_threshold`. Each stick is
-//'   represented as the list of cell identifiers labelling the nodes in the
-//'   stick from the higher to the deeper in the forest.
-//' @examples
-//' # use a phylogenetic forest example
-//' forest <- example("PhylogeneticForest")
-//'
-//' # search for the forest sticks
-//' head(forest$get_sticks())
-//'
-//' # search for the forest sticks whose first node corresponding cells have
-//' # birth times 40 time units at most
-//' forest$get_sticks(40)
-//' @seealso [SampleForest$get_sticks()]
-        .method("get_sticks",
-                (std::list<std::list<CLONES::Mutants::CellId>> (PhylogeneticForest::*)(
-                    const double) const)(&PhylogeneticForest::get_sticks),
-                "Get the forest sticks")
-        .method("get_sticks",
-                (std::list<std::list<CLONES::Mutants::CellId>> (PhylogeneticForest::*)()
-                     const)(&PhylogeneticForest::get_sticks),
-                "Get the forest sticks")
-
-//' @name PhylogeneticForest$get_exposures
-//' @title Getting the timed exposure data frame
-//' @description This method returns a data frame representing the exposure
-//'   evolution over time.
-//' @return A data frame reporting `time`, `signature`, `exposure` and,
-//'   `type`.
-//' @examples
-//' # use a phylogenetic forest example
-//' forest <- example("PhylogeneticForest")
-//'
-//' # get the exposures used to build the forest
-//' forest$get_exposures()
-//' @seealso [`vignette("mutations")`]
         .method("get_exposures", &PhylogeneticForest::get_timed_exposures,
                 "Get the timed exposure data frame")
-
-//' @name PhylogeneticForest$get_bulk_allelic_fragmentation
-//' @title Getting the genome bulk allelic fragmentation
-//' @description This method returns a data frame representing the bulk allelic
-//'   fragmentation of the genome.
-//' @param sample_name The name of the sample whose bulk allelic fragmentation
-//'   is aimed (optional).
-//' @return A data frame reporting, for each genomic fragment and for all
-//'   the allelic type on the genomic fragment, the chromosome (`chr`),
-//'   the first base position (`begin`), the last base position (`end`),
-//'   the number of copy of the major and minor alleles (`major` and
-//'   `minor`, respectively), and the ratio between the number of cells
-//'   exhibiting this allelic type and the total number of cells in the
-//'   sample.
-//' @examples
-//' # use a phylogenetic forest example
-//' forest <- example("PhylogeneticForest")
-//'
-//' # get the genome bulk allelic fragmentation
-//' forest$get_bulk_allelic_fragmentation()
-//' @seealso [`vignette("mutations")`]
         .method("get_bulk_allelic_fragmentation",
                 (Rcpp::List (PhylogeneticForest::*)(const std::string &)
                      const)(&PhylogeneticForest::get_bulk_allelic_fragmentation),
@@ -1504,143 +1258,66 @@ RCPP_MODULE(Mutations)
                 (Rcpp::List (PhylogeneticForest::*)()
                      const)(&PhylogeneticForest::get_bulk_allelic_fragmentation),
                 "Get the bulk allelic fragmentation data frame")
-
-//' @name PhylogeneticForest$get_cell_allelic_fragmentation
-//' @title Getting the cell allelic fragmentation data frame
-//' @description This method returns a data frame representing the allelic
-//'   fragmentation of each sampled cell.
-//' @return A data frame reporting, for each cell, for each genomic fragment,
-//'   and for all the allelic type on the genomic fragment, the cell
-//'   identifier (`cell_id`), the chromosome (`chr`), the first base
-//'   position (`begin`), the last base position (`end`), and the number
-//'   of copy of the major and minor alleles (`major` and `minor`,
-//'   respectively).
-//' @examples
-//' # use a phylogenetic forest example
-//' forest <- example("PhylogeneticForest")
-//'
-//' # print the first rows of the cell allelic fragmentation
-//' head(forest$get_cell_allelic_fragmentation())
-//' @seealso [`vignette("mutations")`]
         .method("get_cell_allelic_fragmentation",
                 (Rcpp::List (PhylogeneticForest::*)()
                      const)(&PhylogeneticForest::get_cell_allelic_fragmentation),
                 "Get the cell allelic fragmentation data frame")
-
-//' @name PhylogeneticForest$get_first_occurrences
-//' @title Getting the cell in which a mutation emerged
-//' @description This method returns the identifier of the cell in which a
-//'   mutation occurs for the first time. `$1`
-//' @param mutation A mutation being a SNV, a indel, or a CNA.
-//' @return The identifier of the cell in which a mutation
-//'   occurs for the first time.
-//' @examples
-//' # use a phylogenetic forest example
-//' forest <- example("PhylogeneticForest")
-//'
-//' # consider a mutation in the forest
-//' mutation <- Mutation("22", 35396109, ref = "CTGA", alt = "C")
-//' mutation
-//'
-//' # get the identifiers of the cells in which the mutation arose, i.e.,
-//' # they have the mutation, but their parent have not
-//' cell_ids <- forest$get_first_occurrences(mutation)
-//' cell_ids
-//'
-//' # get the corresponding node
-//' node <- forest$get_node(cell_ids[[1]])
-//'
-//' # the mutation is among the arising mutation in the node
-//' node$arising_mutations
-//' @seealso [`vignette("mutations")`]
         .method("get_first_occurrences",
                 (Rcpp::List (PhylogeneticForest::*)(const SEXP &)
                      const)(&PhylogeneticForest::get_first_occurrence),
                 "Get the identifier of the cell in which the mutation occurs for the "
                 "first time")
-
-//' @name PhylogeneticForest$get_reference_path
-//' @title Getting the reference genome path
-//' @description This method returns the reference genome path.
-//' @return The reference genome path.
-//' @examples
-//' # use a phylogenetic forest example
-//' forest <- example("PhylogeneticForest")
-//'
-//' # get the reference path
-//' forest$get_reference_path()
-//' @seealso [PhylogeneticForest$set_reference_path()]
         .method("get_reference_path",
                 &PhylogeneticForest::get_reference_path,
                 "Get the reference genome path")
-
-//' @name PhylogeneticForest$get_mutation_statistics
-//' @title Getting the statistics about mutations on each node
-//' @description This method returns a dataframe reporting the statistics about
-//'   mutations on each node.
-//' @return A dataframe consisting of five columns `cell_id`, `new_SIDs`,
-//'   `new_CNAs`, `total_SIDs`, and `total_CNAs`. Each row represents a
-//'   node in the phylogenetic forest and reports the identifier of the
-//'   corresponding cell and contains the number of mutations (`new_SIDs`) and
-//'   CNAs (`new_CNAs`) appearing for the first time on the cell. Moreover, it
-//'   show the total number of mutations and CNAs on the cell (`total_SIDs`
-//'   and `total_CNAs`, respectively).
         .method("get_mutation_statistics",
                 (Rcpp::List (PhylogeneticForest::*)()
                      const)(&PhylogeneticForest::get_mutation_statistics),
                 "Get the statistics about node mutations")
-
-//' @name PhylogeneticForest$set_reference_path
-//' @title Setting the reference genome path
-//' @description This method returns the reference genome path.
-//' @return The reference genome path.
-//' @seealso [PhylogeneticForest$get_reference_path()]
         .method("set_reference_path",
                 &PhylogeneticForest::set_reference_path,
-                "Set the reference genome path")
-
-//' @name PhylogeneticForest$save
-//' @title Saving a phylogenetic forest
-//' @description This method saves a phylogenetic forest in a file.
-//' @param filename The path of the file in which the phylogenetic.
-//' @param quiet An optional Boolean flag to avoid the progress bar
-//'   (default: FALSE).
-//'   forest must be saved.
-        .method("save",
-                (void (PhylogeneticForest::*)(const std::string &, const bool) const)
-                    &PhylogeneticForest::save,
-                "Save a phylogenetic forest")
-        .method("save",
-                (void (PhylogeneticForest::*)(const std::string &) const)
-                    &PhylogeneticForest::save,
-                "Save a phylogenetic forest")
-
-        // show
-        .method("show", &PhylogeneticForest::show, "Describe the PhylogeneticForest");
+                "Set the reference genome path");
 
 //' @name PhylogeneticForestNode
 //' @title The node of a phylogenetic forest
-//' @description This class represents the nodes of a phylogenetic forest. It does not
-//'   have a user constructor and its objects are produced by ProCESS and passed to
-//'   the labelling function of [get_node_tour()].
-//' @field \code{cell_id} The identifier of the associated cell.
-//' @field \code{parent} The node's parent.
-//' @field \code{children} A list of the node's children.
-//' @field \code{is_root} A flag that is set to TRUE if and only if the node is a root.
-//' @field \code{is_leaf} A flag that is set to TRUE if and only if the node is a leaf.
-//' @field \code{sample_name} The name of the sample that collected the associated cell.
-//' @field \code{birth_time} The birth time of the cell associated to the node.
-//' @field \code{death_time} The death time of the cell associated to the node.
-//' @field \code{life_span} The life span of the cell associated to the node.
-//' @field \code{species_id} The identifier of the associated cell's species.
-//' @field \code{species_name} The name of the associated cell's species.
-//' @field \code{epistate_name} The name of the associated cell's epigenetic state.
-//' @field \code{mutant_id} The identifier of the associated cell's mutant.
-//' @field \code{mutant_name} The name of the associated cell's mutant.
-//' @field \code{arising_mutations} The mutations arising for the first time in the
-//'   associated cell.
+//' @description This class represents the nodes of a phylogenetic forest.
+//' @details This class represents the nodes of a phylogenetic forest. It does not
+//'   have a user constructor. Its objects are produced by [get_node_tour()] and
+//'   <code>[PhylogeneticForest$get_node()]</code>.
+//'
+//'   The objects of this class provide the following methods and properties:
+//'   - <code>[cell_id](PhylogeneticForest-cash-cell_id.md)</code>
+//'     represents the identifier of the associated cell.
+//'   - <code>[parent](PhylogeneticForest-cash-parent.md)</code>
+//'     represents the node's parent.
+//'   - <code>[children](PhylogeneticForest-cash-children.md)</code>
+//'     represents a list of the node's children.
+//'   - <code>[is_root](PhylogeneticForest-cash-is_root.md)</code>
+//'     is a Boolean flag that is `TRUE` if and only if the node is a forest
+//'     root.
+//'   - <code>[is_leaf](PhylogeneticForest-cash-is_leaf.md)</code>
+//'     is a Boolean flag that is `TRUE` if and only if the node is a forest
+//'     leaf.
+//'   - <code>[sample_name](PhylogeneticForest-cash-sample_name.md)</code>
+//'     is the name of the sample that collected the associated cell.
+//'   - <code>[birth_time](PhylogeneticForest-cash-birth_time.md)</code>
+//'     is the birth time of the cell associated to the node.
+//'   - <code>[death_time](PhylogeneticForest-cash-death_time.md)</code>
+//'     is the death time of the cell associated to the node.
+//'   - <code>[life_span](PhylogeneticForest-cash-life_span.md)</code>
+//'     is the life span of the cell associated to the node.
+//'   - <code>[species_name](PhylogeneticForest-cash-species_name.md)</code>
+//'     is the name of the associated cell's species.
+//'   - <code>[epistate_name](PhylogeneticForest-cash-epistate_name.md)</code>
+//'     is the name of the associated cell's epigenetic state.
+//'   - <code>[mutant_name](PhylogeneticForest-cash-mutant_name.md)</code>
+//'     is the name of the associated cell's mutant.
+//'   - <code>[arising_mutations](PhylogeneticForest-cash-arising_mutations.md)</code>
+//'     stores the mutations arising in the associated cell.
+//'   - <code>[get_genome()](PhylogeneticForest-cash-get_genome.md)</code>
+//'     returns the genome of the associated cell.
 //' @seealso [get_node_tour()], <code>[PhylogeneticForestNodeTour]</code>,
-//'   <code>[SampleForestNode]</code>, [`vignette("node_labelling")`]
+//'   <code>[SampleForestNode]</code>, [`vignette("node_tour")`]
    class_<PhylogeneticForestNode>("PhylogeneticForestNode")
         REGISTER_NODE_COMMON_FIELDS(PhylogeneticForestNode)
         .property("arising_mutations", &PhylogeneticForestNode::arising_mutations,
@@ -1650,21 +1327,29 @@ RCPP_MODULE(Mutations)
 
 //' @name PhylogeneticForestNodeTour
 //' @title An iterator class over phylogenetic forest nodes
-//' @description This class represents iterators over phylogenetic forest nodes.
-//'   The objects of this class are built by [get_node_tour()].
-//' @field \code{node} An object of the class <code>[PhylogeneticForestNode]</code>
-//'   representing the node pointed by the iterator.
-//' @field \code{label} (OPTIONAL) The label of the of the node pointed by the
-//'   iterator. The presence of this field depends on the [get_node_tour()]'s
-//'   parameters used to create the tour object.
-//' @field \code{genome} (OPTIONAL) An object of the class
-//'   <code>[GenomeMutations]</code> that represent the genome of the node
-//'   pointed by the iterator.
-//' @field \code{step} A method that moves to the next node in the tour.
-//' @field \code{done} A Boolean flag that is set to TRUE only when the tour ended.
+//' @description Iterators over phylogenetic forest nodes.
+//' @details This class represents iterators over phylogenetic forest nodes.
+//'   The objects of this class are built by [get_node_tour()] and provide
+//'   the following methods and properties:
+//'   - <code>[node](PhylogeneticForestNodeTour-cash-node.md)</code>
+//'     is an object of the class <code>[SampleForestNode]</code> and
+//'     represents the node pointed by the iterator.
+//'   - <code>[label](PhylogeneticForestNodeTour-cash-label.md)</code>
+//'     represents the label of the of the node pointed by the
+//'     iterator. The presence of this field depends on the type of the
+//'     [get_node_tour()]'s parameters used to create the tour object
+//'     (OPTIONAL).
+//'   - <code>[genome](PhylogeneticForestNodeTour-cash-genome.md)</code>
+//'     is an object of the class <code>[GenomeMutations]</code> that
+//'     represent the genome of the node pointed by the iterator
+//'     (OPTIONAL).
+//'   - <code>[step()](PhylogeneticForestNodeTour-cash-step.md)</code>
+//'     moves the iterator to the next node in the tour.
+//'   - <code>[done](PhylogeneticForestNodeTour-cash-done.md)</code>
+//'     is a Boolean flag that is set to `TRUE` only when the tour ended.
+//'
 //' @seealso [get_node_tour()], <code>[PhylogeneticForestNode]</code>,
-//'   <code>[SampleForestNodeTour]</code>, <code>[GenomeMutations]</code>,
-//'   [`vignette("node_labelling")`]
+//'   <code>[PhylogeneticForestNodeTour]</code>, [`vignette("node_tour")`]
     class_<PhylogeneticForestNodeTour>("PhylogeneticForestNodeTour")
         REGISTER_TOUR_COMMON_FIELDS(PhylogeneticForestNodeTour)
         .property("genome", &PhylogeneticForestNodeTour::get_genome,
@@ -1673,9 +1358,19 @@ RCPP_MODULE(Mutations)
 //' @name GenomeFragment
 //' @title Representing a genome fragment
 //' @description This class represents genome fragment.
+//' @details This class represents genome fragment.
 //'   The objects of this class are built by <code>[GenomeMutations]</code>.
+//'   They provides the following properties and methods:
+//'   - <code>[get_CIGAR()](GenomeFragment-cash-get_CIGAR.md)</code> returns
+//'     the CIGAR code of the fragment with respect to the reference genome.
+//'   - <code>[get_covered_reference_region()](GenomeFragment-cash-get_covered_reference_region.md)</code>
+//'     returns the reference genome region covered by the fragment.
+//'   - <code>[get_mutations()](GenomeFragment-cash-get_mutations.md)</code>
+//'     returns the mutations occurring on the fragment.
+//'   - <code>[sequence](GenomeFragment-cash-sequence.md)</code> stores
+//'     the fragment DNA sequence.
 //' @seealso <code>[GenomeMutations]</code>, [get_node_tour()],
-//'   [get_genome_tour()], [`vignette("node_labelling")`]
+//'   [`vignette("node_tour")`]
     class_<GenomeFragment>("GenomeFragment")
 
 //' @name GenomeFragment$get_CIGAR
@@ -1695,6 +1390,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # get its CIGAR with respect to the reference genome
 //' fragment$get_CIGAR()
+//' @seealso <code>[GenomeFragment]</code>
         .method("get_CIGAR", &GenomeFragment::get_CIGAR,
                 "Get the fragment CIGAR")
 
@@ -1714,6 +1410,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the fragment sequence
 //' fragment$sequence
+//' @seealso <code>[GenomeFragment]</code>
         .property("sequence", &GenomeFragment::get_sequence,
                   "The fragment sequence")
 
@@ -1735,6 +1432,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the fragment mutations
 //' fragment$get_mutations()
+//' @seealso <code>[GenomeFragment]</code>
         .method("get_mutations", &GenomeFragment::get_mutations,
                 "Get the mutations laying on the fragment")
 
@@ -1758,6 +1456,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the covered reference region
 //' fragment$get_covered_reference_region()
+//' @seealso <code>[GenomeFragment]</code>
         .method("get_covered_reference_region",
                 &GenomeFragment::get_covered_reference_region,
                 "Get the covered region")
@@ -1766,10 +1465,26 @@ RCPP_MODULE(Mutations)
 
 //' @name GenomeMutations
 //' @title Representing cell genome
-//' @description This class represents genome mutations of phylogenetic forest's cells.
-//'   The objects of this class are built by <code>[PhylogeneticForestNodeTour]</code>.
-//' @seealso [get_node_tour()], [get_genome_tour()],
-//'   <code>[PhylogeneticForestNodeTour]</code>, [`vignette("node_labelling")`]
+//' @description This class represents genome mutations of phylogenetic
+//'   forest's cells.
+//' @details The objects of this class are built by [get_node_tour()] and
+//'   [PhylogeneticForestNode$get_genome()]. The provide the following
+//'   methods:
+//'   - <code>[get_CNAs()](GenomeMutations-cash-get_CNAs.md)</code>
+//'     returns a data frame of the genome CNAs.
+//'   - <code>[get_allele_fragments()](GenomeMutations-cash-get_allele_fragments.md)</code>
+//'     returns genome allele fragments.
+//'   - <code>[get_alleles_covering_ref_region()](GenomeMutations-cash-get_alleles_covering_ref_region.md)</code>
+//'     returns the alleles covering a reference region.
+//'   - <code>[get_fragment()](GenomeMutations-cash-get_fragment.md)</code>
+//'     returns a fragment of the genome.
+//'   - <code>[get_mutations()](GenomeMutations-cash-get_mutations.md)</code>
+//'     returns a data frame of the genome mutations.
+//'   - <code>[get_region_aligned_to_ref()](GenomeMutations-cash-get_region_aligned_to_ref.md)</code>
+//'     returns information about the fragment aligning to the reference.
+//'
+//' @seealso [get_node_tour()],
+//'   <code>[PhylogeneticForestNodeTour]</code>, [`vignette("node_tour")`]
     class_<GenomeMutations>("GenomeMutations")
 
 //' @name GenomeMutations$get_mutations
@@ -1787,6 +1502,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the first mutations in the genome
 //' head(genome$get_mutations())
+//' @seealso <code>[GenomeMutations]</code>
         .method("get_mutations",
             (Rcpp::DataFrame (GenomeMutations::*)() const)(&GenomeMutations::get_mutations),
             "Get the genome mutations")
@@ -1795,7 +1511,7 @@ RCPP_MODULE(Mutations)
             "Get the genome mutations")
 
 //' @name GenomeMutations$get_CNAs
-//' @title Getting genome mutations
+//' @title Getting genome CNAs
 //' @description This method returns a data frame representing the CNAs in the genome.
 //' @return A data frame consisting of 8 columns: `chr`, `begin`, `end`, `type`,
 //'   `allele`, `src.allele`, `cause`, and `nature`. Each row represent a SID.
@@ -1808,6 +1524,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the first CNAs in the genome
 //' head(genome$get_CNAs())
+//' @seealso <code>[GenomeMutations]</code>
         .method("get_CNAs",
             (Rcpp::DataFrame (GenomeMutations::*)() const)(&GenomeMutations::get_CNAs),
             "Get the genome CNAs")
@@ -1831,6 +1548,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the genome allele fragments
 //' genome$get_allele_fragments()
+//' @seealso <code>[GenomeMutations]</code>
         .method("get_allele_fragments",
             (Rcpp::DataFrame (GenomeMutations::*)() const)(&GenomeMutations::get_allele_fragments),
             "Get the genome allele fragments")
@@ -1857,6 +1575,7 @@ RCPP_MODULE(Mutations)
 //' # get the region in chromosome 22 allele 0 aligning to the
 //' # reference region from position 16085625 whose size is 100
 //' genome$get_region_aligned_to_ref("22", 0, 16085625, 100)
+//' @seealso <code>[GenomeMutations]</code>
         .method("get_region_aligned_to_ref",
                 &GenomeMutations::region_aligning_on_reference,
             "Get information about the fragment aligning to the specified "
@@ -1883,6 +1602,7 @@ RCPP_MODULE(Mutations)
 //'
 //' # get the alleles in the genome which covers the specified region
 //' genome$get_alleles_covering_ref_region("22", 16085625, 100)
+//' @seealso <code>[GenomeMutations]</code>
         .method("get_alleles_covering_ref_region",
                 &GenomeMutations::get_alleles_covering_ref_region,
             "Get the alleles covering a region of the reference genome")
@@ -1908,7 +1628,8 @@ RCPP_MODULE(Mutations)
 //' # get a fragment
 //' genome$get_fragment("22", 0, 16085625, 100)
 //' @seealso <code>[GenomeFragment]</code>
-//'   <code>[GenomeMutations$get_region_aligned_to_ref()]</code>
+//'   <code>[GenomeMutations$get_region_aligned_to_ref()]</code>,
+//'   <code>[GenomeMutations]</code>
         .method("get_fragment",
                 (GenomeFragment (GenomeMutations::*)(const std::string& chromosome_name,
                                                      const size_t& allele_id,

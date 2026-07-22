@@ -31,6 +31,42 @@
 #include "cell_mutations.hpp"
 #include "utility.hpp"
 
+#define REGISTER_FOREST_COMMON_FIELD(ClassType)                                     \
+        .method("get_nodes",                                                        \
+                (Rcpp::List (ClassType::*)() const)(&ClassType::get_nodes),         \
+                "Get the nodes of the forest")                                      \
+        .method("get_node", &ClassType::get_node,                                   \
+                "Get node corresponding to a cell")                                 \
+        .method("get_coalescent_cells",                                             \
+                (List (ClassType::*)(const std::list<CLONES::Mutants::CellId> &)    \
+                     const)(&ClassType::get_coalescent_cells),                      \
+                "Get the most recent common ancestor of some cells")                \
+        .method("get_coalescent_cells",                                             \
+                (List (ClassType::*)() const)(&ClassType::get_coalescent_cells),    \
+                "Get the most recent common ancestor of all forest leaves")         \
+        .method("get_subforest_for", &ClassType::get_subforest_for,                 \
+                "Get the sub-forest for some of the original samples")              \
+        .method("get_samples_info", &ClassType::get_samples_info,                   \
+                "Get some pieces of information about the samples")                 \
+        .method("get_species_info", &ClassType::get_species_info,                   \
+                "Get the recorded species")                                         \
+        .method("get_sticks",                                                       \
+                (std::list<std::list<CLONES::Mutants::CellId>> (ClassType::*)(      \
+                    const double) const)(&ClassType::get_sticks),                   \
+                "Get the forest sticks")                                            \
+        .method("get_sticks",                                                       \
+                (std::list<std::list<CLONES::Mutants::CellId>> (ClassType::*)()     \
+                     const)(&ClassType::get_sticks),                                \
+                "Get the forest sticks")                                            \
+        .method("save",                                                             \
+                (void (ClassType::*)(const std::string &, const bool) const)        \
+                    &ClassType::save, "Save a sample forest")                       \
+        .method("save",                                                             \
+                (void (ClassType::*)(const std::string &) const)                    \
+                    &ClassType::save, "Save a sample forest")                       \
+        .method("show", &ClassType::show, "Describe the forest")                    \
+
+
 #define REGISTER_NODE_COMMON_FIELDS(ClassType)                      \
         .property("cell_id", &ClassType::get_id,                    \
             "The identifier of the cell associated to the "         \

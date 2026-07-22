@@ -14,176 +14,17 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#' @name PhylogeneticForestNode$cell_id
-#' @title Getting the identifier of the associated cell
-#' @description This property stores the identifier of the
-#'   cell associated to the node.
-#' @return The identifier of the cell associated to the node.
-#' @example nobuild/roxygen/PhylogeneticForestNode-setup.R
-#' @examples
-#'
-#' # get the identifier of the cell associated to the node
-#' node$cell_id
-NULL
-
-#' @name PhylogeneticForestNode$parent
-#' @title Getting the parent node
-#' @description This property stores the parent of the node.
-#' @return The parent of the node.
-#' @example nobuild/roxygen/PhylogeneticForestNode-setup.R
-#' @examples
-#'
-#' # get the node's parent
-#' node$parent
-NULL
-
-#' @name PhylogeneticForestNode$children
-#' @title Getting the children of the node
-#' @description This property stores the children of the node.
-#' @return The children of the node.
-#' @example nobuild/roxygen/PhylogeneticForestNode-setup.R
-#' @examples
-#'
-#' # get the node's children
-#' node$children
-NULL
-
-#' @name PhylogeneticForestNode$is_root
-#' @title Checking whether the node is a root
-#' @description This property is `TRUE` if and only if a root
-#'    of the forest.
-#' @return `TRUE` if and only if the node is a root of the forest.
-#' @example nobuild/roxygen/PhylogeneticForestNode-setup.R
-#' @examples
-#'
-#' # check whether the node is a root
-#' node$is_root
-#'
-#' # get the node corresponding to the cell whose identifier is 1, i.e,
-#' # the root
-#' node <- forest$get_node(1)
-#'
-#' # check whether the node is a root
-#' node$is_root
-NULL
-
-#' @name PhylogeneticForestNode$is_leaf
-#' @title Checking whether the node is a leaf
-#' @description This property is `TRUE` if and only if a leaf
-#'    of the forest.
-#' @return `TRUE` if and only if the node is a leaf of the forest.
-#' @example nobuild/roxygen/PhylogeneticForestNode-setup.R
-#' @examples
-#'
-#' # check whether the node is a leaf
-#' node$is_leaf
-#'
-#' # get a tour over forest leaves
-#' node_tour <- get_node_tour(forest, only_leaves = TRUE)
-#'
-#' # check whether the first node in the tour is a leaf
-#' node_tour$node$is_leaf
-NULL
-
-#' @name PhylogeneticForestNode$sample_name
-#' @title Getting the corresponding cell sample
-#' @description This property is the name of the sample that collected
-#'   the corresponding cell.
-#' @details This property is the name of the sample that collected
-#'   the corresponding cell. If the node is not a leaf, it was not
-#'   collected by any sample and this property is `NA`.
-#' @return The name of of the sample that collected the corresponding
-#'   cell if the corresponding cell was collected. Otherwise, `NA`.
-#' @example nobuild/roxygen/PhylogeneticForestNode-setup.R
-#' @examples
-#'
-#' # the corresponding cell was not collected and the property is `NA`
-#' node$sample_name
-#'
-#' # get a tour over forest leaves
-#' node_tour <- get_node_tour(forest, only_leaves = TRUE)
-#'
-#' # in this case, the node is a leaf and then was collected
-#' node_tour$node$sample_name
-NULL
-
-#' @name PhylogeneticForestNode$birth_time
-#' @title Getting the corresponding cell birth time
-#' @description This property is the simulated time at which the corresponding
-#'   time was born.
-#' @return The simulated time at which the corresponding time was born.
-#' @example nobuild/roxygen/PhylogeneticForestNode-setup.R
-#' @examples
-#'
-#' # get the birth time
-#' node$birth_time
-NULL
-
-#' @name PhylogeneticForestNode$death_time
-#' @title Getting the corresponding cell death time
-#' @description This property is the simulated time at which the corresponding
-#'   time died.
-#' @return The simulated time at which the corresponding time died or the
-#'   sampling time.
-#' @example nobuild/roxygen/PhylogeneticForestNode-setup.R
-#' @examples
-#'
-#' # get the death time
-#' node$death_time
-NULL
-
-#' @name PhylogeneticForestNode$species_name
-#' @title Getting the name of the corresponding cell species
-#' @description This property is the name of the corresponding cell
-#'   species.
-#' @return The name of the corresponding cell species.
-#' @example nobuild/roxygen/PhylogeneticForestNode-setup.R
-#' @examples
-#'
-#' # get the name of the corresponding cell species
-#' node$species_name
-NULL
-
-#' @name PhylogeneticForestNode$epistate_name
-#' @title Getting the name of the corresponding cell epigenetic state
-#' @description This property is the name of the corresponding cell
-#'   species.
-#' @return The name of the corresponding cell epigenetic state.
-#' @example nobuild/roxygen/PhylogeneticForestNode-setup.R
-#' @examples
-#'
-#' # get the name of the corresponding cell species
-#' node$species_name
-#'
-#' # get the corresponding cell epigenetic state
-#' node$epistate_name
-NULL
-
-#' @name PhylogeneticForestNode$mutant_name
-#' @title Getting the name of the corresponding cell mutant
-#' @description This property is the name of the corresponding cell
-#'   mutant.
-#' @return The name of the corresponding cell epigenetic state.
-#' @example nobuild/roxygen/PhylogeneticForestNode-setup.R
-#' @examples
-#'
-#' # get the name of the corresponding cell species
-#' node$species_name
-#'
-#' # get the corresponding cell mutant
-#' node$mutant_name
-NULL
-
 #' @name PhylogeneticForestNode$arising_mutations
 #' @title Getting the mutations arising in the corresponding cell
 #' @description This property is the data frame of the mutations arising
 #'   the corresponding cell.
 #' @return The data frame of the mutations arising the corresponding cell.
-#' @example nobuild/roxygen/PhylogeneticForestNode-setup.R
+#' @example nobuild/roxygen/setups/PhylogeneticForestNode-setup.R
 #' @examples
 #'
 #' # get the mutations arising in the corresponding cell
 #' node$arising_mutations
+#' @seealso <code>[PhylogeneticForestNode]</code>
 NULL
 
 #' @name PhylogeneticForestNode$get_genome
@@ -194,10 +35,11 @@ NULL
 #'   the genomes of many nodes are needed, using the node tour with genomes
 #'   is preferable.
 #' @return The genome of the corresponding cell.
-#' @example nobuild/roxygen/PhylogeneticForestNode-setup.R
+#' @example nobuild/roxygen/setups/PhylogeneticForestNode-setup.R
 #' @examples
 #'
 #' # the genome only has chromosome 22 because the forest was
 #' # built by using the setup "demo"
 #' node$get_genome()
+#' @seealso <code>[PhylogeneticForestNode]</code>
 NULL

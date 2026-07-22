@@ -1,0 +1,126 @@
+#' @name ${CLASS_TYPE}$get_nodes
+#' @title Getting forest nodes
+#' @description This method builds a data frame containing forest nodes.
+#' @return A data frame reporting, for each node in the forest, the
+#'   identified (column `cell_id`), the ancestor identifier (column
+#'   `ancestor`), the node's depth (column `depth`), the name of the
+#'   sample containing the node, (column `sample`), and the mutant
+#'   (column `mutant`), the birth time (column `birth_time`). Whenever,
+#'   the simulation has epigenetic states, the data frame also contains
+#'   the column `epistate`.
+#' @examples
+#' # use a forest example
+#' forest <- example("${CLASS_TYPE}")
+#'
+#' # get the data frame of the nodes
+#' nodes <- forest$get_nodes()
+#'
+#' # print the first lines of the data frame
+#' head(nodes)
+#' @seealso <code>[${CLASS_TYPE}]</code>,
+#'   <code>[${CLASS_TYPE}Node]</code>
+NULL
+
+#' @name ${CLASS_TYPE}$get_node
+#' @title Getting a node of the forest
+#' @description This method returns the node of the forest
+#' @details This method returns the node of the forest whose
+#'    corresponding cell has a specified identifier.
+#' @param cell_id The identifier of the cell whose node is aimed.
+#' @return The <code>[${CLASS_TYPE}Node]</code> object
+#'   associated to the cell whose identifier is `cell_id`.
+#' @examples
+#' # use a forest example
+#' forest <- example("${CLASS_TYPE}")
+#'
+#' # get the node corresponding to the cell having 2 as cell identifier
+#' forest$get_node(2)
+#' @seealso <code>[${CLASS_TYPE}]</code>,
+#'   <code>[${CLASS_TYPE}Node]</code>
+NULL
+
+#' @name ${CLASS_TYPE}$get_coalescent_cells
+#' @title Retrieving the most recent common ancestors
+#' @description This method retrieves the most recent common ancestors
+#'   of a set of cells.
+#' @details If the optional parameter `cell_ids` is
+#'   used, this method find the most recent common ancestors of
+#'   the cells having an identifier among those in `cell_ids`.
+#'   If, otherwise, the optional parameter is not used, this
+#'   method find the most recent common ancestors of the forest
+#'   leaves.
+#' @param cell_ids The list of the identifiers of the cells whose
+#'   most recent common ancestors are aimed (optional).
+#' @return A data frame reporting the identified (column `cell_id`), the
+#'   ancestor identifier (column `ancestor`), the name of the sample
+#'   containing the node (column `sample`), the mutant (column `mutant`),
+#'   and the birth time (column `birth_time`). Whenever, the simulation
+#'   has epigenetic states, the data frame also contains the column
+#'   `epistate`.
+#' @examples
+#' # use a forest example
+#' forest <- example("${CLASS_TYPE}")
+#'
+#' # get the most recent common ancestor of all the leaves in the forest
+#' forest$get_coalescent_cells()
+#' @seealso <code>[${CLASS_TYPE}]</code>
+NULL
+
+#' @name ${CLASS_TYPE}$get_subforest_for
+#' @title Building sub-forests
+#' @description This method builds a sub-forest using as leaves some of the
+#'    original samples.
+#' @param sample_names The names of the samples whose cells will be used
+#'    as leaves of the new forest.
+#' @return A forest built on the samples mentioned in `sample_names`
+#' @examples
+#' # use a forest example
+#' forest <- example("${CLASS_TYPE}")
+#'
+#' # get the subforest for sample "S_1_2"
+#' forest$get_subforest_for("S_1_2")
+#' @seealso <code>[${CLASS_TYPE}]</code>
+NULL
+
+#' @name ${CLASS_TYPE}$get_sticks
+#' @title Computing the forest sticks
+#' @description This method computes the forest sticks.
+#' @details A _crucial node_ of a forest is a root of the forest, a node
+#'   whose parent belongs to a different species, or the most recent common
+#'   ancestor of two crucial nodes.
+#'
+#'   A _stick_ is a path of the forest in which the only crucial nodes are
+#'   the first and the last one.
+#'
+#'   This method returns the list of the forest sticks. Each stick is
+#'   represented by the sequence of cell identifiers labelling the nodes in
+#'   the stick.
+#' @param birth_threshold The maximum birth time for the cells associated
+#'   to the returned sticks (optional).
+#' @return The list of the forest sticks whose associated cells have
+#'   birth time smaller than or equal to `birth_threshold`. Each stick is
+#'   represented as the list of cell identifiers labelling the nodes in the
+#'   stick from the higher to the deeper in the forest.
+#' @examples
+#' # use a forest example
+#' forest <- example("${CLASS_TYPE}")
+#'
+#' # search for the forest sticks
+#' head(forest$get_sticks())
+#'
+#' # search for the forest sticks whose first node corresponding cells have
+#' # birth times 40 time units at most
+#' forest$get_sticks(40)
+#' @seealso <code>[${CLASS_TYPE}]</code>
+NULL
+
+#' @name ${CLASS_TYPE}$save
+#' @title Saving forests
+#' @description This method saves a forest in a file.
+#' @param filename The path of the file in which the
+#'   forest must be saved.
+#' @param quiet An optional Boolean flag to avoid the progress bar
+#'   (default: FALSE).
+#' @seealso [load_forest()], <code>[${CLASS_TYPE}]</code>
+NULL
+

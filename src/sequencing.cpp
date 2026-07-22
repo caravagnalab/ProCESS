@@ -41,6 +41,7 @@ RCPP_MODULE(Sequencing)
 //' @name ErrorlessIlluminaSequencer
 //' @description This method builds an error-free Illumina
 //'   sequencer model.
+//' @usage ErrorlessIlluminaSequencer()
 //' @return A new error-free Illumina sequencer.
 //' @examples
 //' # build a sequencer model
@@ -49,12 +50,21 @@ RCPP_MODULE(Sequencing)
     function("ErrorlessIlluminaSequencer", &ErrorlessIlluminaSequencer::build_sequencer,
              "Build a new error-free Illumina sequencer");
 
-//' @name BasicIlluminaSequencer
+//' @name BasicIlluminaSequencer_class
 //' @title A basic Illumina sequencer class
 //' @description This class implements a basic model for Illumina sequencers.
 //' @details It specifies a simulated sequencing error rate and the simulated
 //'   sequencing errors will occurs according to that rate.
-//' @seealso [simulate_seq()], [simulate_normal_seq()],
+//'
+//'   The objects of this class are built by using the function
+//'   [BasicIlluminaSequencer()] and provide the following fields:
+//'   - <code>[error_rate](BasicIlluminaSequencer-cash-error_rate.md)</code>
+//'     is the error rate of the sequencer.
+//'   - <code>[random_quality_scores](BasicIlluminaSequencer-cash-random_quality_scores.md)</code>
+//'     is a Boolean flag set to `TRUE` if and only if the sequencers
+//'     implements a non-constant quality score model.
+//' @keywords internal
+//' @seealso [simulate_seq()], [simulate_normal_seq()], [BasicIlluminaSequencer()],
 //'   and [`vignette("sequencing")`] for usage examples.
     class_<BasicIlluminaSequencer>("BasicIlluminaSequencer")
         .method("show", &BasicIlluminaSequencer::show,
@@ -75,6 +85,7 @@ RCPP_MODULE(Sequencing)
 //' sequencer$error_rate <- 5e-2
 //'
 //' sequencer$error_rate
+//' @seealso <code>[BasicIlluminaSequencer](BasicIlluminaSequencer_class.md)</code>
         .property("error_rate",
                   (const double &(BasicIlluminaSequencer::*)()
                        const)(&BasicIlluminaSequencer::get_error_rate),
@@ -84,7 +95,7 @@ RCPP_MODULE(Sequencing)
 
 //' @name BasicIlluminaSequencer$random_quality_scores
 //' @title Check the non-constant quality score model
-//' @description This method returns `TRUE` if and only if the sequencers
+//' @description This field is set to `TRUE` if and only if the sequencers
 //'    implements a non-constant quality score model.
 //' @return `TRUE` if and only if the sequencers sequencers implements
 //'    a non-constant quality score model.
@@ -98,6 +109,7 @@ RCPP_MODULE(Sequencing)
 //' sequencer$random_quality_scores <- FALSE
 //'
 //' sequencer$random_quality_scores
+//' @seealso <code>[BasicIlluminaSequencer](BasicIlluminaSequencer_class.md)</code>
         .property("random_quality_scores",
                   (const bool &(BasicIlluminaSequencer::*)()
                        const)(&BasicIlluminaSequencer::producing_random_scores),
@@ -106,7 +118,9 @@ RCPP_MODULE(Sequencing)
                   "A Boolean flag enabling non-constant quality score model");
 
 //' @name BasicIlluminaSequencer
+//' @title Building a basic Illumina sequencer simulator
 //' @description This method builds a basic Illumina sequencer model.
+//' @usage BasicIlluminaSequencer(error_rate, random_quality_scores)
 //' @param error_rate The error rate of the sequencer model.
 //' @param random_quality_scores A Boolean flag to enable a basic
 //'   non-constant quality score model. When it is set to `FALSE`, all
@@ -118,6 +132,7 @@ RCPP_MODULE(Sequencing)
 //' # build a sequencer model having error rate 4e-3
 //' sequencer <- BasicIlluminaSequencer(error_rate=4e-3)
 //' sequencer
+//' @seealso <code>[BasicIlluminaSequencer](BasicIlluminaSequencer_class.md)</code>
     function("BasicIlluminaSequencer", &BasicIlluminaSequencer::build_sequencer,
              List::create(_["error_rate"], _["random_quality_scores"] = true),
              "Create a basic Illumina sequencer model");
@@ -126,6 +141,7 @@ RCPP_MODULE(Sequencing)
 //' @title Simulating the sequencing of sampled cells
 //' @description This method simulates the sequencing of the samples in a
 //'   phylogenetic forest.
+//' @usage simulate_seq(phylo_forest)
 //' @param phylo_forest A phylogenetic forest.
 //' @param sequencer The sequencer that performs the sequencing simulation
 //'   (default: an `ErrorlessIlluminaSequencer`).
@@ -220,6 +236,7 @@ RCPP_MODULE(Sequencing)
 //'   the germline mutations. The forest pre-neoplastic mutations are also
 //'   added to the sample by default. However, they can be avoided by
 //'   using the parameter `with_pre_neoplastic`.
+//' @usage simulate_normal_seq(phylo_forest)
 //' @param phylo_forest A phylogenetic forest.
 //' @param sequencer The sequencer that performs the sequencing simulation
 //'   (default: an `ErrorlessIlluminaSequencer`).

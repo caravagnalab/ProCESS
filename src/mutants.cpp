@@ -36,8 +36,12 @@ RCPP_MODULE(Mutants)
 
 //' @name TissueRectangle
 //' @title A rectangle in the tissue
-//' @field get_lower_corner The rectangle lower corner
-//' @field get_upper_corner The rectangle upper corner
+//' @details The objects of this class represent a rectangle of tissue.
+//'   They provides the following properties and methods:
+//'   - <code>[TissueRectangle$lower_corner]</code> stores the lower
+//'     left corner of the rectangle.
+//'   - <code>[TissueRectangle$upper_corner]</code> stores the upper
+//'     right corner of the rectangle.
     class_<TissueRectangle>("TissueRectangle")
 //' @name TissueRectangle$new
 //' @title Build a new rectangle of tissue
@@ -66,6 +70,7 @@ RCPP_MODULE(Mutants)
 //'
 //' # get the rectangle lower corner, i.e., (500, 500)
 //' rect$lower_corner
+//' @seealso <code>[TissueRectangle]</code>
         .property("lower_corner", &TissueRectangle::get_lower_corner,
                   "The rectangle lower corner")
 
@@ -78,11 +83,12 @@ RCPP_MODULE(Mutants)
 //'
 //' # get the rectangle upper corner, i.e., (550, 550)
 //' rect$upper_corner
+//' @seealso <code>[TissueRectangle]</code>
         .property("upper_corner", &TissueRectangle::get_upper_corner,
                   "The rectangle upper corner")
         .method("show", &TissueRectangle::show);
 
-//' @name TissueSimulation
+//' @name TissueSimulation_class
 //' @title Simulating the cell evolution in a tissue
 //' @description This class simulates the cell evolution on a tissue.
 //' @details The objects of this class can simulate the evolution
@@ -101,6 +107,92 @@ RCPP_MODULE(Mutants)
 //'
 //'   [TissueSimulation()] also allows users to schedule mutations from
 //'   one mutant to a different mutant.
+//'
+//'   This class provides the following methods and properties:
+//'   - <code>[add_epigenetic_state()](TissueSimulation-cash-add_epigenetic_state.md)</code>
+//'     adds an epigenetic state and its species.
+//'   - <code>[add_epigenetic_states()](TissueSimulation-cash-add_epigenetic_states.md)</code>
+//'     adds epigenetic states and their species.
+//'   - <code>[add_mutant()](TissueSimulation-cash-add_mutant.md)</code>
+//'     adds a mutant and its species.
+//'   - <code>[add_mutants()](TissueSimulation-cash-add_mutants.md)</code>
+//'     adds mutants and their species.
+//'   - <code>[border_growth_model](TissueSimulation-cash-border_growth_model.md)</code>
+//'     is a Boolean flag to enable/disable the border-driven growth model.
+//'   - <code>[choose_border_cell_in()](TissueSimulation-cash-choose_border_cell_in.md)</code>
+//'     randomly chooses a cell in tumour border.
+//'   - <code>[choose_cell_in()](TissueSimulation-cash-choose_cell_in.md)</code>
+//'     randomly chooses a tumour cell.
+//'   - <code>[death_activation_level](TissueSimulation-cash-death_activation_level.md)</code>
+//'     stores the minimum number of cells in a species to enable death.
+//'   - <code>[get_added_cells()](TissueSimulation-cash-get_added_cells.md)</code>
+//'     returns the cells manually added to the simulation.
+//'   - <code>[get_cell()](TissueSimulation-cash-get_cell.md)</code>
+//'     returns one of the simulation cells by its position.
+//'   - <code>[get_cells()](TissueSimulation-cash-get_cells.md)</code>
+//'     returns some of the simulation cells by their positions.
+//'   - <code>[get_clock()](TissueSimulation-cash-get_clock.md)</code>
+//'     returns the current simulation time.
+//'   - <code>[get_count_history()](TissueSimulation-cash-get_count_history.md)</code>
+//'     returns the number of cells by species along the simulation.
+//'   - <code>[get_counts()](TissueSimulation-cash-get_counts.md)</code>
+//'     returns the number of cells by species.
+//'   - <code>[get_epigenetic_states()](TissueSimulation-cash-get_epigenetic_states.md)</code>
+//'     returns the names of the simulated epigenetic states.
+//'   - <code>[get_firing_history()](TissueSimulation-cash-get_firing_history.md)</code>
+//'     returns the number of events fired along the simulation.
+//'   - <code>[get_firings()](TissueSimulation-cash-get_firings.md)</code>
+//'     returns the number of fired events.
+//'   - <code>[get_lineage_graph()](TissueSimulation-cash-get_lineage_graph.md)</code>
+//'     returns the lineage graph.
+//'   - <code>[get_mutants()](TissueSimulation-cash-get_mutants.md)</code>
+//'     returns the names of the simulated mutants.
+//'   - <code>[get_name()](TissueSimulation-cash-get_name.md)</code>
+//'     returns the name of the simulation.
+//'   - <code>[get_rates()](TissueSimulation-cash-get_rates.md)</code>
+//'     returns the tissue simulation rates.
+//'   - <code>[get_rates_update_history()](TissueSimulation-cash-get_rates_update_history.md)</code>
+//'     returns the history of the rates along the simulation.
+//'   - <code>[get_sample_forest()](TissueSimulation-cash-get_sample_forest.md)</code>
+//'     returns the sample forest of the tissue simulation.
+//'   - <code>[get_samples_info()](TissueSimulation-cash-get_samples_info.md)</code>
+//'     returns information about the collected samples.
+//'   - <code>[get_tissue_size()](TissueSimulation-cash-get_tissue_size.md)</code>
+//'     returns the size of the simulated tissue.
+//'   - <code>[history_delta](TissueSimulation-cash-history_delta.md)</code>
+//'     stores the time difference between two consecutive samples
+//'     of the tissue simulation status.
+//'   - <code>[mutate_progeny()](TissueSimulation-cash-mutate_progeny.md)</code>
+//'     duplicates a cell and mutates one of its children.
+//'   - <code>[place_cell()](TissueSimulation-cash-place_cell.md)</code>
+//'     places a cell in the simulated tissue.
+//'   - <code>[run_until()](TissueSimulation-cash-run_until.md)</code>
+//'     simulates the evolution of the tissue until a condition holds.
+//'   - <code>[run_up_to_event()](TissueSimulation-cash-run_up_to_event.md)</code>
+//'     simulates the evolution of the tissue until the number of events
+//'     of either a mutant or a species is below a specified threshold.
+//'   - <code>[run_up_to_size()](TissueSimulation-cash-run_up_to_size.md)</code>
+//'     simulates the evolution of the tissue until the number of cells
+//'     of either a mutant or a species is below a specified threshold .
+//'   - <code>[run_up_to_time()](TissueSimulation-cash-run_up_to_time.md)</code>
+//'     simulates the evolution of the tissue until the specified simulation
+//'     time.
+//'   - <code>[sample_cells()](TissueSimulation-cash-sample_cells.md)</code>
+//'     samples tissue cells.
+//'   - <code>[schedule_mutation()](TissueSimulation-cash-schedule_mutation.md)</code>
+//'     schedules a mutation.
+//'   - <code>[search_sample()](TissueSimulation-cash-search_sample.md)</code>
+//'     searches for a rectangular tissue sample satisfying some conditions.
+//'   - <code>[search_samples()](TissueSimulation-cash-search_samples.md)</code>
+//'     searches for rectangular tissue samples satisfying some conditions.
+//'   - <code>[set_rate()](TissueSimulation-cash-set_rate.md)</code>
+//'     sets the rate of an event.
+//'   - <code>[set_rates()](TissueSimulation-cash-set_rates.md)</code>
+//'     sets the rates of multiple events.
+//'   - <code>[var()](TissueSimulation-cash-var.md)</code>
+//'     builds a simulation variable.
+//' @keywords internal
+//' @seealso [TissueSimulation()]
     class_<TissueSimulation>("TissueSimulation")
 
 //' @name TissueSimulation$place_cell
@@ -129,6 +221,7 @@ RCPP_MODULE(Mutants)
 //'
 //' # place a cell of species "A[E1]" in position (500,500)
 //' sim$place_cell("A[E1]", 500, 500)
+//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("place_cell", (void (TissueSimulation::*)(const SEXP&, const SEXP&, const SEXP&))
                 &TissueSimulation::place_cell, "Placing a cell in the tissue")
 
@@ -175,7 +268,8 @@ RCPP_MODULE(Mutants)
 //' sim
 //' @seealso [TissueSimulation$add_mutants()], [TissueSimulation$add_epigenetic_state()],
 //'   [TissueSimulation$add_epigenetic_states()], [TissueSimulation$get_mutants()],
-//'   [TissueSimulation$set_rate()], [TissueSimulation$set_rates()]
+//'   [TissueSimulation$set_rate()], [TissueSimulation$set_rates()],
+//'   <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method(
             "add_mutant",
             (void (TissueSimulation::*)(const SEXP &))(&TissueSimulation::add_mutant),
@@ -205,7 +299,8 @@ RCPP_MODULE(Mutants)
 //' sim$get_mutants()
 //' @seealso [TissueSimulation$add_mutant()], [TissueSimulation$add_epigenetic_state()],
 //'   [TissueSimulation$add_epigenetic_states()], [TissueSimulation$get_mutants()],
-//'   [TissueSimulation$set_rate()], [TissueSimulation$set_rates()]
+//'   [TissueSimulation$set_rate()], [TissueSimulation$set_rates()],
+//'   <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method(
             "add_mutants",
             (void (TissueSimulation::*)(const std::list<std::string> &))(&TissueSimulation::add_mutants),
@@ -232,7 +327,8 @@ RCPP_MODULE(Mutants)
 //' @seealso [TissueSimulation$add_epigenetic_states()],
 //'   [TissueSimulation$get_epigenetic_states()],
 //'   [TissueSimulation$add_mutant()], [TissueSimulation$add_mutants()],
-//'   [TissueSimulation$set_rate()], [TissueSimulation$set_rates()]
+//'   [TissueSimulation$set_rate()], [TissueSimulation$set_rates()],
+//'   <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method(
             "add_epigenetic_state",
             (void (TissueSimulation::*)(const std::string &))(&TissueSimulation::add_epistate),
@@ -260,7 +356,8 @@ RCPP_MODULE(Mutants)
 //' @seealso [TissueSimulation$add_epigenetic_state()],
 //'   [TissueSimulation$get_epigenetic_states()],
 //'   [TissueSimulation$add_mutant()], [TissueSimulation$add_mutants()],
-//'   [TissueSimulation$set_rate()], [TissueSimulation$set_rates()]
+//'   [TissueSimulation$set_rate()], [TissueSimulation$set_rates()],
+//'   <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method(
             "add_epigenetic_states",
             (void (TissueSimulation::*)(const std::list<std::string> &))(&TissueSimulation::add_epistates),
@@ -284,7 +381,6 @@ RCPP_MODULE(Mutants)
 //' @return A list reporting `cell_id`, `mutant`, `position_x`,
 //'   `position_y`, and, when the simulation has epigenetic states,
 //'   `epistate` of the chosen cell.
-//' @seealso [TissueSimulation$choose_border_cell_in()]
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -325,6 +421,8 @@ RCPP_MODULE(Mutants)
 //'
 //' # Randomly choose one cell in "B[E1]"
 //' sim$choose_cell_in(c("B[E1]", "A"))
+//' @seealso [TissueSimulation$choose_border_cell_in()],
+//'   <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("choose_cell_in",
                 (List (TissueSimulation::*)(const SEXP &))(
                     &TissueSimulation::choose_cell_in),
@@ -356,7 +454,6 @@ RCPP_MODULE(Mutants)
 //' @return A list reporting `cell_id`, `mutant`, `position_x`,
 //'   `position_y`, and, when the simulation has epigenetic states,
 //'   `epistate` of the chosen cell.
-//' @seealso [TissueSimulation$choose_cell_in()]
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -397,6 +494,8 @@ RCPP_MODULE(Mutants)
 //'
 //' # Randomly choose one cell in "B[E1]" and any species in "A"
 //' sim$choose_border_cell_in(c("B[E1]", "A"))
+//' @seealso [TissueSimulation$choose_cell_in()],
+//'   <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("choose_border_cell_in",
                 (List (TissueSimulation::*)(const SEXP &))(
                     &TissueSimulation::choose_border_cell_in),
@@ -450,6 +549,7 @@ RCPP_MODULE(Mutants)
 //' sim$run_up_to_size("B", 1)
 //'
 //' sim
+//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("schedule_mutation", &TissueSimulation::schedule_mutation,
                 "Add a timed mutation between two different species")
 
@@ -469,7 +569,8 @@ RCPP_MODULE(Mutants)
 //'
 //' sim$get_mutants()
 //' @seealso [TissueSimulation$add_mutant()], [TissueSimulation$add_mutants()],
-//'   [TissueSimulation$get_epigenetic_states()]
+//'   [TissueSimulation$get_epigenetic_states()],
+//'   <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("get_mutants", &TissueSimulation::get_mutant_names,
                 "Get the mutants added to the simulation")
 
@@ -495,7 +596,8 @@ RCPP_MODULE(Mutants)
 //' sim$get_epigenetic_states()
 //' @seealso [TissueSimulation$add_epigenetic_state()],
 //'   [TissueSimulation$add_epigenetic_states()]
-//'   [TissueSimulation$get_mutants()]
+//'   [TissueSimulation$get_mutants()],
+//'   <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("get_epigenetic_states", &TissueSimulation::get_epigenetic_state_names,
                 "Get the epigenetic states added to the simulation")
 
@@ -522,6 +624,7 @@ RCPP_MODULE(Mutants)
 //' forest <- sim$get_sample_forest()
 //'
 //' forest
+//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("get_sample_forest", &TissueSimulation::get_sample_forest,
                 "Get the sample forest having as leaves the sampled cells")
 
@@ -541,6 +644,7 @@ RCPP_MODULE(Mutants)
 //'
 //' # set the death activation level to 50
 //' sim$death_activation_level <- 50
+//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .property("death_activation_level", &TissueSimulation::get_death_activation_level,
                   &TissueSimulation::set_death_activation_level,
                   "The number of cells in a species that activates cell death")
@@ -569,6 +673,7 @@ RCPP_MODULE(Mutants)
 //'
 //' # switch back to the border-growth model
 //' sim$border_growth_model <- FALSE
+//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .property("border_growth_model", &TissueSimulation::is_border_growth_model,
                   &TissueSimulation::set_border_growth_model,
                   "Switch between homogeneous and border driven growth models.")
@@ -595,6 +700,7 @@ RCPP_MODULE(Mutants)
 //'
 //' # get the simulated time
 //' sim$get_clock()
+//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("get_clock", &TissueSimulation::get_clock,
                 "Get the current simulation time")
 
@@ -625,6 +731,7 @@ RCPP_MODULE(Mutants)
 //'
 //' # collect a cell in the tissue
 //' sim$get_cell(501, 502)
+//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("get_cell",
                 (List (TissueSimulation::*)(const RE::AxisPosition &,
                                             const RE::AxisPosition &)
@@ -723,6 +830,7 @@ RCPP_MODULE(Mutants)
 //'                        epigenetic_filter = c("E2"))
 //'
 //' print_statistics(cells)
+//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("get_cells",
                 (List (TissueSimulation::*)(const std::vector<RE::AxisPosition> &,
                                             const std::vector<RE::AxisPosition> &,
@@ -753,6 +861,7 @@ RCPP_MODULE(Mutants)
 //'
 //' # Expecting "test"
 //' sim$get_name()
+//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("get_name", &TissueSimulation::get_name, "Get the simulation name")
 
 //' @name TissueSimulation$get_lineage_graph
@@ -792,6 +901,7 @@ RCPP_MODULE(Mutants)
 //' sim$run_up_to_time(70)
 //'
 //' sim$get_lineage_graph()
+//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("get_lineage_graph", &TissueSimulation::get_lineage_graph,
                 "Get the simulation lineage graph")
 
@@ -805,7 +915,7 @@ RCPP_MODULE(Mutants)
 //'
 //' # get the tissue size, i.e., expecting c(1200,900)
 //' sim$get_tissue_size()
-//' @seealso [TissueSimulation()]
+//' @seealso [TissueSimulation()], <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("get_tissue_size", &TissueSimulation::get_tissue_size,
                 "Get the simulation tissue size")
 
@@ -835,6 +945,7 @@ RCPP_MODULE(Mutants)
 //'
 //' # get the cells
 //' sim$get_added_cells()
+//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("get_added_cells", &TissueSimulation::get_added_cells,
                 "Get the cells manually added to the simulation")
 
@@ -897,6 +1008,7 @@ RCPP_MODULE(Mutants)
 //'
 //' # counts the number of cells per species
 //' sim$get_counts()
+//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("get_counts", &TissueSimulation::get_counts,
                 "Get the current number of cells and that "
                 "throughout the entire simulation")
@@ -966,6 +1078,7 @@ RCPP_MODULE(Mutants)
 //'
 //' # counts the number of cells per species
 //' sim$get_count_history()
+//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("get_count_history",
                 (List (TissueSimulation::*)() const) &
                     TissueSimulation::get_count_history,
@@ -1030,6 +1143,7 @@ RCPP_MODULE(Mutants)
 //'
 //' # counts the number of cells per species
 //' sim$get_firings()
+//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("get_firings", &TissueSimulation::get_firings,
                 "Get the current number of simulated events per species")
 
@@ -1064,6 +1178,7 @@ RCPP_MODULE(Mutants)
 //'
 //' # get the number of event fired per event and species
 //' sim$get_firing_history()
+//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("get_firing_history",
                 (List (TissueSimulation::*)() const) &
                     TissueSimulation::get_firing_history,
@@ -1092,7 +1207,6 @@ RCPP_MODULE(Mutants)
 //'    is set to NA.
 //'    When the simulation has no epigenetic states, the returned data frame
 //'    exclusively contains the columns `mutant`, `event`, and `rate`.
-//'
 //' @examples
 //' # create a simulation
 //' sim <- TissueSimulation()
@@ -1122,7 +1236,8 @@ RCPP_MODULE(Mutants)
 //'
 //' # get all simulation rates
 //' sim$get_rates(TRUE)
-//' @seealso [TissueSimulation$set_rate()]
+//' @seealso [TissueSimulation$set_rate()],
+//'   <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("get_rates",
                 (List (TissueSimulation::*)() const)(
                     &TissueSimulation::get_rates),
@@ -1150,8 +1265,6 @@ RCPP_MODULE(Mutants)
 //'    of the event `death`, the column `first.child.epistate` is set to NA.
 //'    When the simulation has no epigenetic states, the returned data frame
 //'    exclusively contains the columns `time`, `mutant`, `event`, and `rate`.
-//' @seealso [TissueSimulation$update_rates()],
-//'   [TissueSimulation$get_rates()]
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1189,6 +1302,9 @@ RCPP_MODULE(Mutants)
 //'
 //' # get the rates update history
 //' sim$get_rates_update_history()
+//' @seealso [TissueSimulation$set_rates()],
+//'   [TissueSimulation$get_rates()],
+//'   <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("get_rates_update_history", &TissueSimulation::get_rates_update_history,
                 "Get the rates update history")
 
@@ -1203,9 +1319,6 @@ RCPP_MODULE(Mutants)
 //'   `xmax` report the boundaries of the sample bounding box, while
 //'   `tumour_cells` and `tumour_cells_in_bbox` are the number of tumour
 //'   cells in the sample and in the bounding box, respectively.
-//' @seealso [TissueSimulation$sample_cells()],
-//'   [SampleForest$get_samples_info()],
-//'   [PhylogeneticForest$get_samples_info()]
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1236,6 +1349,10 @@ RCPP_MODULE(Mutants)
 //' # get information about all the collected
 //' # samples, i.e, S1 and S2
 //' sim$get_samples_info()
+//' @seealso [TissueSimulation$sample_cells()],
+//'   [SampleForest$get_samples_info()],
+//'   [PhylogeneticForest$get_samples_info()],
+//'   <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("get_samples_info",
                 (List (TissueSimulation::*)() const) & TissueSimulation::get_samples_info,
                 "Get some pieces of information about the collected samples")
@@ -1244,7 +1361,6 @@ RCPP_MODULE(Mutants)
 //' @title The delta time between time series samples
 //' @description This value is the maximum time between two successive
 //'   time series data samples.
-//' @seealso [TissueSimulation()]
 //' @examples
 //' # create a simulation
 //' sim <- TissueSimulation()
@@ -1254,6 +1370,7 @@ RCPP_MODULE(Mutants)
 //'
 //' # set the delta time between two time series samples
 //' sim$history_delta <- 20
+//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .property("history_delta", &TissueSimulation::get_history_delta,
                   &TissueSimulation::set_history_delta,
                   "The sampling delta for the get_*_history functions")
@@ -1267,8 +1384,6 @@ RCPP_MODULE(Mutants)
 //'   The mutated cell will be located in the position of its parent.
 //' @param cell_position The position of the cell whose offspring will mutate.
 //' @param mutated_mutant The mutant of the mutated cell.
-//' @seealso [TissueSimulation()], [TissueSimulation$choose_cell_in()],
-//'   [TissueSimulation$choose_border_cell_in()]
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1306,6 +1421,9 @@ RCPP_MODULE(Mutants)
 //' # get the number of cells per species again.
 //' # Now, "B" consists of one cell
 //' sim$get_counts()
+//' @seealso [TissueSimulation$choose_cell_in()],
+//'   [TissueSimulation$choose_border_cell_in()],
+//'   <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("mutate_progeny",
                 (void (TissueSimulation::*)(const List &, const std::string &))(
                     &TissueSimulation::mutate_progeny),
@@ -1321,8 +1439,6 @@ RCPP_MODULE(Mutants)
 //' @param time The final simulation time.
 //' @param quiet An optional Boolean flag to avoid the progress bar
 //'   (default: FALSE).
-//' @seealso [TissueSimulation()], [TissueSimulation$run_up_to_event()],
-//'    [TissueSimulation$run_up_to_size()], [TissueSimulation$run_until()]
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1338,6 +1454,9 @@ RCPP_MODULE(Mutants)
 //'
 //' # simulate the tissue up to simulate timed 40
 //' sim$run_up_to_time(40)
+//' @seealso [TissueSimulation$run_up_to_event()],
+//'    [TissueSimulation$run_up_to_size()], [TissueSimulation$run_until()],
+//'   <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("run_up_to_time",
                 (void (TissueSimulation::*)(const CLONES::Time &,
                                             const bool))&TissueSimulation::run_up_to_time,
@@ -1356,8 +1475,6 @@ RCPP_MODULE(Mutants)
 //' @param num_of_events The threshold for the event number.
 //' @param quiet An optional Boolean flag to avoid the progress bar
 //'   (default: FALSE).
-//' @seealso [TissueSimulation()], [TissueSimulation$run_up_to_time()],
-//'    [TissueSimulation$run_up_to_size()], [TissueSimulation$run_until()]
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1379,6 +1496,9 @@ RCPP_MODULE(Mutants)
 //'                     num_of_events = 100)
 //'
 //' sim
+//' @seealso [TissueSimulation$run_up_to_time()],
+//'    [TissueSimulation$run_up_to_size()], [TissueSimulation$run_until()],
+//'   <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("run_up_to_event",
                 (void (TissueSimulation::*)(
                     const std::string &, const std::string &, const size_t &,
@@ -1398,8 +1518,6 @@ RCPP_MODULE(Mutants)
 //' @param num_of_cells The threshold for the cell number.
 //' @param quiet An optional Boolean flag to avoid the progress bar
 //'   (default: FALSE).
-//' @seealso [TissueSimulation()], [TissueSimulation$run_up_to_time()],
-//'    [TissueSimulation$run_up_to_event()], [TissueSimulation$run_until()]
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1420,6 +1538,9 @@ RCPP_MODULE(Mutants)
 //' sim$run_up_to_size(species = "A[E2]", num_of_cells = 100)
 //'
 //' sim$get_counts()
+//' @seealso [TissueSimulation$run_up_to_time()],
+//'    [TissueSimulation$run_up_to_event()], [TissueSimulation$run_until()],
+//'   <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method(
             "run_up_to_size",
             (void (TissueSimulation::*)(const std::string &, const size_t &,
@@ -1439,9 +1560,6 @@ RCPP_MODULE(Mutants)
 //'    simulation.
 //' @param quiet An optional Boolean flag to avoid the progress bar
 //'   (default: FALSE).
-//' @seealso [TissueSimulation()], [TissueSimulation$var()],
-//'    [TissueSimulation$run_up_to_time()], [TissueSimulation$run_up_to_event()],
-//'    and [TissueSimulation$run_up_to_size()].
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1495,6 +1613,10 @@ RCPP_MODULE(Mutants)
 //' sim$run_until(c5)
 //'
 //' sim
+//' @seealso [TissueSimulation$var()],
+//'   [TissueSimulation$run_up_to_time()], [TissueSimulation$run_up_to_event()],
+//'   [TissueSimulation$run_up_to_size()],
+//'   <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("run_until",
                 (void (TissueSimulation::*)(const Logics::Formula &,
                                             const bool))&TissueSimulation::run_until,
@@ -1517,7 +1639,6 @@ RCPP_MODULE(Mutants)
 //'   in pair with `lower_corner`).
 //' @param num_of_cells The maximum number of tumour cells to collect
 //'   (optional).
-//' @seealso [TissueSimulation$get_samples_info()]
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1547,6 +1668,8 @@ RCPP_MODULE(Mutants)
 //'                  num_of_cells = 50)
 //'
 //' sim$get_samples_info()
+//' @seealso [TissueSimulation$get_samples_info()],
+//'   <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method(
             "sample_cells",
             (void (TissueSimulation::*)(
@@ -1594,7 +1717,8 @@ RCPP_MODULE(Mutants)
 //' sim$set_rate("A[E1]", "switch", "A[E3]", 0.0002)
 //'
 //' sim$get_rates()
-//' @seealso [TissueSimulation$set_rates()], [TissueSimulation$get_rates()]
+//' @seealso [TissueSimulation$set_rates()], [TissueSimulation$get_rates()],
+//'   <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("set_rate", (void (TissueSimulation::*)(const std::string &,
                     const std::string &, const double &))(&TissueSimulation::set_rate),
                 "Set the rate of an event")
@@ -1723,7 +1847,8 @@ RCPP_MODULE(Mutants)
 //' # get_rates() only reports the set rates. All remaining rates are
 //' # set to zero by default
 //' sim$get_rates()
-//' @seealso [TissueSimulation$set_rate()], [TissueSimulation()]
+//' @seealso [TissueSimulation$set_rate()],
+//'   <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("set_rates", (void (TissueSimulation::*)(
                     const Rcpp::List& rate_list))(&TissueSimulation::set_rates),
                 "Set tissue simulation rates")
@@ -1742,7 +1867,6 @@ RCPP_MODULE(Mutants)
 //' @param height The height of the searched sample.
 //' @return If a rectangular sample satisfying the provided constraints can
 //'   be found, the corresponding rectangle.
-//' @seealso [TissueSimulation()]
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1770,6 +1894,7 @@ RCPP_MODULE(Mutants)
 //'
 //' # find a 50x50 sample containing 80 "B" cells and 10 "A" cells at least
 //' sim$search_sample(c("A" = 10, "B" = 80), 50, 50)
+//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("search_sample", &TissueSimulation::search_sample,
                 "Search a rectangular sample containing a given number of cells")
 
@@ -1790,7 +1915,6 @@ RCPP_MODULE(Mutants)
 //'   among those satisfying the constraints (optional).
 //' @return A vector of `n_samples` rectangular tissue samples that
 //'   satisfy the aimed constraints.
-//' @seealso [TissueSimulation()]
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1837,6 +1961,7 @@ RCPP_MODULE(Mutants)
 //' }
 //'
 //' plot
+//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("search_samples",
                 (std::vector<TissueRectangle> (TissueSimulation::*)(
                     const Rcpp::IntegerVector &, const uint16_t &, const uint16_t &,
@@ -1866,7 +1991,6 @@ RCPP_MODULE(Mutants)
 //'   occurred since the computation beginning in the species.
 //' @return A variable representing the simulation quantity according to
 //'   the parameter `variable_description`.
-//' @seealso [TissueSimulation()], [TissueSimulation$run_until()]
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1895,6 +2019,8 @@ RCPP_MODULE(Mutants)
 //' # get the variable representing the number of epigenetic
 //' # switches from A[E1]
 //' sim$var("A[E1].switches")
+//' @seealso [TissueSimulation$run_until()],
+//'   <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method("var", &TissueSimulation::get_var,
                 "Get a variable representing a simulation quantity");
 
@@ -1940,6 +2066,7 @@ RCPP_MODULE(Mutants)
 //'
 //' # delete dump directory
 //' unlink("recover_simulation_test", recursive = TRUE)
+//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
     function("recover_simulation", &TissueSimulation::load, "Recover a simulation");
 
 //' @name TissueSimulation
@@ -2037,6 +2164,7 @@ RCPP_MODULE(Mutants)
 //'
 //' sim <- TissueSimulation(rates = df_rates)
 //' sim
+//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
     function("TissueSimulation", &TissueSimulation::build_simulation,
              List::create(_["name"] = R_NilValue, _["width"] = 1000, _["height"] = 1000,
                           _["save_snapshots"] = false, _["rates"] = R_NilValue,
@@ -2046,242 +2174,92 @@ RCPP_MODULE(Mutants)
 
 //' @name SampleForest
 //' @title The sample cell ancestor forest
-//' @description This class represents the forest of the ancestors of the
+//' @description The ancestor forest of sampled cells
+//' @details This class represents the forest of the ancestors of the
 //'   cells sampled during the computation. The leaves of
 //'   this forest are the sampled cells.
+//'
+//'   The objects of this class provide the following methods and properties:
+//'   - <code>[get_coalescent_cells()](SampleForest-cash-get_coalescent_cells.md)</code>
+//'     returns the most recent common ancestors of the sampled cells.
+//'   - <code>[get_node()](SampleForest-cash-get_node.md)</code>
+//'     returns an object of type <code>[SampleForestNode]</code>.
+//'   - <code>[get_nodes()](SampleForest-cash-get_nodes.md)</code>
+//'     returns information about the nodes in the forest.
+//'   - <code>[get_samples_info()](SampleForest-cash-get_samples_info.md)</code>
+//'     returns information about the samples generating the forest.
+//'   - <code>[get_species_info()](SampleForest-cash-get_species_info.md)</code>
+//'     returns information about the simulated species.
+//'   - <code>[get_sticks()](SampleForest-cash-get_sticks.md)</code>
+//'     computes the forest sticks.
+//'   - <code>[get_subforest_for()](SampleForest-cash-get_subforest_for.md)</code>
+//'     extracts a sub-forest for some of the samples.
+//'   - <code>[save()](SampleForest-cash-save.md)</code>
+//'     saves the forest.
+//' @seealso <code>[PhylogeneticForest]</code>
     class_<SampleForest>("SampleForest")
-
-//' @name SampleForest$get_nodes
-//' @title Getting forest nodes
-//' @description This method builds a data frame containing forest nodes.
-//' @return A data frame reporting, for each node in the forest, the
-//'   identified (column `cell_id`), the ancestor identifier (column
-//'   `ancestor`), the node's depth (column `depth`), the name of the
-//'   sample containing the node, (column `sample`), and the mutant
-//'   (column `mutant`), the birth time (column `birth_time`). Whenever,
-//'   the simulation has epigenetic states, the data frame also contains
-//'   the column `epistate`.
-//' @examples
-//' # use a sample forest example
-//' forest <- example("SampleForest")
-//'
-//' # get the data frame of the nodes
-//' nodes <- forest$get_nodes()
-//'
-//' # print the first lines of the data frame
-//' head(nodes)
-        .method("get_nodes", (List (SampleForest::*)() const)(&SampleForest::get_nodes),
-                "Get the nodes of the forest")
-
-//' @name SampleForest$get_node
-//' @title Getting a node of the forest
-//' @description This method returns the node of the forest
-//' @details This method returns the node of the forest whose
-//'    corresponding cell has a specified identifier.
-//' @param cell_id The identifier of the cell whose node is aimed.
-//' @return The <code>[SampleForestNode]</code> object
-//'   associated to the cell whose identifier is `cell_id`.
-//' @examples
-//' # use a sample forest example
-//' forest <- example("SampleForest")
-//'
-//' # get the node corresponding to the cell having 2 as cell identifier
-//' forest$get_node(2)
-//' @seealso <code>[SampleForestNode]</code>
-        .method("get_node", &SampleForest::get_node,
-                "Get node corresponding to a cell")
-
-//' @name SampleForest$get_coalescent_cells
-//' @title Retrieving the most recent common ancestors
-//' @description This method retrieves the most recent common ancestors
-//'   of a set of cells.
-//' @details If the optional parameter `cell_ids` is
-//'   used, this method find the most recent common ancestors of
-//'   the cells having an identifier among those in `cell_ids`.
-//'   If, otherwise, the optional parameter is not used, this
-//'   method find the most recent common ancestors of the forest
-//'   leaves.
-//' @param cell_ids The list of the identifiers of the cells whose
-//'   most recent common ancestors are aimed (optional).
-//' @return A data frame reporting the identified (column `cell_id`), the
-//'   ancestor identifier (column `ancestor`), the name of the sample
-//'   containing the node (column `sample`), the mutant (column `mutant`),
-//'   and the birth time (column `birth_time`). Whenever, the simulation
-//'   has epigenetic states, the data frame also contains the column
-//'   `epistate`.
-//' @examples
-//' # use a sample forest example
-//' forest <- example("SampleForest")
-//'
-//' # get the most recent common ancestor of all the leaves in the forest
-//' forest$get_coalescent_cells()
-        .method("get_coalescent_cells",
-                (List (SampleForest::*)(const std::list<CLONES::Mutants::CellId> &)
-                     const)(&SampleForest::get_coalescent_cells),
-                "Get the most recent common ancestor of some cells")
-        .method("get_coalescent_cells",
-                (List (SampleForest::*)() const)(&SampleForest::get_coalescent_cells),
-                "Get the most recent common ancestor of all forest leaves")
-
-//' @name SampleForest$get_subforest_for
-//' @title Building sub-forests
-//' @description This method builds a sub-forest using as leaves some of the
-//'    original samples.
-//' @param sample_names The names of the samples whose cells will be used
-//'    as leaves of the new forest.
-//' @return A sample forest built on the samples mentioned in `sample_names`
-//' @examples
-//' # use a sample forest example
-//' forest <- example("SampleForest")
-//'
-//' # get the subforest for sample "S_1_2"
-//' forest$get_subforest_for("S_1_2")
-        .method("get_subforest_for", &SampleForest::get_subforest_for,
-                "Get the sub-forest for some of the original samples")
-
-//' @name SampleForest$get_samples_info
-//' @title Retrieving the samples' information
-//' @description This method retrieves information about
-//'   the samples whose cells were used as leaves
-//'   of the sample forest.
-//' @return A data frame containing, for each sample collected
-//'   during the simulation, the columns `name`, `time`, `id`,
-//'   `ymin`, `xmin`, `ymax`, `xmax`, `tumour_cells`, and
-//'   `tumour_cells_in_bbox`. The columns `ymin`, `xmin`, `ymax`,
-//'   `xmax` report the boundaries of the sample bounding box, while
-//'   `tumour_cells` and `tumour_cells_in_bbox` are the number of tumour
-//'   cells in the sample and in the bounding box, respectively.
-//' @seealso [PhylogeneticForest$get_samples_info()] for usage
-//'   examples, [TissueSimulation$sample_cells()],
-//'   [TissueSimulation$get_samples_info()]
-//' @examples
-//' # use a sample forest example
-//' forest <- example("SampleForest")
-//'
-//' # get information about the samples whose cells
-//' # are the forest leaves
-//' forest$get_samples_info()
-        .method("get_samples_info", &SampleForest::get_samples_info,
-                "Get some pieces of information about the samples")
-
-//' @name SampleForest$get_species_info
-//' @title Getting forest species
-//' @description This method builds a data frame containing information
-//'   about the simulated species.
-//' @return A data frame reporting `mutant` and, if the simulation has
-//'   epigenetic states, `epistate` for each registered species.
-//' @examples
-//' # use a sample forest example
-//' forest <- example("SampleForest - no epistates")
-//'
-//' # get species information. Since the simulation has no epigenetic
-//' # state, the species correspond to the mutants
-//' forest$get_species_info()
-//'
-//' @examples
-//' # use a sample forest example
-//' forest <- example("SampleForest")
-//'
-//' # get species information
-//' forest$get_species_info()
-        .method("get_species_info", &SampleForest::get_species_info,
-                "Get the recorded species")
-
-//' @name SampleForest$get_sticks
-//' @title Computing the forest sticks
-//' @description This method computes the forest sticks.
-//' @details A _crucial node_ of a forest is a root of the forest, a node
-//'   whose parent belongs to a different species, or the most recent common
-//'   ancestor of two crucial nodes.
-//'
-//'   A _stick_ is a path of the forest in which the only crucial nodes are
-//'   the first and the last one.
-//'
-//'   This method returns the list of the forest sticks. Each stick is
-//'   represented by the sequence of cell identifiers labelling the nodes in
-//'   the stick.
-//' @param birth_threshold The maximum birth time for the cells associated
-//'   to the returned sticks (optional).
-//' @return The list of the forest sticks whose associated cells have
-//'   birth time smaller than or equal to `birth_threshold`. Each stick is
-//'   represented as the list of cell identifiers labelling the nodes in the
-//'   stick from the higher to the deeper in the forest.
-//' @seealso [PhylogeneticForest$get_sticks()]
-//' @examples
-//' # use a sample forest example
-//' forest <- example("SampleForest")
-//'
-//' # search for the forest sticks
-//' head(forest$get_sticks())
-//'
-//' # search for the forest sticks whose first node corresponding cells have
-//' # birth times 40 time units at most
-//' forest$get_sticks(40)
-        .method("get_sticks",
-                (std::list<std::list<CLONES::Mutants::CellId>> (SampleForest::*)(
-                    const double) const)(&SampleForest::get_sticks),
-                "Get the forest sticks")
-        .method("get_sticks",
-                (std::list<std::list<CLONES::Mutants::CellId>> (SampleForest::*)()
-                     const)(&SampleForest::get_sticks),
-                "Get the forest sticks")
-
-//' @name SampleForest$save
-//' @title Saving sample forests
-//' @description This method saves a sample forest in a file.
-//' @param filename The path of the file in which the samples
-//'   forest must be saved.
-//' @param quiet An optional Boolean flag to avoid the progress bar
-//'   (default: FALSE).
-//' @seealso [load_sample_forest()]
-        .method("save",
-                (void (SampleForest::*)(const std::string &, const bool) const)
-                    &SampleForest::save,
-                "Save a sample forest")
-        .method("save",
-                (void (SampleForest::*)(const std::string &) const)
-                    &SampleForest::save,
-                "Save a sample forest")
-
-        .method("show", &SampleForest::show, "Describe the SampleForest");
+        REGISTER_FOREST_COMMON_FIELD(SampleForest);
 
 //' @name SampleForestNode
 //' @title The node of a sample forest
-//' @description This class represents the nodes of a sample forest. It does not
-//'   have a user constructor and its objects are produced by ProCESS and passed to
-//'   the labelling function of [get_node_tour()].
-//' @field \code{cell_id} The identifier of the associated cell.
-//' @field \code{parent} The node's parent.
-//' @field \code{children} A list of the node's children.
-//' @field \code{is_root} A flag that is set to TRUE if and only if the node is a root.
-//' @field \code{is_leaf} A flag that is set to TRUE if and only if the node is a leaf.
-//' @field \code{sample_name} The name of the sample that collected the associated cell.
-//' @field \code{birth_time} The birth time of the cell associated to the node.
-//' @field \code{death_time} The death time of the cell associated to the node.
-//' @field \code{life_span} The life span of the cell associated to the node.
-//' @field \code{species_id} The identifier of the associated cell's species.
-//' @field \code{species_name} The name of the associated cell's species.
-//' @field \code{epistate_name} The name of the associated cell's epigenetic state.
-//' @field \code{mutant_id} The identifier of the associated cell's mutant.
-//' @field \code{mutant_name} The name of the associated cell's mutant.
+//' @description A class representing the nodes of a sample forest.
+//' @details This class represents the nodes of a sample forest. It does not
+//'   have a user constructor. Its objects are produced by [get_node_tour()] and
+//'   <code>[SampleForest$get_node()]</code>.
+//'
+//'   The objects of this class provide the following methods and properties:
+//'   - <code>[cell_id](SampleForestNode-cash-cell_id.md)</code>
+//'     represents the identifier of the associated cell.
+//'   - <code>[parent](SampleForestNode-cash-parent.md)</code>
+//'     represents the node's parent.
+//'   - <code>[children](SampleForestNode-cash-children.md)</code>
+//'     represents a list of the node's children.
+//'   - <code>[is_root](SampleForestNode-cash-is_root.md)</code>
+//'     is a Boolean flag that is `TRUE` if and only if the node is a forest
+//'     root.
+//'   - <code>[is_leaf](SampleForestNode-cash-is_leaf.md)</code>
+//'     is a Boolean flag that is `TRUE` if and only if the node is a forest
+//'     leaf.
+//'   - <code>[sample_name](SampleForestNode-cash-sample_name.md)</code>
+//'     is the name of the sample that collected the associated cell.
+//'   - <code>[birth_time](SampleForestNode-cash-birth_time.md)</code>
+//'     is the birth time of the cell associated to the node.
+//'   - <code>[death_time](SampleForestNode-cash-death_time.md)</code>
+//'     is the death time of the cell associated to the node.
+//'   - <code>[life_span](SampleForestNode-cash-life_span.md)</code>
+//'     is the life span of the cell associated to the node.
+//'   - <code>[species_name](SampleForestNode-cash-species_name.md)</code>
+//'     is the name of the associated cell's species.
+//'   - <code>[epistate_name](SampleForestNode-cash-epistate_name.md)</code>
+//'     is the name of the associated cell's epigenetic state.
+//'   - <code>[mutant_name](SampleForestNode-cash-mutant_name.md)</code>
+//'     is the name of the associated cell's mutant.
+//'
 //' @seealso [get_node_tour()], <code>[SampleForestNodeTour]</code>,
-//'   <code>[PhylogeneticForestNode]</code>, [`vignette("node_labelling")`]
+//'   <code>[PhylogeneticForestNode]</code>, [`vignette("node_tour")`]
    class_<SampleForestNode>("SampleForestNode")
         REGISTER_NODE_COMMON_FIELDS(SampleForestNode);
 
 //' @name SampleForestNodeTour
 //' @title An iterator class over sample forest nodes
-//' @description This class represents iterators over sample forest nodes.
-//'   The objects of this class are built by [get_node_tour()].
-//' @field \code{node} An object of the class <code>[SampleForestNode]</code>
-//'   representing the node pointed by the iterator.
-//' @field \code{label} (OPTIONAL) The label of the of the node pointed by the
-//'   iterator. The presence of this field depends on the [get_node_tour()]'s
-//'   parameters used to create the tour object.
-//' @field \code{step} A method that moves to the next node in the tour.
-//' @field \code{done} A Boolean flag that is set to TRUE only when the tour ended.
+//' @description Iterators over sample forest nodes.
+//' @details This class represents iterators over sample forest nodes.
+//'   The objects of this class are built by [get_node_tour()] and provide
+//'   the following methods and properties:
+//'   - <code>[node](SampleForestNodeTour-cash-node.md)</code>
+//'     is an object of the class <code>[SampleForestNode]</code> and
+//'     represents the node pointed by the iterator.
+//'   - <code>[label](SampleForestNodeTour-cash-label.md)</code> (OPTIONAL)
+//'     represents the label of the of the node pointed by the
+//'     iterator. The presence of this field depends on the type of the
+//'     [get_node_tour()]'s parameters used to create the tour object.
+//'   - <code>[step()](SampleForestNodeTour-cash-step.md)</code>
+//'     moves the iterator to the next node in the tour.
+//'   - <code>[done](SampleForestNodeTour-cash-done.md)</code>
+//'     is a Boolean flag that is set to `TRUE` only when the tour ended.
+//'
 //' @seealso [get_node_tour()], <code>[SampleForestNode]</code>,
-//'   <code>[PhylogeneticForestNodeTour]</code>, [`vignette("node_labelling")`]
+//'   <code>[PhylogeneticForestNodeTour]</code>, [`vignette("node_tour")`]
     class_<SampleForestNodeTour>("SampleForestNodeTour")
         REGISTER_TOUR_COMMON_FIELDS(SampleForestNodeTour);
 
@@ -2366,16 +2344,16 @@ RCPP_MODULE(Mutants)
 //' collect_labels <- function(tour) {
 //'   total <- NULL
 //'
-//'   # `SampleForestNodeTour$done` is `TRUE` iff the tour ended
+//'   # `tour$done` is `TRUE` iff the tour ended
 //'   while (!tour$done) {
 //'     if (is.null(total)) {
-//'       # `SampleForestNodeTour$label` is the node label
-//'       total <- tour$label
+//'       # `tour$label` is the node label
+//'       total <- list(tour$label)
 //'     } else {
-//'       total <- rbind(total, tour$label)
+//'       total <- append(total, tour$label)
 //'     }
 //'
-//'     # `SampleForestNodeTour$step()` advances to the next node
+//'     # `tour$step()` advances to the next node
 //'     # in the tour
 //'     tour$step()
 //'   }
@@ -2395,14 +2373,14 @@ RCPP_MODULE(Mutants)
 //' tour <- get_node_tour(forest, labelling_functor1)
 //'
 //' print("Functor 1 - All nodes")
-//' print(collect_labels(tour))
+//' print(collect_labels(tour)[1:5])
 //'
 //' # since `labelling_functor1` does not use `label`, we can omit the
 //' # parameter `init_value`
 //' tour <- get_node_tour(forest, labelling_functor1, only_leaves = TRUE)
 //'
 //' print("Functor 1 - Only leaves")
-//' print(collect_labels(tour))
+//' print(collect_labels(tour)[1:5])
 //'
 //' labelling_functor2 <- function(label, node) {
 //'   # the nodes are labelled by their visiting order
@@ -2415,7 +2393,7 @@ RCPP_MODULE(Mutants)
 //'                        init_value = 0, only_leaves = TRUE)
 //'
 //' print("Functor 2 - Only leaves")
-//' print(collect_labels(tour))
+//' print(collect_labels(tour)[1:5])
 //'
 //' a <- 3.14
 //'
@@ -2431,7 +2409,7 @@ RCPP_MODULE(Mutants)
 //'                        init_value = 0, only_leaves = TRUE)
 //'
 //' print("Functor 3 - Only leaves")
-//' print(collect_labels(tour))
+//' print(collect_labels(tour)[1:5])
 //'
 //' set.seed(0)
 //'
@@ -2445,10 +2423,10 @@ RCPP_MODULE(Mutants)
 //'                        init_value = 0, only_leaves = TRUE)
 //'
 //' print("Functor 4 - Only leaves")
-//' print(collect_labels(tour))
+//' print(collect_labels(tour)[1:5])
 //' @seealso <code>[SampleForestNode]</code>, <code>[SampleForestNodeTour]</code>,
 //'    <code>[PhylogeneticForestNode]</code>, <code>[PhylogeneticForestNodeTour]</code>,
-//'    [get_genome_tour()], [`vignette("node_labelling")`]
+//'    [`vignette("node_tour")`]
     function("get_node_tour", &get_node_tour,
             List::create(
                  _["forest"], _["labelling_functor"] = R_NilValue,
