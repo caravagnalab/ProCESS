@@ -16,6 +16,10 @@ This method places a cell in the tissue.
 
   The position on the y axis of the cell.
 
+## See also
+
+[`TissueSimulation`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation_class.md)
+
 ## Examples
 
 ``` r

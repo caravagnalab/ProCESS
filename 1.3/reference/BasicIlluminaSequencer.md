@@ -1,8 +1,12 @@
-# A basic Illumina sequencer class
-
-This class implements a basic model for Illumina sequencers.
+# Building a basic Illumina sequencer simulator
 
 This method builds a basic Illumina sequencer model.
+
+## Usage
+
+``` r
+BasicIlluminaSequencer(error_rate, random_quality_scores)
+```
 
 ## Arguments
 
@@ -21,18 +25,9 @@ This method builds a basic Illumina sequencer model.
 
 A basic Illumina sequencer model.
 
-## Details
-
-It specifies a simulated sequencing error rate and the simulated
-sequencing errors will occurs according to that rate.
-
 ## See also
 
-[`simulate_seq()`](https://caravagnalab.github.io/ProCESS/1.3/reference/simulate_seq.md),
-[`simulate_normal_seq()`](https://caravagnalab.github.io/ProCESS/1.3/reference/simulate_normal_seq.md),
-and
-[`vignette("sequencing")`](https://caravagnalab.github.io/ProCESS/1.3/articles/sequencing.md)
-for usage examples.
+[`BasicIlluminaSequencer`](https://caravagnalab.github.io/ProCESS/1.3/reference/BasicIlluminaSequencer_class.md)
 
 ## Examples
 

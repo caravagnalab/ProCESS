@@ -202,7 +202,7 @@ sim$run_until(c5)
 #>  [████████████████████████████████████████] 100% [00m:00s] Saving snapshot
 
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260719-005215 ─────── ▣  [1000x1000]  ⏱ 40 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260722-102756 ─────── ▣  [1000x1000]  ⏱ 40 ──
 #> 
 #> ── Species: 2, with epigenetics
 #>    

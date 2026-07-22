@@ -1,7 +1,7 @@
 # Getting the cell in which a mutation emerged
 
 This method returns the identifier of the cell in which a mutation
-occurs for the first time. `$1`
+occurs for the first time.
 
 ## Arguments
 
@@ -16,7 +16,8 @@ time.
 
 ## See also
 
-[`vignette("mutations")`](https://caravagnalab.github.io/ProCESS/1.3/articles/mutations.md)
+[`vignette("mutations")`](https://caravagnalab.github.io/ProCESS/1.3/articles/mutations.md),
+[`PhylogeneticForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest.md)
 
 ## Examples
 

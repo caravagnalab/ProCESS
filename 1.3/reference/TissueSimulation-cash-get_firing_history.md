@@ -10,6 +10,10 @@ event type, for each species, and for each sampled time. Whenever, the
 simulation has epigenetic states, the data frame also contains the
 column `epistate`.
 
+## See also
+
+[`TissueSimulation`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation_class.md)
+
 ## Examples
 
 ``` r
@@ -33,7 +37,7 @@ sim$history_delta <- 30
 # run the simulation up to time 70
 sim$run_up_to_time(70)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                       
 
 
 # get the number of event fired per event and species

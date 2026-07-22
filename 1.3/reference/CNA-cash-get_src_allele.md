@@ -7,6 +7,10 @@ copied.
 
 The allele from which CNA is copied.
 
+## See also
+
+[`CNA`](https://caravagnalab.github.io/ProCESS/1.3/reference/CNA_class.md)
+
 ## Examples
 
 ``` r

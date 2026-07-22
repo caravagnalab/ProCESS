@@ -13,6 +13,10 @@ allele of the fragment is derived. The columns `from` and `size`
 maintain the first position of the fragment in the wild-type allele and
 its size.
 
+## See also
+
+[`GenomeMutations`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations.md)
+
 ## Examples
 
 ``` r

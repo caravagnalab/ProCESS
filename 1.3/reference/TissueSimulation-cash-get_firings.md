@@ -9,6 +9,10 @@ A data frame having the `event`, `mutant`, `fired`, and, when the
 simulation has epigenetic states, `epistate`. Each row reports event of
 a given type have been fired in a species.
 
+## See also
+
+[`TissueSimulation`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation_class.md)
+
 ## Examples
 
 ``` r
@@ -33,7 +37,7 @@ sim$place_cell("A", 500, 500)
 # run the simulation up to time 70
 sim$run_up_to_time(70)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                       
 
 
 # get the history of species counts
@@ -68,7 +72,7 @@ sim$place_cell("A[E1]", 500, 500)
 # run the simulation up to time 70
 sim$run_up_to_time(70)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                       
 
 
 # counts the number of cells per species

@@ -19,10 +19,10 @@ species reaches a specified threshold.
 
 ## See also
 
-[`TissueSimulation()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation.md),
 [`TissueSimulation$run_up_to_time()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-run_up_to_time.md),
 [`TissueSimulation$run_up_to_event()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-run_up_to_event.md),
-[`TissueSimulation$run_until()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-run_until.md)
+[`TissueSimulation$run_until()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-run_until.md),
+[`TissueSimulation`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation_class.md)
 
 ## Examples
 
@@ -45,7 +45,7 @@ sim$place_cell("A[E1]", 500, 500)
 # contemporary cells
 sim$run_up_to_size(species = "A[E2]", num_of_cells = 100)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                       
 
 
 sim$get_counts()

@@ -7,6 +7,10 @@ reference genome.
 
 The CIGAR code of the fragment with respect to the reference genome.
 
+## See also
+
+[`GenomeFragment`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeFragment.md)
+
 ## Examples
 
 ``` r

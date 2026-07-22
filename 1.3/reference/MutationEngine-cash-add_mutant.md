@@ -29,7 +29,8 @@ progenitor's genome respecting the specification order.
 
 ## See also
 
-[`MutationEngine$change_rates_from()`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine-cash-change_rates_from.md)
+[`MutationEngine$change_rates_from()`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine-cash-change_rates_from.md),
+[`MutationEngine`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine_class.md)
 
 ## Examples
 
@@ -37,25 +38,25 @@ progenitor's genome respecting the specification order.
 # create a demonstrative mutation engine
 m_engine <- MutationEngine(setup_code = "demo")
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading context index         
+ [█---------------------------------------] 0% [00m:00s] Loading context index                                                                                                   
 
- [████████████████████████████████████████] 100% [00m:00s] Context index loaded        
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading RS index              
-
- [█████████████---------------------------] 31% [00m:01s] Loading RS index             
-
- [██████████████████████████--------------] 63% [00m:02s] Loading RS index             
-
- [█████████████████████████████████████---] 91% [00m:03s] Loading RS index             
-
- [████████████████████████████████████████] 100% [00m:03s] RS index loaded             
+ [████████████████████████████████████████] 100% [00m:00s] Context index loaded                                                                                                  
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading germline              
+ [█---------------------------------------] 0% [00m:00s] Loading RS index                                                                                                        
 
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded             
+ [████████████----------------------------] 29% [00m:01s] Loading RS index                                                                                                       
+
+ [███████████████████████-----------------] 57% [00m:02s] Loading RS index                                                                                                       
+
+ [██████████████████████████████████------] 84% [00m:03s] Loading RS index                                                                                                       
+
+ [████████████████████████████████████████] 100% [00m:03s] RS index loaded                                                                                                       
+
+#> 
+ [█---------------------------------------] 0% [00m:00s] Loading germline                                                                                                        
+
+ [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                                                       
 
 
 # define a list of mutations
@@ -76,19 +77,19 @@ d_mutations <- list("DGCR8 P26L",
 m_engine$add_mutant("A", passenger_rates =c(SNV = 1e-9, indel = 1e-10),
                     drivers = d_mutations)
 #> 
- [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs           
+ [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs                                                                                                     
 
- [█---------------------------------------] 0% [00m:00s] Found 22                      
+ [█---------------------------------------] 0% [00m:00s] Found 22                                                                                                                
 
- [█---------------------------------------] 0% [00m:00s] Reading 22                    
+ [█---------------------------------------] 0% [00m:00s] Reading 22                                                                                                              
 
- [█████████████---------------------------] 32% [00m:01s] Reading 22                   
+ [█████████████---------------------------] 30% [00m:01s] Reading 22                                                                                                             
 
- [██████████████████████████--------------] 63% [00m:02s] Reading 22                   
+ [█████████████████████████---------------] 62% [00m:02s] Reading 22                                                                                                             
 
- [██████████████████████████████████████--] 94% [00m:03s] Reading 22                   
+ [██████████████████████████████████████--] 94% [00m:03s] Reading 22                                                                                                             
 
- [████████████████████████████████████████] 100% [00m:03s] "A"'s SIDs validated        
+ [████████████████████████████████████████] 100% [00m:03s] "A"'s SIDs validated                                                                                                  
 
 
 m_engine
@@ -122,9 +123,9 @@ m_engine$add_mutant("B", list("E1" = c(SNV = 1e-9, indel = 1e-10),
                               "E2" = c(SNV = 3e-8, CNA = 1e-11)),
                     drivers = d_mutations)
 #> 
- [█---------------------------------------] 0% [00m:00s] Retrieving "B" SIDs           
+ [█---------------------------------------] 0% [00m:00s] Retrieving "B" SIDs                                                                                                     
 
- [████████████████████████████████████████] 100% [00m:00s] "B"'s SIDs validated        
+ [████████████████████████████████████████] 100% [00m:00s] "B"'s SIDs validated                                                                                                  
 
 
 m_engine

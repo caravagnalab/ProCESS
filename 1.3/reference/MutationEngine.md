@@ -1,10 +1,9 @@
-# Generating phylogenetic forests
-
-A mutation engine can label every node of a samples forest by mutations
-and produce a consistent phylogenetic forest.
+# Creating a mutation engine
 
 This function downloads and sets up the data requires by a mutation
-engine. Finally, it builds mutation engine itself.
+engine. Finally, it builds an object of the class
+[`MutationEngine`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine_class.md)
+itself.
 
 ## Usage
 
@@ -108,29 +107,6 @@ A mutation engine object.
 
 ## Details
 
-The mutations are randomly generated according to three factors:
-
-1.  the mutational rates of the species involved in the samples forest
-
-2.  the genotypical specification of the mutants involved in the sample
-    forest, i.e., the somatic mutations characterising the mutant
-    genotypes
-
-3.  the SBS and ID signatures active along the species simulation
-
-The data of points 1 and 2 are provided to the mutation engine by the
-method
-[`MutationEngine$add_mutant()`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine-cash-add_mutant.md).
-Instead, the active signatures are defined by using the method
-[`MutationEngine$add_exposure()`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine-cash-add_exposure.md).
-
-The initialisation of a `MutationEngine` object requires a reference
-sequence and the SBS and ID mutational signatures. An SBS index and a ID
-index of the reference sequence are then automatically built. This
-process may take time depending on the size of the reference sequence.
-Hence, the downloaded files together with the built indices are saved on
-the disk for subsequent `MutationEngine` constructions.
-
 There are two building modalities: the first one is more general, but it
 requires to specify all the data sources; the second one adopts some
 pre-set configurations, but it is sufficient in many cases.
@@ -175,6 +151,8 @@ to get the available germline subjects;
 to set the active germline subject;
 [`MutationEngine$get_active_germline()`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine-cash-get_active_germline.md)
 to get the active germline subject.
+
+[`MutationEngine`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine_class.md)
 
 ## Examples
 
@@ -221,66 +199,66 @@ m_engine <- MutationEngine(directory = "Test",
 #> done
 #> Building context index...
 #> 
- [█---------------------------------------] 0% [00m:00s] Processing chr. 22            
+ [█---------------------------------------] 0% [00m:00s] Processing chr. 22                                                                                                      
 
- [█████████████████-----------------------] 40% [00m:00s] Processing chr. 22           
+ [█████████████████-----------------------] 40% [00m:00s] Processing chr. 22                                                                                                     
 
- [█████████████████████████████████-------] 81% [00m:02s] Processing chr. 22           
+ [█████████████████████████████████-------] 81% [00m:02s] Processing chr. 22                                                                                                     
 
- [████████████████████████████████████████] 100% [00m:02s] Context index built         
+ [████████████████████████████████████████] 100% [00m:02s] Context index built                                                                                                   
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Saving context index          
+ [█---------------------------------------] 0% [00m:00s] Saving context index                                                                                                    
 
- [████████████████████████████████████████] 100% [00m:00s] Context index saved         
+ [████████████████████████████████████████] 100% [00m:00s] Context index saved                                                                                                   
 
 #> done
 #> Building repeated sequence index...
 #> 
- [█---------------------------------------] 0% [00m:00s] Reading 22                    
+ [█---------------------------------------] 0% [00m:00s] Reading 22                                                                                                              
 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                  
-
-#> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                  
+ [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                                                            
 
 #> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                  
+ [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                                                            
 
 #> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                  
+ [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                                                            
 
 #> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                  
+ [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                                                            
 
 #> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                  
+ [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                                                            
 
 #> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                  
+ [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                                                            
 
 #> 
- [████████████████████████████████████████] 100% [00m:01s] RS index built              
+ [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                                                            
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Saving RS index               
+ [████████████████████████████████████████] 100% [00m:01s] RS index built                                                                                                        
 
- [█---------------------------------------] 0% [00m:01s] Saving RS index               
+#> 
+ [█---------------------------------------] 0% [00m:00s] Saving RS index                                                                                                         
 
- [███████████████████---------------------] 47% [00m:02s] Saving RS index              
+ [█---------------------------------------] 0% [00m:00s] Saving RS index                                                                                                         
+
+ [████████████████████--------------------] 48% [00m:02s] Saving RS index                                                                                                        
 done
 #> 
- [████████████████████████████████████████] 100% [00m:02s] RS index saved              
+ [████████████████████████████████████████] 100% [00m:02s] RS index saved                                                                                                        
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading germline              
+ [█---------------------------------------] 0% [00m:00s] Loading germline                                                                                                        
 
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded             
+ [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                                                       
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Saving germline               
+ [█---------------------------------------] 0% [00m:00s] Saving germline                                                                                                         
 
- [████████████████████████████████████████] 100% [00m:00s] Germline saved              
+ [████████████████████████████████████████] 100% [00m:00s] Germline saved                                                                                                        
 
 
 # if the parameters of a mutation engine construction match those of a
@@ -290,25 +268,25 @@ done
 m_engine <- MutationEngine("Test", reference_url, sbs_url, indel_url,
   drivers_url, passenger_CNAs_url, germline_url)
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading context index         
+ [█---------------------------------------] 0% [00m:00s] Loading context index                                                                                                   
 
- [████████████████████████████████████████] 100% [00m:00s] Context index loaded        
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading RS index              
-
- [█████████████---------------------------] 31% [00m:01s] Loading RS index             
-
- [█████████████████████████---------------] 62% [00m:02s] Loading RS index             
-
- [█████████████████████████████████████---] 91% [00m:03s] Loading RS index             
-
- [████████████████████████████████████████] 100% [00m:03s] RS index loaded             
+ [████████████████████████████████████████] 100% [00m:00s] Context index loaded                                                                                                  
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading germline              
+ [█---------------------------------------] 0% [00m:00s] Loading RS index                                                                                                        
 
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded             
+ [███████████-----------------------------] 26% [00m:01s] Loading RS index                                                                                                       
+
+ [███████████████████████-----------------] 57% [00m:02s] Loading RS index                                                                                                       
+
+ [███████████████████████████████████-----] 85% [00m:03s] Loading RS index                                                                                                       
+
+ [████████████████████████████████████████] 100% [00m:03s] RS index loaded                                                                                                       
+
+#> 
+ [█---------------------------------------] 0% [00m:00s] Loading germline                                                                                                        
+
+ [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                                                       
 
 
 # if the `context_sampling` parameter changes, a new context index is
@@ -319,35 +297,35 @@ m_engine <- MutationEngine("Test", reference_url, sbs_url, indel_url,
   context_sampling = 50)
 #> Building context index...
 #> 
- [█---------------------------------------] 0% [00m:00s] Processing chr. 22            
+ [█---------------------------------------] 0% [00m:00s] Processing chr. 22                                                                                                      
 
- [█████████████████-----------------------] 40% [00m:00s] Processing chr. 22           
+ [█████████████████-----------------------] 40% [00m:00s] Processing chr. 22                                                                                                     
 
- [█████████████████████████████████-------] 81% [00m:02s] Processing chr. 22           
+ [█████████████████████████████████-------] 81% [00m:02s] Processing chr. 22                                                                                                     
 
- [████████████████████████████████████████] 100% [00m:02s] Context index built         
+ [████████████████████████████████████████] 100% [00m:02s] Context index built                                                                                                   
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Saving context index          
+ [█---------------------------------------] 0% [00m:00s] Saving context index                                                                                                    
 
- [████████████████████████████████████████] 100% [00m:00s] Context index saved         
+ [████████████████████████████████████████] 100% [00m:00s] Context index saved                                                                                                   
 
 #> done
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading RS index              
+ [█---------------------------------------] 0% [00m:00s] Loading RS index                                                                                                        
 
- [█████████████---------------------------] 30% [00m:01s] Loading RS index             
+ [█████████████---------------------------] 30% [00m:01s] Loading RS index                                                                                                       
 
- [█████████████████████████---------------] 61% [00m:02s] Loading RS index             
+ [█████████████████████████---------------] 60% [00m:02s] Loading RS index                                                                                                       
 
- [█████████████████████████████████████---] 90% [00m:03s] Loading RS index             
+ [████████████████████████████████████----] 88% [00m:03s] Loading RS index                                                                                                       
 
- [████████████████████████████████████████] 100% [00m:03s] RS index loaded             
+ [████████████████████████████████████████] 100% [00m:03s] RS index loaded                                                                                                       
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading germline              
+ [█---------------------------------------] 0% [00m:00s] Loading germline                                                                                                        
 
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded             
+ [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                                                       
 
 
 # a further construction with the same parameters avoids both
@@ -356,25 +334,25 @@ m_engine <- MutationEngine("Test", reference_url, sbs_url, indel_url,
   drivers_url, passenger_CNAs_url, germline_url,
   context_sampling = 50)
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading context index         
+ [█---------------------------------------] 0% [00m:00s] Loading context index                                                                                                   
 
- [████████████████████████████████████████] 100% [00m:00s] Context index loaded        
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading RS index              
-
- [████████████----------------------------] 29% [00m:01s] Loading RS index             
-
- [█████████████████████████---------------] 60% [00m:02s] Loading RS index             
-
- [████████████████████████████████████----] 89% [00m:03s] Loading RS index             
-
- [████████████████████████████████████████] 100% [00m:03s] RS index loaded             
+ [████████████████████████████████████████] 100% [00m:00s] Context index loaded                                                                                                  
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading germline              
+ [█---------------------------------------] 0% [00m:00s] Loading RS index                                                                                                        
 
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded             
+ [█████████████---------------------------] 30% [00m:01s] Loading RS index                                                                                                       
+
+ [█████████████████████████---------------] 61% [00m:02s] Loading RS index                                                                                                       
+
+ [████████████████████████████████████----] 89% [00m:03s] Loading RS index                                                                                                       
+
+ [████████████████████████████████████████] 100% [00m:03s] RS index loaded                                                                                                       
+
+#> 
+ [█---------------------------------------] 0% [00m:00s] Loading germline                                                                                                        
+
+ [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                                                       
 
 
 m_engine
@@ -395,25 +373,25 @@ m_engine
 # those available for testing purpose.
 m_engine <- MutationEngine(setup_code = "demo")
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading context index         
+ [█---------------------------------------] 0% [00m:00s] Loading context index                                                                                                   
 
- [████████████████████████████████████████] 100% [00m:00s] Context index loaded        
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading RS index              
-
- [█████████████---------------------------] 31% [00m:01s] Loading RS index             
-
- [█████████████████████████---------------] 62% [00m:02s] Loading RS index             
-
- [█████████████████████████████████████---] 90% [00m:03s] Loading RS index             
-
- [████████████████████████████████████████] 100% [00m:03s] RS index loaded             
+ [████████████████████████████████████████] 100% [00m:00s] Context index loaded                                                                                                  
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading germline              
+ [█---------------------------------------] 0% [00m:00s] Loading RS index                                                                                                        
 
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded             
+ [█████████████---------------------------] 30% [00m:01s] Loading RS index                                                                                                       
+
+ [█████████████████████████---------------] 60% [00m:02s] Loading RS index                                                                                                       
+
+ [████████████████████████████████████----] 88% [00m:03s] Loading RS index                                                                                                       
+
+ [████████████████████████████████████████] 100% [00m:03s] RS index loaded                                                                                                       
+
+#> 
+ [█---------------------------------------] 0% [00m:00s] Loading germline                                                                                                        
+
+ [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                                                       
 
 
 # the `context_sampling` can be used also when a pre-defined set-up
@@ -421,35 +399,35 @@ m_engine <- MutationEngine(setup_code = "demo")
 m_engine <- MutationEngine(setup_code = "demo", context_sampling = 50)
 #> Building context index...
 #> 
- [█---------------------------------------] 0% [00m:00s] Processing chr. 22            
+ [█---------------------------------------] 0% [00m:00s] Processing chr. 22                                                                                                      
 
- [█████████████████-----------------------] 40% [00m:00s] Processing chr. 22           
+ [█████████████████-----------------------] 40% [00m:00s] Processing chr. 22                                                                                                     
 
- [█████████████████████████████████-------] 81% [00m:02s] Processing chr. 22           
+ [█████████████████████████████████-------] 81% [00m:02s] Processing chr. 22                                                                                                     
 
- [████████████████████████████████████████] 100% [00m:02s] Context index built         
+ [████████████████████████████████████████] 100% [00m:02s] Context index built                                                                                                   
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Saving context index          
+ [█---------------------------------------] 0% [00m:00s] Saving context index                                                                                                    
 
- [████████████████████████████████████████] 100% [00m:00s] Context index saved         
+ [████████████████████████████████████████] 100% [00m:00s] Context index saved                                                                                                   
 
 #> done
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading RS index              
+ [█---------------------------------------] 0% [00m:00s] Loading RS index                                                                                                        
 
- [█████████████---------------------------] 31% [00m:01s] Loading RS index             
+ [█████████████---------------------------] 30% [00m:01s] Loading RS index                                                                                                       
 
- [██████████████████████████--------------] 63% [00m:02s] Loading RS index             
+ [█████████████████████████---------------] 60% [00m:02s] Loading RS index                                                                                                       
 
- [██████████████████████████████████████--] 93% [00m:03s] Loading RS index             
+ [████████████████████████████████████----] 88% [00m:03s] Loading RS index                                                                                                       
 
- [████████████████████████████████████████] 100% [00m:03s] RS index loaded             
+ [████████████████████████████████████████] 100% [00m:03s] RS index loaded                                                                                                       
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading germline              
+ [█---------------------------------------] 0% [00m:00s] Loading germline                                                                                                        
 
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded             
+ [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                                                       
 
 
 m_engine
@@ -491,66 +469,66 @@ m_engine <- MutationEngine(setup_code = "demo",
 #> done
 #> Building context index...
 #> 
- [█---------------------------------------] 0% [00m:00s] Processing chr. 22            
+ [█---------------------------------------] 0% [00m:00s] Processing chr. 22                                                                                                      
 
- [█████████████████-----------------------] 40% [00m:00s] Processing chr. 22           
+ [█████████████████-----------------------] 40% [00m:00s] Processing chr. 22                                                                                                     
 
- [█████████████████████████████████-------] 81% [00m:02s] Processing chr. 22           
+ [█████████████████████████████████-------] 81% [00m:02s] Processing chr. 22                                                                                                     
 
- [████████████████████████████████████████] 100% [00m:02s] Context index built         
+ [████████████████████████████████████████] 100% [00m:02s] Context index built                                                                                                   
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Saving context index          
+ [█---------------------------------------] 0% [00m:00s] Saving context index                                                                                                    
 
- [████████████████████████████████████████] 100% [00m:00s] Context index saved         
+ [████████████████████████████████████████] 100% [00m:00s] Context index saved                                                                                                   
 
 #> done
 #> Building repeated sequence index...
 #> 
- [█---------------------------------------] 0% [00m:00s] Reading 22                    
+ [█---------------------------------------] 0% [00m:00s] Reading 22                                                                                                              
 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                  
-
-#> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                  
+ [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                                                            
 
 #> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                  
+ [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                                                            
 
 #> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                  
+ [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                                                            
 
 #> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                  
+ [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                                                            
 
 #> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                  
+ [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                                                            
 
 #> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                  
+ [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                                                            
 
 #> 
- [████████████████████████████████████████] 100% [00m:01s] RS index built              
+ [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                                                            
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Saving RS index               
+ [████████████████████████████████████████] 100% [00m:01s] RS index built                                                                                                        
 
- [█---------------------------------------] 0% [00m:01s] Saving RS index               
+#> 
+ [█---------------------------------------] 0% [00m:00s] Saving RS index                                                                                                         
 
- [███████████████████---------------------] 47% [00m:02s] Saving RS index              
+ [█---------------------------------------] 0% [00m:00s] Saving RS index                                                                                                         
+
+ [████████████████████--------------------] 48% [00m:02s] Saving RS index                                                                                                        
 done
 #> 
- [████████████████████████████████████████] 100% [00m:02s] RS index saved              
+ [████████████████████████████████████████] 100% [00m:02s] RS index saved                                                                                                        
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading germline              
+ [█---------------------------------------] 0% [00m:00s] Loading germline                                                                                                        
 
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded             
+ [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                                                       
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Saving germline               
+ [█---------------------------------------] 0% [00m:00s] Saving germline                                                                                                         
 
- [████████████████████████████████████████] 100% [00m:00s] Germline saved              
+ [████████████████████████████████████████] 100% [00m:00s] Germline saved                                                                                                        
 
 m_engine
 #> MutationEngine
@@ -587,66 +565,66 @@ m_engine <- MutationEngine(setup_code = "demo",
 #> done
 #> Building context index...
 #> 
- [█---------------------------------------] 0% [00m:00s] Processing chr. 22            
+ [█---------------------------------------] 0% [00m:00s] Processing chr. 22                                                                                                      
 
- [█████████████████-----------------------] 40% [00m:00s] Processing chr. 22           
+ [█████████████████-----------------------] 40% [00m:00s] Processing chr. 22                                                                                                     
 
- [█████████████████████████████████-------] 81% [00m:02s] Processing chr. 22           
+ [█████████████████████████████████-------] 81% [00m:02s] Processing chr. 22                                                                                                     
 
- [████████████████████████████████████████] 100% [00m:02s] Context index built         
+ [████████████████████████████████████████] 100% [00m:02s] Context index built                                                                                                   
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Saving context index          
+ [█---------------------------------------] 0% [00m:00s] Saving context index                                                                                                    
 
- [████████████████████████████████████████] 100% [00m:00s] Context index saved         
+ [████████████████████████████████████████] 100% [00m:00s] Context index saved                                                                                                   
 
 #> done
 #> Building repeated sequence index...
 #> 
- [█---------------------------------------] 0% [00m:00s] Reading 22                    
+ [█---------------------------------------] 0% [00m:00s] Reading 22                                                                                                              
 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                  
-
-#> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                  
+ [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                                                            
 
 #> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                  
+ [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                                                            
 
 #> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                  
+ [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                                                            
 
 #> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                  
+ [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                                                            
 
 #> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                  
+ [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                                                            
 
 #> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                  
+ [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                                                            
 
 #> 
- [████████████████████████████████████████] 100% [00m:01s] RS index built              
+ [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                                                            
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Saving RS index               
+ [████████████████████████████████████████] 100% [00m:01s] RS index built                                                                                                        
 
- [█---------------------------------------] 0% [00m:01s] Saving RS index               
+#> 
+ [█---------------------------------------] 0% [00m:00s] Saving RS index                                                                                                         
 
- [████████████████------------------------] 38% [00m:02s] Saving RS index              
+ [█---------------------------------------] 0% [00m:00s] Saving RS index                                                                                                         
+
+ [███████████████-------------------------] 36% [00m:02s] Saving RS index                                                                                                        
 done
 #> 
- [████████████████████████████████████████] 100% [00m:02s] RS index saved              
+ [████████████████████████████████████████] 100% [00m:02s] RS index saved                                                                                                        
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading germline              
+ [█---------------------------------------] 0% [00m:00s] Loading germline                                                                                                        
 
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded             
+ [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                                                       
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Saving germline               
+ [█---------------------------------------] 0% [00m:00s] Saving germline                                                                                                         
 
- [████████████████████████████████████████] 100% [00m:00s] Germline saved              
+ [████████████████████████████████████████] 100% [00m:00s] Germline saved                                                                                                        
 
 m_engine
 #> MutationEngine

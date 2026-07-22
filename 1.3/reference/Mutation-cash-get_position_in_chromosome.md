@@ -7,6 +7,10 @@ occurred.
 
 The position in chromosome where the mutation occurred.
 
+## See also
+
+[`Mutation`](https://caravagnalab.github.io/ProCESS/1.3/reference/Mutation_class.md)
+
 ## Examples
 
 ``` r

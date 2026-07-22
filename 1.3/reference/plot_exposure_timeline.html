@@ -54,6 +54,7 @@ forest.</p>
 <span>  <span class="va">phylogenetic_forest</span>,</span>
 <span>  linewidth <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>  emphasize_switches <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  mutation_type <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span>  pal_name <span class="op">=</span> <span class="st">"Set3"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -67,16 +68,24 @@ forest.</p>
 
 
 <dt id="arg-linewidth">linewidth<a class="anchor" aria-label="anchor" href="#arg-linewidth"></a></dt>
-<dd><p>The width of the lines in the plot.</p></dd>
+<dd><p>The width of the lines in the plot (default:
+<code>0.8</code>).</p></dd>
 
 
 <dt id="arg-emphasize-switches">emphasize_switches<a class="anchor" aria-label="anchor" href="#arg-emphasize-switches"></a></dt>
 <dd><p>A Boolean flag to emphasize the
-exposure switches.</p></dd>
+exposure switches (default: <code>FALSE</code>).</p></dd>
+
+
+<dt id="arg-mutation-type">mutation_type<a class="anchor" aria-label="anchor" href="#arg-mutation-type"></a></dt>
+<dd><p>The type of mutations whose exposure
+plot is requested. It can be <code>"all"</code>, <code>"indel"</code>, or <code>"SNV"</code>
+(default: <code>"all"</code>)</p></dd>
 
 
 <dt id="arg-pal-name">pal_name<a class="anchor" aria-label="anchor" href="#arg-pal-name"></a></dt>
-<dd><p>The name of a <code>RColorBrewer</code> palette.</p></dd>
+<dd><p>The name of a <code>RColorBrewer</code> palette (default:
+<code>"Set3"</code>).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -89,13 +98,17 @@ exposure switches.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># use a phylogenetic forest example</span></span></span>
 <span class="r-in"><span><span class="va">forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="example.html">example</a></span><span class="op">(</span><span class="st">"PhylogeneticForest"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># plotting the phylogenetic forest</span></span></span>
+<span class="r-in"><span><span class="co"># plotting the forest exposure timeline</span></span></span>
 <span class="r-in"><span><span class="fu">plot_exposure_timeline</span><span class="op">(</span><span class="va">forest</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_exposure_timeline-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># plotting the phylogenetic forest emphasizing the exposure switches</span></span></span>
+<span class="r-in"><span><span class="co"># plotting the forest exposure timeline emphasizing the exposure switches</span></span></span>
 <span class="r-in"><span><span class="fu">plot_exposure_timeline</span><span class="op">(</span><span class="va">forest</span>, emphasize_switches <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_exposure_timeline-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># plotting the forest exposure timeline of SNVs</span></span></span>
+<span class="r-in"><span><span class="fu">plot_exposure_timeline</span><span class="op">(</span><span class="va">forest</span>, mutation_type <span class="op">=</span> <span class="st">"SNV"</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="plot_exposure_timeline-3.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

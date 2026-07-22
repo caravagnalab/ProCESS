@@ -12,12 +12,11 @@ cells.
 
 ## Value
 
-A data frame representing, for each of the identified cells, the
-identified (column `cell_id`), the ancestor identifier (column
-`ancestor`), the node's depth (column `depth`), the name of the sample
-containing the node (column `sample`), the mutant (column `mutant`), the
-birth time (column `birth_time`), and, whenever the simulation has
-epigenetic states, the epigenetic state (column `epistate`).
+A data frame reporting the identified (column `cell_id`), the ancestor
+identifier (column `ancestor`), the name of the sample containing the
+node (column `sample`), the mutant (column `mutant`), and the birth time
+(column `birth_time`). Whenever, the simulation has epigenetic states,
+the data frame also contains the column `epistate`.
 
 ## Details
 
@@ -28,16 +27,15 @@ method find the most recent common ancestors of the forest leaves.
 
 ## See also
 
-[`SampleForest$get_coalescent_cells()`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest-cash-get_coalescent_cells.md)
+[`PhylogeneticForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest.md)
 
 ## Examples
 
 ``` r
-# use a phylogenetic forest example
+# use a forest example
 forest <- example("PhylogeneticForest")
 
-# get the coalescent cells. Since this forest consists of
-# only one tree, we get a data frame containing one cell.
+# get the most recent common ancestor of all the leaves in the forest
 forest$get_coalescent_cells()
 #>   cell_id ancestor depth mutant epistate sample birth_time
 #> 1       1       NA     0      A       E1   <NA>          0

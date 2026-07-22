@@ -7,6 +7,10 @@ This method builds a data frame representing the CNA.
 The data frame contains the columns `chr`, `from`, `length`, `alt_base`,
 `allele`", `src.allele`, and `type`.
 
+## See also
+
+[`CNA`](https://caravagnalab.github.io/ProCESS/1.3/reference/CNA_class.md)
+
 ## Examples
 
 ``` r

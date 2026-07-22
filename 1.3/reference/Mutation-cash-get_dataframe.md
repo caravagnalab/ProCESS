@@ -7,6 +7,10 @@ This method builds a data frame representing the mutation.
 The data frame has the columns `chr`, `from`, `ref`, `alt`, `type`
 (i.e., `SNV` and `indel`), and `cause`.
 
+## See also
+
+[`Mutation`](https://caravagnalab.github.io/ProCESS/1.3/reference/Mutation_class.md)
+
 ## Examples
 
 ``` r

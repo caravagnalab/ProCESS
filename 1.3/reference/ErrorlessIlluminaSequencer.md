@@ -5,6 +5,12 @@ errors.
 
 This method builds an error-free Illumina sequencer model.
 
+## Usage
+
+``` r
+ErrorlessIlluminaSequencer()
+```
+
 ## Value
 
 A new error-free Illumina sequencer.

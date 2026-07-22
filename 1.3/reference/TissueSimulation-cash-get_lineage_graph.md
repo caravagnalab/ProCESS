@@ -15,6 +15,10 @@ as a consequence of either mutant mutations or epigenetic switches. The
 *lineage graph* stores these species evolutions and it reports the first
 occurrence time of any species-to-species transition.
 
+## See also
+
+[`TissueSimulation`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation_class.md)
+
 ## Examples
 
 ``` r
@@ -43,7 +47,7 @@ sim$place_cell("A[E1]", 500, 500)
 # run the simulation up to time 70
 sim$run_up_to_time(70)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                       
 
 
 sim$get_lineage_graph()

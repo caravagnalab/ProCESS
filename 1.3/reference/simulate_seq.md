@@ -3,6 +3,12 @@
 This method simulates the sequencing of the samples in a phylogenetic
 forest.
 
+## Usage
+
+``` r
+simulate_seq(phylo_forest)
+```
+
 ## Arguments
 
 - phylo_forest:

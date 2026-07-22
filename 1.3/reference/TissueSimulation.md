@@ -1,6 +1,4 @@
-# Simulating the cell evolution in a tissue
-
-This class simulates the cell evolution on a tissue.
+# Building a new simulation
 
 This method builds a new simulation.
 
@@ -46,23 +44,9 @@ TissueSimulation(name, width = 1000, height = 1000, save_snapshots = FALSE)
 
   The seed for the pseudo-random generator (optional).
 
-## Details
+## See also
 
-The objects of this class can simulate the evolution of many cells
-belonging to different *species* on a tissue. Each cell can duplicate or
-die according to the rates that delineate the cell species.
-
-`TissueSimulation()` supports epigenetic evolutions, and it lets users
-define species pairs that belong to the same mutant (even though, its
-genomic characterisation is unknown) and differ because of their
-epigenetic states.
-
-`TissueSimulation()` models epigenetic mutations and allows a cell in
-one of mutant species to generate a new cell belonging to the other
-species of the same mutant at a specified rate.
-
-`TissueSimulation()` also allows users to schedule mutations from one
-mutant to a different mutant.
+[`TissueSimulation`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation_class.md)
 
 ## Examples
 
@@ -104,12 +88,12 @@ sim <- TissueSimulation(save_snapshots = TRUE)
 
 # the name of the simulation is `ProCESS_<YY><MM><DD>_<HH><MM><SS>`
 sim$get_name()
-#> [1] "ProCESS_20260719-003950"
+#> [1] "ProCESS_20260722-101254"
 
 # the simulation dump have been saved in a directory named
 # after the simulation name
 list.files(pattern = "^ProCESS_")
-#> [1] "ProCESS_20260719-003950"
+#> [1] "ProCESS_20260722-101254"
 
 # let us remove the object and manually delete the simulation
 # directory
@@ -140,7 +124,7 @@ df_rates
 
 sim <- TissueSimulation(rates = df_rates)
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260719-003950 ─────────────── ▣  [1000x1000]  ⏱ 0 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260722-101255 ───────────────────────────────────────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
 #> 
 #> ── Species: 2, without epigenetics 
 #>    
@@ -177,7 +161,7 @@ df_rates
 
 sim <- TissueSimulation(rates = df_rates)
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260719-003951 ─────────────── ▣  [1000x1000]  ⏱ 0 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260722-101255 ───────────────────────────────────────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
 #> 
 #> ── Species: 6, with epigenetics 
 #>    

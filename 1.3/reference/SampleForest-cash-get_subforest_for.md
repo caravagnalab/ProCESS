@@ -12,12 +12,16 @@ samples.
 
 ## Value
 
-A sample forest built on the samples mentioned in `sample_names`
+A forest built on the samples mentioned in `sample_names`
+
+## See also
+
+[`SampleForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest.md)
 
 ## Examples
 
 ``` r
-# use a sample forest example
+# use a forest example
 forest <- example("SampleForest")
 
 # get the subforest for sample "S_1_2"

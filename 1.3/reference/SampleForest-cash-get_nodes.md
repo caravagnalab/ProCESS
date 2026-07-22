@@ -11,10 +11,15 @@ node, (column `sample`), and the mutant (column `mutant`), the birth
 time (column `birth_time`). Whenever, the simulation has epigenetic
 states, the data frame also contains the column `epistate`.
 
+## See also
+
+[`SampleForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest.md),
+[`SampleForestNode`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode.md)
+
 ## Examples
 
 ``` r
-# use a sample forest example
+# use a forest example
 forest <- example("SampleForest")
 
 # get the data frame of the nodes

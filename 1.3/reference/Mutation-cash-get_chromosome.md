@@ -6,6 +6,10 @@ This method identify the chromosome where the mutation occurred.
 
 The identifier of the chromosome in which the mutation occurred.
 
+## See also
+
+[`Mutation`](https://caravagnalab.github.io/ProCESS/1.3/reference/Mutation_class.md)
+
 ## Examples
 
 ``` r

@@ -1,4 +1,4 @@
-# Change the passenger rates from a specified time
+# Changing the passenger rates from a specified time
 
 This method changes the passenger rates from a specified time.
 
@@ -26,7 +26,8 @@ are not affected.
 
 ## See also
 
-[`MutationEngine$add_mutant()`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine-cash-add_mutant.md)
+[`MutationEngine$add_mutant()`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine-cash-add_mutant.md),
+[`MutationEngine`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine_class.md)
 
 ## Examples
 
@@ -34,25 +35,25 @@ are not affected.
 # create a demonstrative mutation engine
 m_engine <- MutationEngine(setup_code = "demo")
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading context index         
+ [█---------------------------------------] 0% [00m:00s] Loading context index                                                                                                   
 
- [████████████████████████████████████████] 100% [00m:00s] Context index loaded        
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading RS index              
-
- [████████████----------------------------] 29% [00m:01s] Loading RS index             
-
- [█████████████████████████---------------] 61% [00m:02s] Loading RS index             
-
- [█████████████████████████████████████---] 90% [00m:03s] Loading RS index             
-
- [████████████████████████████████████████] 100% [00m:03s] RS index loaded             
+ [████████████████████████████████████████] 100% [00m:00s] Context index loaded                                                                                                  
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading germline              
+ [█---------------------------------------] 0% [00m:00s] Loading RS index                                                                                                        
 
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded             
+ [█████████████---------------------------] 30% [00m:01s] Loading RS index                                                                                                       
+
+ [█████████████████████████---------------] 60% [00m:02s] Loading RS index                                                                                                       
+
+ [████████████████████████████████████----] 89% [00m:03s] Loading RS index                                                                                                       
+
+ [████████████████████████████████████████] 100% [00m:03s] RS index loaded                                                                                                       
+
+#> 
+ [█---------------------------------------] 0% [00m:00s] Loading germline                                                                                                        
+
+ [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                                                       
 
 
 # define a list of mutations
@@ -74,9 +75,9 @@ m_engine$add_mutant("A", list("E1" = c(SNV = 1e-9, indel = 1e-10),
                               "E2" = c(SNV = 3e-8, CNA = 1e-11)),
                     drivers = d_mutations)
 #> 
- [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs           
+ [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs                                                                                                     
 
- [████████████████████████████████████████] 100% [00m:00s] "A"'s SIDs validated        
+ [████████████████████████████████████████] 100% [00m:00s] "A"'s SIDs validated                                                                                                  
 
 
 m_engine

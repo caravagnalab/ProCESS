@@ -26,7 +26,8 @@ user can provide a list specifying the rates of the associated species.
 [`TissueSimulation$add_epigenetic_states()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-add_epigenetic_states.md),
 [`TissueSimulation$get_mutants()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-get_mutants.md),
 [`TissueSimulation$set_rate()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-set_rate.md),
-[`TissueSimulation$set_rates()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-set_rates.md)
+[`TissueSimulation$set_rates()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-set_rates.md),
+[`TissueSimulation`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation_class.md)
 
 ## Examples
 
@@ -36,7 +37,7 @@ sim <- TissueSimulation()
 
 # see the simulation setup
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260719-003912 ─────────────── ▣  [1000x1000]  ⏱ 0 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260722-101207 ───────────────────────────────────────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
 #> 
 #> ✖ The simulation has no samples yet!
 
@@ -45,7 +46,7 @@ sim$add_mutant(name = "A")
 
 # see the simulation setup
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260719-003912 ─────────────── ▣  [1000x1000]  ⏱ 0 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260722-101207 ───────────────────────────────────────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
 #> 
 #> ── Species: 1, without epigenetics 
 #>    
@@ -64,7 +65,7 @@ sim$add_mutant(name = "B", rate_list = c(duplication = 0.3, death = 0.1))
 
 # see the simulation setup
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260719-003912 ─────────────── ▣  [1000x1000]  ⏱ 0 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260722-101207 ───────────────────────────────────────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
 #> 
 #> ── Species: 2, without epigenetics 
 #>    
@@ -90,7 +91,7 @@ sim$add_mutant("C", list(duplication = 0.3, death = 0.1,
 
 # see the simulation setup
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260719-003912 ─────────────── ▣  [1000x1000]  ⏱ 0 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260722-101207 ───────────────────────────────────────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
 #> 
 #> ── Species: 9, with epigenetics 
 #>    

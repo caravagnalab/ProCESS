@@ -25,10 +25,14 @@ recent common ancestors of the cells having an identifier among those in
 `cell_ids`. If, otherwise, the optional parameter is not used, this
 method find the most recent common ancestors of the forest leaves.
 
+## See also
+
+[`SampleForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest.md)
+
 ## Examples
 
 ``` r
-# use a sample forest example
+# use a forest example
 forest <- example("SampleForest")
 
 # get the most recent common ancestor of all the leaves in the forest

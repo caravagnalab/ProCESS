@@ -10,6 +10,10 @@ name of the chromosome from which the fragment comes, the position in
 the chromosome of the fragment first base, and the size of the covered
 region, respectively.
 
+## See also
+
+[`GenomeFragment`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeFragment.md)
+
 ## Examples
 
 ``` r

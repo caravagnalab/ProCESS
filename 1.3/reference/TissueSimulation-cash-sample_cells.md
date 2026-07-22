@@ -29,7 +29,8 @@ sample that can be subsequently retrieved to build a sample forest.
 
 ## See also
 
-[`TissueSimulation$get_samples_info()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-get_samples_info.md)
+[`TissueSimulation$get_samples_info()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-get_samples_info.md),
+[`TissueSimulation`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation_class.md)
 
 ## Examples
 
@@ -49,7 +50,9 @@ sim$place_cell("A", 500, 500)
 # simulate the tissue until "A" consists of 50000 cells
 sim$run_up_to_size("A", 50000)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
+ [███████████████████████████████████████-] 95% [00m:00s] Cells: 47752                                                                                                           
+
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                       
 
 
 # randomly sample 50 tumour cells from the tissue
@@ -66,7 +69,7 @@ sim$sample_cells(sample_name = "S3",
 
 sim$get_samples_info()
 #>   name  id xmin ymin xmax ymax tumour_cells tumour_cells_in_bbox     time
-#> 1   S1 259    0    0  999  999           50                50000 294.3848
-#> 2   S2 260  450  475  500  550         3849                 3849 294.3848
-#> 3   S3 261  500  500  550  550           50                 2534 294.3848
+#> 1   S1 339    0    0  999  999           50                50000 294.3848
+#> 2   S2 340  450  475  500  550         3849                 3849 294.3848
+#> 3   S3 341  500  500  550  550           50                 2534 294.3848
 ```

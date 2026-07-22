@@ -2,6 +2,10 @@
 
 This is the vector of the minima among all the rectangle dimensions.
 
+## See also
+
+[`TissueRectangle`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueRectangle.md)
+
 ## Examples
 
 ``` r

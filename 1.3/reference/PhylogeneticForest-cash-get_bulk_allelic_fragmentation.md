@@ -21,7 +21,7 @@ and the total number of cells in the sample.
 
 ## See also
 
-[`vignette("mutations")`](https://caravagnalab.github.io/ProCESS/1.3/articles/mutations.md)
+[`PhylogeneticForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest.md)
 
 ## Examples
 

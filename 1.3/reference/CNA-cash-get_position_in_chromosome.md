@@ -6,6 +6,10 @@ This method returns the position in chromosome where the CNA occurred.
 
 The position in chromosome where the CNA occurred.
 
+## See also
+
+[`CNA`](https://caravagnalab.github.io/ProCESS/1.3/reference/CNA_class.md)
+
 ## Examples
 
 ``` r

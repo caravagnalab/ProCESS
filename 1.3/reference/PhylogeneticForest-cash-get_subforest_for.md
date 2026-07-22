@@ -8,20 +8,20 @@ samples.
 - sample_names:
 
   The names of the samples whose cells will be used as leaves of the new
-  forest
+  forest.
 
 ## Value
 
-A sample forest built on the samples mentioned in `sample_names`
+A forest built on the samples mentioned in `sample_names`
 
 ## See also
 
-[`SampleForest$get_subforest_for()`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest-cash-get_subforest_for.md)
+[`PhylogeneticForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest.md)
 
 ## Examples
 
 ``` r
-# use a phylogenetic forest example
+# use a forest example
 forest <- example("PhylogeneticForest")
 
 # get the subforest for sample "S_1_2"

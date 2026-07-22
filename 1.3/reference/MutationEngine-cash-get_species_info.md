@@ -18,7 +18,9 @@ epigenetic state names.
 
 ## See also
 
-[`PhylogeneticForest$get_species_info()`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_species_info.md)
+[`SampleForest$get_species_info()`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest-cash-get_species_info.md),
+[`PhylogeneticForest$get_species_info()`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_species_info.md),
+[`MutationEngine`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine_class.md)
 
 ## Examples
 
@@ -26,25 +28,29 @@ epigenetic state names.
 # build a mutation engine
 m_engine <- MutationEngine(setup_code = "demo")
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading context index         
+ [█---------------------------------------] 0% [00m:00s] Loading context index                                                                                                   
 
- [████████████████████████████████████████] 100% [00m:00s] Context index loaded        
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading RS index              
-
- [█████████████---------------------------] 32% [00m:01s] Loading RS index             
-
- [██████████████████████████--------------] 64% [00m:02s] Loading RS index             
-
- [███████████████████████████████████████-] 95% [00m:03s] Loading RS index             
-
- [████████████████████████████████████████] 100% [00m:03s] RS index loaded             
+ [████████████████████████████████████████] 100% [00m:00s] Context index loaded                                                                                                  
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading germline              
+ [█---------------------------------------] 0% [00m:00s] Loading RS index                                                                                                        
 
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded             
+ [████████--------------------------------] 19% [00m:01s] Loading RS index                                                                                                       
+
+ [███████████████-------------------------] 36% [00m:02s] Loading RS index                                                                                                       
+
+ [██████████████████████------------------] 52% [00m:03s] Loading RS index                                                                                                       
+
+ [█████████████████████████████-----------] 70% [00m:04s] Loading RS index                                                                                                       
+
+ [███████████████████████████████████-----] 86% [00m:05s] Loading RS index                                                                                                       
+
+ [████████████████████████████████████████] 100% [00m:05s] RS index loaded                                                                                                       
+
+#> 
+ [█---------------------------------------] 0% [00m:00s] Loading germline                                                                                                        
+
+ [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                                                       
 
 
 # get the active germline subject data frame

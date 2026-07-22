@@ -16,10 +16,9 @@ subject gender.
 
 ## See also
 
-[`MutationEngine$get_active_germline()`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine-cash-get_active_germline.md)
-to get the available germline subjects;
-[`MutationEngine$set_germline_subject()`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine-cash-set_germline_subject.md)
-to set the active germline.
+[`MutationEngine$get_active_germline()`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine-cash-get_active_germline.md),
+[`MutationEngine$set_germline_subject()`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine-cash-set_germline_subject.md),
+[`MutationEngine`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine_class.md)
 
 ## Examples
 
@@ -27,25 +26,25 @@ to set the active germline.
 # build a mutation engine
 m_engine <- MutationEngine(setup_code = "demo")
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading context index         
+ [█---------------------------------------] 0% [00m:00s] Loading context index                                                                                                   
 
- [████████████████████████████████████████] 100% [00m:00s] Context index loaded        
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading RS index              
-
- [█████████████---------------------------] 32% [00m:01s] Loading RS index             
-
- [██████████████████████████--------------] 64% [00m:02s] Loading RS index             
-
- [██████████████████████████████████████--] 93% [00m:03s] Loading RS index             
-
- [████████████████████████████████████████] 100% [00m:03s] RS index loaded             
+ [████████████████████████████████████████] 100% [00m:00s] Context index loaded                                                                                                  
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading germline              
+ [█---------------------------------------] 0% [00m:00s] Loading RS index                                                                                                        
 
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded             
+ [████████████----------------------------] 28% [00m:01s] Loading RS index                                                                                                       
+
+ [███████████████████████-----------------] 56% [00m:02s] Loading RS index                                                                                                       
+
+ [██████████████████████████████████------] 83% [00m:03s] Loading RS index                                                                                                       
+
+ [████████████████████████████████████████] 100% [00m:03s] RS index loaded                                                                                                       
+
+#> 
+ [█---------------------------------------] 0% [00m:00s] Loading germline                                                                                                        
+
+ [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                                                       
 
 
 # get the active germline subject data frame

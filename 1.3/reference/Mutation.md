@@ -1,6 +1,12 @@
-# Either an SBS or an indel
+# Creating a SNV or a indel
 
 This function creates SNVs and indels.
+
+## Usage
+
+``` r
+Mutation(chr, from, ref, alt, allele, cause)
+```
 
 ## Arguments
 
@@ -47,7 +53,8 @@ the alt parameter precedes the optional ref parameter, while
 ## See also
 
 [`SNV()`](https://caravagnalab.github.io/ProCESS/1.3/reference/SNV.md)
-for SNV creation.
+for SNV creation,
+[`Mutation`](https://caravagnalab.github.io/ProCESS/1.3/reference/Mutation_class.md)
 
 ## Examples
 

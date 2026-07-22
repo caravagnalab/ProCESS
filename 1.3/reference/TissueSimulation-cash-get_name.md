@@ -7,6 +7,10 @@ This method returns the simulation name
 The simulation name, which corresponds to the name of the directory in
 which the simulation is saving its progresses.
 
+## See also
+
+[`TissueSimulation`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation_class.md)
+
 ## Examples
 
 ``` r
@@ -15,5 +19,5 @@ sim <- TissueSimulation()
 
 # Expecting "test"
 sim$get_name()
-#> [1] "ProCESS_20260719-003927"
+#> [1] "ProCESS_20260722-101228"
 ```

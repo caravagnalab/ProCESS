@@ -77,7 +77,8 @@ retrieved to build a sample forest.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="TissueSimulation-cash-get_samples_info.html">TissueSimulation$get_samples_info()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="TissueSimulation-cash-get_samples_info.html">TissueSimulation$get_samples_info()</a></code>,
+<code><a href="TissueSimulation_class.html">TissueSimulation</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -97,7 +98,9 @@ retrieved to build a sample forest.</p>
 <span class="r-in"><span><span class="co"># simulate the tissue until "A" consists of 50000 cells</span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"A"</span>, <span class="fl">50000</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
+ [███████████████████████████████████████-] 95% [00m:00s] Cells: 47752                                                                                                           
+
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                       
 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># randomly sample 50 tumour cells from the tissue</span></span></span>
@@ -114,9 +117,9 @@ retrieved to build a sample forest.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">get_samples_info</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   name  id xmin ymin xmax ymax tumour_cells tumour_cells_in_bbox     time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   S1 259    0    0  999  999           50                50000 294.3848</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   S2 260  450  475  500  550         3849                 3849 294.3848</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   S3 261  500  500  550  550           50                 2534 294.3848</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   S1 339    0    0  999  999           50                50000 294.3848</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   S2 340  450  475  500  550         3849                 3849 294.3848</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   S3 341  500  500  550  550           50                 2534 294.3848</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

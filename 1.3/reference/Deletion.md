@@ -28,10 +28,9 @@ Deletion(chr, chr_pos, len, allele = NULL)
 
 ## See also
 
-[`Amplification()`](https://caravagnalab.github.io/ProCESS/1.3/reference/Amplification.md)
-to build an amplification;
-[`CNA()`](https://caravagnalab.github.io/ProCESS/1.3/reference/CNA.md)
-to build both amplifications and deletions.
+[`Amplification()`](https://caravagnalab.github.io/ProCESS/1.3/reference/Amplification.md),
+[`CNA()`](https://caravagnalab.github.io/ProCESS/1.3/reference/CNA.md),
+[`CNA`](https://caravagnalab.github.io/ProCESS/1.3/reference/CNA_class.md)
 
 ## Examples
 

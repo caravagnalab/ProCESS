@@ -8,7 +8,8 @@ The reference genome path.
 
 ## See also
 
-[`PhylogeneticForest$set_reference_path()`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-set_reference_path.md)
+[`PhylogeneticForest$set_reference_path()`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-set_reference_path.md),
+[`PhylogeneticForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest.md)
 
 ## Examples
 
@@ -18,5 +19,5 @@ forest <- example("PhylogeneticForest")
 
 # get the reference path
 forest$get_reference_path()
-#> [1] "/private/var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/Rtmpd3PAdf/temp_libpathe34e74940195/ProCESS/extdata/example_ref.fasta"
+#> [1] "/private/var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/RtmpPnBdGL/temp_libpath3c137aed069d/ProCESS/extdata/example_ref.fasta"
 ```

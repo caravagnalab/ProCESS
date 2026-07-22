@@ -21,12 +21,13 @@ a specified identifier.
 
 ## See also
 
+[`PhylogeneticForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest.md),
 [`PhylogeneticForestNode`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode.md)
 
 ## Examples
 
 ``` r
-# use a phylogenetic forest example
+# use a forest example
 forest <- example("PhylogeneticForest")
 
 # get the node corresponding to the cell having 2 as cell identifier

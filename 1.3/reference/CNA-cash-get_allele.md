@@ -13,6 +13,10 @@ If the CNA is an amplification corresponds to the new allele identifier.
 If, instead, the CNA is a deletion is the identifier of the allele on
 which the deletion occurred.
 
+## See also
+
+[`CNA`](https://caravagnalab.github.io/ProCESS/1.3/reference/CNA_class.md)
+
 ## Examples
 
 ``` r

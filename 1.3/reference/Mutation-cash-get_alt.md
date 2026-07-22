@@ -6,6 +6,10 @@ This method returns the sequence after the mutation occurred.
 
 The sequence after the mutation occurred.
 
+## See also
+
+[`Mutation`](https://caravagnalab.github.io/ProCESS/1.3/reference/Mutation_class.md)
+
 ## Examples
 
 ``` r

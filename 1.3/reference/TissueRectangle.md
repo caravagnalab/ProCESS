@@ -2,12 +2,13 @@
 
 A rectangle in the tissue
 
-## Fields
+## Details
 
-- `get_lower_corner`:
+The objects of this class represent a rectangle of tissue. They provides
+the following properties and methods:
 
-  The rectangle lower corner
+- [`TissueRectangle$lower_corner`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueRectangle-cash-lower_corner.md)
+  stores the lower left corner of the rectangle.
 
-- `get_upper_corner`:
-
-  The rectangle upper corner
+- [`TissueRectangle$upper_corner`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueRectangle-cash-upper_corner.md)
+  stores the upper right corner of the rectangle.

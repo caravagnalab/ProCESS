@@ -24,7 +24,8 @@ This method sets the species' rate of an event.
 ## See also
 
 [`TissueSimulation$set_rates()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-set_rates.md),
-[`TissueSimulation$get_rates()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-get_rates.md)
+[`TissueSimulation$get_rates()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-get_rates.md),
+[`TissueSimulation`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation_class.md)
 
 ## Examples
 

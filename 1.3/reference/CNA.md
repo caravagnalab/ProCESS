@@ -1,6 +1,8 @@
 # Creating a CNA
 
-This function creates a CNA.
+This function creates a
+[`CNA`](https://caravagnalab.github.io/ProCESS/1.3/reference/CNA_class.md)
+object.
 
 ## Usage
 
@@ -38,10 +40,9 @@ CNA(type, chr, chr_pos, len, allele = NULL, src_allele = NULL)
 
 ## See also
 
-[`Amplification()`](https://caravagnalab.github.io/ProCESS/1.3/reference/Amplification.md)
-to build an amplification;
-[`Deletion()`](https://caravagnalab.github.io/ProCESS/1.3/reference/Deletion.md)
-to build a deletion.
+[`Amplification()`](https://caravagnalab.github.io/ProCESS/1.3/reference/Amplification.md),
+[`Deletion()`](https://caravagnalab.github.io/ProCESS/1.3/reference/Deletion.md),
+[`CNA`](https://caravagnalab.github.io/ProCESS/1.3/reference/CNA_class.md)
 
 ## Examples
 

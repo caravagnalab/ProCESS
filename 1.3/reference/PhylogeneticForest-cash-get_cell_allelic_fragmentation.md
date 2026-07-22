@@ -13,7 +13,8 @@ minor alleles (`major` and `minor`, respectively).
 
 ## See also
 
-[`vignette("mutations")`](https://caravagnalab.github.io/ProCESS/1.3/articles/mutations.md)
+[`vignette("mutations")`](https://caravagnalab.github.io/ProCESS/1.3/articles/mutations.md),
+[`PhylogeneticForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest.md)
 
 ## Examples
 

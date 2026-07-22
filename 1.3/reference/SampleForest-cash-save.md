@@ -1,12 +1,12 @@
-# Saving sample forests
+# Saving forests
 
-This method saves a sample forest in a file.
+This method saves a forest in a file.
 
 ## Arguments
 
 - filename:
 
-  The path of the file in which the samples forest must be saved.
+  The path of the file in which the forest must be saved.
 
 - quiet:
 
@@ -14,4 +14,5 @@ This method saves a sample forest in a file.
 
 ## See also
 
-[`load_sample_forest()`](https://caravagnalab.github.io/ProCESS/1.3/reference/load_sample_forest.md)
+[`load_forest()`](https://caravagnalab.github.io/ProCESS/1.3/reference/load_forest.md),
+[`SampleForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest.md)

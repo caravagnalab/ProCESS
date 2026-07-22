@@ -17,7 +17,9 @@ indel, and CNA rates, respectively.
 
 ## See also
 
-[`MutationEngine$get_species_info()`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine-cash-get_species_info.md)
+[`MutationEngine$get_species_info()`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine-cash-get_species_info.md),
+[`SampleForest$get_species_info()`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest-cash-get_species_info.md),
+[`PhylogeneticForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest.md)
 
 ## Examples
 

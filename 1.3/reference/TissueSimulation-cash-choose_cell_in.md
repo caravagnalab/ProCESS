@@ -32,7 +32,8 @@ selection can be provided to obtain one cell in the rectangle.
 
 ## See also
 
-[`TissueSimulation$choose_border_cell_in()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-choose_border_cell_in.md)
+[`TissueSimulation$choose_border_cell_in()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-choose_border_cell_in.md),
+[`TissueSimulation`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation_class.md)
 
 ## Examples
 
@@ -65,7 +66,7 @@ sim$death_activation_level <- 100
 # run the simulation until "B[E2]" accounts for less than 1000 cells
 sim$run_up_to_size("B[E2]", 1000)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                       
 
 
 # Randomly choose one cell in "B" in the tissue

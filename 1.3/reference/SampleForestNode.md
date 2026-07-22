@@ -1,71 +1,58 @@
 # The node of a sample forest
 
+A class representing the nodes of a sample forest.
+
+## Details
+
 This class represents the nodes of a sample forest. It does not have a
-user constructor and its objects are produced by ProCESS and passed to
-the labelling function of
-[`get_node_tour()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_node_tour.md).
+user constructor. Its objects are produced by
+[`get_node_tour()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_node_tour.md)
+and
+[`SampleForest$get_node()`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest-cash-get_node.md).
 
-## Fields
+The objects of this class provide the following methods and properties:
 
-- `cell_id`:
+- [`cell_id`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-cell_id.md)
+  represents the identifier of the associated cell.
 
-  The identifier of the associated cell.
+- [`parent`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-parent.md)
+  represents the node's parent.
 
-- `parent`:
+- [`children`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-children.md)
+  represents a list of the node's children.
 
-  The node's parent.
+- [`is_root`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-is_root.md)
+  is a Boolean flag that is `TRUE` if and only if the node is a forest
+  root.
 
-- `children`:
+- [`is_leaf`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-is_leaf.md)
+  is a Boolean flag that is `TRUE` if and only if the node is a forest
+  leaf.
 
-  A list of the node's children.
+- [`sample_name`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-sample_name.md)
+  is the name of the sample that collected the associated cell.
 
-- `is_root`:
+- [`birth_time`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-birth_time.md)
+  is the birth time of the cell associated to the node.
 
-  A flag that is set to TRUE if and only if the node is a root.
+- [`death_time`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-death_time.md)
+  is the death time of the cell associated to the node.
 
-- `is_leaf`:
+- [`life_span`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-life_span.md)
+  is the life span of the cell associated to the node.
 
-  A flag that is set to TRUE if and only if the node is a leaf.
+- [`species_name`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-species_name.md)
+  is the name of the associated cell's species.
 
-- `sample_name`:
+- [`epistate_name`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-epistate_name.md)
+  is the name of the associated cell's epigenetic state.
 
-  The name of the sample that collected the associated cell.
-
-- `birth_time`:
-
-  The birth time of the cell associated to the node.
-
-- `death_time`:
-
-  The death time of the cell associated to the node.
-
-- `life_span`:
-
-  The life span of the cell associated to the node.
-
-- `species_id`:
-
-  The identifier of the associated cell's species.
-
-- `species_name`:
-
-  The name of the associated cell's species.
-
-- `epistate_name`:
-
-  The name of the associated cell's epigenetic state.
-
-- `mutant_id`:
-
-  The identifier of the associated cell's mutant.
-
-- `mutant_name`:
-
-  The name of the associated cell's mutant.
+- [`mutant_name`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-mutant_name.md)
+  is the name of the associated cell's mutant.
 
 ## See also
 
 [`get_node_tour()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_node_tour.md),
 [`SampleForestNodeTour`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNodeTour.md),
 [`PhylogeneticForestNode`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode.md),
-`vignette("node_labelling")`
+[`vignette("node_tour")`](https://caravagnalab.github.io/ProCESS/1.3/articles/node_tour.md)

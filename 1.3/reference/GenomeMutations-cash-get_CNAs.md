@@ -1,4 +1,4 @@
-# Getting genome mutations
+# Getting genome CNAs
 
 This method returns a data frame representing the CNAs in the genome.
 
@@ -6,6 +6,10 @@ This method returns a data frame representing the CNAs in the genome.
 
 A data frame consisting of 8 columns: `chr`, `begin`, `end`, `type`,
 `allele`, `src.allele`, `cause`, and `nature`. Each row represent a SID.
+
+## See also
+
+[`GenomeMutations`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations.md)
 
 ## Examples
 

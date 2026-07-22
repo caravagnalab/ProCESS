@@ -6,6 +6,12 @@ mutations. The forest pre-neoplastic mutations are also added to the
 sample by default. However, they can be avoided by using the parameter
 `with_pre_neoplastic`.
 
+## Usage
+
+``` r
+simulate_normal_seq(phylo_forest)
+```
+
 ## Arguments
 
 - phylo_forest:

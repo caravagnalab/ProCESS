@@ -37,7 +37,8 @@ SNV(chr, chr_pos, alt, ref="?", allele = NULL, cause="")
 ## See also
 
 [`Mutation()`](https://caravagnalab.github.io/ProCESS/1.3/reference/Mutation.md)
-for SNV and indel creation.
+for building SNVs and indels,
+[`Mutation`](https://caravagnalab.github.io/ProCESS/1.3/reference/Mutation_class.md)
 
 ## Examples
 

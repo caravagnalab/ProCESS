@@ -20,8 +20,8 @@ A data frame reporting the types available for a set-up code.
 
 ## See also
 
+[`MutationEngine`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine_class.md)
 [`MutationEngine()`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine.md)
-to build a mutation engine
 
 ## Examples
 

@@ -1,6 +1,6 @@
 # Getting the corresponding cell sample
 
-This property is the name of the sample that collected the corresponding
+This field is the name of the sample that collected the corresponding
 cell.
 
 ## Value
@@ -10,15 +10,19 @@ corresponding cell was collected. Otherwise, `NA`.
 
 ## Details
 
-This property is the name of the sample that collected the corresponding
+This field is the name of the sample that collected the corresponding
 cell. If the node is not a leaf, it was not collected by any sample and
 this property is `NA`.
+
+## See also
+
+[`PhylogeneticForestNode`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode.md)
 
 ## Examples
 
 ``` r
 # use a phylogenetic forest example
-forest <- ProCESS::example("PhylogeneticForest")
+forest <- example("PhylogeneticForest")
 
 # get the node corresponding to the cell whose identifier is 2
 node <- forest$get_node(2)

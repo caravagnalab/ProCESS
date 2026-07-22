@@ -29,6 +29,10 @@ duplication of an "A"'s cell after the specified time occurs to a cell
 in the species "AEi", then the offspring of the cell consists of one
 cell in "AEi" and one in "BEi".
 
+## See also
+
+[`TissueSimulation`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation_class.md)
+
 ## Examples
 
 ``` r
@@ -53,11 +57,11 @@ sim$place_cell("A", 500, 500)
 # run the simulation up to the first cell in B
 sim$run_up_to_size("B", 1)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                       
 
 
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260719-003943 ────────────── ▣  [1000x1000]  ⏱ 50 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260722-101245 ──────────────────────────────────────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 50 ──
 #> 
 #> ── Species: 2, without epigenetics 
 #>    

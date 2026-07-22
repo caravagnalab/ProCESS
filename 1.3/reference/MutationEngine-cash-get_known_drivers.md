@@ -24,31 +24,33 @@ type associated to the mutation.
 
 [`MutationEngine$add_mutant()`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine-cash-add_mutant.md)
 
+[`MutationEngine`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine_class.md)
+
 ## Examples
 
 ``` r
 # build a mutation engine
 m_engine <- MutationEngine(setup_code = "demo")
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading context index         
+ [█---------------------------------------] 0% [00m:00s] Loading context index                                                                                                   
 
- [████████████████████████████████████████] 100% [00m:00s] Context index loaded        
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading RS index              
-
- [█████████████---------------------------] 32% [00m:01s] Loading RS index             
-
- [██████████████████████████--------------] 64% [00m:02s] Loading RS index             
-
- [███████████████████████████████████████-] 95% [00m:03s] Loading RS index             
-
- [████████████████████████████████████████] 100% [00m:03s] RS index loaded             
+ [████████████████████████████████████████] 100% [00m:00s] Context index loaded                                                                                                  
 
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading germline              
+ [█---------------------------------------] 0% [00m:00s] Loading RS index                                                                                                        
 
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded             
+ [█████████████---------------------------] 30% [00m:01s] Loading RS index                                                                                                       
+
+ [█████████████████████████---------------] 61% [00m:02s] Loading RS index                                                                                                       
+
+ [████████████████████████████████████----] 89% [00m:03s] Loading RS index                                                                                                       
+
+ [████████████████████████████████████████] 100% [00m:03s] RS index loaded                                                                                                       
+
+#> 
+ [█---------------------------------------] 0% [00m:00s] Loading germline                                                                                                        
+
+ [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                                                       
 
 
 # get the known driver data frame

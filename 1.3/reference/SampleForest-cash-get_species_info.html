@@ -39,7 +39,7 @@ about the simulated species."><meta property="og:image" content="https://caravag
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Getting forest species</h1>
-      <small class="dont-index">Source: <a href="https://github.com/caravagnalab/ProCESS/tree/1.3/R/RcppExports.R" class="external-link"><code>R/RcppExports.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/caravagnalab/ProCESS/tree/1.3/R/SampleForest_doc.R" class="external-link"><code>R/SampleForest_doc.R</code></a></small>
       <div class="d-none name"><code>SampleForest-cash-get_species_info.Rd</code></div>
     </div>
 
@@ -54,10 +54,16 @@ about the simulated species.</p>
     <p>A data frame reporting <code>mutant</code> and, if the simulation has
 epigenetic states, <code>epistate</code> for each registered species.</p>
     </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="MutationEngine-cash-get_species_info.html">MutationEngine$get_species_info()</a></code>,
+<code><a href="PhylogeneticForest-cash-get_species_info.html">PhylogeneticForest$get_species_info()</a></code>,
+<code><a href="SampleForest.html">SampleForest</a></code></p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># use a sample forest example</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># use a forest example without epistates</span></span></span>
 <span class="r-in"><span><span class="va">forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="example.html">example</a></span><span class="op">(</span><span class="st">"SampleForest - no epistates"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># get species information. Since the simulation has no epigenetic</span></span></span>
@@ -67,7 +73,7 @@ epigenetic states, <code>epistate</code> for each registered species.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1      A</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2      B</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># use a sample forest example</span></span></span>
+<span class="r-in"><span><span class="co"># use a forest example</span></span></span>
 <span class="r-in"><span><span class="va">forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="example.html">example</a></span><span class="op">(</span><span class="st">"SampleForest"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># get species information</span></span></span>

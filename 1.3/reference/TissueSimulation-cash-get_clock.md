@@ -6,6 +6,10 @@ This method returns the current simulation time.
 
 The time simulated by the simulation.
 
+## See also
+
+[`TissueSimulation`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation_class.md)
+
 ## Examples
 
 ``` r
@@ -24,7 +28,7 @@ sim$place_cell("A", 500, 500)
 # run the simulation up to time 40
 sim$run_up_to_time(40)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                       
 
 
 # get the simulated time

@@ -36,7 +36,8 @@ The genome fragment matching the specifications.
 ## See also
 
 [`GenomeFragment`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeFragment.md)
-[`GenomeMutations$get_region_aligned_to_ref()`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations-cash-get_region_aligned_to_ref.md)
+[`GenomeMutations$get_region_aligned_to_ref()`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations-cash-get_region_aligned_to_ref.md),
+[`GenomeMutations`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations.md)
 
 ## Examples
 

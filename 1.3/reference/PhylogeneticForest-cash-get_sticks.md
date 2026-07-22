@@ -1,6 +1,6 @@
 # Computing the forest sticks
 
-This method computes the sticks of the forest.
+This method computes the forest sticks.
 
 ## Arguments
 
@@ -31,12 +31,12 @@ the stick.
 
 ## See also
 
-[`SampleForest$get_sticks()`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest-cash-get_sticks.md)
+[`PhylogeneticForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest.md)
 
 ## Examples
 
 ``` r
-# use a phylogenetic forest example
+# use a forest example
 forest <- example("PhylogeneticForest")
 
 # search for the forest sticks

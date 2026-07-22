@@ -13,6 +13,10 @@ absolute position (column `to`) of each chromosome.
 Its builds a data frame reporting the name, the length, and the initial
 and final absolute positions of each chromosome in the reference genome.
 
+## See also
+
+[`PhylogeneticForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest.md)
+
 ## Examples
 
 ``` r

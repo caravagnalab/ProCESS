@@ -7,6 +7,10 @@ sequencer.
 
 The sequencing error rate of the simulated sequencer.
 
+## See also
+
+[`BasicIlluminaSequencer`](https://caravagnalab.github.io/ProCESS/1.3/reference/BasicIlluminaSequencer_class.md)
+
 ## Examples
 
 ``` r

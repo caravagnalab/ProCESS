@@ -25,6 +25,10 @@ original allele, respectively. In all the remaining cases, the fields
 contains the value `NA`. Finally, the column `code` reports the mutation
 code.
 
+## See also
+
+[`PhylogeneticForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest.md)
+
 ## Examples
 
 ``` r

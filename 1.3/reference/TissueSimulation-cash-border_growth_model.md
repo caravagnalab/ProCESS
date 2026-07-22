@@ -10,6 +10,10 @@ models. When it is set to `TRUE`, the border-growth model is used.
 Otherwise, the homogeneous-growth model is applied. It is set to `TRUE`
 by default.
 
+## See also
+
+[`TissueSimulation`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation_class.md)
+
 ## Examples
 
 ``` r

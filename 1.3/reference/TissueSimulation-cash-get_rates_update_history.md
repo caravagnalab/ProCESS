@@ -22,8 +22,9 @@ contains the columns `time`, `mutant`, `event`, and `rate`.
 
 ## See also
 
-`TissueSimulation$update_rates()`,
-[`TissueSimulation$get_rates()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-get_rates.md)
+[`TissueSimulation$set_rates()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-set_rates.md),
+[`TissueSimulation$get_rates()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-get_rates.md),
+[`TissueSimulation`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation_class.md)
 
 ## Examples
 
@@ -46,7 +47,7 @@ sim$death_activation_level <- 100
 # run the simulation up to time 70
 sim$run_up_to_time(70)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                       
 
 
 # set the death rate of "A" to 0.9
@@ -59,7 +60,7 @@ sim$set_rate("A", "death", 0.05)
 # simulate up to time 80
 sim$run_up_to_time(80)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                       
 
 
 # set the death rate to 0.5
@@ -68,7 +69,7 @@ sim$set_rate("A", "death", 0.5)
 # simulate up to time 80+1
 sim$run_up_to_time(sim$get_clock()+1)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                       
 
 
 # get the rates update history

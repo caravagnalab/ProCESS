@@ -36,7 +36,7 @@ sim$history_delta <- 1
 sim$place_cell("A[E1]", 500, 500)
 sim$run_up_to_time(60)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                       
 
 
 plot_muller(sim)

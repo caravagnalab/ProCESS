@@ -9,6 +9,10 @@ species. The cell of a species \$S\$ can die if and only if that \$S\$
 has reached the death activation level at least once during the
 simulation.
 
+## See also
+
+[`TissueSimulation`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation_class.md)
+
 ## Examples
 
 ``` r

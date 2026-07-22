@@ -7,6 +7,10 @@ occurred.
 
 The identifier of the chromosome in which the CNA occurred.
 
+## See also
+
+[`CNA`](https://caravagnalab.github.io/ProCESS/1.3/reference/CNA_class.md)
+
 ## Examples
 
 ``` r

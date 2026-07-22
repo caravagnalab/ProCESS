@@ -29,7 +29,7 @@ Tissue simulation classes and methods
 - [`SampleForest$get_subforest_for`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest-cash-get_subforest_for.md)
   : Building sub-forests
 - [`SampleForest$save`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest-cash-save.md)
-  : Saving sample forests
+  : Saving forests
 - [`SampleForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest.md)
   : The sample cell ancestor forest
 - [`SampleForestNode$birth_time`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode-cash-birth_time.md)
@@ -56,6 +56,14 @@ Tissue simulation classes and methods
   : Getting the name of the corresponding cell species
 - [`SampleForestNode`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNode.md)
   : The node of a sample forest
+- [`SampleForestNodeTour$done`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNodeTour-cash-done.md)
+  : Testing whether the tour end has been reached
+- [`SampleForestNodeTour$label`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNodeTour-cash-label.md)
+  : Getting node labelling
+- [`SampleForestNodeTour$node`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNodeTour-cash-node.md)
+  : Getting the node pointed by the tour
+- [`SampleForestNodeTour$step`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNodeTour-cash-step.md)
+  : Moving to the next node in the tour
 - [`SampleForestNodeTour`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForestNodeTour.md)
   : An iterator class over sample forest nodes
 - [`TissueRectangle$lower_corner`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueRectangle-cash-lower_corner.md)
@@ -145,7 +153,7 @@ Tissue simulation classes and methods
 - [`TissueSimulation$var`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-var.md)
   : Building a simulation status variable
 - [`TissueSimulation()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation.md)
-  : Simulating the cell evolution in a tissue
+  : Building a new simulation
 - [`plot_firings()`](https://caravagnalab.github.io/ProCESS/1.3/reference/plot_firings.md)
   : Plot the number of stochastic events in the simulation
 - [`plot_muller()`](https://caravagnalab.github.io/ProCESS/1.3/reference/plot_muller.md)
@@ -192,7 +200,7 @@ Mutation simulation classes and methods
 - [`GenomeFragment`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeFragment.md)
   : Representing a genome fragment
 - [`GenomeMutations$get_CNAs`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations-cash-get_CNAs.md)
-  : Getting genome mutations
+  : Getting genome CNAs
 - [`GenomeMutations$get_allele_fragments`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations-cash-get_allele_fragments.md)
   : Getting genome allele fragments
 - [`GenomeMutations$get_alleles_covering_ref_region`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations-cash-get_alleles_covering_ref_region.md)
@@ -217,22 +225,20 @@ Mutation simulation classes and methods
   : Getting the mutation altered sequence
 - [`Mutation$get_cause`](https://caravagnalab.github.io/ProCESS/1.3/reference/Mutation-cash-get_cause.md)
   : Getting the mutation cause
-- [`Mutation$get_chromosome`](https://caravagnalab.github.io/ProCESS/1.3/reference/Mutation-cash-get_chromosome.md)
-  : Getting the mutation chromosome
 - [`Mutation$get_dataframe`](https://caravagnalab.github.io/ProCESS/1.3/reference/Mutation-cash-get_dataframe.md)
   : Getting the mutation data frame
 - [`Mutation$get_position_in_chromosome`](https://caravagnalab.github.io/ProCESS/1.3/reference/Mutation-cash-get_position_in_chromosome.md)
   : Getting the mutation chromosome position
 - [`Mutation$get_ref`](https://caravagnalab.github.io/ProCESS/1.3/reference/Mutation-cash-get_ref.md)
   : Getting the mutation reference sequence
-- [`Mutation`](https://caravagnalab.github.io/ProCESS/1.3/reference/Mutation.md)
-  : Either an SBS or an indel
+- [`Mutation()`](https://caravagnalab.github.io/ProCESS/1.3/reference/Mutation.md)
+  : Creating a SNV or a indel
 - [`MutationEngine$add_exposure`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine-cash-add_exposure.md)
   : Adding an exposure to the mutation engine
 - [`MutationEngine$add_mutant`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine-cash-add_mutant.md)
   : Adding a mutant specification
 - [`MutationEngine$change_rates_from`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine-cash-change_rates_from.md)
-  : Change the passenger rates from a specified time
+  : Changing the passenger rates from a specified time
 - [`MutationEngine$get_SNV_signatures`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine-cash-get_SNV_signatures.md)
   : Getting the SNV signatures
 - [`MutationEngine$get_active_germline`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine-cash-get_active_germline.md)
@@ -256,7 +262,7 @@ Mutation simulation classes and methods
 - [`MutationEngine$set_germline_subject`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine-cash-set_germline_subject.md)
   : Setting the germline subject
 - [`MutationEngine()`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine.md)
-  : Generating phylogenetic forests
+  : Creating a mutation engine
 - [`PhylogeneticForest$get_absolute_chromosome_positions`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_absolute_chromosome_positions.md)
   : Getting the absolute chromosome positions
 - [`PhylogeneticForest$get_bulk_allelic_fragmentation`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_bulk_allelic_fragmentation.md)
@@ -280,7 +286,7 @@ Mutation simulation classes and methods
 - [`PhylogeneticForest$get_node`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_node.md)
   : Getting a node of the forest
 - [`PhylogeneticForest$get_nodes`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_nodes.md)
-  : Getting the forest nodes
+  : Getting forest nodes
 - [`PhylogeneticForest$get_reference_path`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_reference_path.md)
   : Getting the reference genome path
 - [`PhylogeneticForest$get_sampled_cell_CNAs`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_sampled_cell_CNAs.md)
@@ -298,7 +304,7 @@ Mutation simulation classes and methods
 - [`PhylogeneticForest$partition_samples`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-partition_samples.md)
   : Partitioning forest samples
 - [`PhylogeneticForest$save`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-save.md)
-  : Saving a phylogenetic forest
+  : Saving forests
 - [`PhylogeneticForest$set_reference_path`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-set_reference_path.md)
   : Setting the reference genome path
 - [`PhylogeneticForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest.md)
@@ -331,6 +337,16 @@ Mutation simulation classes and methods
   : Getting the name of the corresponding cell species
 - [`PhylogeneticForestNode`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode.md)
   : The node of a phylogenetic forest
+- [`PhylogeneticForestNodeTour$done`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNodeTour-cash-done.md)
+  : Testing whether the tour end has been reached
+- [`PhylogeneticForestNodeTour$genome`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNodeTour-cash-genome.md)
+  : Getting the genome of the associated tour
+- [`PhylogeneticForestNodeTour$label`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNodeTour-cash-label.md)
+  : Getting node labelling
+- [`PhylogeneticForestNodeTour$node`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNodeTour-cash-node.md)
+  : Getting the node pointed by the tour
+- [`PhylogeneticForestNodeTour$step`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNodeTour-cash-step.md)
+  : Moving to the next node in the tour
 - [`PhylogeneticForestNodeTour`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNodeTour.md)
   : An iterator class over phylogenetic forest nodes
 - [`plot_exposure_timeline()`](https://caravagnalab.github.io/ProCESS/1.3/reference/plot_exposure_timeline.md)
@@ -352,9 +368,9 @@ Sequencing simulation methods
   : Getting the error rate
 - [`BasicIlluminaSequencer$random_quality_scores`](https://caravagnalab.github.io/ProCESS/1.3/reference/BasicIlluminaSequencer-cash-random_quality_scores.md)
   : Check the non-constant quality score model
-- [`BasicIlluminaSequencer`](https://caravagnalab.github.io/ProCESS/1.3/reference/BasicIlluminaSequencer.md)
-  : A basic Illumina sequencer class
-- [`ErrorlessIlluminaSequencer`](https://caravagnalab.github.io/ProCESS/1.3/reference/ErrorlessIlluminaSequencer.md)
+- [`BasicIlluminaSequencer()`](https://caravagnalab.github.io/ProCESS/1.3/reference/BasicIlluminaSequencer.md)
+  : Building a basic Illumina sequencer simulator
+- [`ErrorlessIlluminaSequencer()`](https://caravagnalab.github.io/ProCESS/1.3/reference/ErrorlessIlluminaSequencer.md)
   : An error-free Illumina sequencer class
 - [`label_mutations()`](https://caravagnalab.github.io/ProCESS/1.3/reference/label_mutations.md)
   : Label mutations using phylogenetic forest data
@@ -368,9 +384,9 @@ Sequencing simulation methods
   : Plot a Variant Allele Frequency (VAF) histogram
 - [`plot_VAF_marginals()`](https://caravagnalab.github.io/ProCESS/1.3/reference/plot_VAF_marginals.md)
   : Plot Marginals of Variant Allele Frequency (VAF)
-- [`simulate_seq`](https://caravagnalab.github.io/ProCESS/1.3/reference/simulate_seq.md)
+- [`simulate_seq()`](https://caravagnalab.github.io/ProCESS/1.3/reference/simulate_seq.md)
   : Simulating the sequencing of sampled cells
-- [`simulate_normal_seq`](https://caravagnalab.github.io/ProCESS/1.3/reference/simulate_normal_seq.md)
+- [`simulate_normal_seq()`](https://caravagnalab.github.io/ProCESS/1.3/reference/simulate_normal_seq.md)
   : Simulating wild-type sequencing
 - [`seq_to_long()`](https://caravagnalab.github.io/ProCESS/1.3/reference/seq_to_long.md)
   : Convert sequencing results from wide to long format

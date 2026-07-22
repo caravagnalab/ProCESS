@@ -57,9 +57,60 @@ but each node is labelled with the mutations occurring
 for the first time on the cell represented by the node
 itself. Moreover each leaf is also associated with the
 genome mutations occurring in the corresponding cell.</p>
+<p>The objects of this class are built by using
+<a href="MutationEngine.html">MutationEngine</a> objects (see <code>[vignette("mutations")]</code>)
+and provide the following methods and properties:</p><ul><li><p><code><a href="PhylogeneticForest-cash-get_absolute_chromosome_positions.html">get_absolute_chromosome_positions()</a></code>
+returns the absolute chromosome positions.</p></li>
+<li><p><code><a href="PhylogeneticForest-cash-get_bulk_allelic_fragmentation.html">get_bulk_allelic_fragmentation()</a></code>
+returns the genome bulk allelic fragmentation.</p></li>
+<li><p><code><a href="PhylogeneticForest-cash-get_cell_allelic_fragmentation.html">get_cell_allelic_fragmentation()</a></code>
+returns the cell allelic fragmentation.</p></li>
+<li><p><code><a href="PhylogeneticForest-cash-get_coalescent_cells.html">get_coalescent_cells()</a></code>
+returns the most recent common ancestors of the sampled cells.</p></li>
+<li><p><code><a href="PhylogeneticForest-cash-get_driver_mutations.html">get_driver_mutations()</a></code>
+returns the data frame of the driver mutations.</p></li>
+<li><p><code><a href="PhylogeneticForest-cash-get_exposures.html">get_exposures()</a></code>
+returns the timed exposure data frame.</p></li>
+<li><p><code><a href="PhylogeneticForest-cash-get_first_occurrences.html">get_first_occurrences()</a></code>
+returns the identifier of the first cell in which a mutation emerged.</p></li>
+<li><p><code><a href="PhylogeneticForest-cash-get_germline_mutations.html">get_germline_mutations()</a></code>
+returns the data frame of the forest germinal mutations.</p></li>
+<li><p><code><a href="PhylogeneticForest-cash-get_germline_subject.html">get_germline_subject()</a></code>
+returns the germline subject of the phylogenetic forest.</p></li>
+<li><p><code><a href="PhylogeneticForest-cash-get_mutation_statistics.html">get_mutation_statistics()</a></code>
+returns the statistics about mutations on each node.</p></li>
+<li><p><code><a href="PhylogeneticForest-cash-get_node.html">get_node()</a></code>
+returns an object of type <code><a href="PhylogeneticForestNode.html">PhylogeneticForestNode</a></code>.</p></li>
+<li><p><code><a href="PhylogeneticForest-cash-get_nodes.html">get_nodes()</a></code>
+returns information about the nodes in the forest.</p></li>
+<li><p><code><a href="PhylogeneticForest-cash-get_reference_path.html">get_reference_path()</a></code>
+returns the path to the reference genome FASTA file.</p></li>
+<li><p><code><a href="PhylogeneticForest-cash-get_sampled_cell_CNAs.html">get_sampled_cell_CNAs()</a></code>
+returns the data frame of the CNAs in the sampled cells.</p></li>
+<li><p><code><a href="PhylogeneticForest-cash-get_sampled_cell_mutations.html">get_sampled_cell_mutations()</a></code>
+returns the data frame of the SNVs and indels in the sampled cells.</p></li>
+<li><p><code><a href="PhylogeneticForest-cash-get_samples_info.html">get_samples_info()</a></code>
+returns information about the samples generating the forest.</p></li>
+<li><p><code><a href="PhylogeneticForest-cash-get_species_info.html">get_species_info()</a></code>
+returns information about the simulated species.</p></li>
+<li><p><code><a href="PhylogeneticForest-cash-get_sticks.html">get_sticks()</a></code>
+computes the forest sticks.</p></li>
+<li><p><code><a href="PhylogeneticForest-cash-get_subforest_for.html">get_subforest_for()</a></code>
+extracts a sub-forest for some of the samples.</p></li>
+<li><p><code><a href="PhylogeneticForest-cash-partition_samples.html">partition_samples()</a></code>
+partitions the samples according to a labelling.</p></li>
+<li><p><code><a href="PhylogeneticForest-cash-save.html">save()</a></code>
+saves the forest.</p></li>
+<li><p><code><a href="PhylogeneticForest-cash-set_reference_path.html">set_reference_path()</a></code>
+sets the path to the reference genome FASTA file.</p></li>
+</ul></div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="SampleForest.html">SampleForest</a></code>, <code><a href="MutationEngine-cash-place_mutations.html">MutationEngine$place_mutations()</a></code></p></div>
     </div>
 
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

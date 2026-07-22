@@ -8,6 +8,10 @@ fragment.
 A data frame consisting of 7 columns: `chr`, `allele`, `from`, `ref`,
 `alt`, `cause`, and `nature`. Each row represent a SID.
 
+## See also
+
+[`GenomeFragment`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeFragment.md)
+
 ## Examples
 
 ``` r

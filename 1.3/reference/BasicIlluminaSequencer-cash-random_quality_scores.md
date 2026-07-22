@@ -1,12 +1,16 @@
 # Check the non-constant quality score model
 
-This method returns `TRUE` if and only if the sequencers implements a
+This field is set to `TRUE` if and only if the sequencers implements a
 non-constant quality score model.
 
 ## Value
 
 `TRUE` if and only if the sequencers sequencers implements a
 non-constant quality score model.
+
+## See also
+
+[`BasicIlluminaSequencer`](https://caravagnalab.github.io/ProCESS/1.3/reference/BasicIlluminaSequencer_class.md)
 
 ## Examples
 

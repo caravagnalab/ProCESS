@@ -1,16 +1,20 @@
 # Checking whether the node is a leaf
 
-This property is `TRUE` if and only if a leaf of the forest.
+This field is `TRUE` if and only if a leaf of the forest.
 
 ## Value
 
 `TRUE` if and only if the node is a leaf of the forest.
 
+## See also
+
+[`PhylogeneticForestNode`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForestNode.md)
+
 ## Examples
 
 ``` r
 # use a phylogenetic forest example
-forest <- ProCESS::example("PhylogeneticForest")
+forest <- example("PhylogeneticForest")
 
 # get the node corresponding to the cell whose identifier is 2
 node <- forest$get_node(2)

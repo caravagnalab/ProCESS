@@ -31,12 +31,12 @@ the stick.
 
 ## See also
 
-[`PhylogeneticForest$get_sticks()`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_sticks.md)
+[`SampleForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest.md)
 
 ## Examples
 
 ``` r
-# use a sample forest example
+# use a forest example
 forest <- example("SampleForest")
 
 # search for the forest sticks

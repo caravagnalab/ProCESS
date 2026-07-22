@@ -6,6 +6,10 @@ This property is the fragment sequence.
 
 The fragment sequence.
 
+## See also
+
+[`GenomeFragment`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeFragment.md)
+
 ## Examples
 
 ``` r

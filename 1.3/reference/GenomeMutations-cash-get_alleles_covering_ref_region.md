@@ -22,6 +22,10 @@ specified region of the reference genome
 A list of allele identifiers. Each identifier in the list corresponds to
 an allele containing the specified reference region.
 
+## See also
+
+[`GenomeMutations`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations.md)
+
 ## Examples
 
 ``` r

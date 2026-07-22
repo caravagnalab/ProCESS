@@ -14,12 +14,11 @@ This method simulates cell evolution until a formula does not hold.
 
 ## See also
 
-[`TissueSimulation()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation.md),
 [`TissueSimulation$var()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-var.md),
 [`TissueSimulation$run_up_to_time()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-run_up_to_time.md),
 [`TissueSimulation$run_up_to_event()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-run_up_to_event.md),
-and
-[`TissueSimulation$run_up_to_size()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-run_up_to_size.md).
+[`TissueSimulation$run_up_to_size()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-run_up_to_size.md),
+[`TissueSimulation`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation_class.md)
 
 ## Examples
 
@@ -76,11 +75,11 @@ c5
 # run the simulation while c5 does not hold
 sim$run_until(c5)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                       
 
 
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260719-003937 ──────────── ▣  [1000x1000]  ⏱ 40.1 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260722-101239 ────────────────────────────────────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 40.1 ──
 #> 
 #> ── Species: 2, with epigenetics 
 #>    

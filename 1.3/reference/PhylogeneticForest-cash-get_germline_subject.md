@@ -8,6 +8,11 @@ This method returns a data frame reporting the germline subject name
 
 The name of the subject whose germline is used.
 
+## See also
+
+[`PhylogeneticForest$get_sampled_cell_mutations()`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_sampled_cell_mutations.md),
+[`PhylogeneticForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest.md)
+
 ## Examples
 
 ``` r

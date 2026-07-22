@@ -6,6 +6,10 @@ This method returns the CNA length.
 
 The CNA length.
 
+## See also
+
+[`CNA`](https://caravagnalab.github.io/ProCESS/1.3/reference/CNA_class.md)
+
 ## Examples
 
 ``` r

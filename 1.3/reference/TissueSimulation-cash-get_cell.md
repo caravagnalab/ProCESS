@@ -19,6 +19,10 @@ A data frame reporting `cell_id`, `mutant`, `position_x`, and
 `position_y` of the aimed cell. If the simulation has epigenetic states,
 the data frame also contains the column `epistate`.
 
+## See also
+
+[`TissueSimulation`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation_class.md)
+
 ## Examples
 
 ``` r
@@ -37,7 +41,7 @@ sim$place_cell("A", 500, 500)
 # run the simulation up to time 70
 sim$run_up_to_time(70)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                       
 
 
 # collect a cell in the tissue

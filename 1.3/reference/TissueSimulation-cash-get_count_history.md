@@ -9,6 +9,10 @@ A data frame reporting `mutant`, `counts`, and `time` for each species,
 and for each sampled time. When the simulation has epigenetic states,
 the data frame also contains the column `epistate`.
 
+## See also
+
+[`TissueSimulation`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation_class.md)
+
 ## Examples
 
 ``` r
@@ -36,7 +40,7 @@ sim$history_delta <- 20
 # run the simulation up to time 70
 sim$run_up_to_time(70)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                       
 
 
 # get the history of species counts
@@ -78,7 +82,7 @@ sim$history_delta <- 30
 # run the simulation up to time 70
 sim$run_up_to_time(70)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot             
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                       
 
 
 # counts the number of cells per species

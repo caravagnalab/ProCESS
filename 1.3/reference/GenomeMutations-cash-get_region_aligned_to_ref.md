@@ -28,6 +28,10 @@ representing the fragment in the current genome that aligns on the
 region in chromosome `chromosome_name`, allele `allele` from position
 `from` and whose size is `size`.
 
+## See also
+
+[`GenomeMutations`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations.md)
+
 ## Examples
 
 ``` r

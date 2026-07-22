@@ -7,6 +7,10 @@ mutation.
 
 The reference sequence before the mutation.
 
+## See also
+
+[`Mutation`](https://caravagnalab.github.io/ProCESS/1.3/reference/Mutation_class.md)
+
 ## Examples
 
 ``` r

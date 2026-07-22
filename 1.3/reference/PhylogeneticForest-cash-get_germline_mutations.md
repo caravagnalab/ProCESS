@@ -16,6 +16,10 @@ the cells represented in the phylogenetic forest. The data frame also
 reports the allele in which the mutations occur to support double
 occurrences due to CNAs.
 
+## See also
+
+[`PhylogeneticForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest.md)
+
 ## Examples
 
 ``` r

@@ -1,7 +1,7 @@
 # Retrieving the samples' information
 
 This method retrieves information about the samples whose cells were
-used as leaves of the sample forest.
+used as leaves of the forest.
 
 ## Value
 
@@ -14,15 +14,14 @@ cells in the sample and in the bounding box, respectively.
 
 ## See also
 
-[`PhylogeneticForest$get_samples_info()`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_samples_info.md)
-for usage examples,
-[`TissueSimulation$sample_cells()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-sample_cells.md),
-[`TissueSimulation$get_samples_info()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-get_samples_info.md)
+[`TissueSimulation$get_samples_info()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-get_samples_info.md),
+[`PhylogeneticForest$get_samples_info()`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-get_samples_info.md),
+[`SampleForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest.md)
 
 ## Examples
 
 ``` r
-# use a sample forest example
+# use a forest example
 forest <- example("SampleForest")
 
 # get information about the samples whose cells

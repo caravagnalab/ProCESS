@@ -13,6 +13,10 @@ This method returns a data frame representing the SIDs in the genome.
 A data frame consisting of 7 columns: `chr`, `allele`, `from`, `ref`,
 `alt`, `cause`, and `nature`. Each row represent a SID.
 
+## See also
+
+[`GenomeMutations`](https://caravagnalab.github.io/ProCESS/1.3/reference/GenomeMutations.md)
+
 ## Examples
 
 ``` r
