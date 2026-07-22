@@ -1175,7 +1175,6 @@ RCPP_MODULE(Mutations)
 //'   itself. Moreover each leaf is also associated with the
 //'   genome mutations occurring in the corresponding cell.
 //'
-//'
 //'   The objects of this class are built by using
 //'   [MutationEngine] objects (see `[vignette("mutations")]`)
 //'   and provide the following methods and properties:
@@ -1219,6 +1218,9 @@ RCPP_MODULE(Mutations)
 //'     extracts a sub-forest for some of the samples.
 //'   - <code>[partition_samples()](PhylogeneticForest-cash-partition_samples.md)</code>
 //'     partitions the samples according to a labelling.
+//'   - <code>[represents_cell()](PhylogeneticForest-cash-represents_cell.md)</code>
+//'     tests whether a cell having a given identifier is represented by the
+//'     forest.
 //'   - <code>[save()](PhylogeneticForest-cash-save.md)</code>
 //'     saves the forest.
 //'   - <code>[set_reference_path()](PhylogeneticForest-cash-set_reference_path.md)</code>

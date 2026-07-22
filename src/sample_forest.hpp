@@ -44,6 +44,11 @@ class SampleForest : public CLONES::Mutants::DescendantForest
 
     SampleForest(const CLONES::Mutants::Evolutions::TissueSimulation &simulation);
 
+    inline bool represents_cell(const SEXP cell_id) const
+    {
+        return ForestCore::represents_cell(*this, cell_id);
+    }
+
     std::vector<const_node> get_roots() const;
 
     inline Rcpp::List get_nodes() const
@@ -53,6 +58,11 @@ class SampleForest : public CLONES::Mutants::DescendantForest
     }
 
     inline const_node get_node(const CLONES::Mutants::CellId &cell_id) const
+    {
+        return SampleForest::const_node(*this, cell_id);
+    }
+
+    inline const_node get_node(const SEXP cell_id) const
     {
         return SampleForest::const_node(*this, cell_id);
     }

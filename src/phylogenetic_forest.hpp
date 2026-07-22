@@ -90,6 +90,11 @@ class PhylogeneticForest : public CLONES::Mutations::PhylogeneticForest
 
     PhylogeneticForest();
 
+    inline bool represents_cell(const SEXP cell_id) const
+    {
+        return ForestCore::represents_cell(*this, cell_id);
+    }
+
     std::vector<const_node> get_roots() const;
 
     inline Rcpp::List get_nodes() const
@@ -99,6 +104,11 @@ class PhylogeneticForest : public CLONES::Mutations::PhylogeneticForest
     }
 
     inline const_node get_node(const CLONES::Mutants::CellId &cell_id) const
+    {
+        return PhylogeneticForest::const_node(*this, cell_id);
+    }
+
+    inline const_node get_node(const SEXP cell_id) const
     {
         return PhylogeneticForest::const_node(*this, cell_id);
     }

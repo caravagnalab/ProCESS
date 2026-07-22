@@ -32,10 +32,14 @@
 #include "utility.hpp"
 
 #define REGISTER_FOREST_COMMON_FIELD(ClassType)                                     \
+        .method("represents_cell", &ClassType::represents_cell,                     \
+                "Test whether the forest has a node representing a cell")           \
         .method("get_nodes",                                                        \
                 (Rcpp::List (ClassType::*)() const)(&ClassType::get_nodes),         \
                 "Get the nodes of the forest")                                      \
-        .method("get_node", &ClassType::get_node,                                   \
+        .method("get_node",                                                         \
+                 (ClassType::const_node (ClassType::*)(const SEXP) const)(          \
+                    &ClassType::get_node),                                          \
                 "Get node corresponding to a cell")                                 \
         .method("get_coalescent_cells",                                             \
                 (List (ClassType::*)(const std::list<CLONES::Mutants::CellId> &)    \
@@ -223,6 +227,27 @@ public:
             : const_node<FOREST>{&forest, cell_id}
         {}
 
+        const_node(const FOREST* forest, const SEXP cell_id)
+#if !defined(__clang__) && defined(__GNUC__)
+            requires CLONES::Mutations::isForest<FOREST>
+#endif
+            : forest{forest}
+        {
+            using CellId = CLONES::Mutants::CellId;
+
+            const auto C_cell_id = FromSEXP::get<CellId>(cell_id, "parameter `cell_id`",
+                                                         "an integer value");
+
+            node = typename FOREST::base_type::const_node(forest, C_cell_id);
+        }
+
+        const_node(const FOREST& forest, const SEXP cell_id)
+#if !defined(__clang__) && defined(__GNUC__)
+            requires CLONES::Mutations::isForest<FOREST>
+#endif
+            : const_node<FOREST>{&forest, cell_id}
+        {}
+
         const_node<FOREST> parent() const
         {
             if (is_root()) {
@@ -378,6 +403,18 @@ public:
         FOREST::base_type::const_node node;
         FOREST const* forest;
     };
+
+    inline static bool represents_cell(const CLONES::Mutants::DescendantForest& forest, const SEXP cell_id)
+    {
+        using CellId = CLONES::Mutants::CellId;
+
+        const auto C_cell_id = FromSEXP::get<CellId>(cell_id, "parameter `cell_id`",
+                                                     "an integer value");
+
+        const auto& cells = forest.get_cells();
+
+        return (cells.find(C_cell_id) != cells.end());
+    }
 
     template <typename CPP_FOREST>
     static Rcpp::List get_nodes(const CPP_FOREST &forest,

@@ -2194,6 +2194,9 @@ RCPP_MODULE(Mutants)
 //'     computes the forest sticks.
 //'   - <code>[get_subforest_for()](SampleForest-cash-get_subforest_for.md)</code>
 //'     extracts a sub-forest for some of the samples.
+//'   - <code>[represents_cell()](SampleForest-cash-represents_cell.md)</code>
+//'     tests whether a cell having a given identifier is represented by the
+//'     forest.
 //'   - <code>[save()](SampleForest-cash-save.md)</code>
 //'     saves the forest.
 //' @seealso <code>[PhylogeneticForest]</code>

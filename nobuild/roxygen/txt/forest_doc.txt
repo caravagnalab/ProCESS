@@ -21,6 +21,38 @@
 #'   <code>[${CLASS_TYPE}Node]</code>
 NULL
 
+#' @name ${CLASS_TYPE}$represents_cell
+#' @title Testing whether a cell is represented by a forest
+#' @description This method checks whether a cell is represented
+#'   by a forest.
+#' @details This method returns `TRUE` if and only if the forest
+#'   contains a node whose corresponding cell has the specified
+#'   identifier.
+#' @param cell_id The identifier of the cell whose presence in
+#'   the forest is tested.
+#' @return `TRUE` if and only if the the forest contains a node
+#'   whose corresponding cell identifier is `cell_id`.
+#' @examples
+#' # use a forest example
+#' forest <- example("${CLASS_TYPE}")
+#'
+#' # load dplyr to ease the code
+#' library(dplyr)
+#'
+#' # test whether the forest represents cell 2
+#' forest$contains_cell(2)
+#'
+#' get the node 2's information
+#' forest$get_nodes() %>% dplyr::filter(cell_id == 2)
+#'
+#' # test whether the forest represents cell 2e10
+#' forest$contains_cell(2e10)
+#'
+#' get the node 2e10's information
+#' forest$get_nodes() %>% dplyr::filter(cell_id == 2e10)
+#' @seealso <code>[${CLASS_TYPE}]</code>
+NULL
+
 #' @name ${CLASS_TYPE}$get_node
 #' @title Getting a node of the forest
 #' @description This method returns the node of the forest
