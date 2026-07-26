@@ -33,7 +33,7 @@
 
 #define REGISTER_FOREST_COMMON_FIELD(ClassType)                                     \
         .method("represents_cell", &ClassType::represents_cell,                     \
-                "Test whether the forest has a node representing a cell")           \
+                "Test whether one of the forest nodes represents a cell")           \
         .method("get_nodes",                                                        \
                 (Rcpp::List (ClassType::*)() const)(&ClassType::get_nodes),         \
                 "Get the nodes of the forest")                                      \
@@ -404,16 +404,53 @@ public:
         FOREST const* forest;
     };
 
-    inline static bool represents_cell(const CLONES::Mutants::DescendantForest& forest, const SEXP cell_id)
+    template <typename RCPP_VECTOR>
+      requires(std::is_same_v<Rcpp::NumericVector, RCPP_VECTOR> ||
+               std::is_same_v<Rcpp::IntegerVector, RCPP_VECTOR>)
+    inline static Rcpp::LogicalVector represents_cell(const CLONES::Mutants::DescendantForest& forest, const RCPP_VECTOR cell_ids)
     {
         using CellId = CLONES::Mutants::CellId;
 
-        const auto C_cell_id = FromSEXP::get<CellId>(cell_id, "parameter `cell_id`",
-                                                     "an integer value");
+        Rcpp::LogicalVector results(cell_ids.size());
 
-        const auto& cells = forest.get_cells();
+        for (size_t i = 0; i < cell_ids.size(); ++i) {
+            const auto value = static_cast<double>(cell_ids[i]);
 
-        return (cells.find(C_cell_id) != cells.end());
+            if (std::trunc(value) != value) {
+                Rcpp::stop("Expecting a cell identifier; got "
+                           + std::to_string(value) + ".");
+            }
+
+            const auto C_cell_id = static_cast<CellId>(value);
+
+            const auto& cells = forest.get_cells();
+
+            results[i] = (cells.find(C_cell_id) != cells.end());
+        }
+
+        return results;
+    }
+
+    inline static Rcpp::LogicalVector represents_cell(const CLONES::Mutants::DescendantForest& forest, const SEXP cell_ids)
+    {
+        SEXPTYPE type = TYPEOF(cell_ids);
+
+        if (!Rf_isFactor(cell_ids)) {
+            using namespace Rcpp;
+            if (type == REALSXP) {
+                NumericVector n_vector = as<NumericVector>(cell_ids);
+                
+                return represents_cell(forest, n_vector);
+            }
+
+            if (type == INTSXP) {
+                IntegerVector i_vector = as<IntegerVector>(cell_ids);
+                
+                return represents_cell(forest, i_vector);
+            }
+        }
+
+        Rcpp::stop("The parameter `cell_ids` must be an integer vector.");
     }
 
     template <typename CPP_FOREST>

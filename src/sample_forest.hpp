@@ -44,9 +44,9 @@ class SampleForest : public CLONES::Mutants::DescendantForest
 
     SampleForest(const CLONES::Mutants::Evolutions::TissueSimulation &simulation);
 
-    inline bool represents_cell(const SEXP cell_id) const
+    inline Rcpp::LogicalVector represents_cell(const SEXP cell_ids) const
     {
-        return ForestCore::represents_cell(*this, cell_id);
+        return ForestCore::represents_cell(*this, cell_ids);
     }
 
     std::vector<const_node> get_roots() const;
