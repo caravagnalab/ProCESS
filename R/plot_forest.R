@@ -20,7 +20,7 @@
 #' @description
 #' Plot a sample forest. This plot is carried out using
 #' `ggraph` and for simplicity of visualisation the forest is plot as a
-#' set of trees connected to a generic wildtype cell.
+#' set of trees connected to a generic wild-type cell.
 #'
 #' @param forest The sample forest to be plot.
 #' @param highlight_sample If a sample name, the path from root to the sampled
@@ -28,9 +28,15 @@
 #'   highlighted.
 #' @param color_map A named vector representing the simulation species color
 #'   map (optional).
+#' @param alpha_function A function whose input is the data frame
+#'   returned by <code>[SampleForest$get_cells()]</code> or
+#'   <code>[PhylogeneticForest$get_cells()]</code> and returns
+#'   a real vector whose values are in the interval \eqn{[0,1]} and whose
+#'   length is the number of rows in the input data frame. Each value in the
+#'   output is used as alpha level of the corresponding cell. When the
+#'   parameter is set to `NULL`, all tumour simulation cells have alpha
+#'   level `1` (default: `NULL`).
 #' @return A `ggraph` tree plot.
-#' @export
-#'
 #' @examples
 #' # use a sample forest example
 #' forest <- example("SampleForest")
@@ -42,13 +48,37 @@
 #' color_map <- c("#7FC97F", "#BEAED4", "#FDC086", "#FFFF99")
 #'
 #' plot_forest(forest, color_map = color_map)
-plot_forest <- function(forest, highlight_sample = NULL, color_map = NULL) {
+#'
+#' # define an alpha function that hide the nodes representing cells
+#' # whose birth times are greater than 400
+#' library(dplyr)
+#'
+#' alpha_f <- function(nodes) {
+#'    nodes %>%
+#'      dplyr::mutate(alpha = dplyr::case_when(birth_time <= 400 ~ 1,
+#'                                             TRUE ~ 0)) %>%
+#'      dplyr::pull(alpha)
+#' }
+#'
+#' plot_forest(forest, alpha_function = alpha_f)
+#' @export
+#'
+plot_forest <- function(forest, highlight_sample = NULL, color_map = NULL,
+                        alpha_function = NULL) {
   if (!inherits(forest, "Rcpp_SampleForest")
-        && !inherits(forest, "Rcpp_PhylogeneticForest")) {
+      && !inherits(forest, "Rcpp_PhylogeneticForest")) {
     stop("The parameter \"forest\" is not a ProCESS forest.")
   }
 
   forest_data <- forest$get_nodes()
+
+  if (is.null(alpha_function)) {
+    forest_data <- forest_data %>%
+      dplyr::mutate(alpha_level = 1)
+  } else {
+    forest_data <- forest_data %>%
+      dplyr::mutate(alpha_level = alpha_function(.))
+  }
 
   if (nrow(forest_data) == 0) {
     warning("The forest does not contain any node")
@@ -62,7 +92,8 @@ plot_forest <- function(forest, highlight_sample = NULL, color_map = NULL) {
       ) %>%
       add_species_col() %>%
       dplyr::select(.data$from, .data$to, .data$species,
-                    .data$sample, .data$birth_time)
+                    .data$sample, .data$birth_time,
+                    .data$alpha_level)
 
     first_cell <- forest_data %>%
       dplyr::filter(.data$birth_time == 0)
@@ -99,6 +130,10 @@ plot_forest <- function(forest, highlight_sample = NULL, color_map = NULL) {
         by = "name"
       )
 
+    graph <- graph %>%
+      tidygraph::activate("edges") %>%
+      dplyr::mutate(edge_alpha = tidygraph::.N()$alpha_level[to])
+
     # Define the layout with the tree rooted and the root on top
     layout <- ggraph::create_layout(graph, layout = "tree", root = "WT")
 
@@ -124,14 +159,17 @@ plot_forest <- function(forest, highlight_sample = NULL, color_map = NULL) {
       ggraph::geom_edge_link(edge_width = .1,
                              ggplot2::aes(edge_color = ifelse(highlight,
                                                               "indianred3",
-                                                              "black")))
+                                                              "black"),
+                                          alpha = .data$edge_alpha))
 
     graph_plot +
       ggraph::geom_node_point(ggplot2::aes(color = .data$species,
                                            shape = ifelse(is.na(.data$sample),
                                                           "N/A",
                                                           .data$sample),
+                                           alpha = .data$alpha_level,
                                            size = .data$sample)) +
+      ggplot2::scale_alpha_identity() +
       ggplot2::scale_shape_manual(values = c(0:nsamples + 1)) +
       ggplot2::scale_color_manual(values = color_map) +
       ggplot2::theme_minimal() +
