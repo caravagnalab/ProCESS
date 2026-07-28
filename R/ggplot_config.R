@@ -44,11 +44,11 @@ get_colors_for <- function(values, pal_name = "Dark2",
 }
 
 get_mutant_colors <- function(mutants, pal_name = "Dark2",
-                              max_mutants = 3) {
+                              min_mutants = 3) {
 
   if (is.null(.pkg_env$mutant_color_map)) {
-    max_mutants <- max(max_mutants, length(mutants))
-    .pkg_env$mutant_color_map <- RColorBrewer::brewer.pal(max_mutants, pal_name)
+    min_mutants <- max(min_mutants, length(mutants))
+    .pkg_env$mutant_color_map <- RColorBrewer::brewer.pal(min_mutants, pal_name)
   } else {
     if (length(mutants) > length(.pkg_env$mutant_color_map)) {
       warning(paste0("The number of mutants changed since",
@@ -120,21 +120,56 @@ get_epistate_shade_map <- function(epistates, min_light_value = 0.3) {
   .pkg_env$epistate_shade_map
 }
 
-get_species_colors <- function(data, pal_name = "Dark2",
-                               max_mutants = 4) {
-  if (inherits(data, "Rcpp_TissueSimulation")) {
-    data <- data$get_counts() %>%
+#' Get species color maps
+#'
+#' @description
+#' This function returns a species color map
+#' @details
+#' This function returns a color maps for the species represented
+#' in a tissue, in a forest, or in a data frame containing
+#' mutants and, possible, epigenetic states.
+#' @param object The tissue simulation, the forest, or the data
+#'   frame whose species color map is required.
+#' @param pal_name The `RColorBrewer` palette name used to generate
+#'   the species color map (default: `Dark2`).
+#' @param min_mutants The minimum number of colors generated.
+#' @return A named list whose name are the names of the species
+#'   in `object` and whose values are the associated colors.
+#' @examples
+#' # get an example of `SampleForest` object
+#' forest <- example("SampleForest")
+#'
+#' # get the species info
+#' forest$get_species_info()
+#'
+#' # get the color map for the forest species
+#' get_species_colors(forest)
+#' @export
+#'
+get_species_colors <- function(object, pal_name = "Dark2",
+                               min_mutants = 4) {
+  if (inherits(object, "Rcpp_TissueSimulation")) {
+    data <- object$get_counts() %>%
       dplyr::select(-.data$counts, -.data$overall)
-  } else if (inherits(data, "Rcpp_SampleForest")
-             ||inherits(data, "Rcpp_PhylogeneticForest")) {
-    data <- data$get_species_info()
+  } else if (inherits(object, "Rcpp_SampleForest")
+             ||inherits(object, "Rcpp_PhylogeneticForest")) {
+    data <- object$get_species_info()
+  } else {
+    if (!is.data.frame(object)) {
+      stop(paste("The 1st parameter must be a `TissueSimulation`, a",
+                 "forest, or a data frame."))
+    }
+    if (!"mutant" %in% names(object)) {
+      stop("The 1st parameter does not contain the column \"mutant\".")
+    }
+    data <- object
   }
 
   mutants <- data %>%
     dplyr::pull(.data$mutant) %>% unique()
 
   mutant_color_map <- get_mutant_colors(mutants, pal_name = pal_name,
-                                        max_mutants = max_mutants)
+                                        min_mutants = min_mutants)
 
   if ("epistate" %in% colnames(data)) {
 

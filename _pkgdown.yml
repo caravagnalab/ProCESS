@@ -45,6 +45,7 @@ reference:
   contents:
   - annotate_forest
   - bbox_sampler
+  - get_species_colors
   - get_node_tour
   - load_sample_forest
   - load_forest
