@@ -31,6 +31,10 @@ The objects of this class provide the following methods and properties:
 - [`get_subforest_for()`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest-cash-get_subforest_for.md)
   extracts a sub-forest for some of the samples.
 
+- [`represents_cell()`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest-cash-represents_cell.md)
+  tests whether a cell having a given identifier is represented by the
+  forest.
+
 - [`save()`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest-cash-save.md)
   saves the forest.
 

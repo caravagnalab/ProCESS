@@ -33,78 +33,7 @@ can be called by specifying the name of the setup directory, the path or
 URL of the reference sequence, the signature files, the driver mutation
 file, the passenger CNAs file, and the germline data directory.
 
-``` r
-
-library("ProCESS")
-#> 
-#> Attaching package: 'ProCESS'
-#> The following object is masked from 'package:utils':
-#> 
-#>     example
-
-reference_url <- paste0("https://ftp.ensembl.org/pub/grch37/release-111/",
-                        "fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.",
-                        "dna.chromosome.22.fa.gz")
-
-sbs_url <- paste0("https://zenodo.org/records/15875185/files/",
-                  "SBS_demo_signatures.txt")
-
-indel_url <- paste0("https://zenodo.org/records/15875185/files/",
-                    "indel_demo_signatures.txt")
-
-drivers_url <- paste0("https://zenodo.org/records/15875185/files/",
-                      "driver_mutations_hg19.csv.bz2")
-
-passenger_cnas_url <- paste0("https://zenodo.org/records/15875185/files/",
-                             "passenger_CNAs_hg19.csv.bz2")
-
-germline_url <- paste0("https://zenodo.org/records/15875185/files/",
-                       "germline_data_demo.tar.bz2")
-
-# build a mutation engine and place all the files in the directory "Test"
-m_engine <- MutationEngine(directory = "Test",
-                           reference_src = reference_url,
-                           SBS_signatures_src = sbs_url,
-                           indel_signatures_src = indel_url,
-                           drivers_src = drivers_url,
-                           passenger_CNAs_src = passenger_cnas_url,
-                           germline_src = germline_url)
-#> Downloading reference genome...
-#> Reference genome downloaded
-#> Decompressing reference genome...done
-#> Downloading signature files...
-#> Signature file downloaded
-#> Downloading driver mutation file...
-#> Driver mutation file downloaded
-#> Decompressing driver mutation file...done
-#> Downloading passenger CNAs file...
-#> Passenger CNAs file downloaded
-#> Decompressing passenger CNAs file...done
-#> Downloading germline...
-#> Germline downloaded
-#> Decompressing mutations...
-#> done
-#> Building context index...
-#>  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█████████████████-----------------------] 40% [00m:00s] Processing chr. 22 [█████████████████████████████████-------] 81% [00m:02s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:02s] Context index built
-#>  [█---------------------------------------] 0% [00m:00s] Saving context index [████████████████████████████████████████] 100% [00m:00s] Context index saved
-#> done
-#> Building repeated sequence index...
-#>  [█---------------------------------------] 0% [00m:00s] Reading 22 [████████████████████████████████████████] 100% [00m:01s] Reading 22
-#>  [████████████████████████████████████████] 100% [00m:01s] Reading 22
-#>  [████████████████████████████████████████] 100% [00m:01s] Reading 22
-#>  [████████████████████████████████████████] 100% [00m:01s] Reading 22
-#>  [████████████████████████████████████████] 100% [00m:01s] Reading 22
-#>  [████████████████████████████████████████] 100% [00m:01s] Reading 22
-#>  [████████████████████████████████████████] 100% [00m:01s] Reading 22
-#>  [████████████████████████████████████████] 100% [00m:01s] RS index built
-#>  [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:01s] Saving RS index [█████-----------------------------------] 12% [00m:02s] Saving RS index [█████████████████████████████████████---] 91% [00m:03s] Saving RS indexdone
-#>  [████████████████████████████████████████] 100% [00m:03s] RS index saved
-#>  [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded
-#>  [█---------------------------------------] 0% [00m:00s] Saving germline [████████████████████████████████████████] 100% [00m:00s] Germline saved
-
-dir.exists("Test")
-#> [1] TRUE
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`"ProCESS"`](https://caravagnalab.github.io/ProCESS/1.3)`)`` ``#> `` ``#> Attaching package: 'ProCESS'`` ``#> The following object is masked from 'package:utils':`` ``#> `` ``#> example`` `` ``reference_url`` ``<-`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(``"https://ftp.ensembl.org/pub/grch37/release-111/"``,`` `` ``"fasta/homo_sapiens/dna/Homo_sapiens.GRCh37."``,`` `` ``"dna.chromosome.22.fa.gz"``)`` `` ``sbs_url`` ``<-`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(``"https://zenodo.org/records/15875185/files/"``,`` `` ``"SBS_demo_signatures.txt"``)`` `` ``indel_url`` ``<-`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(``"https://zenodo.org/records/15875185/files/"``,`` `` ``"indel_demo_signatures.txt"``)`` `` ``drivers_url`` ``<-`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(``"https://zenodo.org/records/15875185/files/"``,`` `` ``"driver_mutations_hg19.csv.bz2"``)`` `` ``passenger_cnas_url`` ``<-`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(``"https://zenodo.org/records/15875185/files/"``,`` `` ``"passenger_CNAs_hg19.csv.bz2"``)`` `` ``germline_url`` ``<-`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(``"https://zenodo.org/records/15875185/files/"``,`` `` ``"germline_data_demo.tar.bz2"``)`` `` ``# build a mutation engine and place all the files in the directory "Test"`` ``m_engine`` ``<-`` `[`MutationEngine`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine.md)`(``directory ``=`` ``"Test"``,`` `` reference_src ``=`` ``reference_url``,`` `` SBS_signatures_src ``=`` ``sbs_url``,`` `` indel_signatures_src ``=`` ``indel_url``,`` `` drivers_src ``=`` ``drivers_url``,`` `` passenger_CNAs_src ``=`` ``passenger_cnas_url``,`` `` germline_src ``=`` ``germline_url``)`` ``#> Downloading reference genome...`` ``#> Reference genome downloaded`` ``#> Decompressing reference genome...done`` ``#> Downloading signature files...`` ``#> Signature file downloaded`` ``#> Downloading driver mutation file...`` ``#> Driver mutation file downloaded`` ``#> Decompressing driver mutation file...done`` ``#> Downloading passenger CNAs file...`` ``#> Passenger CNAs file downloaded`` ``#> Decompressing passenger CNAs file...done`` ``#> Downloading germline...`` ``#> Germline downloaded`` ``#> Decompressing mutations...`` ``#> done`` ``#> Building context index...`` ``#> [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█████████████████-----------------------] 40% [00m:00s] Processing chr. 22 [█████████████████████████████████-------] 81% [00m:02s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:02s] Context index built`` ``#> [█---------------------------------------] 0% [00m:00s] Saving context index [████████████████████████████████████████] 100% [00m:00s] Context index saved`` ``#> done`` ``#> Building repeated sequence index...`` ``#> [█---------------------------------------] 0% [00m:00s] Reading 22 [████████████████████████████████████████] 100% [00m:01s] Reading 22`` ``#> [████████████████████████████████████████] 100% [00m:01s] Reading 22`` ``#> [████████████████████████████████████████] 100% [00m:01s] Reading 22`` ``#> [████████████████████████████████████████] 100% [00m:01s] Reading 22`` ``#> [████████████████████████████████████████] 100% [00m:01s] Reading 22`` ``#> [████████████████████████████████████████] 100% [00m:01s] Reading 22`` ``#> [████████████████████████████████████████] 100% [00m:01s] Reading 22`` ``#> [████████████████████████████████████████] 100% [00m:01s] RS index built`` ``#> [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:00s] Saving RS index [█████████████████████-------------------] 51% [00m:02s] Saving RS indexdone`` ``#> [████████████████████████████████████████] 100% [00m:02s] RS index saved`` ``#> [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded`` ``#> [█---------------------------------------] 0% [00m:00s] Saving germline [████████████████████████████████████████] 100% [00m:00s] Germline saved`` `` `[`dir.exists`](https://rdrr.io/r/base/files2.html)`(``"Test"``)`` ``#> [1] TRUE`
 
 ### The Context Index
 
@@ -132,73 +61,17 @@ but it can be specified during the
 [`MutationEngine()`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine.md)
 call.
 
-``` r
-
-m_engine <- MutationEngine(setup_code = "demo")
-#> Downloading reference genome...
-#> Reference genome downloaded
-#> Decompressing reference genome...done
-#> Downloading signature files...
-#> Signature file downloaded
-#> Downloading driver mutation file...
-#> Driver mutation file downloaded
-#> Decompressing driver mutation file...done
-#> Downloading passenger CNAs file...
-#> Passenger CNAs file downloaded
-#> Decompressing passenger CNAs file...done
-#> Downloading germline...
-#> Germline downloaded
-#> Decompressing mutations...
-#> done
-#> Building context index...
-#>  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█████████████████-----------------------] 40% [00m:00s] Processing chr. 22 [██████████████████████████████----------] 73% [00m:02s] Processing chr. 22 [████████████████████████████████████████] 98% [00m:03s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:03s] Context index built
-#>  [█---------------------------------------] 0% [00m:00s] Saving context index [████████████████████████████████████████] 100% [00m:00s] Context index saved
-#> done
-#> Building repeated sequence index...
-#>  [█---------------------------------------] 0% [00m:00s] Reading 22 [████████████████████████████████████████] 100% [00m:01s] Reading 22
-#>  [████████████████████████████████████████] 100% [00m:01s] Reading 22
-#>  [████████████████████████████████████████] 100% [00m:01s] Reading 22
-#>  [████████████████████████████████████████] 100% [00m:01s] Reading 22
-#>  [████████████████████████████████████████] 100% [00m:01s] Reading 22
-#>  [████████████████████████████████████████] 100% [00m:01s] Reading 22
-#>  [████████████████████████████████████████] 100% [00m:01s] Reading 22
-#>  [████████████████████████████████████████] 100% [00m:01s] RS index built
-#>  [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:01s] Saving RS index [███████████████████---------------------] 46% [00m:02s] Saving RS indexdone
-#>  [████████████████████████████████████████] 100% [00m:02s] RS index saved
-#>  [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded
-#>  [█---------------------------------------] 0% [00m:00s] Saving germline [████████████████████████████████████████] 100% [00m:00s] Germline saved
-
-# get the size of the context index when `context_sampling` is 100
-utils:::format.object_size(file.size("demo/context_index_100.cif"),
-                           standard = "auto")
-#> [1] "NA bytes"
-```
+`m_engine`` ``<-`` `[`MutationEngine`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine.md)`(``setup_code ``=`` ``"demo"``)`` ``#> Downloading reference genome...`` ``#> Reference genome downloaded`` ``#> Decompressing reference genome...done`` ``#> Downloading signature files...`` ``#> Signature file downloaded`` ``#> Downloading driver mutation file...`` ``#> Driver mutation file downloaded`` ``#> Decompressing driver mutation file...done`` ``#> Downloading passenger CNAs file...`` ``#> Passenger CNAs file downloaded`` ``#> Decompressing passenger CNAs file...done`` ``#> Downloading germline...`` ``#> Germline downloaded`` ``#> Decompressing mutations...`` ``#> done`` ``#> Building context index...`` ``#> [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█████████████████-----------------------] 40% [00m:00s] Processing chr. 22 [█████████████████████████████████-------] 81% [00m:02s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:02s] Context index built`` ``#> [█---------------------------------------] 0% [00m:00s] Saving context index [████████████████████████████████████████] 100% [00m:00s] Context index saved`` ``#> done`` ``#> Building repeated sequence index...`` ``#> [█---------------------------------------] 0% [00m:00s] Reading 22 [████████████████████████████████████████] 100% [00m:01s] Reading 22`` ``#> [████████████████████████████████████████] 100% [00m:01s] Reading 22`` ``#> [████████████████████████████████████████] 100% [00m:01s] Reading 22`` ``#> [████████████████████████████████████████] 100% [00m:01s] Reading 22`` ``#> [████████████████████████████████████████] 100% [00m:01s] Reading 22`` ``#> [████████████████████████████████████████] 100% [00m:01s] Reading 22`` ``#> [████████████████████████████████████████] 100% [00m:01s] Reading 22`` ``#> [████████████████████████████████████████] 100% [00m:01s] RS index built`` ``#> [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:00s] Saving RS index [███████████████████---------------------] 45% [00m:02s] Saving RS indexdone`` ``#> [████████████████████████████████████████] 100% [00m:02s] RS index saved`` ``#> [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded`` ``#> [█---------------------------------------] 0% [00m:00s] Saving germline [████████████████████████████████████████] 100% [00m:00s] Germline saved`` `` ``` # get the size of the context index when `context_sampling` is 100 ``` ``utils``:::`[`format.object_size`](https://rdrr.io/r/utils/object.size.html)`(`[`file.size`](https://rdrr.io/r/base/file.info.html)`(``"demo/context_index_100.cif"``)``,`` `` standard ``=`` ``"auto"``)`` ``#> [1] "NA bytes"`
 
 Let us rebuild the context index, sampling one context every 50.
 
-``` r
-
-# building a mutation engine by using the "demo" set-up configuration
-# and setting context_sampling to 50
-m_engine <- MutationEngine(setup_code = "demo", context_sampling = 50)
-#> Building context index...
-#>  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█████████████---------------------------] 32% [00m:00s] Processing chr. 22 [███████████████████████████-------------] 65% [00m:01s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:03s] Context index built
-#>  [█---------------------------------------] 0% [00m:00s] Saving context index [████████████████████████████████████████] 100% [00m:00s] Context index saved
-#> done
-#>  [█---------------------------------------] 0% [00m:00s] Loading RS index [██████████------------------------------] 23% [00m:01s] Loading RS index [██████████████████████------------------] 52% [00m:02s] Loading RS index [███████████████████████████████---------] 77% [00m:03s] Loading RS index [████████████████████████████████████████] 100% [00m:03s] RS index loaded
-#>  [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded
-```
+`# building a mutation engine by using the "demo" set-up configuration`` ``# and setting context_sampling to 50`` ``m_engine`` ``<-`` `[`MutationEngine`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine.md)`(``setup_code ``=`` ``"demo"``, context_sampling ``=`` ``50``)`` ``#> Building context index...`` ``#> [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█████████████████-----------------------] 40% [00m:00s] Processing chr. 22 [█████████████████████████████████-------] 81% [00m:02s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:02s] Context index built`` ``#> [█---------------------------------------] 0% [00m:00s] Saving context index [████████████████████████████████████████] 100% [00m:00s] Context index saved`` ``#> done`` ``#> [█---------------------------------------] 0% [00m:00s] Loading RS index [█████████████---------------------------] 31% [00m:01s] Loading RS index [█████████████████████████---------------] 62% [00m:02s] Loading RS index [█████████████████████████████████████---] 92% [00m:03s] Loading RS index [████████████████████████████████████████] 100% [00m:03s] RS index loaded`` ``#> [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded`
 
 The above call uses the already downloaded data in the directory
 `"demo"` to build the context and produces the file
 `"demo/context_index_50.cif"`.
 
-``` r
-
-# get the size of the context index when `context_sampling` is 50
-utils:::format.object_size(file.size("demo/context_index_50.cif"), "auto")
-#> [1] "2.7 Mb"
-```
+`` # get the size of the context index when `context_sampling` is 50 ``` ``utils``:::`[`format.object_size`](https://rdrr.io/r/utils/object.size.html)`(`[`file.size`](https://rdrr.io/r/base/file.info.html)`(``"demo/context_index_50.cif"``)``, ``"auto"``)`` ``#> [1] "2.7 Mb"`
 
 ### The Repeated Sequence Index
 
@@ -222,48 +95,17 @@ However, their values can be specified during the
 [`MutationEngine()`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine.md)
 call.
 
-``` r
-
-# get the size of the repeated index when the default parameter values
-# are used
-utils:::format.object_size(file.size("demo/rs_index_50_500000.rsif"), "auto")
-#> [1] "212.5 Mb"
-```
+`# get the size of the repeated index when the default parameter values`` ``# are used`` ``utils``:::`[`format.object_size`](https://rdrr.io/r/utils/object.size.html)`(`[`file.size`](https://rdrr.io/r/base/file.info.html)`(``"demo/rs_index_50_500000.rsif"``)``, ``"auto"``)`` ``#> [1] "212.5 Mb"`
 
 Let us rebuild the context index, sampling one context every 50.
 
-``` r
-
-# building a mutation engine by using the "demo" set-up configuration
-# and setting max_repetition_storage to 10M
-m_engine <- MutationEngine(setup_code = "demo",
-                           max_repetition_storage = 1e7)
-#>  [█---------------------------------------] 0% [00m:00s] Loading context index [████████████████████████████████████████] 100% [00m:00s] Context index loaded
-#> Building repeated sequence index...
-#>  [█---------------------------------------] 0% [00m:00s] Reading 22 [████████████████████████████████████████] 100% [00m:01s] Reading 22
-#>  [████████████████████████████████████████] 100% [00m:01s] Reading 22
-#>  [████████████████████████████████████████] 100% [00m:01s] Reading 22
-#>  [████████████████████████████████████████] 100% [00m:01s] Reading 22
-#>  [████████████████████████████████████████] 100% [00m:01s] Reading 22
-#>  [████████████████████████████████████████] 100% [00m:01s] Reading 22
-#>  [████████████████████████████████████████] 100% [00m:01s] Reading 22
-#>  [████████████████████████████████████████] 100% [00m:01s] RS index built
-#>  [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:01s] Saving RS index [█---------------------------------------] 0% [00m:02s] Saving RS index [█---------------------------------------] 0% [00m:03s] Saving RS index [█---------------------------------------] 0% [00m:03s] Saving RS index [█---------------------------------------] 0% [00m:04s] Saving RS index [█---------------------------------------] 1% [00m:06s] Saving RS index [███████████-----------------------------] 26% [00m:07s] Saving RS index [████████████████████--------------------] 49% [00m:08s] Saving RS index [█████████████████████████████-----------] 70% [00m:09s] Saving RS index [█████████████████████████████████████---] 90% [00m:10s] Saving RS indexdone
-#>  [████████████████████████████████████████] 100% [00m:10s] RS index saved
-#>  [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded
-```
+`# building a mutation engine by using the "demo" set-up configuration`` ``# and setting max_repetition_storage to 10M`` ``m_engine`` ``<-`` `[`MutationEngine`](https://caravagnalab.github.io/ProCESS/1.3/reference/MutationEngine.md)`(``setup_code ``=`` ``"demo"``,`` `` max_repetition_storage ``=`` ``1e7``)`` ``#> [█---------------------------------------] 0% [00m:00s] Loading context index [████████████████████████████████████████] 100% [00m:00s] Context index loaded`` ``#> Building repeated sequence index...`` ``#> [█---------------------------------------] 0% [00m:00s] Reading 22 [████████████████████████████████████████] 100% [00m:01s] Reading 22`` ``#> [████████████████████████████████████████] 100% [00m:01s] Reading 22`` ``#> [████████████████████████████████████████] 100% [00m:01s] Reading 22`` ``#> [████████████████████████████████████████] 100% [00m:01s] Reading 22`` ``#> [████████████████████████████████████████] 100% [00m:01s] Reading 22`` ``#> [████████████████████████████████████████] 100% [00m:01s] Reading 22`` ``#> [████████████████████████████████████████] 100% [00m:01s] Reading 22`` ``#> [████████████████████████████████████████] 100% [00m:01s] RS index built`` ``#> [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:00s] Saving RS index [█---------------------------------------] 0% [00m:01s] Saving RS index [█---------------------------------------] 0% [00m:02s] Saving RS index [█---------------------------------------] 0% [00m:03s] Saving RS index [█---------------------------------------] 0% [00m:04s] Saving RS index [█████-----------------------------------] 12% [00m:06s] Saving RS index [████████████████------------------------] 38% [00m:07s] Saving RS index [██████████████████████████--------------] 63% [00m:08s] Saving RS index [███████████████████████████████████-----] 87% [00m:09s] Saving RS indexdone`` ``#> [████████████████████████████████████████] 100% [00m:09s] RS index saved`` ``#> [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded`
 
 The above call uses the already downloaded data in the directory
 `"demo"` to build the repeated sequence index and produces the file
 `"demo/rs_index_50_10000000.rsif"`.
 
-``` r
-
-# get the size of the context index when `context_sampling` is 50
-utils:::format.object_size(file.size("demo/rs_index_50_10000000.rsif"),
-                           "auto")
-#> [1] "732.1 Mb"
-```
+`` # get the size of the context index when `context_sampling` is 50 ``` ``utils``:::`[`format.object_size`](https://rdrr.io/r/utils/object.size.html)`(`[`file.size`](https://rdrr.io/r/base/file.info.html)`(``"demo/rs_index_50_10000000.rsif"``)``,`` `` ``"auto"``)`` ``#> [1] "732.1 Mb"`
 
 Alexandrov, Ludmil B, Jaegil Kim, Nicholas J Haradhvala, et al. 2020.
 “The Repertoire of Mutational Signatures in Human Cancer.” *Nature* 578

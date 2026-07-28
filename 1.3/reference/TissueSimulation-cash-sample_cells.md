@@ -50,9 +50,9 @@ sim$place_cell("A", 500, 500)
 # simulate the tissue until "A" consists of 50000 cells
 sim$run_up_to_size("A", 50000)
 #> 
- [███████████████████████████████████████-] 95% [00m:00s] Cells: 47752                                                                                                           
+ [███████████████████████████████████████-] 97% [00m:00s] Cells: 48681                                                                        
 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                       
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    
 
 
 # randomly sample 50 tumour cells from the tissue
@@ -69,7 +69,7 @@ sim$sample_cells(sample_name = "S3",
 
 sim$get_samples_info()
 #>   name  id xmin ymin xmax ymax tumour_cells tumour_cells_in_bbox     time
-#> 1   S1 339    0    0  999  999           50                50000 294.3848
-#> 2   S2 340  450  475  500  550         3849                 3849 294.3848
-#> 3   S3 341  500  500  550  550           50                 2534 294.3848
+#> 1   S1 347    0    0  999  999           50                50000 294.3848
+#> 2   S2 348  450  475  500  550         3849                 3849 294.3848
+#> 3   S3 349  500  500  550  550           50                 2534 294.3848
 ```

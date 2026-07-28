@@ -54,12 +54,19 @@
 - [Iterating over Forest
   Nodes](https://caravagnalab.github.io/ProCESS/1.3/articles/node_tour.md):
 
-  How to label forest nodes
+  How to iterate over forest node
 
 - [Time Series
   Analysis](https://caravagnalab.github.io/ProCESS/1.3/articles/time_series.md):
 
   Analyse the evolution of the system over time
+
+### Graphical representations
+
+- [Producing evolution
+  videos](https://caravagnalab.github.io/ProCESS/1.3/articles/videos.md):
+
+  How to produce a video showing tumour evolution
 
 ### Tests and Examples
 

@@ -1,14 +1,6 @@
 # SCOUT
 
-``` r
-
-library(ProCESS)
-#> 
-#> Attaching package: 'ProCESS'
-#> The following object is masked from 'package:utils':
-#> 
-#>     example
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`ProCESS`](https://caravagnalab.github.io/ProCESS/1.3)`)`` ``#> `` ``#> Attaching package: 'ProCESS'`` ``#> The following object is masked from 'package:utils':`` ``#> `` ``#> example`
 
 The Simulated Cohort of Universal Tumours (SCOUT) is a ProCESS-generated
 cohort, containing prototypical tumours with matched sequencing data. As

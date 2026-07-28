@@ -140,14 +140,6 @@ df_rates[["first.child.epistate"]] <- c("E1", NA, "E2")
 
 # load dplyr to simplify the next part of the example
 library(dplyr)
-#> 
-#> Attaching package: ‘dplyr’
-#> The following objects are masked from ‘package:stats’:
-#> 
-#>     filter, lag
-#> The following objects are masked from ‘package:base’:
-#> 
-#>     intersect, setdiff, setequal, union
 
 # we also may set some switch rates
 df_rates <- df_rates %>%

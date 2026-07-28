@@ -97,6 +97,9 @@ This class provides the following methods and properties:
 - [`get_samples_info()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-get_samples_info.md)
   returns information about the collected samples.
 
+- [`get_snapshot_info()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-get_snapshot_info.md)
+  returns information about the collected snapshots.
+
 - [`get_tissue_size()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-get_tissue_size.md)
   returns the size of the simulated tissue.
 
@@ -142,6 +145,9 @@ This class provides the following methods and properties:
 
 - [`set_rates()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-set_rates.md)
   sets the rates of multiple events.
+
+- [`snapshot_trigger`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-snapshot_trigger.md)
+  exposes the tissue simulation snapshot triggers.
 
 - [`var()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-var.md)
   builds a simulation variable.

@@ -26,10 +26,7 @@ In order to install the development version of `ProCESS`, you need:
 
 When the requirements have been satisfied, issue the R command:
 
-``` r
-
-pak::pak("caravagnalab/ProCESS@1.3")
-```
+`pak``::`[`pak`](https://pak.r-lib.org/reference/pak.html)`(``"caravagnalab/ProCESS@1.3"``)`
 
 ------------------------------------------------------------------------
 
@@ -37,10 +34,7 @@ pak::pak("caravagnalab/ProCESS@1.3")
 
 Once `ProCESS` has been install, it can be loaded as follows.
 
-``` r
-
-library(ProCESS)
-```
+[`library`](https://rdrr.io/r/base/library.html)`(`[`ProCESS`](https://caravagnalab.github.io/ProCESS/1.3)`)`
 
 Then, we can define a tissue model with 2 epigenetic states, `E1` and
 `E2`, and 2 mutants, `A` and `B`, and let the model evolve until the
@@ -86,17 +80,7 @@ plot_tissue(sim)
 
 plot of chunk tissue
 
-``` r
-
-
-# collect 3 samples: "Sample_A", "Sample_B", and "Sample_C"
-sim$sample_cells("Sample_A", c(125, 125), c(175, 175))
-sim$sample_cells("Sample_B", c(175, 175), c(225, 225))
-sim$sample_cells("Sample_C", c(50, 100), c(100, 150))
-
-# plot the tissue
-plot_tissue(sim)
-```
+` ``# collect 3 samples: "Sample_A", "Sample_B", and "Sample_C"`` ``sim``$``sample_cells``(``"Sample_A"``, `[`c`](https://rdrr.io/r/base/c.html)`(``125``, ``125``)``, `[`c`](https://rdrr.io/r/base/c.html)`(``175``, ``175``)``)`` ``sim``$``sample_cells``(``"Sample_B"``, `[`c`](https://rdrr.io/r/base/c.html)`(``175``, ``175``)``, `[`c`](https://rdrr.io/r/base/c.html)`(``225``, ``225``)``)`` ``sim``$``sample_cells``(``"Sample_C"``, `[`c`](https://rdrr.io/r/base/c.html)`(``50``, ``100``)``, `[`c`](https://rdrr.io/r/base/c.html)`(``100``, ``150``)``)`` `` ``# plot the tissue`` `[`plot_tissue`](https://caravagnalab.github.io/ProCESS/1.3/reference/plot_tissue.md)`(``sim``)`
 
 ![Post-sampling tissue.](reference/figures/README-tissue-2.png)
 
@@ -105,15 +89,7 @@ plot of chunk tissue
 The collected samples can be used to build a sample forest whose nodes
 represent simulated cells. The forest can be plot and annotate.
 
-``` r
-
-# get the sample forest
-sample_forest <- sim$get_sample_forest()
-
-# plot it
-plot_forest(sample_forest) %>% 
-  annotate_forest(sample_forest)
-```
+`# get the sample forest`` ``sample_forest`` ``<-`` ``sim``$``get_sample_forest``(``)`` `` ``# plot it`` `[`plot_forest`](https://caravagnalab.github.io/ProCESS/1.3/reference/plot_forest.md)`(``sample_forest``)`` ``%>%`` `` `` `[`annotate_forest`](https://caravagnalab.github.io/ProCESS/1.3/reference/annotate_forest.md)`(``sample_forest``)`
 
 ![Sample forest](reference/figures/README-forest-1.png)
 

@@ -5,14 +5,15 @@ This method loads a simulation from the disk.
 ## Usage
 
 ``` r
-recover_simulation(name)
+recover_simulation(path)
 ```
 
 ## Arguments
 
-- name:
+- path:
 
-  The name of the simulation to be recovered.
+  The path of the directory in which the simulation was saved or that of
+  a snapshot file.
 
 ## See also
 
@@ -28,7 +29,7 @@ set.seed(0)
 # save its snapshots in a local directory
 sim <- TissueSimulation("recover_simulation_test",
                         epigenetic_states = c("E1", "E2"),
-                        save_snapshots = TRUE)
+                        save_directory = TRUE)
 
 # add mutant "A" and set its species rates
 sim$add_mutant("A",
@@ -41,20 +42,33 @@ sim$place_cell("A[E1]", 500, 500)
 # simulate up to time 50
 sim$run_up_to_time(50)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                                                       
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    
+
+
+# simulate up to time 75. Each new simulation step produces
+# a new snapshot
+sim$run_up_to_time(75)
+#> 
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    
+
+
+# simulate up to time 80
+sim$run_up_to_time(80)
+#> 
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    
 
 
 # show the simulation
 sim
-#> ──  ProCESS   D   S   M  recover_simulation_test ──────────────────────────────────────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 50 ──
+#> ──  ProCESS   D   S   M  recover_simulation_test ───────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 80 ──
 #> 
 #> ── Species: 2, with epigenetics 
 #>    
 #>    =======  ====  =====  ======  =========
 #>    species   λ      δ    counts      %    
 #>    =======  ====  =====  ======  =========
-#>      A[E1]  0.20  0.050   360    90.225564
-#>      A[E2]  0.01  0.005    39    9.774436 
+#>      A[E1]  0.20  0.050   1581   90.291262
+#>      A[E2]  0.01  0.005   170    9.708738 
 #>    =======  ====  =====  ======  =========
 #> 
 #> ── Epigenetic switches 
@@ -66,10 +80,10 @@ sim
 #>      A[E2]  0.01  A[E1]
 #>    =======  ====  =====
 #> 
-#> ── Firings: 892 total 
+#> ── Firings: 5177 total 
 #> 
-#>  Species A[E1]: 224 (deaths), 621 (duplications) and  39 (switches)
-#>  Species A[E2]:   3 (deaths),   4 (duplications) and   1 (switches)
+#>  Species A[E1]: 1613 (deaths), 3344 (duplications) and  166 (switches)
+#>  Species A[E2]:   10 (deaths),   29 (duplications) and   15 (switches)
 #> ✖ The simulation has no samples yet!
 
 # remove the object sim from the environment
@@ -83,7 +97,44 @@ exists("sim")
 sim <- recover_simulation("recover_simulation_test")
 
 sim
-#> ──  ProCESS   D   S   M  recover_simulation_test ──────────────────────────────────────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 50 ──
+#> ──  ProCESS   D   S   M  recover_simulation_test ───────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 80 ──
+#> 
+#> ── Species: 2, with epigenetics 
+#>    
+#>    =======  ====  =====  ======  =========
+#>    species   λ      δ    counts      %    
+#>    =======  ====  =====  ======  =========
+#>      A[E1]  0.20  0.050   1581   90.291262
+#>      A[E2]  0.01  0.005   170    9.708738 
+#>    =======  ====  =====  ======  =========
+#> 
+#> ── Epigenetic switches 
+#>    
+#>    =======  ====  =====
+#>    species   ε     dest
+#>    =======  ====  =====
+#>      A[E1]  0.01  A[E2]
+#>      A[E2]  0.01  A[E1]
+#>    =======  ====  =====
+#> 
+#> ── Firings: 5177 total 
+#> 
+#>  Species A[E1]: 1613 (deaths), 3344 (duplications) and  166 (switches)
+#>  Species A[E2]:   10 (deaths),   29 (duplications) and   15 (switches)
+#> ✖ The simulation has no samples yet!
+
+# get the sim clock
+sim$get_clock()
+#> [1] 80.00001
+
+# get the snapshot information
+snapshot_info <- sim$get_snapshot_info()
+
+# load the second snapshot
+sim <- recover_simulation(snapshot_info[["file"]][2])
+
+sim
+#> ──  ProCESS   D   S   M  recover_simulation_test ───────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 50 ──
 #> 
 #> ── Species: 2, with epigenetics 
 #>    
@@ -108,6 +159,10 @@ sim
 #>  Species A[E1]: 224 (deaths), 621 (duplications) and  39 (switches)
 #>  Species A[E2]:   3 (deaths),   4 (duplications) and   1 (switches)
 #> ✖ The simulation has no samples yet!
+
+# get the sim clock
+sim$get_clock()
+#> [1] 50.02899
 
 # delete dump directory
 unlink("recover_simulation_test", recursive = TRUE)

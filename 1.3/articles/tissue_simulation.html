@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -130,15 +130,15 @@ one million cells - and sets the name of the simulation to be
 <p>The <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code> call is not mandatory and can be omitted;
 however, it is highly recommended to ensure the simulation
 repeatability.</p>
-<p>The optional Boolean parameter <code>save_snapshots</code> can be
+<p>The optional Boolean parameter <code>save_directory</code> can be
 used to save the simulation progress to the disk and recover it later.
-By setting <code>save_snapshots</code> to <code>TRUE</code>, the
-simulation progress os saved in a directory named after the
+By setting <code>save_directory</code> to <code>TRUE</code>, the
+simulation progress are saved in a directory named after the
 simulation.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># the progress of the simulation will be saved in the "Test" folder.</span></span>
 <span><span class="co"># If the directory "Test" already exists, an exception is raised.</span></span>
-<span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/TissueSimulation.html">TissueSimulation</a></span><span class="op">(</span><span class="st">"Test"</span>, save_snapshots <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/TissueSimulation.html">TissueSimulation</a></span><span class="op">(</span><span class="st">"Test"</span>, save_directory <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>We can get information about any <code>TissueSimulation</code> object
 by printing the corresponding variable.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -281,7 +281,7 @@ to zero by default.</p>
 <span></span>
 <span><span class="co"># updated object (counts refer to number of cells of each species)</span></span>
 <span><span class="va">sim</span></span>
-<span><span class="co">#&gt; ── <span style="background-color: #BBBB00;"> ProCESS </span> <span style="color: #BBBBBB; background-color: #BB0000;"> D </span> <span style="color: #BBBBBB; background-color: #BB0000;"> S </span> <span style="color: #BBBBBB; background-color: #BB0000;"> M </span> ProCESS_20260722-104013 ──────── <span style="color: #BB0000;">▣ </span> [1000x1000]<span style="color: #BB0000;">  ⏱ </span>0 ──</span></span>
+<span><span class="co">#&gt; ── <span style="background-color: #BBBB00;"> ProCESS </span> <span style="color: #BBBBBB; background-color: #BB0000;"> D </span> <span style="color: #BBBBBB; background-color: #BB0000;"> S </span> <span style="color: #BBBBBB; background-color: #BB0000;"> M </span> ProCESS_20260728-104711 ──────── <span style="color: #BB0000;">▣ </span> [1000x1000]<span style="color: #BB0000;">  ⏱ </span>0 ──</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Species: <span style="color: #00BB00;">4</span>, <span style="color: #00BB00;">with</span> epigenetics</span></span>
 <span><span class="co">#&gt;    </span></span>
@@ -653,7 +653,7 @@ number of the cells in the species <code>B[E2]</code> is less than
 <span></span>
 <span><span class="co"># evolve the simulation until "B[E2]" consists of less than 1e4 cells</span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"B[E2]"</span>, <span class="fl">10000</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [█████-----------------------------------] 10% [00m:00s] Cells: 32698 [████████--------------------------------] 18% [00m:00s] Cells: 49790 [████████████----------------------------] 28% [00m:01s] Cells: 64599 [███████████████-------------------------] 35% [00m:02s] Cells: 76368 [█████████████████-----------------------] 42% [00m:03s] Cells: 86750 [███████████████████---------------------] 46% [00m:04s] Cells: 95811 [█████████████████████-------------------] 51% [00m:05s] Cells: 103652 [███████████████████████-----------------] 55% [00m:06s] Cells: 111855 [█████████████████████████---------------] 60% [00m:07s] Cells: 119102 [██████████████████████████--------------] 64% [00m:08s] Cells: 125393 [███████████████████████████-------------] 67% [00m:09s] Cells: 131791 [█████████████████████████████-----------] 70% [00m:10s] Cells: 138477 [██████████████████████████████----------] 74% [00m:11s] Cells: 143655 [███████████████████████████████---------] 77% [00m:12s] Cells: 150122 [█████████████████████████████████-------] 81% [00m:13s] Cells: 156404 [██████████████████████████████████------] 84% [00m:14s] Cells: 162026 [███████████████████████████████████-----] 86% [00m:15s] Cells: 164449 [███████████████████████████████████-----] 87% [00m:17s] Cells: 165801 [████████████████████████████████████----] 88% [00m:18s] Cells: 166882 [████████████████████████████████████----] 89% [00m:19s] Cells: 168305 [█████████████████████████████████████---] 91% [00m:20s] Cells: 171782 [██████████████████████████████████████--] 94% [00m:21s] Cells: 177491 [███████████████████████████████████████-] 97% [00m:22s] Cells: 180919 [████████████████████████████████████████] 100% [00m:22s] Saving snapshot</span></span></code></pre></div>
+<span><span class="co">#&gt;  [█████-----------------------------------] 12% [00m:00s] Cells: 38446 [███████████-----------------------------] 25% [00m:00s] Cells: 60540 [███████████████-------------------------] 35% [00m:01s] Cells: 75761 [██████████████████----------------------] 44% [00m:02s] Cells: 90988 [█████████████████████-------------------] 52% [00m:03s] Cells: 104647 [████████████████████████----------------] 58% [00m:04s] Cells: 116659 [███████████████████████████-------------] 65% [00m:05s] Cells: 128210 [█████████████████████████████-----------] 70% [00m:06s] Cells: 138726 [███████████████████████████████---------] 77% [00m:07s] Cells: 148999 [█████████████████████████████████-------] 82% [00m:08s] Cells: 158506 [████████████████████████████████████----] 88% [00m:09s] Cells: 166917 [██████████████████████████████████████--] 93% [00m:10s] Cells: 175073 [████████████████████████████████████████] 98% [00m:11s] Cells: 183093 [████████████████████████████████████████] 100% [00m:12s] Saving snapshot</span></span></code></pre></div>
 <p>At this point, we can inspect the tissue in more detail. It can help
 to face the species to clearly appreciate the spatial diffusion of the
 populations.</p>
@@ -682,7 +682,7 @@ populations.</p>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">mutate_progeny</span><span class="op">(</span><span class="va">cell</span>, <span class="st">"C"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_time</span><span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="fu">get_clock</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fl">7</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [███████████████████████████████████████-] 97% [00m:00s] Cells: 202160 [████████████████████████████████████████] 98% [00m:01s] Cells: 210533 [████████████████████████████████████████] 98% [00m:01s] Cells: 215186 [████████████████████████████████████████] 99% [00m:02s] Cells: 218793 [████████████████████████████████████████] 99% [00m:04s] Cells: 220979 [████████████████████████████████████████] 99% [00m:05s] Cells: 223293 [████████████████████████████████████████] 99% [00m:06s] Cells: 224861 [████████████████████████████████████████] 100% [00m:06s] Saving snapshot</span></span></code></pre></div>
+<span><span class="co">#&gt;  [███████████████████████████████████████-] 97% [00m:00s] Cells: 205579 [████████████████████████████████████████] 98% [00m:00s] Cells: 213517 [████████████████████████████████████████] 99% [00m:01s] Cells: 220068 [████████████████████████████████████████] 100% [00m:02s] Saving snapshot</span></span></code></pre></div>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_state.html">plot_state</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span></code></pre></div>
 <p><img src="tissue_simulation_files/figure-html/unnamed-chunk-29-1.png" class="r-plt" alt="The species count after the third mutant `C` arose." width="288"></p>

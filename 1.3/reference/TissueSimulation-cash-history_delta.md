@@ -1,11 +1,17 @@
 # The delta time between time series samples
 
-This value is the maximum time between two successive time series data
-samples.
+The maximum time between two consecutive time series data samples.
+
+## Details
+
+This property is the maximum time between two consecutive time series
+data samples. Notice that this property differs from
+[`TissueSimulation$snapshot_triggers`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-snapshot_triggers.md).
 
 ## See also
 
-[`TissueSimulation`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation_class.md)
+[`TissueSimulation`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation_class.md),
+[`TissueSimulation$snapshot_triggers`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-snapshot_triggers.md)
 
 ## Examples
 

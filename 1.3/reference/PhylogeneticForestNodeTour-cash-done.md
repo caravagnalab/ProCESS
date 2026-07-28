@@ -29,9 +29,9 @@ counter <- 0
 while(!node_tour$done) {
   # increase the counter
   counter <- counter + 1
- 
+
   # move to the next node
-  node_tour$step()  
+  node_tour$step()
 }
 
 # show the node count

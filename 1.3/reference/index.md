@@ -8,6 +8,10 @@ Tissue simulation classes and methods
   : Annotate a plot of cell divisions
 - [`bbox_sampler()`](https://caravagnalab.github.io/ProCESS/1.3/reference/bbox_sampler.md)
   : Bounding box sampler
+- [`build_snapshot_video()`](https://caravagnalab.github.io/ProCESS/1.3/reference/build_snapshot_video.md)
+  : Building a video of the snapshots
+- [`get_species_colors()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_species_colors.md)
+  : Get species color maps
 - [`get_node_tour()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_node_tour.md)
   : Labelling forest nodes
 - [`load_sample_forest()`](https://caravagnalab.github.io/ProCESS/1.3/reference/load_sample_forest.md)
@@ -28,6 +32,8 @@ Tissue simulation classes and methods
   : Computing the forest sticks
 - [`SampleForest$get_subforest_for`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest-cash-get_subforest_for.md)
   : Building sub-forests
+- [`SampleForest$represents_cell`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest-cash-represents_cell.md)
+  : Testing whether a cell is represented by a forest
 - [`SampleForest$save`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest-cash-save.md)
   : Saving forests
 - [`SampleForest`](https://caravagnalab.github.io/ProCESS/1.3/reference/SampleForest.md)
@@ -122,6 +128,8 @@ Tissue simulation classes and methods
   : Getting the sample forest
 - [`TissueSimulation$get_samples_info`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-get_samples_info.md)
   : Retrieving sample information
+- [`TissueSimulation$get_snapshot_info`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-get_snapshot_info.md)
+  : Getting snapshot information
 - [`TissueSimulation$get_tissue_size`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-get_tissue_size.md)
   : Getting the simulated tissue size
 - [`TissueSimulation$history_delta`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-history_delta.md)
@@ -150,6 +158,8 @@ Tissue simulation classes and methods
   : Set the rate of an event
 - [`TissueSimulation$set_rates`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-set_rates.md)
   : Set the tissue simulation rates
+- [`TissueSimulation$snapshot_triggers`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-snapshot_triggers.md)
+  : The snapshot triggers
 - [`TissueSimulation$var`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-var.md)
   : Building a simulation status variable
 - [`TissueSimulation()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation.md)
@@ -303,6 +313,8 @@ Mutation simulation classes and methods
   : Building sub-forests
 - [`PhylogeneticForest$partition_samples`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-partition_samples.md)
   : Partitioning forest samples
+- [`PhylogeneticForest$represents_cell`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-represents_cell.md)
+  : Testing whether a cell is represented by a forest
 - [`PhylogeneticForest$save`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-save.md)
   : Saving forests
 - [`PhylogeneticForest$set_reference_path`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-set_reference_path.md)

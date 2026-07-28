@@ -35,7 +35,7 @@ node_tour$label
 # move to the next node
 node_tour$step()
 
-# get the label of the second node in the tour node 
+# get the label of the second node in the tour node
 node_tour$label
 #> [1] 2
 ```

@@ -79,6 +79,10 @@ methods and properties:
 - [`partition_samples()`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-partition_samples.md)
   partitions the samples according to a labelling.
 
+- [`represents_cell()`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-represents_cell.md)
+  tests whether a cell having a given identifier is represented by the
+  forest.
+
 - [`save()`](https://caravagnalab.github.io/ProCESS/1.3/reference/PhylogeneticForest-cash-save.md)
   saves the forest.
 

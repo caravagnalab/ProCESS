@@ -5,7 +5,7 @@ This method builds a new simulation.
 ## Usage
 
 ``` r
-TissueSimulation(name, width = 1000, height = 1000, save_snapshots = FALSE)
+TissueSimulation(name, width = 1000, height = 1000, save_directory = FALSE)
 ```
 
 ## Arguments
@@ -23,9 +23,10 @@ TissueSimulation(name, width = 1000, height = 1000, save_snapshots = FALSE)
 
   The height of the simulated tissue (default: 1000).
 
-- save_snapshots:
+- save_directory:
 
-  A flag to save simulation snapshots on disk (default: `FALSE`).
+  A flag to save simulation data in the working directory (default:
+  `FALSE`).
 
 - rates:
 
@@ -64,11 +65,11 @@ sim$get_name()
 "test" %in% list.files()
 #> [1] FALSE
 
-# By using the optional parameter `save_snapshots`, we force the
-# simulation to save its progresses in a local directory whose name
+# By using the optional parameter `save_directory`, we force the
+# simulation to save its data in a local directory whose name
 # is the name of the simulation, i.e., "test". This data will be
 # preserved when the simulation object will be destroyed.
-sim <- TissueSimulation("test", save_snapshots = TRUE)
+sim <- TissueSimulation("test", save_directory = TRUE)
 
 # the directory "test" exists and contains a binary dump of
 # the simulation
@@ -84,16 +85,16 @@ rm(sim)
 unlink("test", recursive = TRUE)
 
 # the name parameter is optional
-sim <- TissueSimulation(save_snapshots = TRUE)
+sim <- TissueSimulation(save_directory = TRUE)
 
 # the name of the simulation is `ProCESS_<YY><MM><DD>_<HH><MM><SS>`
 sim$get_name()
-#> [1] "ProCESS_20260722-101254"
+#> [1] "ProCESS_20260728-102314"
 
 # the simulation dump have been saved in a directory named
 # after the simulation name
 list.files(pattern = "^ProCESS_")
-#> [1] "ProCESS_20260722-101254"
+#> [1] "ProCESS_20260728-102314"
 
 # let us remove the object and manually delete the simulation
 # directory
@@ -124,7 +125,7 @@ df_rates
 
 sim <- TissueSimulation(rates = df_rates)
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260722-101255 ───────────────────────────────────────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260728-102315 ────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
 #> 
 #> ── Species: 2, without epigenetics 
 #>    
@@ -161,7 +162,7 @@ df_rates
 
 sim <- TissueSimulation(rates = df_rates)
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260722-101255 ───────────────────────────────────────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260728-102315 ────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
 #> 
 #> ── Species: 6, with epigenetics 
 #>    
