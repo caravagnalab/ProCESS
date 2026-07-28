@@ -19,7 +19,7 @@
 #' @description This property stores the identifier of the
 #'   cell associated to the node.
 #' @return The identifier of the cell associated to the node.
-#' @example nobuild/roxygen/setups/SampleForestNode-setup.R
+#' @example template_doc/setups/SampleForestNode-setup.R
 #' @examples
 #'
 #' # get the identifier of the cell associated to the node
@@ -30,7 +30,7 @@ NULL
 #' @title Getting the parent node
 #' @description This property stores the parent of the node.
 #' @return The parent of the node.
-#' @example nobuild/roxygen/setups/SampleForestNode-setup.R
+#' @example template_doc/setups/SampleForestNode-setup.R
 #' @examples
 #'
 #' # get the node's parent
@@ -41,7 +41,7 @@ NULL
 #' @title Getting the children of the node
 #' @description This property stores the children of the node.
 #' @return The children of the node.
-#' @example nobuild/roxygen/setups/SampleForestNode-setup.R
+#' @example template_doc/setups/SampleForestNode-setup.R
 #' @examples
 #'
 #' # get the node's children
@@ -53,7 +53,7 @@ NULL
 #' @description This property is `TRUE` if and only if a root
 #'    of the forest.
 #' @return `TRUE` if and only if the node is a root of the forest.
-#' @example nobuild/roxygen/setups/SampleForestNode-setup.R
+#' @example template_doc/setups/SampleForestNode-setup.R
 #' @examples
 #'
 #' # check whether the node is a root
@@ -72,7 +72,7 @@ NULL
 #' @description This property is `TRUE` if and only if a leaf
 #'    of the forest.
 #' @return `TRUE` if and only if the node is a leaf of the forest.
-#' @example nobuild/roxygen/setups/SampleForestNode-setup.R
+#' @example template_doc/setups/SampleForestNode-setup.R
 #' @examples
 #'
 #' # check whether the node is a leaf
@@ -94,7 +94,7 @@ NULL
 #'   collected by any sample and this property is `NA`.
 #' @return The name of of the sample that collected the corresponding
 #'   cell if the corresponding cell was collected. Otherwise, `NA`.
-#' @example nobuild/roxygen/setups/SampleForestNode-setup.R
+#' @example template_doc/setups/SampleForestNode-setup.R
 #' @examples
 #'
 #' # the corresponding cell was not collected and the property is `NA`
@@ -112,7 +112,7 @@ NULL
 #' @description This property is the simulated time at which the corresponding
 #'   time was born.
 #' @return The simulated time at which the corresponding time was born.
-#' @example nobuild/roxygen/setups/SampleForestNode-setup.R
+#' @example template_doc/setups/SampleForestNode-setup.R
 #' @examples
 #'
 #' # get the birth time
@@ -125,7 +125,7 @@ NULL
 #'   time died.
 #' @return The simulated time at which the corresponding time died or the
 #'   sampling time.
-#' @example nobuild/roxygen/setups/SampleForestNode-setup.R
+#' @example template_doc/setups/SampleForestNode-setup.R
 #' @examples
 #'
 #' # get the death time
@@ -137,7 +137,7 @@ NULL
 #' @description This property is the name of the corresponding cell
 #'   species.
 #' @return The name of the corresponding cell species.
-#' @example nobuild/roxygen/setups/SampleForestNode-setup.R
+#' @example template_doc/setups/SampleForestNode-setup.R
 #' @examples
 #'
 #' # get the name of the corresponding cell species
@@ -149,7 +149,7 @@ NULL
 #' @description This property is the name of the corresponding cell
 #'   species.
 #' @return The name of the corresponding cell epigenetic state.
-#' @example nobuild/roxygen/setups/SampleForestNode-setup.R
+#' @example template_doc/setups/SampleForestNode-setup.R
 #' @examples
 #'
 #' # get the name of the corresponding cell species
@@ -164,7 +164,7 @@ NULL
 #' @description This property is the name of the corresponding cell
 #'   mutant.
 #' @return The name of the corresponding cell epigenetic state.
-#' @example nobuild/roxygen/setups/SampleForestNode-setup.R
+#' @example template_doc/setups/SampleForestNode-setup.R
 #' @examples
 #'
 #' # get the name of the corresponding cell species

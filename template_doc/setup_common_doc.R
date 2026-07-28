@@ -14,7 +14,7 @@ classes <- list(list(name = "SampleForestNode",
 
 disabled <- list()
 
-template_dir <- "nobuild/roxygen/txt/"
+template_dir <- "template_doc/txt/"
 R_dir <- "R"
 
 header_filename <- file.path(template_dir, "copyright_header.txt")

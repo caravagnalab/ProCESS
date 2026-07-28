@@ -21,7 +21,7 @@
 #' @details This property is optional and is available only if the
 #'   `get_node_tour()`'s optional parameter `with_genomes` was set to `TRUE`.
 #' @return The genome of the cell associated to the current node in the tour.
-#' @example nobuild/roxygen/setups/PhylogeneticForestNodeTour-setup.R
+#' @example template_doc/setups/PhylogeneticForestNodeTour-setup.R
 #' @examples
 #'
 #' #' # build a tour for the forest nodes

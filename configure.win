@@ -26,6 +26,6 @@ download_CLONES
 
 RSCRIPT="${R_HOME}/bin/Rscript"
 
-${RSCRIPT} --vanilla nobuild/roxygen/setup_common_doc.R
+${RSCRIPT} --vanilla template_doc/setup_common_doc.R
 
 ${R_HOME}/bin/R --vanilla --silent -e 'Rcpp::compileAttributes()'

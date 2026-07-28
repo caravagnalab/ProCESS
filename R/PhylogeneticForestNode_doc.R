@@ -19,7 +19,7 @@
 #' @description This property is the data frame of the mutations arising
 #'   the corresponding cell.
 #' @return The data frame of the mutations arising the corresponding cell.
-#' @example nobuild/roxygen/setups/PhylogeneticForestNode-setup.R
+#' @example template_doc/setups/PhylogeneticForestNode-setup.R
 #' @examples
 #'
 #' # get the mutations arising in the corresponding cell
@@ -35,7 +35,7 @@ NULL
 #'   the genomes of many nodes are needed, using the node tour with genomes
 #'   is preferable.
 #' @return The genome of the corresponding cell.
-#' @example nobuild/roxygen/setups/PhylogeneticForestNode-setup.R
+#' @example template_doc/setups/PhylogeneticForestNode-setup.R
 #' @examples
 #'
 #' # the genome only has chromosome 22 because the forest was
