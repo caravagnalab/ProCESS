@@ -2,7 +2,7 @@
 title: "Iterating over Forest Nodes"
 output: rmarkdown::html_vignette
 description: >
-  How to label forest nodes
+  How to iterate over forest node
 vignette: >
   %\VignetteIndexEntry{Iterating over Forest Nodes}
   %\VignetteEncoding{UTF-8}
