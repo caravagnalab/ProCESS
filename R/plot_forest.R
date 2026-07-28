@@ -49,8 +49,8 @@
 #'
 #' plot_forest(forest, color_map = color_map)
 #'
-#' # define an alpha function that hide the nodes representing cells
-#' # whose birth times are greater than 400
+#' # define an alpha function hiding the nodes representing cells
+#' # after simulated time 400
 #' library(dplyr)
 #'
 #' alpha_f <- function(nodes) {
