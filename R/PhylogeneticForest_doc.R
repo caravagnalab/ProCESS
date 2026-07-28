@@ -299,7 +299,7 @@ NULL
 #'
 #' # print the first rows of the cell allelic fragmentation
 #' head(forest$get_cell_allelic_fragmentation())
-#' @seealso [`vignette("mutations")`],
+#' @seealso `vignette("mutations")`,
 #'   <code>[PhylogeneticForest]</code>
 NULL
 
@@ -328,7 +328,7 @@ NULL
 #'
 #' # the mutation is among the arising mutation in the node
 #' node$arising_mutations
-#' @seealso [`vignette("mutations")`],
+#' @seealso `vignette("mutations")`,
 #'   <code>[PhylogeneticForest]</code>
 NULL
 

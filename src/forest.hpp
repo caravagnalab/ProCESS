@@ -439,13 +439,13 @@ public:
             using namespace Rcpp;
             if (type == REALSXP) {
                 NumericVector n_vector = as<NumericVector>(cell_ids);
-                
+
                 return represents_cell(forest, n_vector);
             }
 
             if (type == INTSXP) {
                 IntegerVector i_vector = as<IntegerVector>(cell_ids);
-                
+
                 return represents_cell(forest, i_vector);
             }
         }

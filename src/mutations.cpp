@@ -240,7 +240,7 @@ RCPP_MODULE(Mutations)
 //' cna <- CNA("D", "Y", 101310, 205, allele = 0)
 //'
 //' cna
-//' @seealso [Amplification()], 
+//' @seealso [Amplification()],
 //'   [Deletion()], <code>[CNA](CNA_class.md)</code>
     function("CNA", &CNA::build_CNA,
              List::create(_["type"], _["chr"], _["from"], _["len"],
@@ -1319,7 +1319,8 @@ RCPP_MODULE(Mutations)
 //'   - <code>[get_genome()](PhylogeneticForest-cash-get_genome.md)</code>
 //'     returns the genome of the associated cell.
 //' @seealso [get_node_tour()], <code>[PhylogeneticForestNodeTour]</code>,
-//'   <code>[SampleForestNode]</code>, [`vignette("node_tour")`]
+//'   <code>[SampleForestNode]</code>,
+//'   `vignette("node_tour")`
    class_<PhylogeneticForestNode>("PhylogeneticForestNode")
         REGISTER_NODE_COMMON_FIELDS(PhylogeneticForestNode)
         .property("arising_mutations", &PhylogeneticForestNode::arising_mutations,
@@ -1351,7 +1352,8 @@ RCPP_MODULE(Mutations)
 //'     is a Boolean flag that is set to `TRUE` only when the tour ended.
 //'
 //' @seealso [get_node_tour()], <code>[PhylogeneticForestNode]</code>,
-//'   <code>[PhylogeneticForestNodeTour]</code>, [`vignette("node_tour")`]
+//'   <code>[PhylogeneticForestNodeTour]</code>,
+//'   `vignette("node_tour")`
     class_<PhylogeneticForestNodeTour>("PhylogeneticForestNodeTour")
         REGISTER_TOUR_COMMON_FIELDS(PhylogeneticForestNodeTour)
         .property("genome", &PhylogeneticForestNodeTour::get_genome,
@@ -1372,7 +1374,7 @@ RCPP_MODULE(Mutations)
 //'   - <code>[sequence](GenomeFragment-cash-sequence.md)</code> stores
 //'     the fragment DNA sequence.
 //' @seealso <code>[GenomeMutations]</code>, [get_node_tour()],
-//'   [`vignette("node_tour")`]
+//'   `vignette("node_tour")`
     class_<GenomeFragment>("GenomeFragment")
 
 //' @name GenomeFragment$get_CIGAR
@@ -1486,7 +1488,8 @@ RCPP_MODULE(Mutations)
 //'     returns information about the fragment aligning to the reference.
 //'
 //' @seealso [get_node_tour()],
-//'   <code>[PhylogeneticForestNodeTour]</code>, [`vignette("node_tour")`]
+//'   <code>[PhylogeneticForestNodeTour]</code>,
+//'   `vignette("node_tour")`
     class_<GenomeMutations>("GenomeMutations")
 
 //' @name GenomeMutations$get_mutations

@@ -32,7 +32,7 @@ RCPP_MODULE(Sequencing)
 //' @description This class implements a perfect Illumina sequencers that
 //'   does not commit errors.
 //' @seealso [simulate_seq()], [simulate_normal_seq()],
-//'   and [`vignette("sequencing")`] for usage examples.
+//'   and `vignette("sequencing")` for usage examples.
     class_<ErrorlessIlluminaSequencer>("ErrorlessIlluminaSequencer")
 
         .method("show", &ErrorlessIlluminaSequencer::show,
@@ -65,7 +65,7 @@ RCPP_MODULE(Sequencing)
 //'     implements a non-constant quality score model.
 //' @keywords internal
 //' @seealso [simulate_seq()], [simulate_normal_seq()], [BasicIlluminaSequencer()],
-//'   and [`vignette("sequencing")`] for usage examples.
+//'   and `vignette("sequencing")` for usage examples.
     class_<BasicIlluminaSequencer>("BasicIlluminaSequencer")
         .method("show", &BasicIlluminaSequencer::show,
                 "Show a description for the sequencer")
@@ -214,7 +214,7 @@ RCPP_MODULE(Sequencing)
 //'   of the mutation in cited sample.
 //' @seealso [BasicIlluminaSequencer()] and
 //'   [ErrorlessIlluminaSequencer()] as sequencer types, and
-//'   [`vignette("sequencing")`] for usage examples.
+//'   `vignette("sequencing")` for usage examples.
     function("simulate_seq", &simulate_seq,
              List::create(
                  _["phylo_forest"], _["sequencer"] = R_NilValue,
@@ -301,7 +301,7 @@ RCPP_MODULE(Sequencing)
 //'   of the mutation in cited sample.
 //' @seealso [BasicIlluminaSequencer()] and
 //'   [ErrorlessIlluminaSequencer()] as sequencer types, and
-//'   [`vignette("sequencing")`] for usage examples.
+//'   `vignette("sequencing")` for usage examples.
     function("simulate_normal_seq", &simulate_normal_seq,
              List::create(
                  _["phylo_forest"], _["sequencer"] = R_NilValue,
