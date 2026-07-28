@@ -40,15 +40,15 @@ NULL
 #' library(dplyr)
 #'
 #' # test whether the forest represents cell 2
-#' forest$contains_cell(2)
+#' forest$represents_cell(2)
 #'
-#' get the node 2's information
+#' # get the node 2's information
 #' forest$get_nodes() %>% dplyr::filter(cell_id == 2)
 #'
 #' # test whether the forest represents cell 2e10
-#' forest$contains_cell(2e10)
+#' forest$represents_cell(2e10)
 #'
-#' get the node 2e10's information
+#' # get the node 2e10's information
 #' forest$get_nodes() %>% dplyr::filter(cell_id == 2e10)
 #' @seealso <code>[${CLASS_TYPE}]</code>
 NULL
