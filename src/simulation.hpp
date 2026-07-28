@@ -67,7 +67,7 @@ class TissueSimulation
     std::shared_ptr<CLONES::Mutants::Evolutions::TissueSimulation>
         sim_ptr;         //!< The pointer to a CLONES simulation object
     std::string name;    //!< The simulation name
-    bool save_snapshots; //!< A flag to preserve binary dump after object destruction
+    bool save_directory; //!< A flag to preserve binary dump after object destruction
 
     inline static std::map<std::string, CLONES::Mutants::CellEventType> cell_event_names_inv{};
 
@@ -93,7 +93,8 @@ class TissueSimulation
               const std::set<CLONES::Mutants::SpeciesId> &species_filter,
               const std::set<std::string> &epigenetic_filter);
 
-    Rcpp::List wrap_a_cell(const CLONES::Mutants::Evolutions::CellInTissue &cell) const;
+    static Rcpp::List wrap_a_cell(const CLONES::Mutants::Evolutions::Tissue &tissue,
+                                  const CLONES::Mutants::Evolutions::CellInTissue &cell);
 
     std::vector<TissueRectangle>
     find_all_samples(const Rcpp::IntegerVector &minimum_cell_vector,
@@ -174,10 +175,10 @@ class TissueSimulation
     TissueSimulation(const SEXP &first_param, const SEXP &second_param);
 
     TissueSimulation(const std::string &simulation_name, const SEXP &seed,
-                     const bool &save_snapshots);
+                     const bool &save_directory);
 
     TissueSimulation(const std::string &simulation_name, const int seed,
-                     const bool &save_snapshots);
+                     const bool &save_directory);
 
     ~TissueSimulation();
 
@@ -254,6 +255,8 @@ class TissueSimulation
 
     Rcpp::List get_cells(const std::string &sample_name) const;
 
+    Rcpp::List get_cells(const SEXP &first_parameter) const;
+
     inline Rcpp::List get_cell(const CLONES::Mutants::Evolutions::AxisPosition &x,
                                const CLONES::Mutants::Evolutions::AxisPosition &y) const
     {
@@ -267,16 +270,16 @@ class TissueSimulation
         return this->get_cells(sim_ptr->tissue(), lower_corner, upper_corner);
     }
 
-    Rcpp::List get_cells(const CLONES::Mutants::Evolutions::Tissue &tissue) const;
+    static Rcpp::List get_cells(const CLONES::Mutants::Evolutions::Tissue &tissue);
 
-    Rcpp::List get_cell(const CLONES::Mutants::Evolutions::Tissue &tissue,
-                        const CLONES::Mutants::Evolutions::AxisPosition &x,
-                        const CLONES::Mutants::Evolutions::AxisPosition &y) const;
+    static Rcpp::List get_cell(const CLONES::Mutants::Evolutions::Tissue &tissue,
+                               const CLONES::Mutants::Evolutions::AxisPosition &x,
+                               const CLONES::Mutants::Evolutions::AxisPosition &y);
 
-    Rcpp::List get_cells(
-        const CLONES::Mutants::Evolutions::Tissue &tissue,
-        const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &lower_corner,
-        const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner) const;
+    static Rcpp::List get_cells(
+            const CLONES::Mutants::Evolutions::Tissue &tissue,
+            const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &lower_corner,
+            const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner);
 
     Rcpp::List get_cells(const SEXP &first_param, const SEXP &second_param) const;
 
@@ -293,12 +296,12 @@ class TissueSimulation
                          epigenetic_filter);
     }
 
-    Rcpp::List
+    static Rcpp::List
     get_cells(const CLONES::Mutants::Evolutions::Tissue &tissue,
               const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &lower_corner,
               const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner,
               const std::vector<std::string> &mutant_filter,
-              const std::vector<std::string> &epigenetic_filter) const;
+              const std::vector<std::string> &epigenetic_filter);
 
     Rcpp::List get_lineage_graph() const;
 
@@ -412,7 +415,7 @@ class TissueSimulation
                 } while (tissue.is_valid(pos) && tissue(pos).is_wild_type());
 
                 if (!tissue.is_valid(pos)) {
-                    return wrap_a_cell(cell);
+                    return wrap_a_cell(tissue, cell);
                 }
             }
         }
@@ -471,7 +474,7 @@ class TissueSimulation
         sim_ptr->get_statistics().set_history_delta(history_time_delta);
     }
 
-    static TissueSimulation load(const std::string &directory_name);
+    static TissueSimulation load(const std::string &simulation_path);
 
     inline SampleForest get_sample_forest() const { return SampleForest(*sim_ptr); }
 
@@ -503,9 +506,15 @@ class TissueSimulation
 
     static TissueSimulation build_simulation(const SEXP &simulation_name,
                                              const SEXP &width, const SEXP &height,
-                                             const SEXP &save_snapshots,
+                                             const SEXP &save_directory,
                                              const SEXP &rates, const SEXP &epistates,
                                              const SEXP &seed);
+
+    SEXP get_snapshot_triggers() const;
+
+    void set_snapshot_triggers(const SEXP trigger_list);
+
+    Rcpp::DataFrame get_snapshot_dataframe() const;
 
     inline void save_tissue(const std::filesystem::path tissue_file_path) const
     {

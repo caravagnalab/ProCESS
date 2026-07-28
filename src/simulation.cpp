@@ -315,6 +315,16 @@ Rcpp::List TissueSimulation::get_cells(const std::string &sample_name) const
     return get_cells(tissue);
 }
 
+Rcpp::List TissueSimulation::get_cells(const SEXP &first_parameter) const
+{
+    using namespace Rcpp;
+
+    const auto sample_name = FromSEXP::get<std::string>(first_parameter,
+                                                        "1st parameter",
+                                                        "sample name");
+    return get_cells(sample_name);
+}
+
 inline Rcpp::String encode_epigenetic_state(const CLONES::Mutants::Evolutions::Species& species)
 {
     using namespace Rcpp;
@@ -393,49 +403,55 @@ Rcpp::List TissueSimulation::get_cells(
 }
 
 Rcpp::List
-TissueSimulation::wrap_a_cell(const CLONES::Mutants::Evolutions::CellInTissue &cell) const
+TissueSimulation::wrap_a_cell(const CLONES::Mutants::Evolutions::Tissue &tissue,
+                              const CLONES::Mutants::Evolutions::CellInTissue &cell)
 {
     using namespace Rcpp;
     using namespace CLONES::Mutants;
 
-    const auto &species = sim_ptr->tissue().get_species(cell.get_species_id());
+    const auto &species = tissue.get_species(cell.get_species_id());
 
     const auto mutant_name = species.get_mutant_name();
     const auto epistate = species.get_epistate_name();
 
     if (epistate != "") {
         return DataFrame::create(_["cell_id"] = cell.get_id(), _["mutant"] = mutant_name,
-                                _["epistate"] = epistate, _["position_x"] = cell.x,
-                                _["position_y"] = cell.y);
+                                 _["epistate"] = epistate, _["position_x"] = cell.x,
+                                 _["position_y"] = cell.y);
     }
 
     return DataFrame::create(_["cell_id"] = cell.get_id(), _["mutant"] = mutant_name,
                              _["position_x"] = cell.x, _["position_y"] = cell.y);
 }
 
-TissueSimulation TissueSimulation::load(const std::string &directory_name)
+TissueSimulation TissueSimulation::load(const std::string &simulation_path)
 {
     using namespace CLONES::Mutants::Evolutions;
 
+    if (!std::filesystem::exists(simulation_path)) {
+        Rcpp::stop("The path \"" + simulation_path + "\" does not exist.");
+    }
+
     TissueSimulation simulation;
 
-    simulation.save_snapshots = true;
-    simulation.name = directory_name;
+    simulation.save_directory = true;
 
-    if (!std::filesystem::exists(directory_name)) {
-        Rcpp::stop("The directory \"" + directory_name + "\" does not exist.");
+    std::filesystem::path snapshot_path;
+    std::filesystem::path directory_path;
+    if (std::filesystem::is_directory(simulation_path)) {
+        snapshot_path = BinaryLogger::find_last_snapshot_in(simulation_path);
+        directory_path = simulation_path;
+    } else {
+        snapshot_path = simulation_path;
+        directory_path = snapshot_path.parent_path();
     }
 
-    if (!std::filesystem::is_directory(directory_name)) {
-        Rcpp::stop("\"" + directory_name + "\" is not a directory.");
-    }
-
-    auto snapshot_path = BinaryLogger::find_last_snapshot_in(directory_name);
+    simulation.name = to_string(directory_path);
 
     CLONES::Archive::Binary::In archive(snapshot_path);
 
     try {
-        archive &*(simulation.sim_ptr);
+        archive & *(simulation.sim_ptr);
     } catch (const CLONES::Archive::WrongFileFormatDescr &ex) {
         raise_error(ex, "tissue simulation");
     } catch (const CLONES::Archive::WrongFileFormatVersion &ex) {
@@ -443,7 +459,7 @@ TissueSimulation TissueSimulation::load(const std::string &directory_name)
     }
 
     auto ruh_path =
-        std::filesystem::path(directory_name) / get_rates_update_history_file_name();
+        directory_path / get_rates_update_history_file_name();
 
     if (std::filesystem::exists(ruh_path)) {
         CLONES::Archive::Binary::In ruh_archive(ruh_path);
@@ -452,6 +468,13 @@ TissueSimulation TissueSimulation::load(const std::string &directory_name)
     } else {
         Rcpp::warning("The rates update history file is missing.");
     }
+
+    // remove the rate updates newer than the simulation clock
+    auto& history = simulation.rate_update_history;
+    auto it = history.lower_bound(simulation.get_clock());
+
+    history.erase(it, history.end());
+
     return simulation;
 }
 
@@ -497,7 +520,7 @@ void TissueSimulation::init(const SEXP &sexp)
             int seed = as<int>(sexp);
             name = get_default_name();
 
-            if (save_snapshots) {
+            if (save_directory) {
                 sim_ptr = std::make_shared<RS::TissueSimulation>(name, seed);
             } else {
                 sim_ptr = std::make_shared<RS::TissueSimulation>(get_tmp_dir_path(), seed);
@@ -509,7 +532,7 @@ void TissueSimulation::init(const SEXP &sexp)
             name = as<std::string>(sexp);
 
             auto seed = get_random_seed<int>(R_NilValue);
-            if (save_snapshots) {
+            if (save_directory) {
                 sim_ptr = std::make_shared<RS::TissueSimulation>(name, seed);
             } else {
                 sim_ptr = std::make_shared<RS::TissueSimulation>(get_tmp_dir_path(), seed);
@@ -532,27 +555,27 @@ void TissueSimulation::init(const SEXP &sexp)
 TissueSimulation::TissueSimulation()
     : sim_ptr{std::make_shared<CLONES::Mutants::Evolutions::TissueSimulation>(
           get_tmp_dir_path(), get_random_seed<int>(R_NilValue))},
-      name{get_default_name()}, save_snapshots{false}
+      name{get_default_name()}, save_directory{false}
 {
     TissueSimulation::cell_event_names_inv = invert_map(CLONES::Mutants::cell_event_names);
 
     init_history_rate_updates();
 }
 
-TissueSimulation::TissueSimulation(const SEXP &sexp) : save_snapshots{false}
+TissueSimulation::TissueSimulation(const SEXP &sexp) : save_directory{false}
 {
     TissueSimulation::cell_event_names_inv = invert_map(CLONES::Mutants::cell_event_names);
 
     using namespace Rcpp;
 
     if (TYPEOF(sexp) == LGLSXP) {
-        save_snapshots = as<bool>(sexp);
+        save_directory = as<bool>(sexp);
         name = get_default_name();
 
         auto seed = get_random_seed<int>(R_NilValue);
 
         std::filesystem::path sim_path;
-        if (save_snapshots) {
+        if (save_directory) {
             sim_path = name;
         } else {
             sim_path = get_tmp_dir_path();
@@ -569,14 +592,14 @@ TissueSimulation::TissueSimulation(const SEXP &sexp) : save_snapshots{false}
 }
 
 TissueSimulation::TissueSimulation(const SEXP &first_param, const SEXP &second_param)
-    : save_snapshots{false}
+    : save_directory{false}
 {
     TissueSimulation::cell_event_names_inv = invert_map(CLONES::Mutants::cell_event_names);
 
     using namespace Rcpp;
 
     if (TYPEOF(second_param) == LGLSXP) {
-        save_snapshots = as<bool>(second_param);
+        save_directory = as<bool>(second_param);
 
         init(first_param);
 
@@ -612,18 +635,18 @@ TissueSimulation::TissueSimulation(const SEXP &first_param, const SEXP &second_p
 }
 
 TissueSimulation::TissueSimulation(const std::string &simulation_name, const SEXP &seed,
-                                   const bool &save_snapshots)
-    : TissueSimulation{simulation_name, get_random_seed<int>(seed), save_snapshots}
+                                   const bool &save_directory)
+    : TissueSimulation{simulation_name, get_random_seed<int>(seed), save_directory}
 {}
 
 TissueSimulation::TissueSimulation(const std::string &simulation_name, const int seed,
-                                   const bool &save_snapshots)
-    : name{simulation_name}, save_snapshots{save_snapshots}
+                                   const bool &save_directory)
+    : name{simulation_name}, save_directory{save_directory}
 {
     TissueSimulation::cell_event_names_inv = invert_map(CLONES::Mutants::cell_event_names);
 
     std::filesystem::path sim_path;
-    if (save_snapshots) {
+    if (save_directory) {
         sim_path = simulation_name;
     } else {
         sim_path = get_tmp_dir_path();
@@ -704,7 +727,7 @@ std::list<std::string> collect_strings(const Rcpp::List& string_list)
 
 TissueSimulation TissueSimulation::build_simulation(const SEXP &simulation_name,
                                                     const SEXP &width, const SEXP &height,
-                                                    const SEXP &save_snapshots,
+                                                    const SEXP &save_directory,
                                                     const SEXP &rates,
                                                     const SEXP &epistates,
                                                     const SEXP &seed)
@@ -712,7 +735,7 @@ TissueSimulation TissueSimulation::build_simulation(const SEXP &simulation_name,
     std::string c_name;
     auto c_width = FromSEXP::get<size_t>(width, "parameter \"width\"", "positive natural value");
     auto c_height = FromSEXP::get<size_t>(height, "parameter \"height\"", "positive natural value");
-    auto c_save = FromSEXP::get<bool>(save_snapshots, "parameter \"save_snapshots\"", "Boolean value");
+    auto c_save = FromSEXP::get<bool>(save_directory, "parameter \"save_directory\"", "Boolean value");
     auto c_seed = get_random_seed<int>(seed);
 
     if (TYPEOF(simulation_name) == NILSXP) {
@@ -780,9 +803,183 @@ TissueSimulation TissueSimulation::build_simulation(const SEXP &simulation_name,
     return sim;
 }
 
+template<typename DURATION>
+Rcpp::NumericVector build_difftime(const DURATION& duration)
+{
+    const auto sec_duration = std::chrono::duration_cast<std::chrono::seconds>(duration);
+
+    Rcpp::NumericVector res = Rcpp::NumericVector::create(sec_duration.count());
+
+    res.attr("class") = "difftime";
+    res.attr("units") = "secs";
+
+    return res;
+}
+
+CLONES::Mutants::Evolutions::TissueSimulation::SnapshotTrigger::Duration
+from_difftime(const Rcpp::RObject difftime_value)
+{
+    if (!difftime_value.inherits("difftime")) {
+        Rcpp::stop("Input must be a 'difftime' object.");
+    }
+
+    Rcpp::NumericVector nv(difftime_value);
+    std::string units = Rcpp::as<std::string>(nv.attr("units"));
+    double seconds = nv[0];
+
+    if (units == "week") {
+        units = "days";
+        seconds *= 7;
+    }
+
+    if (units == "days") {
+        units = "hours";
+        seconds *= 24;
+    }
+
+    if (units == "hours") {
+        units = "mins";
+        seconds *= 60;
+    }
+
+    if (units == "mins") {
+        units = "secs";
+        seconds *= 60;
+    }
+
+    if (units != "secs") {
+        Rcpp::stop("Unsupported difftime unit: " + units);
+    }
+
+    using Duration = CLONES::Mutants::Evolutions::TissueSimulation::SnapshotTrigger::Duration;
+
+    std::chrono::duration<double> duration_sec(seconds);
+
+    return std::chrono::duration_cast<Duration>(duration_sec);
+}
+
+Rcpp::DataFrame TissueSimulation::get_snapshot_dataframe() const
+{
+    using namespace Rcpp;
+
+    size_t num_of_snapshots = sim_ptr->get_snapshot_info().size();
+
+    DatetimeVector times(num_of_snapshots);
+    NumericVector clocks(num_of_snapshots);
+    IntegerVector cells(num_of_snapshots);
+    CharacterVector paths(num_of_snapshots);
+
+    size_t i{0};
+    for (const auto& snapshot_info : sim_ptr->get_snapshot_info()) {
+        std::chrono::duration<double> sec = snapshot_info.get_time().time_since_epoch();
+        times[i] =  Datetime(sec.count());
+        clocks[i] = snapshot_info.get_clock();
+        cells[i] = snapshot_info.get_num_of_cells();
+        paths[i] = to_string(snapshot_info.get_file_path());
+
+        ++i;
+    }
+
+    return DataFrame::create(_["time"] = times, _["clock"] = clocks,
+                             _["cells"] = cells, _["file"] = paths);
+}
+
+SEXP TissueSimulation::get_snapshot_triggers() const
+{
+    using namespace Rcpp;
+
+    List triggers = List::create();
+
+    const auto& s_trigger = sim_ptr->get_snapshot_trigger();
+
+    if (!std::is_max(s_trigger.get_time_trigger())) {
+        triggers["time interval"] = build_difftime(s_trigger.get_time_trigger());
+    }
+
+    if (!std::is_max(s_trigger.get_clock_trigger())) {
+        triggers["clock interval"] = s_trigger.get_clock_trigger();
+    }
+
+    if (!std::is_max(s_trigger.get_cardinality_trigger())) {
+        triggers["number of cells"] = s_trigger.get_cardinality_trigger();
+    }
+
+    return Rcpp::wrap(triggers);
+}
+
+void validate_trigger_names(const Rcpp::List& t_list)
+{
+    Rcpp::CharacterVector names = t_list.names();
+
+    if (names.size() == 0) {
+        Rcpp::stop("The snapshot trigger specification must be a named list");
+    }
+
+    std::set<std::string> C_names;
+    for (size_t i = 0; i < names.size(); ++i) {
+        C_names.insert(as<std::string>(names[i]));
+    }
+
+    C_names.erase("time interval");
+    C_names.erase("clock interval");
+    C_names.erase("number of cells");
+
+    for (const auto& C_name : C_names) {
+        Rcpp::warning("Unknown trigger name \"" + C_name + "\".");
+    }
+}
+
+void TissueSimulation::set_snapshot_triggers(const SEXP triggers_list)
+{
+    using namespace Rcpp;
+
+    List t_list = FromSEXP::get<List>(triggers_list,
+                                      "snapshot trigger specification", "a list");
+
+    validate_trigger_names(t_list);
+
+    auto& s_trigger = sim_ptr->get_snapshot_trigger();
+    if (t_list.containsElementNamed("time interval")) {
+        using Duration = CLONES::Mutants::Evolutions::TissueSimulation::SnapshotTrigger::Duration;
+        Duration time_delta;
+        if (Rf_isNull(t_list["time interval"])) {
+            time_delta = std::numeric_limits<Duration>::max();
+        } else {
+            time_delta = from_difftime(t_list["time interval"]);
+        }
+
+        s_trigger.set_time_trigger(time_delta);
+    }
+
+    if (t_list.containsElementNamed("clock interval")) {
+        CLONES::Time clock_delta;
+        if (Rf_isNull(t_list["clock interval"])) {
+            clock_delta = std::numeric_limits<CLONES::Time>::max();
+        } else {
+            clock_delta = FromSEXP::get<CLONES::Time>(t_list["clock interval"],
+                                                      "value of the element \"clock interval\"",
+                                                      "floating point value");
+        }
+        s_trigger.set_clock_trigger(clock_delta);
+    }
+
+    if (t_list.containsElementNamed("number of cells")) {
+        uint64_t num_delta;
+        if (Rf_isNull(t_list["number of cells"])) {
+            num_delta = std::numeric_limits<uint64_t>::max();
+        } else {
+            num_delta = FromSEXP::get<uint64_t>(t_list["number of cells"],
+                                                "value of the element \"number of cells\"",
+                                                "integer");
+        }
+
+        s_trigger.set_cardinality_trigger(num_delta);
+    }
+}
+
 TissueSimulation::~TissueSimulation()
 {
-    if (sim_ptr.use_count() == 1 && !save_snapshots) {
+    if (sim_ptr.use_count() == 1 && !save_directory) {
         auto dir = sim_ptr->get_logger().get_directory();
 
         sim_ptr = nullptr;
@@ -1218,7 +1415,7 @@ void TissueSimulation::place_cell(const SEXP &species_name,  const SEXP &x, cons
 }
 
 Rcpp::List
-TissueSimulation::get_cells(const CLONES::Mutants::Evolutions::Tissue &tissue) const
+TissueSimulation::get_cells(const CLONES::Mutants::Evolutions::Tissue &tissue)
 {
     namespace RS = CLONES::Mutants::Evolutions;
 
@@ -1235,17 +1432,17 @@ TissueSimulation::get_cells(const CLONES::Mutants::Evolutions::Tissue &tissue) c
 Rcpp::List
 TissueSimulation::get_cell(const CLONES::Mutants::Evolutions::Tissue &tissue,
                            const CLONES::Mutants::Evolutions::AxisPosition &x,
-                           const CLONES::Mutants::Evolutions::AxisPosition &y) const
+                           const CLONES::Mutants::Evolutions::AxisPosition &y)
 {
     const auto cell_proxy = tissue({x, y});
 
-    return wrap_a_cell(cell_proxy);
+    return wrap_a_cell(tissue, cell_proxy);
 }
 
 Rcpp::List TissueSimulation::get_cells(
     const CLONES::Mutants::Evolutions::Tissue &tissue,
     const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &lower_corner,
-    const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner) const
+    const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner)
 {
     std::set<CLONES::Mutants::SpeciesId> species_ids;
 
@@ -1317,7 +1514,7 @@ Rcpp::List TissueSimulation::get_cells(
     const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &lower_corner,
     const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner,
     const std::vector<std::string> &mutant_filter,
-    const std::vector<std::string> &epigenetic_filter) const
+    const std::vector<std::string> &epigenetic_filter)
 {
     std::set<std::string> mutant_set(mutant_filter.begin(), mutant_filter.end());
     std::set<std::string> epigenetic_set(epigenetic_filter.begin(),
@@ -2102,7 +2299,7 @@ Rcpp::List TissueSimulation::choose_cell_in(const SEXP &names)
 
     const auto &cell = sim_ptr->choose_cell_in(C_names);
 
-    return wrap_a_cell(cell);
+    return wrap_a_cell(sim_ptr->tissue(), cell);
 }
 
 Rcpp::List TissueSimulation::choose_cell_in(const SEXP &names,
@@ -2115,7 +2312,7 @@ Rcpp::List TissueSimulation::choose_cell_in(const SEXP &names,
 
     const auto &cell = sim_ptr->choose_cell_in(C_names, rectangle);
 
-    return wrap_a_cell(cell);
+    return wrap_a_cell(sim_ptr->tissue(), cell);
 }
 
 Rcpp::List TissueSimulation::choose_border_cell_in(const SEXP &names)
@@ -2124,7 +2321,7 @@ Rcpp::List TissueSimulation::choose_border_cell_in(const SEXP &names)
 
     const auto &cell = sim_ptr->choose_border_cell_in(C_names);
 
-    return wrap_a_cell(cell);
+    return wrap_a_cell(sim_ptr->tissue(), cell);
 }
 
 Rcpp::List TissueSimulation::choose_border_cell_in(const SEXP &names,
@@ -2137,7 +2334,7 @@ Rcpp::List TissueSimulation::choose_border_cell_in(const SEXP &names,
 
     const auto &cell = sim_ptr->choose_border_cell_in(C_names, rectangle);
 
-    return wrap_a_cell(cell);
+    return wrap_a_cell(sim_ptr->tissue(), cell);
 }
 
 void TissueSimulation::mutate_progeny(const CLONES::Mutants::Evolutions::AxisPosition &x,

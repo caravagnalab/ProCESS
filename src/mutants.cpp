@@ -157,6 +157,8 @@ RCPP_MODULE(Mutants)
 //'     returns the sample forest of the tissue simulation.
 //'   - <code>[get_samples_info()](TissueSimulation-cash-get_samples_info.md)</code>
 //'     returns information about the collected samples.
+//'   - <code>[get_snapshot_info()](TissueSimulation-cash-get_snapshot_info.md)</code>
+//'     returns information about the collected snapshots.
 //'   - <code>[get_tissue_size()](TissueSimulation-cash-get_tissue_size.md)</code>
 //'     returns the size of the simulated tissue.
 //'   - <code>[history_delta](TissueSimulation-cash-history_delta.md)</code>
@@ -189,6 +191,8 @@ RCPP_MODULE(Mutants)
 //'     sets the rate of an event.
 //'   - <code>[set_rates()](TissueSimulation-cash-set_rates.md)</code>
 //'     sets the rates of multiple events.
+//'   - <code>[snapshot_trigger](TissueSimulation-cash-snapshot_trigger.md)</code>
+//'     exposes the tissue simulation snapshot triggers.
 //'   - <code>[var()](TissueSimulation-cash-var.md)</code>
 //'     builds a simulation variable.
 //' @keywords internal
@@ -507,6 +511,119 @@ RCPP_MODULE(Mutants)
                     &TissueSimulation::choose_border_cell_in),
                 "Randomly choose one cell having a specified mutant in a rectangular "
                 "selection")
+
+//' @name TissueSimulation$snapshot_triggers
+//' @title The snapshot triggers
+//' @description This property is the tissue simulation snapshot trigger list
+//' @details This property is a named list containing three values at most:
+//'   `time interval`, `clock interval`, and `number of cells`. They
+//'   represents the maximum computation time, the maximum simulation time,
+//'   and the maximum difference in the number of tumour cells between two
+//'   snapshots, respectively.
+//'
+//'   Notice that this property differs from
+//'   <code>[TissueSimulation$history_delta](TissueSimulation-cash-history_delta.md)</code>.
+//' @examples
+//' # set the random seed
+//' set.seed(0)
+//'
+//' # build a simulation
+//' sim <- TissueSimulation()
+//'
+//' # add a mutant
+//' sim$add_mutant("A", list(duplication = 3, death = 1))
+//'
+//' # place a cell
+//' sim$place_cell("A", 500, 500)
+//'
+//' # get snapshot information
+//' sim$get_snapshot_info()
+//'
+//' # get the simulation's snapshot triggers
+//' sim$snapshot_triggers
+//'
+//' # take a new snapshot every 1000 new tumour cells
+//' sim$snapshot_triggers <- list("number of cells" = 1000)
+//'
+//' # get new simulation's snapshot triggers
+//' sim$snapshot_triggers
+//'
+//' # let the simulation evolve until consists of 5000 cells
+//' sim$run_up_to_size("A", 4000)
+//'
+//' # get snapshot information
+//' sim$get_snapshot_info()
+//'
+//' # set new snapshot triggers: get a snapshot every 30 seconds, every 10
+//' # simulated time units, and every 1000 new cells (because set previously)
+//' sim$snapshot_triggers <- list("time interval" = as.difftime(30, units = "secs"),
+//'                               "clock interval" = 10)
+//'
+//' # get current simulation's snapshot triggers
+//' sim$snapshot_triggers
+//'
+//' # take a snapshot every 5 simulated time units and reset the other
+//' # trigger types
+//' sim$snapshot_triggers <- list("time interval" = NULL,
+//'                               "clock interval" = 5,
+//'                               "number of cells" = NULL)
+//'
+//' # get new simulation's snapshot triggers
+//' sim$snapshot_triggers
+//'
+//' # let the simulation evolve for other 20 time units
+//' sim$run_up_to_time(sim$get_clock() + 20)
+//'
+//' # get snapshot information
+//' sim$get_snapshot_info()
+//' @seealso <code>[TissueSimulation](TissueSimulation_code.md)</code>,
+//'   [TissueSimulation$get_snapshot_info()],
+//'   [recover_simulation()],
+//'   <code>[TissueSimulation$history_delta](TissueSimulation-cash-history_delta.md)</code>
+        .property("snapshot_triggers",
+                  &TissueSimulation::get_snapshot_triggers,
+                  &TissueSimulation::set_snapshot_triggers,
+                 "The tissue simulation snapshot triggers")
+
+//' @name TissueSimulation$get_snapshot_info
+//' @title Getting snapshot information
+//' @description This method returns the data frame of the snapshots
+//' @return A data frame consisting of four columns: `time`, `clock`,
+//'   `cells`, and `file`. Each row represents a snapshot. The column
+//'   `time` stores the snapshot time. The columns `clock` and `cells`
+//'   maintain the simulated time and the number of tumour cells at
+//'   the snapshot time, respectively. Finally, the column `file`
+//'   contains the snapshot file path.
+//' @examples
+//' # set the random seed
+//' set.seed(0)
+//'
+//' # build a simulation
+//' sim <- TissueSimulation()
+//'
+//' # add a mutant
+//' sim$add_mutant("A", list(duplication = 3, death = 1))
+//'
+//' # place a cell
+//' sim$place_cell("A", 500, 500)
+//'
+//' # get snapshot information
+//' sim$get_snapshot_info()
+//'
+//' # take a new snapshot every 10 simulated time units
+//' sim$snapshot_triggers <- list("clock interval" = 10)
+//'
+//' # let the simulation evolve up to time 30
+//' sim$run_up_to_time(30)
+//'
+//' # get snapshot information
+//' sim$get_snapshot_info()
+//' @seealso <code>[TissueSimulation](TissueSimulation_code.md)</code>,
+//'   <code>[TissueSimulation$snapshot_triggers](TissueSimulation-cash-snapshot_triggers.md)</code>,
+//'   [recover_simulation()]
+        .method("get_snapshot_info",
+                &TissueSimulation::get_snapshot_dataframe,
+                "Get a data frame of the snapshots")
 
 //' @name TissueSimulation$schedule_mutation
 //' @title Scheduling a mutation
@@ -843,7 +960,7 @@ RCPP_MODULE(Mutants)
                      const)(&TissueSimulation::get_cells),
                 "Get cells from the simulated tissue")
         .method("get_cells",
-                (List (TissueSimulation::*)(const std::string &)
+                (List (TissueSimulation::*)(const SEXP &)
                      const)(&TissueSimulation::get_cells),
                 "Get cells from what was the simulated tissue status before a sampling")
         .method("get_cells",
@@ -1359,8 +1476,11 @@ RCPP_MODULE(Mutants)
 
 //' @name TissueSimulation$history_delta
 //' @title The delta time between time series samples
-//' @description This value is the maximum time between two successive
+//' @description The maximum time between two consecutive
 //'   time series data samples.
+//' @details This property is the maximum time between two consecutive
+//'   time series data samples. Notice that this property differs from
+//'   <code>[TissueSimulation$snapshot_triggers](TissueSimulation-cash-snapshot_triggers.md)</code>.
 //' @examples
 //' # create a simulation
 //' sim <- TissueSimulation()
@@ -1370,7 +1490,8 @@ RCPP_MODULE(Mutants)
 //'
 //' # set the delta time between two time series samples
 //' sim$history_delta <- 20
-//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
+//' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>,
+//'   <code>[TissueSimulation$snapshot_triggers](TissueSimulation-cash-snapshot_triggers.md)</code>
         .property("history_delta", &TissueSimulation::get_history_delta,
                   &TissueSimulation::set_history_delta,
                   "The sampling delta for the get_*_history functions")
@@ -2027,8 +2148,9 @@ RCPP_MODULE(Mutants)
 //' @name recover_simulation
 //' @title Loading a simulation
 //' @description This method loads a simulation from the disk.
-//' @usage recover_simulation(name)
-//' @param name The name of the simulation to be recovered.
+//' @usage recover_simulation(path)
+//' @param path The path of the directory in which the simulation
+//'   was saved or that of a snapshot file.
 //' @examples
 //' # set the random seed for repeatability
 //' set.seed(0)
@@ -2037,7 +2159,7 @@ RCPP_MODULE(Mutants)
 //' # save its snapshots in a local directory
 //' sim <- TissueSimulation("recover_simulation_test",
 //'                         epigenetic_states = c("E1", "E2"),
-//'                         save_snapshots = TRUE)
+//'                         save_directory = TRUE)
 //'
 //' # add mutant "A" and set its species rates
 //' sim$add_mutant("A",
@@ -2049,6 +2171,13 @@ RCPP_MODULE(Mutants)
 //'
 //' # simulate up to time 50
 //' sim$run_up_to_time(50)
+//'
+//' # simulate up to time 75. Each new simulation step produces
+//' # a new snapshot
+//' sim$run_up_to_time(75)
+//'
+//' # simulate up to time 80
+//' sim$run_up_to_time(80)
 //'
 //' # show the simulation
 //' sim
@@ -2064,6 +2193,20 @@ RCPP_MODULE(Mutants)
 //'
 //' sim
 //'
+//' # get the sim clock
+//' sim$get_clock()
+//'
+//' # get the snapshot information
+//' snapshot_info <- sim$get_snapshot_info()
+//'
+//' # load the second snapshot
+//' sim <- recover_simulation(snapshot_info[["file"]][2])
+//'
+//' sim
+//'
+//' # get the sim clock
+//' sim$get_clock()
+//'
 //' # delete dump directory
 //' unlink("recover_simulation_test", recursive = TRUE)
 //' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
@@ -2072,12 +2215,12 @@ RCPP_MODULE(Mutants)
 //' @name TissueSimulation
 //' @title Building a new simulation
 //' @description This method builds a new simulation.
-//' @usage TissueSimulation(name, width = 1000, height = 1000, save_snapshots = FALSE)
+//' @usage TissueSimulation(name, width = 1000, height = 1000, save_directory = FALSE)
 //' @param name The name of the simulation (default:
 //'   "`ProCESS_<year>_<hour><minute><second>`").
 //' @param width The width of the simulated tissue (default: 1000).
 //' @param height The height of the simulated tissue (default: 1000).
-//' @param save_snapshots A flag to save simulation snapshots on disk
+//' @param save_directory A flag to save simulation data in the working directory
 //'   (default: `FALSE`).
 //' @param rates A data frame specifying the simulation species and their rates
 //'   (default: `NULL`). See [TissueSimulation$set_rates()] for the data frame
@@ -2098,11 +2241,11 @@ RCPP_MODULE(Mutants)
 //' # however no directory "test" has been created in the working directory
 //' "test" %in% list.files()
 //'
-//' # By using the optional parameter `save_snapshots`, we force the
-//' # simulation to save its progresses in a local directory whose name
+//' # By using the optional parameter `save_directory`, we force the
+//' # simulation to save its data in a local directory whose name
 //' # is the name of the simulation, i.e., "test". This data will be
 //' # preserved when the simulation object will be destroyed.
-//' sim <- TissueSimulation("test", save_snapshots = TRUE)
+//' sim <- TissueSimulation("test", save_directory = TRUE)
 //'
 //' # the directory "test" exists and contains a binary dump of
 //' # the simulation
@@ -2116,7 +2259,7 @@ RCPP_MODULE(Mutants)
 //' unlink("test", recursive = TRUE)
 //'
 //' # the name parameter is optional
-//' sim <- TissueSimulation(save_snapshots = TRUE)
+//' sim <- TissueSimulation(save_directory = TRUE)
 //'
 //' # the name of the simulation is `ProCESS_<YY><MM><DD>_<HH><MM><SS>`
 //' sim$get_name()
@@ -2167,7 +2310,7 @@ RCPP_MODULE(Mutants)
 //' @seealso <code>[TissueSimulation](TissueSimulation_class.md)</code>
     function("TissueSimulation", &TissueSimulation::build_simulation,
              List::create(_["name"] = R_NilValue, _["width"] = 1000, _["height"] = 1000,
-                          _["save_snapshots"] = false, _["rates"] = R_NilValue,
+                          _["save_directory"] = false, _["rates"] = R_NilValue,
                           _["epigenetic_states"] = R_NilValue,
                           _["seed"] = R_NilValue),
              "Create a tissue simulation");
@@ -2239,7 +2382,8 @@ RCPP_MODULE(Mutants)
 //'     is the name of the associated cell's mutant.
 //'
 //' @seealso [get_node_tour()], <code>[SampleForestNodeTour]</code>,
-//'   <code>[PhylogeneticForestNode]</code>, [`vignette("node_tour")`]
+//'   <code>[PhylogeneticForestNode]</code>,
+//'   `vignette("node_tour")`
    class_<SampleForestNode>("SampleForestNode")
         REGISTER_NODE_COMMON_FIELDS(SampleForestNode);
 
@@ -2262,7 +2406,8 @@ RCPP_MODULE(Mutants)
 //'     is a Boolean flag that is set to `TRUE` only when the tour ended.
 //'
 //' @seealso [get_node_tour()], <code>[SampleForestNode]</code>,
-//'   <code>[PhylogeneticForestNodeTour]</code>, [`vignette("node_tour")`]
+//'   <code>[PhylogeneticForestNodeTour]</code>,
+//'   `vignette("node_tour")`
     class_<SampleForestNodeTour>("SampleForestNodeTour")
         REGISTER_TOUR_COMMON_FIELDS(SampleForestNodeTour);
 
@@ -2427,9 +2572,11 @@ RCPP_MODULE(Mutants)
 //'
 //' print("Functor 4 - Only leaves")
 //' print(collect_labels(tour)[1:5])
-//' @seealso <code>[SampleForestNode]</code>, <code>[SampleForestNodeTour]</code>,
-//'    <code>[PhylogeneticForestNode]</code>, <code>[PhylogeneticForestNodeTour]</code>,
-//'    [`vignette("node_tour")`]
+//' @seealso <code>[SampleForestNode]</code>,
+//'    <code>[SampleForestNodeTour]</code>,
+//'    <code>[PhylogeneticForestNode]</code>,
+//'    <code>[PhylogeneticForestNodeTour]</code>,
+//'    `vignette("node_tour")`
     function("get_node_tour", &get_node_tour,
             List::create(
                  _["forest"], _["labelling_functor"] = R_NilValue,

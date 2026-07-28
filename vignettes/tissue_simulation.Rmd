@@ -70,15 +70,15 @@ sim <- TissueSimulation("Test")
 The `set.seed()` call is not mandatory and can be omitted; however, it is
 highly recommended to ensure the simulation repeatability.
 
-The optional Boolean parameter `save_snapshots` can be used to save the
+The optional Boolean parameter `save_directory` can be used to save the
 simulation progress to the disk and recover it later. By
-setting `save_snapshots` to `TRUE`, the simulation progress os
+setting `save_directory` to `TRUE`, the simulation progress are
 saved in a directory named after the simulation.
 
 ```{r, eval = FALSE}
 # the progress of the simulation will be saved in the "Test" folder.
 # If the directory "Test" already exists, an exception is raised.
-sim <- TissueSimulation("Test", save_snapshots = TRUE)
+sim <- TissueSimulation("Test", save_directory = TRUE)
 ```
 
 ```{r echo=FALSE, results='hide', message=FALSE, warning=FALSE}
