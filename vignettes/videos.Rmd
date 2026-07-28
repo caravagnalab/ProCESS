@@ -1,0 +1,442 @@
+---
+title: "Producing evolution videos"
+output: rmarkdown::html_vignette
+description: >
+  How to produce a video showing tumour evolution
+vignette: >
+  %\VignetteIndexEntry{Producing evolution videos}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+```{r, include = FALSE}
+req_pkgs <- c("av", "htmltools", "patchwork")
+all_installed <- all(sapply(req_pkgs, requireNamespace, quietly = TRUE))
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = all_installed
+)
+```
+
+> *Disclaimer:* ProCESS/CLONES implements probability distributions using the
+> C++11 random number distribution classes. Since the standard does not specify
+> the underlying algorithms, their implementations are left to the compiler.
+> Consequently, the simulation output depends on the compiler used to build
+> [CLONES](https://github.com/albertocasagrande/CLONES), and the results
+> reported in this article may differ from those obtained by the reader.
+
+This article exclusively deals with producing videos of the tumour evolution.
+Please, refer to [this article](tissue_simulation.md) for tumour evolution
+modelling.
+
+## Collecting Data
+
+In order to produce a video, we need to collect simulation snapshots during
+tumour evolution. <code>[TissueSimulation](TissueSimulation_class.md)</code>
+performs this task by default at the end of
+<code>[place_cell()](TissueSimulation-cash-place_cell.md)</code>,
+<code>[sample_cells()](TissueSimulation-cash-sample_cells.md)</code>,
+<code>[mutate_progeny()](TissueSimulation-cash-mutate_progeny.md)</code>,
+and <code>run_*()</code> calls.
+
+Let us build a simulation and use
+<code>[get_snapshot_info()](TissueSimulation-cash-get_snapshot_info.md)</code>
+to inspect the collected snapshots.
+
+```{r}
+library("ProCESS")
+
+# set the seed of the random number generator for repeatability
+set.seed(0)
+
+sim <- TissueSimulation(width = 600, height = 600)
+
+# avoid drift
+sim$death_activation_level <- 50
+
+# add a mutant
+sim$add_mutant("A", c(duplication = 0.12, death = 0.05))
+
+# inspect the collected snapshots
+sim$get_snapshot_info()
+
+# place a cell and trigger the first snapshot
+sim$place_cell("A", 300, 300)
+
+# count the collected snapshots
+nrow(sim$get_snapshot_info())
+
+# let the model evolve and trigger the second snapshot
+sim$run_up_to_size("A", 10)
+
+# count the collected snapshots
+nrow(sim$get_snapshot_info())
+
+# add a further mutant
+sim$add_mutant("B", c(duplication = 0.145, death = 0.06))
+
+# one the "A" cell mutate into "B" and the third snapshot
+# is collected
+sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
+
+# count the collected snapshots
+nrow(sim$get_snapshot_info())
+
+# let the model evolve and trigger the fourth snapshot
+sim$run_up_to_size("B", 30)
+
+# count the collected snapshots
+nrow(sim$get_snapshot_info())
+
+# collect a sample and get the fifth snapshot
+sim$sample_cells("S1", c(145, 230), c(215, 300))
+
+# count the collected snapshots
+nrow(sim$get_snapshot_info())
+```
+
+The function <code>[build_snapshot_video()](build_snapshot_video.md)</code>,
+which is exclusively available when the package
+[av](https://CRAN.R-project.org/package=av) is installed, uses the
+collected snapshot to build a video whose frames depicts the tissue as it was
+when snapshots were collected.
+
+The snippet
+
+```{r, eval = FALSE}
+build_snapshot_video(sim, quiet = TRUE)
+```
+
+produces the following video.
+
+```{R, echo = FALSE}
+output <- build_snapshot_video(sim, output_file = "video_1.mp4",
+                               quiet = TRUE)
+
+htmltools::tags$video(
+  src = "video_1.mp4",
+  type = "video/mp4",
+  controls = TRUE,
+  autoplay = TRUE,
+  loop = TRUE,
+  style = "max-width: 100%; height: auto;"
+)
+```
+
+## Triggering Tissue Snapshots
+
+Whenever the snapshots collected by default are not enough to completely
+represent the tumour evolution, user can set custom snapshot triggers.
+ProCESS supports three types of triggers:
+ - computation time triggers, e.g., collect a snapshot at least every 5 minutes
+ - simulated time triggers, e.g., collect a snapshot at least every 5 simulated
+   time units
+ - number of tumour cells triggers, e.g., collect a snapshot at least every time
+   the overall number of tumour cells increased by 1000 cells.
+
+The <code>[TissueSimulation](TissueSimulation_class.md)</code> property
+<code>[snapshot_triggers](TissueSimulation-cash-snapshot_triggers.md)</code>
+reports the current custom triggers and can be used to set them.
+
+```{R}
+# see the current custom snapshot triggers
+sim$snapshot_triggers
+
+# take a new snapshot every 1000 new tumour cells
+sim$snapshot_triggers <- list("number of cells" = 1000)
+
+# get the current simulated time
+sim$get_clock()
+
+# count the snapshots collected before trigger changes
+previous_snapshots <- nrow(sim$get_snapshot_info())
+
+# let the model evolve until "B" consists of less than 2000 cells
+sim$run_up_to_size("B", 2000)
+
+# get the simulated time at each snapshot
+snapshot_info <- sim$get_snapshot_info()
+
+# show the number of tumour cells in each snapshot since the last default
+# trigger
+snapshot_info$cells[previous_snapshots:nrow(snapshot_info)]
+```
+
+<code>[snapshot_triggers](TissueSimulation-cash-snapshot_triggers.md)</code> can
+also be used to reset custom triggers.
+
+```{R}
+# see the current custom snapshot triggers
+sim$snapshot_triggers
+
+# take a new snapshot every 1000 new tumour cells
+sim$snapshot_triggers <- list("number of cells" = NULL, "clock interval" = 5)
+
+# count the snapshots collected before trigger changes
+previous_snapshots <- nrow(sim$get_snapshot_info())
+
+# let the model evolve for further 20 simulated time units
+sim$run_up_to_time(sim$get_clock() + 20)
+
+# get the simulated time at each snapshot
+snapshot_info <- sim$get_snapshot_info()
+
+# show the simulated clock of each snapshot since trigger changes
+snapshot_info$clock[previous_snapshots:nrow(snapshot_info)]
+```
+Custom snapshot triggers allow us to produce a more fluid evolution video.
+For instance, let us consider the tumour model detailed in
+[this article](four_mutants.md) and let us customise the snapshot triggers
+just after creating the
+<code>[TissueSimulation](TissueSimulation_class.md)</code> object as follows.
+
+```{R, eval = FALSE}
+library("ProCESS")
+
+# set the seed of the random number generator for repeatability
+set.seed(0)
+
+sim <- TissueSimulation(width = 600, height = 600)
+
+# collect a snapshot every 5 simulated time units
+sim$snapshot_triggers <- list("clock interval" = 5)
+```
+
+The remaining part of the model specification is the same detailed
+in [this article](four_mutants.md).
+
+```{R, eval = FALSE}
+# avoid drift
+sim$death_activation_level <- 50
+
+# add the mutant A
+sim$add_mutant("A", c(duplication = 0.12, death = 0.05))
+
+# place a cell in the tissue and simulate it until 10 cells
+sim$place_cell("A", 300, 300)
+sim$run_up_to_size("A", 10, quiet = TRUE)
+
+# add the mutant B and let mutate a border cell of A in B
+sim$add_mutant("B", c(duplication = 0.145, death = 0.06))
+sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
+
+# simulate the tissue up to 30 cells in B
+sim$run_up_to_size("B", 30, quiet = TRUE)
+
+# add the third mutant and let one cell of A mutate into C
+sim$add_mutant("C", c(duplication = 0.15, death = 0.06))
+sim$mutate_progeny(sim$choose_border_cell_in("A"), "C")
+
+# simulate the tissue until C consists of 25000 cells
+sim$run_up_to_size("C", 25000, quiet = TRUE)
+
+# collect two samples
+sim$sample_cells("S1", c(145, 230), c(215, 300))
+sim$sample_cells("S2", c(350, 300), c(420, 370))
+
+# add a further mutant and derive it from B
+sim$add_mutant(name = "D", c(duplication = 0.8, death = 0.01))
+sim$mutate_progeny(sim$choose_border_cell_in("B"), "D")
+
+# let the tumour evolve until the mutant C and D cumulatively
+# consist of 10000 cells
+sim$run_until(sim$var("C") + sim$var("D") == 1e5, quiet = TRUE)
+
+# collect the last sample
+sim$sample_cells("S3", c(100, 400), c(170, 470))
+```
+
+At the end of the evolution, by calling
+
+```{R, eval = FALSE}
+build_snapshot_video(sim, res = 300, width=1440, height=1024, framerate = 20)
+```
+
+we produce the following video.
+
+```{R, echo = FALSE}
+sim <- recover_simulation("four_mutants", quiet = TRUE)
+sample_forest <- load_forest("fm_sample_forest.sff", quiet = TRUE)
+
+output <- build_snapshot_video(sim, res = 300, width=1440, height=1024,
+                               framerate = 20, output_file = "video_2.mp4",
+                               quiet = TRUE)
+
+htmltools::tags$video(
+  src = "video_2.mp4",
+  type = "video/mp4",
+  controls = TRUE,
+  autoplay = TRUE,
+  loop = TRUE,
+  style = "max-width: 100%; height: auto;"
+)
+```
+
+## Customizing Plots
+
+<code>[build_snapshot_video()](build_snapshot_video.md)</code> also supports
+plot customisations. The parameter `plot_function` allows users to specify
+their plotting function. The actual parameter should be a function that
+takes in input a simulation and returns a plot. The plots of produced by
+`plot_functions` taking in input the simulation snapshots are the frames of
+the produced video.
+
+For instance, we can produce a video focusing on the cells represented in
+the sample forest. First of all, we need to define a focus function for the
+cells in the sample forest (see, <code>[plot_tissue()](plot_tissue.md)</code>).
+
+```{R}
+# a focus function that highlights the cells represented by
+# the sample forest
+in_sample_forest <- function(cells) {
+  # sample_forest has been defined in four_mutants.md
+  sample_forest$represents_cell(cells$cell_id)
+}
+```
+
+Then, we may define the `plot_function`.
+
+```{R}
+# define a unique color map for all the frames
+color_map <- get_species_colors(sim)
+
+# this function will be called to plot each video frames
+plot_function <- function(snapshot) {
+    plot_tissue(snapshot,
+                color_map = color_map,
+                plot_sample_region = FALSE,
+                list_all_species = TRUE,
+                focus_function = in_sample_forest)
+}
+```
+
+Finally, the snippet
+
+```{R, eval = FALSE}
+build_snapshot_video(sim, res = 300, width=1440, height=1024,
+                     framerate = 20, plot_function = plot_function)
+```
+
+produces the following result.
+
+```{R, echo = FALSE}
+output <- build_snapshot_video(sim, res = 300, width=1440, height=1024,
+                               framerate = 20, output_file = "video_3.mp4",
+                               plot_function = plot_function,
+                               quiet = TRUE)
+
+htmltools::tags$video(
+  src = "video_3.mp4",
+  type = "video/mp4",
+  controls = TRUE,
+  autoplay = TRUE,
+  loop = TRUE,
+  style = "max-width: 100%; height: auto;"
+)
+```
+
+The package [patchwork](https://CRAN.R-project.org/package=patchwork) can be
+easily used to produce more complex videos.
+
+```{R, eval = FALSE}
+library(patchwork)
+library(dplyr)
+
+# a frame plot function
+plot_function <- function(simulation) {
+  # generate the tissue plot
+  tissue_plot <- plot_tissue(simulation, color_map = color_map,
+                             focus_function = in_sample_forest)
+
+  # get the snapshot simulated time
+  clock <- simulation$get_clock()
+
+  # an alpha function that hides all nodes representing cells born after the
+  # snapshot simulated time
+  alpha_funct <- function(nodes) {
+    nodes %>%
+      dplyr::mutate(alpha = dplyr::case_when(birth_time <= clock ~ 1,
+                                             TRUE ~ 0)) %>%
+      dplyr::pull(alpha)
+  }
+
+  # generate the forest plot hiding the nodes representing cells that are
+  # not born yet and removing the legends
+  forest_plot <- plot_forest(sample_forest, color_map = color_map,
+                             alpha_function = alpha_funct) +
+    ggplot2::guides(color = "none") +
+    ggplot2::guides(shape = "none")
+
+  # plot the tissue and the forest plots together
+  (tissue_plot | forest_plot) +
+    plot_layout(guides = "collect") &
+    ggplot2::theme(legend.position = "bottom")
+}
+
+build_snapshot_video(sim, width = 1820, height = 1024, framerate = 20,
+                     res = 300, plot_function = plot_function)
+```
+
+```{R, warning = FALSE, echo = FALSE}
+library(patchwork)
+library(dplyr)
+
+# a frame plot function
+plot_function <- function(simulation) {
+  # generate the tissue plot
+  tissue_plot <- plot_tissue(simulation, color_map = color_map,
+                             focus_function = in_sample_forest)
+
+  # get the snapshot simulated time
+  clock <- simulation$get_clock()
+
+  # an alpha function that hides all nodes representing cells born after the
+  # snapshot simulated time
+  alpha_funct <- function(nodes) {
+    nodes %>%
+      dplyr::mutate(alpha = dplyr::case_when(birth_time <= clock ~ 1,
+                                             TRUE ~ 0)) %>%
+      dplyr::pull(alpha)
+  }
+
+  # generate the forest plot hiding the nodes representing cells that are
+  # not born yet and removing the legends
+  forest_plot <- plot_forest(sample_forest, color_map = color_map,
+                             alpha_function = alpha_funct) +
+    ggplot2::guides(color = "none") +
+    ggplot2::guides(shape = "none")
+
+  # plot the tissue and the forest plots together
+  (tissue_plot | forest_plot) +
+    plot_layout(guides = "collect") &
+    ggplot2::theme(legend.position = "bottom")
+}
+
+output_file <- build_snapshot_video(sim, output_file = "video_4.mp4",
+                                    width = 1820, height = 1024, framerate = 20,
+                                    res = 300, plot_function = plot_function,
+                                    quiet = TRUE)
+
+htmltools::tags$video(
+  src = "video_4.mp4",
+  type = "video/mp4",
+  controls = TRUE,
+  autoplay = TRUE,
+  loop = TRUE,
+  style = "max-width: 100%; height: auto;"
+)
+```
+
+```{R, include = FALSE}
+rm(sim)
+rm(sample_forest)
+
+unlink("four_mutants", recursive = TRUE)
+unlink("fm_sample_forest.sff")
+```
+

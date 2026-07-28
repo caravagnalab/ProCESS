@@ -34,6 +34,9 @@ articles:
   - sample_partition
   - node_tour
   - time_series
+- title: Graphical representations
+  contents:
+  - videos
 - title: Tests and Examples
   contents:
   - four_mutants
@@ -45,6 +48,7 @@ reference:
   contents:
   - annotate_forest
   - bbox_sampler
+  - build_snapshot_video
   - get_species_colors
   - get_node_tour
   - load_sample_forest

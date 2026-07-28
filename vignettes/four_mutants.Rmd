@@ -29,7 +29,34 @@ knitr::opts_chunk$set(
 We build a tumour with a single mutant `A` and grow it up to
 10 cells.
 
-```{r}
+```{r, include = FALSE}
+unlink("four_mutants", recursive = TRUE)
+unlink("fm_sample_forest.sff")
+
+library("ProCESS")
+
+# set the seed of the random number generator for repeatability
+set.seed(0)
+
+sim <- TissueSimulation(width = 600, height = 600, name = "four_mutants",
+                        save_directory = TRUE)
+
+# collect a snapshot every 5 simulated time units
+sim$snapshot_triggers <- list("clock interval" = 5)
+
+# set the delta time between two time series samples
+sim$history_delta <- 10
+
+# avoid drift
+sim$death_activation_level <- 50
+
+sim$add_mutant("A", c(duplication = 0.12, death = 0.05))
+
+sim$place_cell("A", 300, 300)
+sim$run_up_to_size("A", 10, quiet = TRUE)
+```
+
+```{r, eval = FALSE}
 library("ProCESS")
 
 # set the seed of the random number generator for repeatability
@@ -108,10 +135,10 @@ sim$mutate_progeny(sim$choose_border_cell_in("B"), "D")
 
 sim$run_until(sim$var("C") + sim$var("D") == 1e5)
 
-sim$sample_cells("S3", c(360, 80), c(430, 150))
+sim$sample_cells("S3", c(100, 400), c(170, 470))
 
 plot_tissue(sim) +
-  ggplot2::annotate("text", x = (360 + 430) / 2, y = (80 + 150) / 2,
+  ggplot2::annotate("text", x = (100 + 170) / 2, y = (400 + 470) / 2,
                     label = "S3", parse = TRUE)
 
 plot_state(sim)
@@ -139,6 +166,9 @@ library(dplyr)
 
 plot_forest(sample_forest) %>%
   annotate_forest(sample_forest)
+```
+```{R, include = FALSE}
+sample_forest$save("fm_sample_forest.sff")
 ```
 
 ## Cell genetic characterisation level

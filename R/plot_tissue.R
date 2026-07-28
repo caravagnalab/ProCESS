@@ -17,12 +17,13 @@
 
 #' Plot a tissue
 #'
-#' @description
-#' Plots cells distribution over a tissue highlighting species by color.
-#' To facilitate the plot and avoid excessive number of cells, for instance,
-#' when a simulation deals with millions of cells, the plot draws a
+#' @description This function plots the tissue
+#' @details
+#' This function plots cells distribution over a tissue highlighting species
+#' by color. To facilitate the plot and avoid excessive number of cells, for
+#' instance, when a simulation deals with millions of cells, the plot draws a
 #' hexagonal heatmap of 2D bins.
-#'
+#' @usage plot_tissue(simulation)
 #' @param simulation A simulation object.
 #' @param num_of_bins The number of bins (default: 100).
 #' @param before_sample A sample name. When provided, this function represents
@@ -47,11 +48,19 @@
 #'   map (optional).
 #' @param list_all_species A Boolean flag to show all species in
 #'   the legend (default: `FALSE`).
-#' @param highlight_function A function that takes as the input each row of
-#'   the data frame returned by <code>[TissueSimulation$get_cells()]</code>
-#'   and returns a Boolean value. When the function returns `FALSE` the
-#'   corresponding cells is plotted in grey. When the parameter is set to
-#'   `NULL`, all tumour simulation cells are colored (default: `NULL`).
+#' @param focus_function A function whose input is the data frame
+#'   returned by <code>[TissueSimulation$get_cells()]</code> and returns
+#'   a Boolean vector whose length is the number of rows in the input data
+#'   frame. When one the row in the output is `FALSE` the corresponding
+#'   cells is plotted in grey. When the parameter is set to `NULL`, all
+#'   tumour simulation cells are colored (default: `NULL`).
+#' @param alpha_function A function whose input is the data frame
+#'   returned by <code>[TissueSimulation$get_cells()]</code> and returns
+#'   a real vector whose values are in the interval \eqn{[0,1]} and whose
+#'   length is the number of rows in the input data frame. Each value in
+#'   the output is used as alpha level of the corresponding cell. When the
+#'   parameter is set to `NULL`, all tumour simulation cells have alpha
+#'   level `1` (default: `NULL`).
 #' @return An editable ggplot plot.
 #' @examples
 #' # set the seed
@@ -60,32 +69,35 @@
 #' # build a tissue simulation
 #' sim <- TissueSimulation(width = 600, height = 600)
 #'
+#' # avoid drift
+#' sim$death_activation_level <- 50
+#'
 #' # add the mutant A
 #' sim$add_mutant("A", c(duplication = 0.12, death = 0.05))
 #'
 #' # place a cell in the tissue and simulate it until 10 cells
 #' sim$place_cell("A", 300, 300)
-#' sim$run_up_to_size("A", 10)
+#' sim$run_up_to_size("A", 10, quiet = TRUE)
 #'
 #' # add the mutant B and let mutate a border cell of A in B
 #' sim$add_mutant("B", c(duplication = 0.145, death = 0.06))
 #' sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
 #'
 #' # simulate the tissue up to 30 cells in B
-#' sim$run_up_to_size("B", 30)
+#' sim$run_up_to_size("B", 30, quiet = TRUE)
 #'
 #' # add the third mutant and let one cell of A mutate into C
 #' sim$add_mutant("C", c(duplication = 0.15, death = 0.06))
 #' sim$mutate_progeny(sim$choose_border_cell_in("A"), "C")
 #'
 #' # simulate the tissue until C consists of 25000 cells
-#' sim$run_up_to_size("C", 25000)
+#' sim$run_up_to_size("C", 25000, quiet = TRUE)
 #'
 #' # collect the sample "S1"
 #' sim$sample_cells("S1", c(145, 230), c(215, 300))
 #'
 #' # let the simulation reach 25000 cells in C again
-#' sim$run_up_to_size("C", 25000)
+#' sim$run_up_to_size("C", 25000, quiet = TRUE)
 #'
 #' # collect two samples
 #' sim$sample_cells("S2", c(350, 300), c(420, 370))
@@ -97,7 +109,7 @@
 #'
 #' # let the tumour evolve until the mutant C and D cumulatively
 #' # consist of 10000 cells
-#' sim$run_until(sim$var("C") + sim$var("D") == 1e5)
+#' sim$run_until(sim$var("C") + sim$var("D") == 1e5, quiet = TRUE)
 #'
 #' # plot the tissue in the current status
 #' plot_tissue(sim)
@@ -106,9 +118,8 @@
 #' plot_tissue(sim, at_sample = "S3")
 #'
 #' # plot the tissue as it was when "S3" was about to be sampled and
-#' # highlight the regions of the samples collected at the same simulated
-#' # time, but not before
-#' # it, i.e., "S3"
+#' # highlight the regions of the samples collected at the same
+#' # simulated time, but not before it, i.e., "S3"
 #' plot_tissue(sim, at_sample="S3",
 #'             plot_next_sample_regions = TRUE)
 #'
@@ -129,13 +140,14 @@
 #'
 #' # this function returns `TRUE` for cells in the rectangle
 #' # [250,350]x[300,350]
-#' highlight_function <- function(row) {
-#'   (row[["position_x"]] >= 250 && row[["position_x"]] <= 350
-#'    && row[["position_y"]] >= 300 && row[["position_y"]] <= 350)
+#' focus_function <- function(cells) {
+#'   (cells$position_x >= 250 & cells$position_x <= 350
+#'    & cells$position_y >= 300 & cells$position_y <= 350)
 #' }
 #'
 #' # plot the tissue highlighting the region [250,350]x[300,350]
-#' plot_tissue(sim, highlight_function = highlight_function)
+#' plot_tissue(sim, focus_function = focus_function)
+#' @seealso [build_snapshot_video()]
 #' @export
 #'
 plot_tissue <- function(simulation, num_of_bins = 100,
@@ -145,7 +157,8 @@ plot_tissue <- function(simulation, num_of_bins = 100,
                         plot_sample_region = TRUE,
                         color_map = NULL,
                         list_all_species = FALSE,
-                        highlight_function = NULL) {
+                        focus_function = NULL,
+                        alpha_function = NULL) {
   stopifnot(inherits(simulation, "Rcpp_TissueSimulation"))
 
   sample_info <- NULL
@@ -186,6 +199,12 @@ plot_tissue <- function(simulation, num_of_bins = 100,
 
   cells <- cells %>% add_species_col()
 
+  if (is.null(alpha_function)) {
+    cells$alpha_level <- 1
+  } else {
+    cells$alpha_level <- alpha_function(cells)
+  }
+
   if (is.null(color_map)) {
     color_map <- get_species_colors(simulation)
   }
@@ -193,57 +212,70 @@ plot_tissue <- function(simulation, num_of_bins = 100,
   cells$species <- factor(cells$species,
                           levels = unique(names(color_map)))
 
-  if (is.null(highlight_function)) {
+  if (is.null(focus_function)) {
     highlighted_cells <- cells
     masked_cells <- cells[0, ]
   } else {
-    highlighted_cells <- cells[apply(cells, 1, highlight_function), ]
-
-    masking_function <- function(row) {
-      !highlight_function(row)
-    }
-
-    masked_cells <- cells[apply(cells, 1, masking_function), ]
+    highlighted_cells <- cells %>%
+      dplyr::filter(focus_function(cells))
+    masked_cells <- cells %>%
+      dplyr::filter(!focus_function(cells)) %>%
+      dplyr::mutate(alpha_level = .data$alpha_level * 0.7)
   }
 
-  bin_width_x <- (max(cells$position_x) - min(cells$position_x)) / num_of_bins
-  bin_width_y <- (max(cells$position_y) - min(cells$position_y)) / num_of_bins
+  tissue_sizes <- simulation$get_tissue_size()
+
+  bin_width_x <- tissue_sizes[1] / num_of_bins
+  bin_width_y <- tissue_sizes[2] / num_of_bins
 
   pl <- ggplot2::ggplot() +
-    ggplot2::geom_hex(
+    ggplot2::stat_summary_hex(
       data = masked_cells,
       ggplot2::aes(x = .data$position_x,
                    y = .data$position_y,
-                   fill = .data$species),
-      alpha = 0.5,
+                   fill = ggplot2::stage(start = .data$species,
+                                         after_stat = NULL),
+                   z = .data$alpha_level,
+                   alpha = ggplot2::after_stat(value)),
+      fun = max,
       binwidth = c(bin_width_x, bin_width_y),
       show.legend = FALSE
     ) +
-    ggplot2::geom_hex(
+    ggplot2::stat_summary_hex(
       data = masked_cells,
       ggplot2::aes(x = .data$position_x,
                    y = .data$position_y,
-                   fill = "grey70"),
-      alpha = 0.5,
+                   z = .data$alpha_level,
+                   fill = NA,
+                   alpha = ggplot2::after_stat(value)),
+      fill = "grey70",
+      fun = max,
       binwidth = c(bin_width_x, bin_width_y),
       show.legend = FALSE
     ) +
-    ggplot2::geom_hex(
+    ggplot2::stat_summary_hex(
       data = highlighted_cells,
       ggplot2::aes(x = .data$position_x,
                    y = .data$position_y,
-                   fill = .data$species),
+                   fill = ggplot2::stage(start = .data$species,
+                                         after_stat = NULL),
+                   z = .data$alpha_level,
+                   alpha = ggplot2::after_stat(value)),
+      fun = max,
       binwidth = c(bin_width_x, bin_width_y),
       show.legend = TRUE
     ) +
+    ggplot2::guides(alpha = "none") +
+    ggplot2::scale_alpha_identity() +
     ggplot2::scale_fill_manual(values = color_map,
+                               limits = names(color_map),
                                drop = !list_all_species) +
     my_theme() +
     ggplot2::labs(x = NULL, y = NULL,
                   fill = "Species") +
     ggplot2::theme(legend.position = "bottom") +
-    ggplot2::xlim(-10, simulation$get_tissue_size()[1] + 10) +
-    ggplot2::ylim(-10, simulation$get_tissue_size()[2] + 10)
+    ggplot2::xlim(-10, tissue_sizes[1] + 10) +
+    ggplot2::ylim(-10, tissue_sizes[2] + 10)
 
   if (!is.null(sample_info)) {
     if (plot_sample_region) {
@@ -275,4 +307,95 @@ plot_tissue <- function(simulation, num_of_bins = 100,
   }
 
   pl
+}
+
+#' Building a video of the snapshots
+#'
+#' @description This function builds a video of the snapshots.
+#' @details This function builds a video of the snapshots. It is available
+#'   only if the package `av` is installed.
+#' @usage build_snapshot_video(simulation)
+#' @param simulation A simulation object.
+#' @param output_file The path of the output video. When it is set to
+#'   `NULL`, the output video path has the format
+#'   `<simulation path>_evolution.mp4` (default: `NULL`).
+#' @param plot_function The function used to plot each frame of the video.
+#'   When is set to `NULL`, the function `plot_tissue()` is used (default:
+#'   `NULL`).
+#' @param width The width of the video (default: `800`).
+#' @param height The height of the video (default: `600`).
+#' @param framerate The video framerate in frame/sec (default: `1`).
+#' @param res The video resolution (default: `150`).
+#' @param quiet A Boolean flag to enable/disable the messages.
+#' @returns The name of the produced video file path.
+#' @seealso `vignette("video")`, [plot_tissue()]
+#' @export
+#'
+build_snapshot_video <- function(simulation, output_file = NULL,
+                                 plot_function = NULL,
+                                 width = 800, height = 600,
+                                 framerate = 1, res = 150,
+                                 quiet = FALSE) {
+
+  if (!requireNamespace("av", quietly = TRUE)) {
+    stop(
+      "Package 'av' is required for using this function. ",
+      "Please install it using install.packages('av').",
+      call. = FALSE
+    )
+  }
+
+  # choose a color map that contains all the known species
+  color_map <- get_species_colors(simulation)
+
+  # if plot_function is NULL, use the plot_tissue function
+  if (is.null(plot_function)) {
+    plot_function <- function(snapshot) {
+      plot_tissue(snapshot,
+                  color_map = color_map,
+                  plot_sample_region = FALSE,
+                  list_all_species = TRUE)
+    }
+  }
+
+  snapshot_files <- simulation$get_snapshot_info()[["file"]]
+
+  if (is.null(output_file)) {
+    output_file <- paste0(simulation$get_name(), "_evolution.mp4")
+  }
+
+  if (!quiet) {
+    cat("Collecting frames...")
+  }
+
+  get_frames_seq <- function(snapshot_files, quiet) {
+    num_of_files <- length(snapshot_files)
+    if (!quiet) {
+      progress_bar <- txtProgressBar(min = 0, max = num_of_files, style = 3)
+    }
+    for (snapshot_idx in seq_along(snapshot_files)) {
+      if (!quiet) {
+        setTxtProgressBar(progress_bar, snapshot_idx)
+      }
+      snapshot <- recover_simulation(snapshot_files[snapshot_idx])
+
+      print(plot_function(snapshot))
+    }
+
+    if (!quiet) {
+      close(progress_bar)
+    }
+  }
+
+  av::av_capture_graphics(
+    expr = {
+      get_frames_seq(snapshot_files, quiet)
+    },
+    output = output_file,
+    width = width,
+    height = height,
+    framerate = framerate,
+    res = res,
+    verbose = !quiet
+  )
 }
