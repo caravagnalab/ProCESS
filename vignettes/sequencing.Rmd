@@ -22,6 +22,11 @@ knitr::opts_chunk$set(
 
 ```{r, echo=FALSE, results='hide', message=FALSE}
 unlink("ProCESS_SAM", recursive = TRUE)
+
+# wait for true deletion
+while (dir.exists("ProCESS_SAM")) {
+  Sys.sleep(0.3)
+}
 ```
 
 > *Disclaimer:* ProCESS/CLONES implements probability distributions using the
@@ -157,6 +162,12 @@ groups corresponding to the collected samples.
 ```{r, echo=FALSE, results='hide', message=FALSE}
 unlink("SAM_0.7", recursive = TRUE)
 unlink("ProCESS_SAM", recursive = TRUE)
+
+# wait for true deletion
+while (dir.exists("ProCESS_SAM")
+       || dir.exists("SAM_0.7")) {
+  Sys.sleep(0.3)
+}
 ```
 
 ```{r}

@@ -415,6 +415,11 @@ A sample forest can be saved in a file by using the method
 
 ```{r, echo=FALSE,  results='hide', message=FALSE}
 unlink("sample_forest.sff")
+
+# wait for true deletion
+while (file.exists("sample_forest.sff")) {
+  Sys.sleep(0.3)
+}
 ```
 
 ```{r}

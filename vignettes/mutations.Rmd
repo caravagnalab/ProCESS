@@ -59,6 +59,11 @@ Let us build a `MutationEngine` by using the `"demo"` setup.
 
 ```{r, echo=FALSE,  results='hide', message=FALSE}
 unlink("demo", recursive = TRUE)
+
+# wait for true deletion
+while (dir.exists("demo")) {
+  Sys.sleep(0.3)
+}
 ```
 
 ```{r}

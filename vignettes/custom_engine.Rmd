@@ -83,6 +83,11 @@ dir.exists("Test")
 
 ```{r, echo=FALSE,  results='hide', message=FALSE}
 unlink("Test", recursive = TRUE)
+
+# wait for true deletion
+while (dir.exists("Test")) {
+  Sys.sleep(0.3)
+}
 ```
 
 ### The Context Index

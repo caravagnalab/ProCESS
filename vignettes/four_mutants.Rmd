@@ -33,6 +33,12 @@ We build a tumour with a single mutant `A` and grow it up to
 unlink("four_mutants", recursive = TRUE)
 unlink("fm_sample_forest.sff")
 
+# wait for true deletion
+while (dir.exists("four_mutants")
+       || file.exists("fm_sample_forest.sff")) {
+  Sys.sleep(0.3)
+}
+
 library("ProCESS")
 
 # set the seed of the random number generator for repeatability
@@ -166,9 +172,6 @@ library(dplyr)
 
 plot_forest(sample_forest) %>%
   annotate_forest(sample_forest)
-```
-```{R, include = FALSE}
-sample_forest$save("fm_sample_forest.sff")
 ```
 
 ## Cell genetic characterisation level
