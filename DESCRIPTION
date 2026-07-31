@@ -37,6 +37,10 @@ Imports:
     stringr
 Roxygen: list(markdown = TRUE)
 Suggests:
+    future,
+    furrr,
+    progressr,
+    progress,
     knitr,
     htmltools,
     rmarkdown,

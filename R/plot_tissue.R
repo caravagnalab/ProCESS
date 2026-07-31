@@ -326,16 +326,23 @@ plot_tissue <- function(simulation, num_of_bins = 100,
 #' @param height The height of the video (default: `600`).
 #' @param framerate The video framerate in frame/sec (default: `1`).
 #' @param res The video resolution (default: `150`).
-#' @param quiet A Boolean flag to enable/disable the messages.
+#' @param quiet A Boolean flag to enable/disable the messages (default:
+#'   `FALSE`).
+#' @param workers The number of parallel processes generating frames.
+#'   This parameter is used only when the packages "furrr" and
+#'   "progressr" are installed. When it is set to `NULL`, the function
+#'   uses as many processes as the number of available processors minus
+#'   one (default: `NULL`).
 #' @returns The name of the produced video file path.
-#' @seealso `vignette("video")`, [plot_tissue()]
+#' @seealso `vignette("videos")`, [plot_tissue()]
 #' @export
 #'
 build_snapshot_video <- function(simulation, output_file = NULL,
                                  plot_function = NULL,
                                  width = 800, height = 600,
                                  framerate = 1, res = 150,
-                                 quiet = FALSE) {
+                                 quiet = FALSE,
+                                 workers = NULL) {
 
   if (!requireNamespace("av", quietly = TRUE)) {
     stop(
@@ -345,11 +352,11 @@ build_snapshot_video <- function(simulation, output_file = NULL,
     )
   }
 
-  # choose a color map that contains all the known species
-  color_map <- get_species_colors(simulation)
-
   # if plot_function is NULL, use the plot_tissue function
   if (is.null(plot_function)) {
+    # choose a color map that contains all the known species
+    color_map <- get_species_colors(simulation)
+
     plot_function <- function(snapshot) {
       plot_tissue(snapshot,
                   color_map = color_map,
@@ -364,22 +371,97 @@ build_snapshot_video <- function(simulation, output_file = NULL,
     output_file <- paste0(simulation$get_name(), "_evolution.mp4")
   }
 
+  frame_dir <- tempfile(pattern = "ProCESS_video_")
+  dir.create(frame_dir)
+
+  on.exit(unlink(frame_dir, recursive = TRUE), add = TRUE)
+
   if (!quiet) {
-    cat("Collecting frames...")
+    cat("Collecting frames...\n")
   }
 
-  get_frames_seq <- function(snapshot_files, quiet) {
-    num_of_files <- length(snapshot_files)
-    if (!quiet) {
-      progress_bar <- txtProgressBar(min = 0, max = num_of_files, style = 3)
-    }
-    for (snapshot_idx in seq_along(snapshot_files)) {
-      if (!quiet) {
-        setTxtProgressBar(progress_bar, snapshot_idx)
-      }
-      snapshot <- recover_simulation(snapshot_files[snapshot_idx])
+  get_frame_filename <- function(order) {
+    file.path(frame_dir,
+              paste0("video_", sprintf("%010d", order), ".png"))
+  }
 
-      print(plot_function(snapshot))
+  frame_files <- lapply(seq_along(snapshot_files), get_frame_filename)
+
+  files_enum <- Map(function(ff, sf) {
+    list(frame_file = ff, snapshot_file = sf)
+  }, frame_files, snapshot_files)
+
+  get_frames_par <- function(files_enum, workers, quiet) {
+    # backup previous handlers and reset them on exit
+    old_handlers <- progressr::handlers()
+    on.exit(progressr::handlers(old_handlers), add = TRUE)
+
+    if (requireNamespace("progress", quietly = TRUE)) {
+      progressr::handlers(
+        progressr::handler_progress(
+          format = "[:bar] :current/:total (:percent) | ETA: :eta",
+          clear = FALSE
+        )
+      )
+    } else {
+      progressr::handlers(
+        progressr::handler_txtprogressbar(
+          char = "=",
+          style = 3
+        )
+      )
+    }
+
+    future::plan(future::multisession,
+                 workers = min(workers, length(files_enum)))
+
+    progressr::with_progress({
+      pb <- progressr::progressor(along = files_enum)
+
+      furrr::future_map(
+        .x = files_enum,
+        .f = function(files_enum_value) {
+          snapshot <- recover_simulation(files_enum_value$snapshot_file,
+                                         quiet = TRUE)
+
+          plt <- plot_function(snapshot)
+
+          ggplot2::ggsave(files_enum_value$frame_file, plot = plt,
+                          width = width, height = height, dpi = res,
+                          units = "px")
+
+          # advance the progress bar
+          pb()
+        },
+        .options = furrr::furrr_options(packages = c("dplyr", "ProCESS"),
+                                        seed = TRUE, scheduling = FALSE)
+      )
+    }, enable = !quiet)
+
+    future::plan(future::sequential)
+  }
+
+  get_frames_seq <- function(files_enum, quiet) {
+    if (!quiet) {
+      progress_bar <- txtProgressBar(min = 0, max = length(files_enum),
+                                     style = 3)
+    }
+    idx <- 0
+    if (!quiet) {
+      setTxtProgressBar(progress_bar, idx)
+    }
+    for (files_enum_value in files_enum) {
+      snapshot <- recover_simulation(files_enum_value$snapshot_file)
+
+      plt <- plot_function(snapshot)
+
+      ggplot2::ggsave(files_enum_value$frame_file, plot = plt,
+                      width = width, height = height, dpi = res,
+                      units = "px")
+      if (!quiet) {
+        idx <- idx + 1
+        setTxtProgressBar(progress_bar, idx)
+      }
     }
 
     if (!quiet) {
@@ -387,15 +469,26 @@ build_snapshot_video <- function(simulation, output_file = NULL,
     }
   }
 
-  av::av_capture_graphics(
-    expr = {
-      get_frames_seq(snapshot_files, quiet)
-    },
+  if (requireNamespace("furrr", quietly = TRUE)
+      && requireNamespace("progressr", quietly = TRUE)) {
+
+    if (is.null(workers)) {
+      workers <- future::availableCores() - 1
+    }
+    get_frames_par(files_enum, workers = workers, quiet)
+  } else {
+    if (!is.null(workers)) {
+      warning(paste("Packages \"furrr\" and \"progressr\" are not available.",
+                    "Parameter \"workers\" is not used."))
+    }
+
+    get_frames_seq(files_enum, quiet)
+  }
+
+  av::av_encode_video(
+    input = unlist(frame_files),
     output = output_file,
-    width = width,
-    height = height,
     framerate = framerate,
-    res = res,
     verbose = !quiet
   )
 }

@@ -34,18 +34,18 @@ This article exclusively deals with producing videos of the tumour evolution.
 Please, refer to [this article](tissue_simulation.md) for tumour evolution
 modelling.
 
-## Collecting Data
+## Collecting data
 
 In order to produce a video, we need to collect simulation snapshots during
-tumour evolution. <code>[TissueSimulation](TissueSimulation_class.md)</code>
+tumour evolution. <code>[TissueSimulation](../reference/TissueSimulation_class.md)</code>
 performs this task by default at the end of
-<code>[place_cell()](TissueSimulation-cash-place_cell.md)</code>,
-<code>[sample_cells()](TissueSimulation-cash-sample_cells.md)</code>,
-<code>[mutate_progeny()](TissueSimulation-cash-mutate_progeny.md)</code>,
+<code>[place_cell()](../reference/TissueSimulation-cash-place_cell.md)</code>,
+<code>[sample_cells()](../reference/TissueSimulation-cash-sample_cells.md)</code>,
+<code>[mutate_progeny()](../reference/TissueSimulation-cash-mutate_progeny.md)</code>,
 and <code>run_*()</code> calls.
 
 Let us build a simulation and use
-<code>[get_snapshot_info()](TissueSimulation-cash-get_snapshot_info.md)</code>
+<code>[get_snapshot_info()](../reference/TissueSimulation-cash-get_snapshot_info.md)</code>
 to inspect the collected snapshots.
 
 ```{r}
@@ -100,7 +100,7 @@ sim$sample_cells("S1", c(145, 230), c(215, 300))
 nrow(sim$get_snapshot_info())
 ```
 
-The function <code>[build_snapshot_video()](build_snapshot_video.md)</code>,
+The function <code>[build_snapshot_video()](../reference/build_snapshot_video.md)</code>,
 which is exclusively available when the package
 [av](https://CRAN.R-project.org/package=av) is installed, uses the
 collected snapshot to build a video whose frames depicts the tissue as it was
@@ -128,7 +128,7 @@ htmltools::tags$video(
 )
 ```
 
-## Triggering Tissue Snapshots
+## Producing more frames
 
 Whenever the snapshots collected by default are not enough to completely
 represent the tumour evolution, user can set custom snapshot triggers.
@@ -139,8 +139,8 @@ ProCESS supports three types of triggers:
  - number of tumour cells triggers, e.g., collect a snapshot at least every time
    the overall number of tumour cells increased by 1000 cells.
 
-The <code>[TissueSimulation](TissueSimulation_class.md)</code> property
-<code>[snapshot_triggers](TissueSimulation-cash-snapshot_triggers.md)</code>
+The <code>[TissueSimulation](../reference/TissueSimulation_class.md)</code> property
+<code>[snapshot_triggers](../reference/TissueSimulation-cash-snapshot_triggers.md)</code>
 reports the current custom triggers and can be used to set them.
 
 ```{R}
@@ -167,7 +167,7 @@ snapshot_info <- sim$get_snapshot_info()
 snapshot_info$cells[previous_snapshots:nrow(snapshot_info)]
 ```
 
-<code>[snapshot_triggers](TissueSimulation-cash-snapshot_triggers.md)</code> can
+<code>[snapshot_triggers](../reference/TissueSimulation-cash-snapshot_triggers.md)</code> can
 also be used to reset custom triggers.
 
 ```{R}
@@ -193,7 +193,7 @@ Custom snapshot triggers allow us to produce a more fluid evolution video.
 For instance, let us consider the tumour model detailed in
 [this article](four_mutants.md) and let us customise the snapshot triggers
 just after creating the
-<code>[TissueSimulation](TissueSimulation_class.md)</code> object as follows.
+<code>[TissueSimulation](../reference/TissueSimulation_class.md)</code> object as follows.
 
 ```{R, eval = FALSE}
 library("ProCESS")
@@ -249,6 +249,9 @@ sim$run_until(sim$var("C") + sim$var("D") == 1e5, quiet = TRUE)
 
 # collect the last sample
 sim$sample_cells("S3", c(100, 400), c(170, 470))
+
+# build the forest
+sample_forest <- sim$get_sample_forests()
 ```
 
 At the end of the evolution, by calling
@@ -261,7 +264,7 @@ we produce the following video.
 
 ```{R, echo = FALSE}
 sim <- recover_simulation("four_mutants", quiet = TRUE)
-sample_forest <- load_forest("fm_sample_forest.sff", quiet = TRUE)
+sample_forest <- sim$get_sample_forest()
 
 output <- build_snapshot_video(sim, res = 300, width=1440, height=1024,
                                framerate = 20, output_file = "video_2.mp4",
@@ -277,28 +280,28 @@ htmltools::tags$video(
 )
 ```
 
-## Customizing Plots
+## Customizing plots
 
-<code>[build_snapshot_video()](build_snapshot_video.md)</code> also supports
+<code>[build_snapshot_video()](../reference/build_snapshot_video.md)</code>
+also supports
 plot customisations. The parameter `plot_function` allows users to specify
 their plotting function. The actual parameter should be a function that
 takes in input a simulation and returns a plot. The plots of produced by
 `plot_functions` taking in input the simulation snapshots are the frames of
 the produced video.
 
-For instance, we can produce a video focusing on the cells represented in
-the sample forest. First of all, we need to define a focus function for the
-cells in the sample forest (see, <code>[plot_tissue()](plot_tissue.md)</code>).
+For instance, we can produce a video focusing on the cells in a
+rectangle. First of all, we need to define a focus function for the
+cells in the rectangle (see, <code>[plot_tissue()](../reference/plot_tissue.md)</code>).
 
 ```{R}
-# a focus function that highlights the cells represented by
-# the sample forest
-in_sample_forest <- function(cells) {
-  # sample_forest has been defined in four_mutants.md
-  sample_forest$represents_cell(cells$cell_id)
+# a focus function that highlights the cells in the rectangle
+# [250,350]x[300,350]
+in_rectangle <- function(cells) {
+  (cells$position_x >= 250 & cells$position_x <= 350
+   & cells$position_y >= 300 & cells$position_y <= 350)
 }
 ```
-
 Then, we may define the `plot_function`.
 
 ```{R}
@@ -306,20 +309,20 @@ Then, we may define the `plot_function`.
 color_map <- get_species_colors(sim)
 
 # this function will be called to plot each video frames
-plot_function <- function(snapshot) {
-    plot_tissue(snapshot,
-                color_map = color_map,
-                plot_sample_region = FALSE,
-                list_all_species = TRUE,
-                focus_function = in_sample_forest)
+plot_in_rectangle <- function(snapshot) {
+  plot_tissue(snapshot,
+              color_map = color_map,
+              plot_sample_region = FALSE,
+              list_all_species = TRUE,
+              focus_function = in_rectangle)
 }
 ```
 
-Finally, the snippet
+The snippet
 
 ```{R, eval = FALSE}
 build_snapshot_video(sim, res = 300, width=1440, height=1024,
-                     framerate = 20, plot_function = plot_function)
+                     framerate = 20, plot_function = plot_in_rectangle)
 ```
 
 produces the following result.
@@ -327,7 +330,7 @@ produces the following result.
 ```{R, echo = FALSE}
 output <- build_snapshot_video(sim, res = 300, width=1440, height=1024,
                                framerate = 20, output_file = "video_3.mp4",
-                               plot_function = plot_function,
+                               plot_function = plot_in_rectangle,
                                quiet = TRUE)
 
 htmltools::tags$video(
@@ -340,15 +343,106 @@ htmltools::tags$video(
 )
 ```
 
-The package [patchwork](https://CRAN.R-project.org/package=patchwork) can be
-easily used to produce more complex videos.
+
+## Parallelising frame generation
+
+When the packages [furrr](https://CRAN.R-project.org/package=furrr) and
+[progressr](https://CRAN.R-project.org/package=progressr) are installed in the 
+system, the function
+<code>[build_snapshot_video()](../reference/build_snapshot_video.md)</code>
+uses them to parallelise frame
+generations. However, ProCESS data structures are not serializable in R
+and cannot be transparently passed to the
+[furrr](https://CRAN.R-project.org/package=furrr)
+processes. Because of that, all
+ProCESS objects involved in the evaluation of `plot_function()`, with
+the exception of the function parameter, must be saved to the disk
+outside `plot_function()` and, then, reloaded inside it. In this way,
+the objects will be local to each
+[furrr](https://CRAN.R-project.org/package=furrr) process.
+
+For instance, if we want to generate a video that focus on the cells
+represented in the sample forest, we first need to save the sample
+forest.
+
+```{R}
+sample_forest$save("forest.sff")
+```
+
+Then, we must define a `plot_function()` that loads its own copy
+of the sample forest and use it.
+
+```{R}
+# this function will be called to plot each video frames
+plot_in_forest <- function(snapshot) {
+  # load the local copy of the forest
+  local_forest <- load_forest("forest.sff")
+
+  # define a unique color map for all the frames
+  color_map <- get_species_colors(local_forest)
+
+  # a focus function that highlights the cells represented by
+  # the sample forest
+  in_sample_forest <- function(cells) {
+    # sample_forest has been defined in four_mutants.md
+    local_forest$represents_cell(cells$cell_id)
+  }
+
+  # plot the tissue using the shared color map 
+  plot_tissue(snapshot,
+              color_map = color_map,
+              plot_sample_region = FALSE,
+              list_all_species = TRUE,
+              focus_function = in_sample_forest)
+}
+```
+
+Please, notice that `color_map` is a serialisable object and
+is automatically passed to all frame generator processes.
+
+Finally, the function call
 
 ```{R, eval = FALSE}
-library(patchwork)
+build_snapshot_video(sim, res = 300, width=1440, height=1024,
+                     framerate = 20, plot_function = plot_in_forest)
+```
+
+produces the following video.
+
+```{R, echo = FALSE}
+output <- build_snapshot_video(sim, res = 300, width=1440, height=1024,
+                               framerate = 20, output_file = "video_4.mp4",
+                               plot_function = plot_in_forest,
+                               quiet = TRUE)
+
+htmltools::tags$video(
+  src = "video_4.mp4",
+  type = "video/mp4",
+  controls = TRUE,
+  autoplay = TRUE,
+  loop = TRUE,
+  style = "max-width: 100%; height: auto;"
+)
+```
+
+The package [patchwork](https://CRAN.R-project.org/package=patchwork) can be
+used to generate more complex videos.
+
+```{R, eval = FALSE}
 library(dplyr)
 
 # a frame plot function
-plot_function <- function(simulation) {
+patchwork_function <- function(simulation) {
+  # load the local copy of the forest
+  local_forest <- load_forest("forest.sff", quiet = TRUE)
+
+  # a focus function that highlights the cells represented by
+  # the sample forest
+  in_sample_forest <- function(cells) {
+    # sample_forest has been defined in four_mutants.md
+    local_forest$represents_cell(cells$cell_id)
+  }
+
   # generate the tissue plot
   tissue_plot <- plot_tissue(simulation, color_map = color_map,
                              focus_function = in_sample_forest)
@@ -367,10 +461,13 @@ plot_function <- function(simulation) {
 
   # generate the forest plot hiding the nodes representing cells that are
   # not born yet and removing the legends
-  forest_plot <- plot_forest(sample_forest, color_map = color_map,
+  forest_plot <- plot_forest(local_forest, color_map = color_map,
                              alpha_function = alpha_funct) +
     ggplot2::guides(color = "none") +
     ggplot2::guides(shape = "none")
+
+  # load the patchwork in each frame generator
+  library(patchwork)
 
   # plot the tissue and the forest plots together
   (tissue_plot | forest_plot) +
@@ -379,15 +476,24 @@ plot_function <- function(simulation) {
 }
 
 build_snapshot_video(sim, width = 1820, height = 1024, framerate = 20,
-                     res = 300, plot_function = plot_function)
+                     res = 300, plot_function = patchwork_function)
 ```
 
 ```{R, warning = FALSE, echo = FALSE}
-library(patchwork)
 library(dplyr)
 
 # a frame plot function
-plot_function <- function(simulation) {
+patchwork_function <- function(simulation) {
+  # load the local copy of the forest
+  local_forest <- load_forest("forest.sff", quiet = TRUE)
+
+  # a focus function that highlights the cells represented by
+  # the sample forest
+  in_sample_forest <- function(cells) {
+    # sample_forest has been defined in four_mutants.md
+    local_forest$represents_cell(cells$cell_id)
+  }
+
   # generate the tissue plot
   tissue_plot <- plot_tissue(simulation, color_map = color_map,
                              focus_function = in_sample_forest)
@@ -406,10 +512,13 @@ plot_function <- function(simulation) {
 
   # generate the forest plot hiding the nodes representing cells that are
   # not born yet and removing the legends
-  forest_plot <- plot_forest(sample_forest, color_map = color_map,
+  forest_plot <- plot_forest(local_forest, color_map = color_map,
                              alpha_function = alpha_funct) +
     ggplot2::guides(color = "none") +
     ggplot2::guides(shape = "none")
+
+  # load the patchwork in each frame generator
+  library(patchwork)
 
   # plot the tissue and the forest plots together
   (tissue_plot | forest_plot) +
@@ -417,13 +526,14 @@ plot_function <- function(simulation) {
     ggplot2::theme(legend.position = "bottom")
 }
 
-output_file <- build_snapshot_video(sim, output_file = "video_4.mp4",
-                                    width = 1820, height = 1024, framerate = 20,
-                                    res = 300, plot_function = plot_function,
+output_file <- build_snapshot_video(sim, output_file = "video_5.mp4",
+                                    width = 1820, height = 1024,
+                                    framerate = 20, res = 300,
+                                    plot_function = patchwork_function,
                                     quiet = TRUE)
 
 htmltools::tags$video(
-  src = "video_4.mp4",
+  src = "video_5.mp4",
   type = "video/mp4",
   controls = TRUE,
   autoplay = TRUE,
@@ -437,6 +547,5 @@ rm(sim)
 rm(sample_forest)
 
 unlink("four_mutants", recursive = TRUE)
-unlink("fm_sample_forest.sff")
+unlink("forest.sff")
 ```
-
