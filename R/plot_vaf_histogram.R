@@ -293,7 +293,7 @@ setup_VAF_data_for_plotting <- function(
 #'   This parameter can be avoided when `seq_result` is the result
 #'   of the function `simulate_seq()` (default: `NULL`).
 #' @param driver_mutation_labels A Boolean value to enable/disable
-#'   driver mutation labels in the returned plot (default: TRUE).
+#'   driver mutation labels in the returned plot (default: `TRUE`).
 #' @param cuts A numeric vector specifying the range of VAF values to
 #'   include in the plot (default: `c(0, 1)`).
 #' @return A ggplot2 object showing the VAF histogram.

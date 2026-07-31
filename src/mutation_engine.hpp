@@ -149,7 +149,12 @@ class MutationEngine
         m_engine.infinite_sites_model = infinite_sites_model;
     }
 
-    void set_germline_subject(const std::string &germline_subject);
+    void set_germline_subject(const std::string &germline_subject, const bool quiet);
+
+    inline void set_germline_subject(const std::string &germline_subject)
+    {
+        set_germline_subject(germline_subject, false);
+    }
 
     PhylogeneticForest
     place_mutations(const SampleForest &forest, const size_t &num_of_pre_neoplastic_SNVs,
@@ -219,7 +224,8 @@ class MutationEngine
         const size_t &driver_CNA_min_distance, const std::string &tumour_type,
         const bool avoid_homozygous_losses, const bool quiet);
 
-    static Rcpp::List get_available_tumour_type(const std::string &setup_code);
+    static Rcpp::List get_available_tumour_type(const std::string &setup_code,
+                                                const bool& quiet);
 
     inline void set_context_sampling(const size_t &context_sampling)
     {

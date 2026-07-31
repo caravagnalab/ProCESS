@@ -487,7 +487,7 @@ RCPP_MODULE(Mutations)
 //'   new mutations are exclusively placed in mutation-free loci.
 //' @examples
 //' # create a demonstrative mutation engine
-//' m_engine <- MutationEngine(setup_code = "demo")
+//' m_engine <- MutationEngine(setup_code = "demo", quiet = TRUE)
 //'
 //' # the infinite sites model is enabled by default
 //' m_engine$infinite_sites_model
@@ -520,13 +520,13 @@ RCPP_MODULE(Mutations)
 //'   The indel and SNV exposures can be specified in the same list.
 //' @examples
 //' # create a demonstrative mutation engine
-//' m_engine <- MutationEngine(setup_code = "demo")
+//' m_engine <- MutationEngine(setup_code = "demo", quiet = TRUE)
 //'
 //' # add a default set of coefficients that will be used from simulated
 //' # time 0 up to the successive coefficient change. The indel and SNV
 //' # exposures can be specified in the same list.
 //' m_engine$add_exposure(c(SBS13 = 0.3, SBS1 = 0.7, ID2 = 0.2, ID3 = 0.3,
-//'   ID20 = 0.5))
+//'                         ID20 = 0.5))
 //'
 //' # add a default set of coefficients that will be used from simulated
 //' # time 3.2 up to the end of the simulation.
@@ -559,7 +559,7 @@ RCPP_MODULE(Mutations)
 //'   genome doubling events (WGD) characterizing the mutant (optional).
 //' @examples
 //' # create a demonstrative mutation engine
-//' m_engine <- MutationEngine(setup_code = "demo")
+//' m_engine <- MutationEngine(setup_code = "demo", quiet = TRUE)
 //'
 //' # define a list of mutations
 //' d_mutations <- list("DGCR8 P26L",
@@ -617,7 +617,7 @@ RCPP_MODULE(Mutations)
 //'   does not have an epigenetic state.
 //' @examples
 //' # create a demonstrative mutation engine
-//' m_engine <- MutationEngine(setup_code = "demo")
+//' m_engine <- MutationEngine(setup_code = "demo", quiet = TRUE)
 //'
 //' # define a list of mutations
 //' d_mutations <- list("DGCR8 P26L",
@@ -695,7 +695,7 @@ RCPP_MODULE(Mutations)
 //' sample_forest <- sim$get_sample_forest()
 //'
 //' # build a mutation engine
-//' m_engine <- MutationEngine(setup_code = "demo")
+//' m_engine <- MutationEngine(setup_code = "demo", quiet = TRUE)
 //'
 //' # add the mutant "A" to the engine
 //' m_engine$add_mutant("A", c(SNV = 3e-9), list(SNV("22", 12028576, "G")))
@@ -747,7 +747,7 @@ RCPP_MODULE(Mutations)
 //'    of alleles (column `num_of_alleles`) of each chromosome.
 //' @examples
 //' # build a mutation engine
-//' m_engine <- MutationEngine(setup_code = "demo")
+//' m_engine <- MutationEngine(setup_code = "demo", quiet = TRUE)
 //'
 //' # get the genome information
 //' m_engine$get_genome_info()
@@ -765,7 +765,7 @@ RCPP_MODULE(Mutations)
 //' @return A data frame the active germline subject.
 //' @examples
 //' # build a mutation engine
-//' m_engine <- MutationEngine(setup_code = "demo")
+//' m_engine <- MutationEngine(setup_code = "demo", quiet = TRUE)
 //'
 //' # get the active germline subject data frame
 //' head(m_engine$get_active_germline(), 5)
@@ -779,17 +779,25 @@ RCPP_MODULE(Mutations)
 //' @description This method sets the germline subject.
 //' @details The subject must be one among those reported by
 //'   [MutationEngine$get_germline_subjects()].
-//' @return Set the germline subject.
+//' @param subject The germline subject. It must be one among those reported
+//'   by [MutationEngine$get_germline_subjects()].
+//' @param quiet An optional Boolean flag to avoid the progress bar
+//'   (default: `FALSE`).
 //' @examples
 //' # build a mutation engine
-//' m_engine <- MutationEngine(setup_code = "demo")
+//' m_engine <- MutationEngine(setup_code = "demo", quiet = TRUE)
 //'
 //' # set the active germline subject data frame
 //' m_engine$set_germline_subject("NA18941")
 //' @seealso [MutationEngine$get_germline_subjects()],
 //'   [MutationEngine$get_active_germline()],
 //'   <code>[MutationEngine](MutationEngine_class.md)</code>
-        .method("set_germline_subject", &MutationEngine::set_germline_subject)
+        .method("set_germline_subject",
+                (void (MutationEngine::*)(const std::string&, const bool))
+                &MutationEngine::set_germline_subject)
+        .method("set_germline_subject",
+                (void (MutationEngine::*)(const std::string&))
+                &MutationEngine::set_germline_subject)
 
 //' @name MutationEngine$get_germline_subjects
 //' @title Getting the germline subjects
@@ -802,7 +810,7 @@ RCPP_MODULE(Mutations)
 //' @return A data frame the available germline subjects.
 //' @examples
 //' # build a mutation engine
-//' m_engine <- MutationEngine(setup_code = "demo")
+//' m_engine <- MutationEngine(setup_code = "demo", quiet = TRUE)
 //'
 //' # get the active germline subject data frame
 //' head(m_engine$get_germline_subjects(), 5)
@@ -822,7 +830,7 @@ RCPP_MODULE(Mutations)
 //' @return A data frame containing the population descriptions.
 //' @examples
 //' # build a mutation engine
-//' m_engine <- MutationEngine(setup_code = "demo")
+//' m_engine <- MutationEngine(setup_code = "demo", quiet = TRUE)
 //'
 //' # get the active germline subject data frame
 //' head(m_engine$get_population_descriptions(), 5)
@@ -846,7 +854,7 @@ RCPP_MODULE(Mutations)
 //' @return A data frame containing the registered species rates.
 //' @examples
 //' # build a mutation engine
-//' m_engine <- MutationEngine(setup_code = "demo")
+//' m_engine <- MutationEngine(setup_code = "demo", quiet = TRUE)
 //'
 //' # get the active germline subject data frame
 //' head(m_engine$get_species_info(), 5)
@@ -870,7 +878,7 @@ RCPP_MODULE(Mutations)
 //'   signatures.
 //' @examples
 //' # build a mutation engine
-//' m_engine <- MutationEngine(setup_code = "demo")
+//' m_engine <- MutationEngine(setup_code = "demo", quiet = TRUE)
 //'
 //' # get the indel data frame
 //' head(m_engine$get_SNV_signatures(), 5)
@@ -893,7 +901,7 @@ RCPP_MODULE(Mutations)
 //'   signatures.
 //' @examples
 //' # build a mutation engine
-//' m_engine <- MutationEngine(setup_code = "demo")
+//' m_engine <- MutationEngine(setup_code = "demo", quiet = TRUE)
 //'
 //' # get the indel data frame
 //' head(m_engine$get_indel_signatures(), 5)
@@ -1020,9 +1028,9 @@ RCPP_MODULE(Mutations)
 //' @param avoid_homozygous_losses An optional Boolean flag to avoid
 //'   homozygous losses. When set to `TRUE`, passenger CNAs will be
 //'   exclusively applied to regions covered by two alleles at least.
-//'   (default: TRUE).
+//'   (default: `TRUE`).
 //' @param quiet An optional Boolean flag to avoid the progress bar
-//'   (default: FALSE).
+//'   (default: `FALSE`).
 //' @seealso [get_mutation_engine_codes()] provides a list of
 //'   the supported set-up codes;
 //'   [MutationEngine$get_germline_subjects()] to get the
@@ -1137,6 +1145,8 @@ RCPP_MODULE(Mutations)
 //' @usage get_available_tumours_in(setup_code)
 //' @param setup_code The set-up code whose available tumour types are
 //'   requested.
+//' @param quiet A Boolean flag to enable/disable verbose messages
+//'   (default: `TRUE`)
 //' @return A data frame reporting the types available for a set-up code.
 //' @export
 //' @examples
@@ -1145,7 +1155,7 @@ RCPP_MODULE(Mutations)
 //' @seealso <code>[MutationEngine](MutationEngine_class.md)</code>
 //'   [MutationEngine()]
     function("get_available_tumours_in", &MutationEngine::get_available_tumour_type,
-             List::create(_["setup_code"]),
+             List::create(_["setup_code"], _["quiet"] = true),
              "Get the set of tumour types for a set-up code.");
 
 //' @name get_mutation_engine_codes
@@ -1661,7 +1671,7 @@ RCPP_MODULE(Mutations)
 //' @param filename The path of the file from which the phylogenetic
 //'   forest must be loaded.
 //' @param quiet An optional Boolean flag to avoid the progress bar
-//'   (default: FALSE).
+//'   (default: `FALSE`).
 //' @return The loaded phylogenetic forest
 //' @seealso [PhylogeneticForest$save()], [load_sample_forest()]
 //'   [load_forest()]

@@ -779,7 +779,7 @@ RCPP_MODULE(Mutants)
 //' sim <- TissueSimulation()
 //'
 //' # is the simulation using the border driven growth model
-//' # (default: TRUE)
+//' # (default: `TRUE`)
 //' sim$border_growth_model
 //'
 //' # switch to the homogeneous-growth model
@@ -1309,7 +1309,7 @@ RCPP_MODULE(Mutants)
 //'    set during the system specification. In these cases, the rate is assumed to
 //'    be 0 by default.
 //' @param complete A Boolean flag to get also the rates that have not been set
-//'    (default: FALSE).
+//'    (default: `FALSE`).
 //' @return A data frame containing the simulation rates. If the
 //'    simulation has epigenetic states, the data frame has 5 columns: `mutant`,
 //'    `epistate`, `event`, `first.child.epistate`, and `rate`. The columns `mutant`
@@ -1559,7 +1559,7 @@ RCPP_MODULE(Mutants)
 //' @title Simulating cell evolution
 //' @param time The final simulation time.
 //' @param quiet An optional Boolean flag to avoid the progress bar
-//'   (default: FALSE).
+//'   (default: `FALSE`).
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1595,7 +1595,7 @@ RCPP_MODULE(Mutants)
 //' @param species The species whose event number is considered.
 //' @param num_of_events The threshold for the event number.
 //' @param quiet An optional Boolean flag to avoid the progress bar
-//'   (default: FALSE).
+//'   (default: `FALSE`).
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1638,7 +1638,7 @@ RCPP_MODULE(Mutants)
 //' @param species The species whose number of cells is considered.
 //' @param num_of_cells The threshold for the cell number.
 //' @param quiet An optional Boolean flag to avoid the progress bar
-//'   (default: FALSE).
+//'   (default: `FALSE`).
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -1680,7 +1680,7 @@ RCPP_MODULE(Mutants)
 //' @param formula The formula that will be satisfied at the end of the
 //'    simulation.
 //' @param quiet An optional Boolean flag to avoid the progress bar
-//'   (default: FALSE).
+//'   (default: `FALSE`).
 //' @examples
 //' # set the seed of the random number generator
 //' set.seed(0)
@@ -2591,7 +2591,7 @@ RCPP_MODULE(Mutants)
 //' @param filename The path of the file from which the samples
 //'   forest must be loaded.
 //' @param quiet An optional Boolean flag to avoid the progress bar
-//'   (default: FALSE).
+//'   (default: `FALSE`).
 //' @return The loaded sample forest
 //' @seealso [SampleForest$save()], [load_phylogenetic_forest()]
 //'   [load_forest()]
@@ -2610,7 +2610,7 @@ RCPP_MODULE(Mutants)
 //' @param filename The path of the file from which the forest must be
 //'   loaded.
 //' @param quiet An optional Boolean flag to avoid the progress bar
-//'   (default: FALSE).
+//'   (default: `FALSE`).
 //' @return The loaded forest
 //' @seealso [SampleForest$save()], [PhylogeneticForest$save()],
 //'   [load_sample_forest()], [load_phylogenetic_forest()]

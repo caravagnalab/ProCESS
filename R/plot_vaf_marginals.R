@@ -94,7 +94,7 @@ add_marginals_driver_mutation_labels <- function(plot, data, driver_mutations) {
 #'   This parameter can be avoided when `seq_result` is the result
 #'   of the function `simulate_seq()` (default: `NULL`).
 #' @param driver_mutation_labels A Boolean value to enable/disable
-#'   driver mutation labels in the returned plot (default: TRUE).
+#'   driver mutation labels in the returned plot (default: `TRUE`).
 #' @param cuts A numeric vector specifying the range of VAF values to
 #'   include in the plot. A mutation is represented in the plot only if
 #'   its VAF lays in this interval in at least one of the samples

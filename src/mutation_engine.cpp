@@ -100,11 +100,13 @@ GenomicDataStorage setup_storage(
     const std::string &directory, const std::string &reference_source,
     const std::string &SBS_signatures_source, const std::string &indel_signatures_source,
     const std::string &drivers_source, const std::string &passengers_CNA_source,
-    const std::string &germline_source, std::shared_ptr<Account> COSMIC_account = nullptr)
+    const std::string &germline_source, const bool quiet,
+    std::shared_ptr<Account> COSMIC_account = nullptr)
 {
     GenomicDataStorage storage(COSMIC_account, directory, reference_source,
                                SBS_signatures_source, indel_signatures_source,
-                               drivers_source, passengers_CNA_source, germline_source);
+                               drivers_source, passengers_CNA_source, germline_source,
+                               quiet);
 
     storage.save_sources();
 
@@ -121,7 +123,7 @@ GenomicDataStorage setup_storage(
     const std::string &reference_source, const std::string &SBS_signatures_source,
     const std::string &indel_signatures_source, const std::string &drivers_source,
     const std::string &passengers_CNA_source, const std::string &germline_source,
-    std::shared_ptr<Account> COSMIC_account = nullptr)
+    const bool quiet, std::shared_ptr<Account> COSMIC_account = nullptr)
 {
     using namespace Rcpp;
 
@@ -148,13 +150,14 @@ GenomicDataStorage setup_storage(
         first_if_empty(indel_signatures_source, code_it->second.indel_signatures_url),
         first_if_empty(drivers_source, code_it->second.drivers_url),
         first_if_empty(passengers_CNA_source, code_it->second.passenger_CNAs_url),
-        first_if_empty(germline_source, code_it->second.germline_url), COSMIC_account);
+        first_if_empty(germline_source, code_it->second.germline_url), quiet,
+        COSMIC_account);
 }
 
-inline GenomicDataStorage setup_storage(const std::string &setup_code,
+inline GenomicDataStorage setup_storage(const std::string &setup_code, const bool quiet,
                                         std::shared_ptr<Account> COSMIC_account = nullptr)
 {
-    return setup_storage(setup_code, "", "", "", "", "", "", "", COSMIC_account);
+    return setup_storage(setup_code, "", "", "", "", "", "", "", quiet, COSMIC_account);
 }
 
 Rcpp::List MutationEngine::get_supported_setups()
@@ -232,7 +235,9 @@ build_contex_index(const GenomicDataStorage &storage, const size_t context_sampl
 
     using namespace Rcpp;
 
-    Rcout << "Building context index..." << std::endl << std::flush;
+    if (!quiet) {
+        Rcout << "Building context index..." << std::endl << std::flush;
+    }
 
     std::set<GenomicRegion> regions_to_avoid = get_region_to_avoid(storage);
 
@@ -252,8 +257,10 @@ build_contex_index(const GenomicDataStorage &storage, const size_t context_sampl
         archive.save(context_index, progress_bar, "context index");
     }
 
-    Rcout << "done" << std::endl;
 
+    if (!quiet) {
+        Rcout << "done" << std::endl;
+    }
     return context_index;
 }
 
@@ -301,7 +308,6 @@ CLONES::Mutations::RSIndex build_rs_index(const GenomicDataStorage &storage,
     if (!quiet) {
         Rcout << "Building repeated sequence index..." << std::endl << std::flush;
     }
-
 
     std::set<GenomicRegion> regions_to_avoid = get_region_to_avoid(storage);
 
@@ -452,7 +458,7 @@ void MutationEngine::init_mutation_engine(const bool &quiet)
     context_index = build_contex_index(storage, context_sampling, quiet);
     rs_index = build_rs_index(storage, max_motif_size, max_repetition_storage, quiet);
 
-    reset();
+    reset(true, quiet);
 }
 
 MutationEngine::MutationEngine(
@@ -468,7 +474,7 @@ MutationEngine::MutationEngine(
     : storage(setup_storage(setup_name, directory, reference_source,
                             SBS_signatures_source, indel_signatures_source,
                             drivers_source, passenger_CNAs_source, germline_source,
-                            COSMIC_account)),
+                            quiet, COSMIC_account)),
       germline_subject(germline_subject), context_sampling(context_sampling),
       max_motif_size(max_motif_size), max_repetition_storage(max_repetition_storage),
       driver_CNA_min_distance(driver_CNA_min_distance), tumour_type(tumour_type),
@@ -488,7 +494,8 @@ MutationEngine::MutationEngine(
     const bool &avoid_homozygous_losses, const bool &quiet)
     : storage(setup_storage(directory, reference_source, SBS_signatures_source,
                             indel_signatures_source, drivers_source,
-                            passenger_CNAs_source, germline_source, COSMIC_account)),
+                            passenger_CNAs_source, germline_source, quiet,
+                            COSMIC_account)),
       germline_subject(germline_subject), context_sampling(context_sampling),
       max_motif_size(max_motif_size), max_repetition_storage(max_repetition_storage),
       driver_CNA_min_distance(driver_CNA_min_distance), tumour_type(tumour_type),
@@ -627,11 +634,12 @@ MutationEngine MutationEngine::build_MutationEngine(
         driver_CNA_min_distance, tumour_type, avoid_homozygous_losses, quiet);
 }
 
-Rcpp::List MutationEngine::get_available_tumour_type(const std::string &setup_code)
+Rcpp::List MutationEngine::get_available_tumour_type(const std::string &setup_code,
+                                                     const bool& quiet)
 {
     auto setup_cfg = supported_setups.at(setup_code);
 
-    auto storage = setup_storage(setup_code);
+    auto storage = setup_storage(setup_code, quiet);
 
     std::set<std::string> CNA_types;
 
@@ -1364,7 +1372,7 @@ void MutationEngine::set_context_sampling(const size_t &context_sampling,
 
     context_index = build_contex_index(storage, context_sampling, quiet);
 
-    reset();
+    reset(true, quiet);
 }
 
 void warning_function(const CLONES::WarningType type, const std::string message)
@@ -1439,11 +1447,12 @@ void MutationEngine::reset(const bool full, const bool quiet)
     m_engine.avoid_homozygous_losses = avoid_homozygous_losses;
 }
 
-void MutationEngine::set_germline_subject(const std::string &germline_subject)
+void MutationEngine::set_germline_subject(const std::string &germline_subject,
+                                          const bool quiet)
 {
     storage.get_germline_storage().get_subject(germline_subject);
 
     this->germline_subject = germline_subject;
 
-    reset(false);
+    reset(false, quiet);
 }

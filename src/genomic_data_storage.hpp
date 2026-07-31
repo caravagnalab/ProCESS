@@ -165,6 +165,8 @@ class GenomicDataStorage
 
     std::string germline_src;
 
+    bool quiet;
+
     std::filesystem::path get_destination_path(const std::string &url) const;
 
     std::filesystem::path download_file(const std::string &url) const;
@@ -226,14 +228,16 @@ class GenomicDataStorage
                        const std::string &indel_signatures_source,
                        const std::string &driver_mutations_source,
                        const std::string &passenger_CNAs_source,
-                       const std::string &germline_source);
+                       const std::string &germline_source,
+                       const bool quiet);
 
     GenomicDataStorage(const std::string &directory, const std::string &reference_source,
                        const std::string &SBS_signatures_source,
                        const std::string &indel_signatures_source,
                        const std::string &driver_mutations_source,
                        const std::string &passenger_CNAs_source,
-                       const std::string &germline_source);
+                       const std::string &germline_source,
+                       const bool quiet);
 
     inline std::filesystem::path get_directory() const { return directory; }
 

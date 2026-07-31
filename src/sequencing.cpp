@@ -185,7 +185,7 @@ RCPP_MODULE(Sequencing)
 //' @param seed The random seed for the internal random generator
 //'   (optional).
 //' @param quiet A Boolean flag to enable/disable the progress bar
-//'   (default: FALSE).
+//'   (default: `FALSE`).
 //' @return A named list of two elements: the sequencing output data
 //'   frame (name `mutations`) and the calling parameters (name
 //'   `parameters`).
@@ -271,7 +271,7 @@ RCPP_MODULE(Sequencing)
 //' @param seed The random seed for the internal random generator
 //'   (optional).
 //' @param quiet A Boolean flag to enable/disable the progress bar
-//'   (default: FALSE).
+//'   (default: `FALSE`).
 //' @return A named list of two elements: the sequencing output data
 //'   frame (name `mutations`) and the calling parameters
 //'   (name `parameters`).

@@ -309,7 +309,8 @@ void download_COSMIC(
     rfunc(COSMIC_account->get_username(), COSMIC_account->get_password(), d_list);
 }
 
-void download_file(const std::string &url, const std::filesystem::path dest_filename)
+void download_file(const std::string &url, const std::filesystem::path dest_filename,
+                   const bool& quiet)
 {
     if (!std::filesystem::exists(dest_filename.parent_path())) {
         std::filesystem::create_directory(dest_filename.parent_path());
@@ -328,7 +329,7 @@ void download_file(const std::string &url, const std::filesystem::path dest_file
     // download the file
     Function download_f("download.file");
     download_f(_["url"] = url, _["destfile"] = to_string(dest_filename),
-               _["mode"] = "wb");
+               _["mode"] = "wb", _["quiet"] = quiet);
 
     // revert to the default timeout
     options_f(_["timeout"] = timeout);
@@ -338,7 +339,7 @@ std::filesystem::path GenomicDataStorage::download_file(const std::string &url) 
 {
     const auto dest_filename = to_string(get_destination_path(url));
 
-    ::download_file(url, dest_filename);
+    ::download_file(url, dest_filename, quiet);
 
     return dest_filename;
 }
@@ -355,17 +356,21 @@ void GenomicDataStorage::retrieve_signatures(
         return;
     }
 
-    Rcpp::Rcout << "Downloading signature files..." << std::endl << std::flush;
+    if (!quiet) {
+        Rcpp::Rcout << "Downloading signature files..." << std::endl << std::flush;
+    }
 
     if (signatures_from_COSMIC(download_list)) {
         download_COSMIC(COSMIC_account, download_list);
     } else {
         for (const auto &[src, dst] : download_list) {
-            ::download_file(src, dst);
+            ::download_file(src, dst, quiet);
         }
     }
 
-    Rcpp::Rcout << "Signature file downloaded" << std::endl;
+    if (!quiet) {
+        Rcpp::Rcout << "Signature file downloaded" << std::endl;
+    }
 }
 
 GenomicDataStorage::GenomicDataStorage(const std::shared_ptr<Account> COSMIC_account,
@@ -375,11 +380,13 @@ GenomicDataStorage::GenomicDataStorage(const std::shared_ptr<Account> COSMIC_acc
                                        const std::string &indel_signatures_source,
                                        const std::string &driver_mutations_source,
                                        const std::string &passenger_CNAs_source,
-                                       const std::string &germline_source)
+                                       const std::string &germline_source,
+                                       const bool quiet)
     : directory{std::filesystem::absolute(directory)}, reference_src{reference_source},
       SBS_signatures_src{SBS_signatures_source},
       indel_signatures_src{indel_signatures_source}, drivers_src{driver_mutations_source},
-      passenger_CNAs_src{passenger_CNAs_source}, germline_src{germline_source}
+      passenger_CNAs_src{passenger_CNAs_source}, germline_src{germline_source},
+      quiet{quiet}
 {
     std::filesystem::create_directory(directory);
 
@@ -402,10 +409,11 @@ GenomicDataStorage::GenomicDataStorage(const std::string &directory,
                                        const std::string &indel_signatures_source,
                                        const std::string &driver_mutations_source,
                                        const std::string &passenger_CNAs_source,
-                                       const std::string &germline_source)
+                                       const std::string &germline_source,
+                                       const bool quiet)
     : GenomicDataStorage(nullptr, directory, reference_source, SBS_signatures_source,
                          indel_signatures_source, driver_mutations_source,
-                         passenger_CNAs_source, germline_source)
+                         passenger_CNAs_source, germline_source, quiet)
 {}
 
 std::filesystem::path
@@ -441,7 +449,7 @@ std::string get_file_extension(const std::string &filename)
 
 void setup_downloaded_file(const std::string &downloaded_filename,
                            const std::string destination,
-                           const std::string &description = "")
+                           const bool& quiet, const std::string &description = "")
 {
     const std::map<std::string, std::string> decompressors{{"gz", "gunzip"},
                                                            {"bz2", "bunzip2"}};
@@ -455,9 +463,14 @@ void setup_downloaded_file(const std::string &downloaded_filename,
         Environment pkg = Environment::namespace_env("R.utils");
         Function decompressFile = pkg[decomp_it->second];
 
-        Rcout << "Decompressing " << description << "..." << std::flush;
-        decompressFile(_["filename"] = downloaded_filename, _["destname"] = destination);
-        Rcout << "done" << std::endl << std::flush;
+        if (!quiet) {
+            Rcout << "Decompressing " << description << "..." << std::flush;
+        }
+        decompressFile(_["filename"] = downloaded_filename, _["destname"] = destination,
+                       _["overwrite"] = true);
+        if (!quiet) {
+            Rcout << "done" << std::endl << std::flush;
+        }
     } else {
         std::filesystem::rename(downloaded_filename, destination);
     }
@@ -465,9 +478,10 @@ void setup_downloaded_file(const std::string &downloaded_filename,
 
 inline void setup_downloaded_file(const std::string &downloaded_filename,
                                   const std::filesystem::path &destination,
+                                  const bool& quiet,
                                   const std::string &description = "")
 {
-    setup_downloaded_file(downloaded_filename, to_string(destination), description);
+    setup_downloaded_file(downloaded_filename, to_string(destination), quiet, description);
 }
 
 std::filesystem::path GenomicDataStorage::retrieve_reference() const
@@ -485,13 +499,17 @@ std::filesystem::path GenomicDataStorage::retrieve_reference() const
 
     using namespace Rcpp;
 
-    Rcout << "Downloading reference genome..." << std::endl << std::flush;
-
+    if (!quiet) {
+        Rcout << "Downloading reference genome..." << std::endl << std::flush;
+    }
     const auto downloaded_file = to_string(download_file(reference_src));
 
-    Rcout << "Reference genome downloaded" << std::endl;
+    if (!quiet) {
+        Rcout << "Reference genome downloaded" << std::endl;
+    }
 
-    setup_downloaded_file(downloaded_file, reference_filename, "reference genome");
+    setup_downloaded_file(downloaded_file, reference_filename, quiet,
+                          "reference genome");
 
     return reference_filename;
 }
@@ -515,13 +533,18 @@ void GenomicDataStorage::retrieve_drivers() const
 
     using namespace Rcpp;
 
-    Rcout << "Downloading driver mutation file..." << std::endl << std::flush;
+    if (!quiet) {
+        Rcout << "Downloading driver mutation file..." << std::endl << std::flush;
+    }
 
     const auto downloaded_file = to_string(download_file(drivers_src));
 
-    Rcout << "Driver mutation file downloaded" << std::endl;
+    if (!quiet) {
+        Rcout << "Driver mutation file downloaded" << std::endl;
+    }
 
-    setup_downloaded_file(downloaded_file, mutations_filename, "driver mutation file");
+    setup_downloaded_file(downloaded_file, mutations_filename, quiet,
+                          "driver mutation file");
 }
 
 void GenomicDataStorage::retrieve_passenger_CNAs() const
@@ -543,13 +566,16 @@ void GenomicDataStorage::retrieve_passenger_CNAs() const
         return;
     }
 
-    Rcout << "Downloading passenger CNAs file..." << std::endl << std::flush;
-
+    if (!quiet) {
+        Rcout << "Downloading passenger CNAs file..." << std::endl << std::flush;
+    }
     const auto downloaded_file = to_string(download_file(passenger_CNAs_src));
 
-    Rcout << "Passenger CNAs file downloaded" << std::endl;
+    if (!quiet) {
+        Rcout << "Passenger CNAs file downloaded" << std::endl;
+    }
 
-    setup_downloaded_file(downloaded_file, passenger_CNAs_filename,
+    setup_downloaded_file(downloaded_file, passenger_CNAs_filename, quiet,
                           "passenger CNAs file");
 }
 
@@ -572,17 +598,23 @@ void GenomicDataStorage::retrieve_germline() const
 
     using namespace Rcpp;
 
-    Rcout << "Downloading germline..." << std::endl << std::flush;
-
+    if (!quiet) {
+        Rcout << "Downloading germline..." << std::endl << std::flush;
+    }
     auto downloaded_file = download_file(germline_src);
 
-    Rcout << "Germline downloaded" << std::endl;
+    if (!quiet) {
+        Rcout << "Germline downloaded" << std::endl
+              << "Decompressing mutations..." << std::endl << std::flush;
+    }
 
     Function untar("untar");
+    untar(_["tarfile"] = to_string(downloaded_file),
+          _["exdir"] = to_string(directory));
 
-    Rcout << "Decompressing mutations..." << std::endl << std::flush;
-    untar(_["tarfile"] = to_string(downloaded_file), _["exdir"] = to_string(directory));
-    Rcout << "done" << std::endl;
+    if (!quiet) {
+        Rcout << "done" << std::endl;
+    }
 
     std::filesystem::remove(downloaded_file);
 }
