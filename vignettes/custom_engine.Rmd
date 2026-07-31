@@ -47,6 +47,15 @@ of the setup directory, the path or URL of the reference sequence, the
 signature files, the driver mutation file, the passenger CNAs file, and
 the germline data directory.
 
+```{r, echo=FALSE,  results='hide', message=FALSE}
+unlink("Test", recursive = TRUE)
+
+# wait for true deletion
+while (dir.exists("Test")) {
+  Sys.sleep(0.3)
+}
+```
+
 ```{r}
 library("ProCESS")
 
