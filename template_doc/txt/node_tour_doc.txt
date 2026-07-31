@@ -11,7 +11,7 @@
 #' # show the first node in the tour
 #' node_tour$node
 #' @seealso <code>[${CLASS_TYPE}]</code>, [get_node_tour()],
-#'   <code>[`vignette("node_tour")`]</code>
+#'   `vignette("node_tour")`
 NULL
 
 #' @name ${CLASS_TYPE}$step
@@ -32,7 +32,7 @@ NULL
 #' # show the second node in the tour
 #' node_tour$node
 #' @seealso <code>[${CLASS_TYPE}]</code>, [get_node_tour()],
-#'   <code>[`vignette("node_tour")`]</code>
+#'   `vignette("node_tour")`
 NULL
 
 #' @name ${CLASS_TYPE}$done
@@ -65,7 +65,7 @@ NULL
 #' # show the forest (and the number of its nodes)
 #' forest
 #' @seealso <code>[${CLASS_TYPE}]</code>, [get_node_tour()],
-#'   <code>[`vignette("node_tour")`]</code>
+#'   `vignette("node_tour")`
 NULL
 
 #' @name ${CLASS_TYPE}$label
@@ -94,5 +94,5 @@ NULL
 #' # get the label of the second node in the tour node
 #' node_tour$label
 #' @seealso <code>[${CLASS_TYPE}]</code>, [get_node_tour()],
-#'   <code>[`vignette("node_tour")`]</code>
+#'   `vignette("node_tour")`
 NULL
