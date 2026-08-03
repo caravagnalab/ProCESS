@@ -2393,7 +2393,7 @@ void TissueSimulation::validate_usable_sample_name(const std::string &sample_nam
 void TissueSimulation::sample_cells(
     const std::string &sample_name,
     const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &lower_corner,
-    const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner) const
+    const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner)
 {
     using namespace CLONES::Mutants;
 
@@ -2404,7 +2404,7 @@ void TissueSimulation::sample_cells(
 }
 
 void TissueSimulation::sample_cells(const std::string &sample_name,
-                                    const size_t &num_of_cells) const
+                                    const size_t &num_of_cells)
 {
     std::vector<CLONES::Mutants::Evolutions::AxisPosition> lower_corner, upper_corner;
 
@@ -2420,7 +2420,7 @@ void TissueSimulation::sample_cells(
     const std::string &sample_name,
     const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &lower_corner,
     const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner,
-    const size_t &num_of_cells) const
+    const size_t &num_of_cells)
 {
     using namespace CLONES::Mutants;
 
@@ -2430,9 +2430,105 @@ void TissueSimulation::sample_cells(
     auto bounding_box = get_rectangle(lower_corner, upper_corner);
 
     CLONES::Mutants::Evolutions::SampleSpecification spec(sample_name, bounding_box,
-                                                         num_of_cells);
+                                                          num_of_cells);
 
     sim_ptr->sample_tissue(spec);
+}
+
+std::vector<CLONES::Mutants::Evolutions::AxisPosition>
+get_coordinates(const SEXP& position, const std::string& what,
+                const std::vector<CLONES::Mutants::Evolutions::AxisSize>& tissue_size)
+{
+    if (!Rcpp::is<Rcpp::NumericVector>(position)) {
+        Rcpp::stop("\"" + what
+                   + "\" must be a coordinate.");
+    }
+
+    const std::vector<double> temp = Rcpp::as<std::vector<double>>(position);
+
+    if (temp.size() != tissue_size.size()) {
+        Rcpp::stop("\"" + what + "\" must have "
+                   + std::to_string(tissue_size.size()) + " dimensions.");
+    }
+
+    std::vector<CLONES::Mutants::Evolutions::AxisPosition> coordinates(temp.size());
+
+    auto coord_it = coordinates.begin();
+    auto size_it = tissue_size.begin();
+    auto i{1};
+    for (const auto& value : temp) {
+        if (value < 0 || value != std::trunc(value) || value > *size_it) {
+
+            Rcpp::stop("The " + ordtostr(i) + " dimension in \"" + what
+                       + "\" must be an integer in the interval [0,"
+                       + std::to_string(*size_it) + "].");
+        }
+        *coord_it = static_cast<CLONES::Mutants::Evolutions::AxisPosition>(value);
+        ++coord_it;
+        ++size_it;
+        ++i;
+    }
+
+    return coordinates;
+}
+
+void TissueSimulation::sample_cells(const SEXP &sample_name, const SEXP &num_of_cells)
+{
+    const std::string c_sample_name = FromSEXP::get<std::string>(sample_name,
+                                                                 "sample name",
+                                                                 "string");
+    const int64_t c_num_of_cells = FromSEXP::get<int64_t>(num_of_cells,
+                                                          "number of cells",
+                                                          "non-negative number");
+
+    if (c_num_of_cells < 0) {
+        Rcpp::stop("The number of cells must be non-negative");
+    }
+
+    return sample_cells(c_sample_name, static_cast<size_t>(c_num_of_cells));
+}
+
+void TissueSimulation::sample_cells(const SEXP &sample_name, const SEXP &lower_corner,
+                                    const SEXP &upper_corner)
+{
+    const std::string c_sample_name = FromSEXP::get<std::string>(sample_name,
+                                                                 "sample name",
+                                                                 "string");
+
+    const auto tissue_size = sim_ptr->tissue().size();
+
+    const auto c_lower_corner = get_coordinates(lower_corner, "lower_corner",
+                                                tissue_size);
+    const auto c_upper_corner = get_coordinates(upper_corner, "upper_corner",
+                                                tissue_size);
+
+    return sample_cells(c_sample_name, c_lower_corner, c_upper_corner);
+}
+
+void TissueSimulation::sample_cells(const SEXP &sample_name, const SEXP &lower_corner,
+                                    const SEXP &upper_corner, const SEXP &num_of_cells)
+{
+    const std::string c_sample_name = FromSEXP::get<std::string>(sample_name,
+                                                                 "sample name",
+                                                                 "string");
+
+    const auto tissue_size = sim_ptr->tissue().size();
+
+    const auto c_lower_corner = get_coordinates(lower_corner, "lower_corner",
+                                                tissue_size);
+    const auto c_upper_corner = get_coordinates(upper_corner, "upper_corner",
+                                                tissue_size);
+
+    const int64_t c_num_of_cells = FromSEXP::get<int64_t>(num_of_cells,
+                                                          "number of cells",
+                                                          "non-negative number");
+
+    if (c_num_of_cells < 0) {
+        Rcpp::stop("The number of cells must be non-negative");
+    }
+
+    return sample_cells(c_sample_name, c_lower_corner, c_upper_corner,
+                        static_cast<size_t>(c_num_of_cells));
 }
 
 std::map<CLONES::Mutants::SpeciesId, size_t>

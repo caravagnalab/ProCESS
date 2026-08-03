@@ -335,18 +335,26 @@ class TissueSimulation
 
     void run_until(const Logics::Formula &formula, const bool quiet);
 
-    void sample_cells(const std::string &sample_name, const size_t &num_of_cells) const;
+    void sample_cells(const std::string &sample_name, const size_t &num_of_cells);
 
     void sample_cells(
         const std::string &sample_name,
         const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &lower_corner,
-        const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner) const;
+        const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner);
 
     void sample_cells(
         const std::string &sample_name,
         const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &lower_corner,
         const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner,
-        const size_t &num_of_cells) const;
+        const size_t &num_of_cells);
+
+    void sample_cells(const SEXP &sample_name, const SEXP &num_of_cells);
+
+    void sample_cells(const SEXP &sample_name, const SEXP &lower_corner,
+                      const SEXP &upper_corner);
+
+    void sample_cells(const SEXP &sample_name, const SEXP &lower_corner,
+                      const SEXP &upper_corner, const SEXP &num_of_cells);
 
     Rcpp::List get_firings() const;
 

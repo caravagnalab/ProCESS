@@ -1793,24 +1793,20 @@ RCPP_MODULE(Mutants)
 //'   <code>[TissueSimulation](TissueSimulation_class.md)</code>
         .method(
             "sample_cells",
-            (void (TissueSimulation::*)(
-                const std::string &,
-                const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &lower_corner,
-                const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner,
-                const size_t &num_of_cells) const)(&TissueSimulation::sample_cells),
+            (void (TissueSimulation::*)(const SEXP &, const SEXP &,
+                                        const SEXP &, const SEXP &))
+                (&TissueSimulation::sample_cells),
             "Sample a rectangular region of the tissue")
         .method(
             "sample_cells",
-            (void (TissueSimulation::*)(
-                const std::string &,
-                const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &lower_corner,
-                const std::vector<CLONES::Mutants::Evolutions::AxisPosition> &upper_corner)
-                 const)(&TissueSimulation::sample_cells),
+            (void (TissueSimulation::*)(const SEXP &, const SEXP &,
+                                        const SEXP &))
+                (&TissueSimulation::sample_cells),
             "Sample a rectangular region of the tissue")
         .method(
             "sample_cells",
-            (void (TissueSimulation::*)(const std::string &, const size_t &num_of_cells)
-                 const)(&TissueSimulation::sample_cells),
+            (void (TissueSimulation::*)(const SEXP &, const SEXP &))
+                (&TissueSimulation::sample_cells),
             "Sample a rectangular region of the tissue")
 
 //' @name TissueSimulation$set_rate
