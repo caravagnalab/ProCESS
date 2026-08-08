@@ -15,6 +15,13 @@
 ## You should have received a copy of the GNU General Public License
 ## along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+sample_shape <- function(nodes) {
+  nodes %>%
+    dplyr::mutate(shape_label = ifelse(is.na(.data$sample), "N/A",
+                                       .data$sample)) %>%
+    dplyr::pull(.data$shape_label)
+}
+
 #' Plot a sample forest
 #'
 #' @description
@@ -27,15 +34,31 @@
 #'   cells in the sample is highlighted. If `NULL` (default), nothing is
 #'   highlighted.
 #' @param color_map A named vector representing the simulation species color
-#'   map (optional).
+#'   map (optional when `color_label_function` is `NULL`; mandatory,
+#'   otherwise).
 #' @param alpha_function A function whose input is the data frame
 #'   returned by <code>[SampleForest$get_cells()]</code> or
 #'   <code>[PhylogeneticForest$get_cells()]</code> and returns
 #'   a real vector whose values are in the interval \eqn{[0,1]} and whose
 #'   length is the number of rows in the input data frame. Each value in the
 #'   output is used as alpha level of the corresponding cell. When the
-#'   parameter is set to `NULL`, all tumour simulation cells have alpha
-#'   level `1` (default: `NULL`).
+#'   parameter is set to `NULL`, all nodes have alpha level `1`
+#'   (default: `NULL`).
+#' @param shape_label_function A function whose input is the data frame
+#'   returned by <code>[SampleForest$get_cells()]</code> or
+#'   <code>[PhylogeneticForest$get_cells()]</code> and returns
+#'   a string vector whose length is the number of rows in the input data
+#'   frame. Each value in the output is the label of the associated node
+#'   and determine the node shape. When the parameter is set to `NULL`,
+#'   all nodes have the same shape. By default, the node shapes correspond
+#'   to the sample which collected the corresponding cell.
+#' @param color_label_function A function whose input is the data frame
+#'   returned by <code>[SampleForest$get_cells()]</code> or
+#'   <code>[PhylogeneticForest$get_cells()]</code> and returns
+#'   a string vector whose length is the number of rows in the input data
+#'   frame. Each value in the output is the label of the associated node
+#'   and determine the node color. When the parameter is set to `NULL`,
+#'   the nodes are colored according their species (default: `NULL`).
 #' @return A `ggraph` tree plot.
 #' @examples
 #' # use a sample forest example
@@ -49,28 +72,95 @@
 #'
 #' plot_forest(forest, color_map = color_map)
 #'
-#' # define an alpha function hiding the nodes representing cells
-#' # after simulated time 400
-#' library(dplyr)
-#'
+#' # define an alpha function assigning to each node an alpha
+#' # value according to the corresponding cell's birth time
 #' alpha_f <- function(nodes) {
-#'    nodes %>%
-#'      dplyr::mutate(alpha = dplyr::case_when(birth_time <= 400 ~ 1,
-#'                                             TRUE ~ 0)) %>%
-#'      dplyr::pull(alpha)
+#'   library(dplyr)
+#'
+#'   T <- max(nodes$birth_time)
+#'   nodes %>%
+#'     mutate(alpha = (T-.data$birth_time)/T) %>%
+#'     pull(alpha)
 #' }
 #'
 #' plot_forest(forest, alpha_function = alpha_f)
+#'
+#' # plot the forest avoiding to denote samples by using node shapes
+#' plot_forest(forest, shape_label_function = NULL)
+#'
+#' # a shape function that labels each node as the sample that
+#' # collected the corresponding cells
+#' shape_label_function <- function(nodes) {
+#'   library(dplyr)
+#'
+#'   nodes %>%
+#'     mutate(label = case_when(birth_time <= 300 ~ "Old",
+#'                              TRUE ~ "Young")) %>%
+#'     pull(label)
+#' }
+#'
+#' # plot the forest using the node shapes to denote cell birth time
+#' plot_forest(forest, shape_label_function = shape_label_function)
+#'
+#' color_label_function <- function(nodes) {
+#'   library(dplyr)
+#'
+#'   nodes %>%
+#'     mutate(age = case_when(birth_time <= 300 ~ "Old",
+#'                            TRUE ~ "Young")) %>%
+#'     mutate(label = paste(mutant, age)) %>%
+#'     pull(label)
+#' }
+#'
+#' # get the plot labels (i.e., paste(mutants, "Old") +
+#' # paste(mutants, "Young"))
+#' mutants <- unique(forest$get_nodes() %>% dplyr::pull(mutant))
+#' labels <- c(paste(mutants, "Old"), paste(mutants, "Young"))
+#'
+#' # create a color map for the labels
+#' color_map <- RColorBrewer::brewer.pal(n = length(labels), name = "Set1")
+#' names(color_map) <- labels
+#'
+#' # plot the tissue labelling the cells according to
+#' # `label_function`. The parameter `color_map` is mandatory.
+#' plot_forest(forest, color_label_function = color_label_function,
+#'             color_map = color_map, shape_label_function = NULL)
 #' @export
 #'
 plot_forest <- function(forest, highlight_sample = NULL, color_map = NULL,
-                        alpha_function = NULL) {
+                        alpha_function = NULL,
+                        shape_label_function = sample_shape,
+                        color_label_function = NULL) {
   if (!inherits(forest, "Rcpp_SampleForest")
       && !inherits(forest, "Rcpp_PhylogeneticForest")) {
     stop("The parameter \"forest\" is not a ProCESS forest.")
   }
 
   forest_data <- forest$get_nodes()
+
+  if (is.null(color_label_function)) {
+    forest_data <- forest_data %>% add_species_col("color_label")
+
+    if (is.null(color_map)) {
+      color_map <- get_species_colors(forest)
+    }
+  } else {
+    if (is.null(color_map)) {
+      stop("\"color_map\" is mandatory when ",
+           "\"color_label_function\" is specified.")
+    }
+
+    forest_data[["color_label"]] <- color_label_function(forest_data)
+  }
+
+  forest_data$color_label <- factor(forest_data$color_label,
+                                    levels = names(color_map))
+
+  if (!is.null(shape_label_function)) {
+    forest_data[["shape_label"]] <- shape_label_function(forest_data)
+  } else {
+    forest_data[["shape_label"]] <- NA
+  }
 
   if (is.null(alpha_function)) {
     forest_data <- forest_data %>%
@@ -90,18 +180,18 @@ plot_forest <- function(forest, highlight_sample = NULL, color_map = NULL,
         from = .data$ancestor,
         to = .data$cell_id
       ) %>%
-      add_species_col() %>%
-      dplyr::select(.data$from, .data$to, .data$species,
-                    .data$sample, .data$birth_time,
-                    .data$alpha_level)
+      dplyr::select(.data$from, .data$to, .data$sample,
+                    .data$shape_label, .data$color_label,
+                    .data$birth_time, .data$alpha_level)
 
     first_cell <- forest_data %>%
       dplyr::filter(.data$birth_time == 0)
 
     forest_data <- forest_data %>%
       dplyr::add_row(from = NA, to = NA,
-                     species = first_cell[1, ]$species,
-                     sample = NA, birth_time = 0) %>%
+                     color_label = first_cell[1, ]$color_label,
+                     shape_label = first_cell[1, ]$shape_label,
+                     birth_time = 0) %>%
       dplyr::mutate(
         from = ifelse(is.na(.data$from), "WT", .data$from),
         to = ifelse(is.na(.data$to), "WT", .data$to),
@@ -142,10 +232,6 @@ plot_forest <- function(forest, highlight_sample = NULL, color_map = NULL,
 
     layout$y <- layout$reversed_btime
 
-    if (is.null(color_map)) {
-      color_map <- get_species_colors(forest)
-    }
-
     nsamples <- forest$get_samples_info() %>% nrow()
 
     labels_every <- max_Y / 10
@@ -162,27 +248,34 @@ plot_forest <- function(forest, highlight_sample = NULL, color_map = NULL,
                                                               "black"),
                                           alpha = .data$edge_alpha))
 
+    if (is.null(shape_label_function)) {
+      graph_plot <- graph_plot +
+        ggraph::geom_node_point(ggplot2::aes(color = .data$color_label,
+                                             alpha = .data$alpha_level,
+                                             size = .data$sample))
+    } else {
+      graph_plot <- graph_plot +
+        ggraph::geom_node_point(ggplot2::aes(color = .data$color_label,
+                                             shape = .data$shape_label,
+                                             alpha = .data$alpha_level,
+                                             size = .data$sample)) +
+        ggplot2::scale_shape_manual(values = c(0:nsamples + 1))
+    }
+
     graph_plot +
-      ggraph::geom_node_point(ggplot2::aes(color = .data$species,
-                                           shape = ifelse(is.na(.data$sample),
-                                                          "N/A",
-                                                          .data$sample),
-                                           alpha = .data$alpha_level,
-                                           size = .data$sample)) +
       ggplot2::scale_alpha_identity() +
-      ggplot2::scale_shape_manual(values = c(0:nsamples + 1)) +
       ggplot2::scale_color_manual(values = color_map) +
       ggplot2::theme_minimal() +
       ggplot2::theme(legend.position = "bottom") +
       ggplot2::labs(
-        color = "Species",
-        shape = "Sample",
+        color = NULL,
+        shape = NULL,
         x = NULL,
         y = "Time"
       ) +
       ggplot2::guides(size = "none",
-                      shape = ggplot2::guide_legend("Sample"),
-                      color = ggplot2::guide_legend("Species")) +
+                      shape = NULL,
+                      color = NULL) +
       ggplot2::scale_size_manual(
         values = point_size
       ) +
@@ -225,4 +318,3 @@ paths_to_sample <- function(forest_data, sample) {
 
   queue
 }
-
