@@ -19,10 +19,10 @@
 #'
 #' @description This function plots the tissue
 #' @details
-#' This function plots cells distribution over a tissue highlighting species
-#' by color. To facilitate the plot and avoid excessive number of cells, for
-#' instance, when a simulation deals with millions of cells, the plot draws a
-#' hexagonal heatmap of 2D bins.
+#' This function represents cells distribution over a tissue. Each cells is
+#' labelled and colored according to its label (see parameter
+#' `label_function`). The tissue is draws as a heatmap of hexagonal bins for
+#' efficiency porpoise.
 #' @usage plot_tissue(simulation)
 #' @param simulation A simulation object.
 #' @param num_of_bins The number of bins (default: 100).
@@ -44,18 +44,27 @@
 #'   `before_sample` are set and `plot_sample_region` is set to be `TRUE`,
 #'   the function also plots the region of the specified sample
 #'   (default: `TRUE`).
-#' @param color_map A named vector representing the simulation species color
-#'   map (optional).
-#' @param list_all_species A Boolean flag to show all species in
+#' @param color_map A named vector representing the color of the labels
+#'   map (optional when `label_function` is `NULL`; mandatory, otherwise).
+#' @param list_all_labels A Boolean flag to show all labels in
 #'   the legend (default: `FALSE`).
-#' @param focus_function A function whose input is the data frame
-#'   returned by <code>[TissueSimulation$get_cells()]</code> and returns
+#' @param label_function A function whose input is the result of
+#'   <code>[TissueSimulation$get_cells()]</code> and that returns
+#'   a string vector whose length is the number of rows in the input data
+#'   frame. The strings are the labels of the corresponding cells and
+#'   the function represents the different labels in the returned plot
+#'   by coloring the cells according to `color_map`. If `label_function`
+#'   is specified, then `color_map` becomes mandatory. When the parameter
+#'   is set to `NULL`, the cells are labelled by their species names
+#'   (default: `NULL`).
+#' @param focus_function A function whose input is the result of
+#'   <code>[TissueSimulation$get_cells()]</code> and that returns
 #'   a Boolean vector whose length is the number of rows in the input data
 #'   frame. When one the row in the output is `FALSE` the corresponding
 #'   cells is plotted in grey. When the parameter is set to `NULL`, all
 #'   tumour simulation cells are colored (default: `NULL`).
-#' @param alpha_function A function whose input is the data frame
-#'   returned by <code>[TissueSimulation$get_cells()]</code> and returns
+#' @param alpha_function A function whose input is the result of
+#'   <code>[TissueSimulation$get_cells()]</code> and that returns
 #'   a real vector whose values are in the interval \eqn{[0,1]} and whose
 #'   length is the number of rows in the input data frame. Each value in
 #'   the output is used as alpha level of the corresponding cell. When the
@@ -139,14 +148,43 @@
 #' plot_tissue(sim, color_map = color_map)
 #'
 #' # this function returns `TRUE` for cells in the rectangle
-#' # [250,350]x[300,350]
+#' # [200,400]x[300,500]
 #' focus_function <- function(cells) {
-#'   (cells$position_x >= 250 & cells$position_x <= 350
-#'    & cells$position_y >= 300 & cells$position_y <= 350)
+#'   (cells$position_x >= 200 & cells$position_x <= 400
+#'    & cells$position_y >= 300 & cells$position_y <= 500)
 #' }
 #'
-#' # plot the tissue highlighting the region [250,350]x[300,350]
+#' # plot the tissue highlighting the region [200,400]x[300,500]
 #' plot_tissue(sim, focus_function = focus_function)
+#'
+#' # this function labels cells. Inside the rectangle
+#' # [200,400]x[300,500] the label is the cell's mutant name.
+#' # Outside, the rectangle label is cell's mutant name with
+#' # "outside" attached.
+#' label_function <- function(cells) {
+#'   library(dplyr)
+#'
+#'   cells %>%
+#'     mutate(label = if_else(cells$position_x >= 200
+#'                            & cells$position_x <= 400
+#'                            & cells$position_y >= 300
+#'                            & cells$position_y <= 500,
+#'                            .data$mutant,
+#'                            paste(.data$mutant, "outside"))) %>%
+#'     pull(label)
+#' }
+#'
+#' # get the plot labels (i.e., mutants + paste(mutants, "outside"))
+#' mutants <- sim$get_mutants() %>% dplyr::pull(mutant)
+#' labels <- c(mutants, paste(mutants, "outside"))
+#'
+#' # create a color map for the labels
+#' color_map <- RColorBrewer::brewer.pal(n = length(labels), name = "Set1")
+#' names(color_map) <- labels
+#'
+#' # plot the tissue labelling the cells according to
+#' # `label_function`. The parameter `color_map` is mandatory.
+#' plot_tissue(sim, label_function = label_function, color_map = color_map)
 #' @seealso [build_snapshot_video()]
 #' @export
 #'
@@ -156,7 +194,8 @@ plot_tissue <- function(simulation, num_of_bins = 100,
                         plot_next_sample_regions = FALSE,
                         plot_sample_region = TRUE,
                         color_map = NULL,
-                        list_all_species = FALSE,
+                        list_all_labels = FALSE,
+                        label_function = NULL,
                         focus_function = NULL,
                         alpha_function = NULL) {
   stopifnot(inherits(simulation, "Rcpp_TissueSimulation"))
@@ -197,7 +236,20 @@ plot_tissue <- function(simulation, num_of_bins = 100,
     }
   }
 
-  cells <- cells %>% add_species_col()
+  if (is.null(label_function)) {
+    cells <- cells %>% add_species_col("label")
+
+    if (is.null(color_map)) {
+      color_map <- get_species_colors(simulation)
+    }
+  } else {
+    if (is.null(color_map)) {
+      stop("\"color_map\" is mandatory when \"label_function\" ",
+           "is specified.")
+    }
+
+    cells[["label"]] <- label_function(cells)
+  }
 
   if (is.null(alpha_function)) {
     cells$alpha_level <- 1
@@ -205,12 +257,8 @@ plot_tissue <- function(simulation, num_of_bins = 100,
     cells$alpha_level <- alpha_function(cells)
   }
 
-  if (is.null(color_map)) {
-    color_map <- get_species_colors(simulation)
-  }
-
-  cells$species <- factor(cells$species,
-                          levels = unique(names(color_map)))
+  cells[["label"]] <- factor(cells[["label"]],
+                             levels = unique(names(color_map)))
 
   if (is.null(focus_function)) {
     highlighted_cells <- cells
@@ -233,7 +281,7 @@ plot_tissue <- function(simulation, num_of_bins = 100,
       data = masked_cells,
       ggplot2::aes(x = .data$position_x,
                    y = .data$position_y,
-                   fill = ggplot2::stage(start = .data$species,
+                   fill = ggplot2::stage(start = .data$label,
                                          after_stat = NULL),
                    z = .data$alpha_level,
                    alpha = ggplot2::after_stat(value)),
@@ -257,7 +305,7 @@ plot_tissue <- function(simulation, num_of_bins = 100,
       data = highlighted_cells,
       ggplot2::aes(x = .data$position_x,
                    y = .data$position_y,
-                   fill = ggplot2::stage(start = .data$species,
+                   fill = ggplot2::stage(start = .data$label,
                                          after_stat = NULL),
                    z = .data$alpha_level,
                    alpha = ggplot2::after_stat(value)),
@@ -269,10 +317,9 @@ plot_tissue <- function(simulation, num_of_bins = 100,
     ggplot2::scale_alpha_identity() +
     ggplot2::scale_fill_manual(values = color_map,
                                limits = names(color_map),
-                               drop = !list_all_species) +
+                               drop = !list_all_labels) +
     my_theme() +
-    ggplot2::labs(x = NULL, y = NULL,
-                  fill = "Species") +
+    ggplot2::labs(x = NULL, y = NULL, fill = NULL) +
     ggplot2::theme(legend.position = "bottom") +
     ggplot2::xlim(-10, tissue_sizes[1] + 10) +
     ggplot2::ylim(-10, tissue_sizes[2] + 10)
@@ -361,7 +408,7 @@ build_snapshot_video <- function(simulation, output_file = NULL,
       plot_tissue(snapshot,
                   color_map = color_map,
                   plot_sample_region = FALSE,
-                  list_all_species = TRUE)
+                  list_all_labels = TRUE)
     }
   }
 

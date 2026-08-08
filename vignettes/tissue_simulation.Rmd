@@ -453,17 +453,18 @@ sim$get_counts()
 sim$run_up_to_size("B[E2]", 10000)
 ```
 
-At this point, we can inspect the tissue in more detail. It can help to
-face the species to clearly appreciate the spatial diffusion of the
-populations.
+We can inspect the tissue using the plotting functions. 
 
 ```{r,  fig.height=4, fig.width=3, fig.alt=c("The species count after the new mutant `B` arose.", "The tumour tissue after the new mutant `B` arose.")}
 plot_state(sim)
 plot_tissue(sim, num_of_bins = 250)
 ```
 
+Each cell is labelled by its species by default. We can face the labels
+to better appreciate the spatial diffusion of the populations.
+
 ```{r,  fig.height=6, fig.width=6, fig.alt=c("The tumour tissue in which cells are split by species.")}
-plot_tissue(sim, num_of_bins = 250) + ggplot2::facet_wrap(~species)
+plot_tissue(sim, num_of_bins = 250) + ggplot2::facet_wrap(~label)
 ```
 
 If, at this point in the simulation, we generate a new mutant `C` from

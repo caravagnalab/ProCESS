@@ -313,7 +313,7 @@ plot_in_rectangle <- function(snapshot) {
   plot_tissue(snapshot,
               color_map = color_map,
               plot_sample_region = FALSE,
-              list_all_species = TRUE,
+              list_all_labels = TRUE,
               focus_function = in_rectangle)
 }
 ```
@@ -392,7 +392,7 @@ plot_in_forest <- function(snapshot) {
   plot_tissue(snapshot,
               color_map = color_map,
               plot_sample_region = FALSE,
-              list_all_species = TRUE,
+              list_all_labels = TRUE,
               focus_function = in_sample_forest)
 }
 ```
