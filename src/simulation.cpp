@@ -2439,7 +2439,8 @@ std::vector<CLONES::Mutants::Evolutions::AxisPosition>
 get_coordinates(const SEXP& position, const std::string& what,
                 const std::vector<CLONES::Mutants::Evolutions::AxisSize>& tissue_size)
 {
-    if (!Rcpp::is<Rcpp::NumericVector>(position)) {
+    if (!Rcpp::is<Rcpp::NumericVector>(position)
+        && !Rcpp::is<Rcpp::IntegerVector>(position)) {
         Rcpp::stop("\"" + what
                    + "\" must be a coordinate.");
     }
