@@ -199,6 +199,25 @@ RCPP_MODULE(Mutants)
 //' @seealso [TissueSimulation()]
     class_<TissueSimulation>("TissueSimulation")
 
+//' @name TissueRectangle$get_just_occurred_events
+//' @title Getting the events that just occurred
+//' @description This method returns the list of the just occurred
+//'   events.
+//' @return A list describing the events that occurred at the current
+//'   simulated time. Each element is a named list. The names describe
+//'   the event type and are among `\"rate update\"`,
+//'   `\"mutant arising\"`, and `\"sampling\"`. The type of values,
+//'   instead, depend on the name. When the name is `\"rate update\"`,
+//'   the value is a data frame containing the rate updates. When
+//'   the name is `\"mutant arising\"`, the value is the name of
+//'   just emerged mutant. Finally, when the name is `\"sampling\"`,
+//'   the value is the name of the sample.
+//' @keywords internal
+        .method("get_just_occurred_events",
+                (Rcpp::List (TissueSimulation::*)() const)
+                &TissueSimulation::get_just_occurred_events,
+                "Get the just occurred events")
+
 //' @name TissueSimulation$place_cell
 //' @title Placing one cell in the tissue
 //' @description This method places a cell in the tissue.

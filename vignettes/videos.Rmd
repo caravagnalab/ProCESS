@@ -280,6 +280,89 @@ htmltools::tags$video(
 )
 ```
 
+`build_snapshot_video` also supports pauses.
+
+Users can specify pauses on events declaring the length of the pause
+on specific sample or mutant rising or the generic event.
+
+```{R, eval = FALSE}
+pauses_on_event <- list(
+    "mutant arising" = list(
+
+        # pause 4 seconds when "C" arises
+        "C" = as.difftime(4, units="secs"),
+
+        # pause 4 frames when "B" arises
+        "B" = 4),
+
+    # pause 3 seconds at each sample
+    "sampling" = as.difftime(3, units="secs")
+)
+
+build_snapshot_video(sim, res = 300, width=1440, height=1024, framerate = 20
+                     pauses_on_event = pauses_on_event)
+```
+
+```{R, echo = FALSE}
+pauses_on_event <- list(
+    "mutant arising" = list(
+        "C" = as.difftime(4, units="secs"),
+        "B" = 4),
+
+    "sampling" = as.difftime(3, units="secs")
+)
+
+output <- build_snapshot_video(sim, res = 300, width=1440, height=1024,
+                               framerate = 20, output_file = "video_3.mp4",
+                               pauses_on_event = pauses_on_event,
+                               quiet = TRUE)
+
+htmltools::tags$video(
+  src = "video_3.mp4",
+  type = "video/mp4",
+  controls = TRUE,
+  autoplay = TRUE,
+  loop = TRUE,
+  style = "max-width: 100%; height: auto;"
+)
+```
+
+Pauses can also applied to specific frames.
+
+```{R, eval = FALSE}
+pauses_on_frame <- list(
+    # pause 3 seconds on frame 101
+    list(frame = 101, length = as.difftime(3, units="secs")),
+
+    # pause 3 seconds on frame 102
+    list(frame = 102, length = as.difftime(3, units="secs"))
+)
+
+build_snapshot_video(sim, res = 300, width=1440, height=1024, framerate = 20
+                     pauses_on_frame = pauses_on_frame)
+```
+
+```{R, echo = FALSE}
+pauses_on_frame <- list(
+    list(frame = 101, length = as.difftime(3, units="secs")),
+    list(frame = 102, length = as.difftime(3, units="secs"))
+)
+
+output <- build_snapshot_video(sim, res = 300, width=1440, height=1024,
+                               framerate = 20, output_file = "video_4.mp4",
+                               pauses_on_frame = pauses_on_frame,
+                               quiet = TRUE)
+
+htmltools::tags$video(
+  src = "video_4.mp4",
+  type = "video/mp4",
+  controls = TRUE,
+  autoplay = TRUE,
+  loop = TRUE,
+  style = "max-width: 100%; height: auto;"
+)
+```
+
 ## Customizing plots
 
 <code>[build_snapshot_video()](../reference/build_snapshot_video.md)</code>
@@ -329,12 +412,12 @@ produces the following result.
 
 ```{R, echo = FALSE}
 output <- build_snapshot_video(sim, res = 300, width=1440, height=1024,
-                               framerate = 20, output_file = "video_3.mp4",
+                               framerate = 20, output_file = "video_5.mp4",
                                plot_function = plot_in_rectangle,
                                quiet = TRUE)
 
 htmltools::tags$video(
-  src = "video_3.mp4",
+  src = "video_5.mp4",
   type = "video/mp4",
   controls = TRUE,
   autoplay = TRUE,
@@ -376,7 +459,7 @@ of the sample forest and use it.
 # this function will be called to plot each video frames
 plot_in_forest <- function(snapshot) {
   # load the local copy of the forest
-  local_forest <- load_forest("forest.sff")
+  local_forest <- load_forest("forest.sff", quiet = TRUE)
 
   # define a unique color map for all the frames
   color_map <- get_species_colors(local_forest)
@@ -411,12 +494,12 @@ produces the following video.
 
 ```{R, echo = FALSE}
 output <- build_snapshot_video(sim, res = 300, width=1440, height=1024,
-                               framerate = 20, output_file = "video_4.mp4",
+                               framerate = 20, output_file = "video_6.mp4",
                                plot_function = plot_in_forest,
                                quiet = TRUE)
 
 htmltools::tags$video(
-  src = "video_4.mp4",
+  src = "video_6.mp4",
   type = "video/mp4",
   controls = TRUE,
   autoplay = TRUE,
@@ -475,8 +558,14 @@ patchwork_function <- function(simulation) {
     ggplot2::theme(legend.position = "bottom")
 }
 
+pauses_on_event <- list(
+    "mutant arising" = as.difftime(3, units="secs"),
+    "sampling" = as.difftime(2, units="secs")
+)
+
 build_snapshot_video(sim, width = 1820, height = 1024, framerate = 20,
-                     res = 300, plot_function = patchwork_function)
+                     res = 300, pauses_on_event = pauses_on_event,
+                     plot_function = patchwork_function)
 ```
 
 ```{R, warning = FALSE, echo = FALSE}
@@ -526,14 +615,20 @@ patchwork_function <- function(simulation) {
     ggplot2::theme(legend.position = "bottom")
 }
 
-output_file <- build_snapshot_video(sim, output_file = "video_5.mp4",
+pauses_on_event <- list(
+    "mutant arising" = as.difftime(3, units="secs"),
+    "sampling" = as.difftime(2, units="secs")
+)
+
+output_file <- build_snapshot_video(sim, output_file = "video_7.mp4",
                                     width = 1820, height = 1024,
                                     framerate = 20, res = 300,
                                     plot_function = patchwork_function,
+                                    pauses_on_event = pauses_on_event,
                                     quiet = TRUE)
 
 htmltools::tags$video(
-  src = "video_5.mp4",
+  src = "video_7.mp4",
   type = "video/mp4",
   controls = TRUE,
   autoplay = TRUE,

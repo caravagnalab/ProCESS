@@ -1386,6 +1386,68 @@ Rcpp::List TissueSimulation::get_rates_update_history() const
                              _["first child epistate"] = epi_states, _["rate"] = rates);
 }
 
+
+Rcpp::List TissueSimulation::get_rates_update_at(const CLONES::Time time) const
+{
+    using namespace Rcpp;
+    using namespace CLONES::Mutants;
+
+    size_t num_of_rows{0};
+
+    const auto found = rate_update_history.find(time);
+
+    if (found != rate_update_history.end()) {
+        const auto& species_rate_updates = found->second;
+        for (const auto &[species_id, event_rate_updates] : species_rate_updates) {
+            for (const auto &[event_name, dst_rate] : event_rate_updates) {
+                num_of_rows += dst_rate.size();
+            }
+        }
+    }
+
+    CharacterVector mutant_names(num_of_rows), epi_states(num_of_rows),
+                    event_names(num_of_rows), dst_epi_states(num_of_rows);
+    NumericVector rates(num_of_rows), times(num_of_rows);
+
+    size_t i{0};
+    const auto &tissue = sim_ptr->tissue();
+    if (found != rate_update_history.end()) {
+        const auto& species_rate_updates = found->second;
+        for (const auto &[species_id, event_rate_updates] : species_rate_updates) {
+            const auto &species = tissue.get_species(species_id);
+            const std::string mutant_name = species.get_mutant_name();
+            const auto epi_state = species.get_epistate_name();
+            for (const auto &[event_name, dst_rate] : event_rate_updates) {
+                for (const auto &[dst_id, rate] : dst_rate) {
+                    times[i] = time;
+                    mutant_names[i] = mutant_name.c_str();
+                    epi_states[i] = encode_epigenetic_state(species);
+                    event_names[i] = event_name.c_str();
+
+                    if (get_event_id(event_name)==CellEventType::DEATH) {
+                        dst_epi_states[i] = NA_STRING;
+                    } else {
+                        const auto &dst_species = tissue.get_species(dst_id);
+                        dst_epi_states[i] = encode_epigenetic_state(dst_species);
+                    }
+                    rates[i] = rate;
+
+                    ++i;
+                }
+            }
+        }
+    }
+
+    if (sim_ptr->get_epigenetic_state_names().size()==0) {
+        return DataFrame::create(_["time"] = times, _["mutant"] = mutant_names,
+                                 _["event"] = event_names, _["rate"] = rates);
+    }
+
+    return DataFrame::create(_["time"] = times, _["mutant"] = mutant_names,
+                             _["epistate"] = epi_states, _["event"] = event_names,
+                             _["first child epistate"] = epi_states, _["rate"] = rates);
+}
+
 void TissueSimulation::place_cell(const std::string &species_name,
                                   const CLONES::Mutants::Evolutions::AxisPosition &x,
                                   const CLONES::Mutants::Evolutions::AxisPosition &y)
@@ -1676,6 +1738,60 @@ inline void validate_non_empty_tissue(const CLONES::Mutants::Evolutions::Tissue 
     if (tissue.num_of_cells() == 0) {
         Rcpp::stop("The tissue does not contain any cell.");
     }
+}
+
+std::vector<std::string>
+get_newborn_mutants(const CLONES::Mutants::Evolutions::TissueSimulation& simulation)
+{
+    std::map<CLONES::Mutants::MutantId, size_t> mutant_sizes;
+    for (const auto& species : simulation.tissue()) {
+        auto found = mutant_sizes.find(species.get_mutant_id());
+        if (found != mutant_sizes.end()) {
+            found->second += species.num_of_simulated_cells(); 
+        } else {
+            mutant_sizes.emplace(species.get_mutant_id(),
+                                 species.num_of_simulated_cells());
+        }
+    }
+
+    std::vector<std::string> newborn_mutants;
+    for (const auto& species : simulation.tissue()) {
+        if (species.num_of_simulated_cells() == 1) {
+            auto found = mutant_sizes.find(species.get_mutant_id());
+            if (found->second == 1) {
+                if (species.begin()->get_birth_time() == simulation.get_time()) {
+                    newborn_mutants.emplace_back(species.get_mutant_name());
+                }
+            }
+        }
+    }
+
+    return newborn_mutants;
+}
+
+Rcpp::List TissueSimulation::get_just_occurred_events() const
+{
+    using namespace Rcpp;
+
+    List last_events = List::create();
+
+    if (rate_update_history.find(get_clock()) != rate_update_history.end()) {
+        last_events["rate update"] = get_rates_update_at(get_clock());
+    } 
+
+    const auto newborn_mutants = get_newborn_mutants(*sim_ptr);
+
+    if (newborn_mutants.size()>0) {
+        last_events["mutant arising"] = newborn_mutants.front();
+    }
+
+    const auto& last_sample = sim_ptr->get_tissue_samples().back();
+
+    if (last_sample.get_time() == get_clock()) {
+        last_events["sampling"] = last_sample.get_name();
+    }
+
+    return last_events;
 }
 
 void TissueSimulation::run_up_to_time(const CLONES::Time &time)

@@ -316,6 +316,8 @@ class TissueSimulation
         sim_ptr->schedule_mutation(src, dst, time);
     }
 
+    Rcpp::List get_just_occurred_events() const;
+
     void run_up_to_time(const CLONES::Time &time);
 
     void run_up_to_time(const CLONES::Time &time, const bool quiet);
@@ -383,6 +385,8 @@ class TissueSimulation
     Rcpp::List get_rates(const SEXP& complete) const;
 
     Rcpp::List get_rates_update_history() const;
+
+    Rcpp::List get_rates_update_at(const CLONES::Time time) const;
 
     void set_rate(const std::string &src_species_name,
                   const std::string &event_name,
