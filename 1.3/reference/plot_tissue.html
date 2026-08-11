@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,18 +93,30 @@ the function also plots the region of the specified sample
 
 
 <dt id="arg-color-map">color_map<a class="anchor" aria-label="anchor" href="#arg-color-map"></a></dt>
-<dd><p>A named vector representing the simulation species color
-map (optional).</p></dd>
+<dd><p>A named vector representing the color of the labels
+map (optional when <code>label_function</code> is <code>NULL</code>; mandatory, otherwise).</p></dd>
 
 
-<dt id="arg-list-all-species">list_all_species<a class="anchor" aria-label="anchor" href="#arg-list-all-species"></a></dt>
-<dd><p>A Boolean flag to show all species in
+<dt id="arg-list-all-labels">list_all_labels<a class="anchor" aria-label="anchor" href="#arg-list-all-labels"></a></dt>
+<dd><p>A Boolean flag to show all labels in
 the legend (default: <code>FALSE</code>).</p></dd>
 
 
+<dt id="arg-label-function">label_function<a class="anchor" aria-label="anchor" href="#arg-label-function"></a></dt>
+<dd><p>A function whose input is the result of
+<code><code><a href="TissueSimulation-cash-get_cells.html">TissueSimulation$get_cells()</a></code></code> and that returns
+a string vector whose length is the number of rows in the input data
+frame. The strings are the labels of the corresponding cells and
+the function represents the different labels in the returned plot
+by coloring the cells according to <code>color_map</code>. If <code>label_function</code>
+is specified, then <code>color_map</code> becomes mandatory. When the parameter
+is set to <code>NULL</code>, the cells are labelled by their species names
+(default: <code>NULL</code>).</p></dd>
+
+
 <dt id="arg-focus-function">focus_function<a class="anchor" aria-label="anchor" href="#arg-focus-function"></a></dt>
-<dd><p>A function whose input is the data frame
-returned by <code><code><a href="TissueSimulation-cash-get_cells.html">TissueSimulation$get_cells()</a></code></code> and returns
+<dd><p>A function whose input is the result of
+<code><code><a href="TissueSimulation-cash-get_cells.html">TissueSimulation$get_cells()</a></code></code> and that returns
 a Boolean vector whose length is the number of rows in the input data
 frame. When one the row in the output is <code>FALSE</code> the corresponding
 cells is plotted in grey. When the parameter is set to <code>NULL</code>, all
@@ -112,8 +124,8 @@ tumour simulation cells are colored (default: <code>NULL</code>).</p></dd>
 
 
 <dt id="arg-alpha-function">alpha_function<a class="anchor" aria-label="anchor" href="#arg-alpha-function"></a></dt>
-<dd><p>A function whose input is the data frame
-returned by <code><code><a href="TissueSimulation-cash-get_cells.html">TissueSimulation$get_cells()</a></code></code> and returns
+<dd><p>A function whose input is the result of
+<code><code><a href="TissueSimulation-cash-get_cells.html">TissueSimulation$get_cells()</a></code></code> and that returns
 a real vector whose values are in the interval \([0,1]\) and whose
 length is the number of rows in the input data frame. Each value in
 the output is used as alpha level of the corresponding cell. When the
@@ -127,10 +139,10 @@ level <code>1</code> (default: <code>NULL</code>).</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function plots cells distribution over a tissue highlighting species
-by color. To facilitate the plot and avoid excessive number of cells, for
-instance, when a simulation deals with millions of cells, the plot draws a
-hexagonal heatmap of 2D bins.</p>
+    <p>This function represents cells distribution over a tissue. Each cells is
+labelled and colored according to its label (see parameter
+<code>label_function</code>). The tissue is draws as a heatmap of hexagonal bins for
+efficiency porpoise.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -185,7 +197,7 @@ hexagonal heatmap of 2D bins.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># let the tumour evolve until the mutant C and D cumulatively</span></span></span>
 <span class="r-in"><span><span class="co"># consist of 10000 cells</span></span></span>
-<span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">run_until</span><span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="fu">var</span><span class="op">(</span><span class="st">"C"</span><span class="op">)</span> <span class="op">+</span> <span class="va">sim</span><span class="op">$</span><span class="fu">var</span><span class="op">(</span><span class="st">"D"</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1e5</span>, <span class="fl">10</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">run_until</span><span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="fu">var</span><span class="op">(</span><span class="st">"C"</span><span class="op">)</span> <span class="op">+</span> <span class="va">sim</span><span class="op">$</span><span class="fu">var</span><span class="op">(</span><span class="st">"D"</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1e5</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot the tissue in the current status</span></span></span>
 <span class="r-in"><span><span class="fu">plot_tissue</span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span></span>
@@ -196,9 +208,8 @@ hexagonal heatmap of 2D bins.</p>
 <span class="r-plt img"><img src="plot_tissue-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot the tissue as it was when "S3" was about to be sampled and</span></span></span>
-<span class="r-in"><span><span class="co"># highlight the regions of the samples collected at the same simulated</span></span></span>
-<span class="r-in"><span><span class="co"># time, but not before</span></span></span>
-<span class="r-in"><span><span class="co"># it, i.e., "S3"</span></span></span>
+<span class="r-in"><span><span class="co"># highlight the regions of the samples collected at the same</span></span></span>
+<span class="r-in"><span><span class="co"># simulated time, but not before it, i.e., "S3"</span></span></span>
 <span class="r-in"><span><span class="fu">plot_tissue</span><span class="op">(</span><span class="va">sim</span>, at_sample<span class="op">=</span><span class="st">"S3"</span>,</span></span>
 <span class="r-in"><span>            plot_next_sample_regions <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_tissue-3.png" alt="" width="700" height="433"></span>
@@ -222,15 +233,45 @@ hexagonal heatmap of 2D bins.</p>
 <span class="r-plt img"><img src="plot_tissue-6.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># this function returns `TRUE` for cells in the rectangle</span></span></span>
-<span class="r-in"><span><span class="co"># [250,350]x[300,350]</span></span></span>
+<span class="r-in"><span><span class="co"># [200,400]x[300,500]</span></span></span>
 <span class="r-in"><span><span class="va">focus_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">cells</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="op">(</span><span class="va">cells</span><span class="op">$</span><span class="va">position_x</span> <span class="op">&gt;=</span> <span class="fl">250</span> <span class="op">&amp;</span> <span class="va">cells</span><span class="op">$</span><span class="va">position_x</span> <span class="op">&lt;=</span> <span class="fl">350</span></span></span>
-<span class="r-in"><span>   <span class="op">&amp;</span> <span class="va">cells</span><span class="op">$</span><span class="va">position_y</span> <span class="op">&gt;=</span> <span class="fl">300</span> <span class="op">&amp;</span> <span class="va">cells</span><span class="op">$</span><span class="va">position_y</span> <span class="op">&lt;=</span> <span class="fl">350</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">(</span><span class="va">cells</span><span class="op">$</span><span class="va">position_x</span> <span class="op">&gt;=</span> <span class="fl">200</span> <span class="op">&amp;</span> <span class="va">cells</span><span class="op">$</span><span class="va">position_x</span> <span class="op">&lt;=</span> <span class="fl">400</span></span></span>
+<span class="r-in"><span>   <span class="op">&amp;</span> <span class="va">cells</span><span class="op">$</span><span class="va">position_y</span> <span class="op">&gt;=</span> <span class="fl">300</span> <span class="op">&amp;</span> <span class="va">cells</span><span class="op">$</span><span class="va">position_y</span> <span class="op">&lt;=</span> <span class="fl">500</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># plot the tissue highlighting the region [250,350]x[300,350]</span></span></span>
+<span class="r-in"><span><span class="co"># plot the tissue highlighting the region [200,400]x[300,500]</span></span></span>
 <span class="r-in"><span><span class="fu">plot_tissue</span><span class="op">(</span><span class="va">sim</span>, focus_function <span class="op">=</span> <span class="va">focus_function</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_tissue-7.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># this function labels cells. Inside the rectangle</span></span></span>
+<span class="r-in"><span><span class="co"># [200,400]x[300,500] the label is the cell's mutant name.</span></span></span>
+<span class="r-in"><span><span class="co"># Outside, the rectangle label is cell's mutant name with</span></span></span>
+<span class="r-in"><span><span class="co"># "outside" attached.</span></span></span>
+<span class="r-in"><span><span class="va">label_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">cells</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">cells</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="va">cells</span><span class="op">$</span><span class="va">position_x</span> <span class="op">&gt;=</span> <span class="fl">200</span></span></span>
+<span class="r-in"><span>                           <span class="op">&amp;</span> <span class="va">cells</span><span class="op">$</span><span class="va">position_x</span> <span class="op">&lt;=</span> <span class="fl">400</span></span></span>
+<span class="r-in"><span>                           <span class="op">&amp;</span> <span class="va">cells</span><span class="op">$</span><span class="va">position_y</span> <span class="op">&gt;=</span> <span class="fl">300</span></span></span>
+<span class="r-in"><span>                           <span class="op">&amp;</span> <span class="va">cells</span><span class="op">$</span><span class="va">position_y</span> <span class="op">&lt;=</span> <span class="fl">500</span>,</span></span>
+<span class="r-in"><span>                           <span class="va">.data</span><span class="op">$</span><span class="va">mutant</span>,</span></span>
+<span class="r-in"><span>                           <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">mutant</span>, <span class="st">"outside"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">label</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># get the plot labels (i.e., mutants + paste(mutants, "outside"))</span></span></span>
+<span class="r-in"><span><span class="va">mutants</span> <span class="op">&lt;-</span> <span class="va">sim</span><span class="op">$</span><span class="fu">get_mutants</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">mutant</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">mutants</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">mutants</span>, <span class="st">"outside"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># create a color map for the labels</span></span></span>
+<span class="r-in"><span><span class="va">color_map</span> <span class="op">&lt;-</span> <span class="fu">RColorBrewer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html" class="external-link">brewer.pal</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">labels</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">color_map</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">labels</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># plot the tissue labelling the cells according to</span></span></span>
+<span class="r-in"><span><span class="co"># `label_function`. The parameter `color_map` is mandatory.</span></span></span>
+<span class="r-in"><span><span class="fu">plot_tissue</span><span class="op">(</span><span class="va">sim</span>, label_function <span class="op">=</span> <span class="va">label_function</span>, color_map <span class="op">=</span> <span class="va">color_map</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="plot_tissue-8.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -252,3 +293,4 @@ hexagonal heatmap of 2D bins.</p>
 
 
   </body></html>
+

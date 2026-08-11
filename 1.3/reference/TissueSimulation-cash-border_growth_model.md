@@ -21,7 +21,7 @@ by default.
 sim <- TissueSimulation()
 
 # is the simulation using the border driven growth model
-# (default: TRUE)
+# (default: `TRUE`)
 sim$border_growth_model
 #> [1] TRUE
 

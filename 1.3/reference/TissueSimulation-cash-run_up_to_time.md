@@ -10,7 +10,7 @@ Simulating cell evolution
 
 - quiet:
 
-  An optional Boolean flag to avoid the progress bar (default: FALSE).
+  An optional Boolean flag to avoid the progress bar (default: `FALSE`).
 
 ## See also
 
@@ -37,5 +37,5 @@ sim$place_cell("A", 500, 500)
 # simulate the tissue up to simulate timed 40
 sim$run_up_to_time(40)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot      
 ```

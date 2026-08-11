@@ -41,7 +41,7 @@ sim$add_mutant("A", c(duplication = 1))
 sim$place_cell("A", 500, 500)
 sim$run_up_to_size("A",1e4)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot      
 
 
 sim$add_mutant("B", c(duplication = 3.5))
@@ -49,7 +49,7 @@ sim$mutate_progeny(sim$choose_border_cell_in("A"), "B")
 
 sim$run_up_to_size("B",1e4)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot      
 
 
 bbox <- sim$search_sample(c("A" = 100, "B" = 100), 50, 50)
@@ -81,7 +81,7 @@ sim$place_cell("A[E1]", 500, 500)
 # run the simulation up to time 70
 sim$run_up_to_time(70)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot      
 
 
 # sample the tissue

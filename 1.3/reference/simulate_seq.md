@@ -104,7 +104,7 @@ simulate_seq(phylo_forest)
 
 - quiet:
 
-  A Boolean flag to enable/disable the progress bar (default: FALSE).
+  A Boolean flag to enable/disable the progress bar (default: `FALSE`).
 
 ## Value
 

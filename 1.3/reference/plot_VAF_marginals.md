@@ -60,7 +60,7 @@ plot_VAF_marginals(
 - driver_mutation_labels:
 
   A Boolean value to enable/disable driver mutation labels in the
-  returned plot (default: TRUE).
+  returned plot (default: `TRUE`).
 
 - cuts:
 

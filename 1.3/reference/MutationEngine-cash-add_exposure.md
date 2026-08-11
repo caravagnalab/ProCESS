@@ -33,91 +33,13 @@ its time is 0.
 
 ``` r
 # create a demonstrative mutation engine
-m_engine <- MutationEngine(setup_code = "demo")
-#> Downloading reference genome...
-#> Reference genome downloaded
-#> Decompressing reference genome...done
-#> Downloading signature files...
-#> Signature file downloaded
-#> Downloading driver mutation file...
-#> Driver mutation file downloaded
-#> Decompressing driver mutation file...done
-#> Downloading passenger CNAs file...
-#> Passenger CNAs file downloaded
-#> Decompressing passenger CNAs file...done
-#> Downloading germline...
-#> Germline downloaded
-#> Decompressing mutations...
-#> done
-#> Building context index...
-#> 
- [█---------------------------------------] 0% [00m:00s] Processing chr. 22                                                                   
-
- [█████████████████-----------------------] 40% [00m:00s] Processing chr. 22                                                                  
-
- [█████████████████████████████████-------] 81% [00m:02s] Processing chr. 22                                                                  
-
- [████████████████████████████████████████] 100% [00m:02s] Context index built                                                                
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Saving context index                                                                 
-
- [████████████████████████████████████████] 100% [00m:00s] Context index saved                                                                
-
-#> done
-#> Building repeated sequence index...
-#> 
- [█---------------------------------------] 0% [00m:00s] Reading 22                                                                           
-
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                         
-
-#> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                         
-
-#> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                         
-
-#> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                         
-
-#> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                         
-
-#> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                         
-
-#> 
- [████████████████████████████████████████] 100% [00m:01s] Reading 22                                                                         
-
-#> 
- [████████████████████████████████████████] 100% [00m:01s] RS index built                                                                     
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Saving RS index                                                                      
-
- [█---------------------------------------] 0% [00m:00s] Saving RS index                                                                      
-
- [█████████████████████-------------------] 52% [00m:02s] Saving RS index                                                                     
-done
-#> 
- [████████████████████████████████████████] 100% [00m:02s] RS index saved                                                                     
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading germline                                                                     
-
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                    
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Saving germline                                                                      
-
- [████████████████████████████████████████] 100% [00m:00s] Germline saved                                                                     
-
+m_engine <- MutationEngine(setup_code = "demo", quiet = TRUE)
 
 # add a default set of coefficients that will be used from simulated
 # time 0 up to the successive coefficient change. The indel and SNV
 # exposures can be specified in the same list.
 m_engine$add_exposure(c(SBS13 = 0.3, SBS1 = 0.7, ID2 = 0.2, ID3 = 0.3,
-  ID20 = 0.5))
+                        ID20 = 0.5))
 
 # add a default set of coefficients that will be used from simulated
 # time 3.2 up to the end of the simulation.

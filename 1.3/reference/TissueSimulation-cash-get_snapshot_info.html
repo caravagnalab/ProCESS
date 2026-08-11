@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,9 +79,9 @@ contains the snapshot file path.</p>
 <span class="r-in"><span><span class="co"># get snapshot information</span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">get_snapshot_info</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  time clock cells</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2026-07-28 10:22:28     0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2026-08-11 22:44:39     0     1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                   file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_1389a68e/snapshot_657a78a1bd65e.dat</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_1b958e54/snapshot_658cb8a24df10.dat</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># take a new snapshot every 10 simulated time units</span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="va">snapshot_triggers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"clock interval"</span> <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
@@ -89,57 +89,57 @@ contains the snapshot file path.</p>
 <span class="r-in"><span><span class="co"># let the simulation evolve up to time 30</span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_time</span><span class="op">(</span><span class="fl">30</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 
- [██████████████--------------------------] 33% [00m:00s] Saving snapshot                                                                     
+ [██████████████--------------------------] 33% [00m:00s] Saving snapshot       
 
- [███████████████████---------------------] 46% [00m:00s] Cells: 17613                                                                        
+ [███████████████████---------------------] 46% [00m:00s] Cells: 18091          
 
- [███████████████████████-----------------] 56% [00m:01s] Cells: 27414                                                                        
+ [███████████████████████-----------------] 56% [00m:01s] Cells: 28194          
 
- [█████████████████████████---------------] 62% [00m:02s] Cells: 35959                                                                        
+ [██████████████████████████--------------] 63% [00m:02s] Cells: 36622          
 
- [███████████████████████████-------------] 66% [00m:03s] Saving snapshot                                                                     
+ [███████████████████████████-------------] 66% [00m:03s] Saving snapshot       
 
- [████████████████████████████------------] 68% [00m:03s] Cells: 43187                                                                        
+ [████████████████████████████------------] 68% [00m:03s] Cells: 43951          
 
- [█████████████████████████████-----------] 72% [00m:04s] Cells: 49849                                                                        
+ [██████████████████████████████----------] 73% [00m:04s] Cells: 50536          
 
- [███████████████████████████████---------] 76% [00m:05s] Cells: 56139                                                                        
+ [███████████████████████████████---------] 75% [00m:05s] Cells: 54248          
 
- [████████████████████████████████--------] 79% [00m:06s] Cells: 61779                                                                        
+ [████████████████████████████████--------] 78% [00m:06s] Cells: 59760          
 
- [█████████████████████████████████-------] 82% [00m:07s] Cells: 66999                                                                        
+ [█████████████████████████████████-------] 81% [00m:07s] Cells: 65017          
 
- [███████████████████████████████████-----] 85% [00m:08s] Cells: 72069                                                                        
+ [██████████████████████████████████------] 84% [00m:08s] Cells: 69788          
 
- [████████████████████████████████████----] 88% [00m:09s] Cells: 76421                                                                        
+ [███████████████████████████████████-----] 86% [00m:09s] Cells: 74295          
 
- [█████████████████████████████████████---] 90% [00m:10s] Cells: 81089                                                                        
+ [████████████████████████████████████----] 89% [00m:10s] Cells: 78727          
 
- [█████████████████████████████████████---] 92% [00m:11s] Cells: 85297                                                                        
+ [█████████████████████████████████████---] 91% [00m:11s] Cells: 82868          
 
- [██████████████████████████████████████--] 94% [00m:12s] Cells: 89315                                                                        
+ [██████████████████████████████████████--] 93% [00m:12s] Cells: 87125          
 
- [███████████████████████████████████████-] 96% [00m:13s] Cells: 93201                                                                        
+ [███████████████████████████████████████-] 95% [00m:13s] Cells: 90895          
 
- [████████████████████████████████████████] 98% [00m:14s] Cells: 96862                                                                        
+ [███████████████████████████████████████-] 96% [00m:14s] Cells: 94527          
 
- [████████████████████████████████████████] 99% [00m:15s] Cells: 100302                                                                       
+ [████████████████████████████████████████] 98% [00m:15s] Cells: 98337          
 
- [████████████████████████████████████████] 100% [00m:16s] Saving snapshot                                                                    
+ [████████████████████████████████████████] 100% [00m:16s] Saving snapshot      
 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># get snapshot information</span></span></span>
 <span class="r-in"><span><span class="va">sim</span><span class="op">$</span><span class="fu">get_snapshot_info</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  time    clock  cells</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2026-07-28 10:22:28  0.00000      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2026-07-28 10:22:28 10.00003   7879</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2026-07-28 10:22:32 20.00003  41040</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2026-07-28 10:22:44 30.00000 101378</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2026-08-11 22:44:39  0.00000      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2026-08-11 22:44:39 10.00003   7879</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2026-08-11 22:44:43 20.00003  41040</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2026-08-11 22:44:56 30.00000 101378</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                   file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_1389a68e/snapshot_657a78a1bd65e.dat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_1389a68e/snapshot_657a78a20415c.dat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_1389a68e/snapshot_657a78a53fa55.dat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_1389a68e/snapshot_657a78b14efd0.dat</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_1b958e54/snapshot_658cb8a24df10.dat</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_1b958e54/snapshot_658cb8a291c7d.dat</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_1b958e54/snapshot_658cb8a5b9479.dat</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_1b958e54/snapshot_658cb8b25a378.dat</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

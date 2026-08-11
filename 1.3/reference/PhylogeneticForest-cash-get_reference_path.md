@@ -19,5 +19,5 @@ forest <- example("PhylogeneticForest")
 
 # get the reference path
 forest$get_reference_path()
-#> [1] "/private/var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/Rtmp45L8ET/temp_libpath52af7416ac58/ProCESS/extdata/example_ref.fasta"
+#> [1] "/private/var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/RtmpaSI38F/temp_libpath58bb47fd4210/ProCESS/extdata/example_ref.fasta"
 ```

@@ -50,31 +50,43 @@ plot_tissue(simulation)
 
 - color_map:
 
-  A named vector representing the simulation species color map
-  (optional).
+  A named vector representing the color of the labels map (optional when
+  `label_function` is `NULL`; mandatory, otherwise).
 
-- list_all_species:
+- list_all_labels:
 
-  A Boolean flag to show all species in the legend (default: `FALSE`).
+  A Boolean flag to show all labels in the legend (default: `FALSE`).
+
+- label_function:
+
+  A function whose input is the result of
+  [`TissueSimulation$get_cells()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-get_cells.md)
+  and that returns a string vector whose length is the number of rows in
+  the input data frame. The strings are the labels of the corresponding
+  cells and the function represents the different labels in the returned
+  plot by coloring the cells according to `color_map`. If
+  `label_function` is specified, then `color_map` becomes mandatory.
+  When the parameter is set to `NULL`, the cells are labelled by their
+  species names (default: `NULL`).
 
 - focus_function:
 
-  A function whose input is the data frame returned by
+  A function whose input is the result of
   [`TissueSimulation$get_cells()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-get_cells.md)
-  and returns a Boolean vector whose length is the number of rows in the
-  input data frame. When one the row in the output is `FALSE` the
+  and that returns a Boolean vector whose length is the number of rows
+  in the input data frame. When one the row in the output is `FALSE` the
   corresponding cells is plotted in grey. When the parameter is set to
   `NULL`, all tumour simulation cells are colored (default: `NULL`).
 
 - alpha_function:
 
-  A function whose input is the data frame returned by
+  A function whose input is the result of
   [`TissueSimulation$get_cells()`](https://caravagnalab.github.io/ProCESS/1.3/reference/TissueSimulation-cash-get_cells.md)
-  and returns a real vector whose values are in the interval \\\[0,1\]\\
-  and whose length is the number of rows in the input data frame. Each
-  value in the output is used as alpha level of the corresponding cell.
-  When the parameter is set to `NULL`, all tumour simulation cells have
-  alpha level `1` (default: `NULL`).
+  and that returns a real vector whose values are in the interval
+  \\\[0,1\]\\ and whose length is the number of rows in the input data
+  frame. Each value in the output is used as alpha level of the
+  corresponding cell. When the parameter is set to `NULL`, all tumour
+  simulation cells have alpha level `1` (default: `NULL`).
 
 ## Value
 
@@ -82,10 +94,10 @@ An editable ggplot plot.
 
 ## Details
 
-This function plots cells distribution over a tissue highlighting
-species by color. To facilitate the plot and avoid excessive number of
-cells, for instance, when a simulation deals with millions of cells, the
-plot draws a hexagonal heatmap of 2D bins.
+This function represents cells distribution over a tissue. Each cells is
+labelled and colored according to its label (see parameter
+`label_function`). The tissue is draws as a heatmap of hexagonal bins
+for efficiency porpoise.
 
 ## See also
 
@@ -140,7 +152,7 @@ sim$mutate_progeny(sim$choose_border_cell_in("B"), "D")
 
 # let the tumour evolve until the mutant C and D cumulatively
 # consist of 10000 cells
-sim$run_until(sim$var("C") + sim$var("D") == 1e5, 10, quiet = TRUE)
+sim$run_until(sim$var("C") + sim$var("D") == 1e5, quiet = TRUE)
 
 # plot the tissue in the current status
 plot_tissue(sim)
@@ -151,9 +163,8 @@ plot_tissue(sim, at_sample = "S3")
 
 
 # plot the tissue as it was when "S3" was about to be sampled and
-# highlight the regions of the samples collected at the same simulated
-# time, but not before
-# it, i.e., "S3"
+# highlight the regions of the samples collected at the same
+# simulated time, but not before it, i.e., "S3"
 plot_tissue(sim, at_sample="S3",
             plot_next_sample_regions = TRUE)
 
@@ -177,12 +188,42 @@ plot_tissue(sim, color_map = color_map)
 
 
 # this function returns `TRUE` for cells in the rectangle
-# [250,350]x[300,350]
+# [200,400]x[300,500]
 focus_function <- function(cells) {
-  (cells$position_x >= 250 & cells$position_x <= 350
-   & cells$position_y >= 300 & cells$position_y <= 350)
+  (cells$position_x >= 200 & cells$position_x <= 400
+   & cells$position_y >= 300 & cells$position_y <= 500)
 }
 
-# plot the tissue highlighting the region [250,350]x[300,350]
+# plot the tissue highlighting the region [200,400]x[300,500]
 plot_tissue(sim, focus_function = focus_function)
+
+
+# this function labels cells. Inside the rectangle
+# [200,400]x[300,500] the label is the cell's mutant name.
+# Outside, the rectangle label is cell's mutant name with
+# "outside" attached.
+label_function <- function(cells) {
+  library(dplyr)
+
+  cells %>%
+    mutate(label = if_else(cells$position_x >= 200
+                           & cells$position_x <= 400
+                           & cells$position_y >= 300
+                           & cells$position_y <= 500,
+                           .data$mutant,
+                           paste(.data$mutant, "outside"))) %>%
+    pull(label)
+}
+
+# get the plot labels (i.e., mutants + paste(mutants, "outside"))
+mutants <- sim$get_mutants() %>% dplyr::pull(mutant)
+labels <- c(mutants, paste(mutants, "outside"))
+
+# create a color map for the labels
+color_map <- RColorBrewer::brewer.pal(n = length(labels), name = "Set1")
+names(color_map) <- labels
+
+# plot the tissue labelling the cells according to
+# `label_function`. The parameter `color_map` is mandatory.
+plot_tissue(sim, label_function = label_function, color_map = color_map)
 ```

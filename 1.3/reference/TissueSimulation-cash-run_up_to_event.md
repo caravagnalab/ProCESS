@@ -19,7 +19,7 @@ have occurred to cells of a species reaches a specified threshold.
 
 - quiet:
 
-  An optional Boolean flag to avoid the progress bar (default: FALSE).
+  An optional Boolean flag to avoid the progress bar (default: `FALSE`).
 
 ## See also
 
@@ -50,11 +50,11 @@ sim$place_cell("A[E1]", 500, 500)
 sim$run_up_to_event(event = "switch", species = "A[E2]",
                     num_of_events = 100)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot      
 
 
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260728-102250 ──────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 149 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260811-224501 ────── ▣  [1000x1000]  ⏱ 149 ──
 #> 
 #> ── Species: 2, with epigenetics 
 #>    

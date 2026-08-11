@@ -17,7 +17,7 @@ load_phylogenetic_forest(filename, quiet)
 
 - quiet:
 
-  An optional Boolean flag to avoid the progress bar (default: FALSE).
+  An optional Boolean flag to avoid the progress bar (default: `FALSE`).
 
 ## Value
 

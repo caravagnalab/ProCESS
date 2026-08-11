@@ -42,25 +42,25 @@ sim$place_cell("A[E1]", 500, 500)
 # simulate up to time 50
 sim$run_up_to_time(50)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot      
 
 
 # simulate up to time 75. Each new simulation step produces
 # a new snapshot
 sim$run_up_to_time(75)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot      
 
 
 # simulate up to time 80
 sim$run_up_to_time(80)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot      
 
 
 # show the simulation
 sim
-#> ──  ProCESS   D   S   M  recover_simulation_test ───────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 80 ──
+#> ──  ProCESS   D   S   M  recover_simulation_test ─────── ▣  [1000x1000]  ⏱ 80 ──
 #> 
 #> ── Species: 2, with epigenetics 
 #>    
@@ -97,7 +97,7 @@ exists("sim")
 sim <- recover_simulation("recover_simulation_test")
 
 sim
-#> ──  ProCESS   D   S   M  recover_simulation_test ───────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 80 ──
+#> ──  ProCESS   D   S   M  recover_simulation_test ─────── ▣  [1000x1000]  ⏱ 80 ──
 #> 
 #> ── Species: 2, with epigenetics 
 #>    
@@ -134,7 +134,7 @@ snapshot_info <- sim$get_snapshot_info()
 sim <- recover_simulation(snapshot_info[["file"]][2])
 
 sim
-#> ──  ProCESS   D   S   M  recover_simulation_test ───────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 50 ──
+#> ──  ProCESS   D   S   M  recover_simulation_test ─────── ▣  [1000x1000]  ⏱ 50 ──
 #> 
 #> ── Species: 2, with epigenetics 
 #>    

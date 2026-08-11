@@ -74,12 +74,12 @@ sim <- TissueSimulation("test", save_directory = TRUE)
 # the directory "test" exists and contains a binary dump of
 # the simulation
 "test" %in% list.files()
-#> [1] TRUE
+#> [1] FALSE
 
 # the directory persists even after the object destruction
 rm(sim)
 "test" %in% list.files()
-#> [1] TRUE
+#> [1] FALSE
 
 # let us manually delete the "test" directory
 unlink("test", recursive = TRUE)
@@ -89,12 +89,12 @@ sim <- TissueSimulation(save_directory = TRUE)
 
 # the name of the simulation is `ProCESS_<YY><MM><DD>_<HH><MM><SS>`
 sim$get_name()
-#> [1] "ProCESS_20260728-102314"
+#> [1] "ProCESS_20260811-224526"
 
 # the simulation dump have been saved in a directory named
 # after the simulation name
 list.files(pattern = "^ProCESS_")
-#> [1] "ProCESS_20260728-102314"
+#> [1] "ProCESS_20260811-220431" "ProCESS_20260811-224526"
 
 # let us remove the object and manually delete the simulation
 # directory
@@ -125,7 +125,7 @@ df_rates
 
 sim <- TissueSimulation(rates = df_rates)
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260728-102315 ────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260811-224526 ──────── ▣  [1000x1000]  ⏱ 0 ──
 #> 
 #> ── Species: 2, without epigenetics 
 #>    
@@ -162,7 +162,7 @@ df_rates
 
 sim <- TissueSimulation(rates = df_rates)
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260728-102315 ────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260811-224526 ──────── ▣  [1000x1000]  ⏱ 0 ──
 #> 
 #> ── Species: 6, with epigenetics 
 #>    

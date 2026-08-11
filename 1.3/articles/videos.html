@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,14 +72,14 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Producing evolution videos</h1>
-
-
+            
+      
       <small class="dont-index">Source: <a href="https://github.com/caravagnalab/ProCESS/tree/1.3/vignettes/videos.Rmd" class="external-link"><code>vignettes/videos.Rmd</code></a></small>
       <div class="d-none name"><code>videos.Rmd</code></div>
     </div>
 
-
-
+    
+    
 <blockquote>
 <p><em>Disclaimer:</em> ProCESS/CLONES implements probability
 distributions using the C++11 random number distribution classes. Since
@@ -93,15 +93,15 @@ reader.</p>
 evolution. Please, refer to <a href="tissue_simulation.html">this
 article</a> for tumour evolution modelling.</p>
 <div class="section level2">
-<h2 id="collecting-data">Collecting Data<a class="anchor" aria-label="anchor" href="#collecting-data"></a>
+<h2 id="collecting-data">Collecting data<a class="anchor" aria-label="anchor" href="#collecting-data"></a>
 </h2>
 <p>In order to produce a video, we need to collect simulation snapshots
-during tumour evolution. <code><a href="TissueSimulation_class.html">TissueSimulation</a></code> performs
-this task by default at the end of <code><a href="TissueSimulation-cash-place_cell.html">place_cell()</a></code>,
-<code><a href="TissueSimulation-cash-sample_cells.html">sample_cells()</a></code>,
-<code><a href="TissueSimulation-cash-mutate_progeny.html">mutate_progeny()</a></code>,
+during tumour evolution. <code><a href="../reference/TissueSimulation_class.html">TissueSimulation</a></code>
+performs this task by default at the end of <code><a href="../reference/TissueSimulation-cash-place_cell.html">place_cell()</a></code>,
+<code><a href="../reference/TissueSimulation-cash-sample_cells.html">sample_cells()</a></code>,
+<code><a href="../reference/TissueSimulation-cash-mutate_progeny.html">mutate_progeny()</a></code>,
 and <code>run_*()</code> calls.</p>
-<p>Let us build a simulation and use <code><a href="TissueSimulation-cash-get_snapshot_info.html">get_snapshot_info()</a></code>
+<p>Let us build a simulation and use <code><a href="../reference/TissueSimulation-cash-get_snapshot_info.html">get_snapshot_info()</a></code>
 to inspect the collected snapshots.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://caravagnalab.github.io/ProCESS/1.3">"ProCESS"</a></span><span class="op">)</span></span>
@@ -167,8 +167,8 @@ to inspect the collected snapshots.</p>
 <span><span class="co"># count the collected snapshots</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="fu">get_snapshot_info</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 5</span></span></code></pre></div>
-<p>The function <code><a href="build_snapshot_video.html">build_snapshot_video()</a></code>, which
-is exclusively available when the package <a href="https://CRAN.R-project.org/package=av" class="external-link">av</a> is installed, uses
+<p>The function <code><a href="../reference/build_snapshot_video.html">build_snapshot_video()</a></code>,
+which is exclusively available when the package <a href="https://CRAN.R-project.org/package=av" class="external-link">av</a> is installed, uses
 the collected snapshot to build a video whose frames depicts the tissue
 as it was when snapshots were collected.</p>
 <p>The snippet</p>
@@ -178,7 +178,7 @@ as it was when snapshots were collected.</p>
 <video src="video_1.mp4" type="video/mp4" controls="TRUE" autoplay="TRUE" loop="TRUE" style="max-width: 100%; height: auto;"></video>
 </div>
 <div class="section level2">
-<h2 id="triggering-tissue-snapshots">Triggering Tissue Snapshots<a class="anchor" aria-label="anchor" href="#triggering-tissue-snapshots"></a>
+<h2 id="producing-more-frames">Producing more frames<a class="anchor" aria-label="anchor" href="#producing-more-frames"></a>
 </h2>
 <p>Whenever the snapshots collected by default are not enough to
 completely represent the tumour evolution, user can set custom snapshot
@@ -188,8 +188,8 @@ time triggers, e.g., collect a snapshot at least every 5 simulated time
 units - number of tumour cells triggers, e.g., collect a snapshot at
 least every time the overall number of tumour cells increased by 1000
 cells.</p>
-<p>The <code><a href="TissueSimulation_class.html">TissueSimulation</a></code> property
-<code><a href="TissueSimulation-cash-snapshot_triggers.html">snapshot_triggers</a></code>
+<p>The <code><a href="../reference/TissueSimulation_class.html">TissueSimulation</a></code>
+property <code><a href="../reference/TissueSimulation-cash-snapshot_triggers.html">snapshot_triggers</a></code>
 reports the current custom triggers and can be used to set them.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># see the current custom snapshot triggers</span></span>
@@ -217,7 +217,7 @@ reports the current custom triggers and can be used to set them.</p>
 <span><span class="co"># trigger</span></span>
 <span><span class="va">snapshot_info</span><span class="op">$</span><span class="va">cells</span><span class="op">[</span><span class="va">previous_snapshots</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">snapshot_info</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt; [1]  127 1127 2127 3127 4127 4304</span></span></code></pre></div>
-<p><code><a href="TissueSimulation-cash-snapshot_triggers.html">snapshot_triggers</a></code>
+<p><code><a href="../reference/TissueSimulation-cash-snapshot_triggers.html">snapshot_triggers</a></code>
 can also be used to reset custom triggers.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># see the current custom snapshot triggers</span></span>
@@ -243,8 +243,8 @@ can also be used to reset custom triggers.</p>
 <span><span class="co">#&gt; [1] 180.9084 185.9117 190.9132 195.9168 200.9110</span></span></code></pre></div>
 <p>Custom snapshot triggers allow us to produce a more fluid evolution
 video. For instance, let us consider the tumour model detailed in <a href="four_mutants.html">this article</a> and let us customise the
-snapshot triggers just after creating the <code><a href="TissueSimulation_class.html">TissueSimulation</a></code> object as
-follows.</p>
+snapshot triggers just after creating the <code><a href="../reference/TissueSimulation_class.html">TissueSimulation</a></code>
+object as follows.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://caravagnalab.github.io/ProCESS/1.3">"ProCESS"</a></span><span class="op">)</span></span>
 <span></span>
@@ -295,58 +295,153 @@ follows.</p>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">run_until</span><span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="fu">var</span><span class="op">(</span><span class="st">"C"</span><span class="op">)</span> <span class="op">+</span> <span class="va">sim</span><span class="op">$</span><span class="fu">var</span><span class="op">(</span><span class="st">"D"</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1e5</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># collect the last sample</span></span>
-<span><span class="va">sim</span><span class="op">$</span><span class="fu">sample_cells</span><span class="op">(</span><span class="st">"S3"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">400</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">170</span>, <span class="fl">470</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">sim</span><span class="op">$</span><span class="fu">sample_cells</span><span class="op">(</span><span class="st">"S3"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">400</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">170</span>, <span class="fl">470</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># build the forest</span></span>
+<span><span class="va">sample_forest</span> <span class="op">&lt;-</span> <span class="va">sim</span><span class="op">$</span><span class="fu">get_sample_forests</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>At the end of the evolution, by calling</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/build_snapshot_video.html">build_snapshot_video</a></span><span class="op">(</span><span class="va">sim</span>, res <span class="op">=</span> <span class="fl">300</span>, width<span class="op">=</span><span class="fl">1440</span>, height<span class="op">=</span><span class="fl">1024</span>, framerate <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
 <p>we produce the following video.</p>
-<video src="video_2.mp4" type="video/mp4" controls="TRUE" autoplay="TRUE" loop="TRUE" style="max-width: 100%; height: auto;"></video>
+<video src="video_2.mp4" type="video/mp4" controls="TRUE" autoplay="TRUE" loop="TRUE" style="max-width: 100%; height: auto;"></video><p><code>build_snapshot_video</code> also supports pauses.</p>
+<p>Users can specify pauses on events declaring the length of the pause
+on specific sample or mutant rising or the generic event.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>pauses_on_event <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>    <span class="st">"mutant arising"</span> <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>        <span class="co"># pause 4 seconds when "C" arises</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>        <span class="st">"C"</span> <span class="ot">=</span> <span class="fu">as.difftime</span>(<span class="dv">4</span>, <span class="at">units=</span><span class="st">"secs"</span>),</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>        <span class="co"># pause 4 frames when "B" arises</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>        <span class="st">"B"</span> <span class="ot">=</span> <span class="dv">4</span>),</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>    <span class="co"># pause 3 seconds at each sample</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>    <span class="st">"sampling"</span> <span class="ot">=</span> <span class="fu">as.difftime</span>(<span class="dv">3</span>, <span class="at">units=</span><span class="st">"secs"</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>)</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="fu">build_snapshot_video</span>(sim, <span class="at">res =</span> <span class="dv">300</span>, <span class="at">width=</span><span class="dv">1440</span>, <span class="at">height=</span><span class="dv">1024</span>, <span class="at">framerate =</span> <span class="dv">20</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>                     <span class="at">pauses_on_event =</span> pauses_on_event)</span></code></pre></div>
+<video src="video_3.mp4" type="video/mp4" controls="TRUE" autoplay="TRUE" loop="TRUE" style="max-width: 100%; height: auto;"></video><p>Pauses can also applied to specific frames.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>pauses_on_frame <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>    <span class="co"># pause 3 seconds on frame 101</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">frame =</span> <span class="dv">101</span>, <span class="at">length =</span> <span class="fu">as.difftime</span>(<span class="dv">3</span>, <span class="at">units=</span><span class="st">"secs"</span>)),</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>    <span class="co"># pause 3 seconds on frame 102</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">frame =</span> <span class="dv">102</span>, <span class="at">length =</span> <span class="fu">as.difftime</span>(<span class="dv">3</span>, <span class="at">units=</span><span class="st">"secs"</span>))</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>)</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="fu">build_snapshot_video</span>(sim, <span class="at">res =</span> <span class="dv">300</span>, <span class="at">width=</span><span class="dv">1440</span>, <span class="at">height=</span><span class="dv">1024</span>, <span class="at">framerate =</span> <span class="dv">20</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>                     <span class="at">pauses_on_frame =</span> pauses_on_frame)</span></code></pre></div>
+<video src="video_4.mp4" type="video/mp4" controls="TRUE" autoplay="TRUE" loop="TRUE" style="max-width: 100%; height: auto;"></video>
 </div>
 <div class="section level2">
-<h2 id="customizing-plots">Customizing Plots<a class="anchor" aria-label="anchor" href="#customizing-plots"></a>
+<h2 id="customizing-plots">Customizing plots<a class="anchor" aria-label="anchor" href="#customizing-plots"></a>
 </h2>
-<p><code><a href="build_snapshot_video.html">build_snapshot_video()</a></code> also
-supports plot customisations. The parameter <code>plot_function</code>
-allows users to specify their plotting function. The actual parameter
-should be a function that takes in input a simulation and returns a
-plot. The plots of produced by <code>plot_functions</code> taking in
-input the simulation snapshots are the frames of the produced video.</p>
-<p>For instance, we can produce a video focusing on the cells
-represented in the sample forest. First of all, we need to define a
-focus function for the cells in the sample forest (see, <code><a href="plot_tissue.html">plot_tissue()</a></code>).</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># a focus function that highlights the cells represented by</span></span>
-<span><span class="co"># the sample forest</span></span>
-<span><span class="va">in_sample_forest</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">cells</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="co"># sample_forest has been defined in four_mutants.md</span></span>
-<span>  <span class="va">sample_forest</span><span class="op">$</span><span class="fu">represents_cell</span><span class="op">(</span><span class="va">cells</span><span class="op">$</span><span class="va">cell_id</span><span class="op">)</span></span>
+<p><code><a href="../reference/build_snapshot_video.html">build_snapshot_video()</a></code>
+also supports plot customisations. The parameter
+<code>plot_function</code> allows users to specify their plotting
+function. The actual parameter should be a function that takes in input
+a simulation and returns a plot. The plots of produced by
+<code>plot_functions</code> taking in input the simulation snapshots are
+the frames of the produced video.</p>
+<p>For instance, we can produce a video focusing on the cells in a
+rectangle. First of all, we need to define a focus function for the
+cells in the rectangle (see, <code><a href="../reference/plot_tissue.html">plot_tissue()</a></code>).</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># a focus function that highlights the cells in the rectangle</span></span>
+<span><span class="co"># [250,350]x[300,350]</span></span>
+<span><span class="va">in_rectangle</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">cells</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="op">(</span><span class="va">cells</span><span class="op">$</span><span class="va">position_x</span> <span class="op">&gt;=</span> <span class="fl">250</span> <span class="op">&amp;</span> <span class="va">cells</span><span class="op">$</span><span class="va">position_x</span> <span class="op">&lt;=</span> <span class="fl">350</span></span>
+<span>   <span class="op">&amp;</span> <span class="va">cells</span><span class="op">$</span><span class="va">position_y</span> <span class="op">&gt;=</span> <span class="fl">300</span> <span class="op">&amp;</span> <span class="va">cells</span><span class="op">$</span><span class="va">position_y</span> <span class="op">&lt;=</span> <span class="fl">350</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>Then, we may define the <code>plot_function</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># define a unique color map for all the frames</span></span>
 <span><span class="va">color_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_species_colors.html">get_species_colors</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># this function will be called to plot each video frames</span></span>
-<span><span class="va">plot_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">snapshot</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu"><a href="../reference/plot_tissue.html">plot_tissue</a></span><span class="op">(</span><span class="va">snapshot</span>,</span>
-<span>                color_map <span class="op">=</span> <span class="va">color_map</span>,</span>
-<span>                plot_sample_region <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                list_all_species <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                focus_function <span class="op">=</span> <span class="va">in_sample_forest</span><span class="op">)</span></span>
+<span><span class="va">plot_in_rectangle</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">snapshot</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="../reference/plot_tissue.html">plot_tissue</a></span><span class="op">(</span><span class="va">snapshot</span>,</span>
+<span>              color_map <span class="op">=</span> <span class="va">color_map</span>,</span>
+<span>              plot_sample_region <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>              list_all_labels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>              focus_function <span class="op">=</span> <span class="va">in_rectangle</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>Finally, the snippet</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<p>The snippet</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/build_snapshot_video.html">build_snapshot_video</a></span><span class="op">(</span><span class="va">sim</span>, res <span class="op">=</span> <span class="fl">300</span>, width<span class="op">=</span><span class="fl">1440</span>, height<span class="op">=</span><span class="fl">1024</span>,</span>
-<span>                     framerate <span class="op">=</span> <span class="fl">20</span>, plot_function <span class="op">=</span> <span class="va">plot_function</span><span class="op">)</span></span></code></pre></div>
+<span>                     framerate <span class="op">=</span> <span class="fl">20</span>, plot_function <span class="op">=</span> <span class="va">plot_in_rectangle</span><span class="op">)</span></span></code></pre></div>
 <p>produces the following result.</p>
-<video src="video_3.mp4" type="video/mp4" controls="TRUE" autoplay="TRUE" loop="TRUE" style="max-width: 100%; height: auto;"></video><p>The package <a href="https://CRAN.R-project.org/package=patchwork" class="external-link">patchwork</a> can be
-easily used to produce more complex videos.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<video src="video_5.mp4" type="video/mp4" controls="TRUE" autoplay="TRUE" loop="TRUE" style="max-width: 100%; height: auto;"></video>
+</div>
+<div class="section level2">
+<h2 id="parallelising-frame-generation">Parallelising frame generation<a class="anchor" aria-label="anchor" href="#parallelising-frame-generation"></a>
+</h2>
+<p>When the packages <a href="https://CRAN.R-project.org/package=furrr" class="external-link">furrr</a> and <a href="https://CRAN.R-project.org/package=progressr" class="external-link">progressr</a> are
+installed in the system, the function <code><a href="../reference/build_snapshot_video.html">build_snapshot_video()</a></code>
+uses them to parallelise frame generations. However, ProCESS data
+structures are not serializable in R and cannot be transparently passed
+to the <a href="https://CRAN.R-project.org/package=furrr" class="external-link">furrr</a>
+processes. Because of that, all ProCESS objects involved in the
+evaluation of <code>plot_function()</code>, with the exception of the
+function parameter, must be saved to the disk outside
+<code>plot_function()</code> and, then, reloaded inside it. In this way,
+the objects will be local to each <a href="https://CRAN.R-project.org/package=furrr" class="external-link">furrr</a> process.</p>
+<p>For instance, if we want to generate a video that focus on the cells
+represented in the sample forest, we first need to save the sample
+forest.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sample_forest</span><span class="op">$</span><span class="fu">save</span><span class="op">(</span><span class="st">"forest.sff"</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving forest [████████████████████████████████████████] 100% [00m:00s] Forest saved</span></span></code></pre></div>
+<p>Then, we must define a <code>plot_function()</code> that loads its
+own copy of the sample forest and use it.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># this function will be called to plot each video frames</span></span>
+<span><span class="va">plot_in_forest</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">snapshot</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># load the local copy of the forest</span></span>
+<span>  <span class="va">local_forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_forest.html">load_forest</a></span><span class="op">(</span><span class="st">"forest.sff"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># define a unique color map for all the frames</span></span>
+<span>  <span class="va">color_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_species_colors.html">get_species_colors</a></span><span class="op">(</span><span class="va">local_forest</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># a focus function that highlights the cells represented by</span></span>
+<span>  <span class="co"># the sample forest</span></span>
+<span>  <span class="va">in_sample_forest</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">cells</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="co"># sample_forest has been defined in four_mutants.md</span></span>
+<span>    <span class="va">local_forest</span><span class="op">$</span><span class="fu">represents_cell</span><span class="op">(</span><span class="va">cells</span><span class="op">$</span><span class="va">cell_id</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="co"># plot the tissue using the shared color map </span></span>
+<span>  <span class="fu"><a href="../reference/plot_tissue.html">plot_tissue</a></span><span class="op">(</span><span class="va">snapshot</span>,</span>
+<span>              color_map <span class="op">=</span> <span class="va">color_map</span>,</span>
+<span>              plot_sample_region <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>              list_all_labels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>              focus_function <span class="op">=</span> <span class="va">in_sample_forest</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>Please, notice that <code>color_map</code> is a serialisable object
+and is automatically passed to all frame generator processes.</p>
+<p>Finally, the function call</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/build_snapshot_video.html">build_snapshot_video</a></span><span class="op">(</span><span class="va">sim</span>, res <span class="op">=</span> <span class="fl">300</span>, width<span class="op">=</span><span class="fl">1440</span>, height<span class="op">=</span><span class="fl">1024</span>,</span>
+<span>                     framerate <span class="op">=</span> <span class="fl">20</span>, plot_function <span class="op">=</span> <span class="va">plot_in_forest</span><span class="op">)</span></span></code></pre></div>
+<p>produces the following video.</p>
+<video src="video_6.mp4" type="video/mp4" controls="TRUE" autoplay="TRUE" loop="TRUE" style="max-width: 100%; height: auto;"></video><p>The package <a href="https://CRAN.R-project.org/package=patchwork" class="external-link">patchwork</a> can be
+used to generate more complex videos.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># a frame plot function</span></span>
-<span><span class="va">plot_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">simulation</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">patchwork_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">simulation</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># load the local copy of the forest</span></span>
+<span>  <span class="va">local_forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_forest.html">load_forest</a></span><span class="op">(</span><span class="st">"forest.sff"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># a focus function that highlights the cells represented by</span></span>
+<span>  <span class="co"># the sample forest</span></span>
+<span>  <span class="va">in_sample_forest</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">cells</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="co"># sample_forest has been defined in four_mutants.md</span></span>
+<span>    <span class="va">local_forest</span><span class="op">$</span><span class="fu">represents_cell</span><span class="op">(</span><span class="va">cells</span><span class="op">$</span><span class="va">cell_id</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
 <span>  <span class="co"># generate the tissue plot</span></span>
 <span>  <span class="va">tissue_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_tissue.html">plot_tissue</a></span><span class="op">(</span><span class="va">simulation</span>, color_map <span class="op">=</span> <span class="va">color_map</span>,</span>
 <span>                             focus_function <span class="op">=</span> <span class="va">in_sample_forest</span><span class="op">)</span></span>
@@ -365,10 +460,13 @@ easily used to produce more complex videos.</p>
 <span></span>
 <span>  <span class="co"># generate the forest plot hiding the nodes representing cells that are</span></span>
 <span>  <span class="co"># not born yet and removing the legends</span></span>
-<span>  <span class="va">forest_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_forest.html">plot_forest</a></span><span class="op">(</span><span class="va">sample_forest</span>, color_map <span class="op">=</span> <span class="va">color_map</span>,</span>
+<span>  <span class="va">forest_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_forest.html">plot_forest</a></span><span class="op">(</span><span class="va">local_forest</span>, color_map <span class="op">=</span> <span class="va">color_map</span>,</span>
 <span>                             alpha_function <span class="op">=</span> <span class="va">alpha_funct</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># load the patchwork in each frame generator</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="co"># plot the tissue and the forest plots together</span></span>
 <span>  <span class="op">(</span><span class="va">tissue_plot</span> <span class="op">|</span> <span class="va">forest_plot</span><span class="op">)</span> <span class="op">+</span></span>
@@ -376,9 +474,23 @@ easily used to produce more complex videos.</p>
 <span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
+<span><span class="va">pauses_on_event</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="st">"mutant arising"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/difftime.html" class="external-link">as.difftime</a></span><span class="op">(</span><span class="fl">3</span>, units<span class="op">=</span><span class="st">"secs"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"sampling"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/difftime.html" class="external-link">as.difftime</a></span><span class="op">(</span><span class="fl">2</span>, units<span class="op">=</span><span class="st">"secs"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu"><a href="../reference/build_snapshot_video.html">build_snapshot_video</a></span><span class="op">(</span><span class="va">sim</span>, width <span class="op">=</span> <span class="fl">1820</span>, height <span class="op">=</span> <span class="fl">1024</span>, framerate <span class="op">=</span> <span class="fl">20</span>,</span>
-<span>                     res <span class="op">=</span> <span class="fl">300</span>, plot_function <span class="op">=</span> <span class="va">plot_function</span><span class="op">)</span></span></code></pre></div>
-<video src="video_4.mp4" type="video/mp4" controls="TRUE" autoplay="TRUE" loop="TRUE" style="max-width: 100%; height: auto;"></video>
+<span>                     res <span class="op">=</span> <span class="fl">300</span>, pauses_on_event <span class="op">=</span> <span class="va">pauses_on_event</span>,</span>
+<span>                     plot_function <span class="op">=</span> <span class="va">patchwork_function</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     filter, lag</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span></code></pre>
+<video src="video_7.mp4" type="video/mp4" controls="TRUE" autoplay="TRUE" loop="TRUE" style="max-width: 100%; height: auto;"></video>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

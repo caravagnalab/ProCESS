@@ -23,28 +23,7 @@ respectively, and the column `gender` declares the subject gender.
 
 ``` r
 # build a mutation engine
-m_engine <- MutationEngine(setup_code = "demo")
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading context index                                                                
-
- [████████████████████████████████████████] 100% [00m:00s] Context index loaded                                                               
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading RS index                                                                     
-
- [█████████████---------------------------] 31% [00m:01s] Loading RS index                                                                    
-
- [██████████████████████████--------------] 64% [00m:02s] Loading RS index                                                                    
-
- [██████████████████████████████████████--] 94% [00m:03s] Loading RS index                                                                    
-
- [████████████████████████████████████████] 100% [00m:03s] RS index loaded                                                                    
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading germline                                                                     
-
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                    
-
+m_engine <- MutationEngine(setup_code = "demo", quiet = TRUE)
 
 # get the active germline subject data frame
 head(m_engine$get_active_germline(), 5)

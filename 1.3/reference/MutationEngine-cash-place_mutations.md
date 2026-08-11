@@ -62,9 +62,9 @@ sim$place_cell("A", 500, 500)
 # run the simulation until "A" accounts for less than 50000 cells
 sim$run_up_to_size("A", 50000)
 #> 
- [███████████████████████████████████████-] 97% [00m:00s] Cells: 48689                                                                        
+ [███████████████████████████████████████-] 96% [00m:00s] Cells: 48230          
 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot      
 
 
 # sample the region [450,500]x[475,550]
@@ -75,35 +75,14 @@ sim$sample_cells("S1", lower_corner = c(450, 475),
 sample_forest <- sim$get_sample_forest()
 
 # build a mutation engine
-m_engine <- MutationEngine(setup_code = "demo")
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading context index                                                                
-
- [████████████████████████████████████████] 100% [00m:00s] Context index loaded                                                               
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading RS index                                                                     
-
- [█████████████---------------------------] 32% [00m:01s] Loading RS index                                                                    
-
- [███████████████████████████-------------] 65% [00m:02s] Loading RS index                                                                    
-
- [███████████████████████████████████████-] 97% [00m:03s] Loading RS index                                                                    
-
- [████████████████████████████████████████] 100% [00m:03s] RS index loaded                                                                    
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading germline                                                                     
-
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                    
-
+m_engine <- MutationEngine(setup_code = "demo", quiet = TRUE)
 
 # add the mutant "A" to the engine
 m_engine$add_mutant("A", c(SNV = 3e-9), list(SNV("22", 12028576, "G")))
 #> 
- [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs                                                                  
+ [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs    
 
- [████████████████████████████████████████] 100% [00m:00s] "A"'s SIDs validated                                                               
+ [████████████████████████████████████████] 100% [00m:00s] "A"'s SIDs validated 
 
 
 # add the default set of SNV signature coefficients
@@ -114,9 +93,9 @@ m_engine$add_exposure(c(SBS13 = 0.3, SBS1 = 0.7, ID2 = 0.3, ID21 = 0.5,
 # SNVs and 500 indels
 phylogenetic_forest <- m_engine$place_mutations(sample_forest, 1000, 500)
 #> 
- [█---------------------------------------] 0% [00m:00s] Placing mutations                                                                    
+ [█---------------------------------------] 0% [00m:00s] Placing mutations      
 
- [████████████████████████████████████████] 100% [00m:00s] Mutations placed                                                                   
+ [████████████████████████████████████████] 100% [00m:00s] Mutations placed     
 
 
 phylogenetic_forest

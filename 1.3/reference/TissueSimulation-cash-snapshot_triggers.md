@@ -38,9 +38,9 @@ sim$place_cell("A", 500, 500)
 # get snapshot information
 sim$get_snapshot_info()
 #>                  time clock cells
-#> 1 2026-07-28 10:23:00     0     1
+#> 1 2026-08-11 22:45:11     0     1
 #>                                                                                                   file
-#> 1 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_863d7c4f/snapshot_657a78c08ebb4.dat
+#> 1 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_bc982fd3/snapshot_658cb8c0b3440.dat
 
 # get the simulation's snapshot triggers
 sim$snapshot_triggers
@@ -58,29 +58,29 @@ sim$snapshot_triggers
 # let the simulation evolve until consists of 5000 cells
 sim$run_up_to_size("A", 4000)
 #> 
- [███████████-----------------------------] 25% [00m:00s] Saving snapshot                                                                     
+ [███████████-----------------------------] 25% [00m:00s] Saving snapshot       
 
- [█████████████████████-------------------] 50% [00m:00s] Saving snapshot                                                                     
+ [█████████████████████-------------------] 50% [00m:00s] Saving snapshot       
 
- [███████████████████████████████---------] 75% [00m:00s] Saving snapshot                                                                     
+ [███████████████████████████████---------] 75% [00m:00s] Saving snapshot       
 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot      
 
 
 # get snapshot information
 sim$get_snapshot_info()
 #>                  time    clock cells
-#> 1 2026-07-28 10:23:00 0.000000     1
-#> 2 2026-07-28 10:23:00 4.858114  1001
-#> 3 2026-07-28 10:23:00 6.086508  2001
-#> 4 2026-07-28 10:23:00 6.975337  3001
-#> 5 2026-07-28 10:23:00 7.718603  4000
+#> 1 2026-08-11 22:45:11 0.000000     1
+#> 2 2026-08-11 22:45:11 4.858114  1001
+#> 3 2026-08-11 22:45:11 6.086508  2001
+#> 4 2026-08-11 22:45:11 6.975337  3001
+#> 5 2026-08-11 22:45:11 7.718603  4000
 #>                                                                                                   file
-#> 1 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_863d7c4f/snapshot_657a78c08ebb4.dat
-#> 2 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_863d7c4f/snapshot_657a78c092e2a.dat
-#> 3 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_863d7c4f/snapshot_657a78c09ab7a.dat
-#> 4 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_863d7c4f/snapshot_657a78c0a3422.dat
-#> 5 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_863d7c4f/snapshot_657a78c0ac106.dat
+#> 1 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_bc982fd3/snapshot_658cb8c0b3440.dat
+#> 2 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_bc982fd3/snapshot_658cb8c0b7786.dat
+#> 3 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_bc982fd3/snapshot_658cb8c0be631.dat
+#> 4 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_bc982fd3/snapshot_658cb8c0c728d.dat
+#> 5 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_bc982fd3/snapshot_658cb8c0d26b9.dat
 
 # set new snapshot triggers: get a snapshot every 30 seconds, every 10
 # simulated time units, and every 1000 new cells (because set previously)
@@ -114,57 +114,59 @@ sim$snapshot_triggers
 # let the simulation evolve for other 20 time units
 sim$run_up_to_time(sim$get_clock() + 20)
 #> 
- [███████████████████---------------------] 45% [00m:00s] Saving snapshot                                                                     
+ [███████████████████---------------------] 45% [00m:00s] Saving snapshot       
 
- [█████████████████████-------------------] 51% [00m:00s] Cells: 18700                                                                        
+ [█████████████████████-------------------] 51% [00m:00s] Cells: 18817          
 
- [█████████████████████████---------------] 61% [00m:01s] Cells: 28327                                                                        
+ [█████████████████████████---------------] 61% [00m:01s] Cells: 28422          
 
- [██████████████████████████--------------] 63% [00m:01s] Saving snapshot                                                                     
+ [██████████████████████████--------------] 63% [00m:01s] Saving snapshot       
 
- [████████████████████████████------------] 68% [00m:02s] Cells: 36097                                                                        
+ [████████████████████████████------------] 68% [00m:02s] Cells: 35881          
 
- [██████████████████████████████----------] 73% [00m:03s] Cells: 43192                                                                        
+ [██████████████████████████████----------] 73% [00m:03s] Cells: 43047          
 
- [████████████████████████████████--------] 78% [00m:04s] Cells: 49686                                                                        
+ [████████████████████████████████--------] 78% [00m:04s] Cells: 49479          
 
- [█████████████████████████████████-------] 81% [00m:05s] Saving snapshot                                                                     
+ [█████████████████████████████████-------] 81% [00m:05s] Saving snapshot       
 
- [█████████████████████████████████-------] 82% [00m:05s] Cells: 55895                                                                        
+ [█████████████████████████████████-------] 82% [00m:05s] Cells: 55478          
 
- [███████████████████████████████████-----] 86% [00m:06s] Cells: 61531                                                                        
+ [███████████████████████████████████-----] 85% [00m:06s] Cells: 60834          
 
- [████████████████████████████████████----] 89% [00m:07s] Cells: 66966                                                                        
+ [████████████████████████████████████----] 89% [00m:07s] Cells: 66054          
 
- [█████████████████████████████████████---] 92% [00m:08s] Cells: 72021                                                                        
+ [█████████████████████████████████████---] 92% [00m:08s] Cells: 70929          
 
- [███████████████████████████████████████-] 95% [00m:09s] Cells: 76548                                                                        
+ [██████████████████████████████████████--] 94% [00m:09s] Cells: 75443          
 
- [███████████████████████████████████████-] 97% [00m:10s] Cells: 81229                                                                        
+ [███████████████████████████████████████-] 97% [00m:10s] Cells: 79930          
 
- [████████████████████████████████████████] 100% [00m:11s] Saving snapshot                                                                    
+ [████████████████████████████████████████] 99% [00m:11s] Cells: 84233          
+
+ [████████████████████████████████████████] 100% [00m:11s] Saving snapshot      
 
 
 # get snapshot information
 sim$get_snapshot_info()
 #>                  time     clock cells
-#> 1 2026-07-28 10:23:00  0.000000     1
-#> 2 2026-07-28 10:23:00  4.858114  1001
-#> 3 2026-07-28 10:23:00  6.086508  2001
-#> 4 2026-07-28 10:23:00  6.975337  3001
-#> 5 2026-07-28 10:23:00  7.718603  4000
-#> 6 2026-07-28 10:23:01 12.718639 14173
-#> 7 2026-07-28 10:23:03 17.718647 30895
-#> 8 2026-07-28 10:23:06 22.718651 54792
-#> 9 2026-07-28 10:23:12 27.718607 85008
+#> 1 2026-08-11 22:45:11  0.000000     1
+#> 2 2026-08-11 22:45:11  4.858114  1001
+#> 3 2026-08-11 22:45:11  6.086508  2001
+#> 4 2026-08-11 22:45:11  6.975337  3001
+#> 5 2026-08-11 22:45:11  7.718603  4000
+#> 6 2026-08-11 22:45:12 12.718639 14173
+#> 7 2026-08-11 22:45:13 17.718647 30895
+#> 8 2026-08-11 22:45:17 22.718651 54792
+#> 9 2026-08-11 22:45:23 27.718607 85008
 #>                                                                                                   file
-#> 1 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_863d7c4f/snapshot_657a78c08ebb4.dat
-#> 2 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_863d7c4f/snapshot_657a78c092e2a.dat
-#> 3 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_863d7c4f/snapshot_657a78c09ab7a.dat
-#> 4 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_863d7c4f/snapshot_657a78c0a3422.dat
-#> 5 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_863d7c4f/snapshot_657a78c0ac106.dat
-#> 6 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_863d7c4f/snapshot_657a78c142993.dat
-#> 7 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_863d7c4f/snapshot_657a78c2e9801.dat
-#> 8 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_863d7c4f/snapshot_657a78c63a85e.dat
-#> 9 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_863d7c4f/snapshot_657a78cc00010.dat
+#> 1 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_bc982fd3/snapshot_658cb8c0b3440.dat
+#> 2 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_bc982fd3/snapshot_658cb8c0b7786.dat
+#> 3 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_bc982fd3/snapshot_658cb8c0be631.dat
+#> 4 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_bc982fd3/snapshot_658cb8c0c728d.dat
+#> 5 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_bc982fd3/snapshot_658cb8c0d26b9.dat
+#> 6 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_bc982fd3/snapshot_658cb8c16a3a6.dat
+#> 7 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_bc982fd3/snapshot_658cb8c318a83.dat
+#> 8 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_bc982fd3/snapshot_658cb8c6710fc.dat
+#> 9 /var/folders/tb/jqmdpgxs2t5129bny6pb96680000gn/T/ProCESS_alberto_bc982fd3/snapshot_658cb8cc6d643.dat
 ```

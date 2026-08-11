@@ -10,7 +10,7 @@ This method simulates cell evolution until a formula does not hold.
 
 - quiet:
 
-  An optional Boolean flag to avoid the progress bar (default: FALSE).
+  An optional Boolean flag to avoid the progress bar (default: `FALSE`).
 
 ## See also
 
@@ -75,11 +75,11 @@ c5
 # run the simulation while c5 does not hold
 sim$run_until(c5)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot      
 
 
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260728-102249 ─────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 40.1 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260811-224500 ───── ▣  [1000x1000]  ⏱ 40.1 ──
 #> 
 #> ── Species: 2, with epigenetics 
 #>    

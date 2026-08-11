@@ -7,7 +7,7 @@ This method returns the rates of the simulation.
 - complete:
 
   A Boolean flag to get also the rates that have not been set (default:
-  FALSE).
+  `FALSE`).
 
 ## Value
 

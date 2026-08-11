@@ -33,28 +33,7 @@ are not affected.
 
 ``` r
 # create a demonstrative mutation engine
-m_engine <- MutationEngine(setup_code = "demo")
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading context index                                                                
-
- [████████████████████████████████████████] 100% [00m:00s] Context index loaded                                                               
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading RS index                                                                     
-
- [█████████████---------------------------] 32% [00m:01s] Loading RS index                                                                    
-
- [██████████████████████████--------------] 64% [00m:02s] Loading RS index                                                                    
-
- [██████████████████████████████████████--] 94% [00m:03s] Loading RS index                                                                    
-
- [████████████████████████████████████████] 100% [00m:03s] RS index loaded                                                                    
-
-#> 
- [█---------------------------------------] 0% [00m:00s] Loading germline                                                                     
-
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                    
-
+m_engine <- MutationEngine(setup_code = "demo", quiet = TRUE)
 
 # define a list of mutations
 d_mutations <- list("DGCR8 P26L",
@@ -75,9 +54,9 @@ m_engine$add_mutant("A", list("E1" = c(SNV = 1e-9, indel = 1e-10),
                               "E2" = c(SNV = 3e-8, CNA = 1e-11)),
                     drivers = d_mutations)
 #> 
- [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs                                                                  
+ [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs    
 
- [████████████████████████████████████████] 100% [00m:00s] "A"'s SIDs validated                                                               
+ [████████████████████████████████████████] 100% [00m:00s] "A"'s SIDs validated 
 
 
 m_engine

@@ -52,7 +52,7 @@ sim$add_mutant("A", c(duplication = 0.08, death = 0.01))
 sim$place_cell("A", 500, 500)
 sim$run_up_to_size("A", 25000)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot      
 
 bbox <- bbox_sampler(sim, "A", n = 2500, n_w = 50, n_h = 50)
 sim$sample_cells("A", bbox$p, bbox$q)
