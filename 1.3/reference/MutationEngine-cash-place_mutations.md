@@ -62,7 +62,7 @@ sim$place_cell("A", 500, 500)
 # run the simulation until "A" accounts for less than 50000 cells
 sim$run_up_to_size("A", 50000)
 #> 
- [███████████████████████████████████████-] 96% [00m:00s] Cells: 48230          
+ [████████████████████████████████████████] 99% [00m:00s] Cells: 49785          
 
  [████████████████████████████████████████] 100% [00m:00s] Saving snapshot      
 

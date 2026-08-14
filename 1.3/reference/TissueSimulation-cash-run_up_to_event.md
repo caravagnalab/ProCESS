@@ -54,7 +54,7 @@ sim$run_up_to_event(event = "switch", species = "A[E2]",
 
 
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260811-224501 ────── ▣  [1000x1000]  ⏱ 149 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260814-004517 ────── ▣  [1000x1000]  ⏱ 149 ──
 #> 
 #> ── Species: 2, with epigenetics 
 #>    

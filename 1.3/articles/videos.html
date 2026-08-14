@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -307,7 +307,7 @@ object as follows.</p>
 <p>Users can specify pauses on events declaring the length of the pause
 on specific sample or mutant rising or the generic event.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>pauses_on_event <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>    <span class="st">"mutant arising"</span> <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>    <span class="st">"mutant emerged"</span> <span class="ot">=</span> <span class="fu">list</span>(</span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a></span>
 <span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>        <span class="co"># pause 4 seconds when "C" arises</span></span>
 <span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>        <span class="st">"C"</span> <span class="ot">=</span> <span class="fu">as.difftime</span>(<span class="dv">4</span>, <span class="at">units=</span><span class="st">"secs"</span>),</span>
@@ -375,7 +375,7 @@ cells in the rectangle (see, <code><a href="../reference/plot_tissue.html">plot_
 <video src="video_5.mp4" type="video/mp4" controls="TRUE" autoplay="TRUE" loop="TRUE" style="max-width: 100%; height: auto;"></video>
 </div>
 <div class="section level2">
-<h2 id="parallelising-frame-generation">Parallelising frame generation<a class="anchor" aria-label="anchor" href="#parallelising-frame-generation"></a>
+<h2 id="parallel-frame-generation">Parallel frame generation<a class="anchor" aria-label="anchor" href="#parallel-frame-generation"></a>
 </h2>
 <p>When the packages <a href="https://CRAN.R-project.org/package=furrr" class="external-link">furrr</a> and <a href="https://CRAN.R-project.org/package=progressr" class="external-link">progressr</a> are
 installed in the system, the function <code><a href="../reference/build_snapshot_video.html">build_snapshot_video()</a></code>
@@ -428,12 +428,15 @@ and is automatically passed to all frame generator processes.</p>
 <video src="video_6.mp4" type="video/mp4" controls="TRUE" autoplay="TRUE" loop="TRUE" style="max-width: 100%; height: auto;"></video><p>The package <a href="https://CRAN.R-project.org/package=patchwork" class="external-link">patchwork</a> can be
 used to generate more complex videos.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># this function will be called to plot each video frames</span></span>
+<span><span class="va">patchwork_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">snapshot</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># a frame plot function</span></span>
-<span><span class="va">patchwork_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">simulation</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># load the local copy of the forest</span></span>
 <span>  <span class="va">local_forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_forest.html">load_forest</a></span><span class="op">(</span><span class="st">"forest.sff"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># define a unique color map for all the frames</span></span>
+<span>  <span class="va">color_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_species_colors.html">get_species_colors</a></span><span class="op">(</span><span class="va">local_forest</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="co"># a focus function that highlights the cells represented by</span></span>
 <span>  <span class="co"># the sample forest</span></span>
@@ -442,12 +445,15 @@ used to generate more complex videos.</p>
 <span>    <span class="va">local_forest</span><span class="op">$</span><span class="fu">represents_cell</span><span class="op">(</span><span class="va">cells</span><span class="op">$</span><span class="va">cell_id</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span></span>
-<span>  <span class="co"># generate the tissue plot</span></span>
-<span>  <span class="va">tissue_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_tissue.html">plot_tissue</a></span><span class="op">(</span><span class="va">simulation</span>, color_map <span class="op">=</span> <span class="va">color_map</span>,</span>
+<span>  <span class="co"># plot the tissue using the shared color map </span></span>
+<span>  <span class="va">tissue_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_tissue.html">plot_tissue</a></span><span class="op">(</span><span class="va">snapshot</span>,</span>
+<span>                             color_map <span class="op">=</span> <span class="va">color_map</span>,</span>
+<span>                             plot_sample_region <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                             list_all_labels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                             focus_function <span class="op">=</span> <span class="va">in_sample_forest</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="co"># get the snapshot simulated time</span></span>
-<span>  <span class="va">clock</span> <span class="op">&lt;-</span> <span class="va">simulation</span><span class="op">$</span><span class="fu">get_clock</span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="va">clock</span> <span class="op">&lt;-</span> <span class="va">snapshot</span><span class="op">$</span><span class="fu">get_clock</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="co"># an alpha function that hides all nodes representing cells born after the</span></span>
 <span>  <span class="co"># snapshot simulated time</span></span>
@@ -465,31 +471,76 @@ used to generate more complex videos.</p>
 <span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
 <span></span>
+<span>  <span class="va">events</span> <span class="op">&lt;-</span> <span class="va">snapshot</span><span class="op">$</span><span class="fu">get_just_occurred_events</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="st">"mutant emerged"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">events</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">emerged_mutant</span> <span class="op">&lt;-</span> <span class="va">events</span><span class="op">[[</span><span class="st">"mutant emerged"</span><span class="op">]</span><span class="op">]</span></span>
+<span>    <span class="va">cell</span> <span class="op">&lt;-</span> <span class="va">snapshot</span><span class="op">$</span><span class="fu">get_cells</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">mutant</span> <span class="op">==</span> <span class="va">emerged_mutant</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">mutant_color</span> <span class="op">&lt;-</span> <span class="va">color_map</span><span class="op">[[</span><span class="va">emerged_mutant</span><span class="op">]</span><span class="op">]</span> </span>
+<span></span>
+<span>    <span class="va">tissue_plot</span> <span class="op">&lt;-</span> <span class="va">tissue_plot</span> <span class="op">+</span></span>
+<span>      <span class="fu">ggrepel</span><span class="fu">::</span><span class="fu"><a href="https://ggrepel.slowkow.com/reference/geom_text_repel.html" class="external-link">geom_label_repel</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">cell</span>,</span>
+<span>                                <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">position_x</span>, y <span class="op">=</span> <span class="va">position_y</span>,</span>
+<span>                                             label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"First cell in \""</span>,</span>
+<span>                                                            <span class="va">mutant</span>,<span class="st">"\""</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                                fill <span class="op">=</span> <span class="va">mutant_color</span>,</span>
+<span>                                color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>                                box.padding <span class="op">=</span> <span class="fl">0.5</span>, max.overlaps <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">cell</span>,</span>
+<span>                          <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">position_x</span>, y <span class="op">=</span> <span class="va">position_y</span><span class="op">)</span>,</span>
+<span>                          color <span class="op">=</span> <span class="va">mutant_color</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">forest_plot</span> <span class="op">&lt;-</span> <span class="va">forest_plot</span> <span class="op">+</span></span>
+<span>      <span class="fu">ggraph</span><span class="fu">::</span><span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_text.html" class="external-link">geom_node_label</a></span><span class="op">(</span></span>
+<span>        data <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">name</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">cell</span><span class="op">$</span><span class="va">cell_id</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>        <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"First cell in \""</span>,<span class="va">cell</span><span class="op">$</span><span class="va">mutant</span>,<span class="st">"\""</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>        fill <span class="op">=</span> <span class="va">mutant_color</span>,</span>
+<span>        segment.color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>        segment.size <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>        min.segment.length <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>        <span class="co">#point.padding = 0,</span></span>
+<span>        repel <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>      <span class="op">)</span></span>
+<span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="st">"sampling"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">events</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">sample_name</span> <span class="op">&lt;-</span> <span class="va">events</span><span class="op">[[</span><span class="st">"sampling"</span><span class="op">]</span><span class="op">]</span></span>
+<span></span>
+<span>    <span class="va">sample</span> <span class="op">&lt;-</span> <span class="va">snapshot</span><span class="op">$</span><span class="fu">get_samples_info</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">==</span> <span class="va">sample_name</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">tissue_plot</span> <span class="op">&lt;-</span> <span class="va">tissue_plot</span> <span class="op">+</span></span>
+<span>      <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html" class="external-link">annotate</a></span><span class="op">(</span></span>
+<span>        <span class="st">"rect"</span>,</span>
+<span>        xmin <span class="op">=</span> <span class="va">sample</span><span class="op">$</span><span class="va">xmin</span>, xmax <span class="op">=</span> <span class="va">sample</span><span class="op">$</span><span class="va">xmax</span>,</span>
+<span>        ymin <span class="op">=</span> <span class="va">sample</span><span class="op">$</span><span class="va">ymin</span>, ymax <span class="op">=</span> <span class="va">sample</span><span class="op">$</span><span class="va">ymax</span>,</span>
+<span>        fill <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>        color <span class="op">=</span> <span class="st">"black"</span></span>
+<span>      <span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html" class="external-link">annotate</a></span><span class="op">(</span><span class="st">"text"</span>, x <span class="op">=</span> <span class="op">(</span><span class="va">sample</span><span class="op">$</span><span class="va">xmin</span> <span class="op">+</span> <span class="va">sample</span><span class="op">$</span><span class="va">xmax</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span>,</span>
+<span>                        y <span class="op">=</span> <span class="op">(</span><span class="va">sample</span><span class="op">$</span><span class="va">ymin</span> <span class="op">+</span> <span class="va">sample</span><span class="op">$</span><span class="va">ymax</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span>,</span>
+<span>                        label <span class="op">=</span> <span class="va">sample_name</span>, parse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  </span>
 <span>  <span class="co"># load the patchwork in each frame generator</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
-<span></span>
+<span>  </span>
 <span>  <span class="co"># plot the tissue and the forest plots together</span></span>
 <span>  <span class="op">(</span><span class="va">tissue_plot</span> <span class="op">|</span> <span class="va">forest_plot</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html" class="external-link">plot_layout</a></span><span class="op">(</span>guides <span class="op">=</span> <span class="st">"collect"</span><span class="op">)</span> <span class="op">&amp;</span></span>
 <span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
+<span><span class="co"># define the pauses on events</span></span>
 <span><span class="va">pauses_on_event</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    <span class="st">"mutant arising"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/difftime.html" class="external-link">as.difftime</a></span><span class="op">(</span><span class="fl">3</span>, units<span class="op">=</span><span class="st">"secs"</span><span class="op">)</span>,</span>
-<span>    <span class="st">"sampling"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/difftime.html" class="external-link">as.difftime</a></span><span class="op">(</span><span class="fl">2</span>, units<span class="op">=</span><span class="st">"secs"</span><span class="op">)</span></span>
+<span>  <span class="st">"mutant emerged"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/difftime.html" class="external-link">as.difftime</a></span><span class="op">(</span><span class="fl">3</span>, units<span class="op">=</span><span class="st">"secs"</span><span class="op">)</span>,</span>
+<span>  <span class="st">"sampling"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/difftime.html" class="external-link">as.difftime</a></span><span class="op">(</span><span class="fl">2</span>, units<span class="op">=</span><span class="st">"secs"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/build_snapshot_video.html">build_snapshot_video</a></span><span class="op">(</span><span class="va">sim</span>, width <span class="op">=</span> <span class="fl">1820</span>, height <span class="op">=</span> <span class="fl">1024</span>, framerate <span class="op">=</span> <span class="fl">20</span>,</span>
 <span>                     res <span class="op">=</span> <span class="fl">300</span>, pauses_on_event <span class="op">=</span> <span class="va">pauses_on_event</span>,</span>
 <span>                     plot_function <span class="op">=</span> <span class="va">patchwork_function</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     filter, lag</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span></code></pre>
 <video src="video_7.mp4" type="video/mp4" controls="TRUE" autoplay="TRUE" loop="TRUE" style="max-width: 100%; height: auto;"></video>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

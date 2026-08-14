@@ -61,7 +61,7 @@ sim$run_up_to_size("B", 1)
 
 
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260811-224505 ─────── ▣  [1000x1000]  ⏱ 50 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260814-004521 ─────── ▣  [1000x1000]  ⏱ 50 ──
 #> 
 #> ── Species: 2, without epigenetics 
 #>    

@@ -79,7 +79,7 @@ sim$run_until(c5)
 
 
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260811-224500 ───── ▣  [1000x1000]  ⏱ 40.1 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260814-004516 ───── ▣  [1000x1000]  ⏱ 40.1 ──
 #> 
 #> ── Species: 2, with epigenetics 
 #>    
