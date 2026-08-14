@@ -586,6 +586,12 @@ patchwork_function <- function(snapshot) {
         min.segment.length = 0,
         #point.padding = 0,
         repel = TRUE
+      ) +
+      ggplot2::geom_point(
+        data = function(x) subset(x, name == as.character(cell$cell_id)),
+        ggplot2::aes(x = x, y = y),
+        color = mutant_color,
+        size = 0.8
       )
 
   } else if ("sampling" %in% names(events)) {
@@ -605,6 +611,14 @@ patchwork_function <- function(snapshot) {
       ggplot2::annotate("text", x = (sample$xmin + sample$xmax) / 2,
                         y = (sample$ymin + sample$ymax) / 2,
                         label = sample_name, parse = TRUE)
+
+    forest_plot <- forest_plot +
+      ggplot2::geom_point(
+        data = function(x) subset(x, sample == sample_name),
+        ggplot2::aes(x = x, y = y),
+        color = "black",
+        size = 0.8
+      )
   }
   
   # load the patchwork in each frame generator
@@ -702,6 +716,12 @@ patchwork_function <- function(snapshot) {
         min.segment.length = 0,
         #point.padding = 0,
         repel = TRUE
+      ) +
+      ggplot2::geom_point(
+        data = function(x) subset(x, name == as.character(cell$cell_id)),
+        ggplot2::aes(x = x, y = y),
+        color = mutant_color,
+        size = 0.8
       )
 
   } else if ("sampling" %in% names(events)) {
@@ -721,6 +741,14 @@ patchwork_function <- function(snapshot) {
       ggplot2::annotate("text", x = (sample$xmin + sample$xmax) / 2,
                         y = (sample$ymin + sample$ymax) / 2,
                         label = sample_name, parse = TRUE)
+    
+    forest_plot <- forest_plot +
+      ggplot2::geom_point(
+        data = function(x) subset(x, sample == sample_name),
+        ggplot2::aes(x = x, y = y),
+        color = "black",
+        size = 0.8
+      )
   }
   
   # load the patchwork in each frame generator
