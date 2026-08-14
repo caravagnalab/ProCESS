@@ -502,6 +502,12 @@ used to generate more complex videos.</p>
 <span>        min.segment.length <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>        <span class="co">#point.padding = 0,</span></span>
 <span>        repel <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>      <span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span></span>
+<span>        data <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">name</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">cell</span><span class="op">$</span><span class="va">cell_id</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>        <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span>,</span>
+<span>        color <span class="op">=</span> <span class="va">mutant_color</span>,</span>
+<span>        size <span class="op">=</span> <span class="fl">0.8</span></span>
 <span>      <span class="op">)</span></span>
 <span></span>
 <span>  <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="st">"sampling"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">events</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -521,6 +527,14 @@ used to generate more complex videos.</p>
 <span>      <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html" class="external-link">annotate</a></span><span class="op">(</span><span class="st">"text"</span>, x <span class="op">=</span> <span class="op">(</span><span class="va">sample</span><span class="op">$</span><span class="va">xmin</span> <span class="op">+</span> <span class="va">sample</span><span class="op">$</span><span class="va">xmax</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span>,</span>
 <span>                        y <span class="op">=</span> <span class="op">(</span><span class="va">sample</span><span class="op">$</span><span class="va">ymin</span> <span class="op">+</span> <span class="va">sample</span><span class="op">$</span><span class="va">ymax</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span>,</span>
 <span>                        label <span class="op">=</span> <span class="va">sample_name</span>, parse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">forest_plot</span> <span class="op">&lt;-</span> <span class="va">forest_plot</span> <span class="op">+</span></span>
+<span>      <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span></span>
+<span>        data <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">sample</span> <span class="op">==</span> <span class="va">sample_name</span><span class="op">)</span>,</span>
+<span>        <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span>,</span>
+<span>        color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>        size <span class="op">=</span> <span class="fl">0.8</span></span>
+<span>      <span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span>  </span>
 <span>  <span class="co"># load the patchwork in each frame generator</span></span>
