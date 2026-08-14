@@ -1782,7 +1782,7 @@ Rcpp::List TissueSimulation::get_just_occurred_events() const
     const auto newborn_mutants = get_newborn_mutants(*sim_ptr);
 
     if (newborn_mutants.size()>0) {
-        last_events["mutant arising"] = newborn_mutants.front();
+        last_events["mutant emerged"] = newborn_mutants.front();
     }
 
     const auto& last_sample = sim_ptr->get_tissue_samples().back();

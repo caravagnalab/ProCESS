@@ -104,14 +104,15 @@ get_event_pauses <- function(simulation, pauses_on_event, framerate) {
       }
     }
 
-    if ("mutant arising" %in% names(pauses_on_event)) {
-      if (is.numeric(pauses_on_event[["mutant arising"]])) {
+    if ("mutant emerged" %in% names(pauses_on_event)) {
+      if (inherits(pauses_on_event[["mutant emerged"]], "difftime")
+          || is.numeric(pauses_on_event[["mutant emerged"]])) {
         mutants <- simulation$get_mutants()
-        mutants$length <- pauses_on_event[["mutant arising"]]
+        mutants$length <- pauses_on_event[["mutant emerged"]]
         mutant_pauses <- as.list(mutants[["length"]])
-        names(mutant_pauses) <- as.list(mutants[["name"]])
+        names(mutant_pauses) <- mutants[["mutant"]]
 
-        pauses_on_event[["mutant arising"]] <- mutant_pauses
+        pauses_on_event[["mutant emerged"]] <- mutant_pauses
       }
     }
 
@@ -124,7 +125,7 @@ get_event_pauses <- function(simulation, pauses_on_event, framerate) {
       new_events <- snapshot$get_just_occurred_events()
 
       pause_length <- 0
-      for (event in list("sampling", "mutant arising")) {
+      for (event in list("sampling", "mutant emerged")) {
         if (event %in% names(pauses_on_event)) {
           if (event %in% names(new_events)) {
             event_pauses <- pauses_on_event[[event]]

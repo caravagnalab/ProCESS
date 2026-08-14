@@ -287,7 +287,7 @@ on specific sample or mutant rising or the generic event.
 
 ```{R, eval = FALSE}
 pauses_on_event <- list(
-    "mutant arising" = list(
+    "mutant emerged" = list(
 
         # pause 4 seconds when "C" arises
         "C" = as.difftime(4, units="secs"),
@@ -305,7 +305,7 @@ build_snapshot_video(sim, res = 300, width=1440, height=1024, framerate = 20
 
 ```{R, echo = FALSE}
 pauses_on_event <- list(
-    "mutant arising" = list(
+    "mutant emerged" = list(
         "C" = as.difftime(4, units="secs"),
         "B" = 4),
 
@@ -427,7 +427,7 @@ htmltools::tags$video(
 ```
 
 
-## Parallelising frame generation
+## Parallel frame generation
 
 When the packages [furrr](https://CRAN.R-project.org/package=furrr) and
 [progressr](https://CRAN.R-project.org/package=progressr) are installed in the 
@@ -512,12 +512,15 @@ The package [patchwork](https://CRAN.R-project.org/package=patchwork) can be
 used to generate more complex videos.
 
 ```{R, eval = FALSE}
-library(dplyr)
+# this function will be called to plot each video frames
+patchwork_function <- function(snapshot) {
+  library(dplyr)
 
-# a frame plot function
-patchwork_function <- function(simulation) {
   # load the local copy of the forest
   local_forest <- load_forest("forest.sff", quiet = TRUE)
+
+  # define a unique color map for all the frames
+  color_map <- get_species_colors(local_forest)
 
   # a focus function that highlights the cells represented by
   # the sample forest
@@ -526,12 +529,15 @@ patchwork_function <- function(simulation) {
     local_forest$represents_cell(cells$cell_id)
   }
 
-  # generate the tissue plot
-  tissue_plot <- plot_tissue(simulation, color_map = color_map,
+  # plot the tissue using the shared color map 
+  tissue_plot <- plot_tissue(snapshot,
+                             color_map = color_map,
+                             plot_sample_region = FALSE,
+                             list_all_labels = TRUE,
                              focus_function = in_sample_forest)
 
   # get the snapshot simulated time
-  clock <- simulation$get_clock()
+  clock <- snapshot$get_clock()
 
   # an alpha function that hides all nodes representing cells born after the
   # snapshot simulated time
@@ -549,18 +555,71 @@ patchwork_function <- function(simulation) {
     ggplot2::guides(color = "none") +
     ggplot2::guides(shape = "none")
 
+  events <- snapshot$get_just_occurred_events()
+
+  if ("mutant emerged" %in% names(events)) {
+    emerged_mutant <- events[["mutant emerged"]]
+    cell <- snapshot$get_cells() %>%
+      dplyr::filter(mutant == emerged_mutant)
+
+    mutant_color <- color_map[[emerged_mutant]] 
+
+    tissue_plot <- tissue_plot +
+      ggrepel::geom_label_repel(data = cell,
+                                ggplot2::aes(x = position_x, y = position_y,
+                                             label = paste0("First cell in \"",
+                                                            mutant,"\"")),
+                                fill = mutant_color,
+                                color = "black",
+                                box.padding = 0.5, max.overlaps = Inf) +
+      ggplot2::geom_point(data = cell,
+                          ggplot2::aes(x = position_x, y = position_y),
+                          color = mutant_color)
+
+    forest_plot <- forest_plot +
+      ggraph::geom_node_label(
+        data = function(x) subset(x, name == as.character(cell$cell_id)),
+        ggplot2::aes(label = paste0("First cell in \"",cell$mutant,"\"")),
+        fill = mutant_color,
+        segment.color = "black",
+        segment.size = 0.5,
+        min.segment.length = 0,
+        #point.padding = 0,
+        repel = TRUE
+      )
+
+  } else if ("sampling" %in% names(events)) {
+    sample_name <- events[["sampling"]]
+
+    sample <- snapshot$get_samples_info() %>%
+      dplyr::filter(name == sample_name)
+
+    tissue_plot <- tissue_plot +
+      ggplot2::annotate(
+        "rect",
+        xmin = sample$xmin, xmax = sample$xmax,
+        ymin = sample$ymin, ymax = sample$ymax,
+        fill = NA,
+        color = "black"
+      ) +
+      ggplot2::annotate("text", x = (sample$xmin + sample$xmax) / 2,
+                        y = (sample$ymin + sample$ymax) / 2,
+                        label = sample_name, parse = TRUE)
+  }
+  
   # load the patchwork in each frame generator
   library(patchwork)
-
+  
   # plot the tissue and the forest plots together
   (tissue_plot | forest_plot) +
     plot_layout(guides = "collect") &
     ggplot2::theme(legend.position = "bottom")
 }
 
+# define the pauses on events
 pauses_on_event <- list(
-    "mutant arising" = as.difftime(3, units="secs"),
-    "sampling" = as.difftime(2, units="secs")
+  "mutant emerged" = as.difftime(3, units="secs"),
+  "sampling" = as.difftime(2, units="secs")
 )
 
 build_snapshot_video(sim, width = 1820, height = 1024, framerate = 20,
@@ -569,12 +628,15 @@ build_snapshot_video(sim, width = 1820, height = 1024, framerate = 20,
 ```
 
 ```{R, warning = FALSE, echo = FALSE}
-library(dplyr)
+# this function will be called to plot each video frames
+patchwork_function <- function(snapshot) {
+  library(dplyr)
 
-# a frame plot function
-patchwork_function <- function(simulation) {
   # load the local copy of the forest
   local_forest <- load_forest("forest.sff", quiet = TRUE)
+
+  # define a unique color map for all the frames
+  color_map <- get_species_colors(local_forest)
 
   # a focus function that highlights the cells represented by
   # the sample forest
@@ -583,12 +645,15 @@ patchwork_function <- function(simulation) {
     local_forest$represents_cell(cells$cell_id)
   }
 
-  # generate the tissue plot
-  tissue_plot <- plot_tissue(simulation, color_map = color_map,
+  # plot the tissue using the shared color map 
+  tissue_plot <- plot_tissue(snapshot,
+                             color_map = color_map,
+                             plot_sample_region = FALSE,
+                             list_all_labels = TRUE,
                              focus_function = in_sample_forest)
 
   # get the snapshot simulated time
-  clock <- simulation$get_clock()
+  clock <- snapshot$get_clock()
 
   # an alpha function that hides all nodes representing cells born after the
   # snapshot simulated time
@@ -606,18 +671,71 @@ patchwork_function <- function(simulation) {
     ggplot2::guides(color = "none") +
     ggplot2::guides(shape = "none")
 
+  events <- snapshot$get_just_occurred_events()
+
+  if ("mutant emerged" %in% names(events)) {
+    emerged_mutant <- events[["mutant emerged"]]
+    cell <- snapshot$get_cells() %>%
+      dplyr::filter(mutant == emerged_mutant)
+
+    mutant_color <- color_map[[emerged_mutant]] 
+
+    tissue_plot <- tissue_plot +
+      ggrepel::geom_label_repel(data = cell,
+                                ggplot2::aes(x = position_x, y = position_y,
+                                             label = paste0("First cell in \"",
+                                                            mutant,"\"")),
+                                fill = mutant_color,
+                                color = "black",
+                                box.padding = 0.5, max.overlaps = Inf) +
+      ggplot2::geom_point(data = cell,
+                          ggplot2::aes(x = position_x, y = position_y),
+                          color = mutant_color)
+
+    forest_plot <- forest_plot +
+      ggraph::geom_node_label(
+        data = function(x) subset(x, name == as.character(cell$cell_id)),
+        ggplot2::aes(label = paste0("First cell in \"",cell$mutant,"\"")),
+        fill = mutant_color,
+        segment.color = "black",
+        segment.size = 0.5,
+        min.segment.length = 0,
+        #point.padding = 0,
+        repel = TRUE
+      )
+
+  } else if ("sampling" %in% names(events)) {
+    sample_name <- events[["sampling"]]
+
+    sample <- snapshot$get_samples_info() %>%
+      dplyr::filter(name == sample_name)
+
+    tissue_plot <- tissue_plot +
+      ggplot2::annotate(
+        "rect",
+        xmin = sample$xmin, xmax = sample$xmax,
+        ymin = sample$ymin, ymax = sample$ymax,
+        fill = NA,
+        color = "black"
+      ) +
+      ggplot2::annotate("text", x = (sample$xmin + sample$xmax) / 2,
+                        y = (sample$ymin + sample$ymax) / 2,
+                        label = sample_name, parse = TRUE)
+  }
+  
   # load the patchwork in each frame generator
   library(patchwork)
-
+  
   # plot the tissue and the forest plots together
   (tissue_plot | forest_plot) +
     plot_layout(guides = "collect") &
     ggplot2::theme(legend.position = "bottom")
 }
 
+# define the pauses on events
 pauses_on_event <- list(
-    "mutant arising" = as.difftime(3, units="secs"),
-    "sampling" = as.difftime(2, units="secs")
+  "mutant emerged" = as.difftime(3, units="secs"),
+  "sampling" = as.difftime(2, units="secs")
 )
 
 output_file <- build_snapshot_video(sim, output_file = "video_7.mp4",
