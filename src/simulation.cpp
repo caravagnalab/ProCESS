@@ -916,7 +916,7 @@ void validate_trigger_names(const Rcpp::List& t_list)
     }
 
     std::set<std::string> C_names;
-    for (size_t i = 0; i < names.size(); ++i) {
+    for (auto i = 0; i < names.size(); ++i) {
         C_names.insert(as<std::string>(names[i]));
     }
 

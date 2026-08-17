@@ -413,7 +413,7 @@ public:
 
         Rcpp::LogicalVector results(cell_ids.size());
 
-        for (size_t i = 0; i < cell_ids.size(); ++i) {
+        for (auto i = 0; i < cell_ids.size(); ++i) {
             const auto value = static_cast<double>(cell_ids[i]);
 
             if (std::trunc(value) != value) {

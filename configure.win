@@ -16,7 +16,7 @@ download_CLONES() {
 
         git clone https://github.com/albertocasagrande/CLONES.git
 
-        (cd CLONES; git checkout b24a1a6 && rm -rf .git )
+        (cd CLONES; git checkout aafe01b && rm -rf .git )
     fi
 }
 
