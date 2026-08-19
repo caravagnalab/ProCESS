@@ -48,7 +48,6 @@ reference:
   contents:
   - annotate_forest
   - bbox_sampler
-  - build_snapshot_video
   - get_species_colors
   - get_node_tour
   - load_sample_forest
@@ -110,3 +109,10 @@ reference:
   contents:
   - available_examples
   - example
+- title: "Video"
+  desc:  "Producing videos of tissue evolutions"
+  contents:
+  - build_snapshot_video
+  - get_forest_frame_gen
+  - get_tissue_forest_frame_gen
+  - get_tissue_frame_gen

@@ -1,8 +1,8 @@
 Package: ProCESS
 Type: Package
 Title: ProCESS: Programmable Cancer Evolution Spatial Simulator
-Version: 1.3.8
-Date: 2026-08-14
+Version: 1.3.9
+Date: 2026-08-19
 Authors@R: c(
     person("Alberto", "Casagrande", email = "alberto.casagrande@uniud.it", role = c("aut", "cre")),
     person("Giulio", "Caravagna", role = c("aut")))

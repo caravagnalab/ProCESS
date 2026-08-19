@@ -157,37 +157,413 @@ get_event_pauses <- function(simulation, pauses_on_event, framerate) {
   pauses
 }
 
+#' Building a frame generator representing sample forest
+#'
+#' This function builds a frame generator for [build_snapshot_video()] to
+#' represent each snapshot of `simulation` as the sample forest at the
+#' snapshot time.
+#' @param simulation The tissue simulation for which the frame generator
+#'   is built.
+#' @return A named list of two functions: `frame_generator` and
+#'   `cleanup_function`. The function `frame_generator` is a frame generator
+#'   for [build_snapshot_video()] that represents each snapshot of `simulation`
+#'   as the sample forest at the snapshot time. The function `cleanup_function`
+#'   will cleanup the temporary files required to execute `frame_generator`
+#'   and must be called after the frame generation has been completed.
+#' @seealso [build_snapshot_video()], [get_tissue_forest_frame_gen()],
+#'   [get_tissue_frame_gen()]
+#' @export
+get_forest_frame_gen <- function(simulation) {
+
+  # build the sample forest and save it in a temporary file
+  forest <- simulation$get_sample_forest()
+  forest_tmp_file <- tempfile(pattern = "ProCESS_frame_gen_", fileext = ".sff")
+  forest$save(forest_tmp_file, quiet = TRUE)
+
+  cleanup_function <- function() {
+    unlink(forest_tmp_file)
+  }
+
+  frame_generator <- function(snapshot) {
+    library(dplyr)
+    library(ProCESS)
+
+    if (!file.exists(forest_tmp_file)) {
+      stop("The temporary file does not exists.",
+           "Did you invoke `cleanup_function()` before frame generation?")
+    }
+
+    # load the local copy of the forest
+    local_forest <- load_forest(forest_tmp_file, quiet = TRUE)
+
+    # define a unique color map for all the frames
+    color_map <- get_species_colors(local_forest)
+
+    # get the snapshot simulated time
+    clock <- snapshot$get_clock()
+
+    # an alpha function that hides all nodes representing cells born after the
+    # snapshot simulated time
+    alpha_funct <- function(nodes) {
+      nodes %>%
+        dplyr::mutate(alpha = dplyr::case_when(birth_time <= clock ~ 1,
+                                               TRUE ~ 0)) %>%
+        dplyr::pull(alpha)
+    }
+
+    # generate the forest plot hiding the nodes representing cells that are
+    # not born yet and removing the legends
+    forest_plot <- plot_forest(local_forest, color_map = color_map,
+                               alpha_function = alpha_funct)
+
+    events <- snapshot$get_just_occurred_events()
+
+    if ("mutant emerged" %in% names(events)) {
+      emerged_mutant <- events[["mutant emerged"]]
+      cell <- snapshot$get_cells() %>%
+        dplyr::filter(mutant == emerged_mutant)
+
+      mutant_color <- color_map[[emerged_mutant]]
+
+      forest_plot <- forest_plot +
+        ggraph::geom_node_label(
+          data = function(x) subset(x, name == as.character(cell$cell_id)),
+          ggplot2::aes(label = paste0("First cell in \"", cell$mutant, "\"")),
+          fill = mutant_color,
+          segment.color = "black",
+          segment.size = 0.5,
+          min.segment.length = 0,
+          repel = TRUE
+        ) +
+        ggplot2::geom_point(
+          data = function(x) subset(x, name == as.character(cell$cell_id)),
+          ggplot2::aes(x = x, y = y),
+          color = mutant_color,
+          size = 0.8
+        )
+
+    } else if ("sampling" %in% names(events)) {
+      sample_name <- events[["sampling"]]
+
+      sample <- snapshot$get_samples_info() %>%
+        dplyr::filter(name == sample_name)
+
+      youngest_cell <- forest_plot$data %>%
+        dplyr::filter(sample == sample_name) %>%
+        dplyr::filter(y == max(y))
+
+      forest_plot <- forest_plot +
+        ggplot2::geom_point(
+          data = function(x) subset(x, sample == sample_name),
+          ggplot2::aes(x = x, y = y),
+          color = "black",
+          size = 0.8
+        ) +
+        ggraph::geom_node_label(
+          data = function(x) subset(x, name == youngest_cell$name),
+          ggplot2::aes(label = paste0("Sample \"", sample_name, "\"")),
+          fill = "white",
+          color = "black",
+          segment.color = "black",
+          segment.size = 0.5,
+          min.segment.length = 0,
+          repel = TRUE
+        )
+    }
+
+    forest_plot
+  }
+
+  list(frame_generator = frame_generator,
+       cleanup_function = cleanup_function)
+}
+
+
+#' Building a frame generator representing the tissue configuration
+#'
+#' This function builds a frame generator for [build_snapshot_video()] to
+#' represent each snapshot of `simulation` as its tissue configuration.
+#' @param simulation The tissue simulation for which the frame generator
+#'   is built.
+#' @return A named list of two functions: `frame_generator` and
+#'   `cleanup_function`. The function `frame_generator` is a frame generator
+#'   for [build_snapshot_video()] that represents each snapshot of `simulation`
+#'   as both its tissue configuration. The function `cleanup_function` will
+#'   cleanup the temporary files required to execute `frame_generator` and
+#'   must be called after the frame generation has been completed.
+#' @seealso [build_snapshot_video()], [get_tissue_forest_frame_gen()],
+#'   [get_forest_frame_gen()]
+#' @export
+get_tissue_frame_gen <- function(simulation) {
+
+  # define a unique color map for all the frames
+  color_map <- get_species_colors(simulation)
+
+  frame_generator <- function(snapshot) {
+    library(dplyr)
+    library(ProCESS)
+
+    # plot the tissue using the shared color map
+    tissue_plot <- plot_tissue(snapshot,
+                               color_map = color_map,
+                               plot_sample_region = FALSE,
+                               list_all_labels = TRUE)
+
+    events <- snapshot$get_just_occurred_events()
+
+    if ("mutant emerged" %in% names(events)) {
+      emerged_mutant <- events[["mutant emerged"]]
+      cell <- snapshot$get_cells() %>%
+        dplyr::filter(mutant == emerged_mutant)
+
+      mutant_color <- color_map[[emerged_mutant]]
+
+      tissue_plot <- tissue_plot +
+        ggrepel::geom_label_repel(data = cell,
+                                  ggplot2::aes(x = position_x, y = position_y,
+                                               label = paste0("First cell in ",
+                                                              "\"", mutant,
+                                                              "\"")),
+                                  fill = mutant_color,
+                                  color = "black",
+                                  box.padding = 0.5, max.overlaps = Inf) +
+        ggplot2::geom_point(data = cell,
+                            ggplot2::aes(x = position_x, y = position_y),
+                            color = mutant_color)
+
+    } else if ("sampling" %in% names(events)) {
+      sample_name <- events[["sampling"]]
+
+      sample <- snapshot$get_samples_info() %>%
+        dplyr::filter(name == sample_name)
+
+      tissue_plot <- tissue_plot +
+        ggplot2::annotate(
+          "rect",
+          xmin = sample$xmin, xmax = sample$xmax,
+          ymin = sample$ymin, ymax = sample$ymax,
+          fill = NA,
+          color = "black"
+        ) +
+        ggplot2::annotate("text", x = (sample$xmin + sample$xmax) / 2,
+                          y = (sample$ymin + sample$ymax) / 2,
+                          label = sample_name, parse = TRUE)
+    }
+
+    tissue_plot
+  }
+
+  # no cleanup is needed
+  list(frame_generator = frame_generator,
+       cleanup_function = function() {})
+}
+
+#' Building a frame generator representing both tissue and sample forest
+#'
+#' This function builds a frame generator for [build_snapshot_video()] to
+#' represent each snapshot of `simulation` as both its tissue configuration
+#' and the sample forest at the snapshot time. This function requires the
+#' package [patchwork::patchwork-package].
+#' @param simulation The tissue simulation for which the frame generator
+#'   is built.
+#' @return A named list of two functions: `frame_generator` and
+#'   `cleanup_function`. The function `frame_generator` is a frame generator
+#'   for [build_snapshot_video()] that represents each snapshot of `simulation`
+#'   as both its tissue configuration and the sample forest at the snapshot
+#'   time. The function `cleanup_function` will cleanup the temporary files
+#'   required to execute `frame_generator` and must be called after the frame
+#'   generation has been completed.
+#' @seealso [build_snapshot_video()], [get_forest_frame_gen()],
+#'   [get_tissue_frame_gen()]
+#' @export
+get_tissue_forest_frame_gen <- function(simulation) {
+
+  if (!requireNamespace("patchwork", quietly = TRUE)) {
+    stop("`get_tissue_forest_frame_gen()` requires package \"patchwork\".")
+  }
+
+  # build the sample forest and save it in a temporary file
+  forest <- simulation$get_sample_forest()
+  forest_tmp_file <- tempfile(pattern = "ProCESS_frame_gen_", fileext = ".sff")
+  forest$save(forest_tmp_file, quiet = TRUE)
+
+  cleanup_function <- function() {
+    unlink(forest_tmp_file)
+  }
+
+  frame_generator <- function(snapshot) {
+    library(dplyr)
+    library(ProCESS)
+
+    if (!file.exists(forest_tmp_file)) {
+      stop("The temporary file does not exists.",
+           "Did you invoke `cleanup_function()` before frame generation?")
+    }
+
+    # load the local copy of the forest
+    local_forest <- load_forest(forest_tmp_file, quiet = TRUE)
+
+    # define a unique color map for all the frames
+    color_map <- get_species_colors(local_forest)
+
+    # a focus function that highlights the cells represented by
+    # the sample forest
+    in_sample_forest <- function(cells) {
+      # sample_forest has been defined in four_mutants.md
+      local_forest$represents_cell(cells$cell_id)
+    }
+
+    # plot the tissue using the shared color map
+    tissue_plot <- plot_tissue(snapshot,
+                               color_map = color_map,
+                               plot_sample_region = FALSE,
+                               list_all_labels = TRUE,
+                               focus_function = in_sample_forest)
+
+    # get the snapshot simulated time
+    clock <- snapshot$get_clock()
+
+    # an alpha function that hides all nodes representing cells born after the
+    # snapshot simulated time
+    alpha_funct <- function(nodes) {
+      nodes %>%
+        dplyr::mutate(alpha = dplyr::case_when(birth_time <= clock ~ 1,
+                                               TRUE ~ 0)) %>%
+        dplyr::pull(alpha)
+    }
+
+    # generate the forest plot hiding the nodes representing cells that are
+    # not born yet and removing the legends
+    forest_plot <- plot_forest(local_forest, color_map = color_map,
+                               alpha_function = alpha_funct) +
+      ggplot2::guides(color = "none") +
+      ggplot2::guides(shape = "none")
+
+    events <- snapshot$get_just_occurred_events()
+
+    if ("mutant emerged" %in% names(events)) {
+      emerged_mutant <- events[["mutant emerged"]]
+      cell <- snapshot$get_cells() %>%
+        dplyr::filter(mutant == emerged_mutant)
+
+      mutant_color <- color_map[[emerged_mutant]]
+
+      tissue_plot <- tissue_plot +
+        ggrepel::geom_label_repel(data = cell,
+                                  ggplot2::aes(x = position_x, y = position_y,
+                                               label = paste0("First cell in ",
+                                                              "\"", mutant,
+                                                              "\"")),
+                                  fill = mutant_color,
+                                  color = "black",
+                                  box.padding = 0.5, max.overlaps = Inf) +
+        ggplot2::geom_point(data = cell,
+                            ggplot2::aes(x = position_x, y = position_y),
+                            color = mutant_color)
+
+      forest_plot <- forest_plot +
+        ggraph::geom_node_label(
+          data = function(x) subset(x, name == as.character(cell$cell_id)),
+          ggplot2::aes(label = paste0("First cell in \"", cell$mutant, "\"")),
+          fill = mutant_color,
+          segment.color = "black",
+          segment.size = 0.5,
+          min.segment.length = 0,
+          repel = TRUE
+        ) +
+        ggplot2::geom_point(
+          data = function(x) subset(x, name == as.character(cell$cell_id)),
+          ggplot2::aes(x = x, y = y),
+          color = mutant_color,
+          size = 0.8
+        )
+
+    } else if ("sampling" %in% names(events)) {
+      sample_name <- events[["sampling"]]
+
+      sample <- snapshot$get_samples_info() %>%
+        dplyr::filter(name == sample_name)
+
+      tissue_plot <- tissue_plot +
+        ggplot2::annotate(
+          "rect",
+          xmin = sample$xmin, xmax = sample$xmax,
+          ymin = sample$ymin, ymax = sample$ymax,
+          fill = NA,
+          color = "black"
+        ) +
+        ggplot2::annotate("text", x = (sample$xmin + sample$xmax) / 2,
+                          y = (sample$ymin + sample$ymax) / 2,
+                          label = sample_name, parse = TRUE)
+
+      youngest_cell <- forest_plot$data %>%
+        dplyr::filter(sample == sample_name) %>%
+        dplyr::filter(y == max(y))
+
+      forest_plot <- forest_plot +
+        ggplot2::geom_point(
+          data = function(x) subset(x, sample == sample_name),
+          ggplot2::aes(x = x, y = y),
+          color = "black",
+          size = 0.8
+        ) +
+        ggraph::geom_node_label(
+          data = function(x) subset(x, name == youngest_cell$name),
+          ggplot2::aes(label = paste0("Sample \"", sample_name, "\"")),
+          fill = "white",
+          color = "black",
+          segment.color = "black",
+          segment.size = 0.5,
+          min.segment.length = 0,
+          repel = TRUE
+        )
+    }
+
+    # load the patchwork in each frame generator
+    library(patchwork)
+
+    # plot the tissue and the forest plots together
+    (tissue_plot | forest_plot) +
+      plot_layout(guides = "collect") &
+      ggplot2::theme(legend.position = "bottom")
+  }
+
+  list(frame_generator = frame_generator,
+       cleanup_function = cleanup_function)
+}
+
 #' Building a video of the snapshots
 #'
 #' @description This function builds a video of the snapshots.
 #' @details This function builds a video of the snapshots. It is available
-#'   only if the package `av` is installed.
+#'   only if the package [av::av-package] is installed.
 #' @usage build_snapshot_video(simulation)
 #' @param simulation A simulation object.
 #' @param output_file The path of the output video. When it is set to
 #'   `NULL`, the output video path has the format
 #'   `<simulation path>_evolution.mp4` (default: `NULL`).
-#' @param plot_function The function used to plot each frame of the video.
-#'   When is set to `NULL`, the function `plot_tissue()` is used (default:
-#'   `NULL`).
 #' @param width The width of the video (default: `800`).
 #' @param height The height of the video (default: `600`).
 #' @param framerate The video framerate in frame/sec (default: `1`).
 #' @param res The video resolution (default: `150`).
+#' @param frame_generator The function used to plot each frame of the video.
+#'   When it is set to `NULL`, this function uses the function `frame_generator`
+#'   built by `get_tissue_frame_gen()` (default: `NULL`).
 #' @param pauses_on_event A named list specifying the pauses on event in
 #'   the output video.
-#'   The names of the list must be among "mutant rising" and "sampling".
+#'   The names of the list must be among "mutant emerged" and "sampling".
 #'   The values can either be a numeric value, a `difftime` object, or
 #'   a named list. The numeric value represents the pause length in number
 #'   of frames. The `difftime` object denotes the pause length. Finally,
 #'   the named list described the pauses for specific events. When the name
-#'   of the element is "mutant rising", the names of the sub-list are among
+#'   of the element is "mutant emerged", the names of the sub-list are among
 #'   the simulated mutants. When, instead, the name of the element is
 #'   "sampling", the names of the sub-list are among the collected samples.
 #'   In both the cases, the values represent the pause lengths for the
 #'   specific event and can be either a numeric value or a `difftime`
 #'   object as for the generic specification. When `pauses_on_event` is
-#'   `NULL`, no pauses are added to the output video (default: `NULL`).
+#'   `NULL`, a 3-seconds pause is added after any new mutant appearance and
+#'   any sample collection  (default: `NULL`).
 #' @param pauses_on_frame A list specifying the pauses on frame in the
 #'   output video.
 #'   Each element of the list is a named list whose names are `frame` and
@@ -198,19 +574,19 @@ get_event_pauses <- function(simulation, pauses_on_event, framerate) {
 #'   (default: `NULL`).
 #' @param quiet A Boolean flag to enable/disable the messages (default:
 #'   `FALSE`).
-#' @param workers The number of parallel processes generating frames.
-#'   This parameter is used only when the packages "furrr" and
-#'   "progressr" are installed. When it is set to `NULL`, the function
-#'   uses as many processes as the number of available processors minus
-#'   one (default: `NULL`).
+#' @param workers The number of parallel processes generating frames. This
+#'   parameter is used only when the packages [furrr::furrr-package] and
+#'   [progressr::progressr-package] are installed. When it is set to `NULL`,
+#'   the function uses as many processes as the number of available
+#'   processors minus one (default: `NULL`).
 #' @returns The name of the produced video file path.
-#' @seealso `vignette("videos")`, [plot_tissue()]
+#' @seealso `vignette("videos")`, [plot_tissue()], [get_tissue_frame_gen()],
+#'   [get_forest_frame_gen()], [get_tissue_forest_frame_gen()]
 #' @export
-#'
 build_snapshot_video <- function(simulation, output_file = NULL,
-                                 plot_function = NULL,
                                  width = 800, height = 600,
                                  framerate = 1, res = 150,
+                                 frame_generator = NULL,
                                  pauses_on_event = NULL,
                                  pauses_on_frame = NULL,
                                  quiet = FALSE,
@@ -224,17 +600,13 @@ build_snapshot_video <- function(simulation, output_file = NULL,
     )
   }
 
-  # if plot_function is NULL, use the plot_tissue function
-  if (is.null(plot_function)) {
-    # choose a color map that contains all the known species
-    color_map <- get_species_colors(simulation)
+  if (is.null(frame_generator)) {
+    frame_generator <- get_tissue_frame_gen(simulation)[["frame_generator"]]
+  }
 
-    plot_function <- function(snapshot) {
-      plot_tissue(snapshot,
-                  color_map = color_map,
-                  plot_sample_region = FALSE,
-                  list_all_labels = TRUE)
-    }
+  if (is.null(pauses_on_event)) {
+    pauses_on_event <- list("mutant emerged" = as.difftime(3, units = "secs"),
+                            "sampling" = as.difftime(3, units = "secs"))
   }
 
   snapshot_files <- simulation$get_snapshot_info()[["file"]]
@@ -296,7 +668,7 @@ build_snapshot_video <- function(simulation, output_file = NULL,
           snapshot <- recover_simulation(files_enum_value$snapshot_file,
                                          quiet = TRUE)
 
-          plt <- plot_function(snapshot)
+          plt <- frame_generator(snapshot)
 
           ggplot2::ggsave(files_enum_value$frame_file, plot = plt,
                           width = width, height = height, dpi = res,
@@ -325,7 +697,7 @@ build_snapshot_video <- function(simulation, output_file = NULL,
     for (files_enum_value in files_enum) {
       snapshot <- recover_simulation(files_enum_value$snapshot_file)
 
-      plt <- plot_function(snapshot)
+      plt <- frame_generator(snapshot)
 
       ggplot2::ggsave(files_enum_value$frame_file, plot = plt,
                       width = width, height = height, dpi = res,
