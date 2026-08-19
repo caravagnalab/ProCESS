@@ -47,7 +47,7 @@ sim$place_cell("A[E1]", 500, 500)
 # run the simulation up to time 70
 sim$run_up_to_time(70)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot      
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    
 
 
 sim$get_lineage_graph()

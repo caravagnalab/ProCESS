@@ -88,10 +88,11 @@ At the end of the evolution, by calling
 
 we produce the following video.
 
-`build_snapshot_video` also supports pauses.
+## Customizing Pauses
 
 Users can specify pauses on events declaring the length of the pause on
-specific sample or mutant rising or the generic event.
+specific sample or new mutant. They can also add pauses on any sample or
+new mutant.
 
 ``` r
 pauses_on_event <- list(
@@ -126,33 +127,50 @@ build_snapshot_video(sim, res = 300, width=1440, height=1024, framerate = 20
                      pauses_on_frame = pauses_on_frame)
 ```
 
-## Customizing plots
+## Customizing Frames
 
 [`build_snapshot_video()`](https://caravagnalab.github.io/ProCESS/1.3/reference/build_snapshot_video.md)
-also supports plot customisations. The parameter `plot_function` allows
-users to specify their plotting function. The actual parameter should be
-a function that takes in input a simulation and returns a plot. The
-plots of produced by `plot_functions` taking in input the simulation
-snapshots are the frames of the produced video.
+also supports frame customisations. The parameter `frame_generator`
+allows users to specify their frame plotting function. The actual
+parameter should be a function that takes in input a simulation snapshot
+and returns a plot corresponding to a frame of the video.
 
 For instance, we can produce a video focusing on the cells in a
 rectangle. First of all, we need to define a focus function for the
 cells in the rectangle (see,
-[`plot_tissue()`](https://caravagnalab.github.io/ProCESS/1.3/reference/plot_tissue.md)).
+[`plot_tissue()`](https://caravagnalab.github.io/ProCESS/1.3/reference/plot_tissue.md)),
+and, then, we changes define the `frame_generator()`.
 
-`# a focus function that highlights the cells in the rectangle`` ``# [250,350]x[300,350]`` ``in_rectangle`` ``<-`` ``function``(``cells``)`` ``{`` `` ``(``cells``$``position_x`` ``>=`` ``250`` ``&`` ``cells``$``position_x`` ``<=`` ``350`` `` ``&`` ``cells``$``position_y`` ``>=`` ``300`` ``&`` ``cells``$``position_y`` ``<=`` ``350``)`` ``}`
-
-Then, we may define the `plot_function`.
-
-`# define a unique color map for all the frames`` ``color_map`` ``<-`` `[`get_species_colors`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_species_colors.md)`(``sim``)`` `` ``# this function will be called to plot each video frames`` ``plot_in_rectangle`` ``<-`` ``function``(``snapshot``)`` ``{`` `` `[`plot_tissue`](https://caravagnalab.github.io/ProCESS/1.3/reference/plot_tissue.md)`(``snapshot``,`` `` color_map ``=`` ``color_map``,`` `` plot_sample_region ``=`` ``FALSE``,`` `` list_all_labels ``=`` ``TRUE``,`` `` focus_function ``=`` ``in_rectangle``)`` ``}`
+`# a focus function that highlights the cells in the rectangle`` ``# [250,350]x[300,350]`` ``in_rectangle`` ``<-`` ``function``(``cells``)`` ``{`` `` ``(``cells``$``position_x`` ``>=`` ``250`` ``&`` ``cells``$``position_x`` ``<=`` ``350`` `` ``&`` ``cells``$``position_y`` ``>=`` ``300`` ``&`` ``cells``$``position_y`` ``<=`` ``350``)`` ``}`` `` ``# define a unique color map for all the frames`` ``color_map`` ``<-`` `[`get_species_colors`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_species_colors.md)`(``sim``)`` `` ``# this function will be called to plot each video frames`` ``plot_in_rectangle`` ``<-`` ``function``(``snapshot``)`` ``{`` `` `[`plot_tissue`](https://caravagnalab.github.io/ProCESS/1.3/reference/plot_tissue.md)`(``snapshot``,`` `` color_map ``=`` ``color_map``,`` `` plot_sample_region ``=`` ``FALSE``,`` `` list_all_labels ``=`` ``TRUE``,`` `` focus_function ``=`` ``in_rectangle``)`` ``}`
 
 The snippet
 
-[`build_snapshot_video`](https://caravagnalab.github.io/ProCESS/1.3/reference/build_snapshot_video.md)`(``sim``, res ``=`` ``300``, width``=``1440``, height``=``1024``,`` `` framerate ``=`` ``20``, plot_function ``=`` ``plot_in_rectangle``)`
+[`build_snapshot_video`](https://caravagnalab.github.io/ProCESS/1.3/reference/build_snapshot_video.md)`(``sim``, res ``=`` ``300``, width``=``1440``, height``=``1024``,`` `` framerate ``=`` ``20``, frame_generator ``=`` ``plot_in_rectangle``)`
 
 produces the following result.
 
-## Parallel frame generation
+## Predefined Frame Generators
+
+`ProCESS` provides some default frame generator using the functions
+\[get_tissue_frame_gen()\], \[get_forest_frame_gen()\], and
+\[get_tissue_forest_frame_gen()\]. They all produces a named list of two
+functions: `frame_generator` and `cleanup_function`. The former is a
+frame generator; the latter a function that removes the temporary files,
+and that must be called after the frame generation process has been
+completed. The function \[get_tissue_frame_gen()\] produces a frame
+generator that represents the tissue configuration of a snapshot in each
+frame. This frame generator is the default one for
+\[build_snapshot_video()\]. The function \[get_forest_frame_gen()\]
+returns a frame generator depicting each snapshot as the sample forest
+at the snapshot time. It requires a temporary file and the cleanup
+function returned by \[get_forest_frame_gen()\] removes it. Finally, the
+function \[get_forest_frame_gen()\] returns a frame generator that
+represents each snapshot in the simulation as both its tissue
+configuration and the sample forest at the snapshot time. This function
+is only available when \[patchwork::patchwork-package\] is installed in
+the system.
+
+## Parallel Frame Generation
 
 When the packages [furrr](https://CRAN.R-project.org/package=furrr) and
 [progressr](https://CRAN.R-project.org/package=progressr) are installed
@@ -162,9 +180,9 @@ uses them to parallelise frame generations. However, ProCESS data
 structures are not serializable in R and cannot be transparently passed
 to the [furrr](https://CRAN.R-project.org/package=furrr) processes.
 Because of that, all ProCESS objects involved in the evaluation of
-`plot_function()`, with the exception of the function parameter, must be
-saved to the disk outside `plot_function()` and, then, reloaded inside
-it. In this way, the objects will be local to each
+`frame_generator()`, with the exception of the function parameter, must
+be saved to the disk outside `frame_generator()` and, then, reloaded
+inside it. In this way, the objects will be local to each
 [furrr](https://CRAN.R-project.org/package=furrr) process.
 
 For instance, if we want to generate a video that focus on the cells
@@ -173,8 +191,8 @@ forest.
 
 `sample_forest``$``save``(``"forest.sff"``)`` ``#> [█---------------------------------------] 0% [00m:00s] Saving forest [████████████████████████████████████████] 100% [00m:00s] Forest saved`
 
-Then, we must define a `plot_function()` that loads its own copy of the
-sample forest and use it.
+Then, we must define a `frame_generator()` that loads its own copy of
+the sample forest and use it.
 
 `# this function will be called to plot each video frames`` ``plot_in_forest`` ``<-`` ``function``(``snapshot``)`` ``{`` `` ``# load the local copy of the forest`` `` ``local_forest`` ``<-`` `[`load_forest`](https://caravagnalab.github.io/ProCESS/1.3/reference/load_forest.md)`(``"forest.sff"``, quiet ``=`` ``TRUE``)`` `` `` ``# define a unique color map for all the frames`` `` ``color_map`` ``<-`` `[`get_species_colors`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_species_colors.md)`(``local_forest``)`` `` `` ``# a focus function that highlights the cells represented by`` `` ``# the sample forest`` `` ``in_sample_forest`` ``<-`` ``function``(``cells``)`` ``{`` `` ``# sample_forest has been defined in four_mutants.md`` `` ``local_forest``$``represents_cell``(``cells``$``cell_id``)`` `` ``}`` `` `` ``# plot the tissue using the shared color map `` `` `[`plot_tissue`](https://caravagnalab.github.io/ProCESS/1.3/reference/plot_tissue.md)`(``snapshot``,`` `` color_map ``=`` ``color_map``,`` `` plot_sample_region ``=`` ``FALSE``,`` `` list_all_labels ``=`` ``TRUE``,`` `` focus_function ``=`` ``in_sample_forest``)`` ``}`
 
@@ -183,11 +201,14 @@ automatically passed to all frame generator processes.
 
 Finally, the function call
 
-[`build_snapshot_video`](https://caravagnalab.github.io/ProCESS/1.3/reference/build_snapshot_video.md)`(``sim``, res ``=`` ``300``, width``=``1440``, height``=``1024``,`` `` framerate ``=`` ``20``, plot_function ``=`` ``plot_in_forest``)`
+[`build_snapshot_video`](https://caravagnalab.github.io/ProCESS/1.3/reference/build_snapshot_video.md)`(``sim``, res ``=`` ``300``, width``=``1440``, height``=``1024``,`` `` framerate ``=`` ``20``, frame_generator ``=`` ``plot_in_forest``,`` `` pauses_on_event ``=`` `[`list`](https://rdrr.io/r/base/list.html)`(``)``)`
 
 produces the following video.
 
 The package [patchwork](https://CRAN.R-project.org/package=patchwork)
 can be used to generate more complex videos.
 
-`# this function will be called to plot each video frames`` ``patchwork_function`` ``<-`` ``function``(``snapshot``)`` ``{`` `` `[`library`](https://rdrr.io/r/base/library.html)`(`[`dplyr`](https://dplyr.tidyverse.org)`)`` `` `` ``# load the local copy of the forest`` `` ``local_forest`` ``<-`` `[`load_forest`](https://caravagnalab.github.io/ProCESS/1.3/reference/load_forest.md)`(``"forest.sff"``, quiet ``=`` ``TRUE``)`` `` `` ``# define a unique color map for all the frames`` `` ``color_map`` ``<-`` `[`get_species_colors`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_species_colors.md)`(``local_forest``)`` `` `` ``# a focus function that highlights the cells represented by`` `` ``# the sample forest`` `` ``in_sample_forest`` ``<-`` ``function``(``cells``)`` ``{`` `` ``# sample_forest has been defined in four_mutants.md`` `` ``local_forest``$``represents_cell``(``cells``$``cell_id``)`` `` ``}`` `` `` ``# plot the tissue using the shared color map `` `` ``tissue_plot`` ``<-`` `[`plot_tissue`](https://caravagnalab.github.io/ProCESS/1.3/reference/plot_tissue.md)`(``snapshot``,`` `` color_map ``=`` ``color_map``,`` `` plot_sample_region ``=`` ``FALSE``,`` `` list_all_labels ``=`` ``TRUE``,`` `` focus_function ``=`` ``in_sample_forest``)`` `` `` ``# get the snapshot simulated time`` `` ``clock`` ``<-`` ``snapshot``$``get_clock``(``)`` `` `` ``# an alpha function that hides all nodes representing cells born after the`` `` ``# snapshot simulated time`` `` ``alpha_funct`` ``<-`` ``function``(``nodes``)`` ``{`` `` ``nodes`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` ``dplyr``::`[`mutate`](https://dplyr.tidyverse.org/reference/mutate.html)`(``alpha ``=`` ``dplyr``::`[`case_when`](https://dplyr.tidyverse.org/reference/case-and-replace-when.html)`(``birth_time`` ``<=`` ``clock`` ``~`` ``1``,`` `` ``TRUE`` ``~`` ``0``)``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` ``dplyr``::`[`pull`](https://dplyr.tidyverse.org/reference/pull.html)`(``alpha``)`` `` ``}`` `` `` ``# generate the forest plot hiding the nodes representing cells that are`` `` ``# not born yet and removing the legends`` `` ``forest_plot`` ``<-`` `[`plot_forest`](https://caravagnalab.github.io/ProCESS/1.3/reference/plot_forest.md)`(``local_forest``, color_map ``=`` ``color_map``,`` `` alpha_function ``=`` ``alpha_funct``)`` ``+`` `` ``ggplot2``::`[`guides`](https://ggplot2.tidyverse.org/reference/guides.html)`(``color ``=`` ``"none"``)`` ``+`` `` ``ggplot2``::`[`guides`](https://ggplot2.tidyverse.org/reference/guides.html)`(``shape ``=`` ``"none"``)`` `` `` ``events`` ``<-`` ``snapshot``$``get_just_occurred_events``(``)`` `` `` ``if`` ``(``"mutant emerged"`` `[`%in%`](https://rdrr.io/r/base/match.html)` `[`names`](https://rdrr.io/r/base/names.html)`(``events``)``)`` ``{`` `` ``emerged_mutant`` ``<-`` ``events``[[``"mutant emerged"``]``]`` `` ``cell`` ``<-`` ``snapshot``$``get_cells``(``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` ``dplyr``::`[`filter`](https://dplyr.tidyverse.org/reference/filter.html)`(``mutant`` ``==`` ``emerged_mutant``)`` `` `` ``mutant_color`` ``<-`` ``color_map``[[``emerged_mutant``]``]`` `` `` `` ``tissue_plot`` ``<-`` ``tissue_plot`` ``+`` `` ``ggrepel``::`[`geom_label_repel`](https://ggrepel.slowkow.com/reference/geom_text_repel.html)`(``data ``=`` ``cell``,`` `` ``ggplot2``::`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``position_x``, y ``=`` ``position_y``,`` `` label ``=`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(``"First cell in \""``,`` `` ``mutant``,``"\""``)``)``,`` `` fill ``=`` ``mutant_color``,`` `` color ``=`` ``"black"``,`` `` box.padding ``=`` ``0.5``, max.overlaps ``=`` ``Inf``)`` ``+`` `` ``ggplot2``::`[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(``data ``=`` ``cell``,`` `` ``ggplot2``::`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``position_x``, y ``=`` ``position_y``)``,`` `` color ``=`` ``mutant_color``)`` `` `` ``forest_plot`` ``<-`` ``forest_plot`` ``+`` `` ``ggraph``::`[`geom_node_label`](https://ggraph.data-imaginist.com/reference/geom_node_text.html)`(`` `` data ``=`` ``function``(``x``)`` `[`subset`](https://rdrr.io/r/base/subset.html)`(``x``, ``name`` ``==`` `[`as.character`](https://rdrr.io/r/base/character.html)`(``cell``$``cell_id``)``)``,`` `` ``ggplot2``::`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``label ``=`` `[`paste0`](https://rdrr.io/r/base/paste.html)`(``"First cell in \""``,``cell``$``mutant``,``"\""``)``)``,`` `` fill ``=`` ``mutant_color``,`` `` segment.color ``=`` ``"black"``,`` `` segment.size ``=`` ``0.5``,`` `` min.segment.length ``=`` ``0``,`` `` ``#point.padding = 0,`` `` repel ``=`` ``TRUE`` `` ``)`` ``+`` `` ``ggplot2``::`[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(`` `` data ``=`` ``function``(``x``)`` `[`subset`](https://rdrr.io/r/base/subset.html)`(``x``, ``name`` ``==`` `[`as.character`](https://rdrr.io/r/base/character.html)`(``cell``$``cell_id``)``)``,`` `` ``ggplot2``::`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``x``, y ``=`` ``y``)``,`` `` color ``=`` ``mutant_color``,`` `` size ``=`` ``0.8`` `` ``)`` `` `` ``}`` ``else`` ``if`` ``(``"sampling"`` `[`%in%`](https://rdrr.io/r/base/match.html)` `[`names`](https://rdrr.io/r/base/names.html)`(``events``)``)`` ``{`` `` ``sample_name`` ``<-`` ``events``[[``"sampling"``]``]`` `` `` ``sample`` ``<-`` ``snapshot``$``get_samples_info``(``)`` `[`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)` `` ``dplyr``::`[`filter`](https://dplyr.tidyverse.org/reference/filter.html)`(``name`` ``==`` ``sample_name``)`` `` `` ``tissue_plot`` ``<-`` ``tissue_plot`` ``+`` `` ``ggplot2``::`[`annotate`](https://ggplot2.tidyverse.org/reference/annotate.html)`(`` `` ``"rect"``,`` `` xmin ``=`` ``sample``$``xmin``, xmax ``=`` ``sample``$``xmax``,`` `` ymin ``=`` ``sample``$``ymin``, ymax ``=`` ``sample``$``ymax``,`` `` fill ``=`` ``NA``,`` `` color ``=`` ``"black"`` `` ``)`` ``+`` `` ``ggplot2``::`[`annotate`](https://ggplot2.tidyverse.org/reference/annotate.html)`(``"text"``, x ``=`` ``(``sample``$``xmin`` ``+`` ``sample``$``xmax``)`` ``/`` ``2``,`` `` y ``=`` ``(``sample``$``ymin`` ``+`` ``sample``$``ymax``)`` ``/`` ``2``,`` `` label ``=`` ``sample_name``, parse ``=`` ``TRUE``)`` `` `` ``forest_plot`` ``<-`` ``forest_plot`` ``+`` `` ``ggplot2``::`[`geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)`(`` `` data ``=`` ``function``(``x``)`` `[`subset`](https://rdrr.io/r/base/subset.html)`(``x``, ``sample`` ``==`` ``sample_name``)``,`` `` ``ggplot2``::`[`aes`](https://ggplot2.tidyverse.org/reference/aes.html)`(``x ``=`` ``x``, y ``=`` ``y``)``,`` `` color ``=`` ``"black"``,`` `` size ``=`` ``0.8`` `` ``)`` `` ``}`` `` `` `` ``# load the patchwork in each frame generator`` `` `[`library`](https://rdrr.io/r/base/library.html)`(`[`patchwork`](https://patchwork.data-imaginist.com)`)`` `` `` `` ``# plot the tissue and the forest plots together`` `` ``(``tissue_plot`` ``|`` ``forest_plot``)`` ``+`` `` `[`plot_layout`](https://patchwork.data-imaginist.com/reference/plot_layout.html)`(``guides ``=`` ``"collect"``)`` ``&`` `` ``ggplot2``::`[`theme`](https://ggplot2.tidyverse.org/reference/theme.html)`(``legend.position ``=`` ``"bottom"``)`` ``}`` `` ``# define the pauses on events`` ``pauses_on_event`` ``<-`` `[`list`](https://rdrr.io/r/base/list.html)`(`` `` ``"mutant emerged"`` ``=`` `[`as.difftime`](https://rdrr.io/r/base/difftime.html)`(``3``, units``=``"secs"``)``,`` `` ``"sampling"`` ``=`` `[`as.difftime`](https://rdrr.io/r/base/difftime.html)`(``2``, units``=``"secs"``)`` ``)`` `` `[`build_snapshot_video`](https://caravagnalab.github.io/ProCESS/1.3/reference/build_snapshot_video.md)`(``sim``, width ``=`` ``1820``, height ``=`` ``1024``, framerate ``=`` ``20``,`` `` res ``=`` ``300``, pauses_on_event ``=`` ``pauses_on_event``,`` `` plot_function ``=`` ``patchwork_function``)`
+The `frame_generator` built by \[get_tissue_forest_frame_gen()\]
+exploits this package.
+
+`fg`` ``<-`` `[`get_tissue_forest_frame_gen`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_tissue_forest_frame_gen.md)`(``sim``)`` `` `[`build_snapshot_video`](https://caravagnalab.github.io/ProCESS/1.3/reference/build_snapshot_video.md)`(``sim``, width ``=`` ``1820``, height ``=`` ``1024``, framerate ``=`` ``20``,`` `` res ``=`` ``300``, frame_generator ``=`` ``fg``$``frame_generator``)`` `` ``fg``$``cleanup_function``(``)`

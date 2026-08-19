@@ -57,11 +57,11 @@ sim$place_cell("A", 500, 500)
 # run the simulation up to the first cell in B
 sim$run_up_to_size("B", 1)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot      
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    
 
 
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260814-004521 ─────── ▣  [1000x1000]  ⏱ 50 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260819-135126 ───────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 50 ──
 #> 
 #> ── Species: 2, without epigenetics 
 #>    

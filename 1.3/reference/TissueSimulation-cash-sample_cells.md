@@ -50,7 +50,9 @@ sim$place_cell("A", 500, 500)
 # simulate the tissue until "A" consists of 50000 cells
 sim$run_up_to_size("A", 50000)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot      
+ [███████████████████████████████████████-] 97% [00m:00s] Cells: 48695                                                                        
+
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    
 
 
 # randomly sample 50 tumour cells from the tissue

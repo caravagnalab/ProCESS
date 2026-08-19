@@ -89,12 +89,12 @@ sim <- TissueSimulation(save_directory = TRUE)
 
 # the name of the simulation is `ProCESS_<YY><MM><DD>_<HH><MM><SS>`
 sim$get_name()
-#> [1] "ProCESS_20260814-004541"
+#> [1] "ProCESS_20260819-135146"
 
 # the simulation dump have been saved in a directory named
 # after the simulation name
 list.files(pattern = "^ProCESS_")
-#> [1] "ProCESS_20260814-004541"
+#> [1] "ProCESS_20260819-135146"
 
 # let us remove the object and manually delete the simulation
 # directory
@@ -125,7 +125,7 @@ df_rates
 
 sim <- TissueSimulation(rates = df_rates)
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260814-004541 ──────── ▣  [1000x1000]  ⏱ 0 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260819-135146 ────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
 #> 
 #> ── Species: 2, without epigenetics 
 #>    
@@ -162,7 +162,7 @@ df_rates
 
 sim <- TissueSimulation(rates = df_rates)
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260814-004542 ──────── ▣  [1000x1000]  ⏱ 0 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260819-135147 ────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
 #> 
 #> ── Species: 6, with epigenetics 
 #>    

@@ -54,9 +54,9 @@ m_engine$add_mutant("A", list("E1" = c(SNV = 1e-9, indel = 1e-10),
                               "E2" = c(SNV = 3e-8, CNA = 1e-11)),
                     drivers = d_mutations)
 #> 
- [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs    
+ [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs                                                                  
 
- [████████████████████████████████████████] 100% [00m:00s] "A"'s SIDs validated 
+ [████████████████████████████████████████] 100% [00m:00s] "A"'s SIDs validated                                                               
 
 
 m_engine

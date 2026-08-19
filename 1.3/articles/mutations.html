@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -135,19 +135,13 @@ containing them can be obtained by invoking the function
 <span><span class="co">#&gt; Downloading driver mutation file...</span></span>
 <span><span class="co">#&gt; Driver mutation file downloaded</span></span>
 <span><span class="co">#&gt; Decompressing driver mutation file...done</span></span>
-<span><span class="co">#&gt; Downloading passenger CNAs file...</span></span>
-<span><span class="co">#&gt; Passenger CNAs file downloaded</span></span>
-<span><span class="co">#&gt; Decompressing passenger CNAs file...done</span></span>
 <span><span class="co">#&gt; Downloading germline...</span></span>
 <span><span class="co">#&gt; Germline downloaded</span></span>
 <span><span class="co">#&gt; Decompressing mutations...</span></span>
 <span><span class="co">#&gt; done</span></span>
-<span><span class="co">#&gt; Building context index...</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Processing chr. 22 [█████████████████-----------------------] 40% [00m:00s] Processing chr. 22 [█████████████████████████████████-------] 81% [00m:02s] Processing chr. 22 [████████████████████████████████████████] 100% [00m:02s] Context index built</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Saving context index [█---------------------------------------] 0% [00m:00s] Saving context index [████████████████████████████████████████] 100% [00m:00s] Context index saved</span></span>
-<span><span class="co">#&gt; done</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading RS index [█---------------------------------------] 1% [00m:12s] Loading RS index [███████████-----------------------------] 27% [00m:13s] Loading RS index [███████████████████████-----------------] 56% [00m:14s] Loading RS index [█████████████████████████████████-------] 81% [00m:15s] Loading RS index [████████████████████████████████████████] 100% [00m:16s] RS index loaded</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading germline [█---------------------------------------] 1% [00m:08s] Loading germline [████████████████████████████████████████] 100% [00m:09s] Germline loaded</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading context index [█---------------------------------------] 1% [00m:01s] Loading context index [████████████████████████████████████████] 100% [00m:01s] Context index loaded</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading RS index [█---------------------------------------] 1% [00m:13s] Loading RS index [████████████----------------------------] 28% [00m:14s] Loading RS index [███████████████████████-----------------] 57% [00m:15s] Loading RS index [██████████████████████████████████------] 83% [00m:16s] Loading RS index [████████████████████████████████████████] 100% [00m:17s] RS index loaded</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading germline [█---------------------------------------] 1% [00m:02s] Loading germline [████████████████████████████████████████] 100% [00m:02s] Germline loaded</span></span>
 <span></span>
 <span><span class="va">m_engine</span></span>
 <span><span class="co">#&gt; MutationEngine</span></span>
@@ -182,7 +176,7 @@ sub-tasks that have not been already fulfilled.</p>
 <code class="sourceCode R"><span><span class="co"># building a mutation engine by using the "demo" set-up configuration</span></span>
 <span><span class="va">m_engine</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MutationEngine.html">MutationEngine</a></span><span class="op">(</span>setup_code <span class="op">=</span> <span class="st">"demo"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading context index [████████████████████████████████████████] 100% [00m:00s] Context index loaded</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading RS index [██████████████--------------------------] 33% [00m:01s] Loading RS index [██████████████████████████--------------] 64% [00m:02s] Loading RS index [███████████████████████████████████████-] 95% [00m:03s] Loading RS index [████████████████████████████████████████] 100% [00m:03s] RS index loaded</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading RS index [█████████████---------------------------] 31% [00m:01s] Loading RS index [█████████████████████████---------------] 62% [00m:02s] Loading RS index [█████████████████████████████████████---] 91% [00m:03s] Loading RS index [████████████████████████████████████████] 100% [00m:03s] RS index loaded</span></span>
 <span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Loading germline [████████████████████████████████████████] 100% [00m:00s] Germline loaded</span></span></code></pre></div>
 <div class="section level4">
 <h4 id="mutant-genetic-characterization">Mutant Genetic Characterization<a class="anchor" aria-label="anchor" href="#mutant-genetic-characterization"></a>
@@ -233,7 +227,7 @@ declared as it follows.</p>
 <span>                                   <span class="fu"><a href="../reference/CNA.html">CNA</a></span><span class="op">(</span><span class="st">"D"</span>, <span class="st">"22"</span>, <span class="fl">5010000</span>, <span class="fl">200000</span>,</span>
 <span>                                       allele <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
 <span>                                   <span class="va">WGD</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs [████████████████████████████████████████] 100% [00m:00s] "A"'s SIDs validated</span></span>
+<span><span class="co">#&gt;  [█---------------------------------------] 0% [00m:00s] Retrieving "A" SIDs [█████████████████████-------------------] 50% [00m:03s] Retrieving "A" SIDs [████████████████████████████████████████] 100% [00m:03s] "A"'s SIDs validated</span></span>
 <span></span>
 <span><span class="va">m_engine</span></span>
 <span><span class="co">#&gt; MutationEngine</span></span>

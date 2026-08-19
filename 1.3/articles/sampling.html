@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ProCESS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -125,7 +125,7 @@ multiple time-points.</p></li>
 <span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">place_cell</span><span class="op">(</span><span class="st">"A"</span>, <span class="fl">500</span>, <span class="fl">500</span><span class="op">)</span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"A"</span>, <span class="fl">60000</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [█████████████████-----------------------] 40% [00m:00s] Cells: 24300 [█████████████████████████████████-------] 80% [00m:00s] Cells: 48504 [████████████████████████████████████████] 100% [00m:01s] Saving snapshot</span></span></code></pre></div>
+<span><span class="co">#&gt;  [█████████████████████████---------------] 62% [00m:00s] Cells: 37335 [███████████████████████████████████████-] 97% [00m:00s] Cells: 58658 [████████████████████████████████████████] 100% [00m:01s] Saving snapshot</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">current</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_tissue.html">plot_tissue</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span>
 <span><span class="va">current</span></span></code></pre></div>
@@ -289,7 +289,7 @@ as the sampling times and the MRCAs of each sample in the forest.</p>
 <span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">place_cell</span><span class="op">(</span><span class="st">"A"</span>, <span class="fl">500</span>, <span class="fl">500</span><span class="op">)</span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"A"</span>, <span class="fl">60000</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [████████████████------------------------] 38% [00m:00s] Cells: 23232 [███████████████████████████-------------] 67% [00m:00s] Cells: 40362 [████████████████████████████████████----] 89% [00m:01s] Cells: 53408 [████████████████████████████████████████] 100% [00m:02s] Saving snapshot</span></span></code></pre></div>
+<span><span class="co">#&gt;  [████████████████████████----------------] 58% [00m:00s] Cells: 35389 [██████████████████████████████████████--] 93% [00m:00s] Cells: 56147 [████████████████████████████████████████] 100% [00m:01s] Saving snapshot</span></span></code></pre></div>
 <p>We include a new mutant and let it grow. This new mutant has much
 higher growth rates than its ancestor.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
@@ -403,7 +403,7 @@ However, user can create as many epigenetic states as they need.</p>
 <span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">place_cell</span><span class="op">(</span><span class="st">"A[E1]"</span>, <span class="fl">500</span>, <span class="fl">500</span><span class="op">)</span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"A[E1]"</span>, <span class="fl">1000</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [█████████████████████████████████-------] 82% [00m:00s] Cells: 26226 [████████████████████████████████████████] 100% [00m:00s] Saving snapshot</span></span>
+<span><span class="co">#&gt;  [███████████████████████████████████-----] 87% [00m:00s] Cells: 28752 [████████████████████████████████████████] 100% [00m:00s] Saving snapshot</span></span>
 <span><span class="fu"><a href="../reference/plot_tissue.html">plot_tissue</a></span><span class="op">(</span><span class="va">sim</span>, num_of_bins <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></code></pre></div>
 <p><img src="sampling_files/figure-html/unnamed-chunk-24-1.png" class="r-plt" alt="A tumour having one mutants and two species with different rates." width="700"></p>
 <p>We sample before introducing a new mutant.</p>
@@ -438,7 +438,7 @@ However, user can create as many epigenetic states as they need.</p>
 <span></span>
 <span><span class="co"># let it grow more</span></span>
 <span><span class="va">sim</span><span class="op">$</span><span class="fu">run_up_to_size</span><span class="op">(</span><span class="st">"B[E1]"</span>, <span class="fl">7000</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [██████----------------------------------] 14% [00m:00s] Cells: 55668 [███████████████████---------------------] 47% [00m:00s] Cells: 70700 [█████████████████████████████████-------] 81% [00m:01s] Cells: 83682 [████████████████████████████████████████] 100% [00m:02s] Saving snapshot</span></span>
+<span><span class="co">#&gt;  [███████---------------------------------] 15% [00m:00s] Cells: 56208 [████████████████████--------------------] 49% [00m:00s] Cells: 71619 [█████████████████████████████████-------] 80% [00m:01s] Cells: 83269 [████████████████████████████████████████] 100% [00m:02s] Saving snapshot</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plot_tissue.html">plot_tissue</a></span><span class="op">(</span><span class="va">sim</span>, num_of_bins <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></code></pre></div>
 <p><img src="sampling_files/figure-html/unnamed-chunk-27-1.png" class="r-plt" alt="A new mutant with epigenetic state arose." width="288"></p>

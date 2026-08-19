@@ -131,8 +131,6 @@ Tissue simulation classes and methods
   : Annotate a plot of cell divisions
 - [`bbox_sampler()`](https://caravagnalab.github.io/ProCESS/1.3/reference/bbox_sampler.md)
   : Bounding box sampler
-- [`build_snapshot_video()`](https://caravagnalab.github.io/ProCESS/1.3/reference/build_snapshot_video.md)
-  : Building a video of the snapshots
 - [`get_species_colors()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_species_colors.md)
   : Get species color maps
 - [`get_node_tour()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_node_tour.md)
@@ -545,6 +543,20 @@ Methods providing data structure examples
   : Get the available data structure examples
 - [`example()`](https://caravagnalab.github.io/ProCESS/1.3/reference/example.md)
   : Get examples
+
+## Video
+
+Producing videos of tissue evolutions
+
+- [`build_snapshot_video()`](https://caravagnalab.github.io/ProCESS/1.3/reference/build_snapshot_video.md)
+  : Building a video of the snapshots
+- [`get_forest_frame_gen()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_forest_frame_gen.md)
+  : Building a frame generator representing sample forest
+- [`get_tissue_forest_frame_gen()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_tissue_forest_frame_gen.md)
+  : Building a frame generator representing both tissue and sample
+  forest
+- [`get_tissue_frame_gen()`](https://caravagnalab.github.io/ProCESS/1.3/reference/get_tissue_frame_gen.md)
+  : Building a frame generator representing the tissue configuration
 
 # Articles
 

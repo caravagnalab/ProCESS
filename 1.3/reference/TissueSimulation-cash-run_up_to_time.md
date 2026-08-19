@@ -37,5 +37,5 @@ sim$place_cell("A", 500, 500)
 # simulate the tissue up to simulate timed 40
 sim$run_up_to_time(40)
 #> 
- [████████████████████████████████████████] 100% [00m:00s] Saving snapshot      
+ [████████████████████████████████████████] 100% [00m:00s] Saving snapshot                                                                    
 ```

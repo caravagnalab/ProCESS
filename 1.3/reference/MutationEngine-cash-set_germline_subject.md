@@ -33,7 +33,7 @@ m_engine <- MutationEngine(setup_code = "demo", quiet = TRUE)
 # set the active germline subject data frame
 m_engine$set_germline_subject("NA18941")
 #> 
- [█---------------------------------------] 0% [00m:00s] Loading germline       
+ [█---------------------------------------] 0% [00m:00s] Loading germline                                                                     
 
- [████████████████████████████████████████] 100% [00m:00s] Germline loaded      
+ [████████████████████████████████████████] 100% [00m:00s] Germline loaded                                                                    
 ```
