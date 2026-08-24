@@ -160,16 +160,17 @@ get_event_pauses <- function(simulation, pauses_on_event, framerate) {
 #' Building a frame generator representing sample forest
 #'
 #' This function builds a frame generator for [build_snapshot_video()] to
-#' represent each snapshot of `simulation` as the sample forest at the
-#' snapshot time.
+#' represent each snapshot of `simulation` as the portion of the sample
+#' forest whose nodes represent cells already born at the snapshot time.
 #' @param simulation The tissue simulation for which the frame generator
 #'   is built.
 #' @return A named list of two functions: `frame_generator` and
 #'   `cleanup_function`. The function `frame_generator` is a frame generator
 #'   for [build_snapshot_video()] that represents each snapshot of `simulation`
-#'   as the sample forest at the snapshot time. The function `cleanup_function`
-#'   will cleanup the temporary files required to execute `frame_generator`
-#'   and must be called after the frame generation has been completed.
+#'   as the portion of the sample forest whose nodes represent cells already
+#'   born at the snapshot time. The function `cleanup_function` will cleanup
+#'   the temporary files required to execute `frame_generator` and must be
+#'   called after the frame generation has been completed.
 #' @seealso [build_snapshot_video()], [get_tissue_forest_frame_gen()],
 #'   [get_tissue_frame_gen()]
 #' @export
@@ -288,7 +289,7 @@ get_forest_frame_gen <- function(simulation) {
 #' @return A named list of two functions: `frame_generator` and
 #'   `cleanup_function`. The function `frame_generator` is a frame generator
 #'   for [build_snapshot_video()] that represents each snapshot of `simulation`
-#'   as both its tissue configuration. The function `cleanup_function` will
+#'   as its tissue configuration. The function `cleanup_function` will
 #'   cleanup the temporary files required to execute `frame_generator` and
 #'   must be called after the frame generation has been completed.
 #' @seealso [build_snapshot_video()], [get_tissue_forest_frame_gen()],
@@ -362,17 +363,19 @@ get_tissue_frame_gen <- function(simulation) {
 #'
 #' This function builds a frame generator for [build_snapshot_video()] to
 #' represent each snapshot of `simulation` as both its tissue configuration
-#' and the sample forest at the snapshot time. This function requires the
-#' package [patchwork::patchwork-package].
+#' and the portion of the sample forest whose nodes represent cells already
+#' born at the snapshot time. This function requires the package
+#' [patchwork::patchwork-package].
 #' @param simulation The tissue simulation for which the frame generator
 #'   is built.
 #' @return A named list of two functions: `frame_generator` and
 #'   `cleanup_function`. The function `frame_generator` is a frame generator
 #'   for [build_snapshot_video()] that represents each snapshot of `simulation`
-#'   as both its tissue configuration and the sample forest at the snapshot
-#'   time. The function `cleanup_function` will cleanup the temporary files
-#'   required to execute `frame_generator` and must be called after the frame
-#'   generation has been completed.
+#'   as both its tissue configuration and as the portion of the sample forest
+#'   whose nodes represent cells already born at the snapshot time. The
+#'   function `cleanup_function` will cleanup the temporary files required to
+#'   execute `frame_generator` and must be called after the frame generation
+#'   has been completed.
 #' @seealso [build_snapshot_video()], [get_forest_frame_gen()],
 #'   [get_tissue_frame_gen()]
 #' @export
