@@ -427,18 +427,30 @@ htmltools::tags$video(
 ## Predefined Frame Generators
 
 `ProCESS` provides some default frame generator using the functions
-[get_tissue_frame_gen()], [get_forest_frame_gen()], and
-[get_tissue_forest_frame_gen()]. They all produces a named list of two
-functions: `frame_generator` and `cleanup_function`. The former is a frame
+<code>[get_tissue_frame_gen()](../reference/get_tissue_frame_gen.md)</code>,
+<code>[get_forest_frame_gen()](../reference/get_forest_frame_gen.md)</code>,
+and
+<code>[get_tissue_forest_frame_gen()](../reference/get_tissue_forest_frame_gen.md)</code>,
+They all produces a named list of two
+functions: `frame_generator()` and `cleanup_function()`. The former is a frame
 generator; the latter a function that removes the temporary files, and that
 must be called after the frame generation process has been completed.
-The function [get_tissue_frame_gen()] produces a frame generator that 
+The function
+<code>[get_tissue_frame_gen()](../reference/get_tissue_frame_gen.md)</code>
+produces a frame generator that 
 represents the tissue configuration of a snapshot in each frame. This frame
-generator is the default one for [build_snapshot_video()].
-The function [get_forest_frame_gen()] returns a frame generator depicting each
+generator is the default one for
+<code>[build_snapshot_video()](../reference/build_snapshot_video.md)</code>.
+The function 
+<code>[get_forest_frame_gen()](../reference/get_forest_frame_gen.md)</code>
+returns a frame generator depicting each
 snapshot as the sample forest at the snapshot time. It requires a temporary
-file and the cleanup function returned by [get_forest_frame_gen()] removes it.
-Finally, the function [get_forest_frame_gen()] returns a frame generator that
+file and the cleanup function returned by
+<code>[get_forest_frame_gen()](../reference/get_forest_frame_gen.md)</code>
+removes it.
+Finally, the function
+<code>[get_tissue_forest_frame_gen()](../reference/get_tissue_forest_frame_gen.md)</code>
+returns a frame generator that
 represents each snapshot in the simulation as both its tissue configuration
 and the sample forest at the snapshot time. This function is only available
 when [patchwork::patchwork-package] is installed in the system.
@@ -529,8 +541,9 @@ htmltools::tags$video(
 The package [patchwork](https://CRAN.R-project.org/package=patchwork) can be
 used to generate more complex videos.
 
-The `frame_generator` built by [get_tissue_forest_frame_gen()] exploits this
-package.
+The function `frame_generator()` built by
+<code>[get_tissue_forest_frame_gen()](../reference/get_tissue_forest_frame_gen.md)</code>
+uses this package.
 
 
 ```{R, eval = FALSE}
