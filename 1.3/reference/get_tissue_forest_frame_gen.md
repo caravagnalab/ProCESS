@@ -3,8 +3,9 @@
 This function builds a frame generator for
 [`build_snapshot_video()`](https://caravagnalab.github.io/ProCESS/1.3/reference/build_snapshot_video.md)
 to represent each snapshot of `simulation` as both its tissue
-configuration and the sample forest at the snapshot time. This function
-requires the package
+configuration and the portion of the sample forest whose nodes represent
+cells already born at the snapshot time. This function requires the
+package
 [patchwork::patchwork-package](https://patchwork.data-imaginist.com/reference/patchwork-package.html).
 
 ## Usage
@@ -25,7 +26,8 @@ A named list of two functions: `frame_generator` and `cleanup_function`.
 The function `frame_generator` is a frame generator for
 [`build_snapshot_video()`](https://caravagnalab.github.io/ProCESS/1.3/reference/build_snapshot_video.md)
 that represents each snapshot of `simulation` as both its tissue
-configuration and the sample forest at the snapshot time. The function
+configuration and as the portion of the sample forest whose nodes
+represent cells already born at the snapshot time. The function
 `cleanup_function` will cleanup the temporary files required to execute
 `frame_generator` and must be called after the frame generation has been
 completed.

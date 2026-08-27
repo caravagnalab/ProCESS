@@ -21,7 +21,7 @@ get_tissue_frame_gen(simulation)
 A named list of two functions: `frame_generator` and `cleanup_function`.
 The function `frame_generator` is a frame generator for
 [`build_snapshot_video()`](https://caravagnalab.github.io/ProCESS/1.3/reference/build_snapshot_video.md)
-that represents each snapshot of `simulation` as both its tissue
+that represents each snapshot of `simulation` as its tissue
 configuration. The function `cleanup_function` will cleanup the
 temporary files required to execute `frame_generator` and must be called
 after the frame generation has been completed.

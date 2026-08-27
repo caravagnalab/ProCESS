@@ -2,8 +2,8 @@
 
 This function builds a frame generator for
 [`build_snapshot_video()`](https://caravagnalab.github.io/ProCESS/1.3/reference/build_snapshot_video.md)
-to represent each snapshot of `simulation` as the sample forest at the
-snapshot time.
+to represent each snapshot of `simulation` as the portion of the sample
+forest whose nodes represent cells already born at the snapshot time.
 
 ## Usage
 
@@ -22,10 +22,11 @@ get_forest_frame_gen(simulation)
 A named list of two functions: `frame_generator` and `cleanup_function`.
 The function `frame_generator` is a frame generator for
 [`build_snapshot_video()`](https://caravagnalab.github.io/ProCESS/1.3/reference/build_snapshot_video.md)
-that represents each snapshot of `simulation` as the sample forest at
-the snapshot time. The function `cleanup_function` will cleanup the
-temporary files required to execute `frame_generator` and must be called
-after the frame generation has been completed.
+that represents each snapshot of `simulation` as the portion of the
+sample forest whose nodes represent cells already born at the snapshot
+time. The function `cleanup_function` will cleanup the temporary files
+required to execute `frame_generator` and must be called after the frame
+generation has been completed.
 
 ## See also
 

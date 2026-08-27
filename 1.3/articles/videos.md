@@ -43,6 +43,9 @@ The snippet
 
 produces the following video.
 
+    #> Warning in serializedSize(x): 'package:ProCESS' may not be available when
+    #> loading
+
 ## Producing more frames
 
 Whenever the snapshots collected by default are not enough to completely
@@ -88,6 +91,9 @@ At the end of the evolution, by calling
 
 we produce the following video.
 
+    #> Warning in serializedSize(x): 'package:ProCESS' may not be available when
+    #> loading
+
 ## Customizing Pauses
 
 Users can specify pauses on events declaring the length of the pause on
@@ -112,6 +118,9 @@ build_snapshot_video(sim, res = 300, width=1440, height=1024, framerate = 20
                      pauses_on_event = pauses_on_event)
 ```
 
+    #> Warning in serializedSize(x): 'package:ProCESS' may not be available when
+    #> loading
+
 Pauses can also applied to specific frames.
 
 ``` r
@@ -126,6 +135,9 @@ pauses_on_frame <- list(
 build_snapshot_video(sim, res = 300, width=1440, height=1024, framerate = 20
                      pauses_on_frame = pauses_on_frame)
 ```
+
+    #> Warning in serializedSize(x): 'package:ProCESS' may not be available when
+    #> loading
 
 ## Customizing Frames
 

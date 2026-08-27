@@ -37,7 +37,7 @@ sim <- TissueSimulation()
 
 # see the simulation setup
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260819-135036 ────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260826-222657 ────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
 #> 
 #> ✖ The simulation has no samples yet!
 
@@ -46,7 +46,7 @@ sim$add_mutant(name = "A")
 
 # see the simulation setup
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260819-135036 ────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260826-222657 ────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
 #> 
 #> ── Species: 1, without epigenetics 
 #>    
@@ -65,7 +65,7 @@ sim$add_mutant(name = "B", rate_list = c(duplication = 0.3, death = 0.1))
 
 # see the simulation setup
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260819-135036 ────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260826-222657 ────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
 #> 
 #> ── Species: 2, without epigenetics 
 #>    
@@ -91,7 +91,7 @@ sim$add_mutant("C", list(duplication = 0.3, death = 0.1,
 
 # see the simulation setup
 sim
-#> ──  ProCESS   D   S   M  ProCESS_20260819-135036 ────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
+#> ──  ProCESS   D   S   M  ProCESS_20260826-222657 ────────────────────────────────────────────────────────────────────── ▣  [1000x1000]  ⏱ 0 ──
 #> 
 #> ── Species: 9, with epigenetics 
 #>    
