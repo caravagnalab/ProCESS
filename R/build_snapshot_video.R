@@ -246,12 +246,10 @@ get_forest_frame_gen <- function(simulation) {
     } else if ("sampling" %in% names(events)) {
       sample_name <- events[["sampling"]]
 
-      sample <- snapshot$get_samples_info() %>%
-        dplyr::filter(name == sample_name)
-
-      youngest_cell <- forest_plot$data %>%
+      centroids <- forest_plot$data %>%
         dplyr::filter(sample == sample_name) %>%
-        dplyr::filter(y == max(y))
+        dplyr::group_by(sample) %>%
+        dplyr::summarise(x = mean(x), y = mean(y))
 
       forest_plot <- forest_plot +
         ggplot2::geom_point(
@@ -261,13 +259,14 @@ get_forest_frame_gen <- function(simulation) {
           size = 0.8
         ) +
         ggraph::geom_node_label(
-          data = function(x) subset(x, name == youngest_cell$name),
+          data = centroids,
           ggplot2::aes(label = paste0("Sample \"", sample_name, "\"")),
           fill = "white",
           color = "black",
           segment.color = "black",
-          segment.size = 0.5,
+          segment.size = 0,
           min.segment.length = 0,
+          box.padding = grid::unit(0.8, "lines"),
           repel = TRUE
         )
     }
@@ -406,9 +405,6 @@ get_tissue_forest_frame_gen <- function(simulation) {
     # load the local copy of the forest
     local_forest <- load_forest(forest_tmp_file, quiet = TRUE)
 
-    # define a unique color map for all the frames
-    color_map <- get_species_colors(local_forest)
-
     # a focus function that highlights the cells represented by
     # the sample forest
     in_sample_forest <- function(cells) {
@@ -416,12 +412,36 @@ get_tissue_forest_frame_gen <- function(simulation) {
       local_forest$represents_cell(cells$cell_id)
     }
 
+    # build a color map for in and off forest cells
+    color_map <- get_species_colors(local_forest)
+
+    get_tissue_color_map <- function(color_map) {
+      grey_colors <- colorspace::desaturate(color_map, amount = 0.7)
+
+      names(color_map) <- paste(names(color_map), "- In-forest")
+      names(grey_colors) <- paste(names(grey_colors), "- Off-forest")
+
+      append(color_map, grey_colors)
+    }
+
+    tissue_color_map <- get_tissue_color_map(color_map)
+
+    label_function <- function(cells) {
+      cells %>%
+        dplyr::mutate(label = ifelse(local_forest$represents_cell(cell_id),
+                                     paste(mutant, "- In-forest"),
+                                     paste(mutant, "- Off-forest"))) %>%
+        dplyr::pull(label)
+    }
+
     # plot the tissue using the shared color map
     tissue_plot <- plot_tissue(snapshot,
-                               color_map = color_map,
+                               color_map = tissue_color_map,
                                plot_sample_region = FALSE,
                                list_all_labels = TRUE,
-                               focus_function = in_sample_forest)
+                               label_function = label_function) +
+      ggplot2::theme(legend.position = "bottom") +
+      ggplot2::guides(fill = ggplot2::guide_legend(nrow = 2, byrow = TRUE))
 
     # get the snapshot simulated time
     clock <- snapshot$get_clock()
@@ -499,9 +519,10 @@ get_tissue_forest_frame_gen <- function(simulation) {
                           y = (sample$ymin + sample$ymax) / 2,
                           label = sample_name, parse = TRUE)
 
-      youngest_cell <- forest_plot$data %>%
+      centroids <- forest_plot$data %>%
         dplyr::filter(sample == sample_name) %>%
-        dplyr::filter(y == max(y))
+        dplyr::group_by(sample) %>%
+        dplyr::summarise(x = mean(x), y = mean(y))
 
       forest_plot <- forest_plot +
         ggplot2::geom_point(
@@ -511,13 +532,14 @@ get_tissue_forest_frame_gen <- function(simulation) {
           size = 0.8
         ) +
         ggraph::geom_node_label(
-          data = function(x) subset(x, name == youngest_cell$name),
+          data = centroids,
           ggplot2::aes(label = paste0("Sample \"", sample_name, "\"")),
           fill = "white",
           color = "black",
           segment.color = "black",
-          segment.size = 0.5,
+          segment.size = 0,
           min.segment.length = 0,
+          box.padding = grid::unit(0.8, "lines"),
           repel = TRUE
         )
     }
