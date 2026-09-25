@@ -51,7 +51,7 @@ SEXP ForestCore::load_forest(const std::string &filename, const bool quiet)
 }
 
 inline std::string find_code(const CLONES::Mutations::MutationSpec<CLONES::Mutations::SID> &sid,
-                             const std::map<CLONES::Mutations::SID, std::string> &driver_codes)
+                             const CLONES::map<CLONES::Mutations::SID, std::string> &driver_codes)
 {
     const auto found = driver_codes.find(static_cast<CLONES::Mutations::SID>(sid));
     if (found == driver_codes.end()) {
@@ -74,7 +74,7 @@ bool select_column(Rcpp::CharacterVector& column, Rcpp::DataFrame &df, const cha
 
 inline void fill_SID_row(Rcpp::DataFrame& df,
                          const CLONES::Mutations::MutationSpec<CLONES::Mutations::SID> &sid,
-                         const std::map<CLONES::Mutations::SID, std::string> &driver_codes,
+                         const CLONES::map<CLONES::Mutations::SID, std::string> &driver_codes,
                          const size_t &i)
 {
     using namespace Rcpp;
@@ -196,7 +196,7 @@ inline void fill_WGD_row(Rcpp::DataFrame &df, const std::string& mutant_name, co
 
 void ForestCore::fill_mutation_list(Rcpp::DataFrame &df, const CLONES::Mutations::MutationList& mutations,
                                     const std::string& mutant_name,
-                                    const std::map<CLONES::Mutations::SID, std::string>& driver_codes,
+                                    const CLONES::map<CLONES::Mutations::SID, std::string>& driver_codes,
                                     size_t &i, size_t &mut_i)
 {
     using namespace Rcpp;

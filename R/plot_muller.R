@@ -79,6 +79,12 @@ plot_muller <- function(simulation, color_map = NULL) {
     dplyr::rename(Generation = .data$time, Population = .data$count) %>%
     dplyr::select(.data$Generation, .data$Identity, .data$Population)
 
+  for (species in unique(df_populations$Identity)) {
+    df_populations <- df_populations %>% dplyr::add_row(Generation = 0,
+                                                        Identity = species,
+                                                        Population = 0)
+  }
+
   df_populations$Identity <- factor(df_populations$Identity,
                                     levels = unique(names(color_map)))
 
@@ -117,7 +123,9 @@ plot_muller <- function(simulation, color_map = NULL) {
     muller_df <- ggmuller::get_Muller_df(df_edges, t_wt_dynamics)
 
     plot <- ggmuller::Muller_pop_plot(muller_df, add_legend = TRUE,
-                                      palette = color_map) +
+                                      palette = color_map,
+                                      xlab = "Time",
+                                      ylab = "Total Count") +
       my_theme() +
       ggplot2::guides(fill = ggplot2::guide_legend("Species"))
   })

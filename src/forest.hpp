@@ -145,7 +145,7 @@ class ForestCore
 public:
     inline static void fill_mutation_list(Rcpp::DataFrame &df, const CLONES::Mutations::MutationList& mutations,
                                           const std::string& mutant_name,
-                                          const std::map<CLONES::Mutations::SID, std::string>& driver_codes)
+                                          const CLONES::map<CLONES::Mutations::SID, std::string>& driver_codes)
     {
         size_t i{0};
 
@@ -154,7 +154,7 @@ public:
 
     inline static void fill_mutation_list(Rcpp::DataFrame &df, const CLONES::Mutations::MutationList& mutations,
                                           const std::string& mutant_name,
-                                          const std::map<CLONES::Mutations::SID, std::string>& driver_codes,
+                                          const CLONES::map<CLONES::Mutations::SID, std::string>& driver_codes,
                                           size_t &i)
     {
         size_t mut_i{1};
@@ -164,7 +164,7 @@ public:
 
     static void fill_mutation_list(Rcpp::DataFrame &df, const CLONES::Mutations::MutationList& mutations,
                                    const std::string& mutant_name,
-                                   const std::map<CLONES::Mutations::SID, std::string>& driver_codes,
+                                   const CLONES::map<CLONES::Mutations::SID, std::string>& driver_codes,
                                    size_t &i, size_t &mut_i);
 
     template<typename FOREST>

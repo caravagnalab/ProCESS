@@ -71,9 +71,9 @@ class TissueSimulation
 
     inline static std::map<std::string, CLONES::Mutants::CellEventType> cell_event_names_inv{};
 
-    using DestRateUpdateMap = std::map<CLONES::Mutants::SpeciesId, double>;
+    using DestRateUpdateMap = CLONES::map<CLONES::Mutants::SpeciesId, double>;
     using EventRateUpdateMap = std::map<std::string, DestRateUpdateMap>;
-    using SpeciesRateUpdateMap = std::map<CLONES::Mutants::SpeciesId, EventRateUpdateMap>;
+    using SpeciesRateUpdateMap = CLONES::map<CLONES::Mutants::SpeciesId, EventRateUpdateMap>;
     using RateUpdateHistory = std::map<CLONES::Time, SpeciesRateUpdateMap>;
 
     RateUpdateHistory rate_update_history;

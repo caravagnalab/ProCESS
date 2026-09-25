@@ -184,10 +184,10 @@ inline std::filesystem::path get_context_index_path(const GenomicDataStorage &st
            std::string("context_index_" + std::to_string(context_sampling) + ".cif");
 }
 
-std::set<CLONES::Mutations::GenomicRegion>
+CLONES::set<CLONES::Mutations::GenomicRegion>
 get_region_to_avoid(const GenomicDataStorage &storage)
 {
-    std::set<CLONES::Mutations::GenomicRegion> regions_to_avoid;
+    CLONES::set<CLONES::Mutations::GenomicRegion> regions_to_avoid;
 
     auto drivers_path = storage.get_driver_mutations_path();
     if (std::filesystem::exists(drivers_path)) {
@@ -239,7 +239,7 @@ build_contex_index(const GenomicDataStorage &storage, const size_t context_sampl
         Rcout << "Building context index..." << std::endl << std::flush;
     }
 
-    std::set<GenomicRegion> regions_to_avoid = get_region_to_avoid(storage);
+    CLONES::set<GenomicRegion> regions_to_avoid = get_region_to_avoid(storage);
 
     std::list<GenomicRegion> chr_regions;
     {
@@ -309,7 +309,7 @@ CLONES::Mutations::RSIndex build_rs_index(const GenomicDataStorage &storage,
         Rcout << "Building repeated sequence index..." << std::endl << std::flush;
     }
 
-    std::set<GenomicRegion> regions_to_avoid = get_region_to_avoid(storage);
+    CLONES::set<GenomicRegion> regions_to_avoid = get_region_to_avoid(storage);
 
     {
         UI::ProgressBar progress_bar(Rcpp::Rcout, quiet);
@@ -412,7 +412,7 @@ CLONES::Mutations::GenomicRegion get_CNA_region(const CLONES::IO::CSVReader::CSV
 std::vector<CLONES::Mutations::CNA>
 load_passenger_CNAs(const std::filesystem::path &CNAs_csv, const std::string &tumour_type)
 {
-    std::set<CLONES::Mutations::CNA> CNAs;
+    CLONES::set<CLONES::Mutations::CNA> CNAs;
 
     CLONES::IO::CSVReader csv_reader(CNAs_csv, true, '\t');
 
@@ -555,7 +555,7 @@ bool is_COSMIC_account(const SEXP &COSMIC_account_data)
 
     std::set<std::string> needed_names{"email", "password"};
     for (auto i = 0; i < list_account_data.size(); ++i) {
-        needed_names.extract(Rcpp::as<std::string>(names[i]));
+        (void)needed_names.extract(Rcpp::as<std::string>(names[i]));
     }
 
     return needed_names.size() == 0;
@@ -577,7 +577,7 @@ std::shared_ptr<Account> extract_COSMIC_account(const SEXP &COSMIC_account_data)
 
     std::set<std::string> needed_names{"email", "password"};
     for (auto i = 0; i < list_account_data.size() && needed_names.size() > 0; ++i) {
-        needed_names.extract(Rcpp::as<std::string>(names[i]));
+        (void)needed_names.extract(Rcpp::as<std::string>(names[i]));
     }
 
     std::ostringstream oss;
@@ -729,7 +729,7 @@ get_mutation_spec_from_list(const CLONES::Mutations::DriverStorage &driver_stora
 
 void insert_mutant_driver_code(const SIDSpec mut_spec, const std::string &mutation_code,
                                const std::string &mutant_name,
-                               std::map<SIDSpec, std::string> &mutant_drivers)
+                               CLONES::map<SIDSpec, std::string> &mutant_drivers)
 {
     const auto found = mutant_drivers.find(mut_spec);
 
@@ -752,7 +752,7 @@ void insert_among_drivers(
     const SIDSpec mut_spec, const std::string &mutation_code,
     const std::string &mutant_name, std::list<SIDSpec> &c_sids,
     std::list<CLONES::Mutations::DriverMutations::MutationType> &application_order,
-    std::map<SIDSpec, std::string> &mutant_drivers)
+    CLONES::map<SIDSpec, std::string> &mutant_drivers)
 {
     if (mut_spec.ref != "?") {
         insert_mutant_driver_code(mut_spec, mutation_code, mutant_name, mutant_drivers);
@@ -766,9 +766,9 @@ void get_mutation_spec(
     const std::string &mutant_name, std::list<SIDSpec> &c_sids,
     std::list<CLONES::Mutations::CNA> &c_cnas,
     std::list<CLONES::Mutations::DriverMutations::MutationType> &application_order,
-    std::map<SIDSpec, std::string> &mutant_drivers,
+    CLONES::map<SIDSpec, std::string> &mutant_drivers,
     const CLONES::Mutations::DriverStorage &driver_storage,
-    const std::map<CLONES::Mutations::SID, std::string> &reverse_driver_storage,
+    const CLONES::map<CLONES::Mutations::SID, std::string> &reverse_driver_storage,
     const std::string &tumour_type, const Rcpp::List &rcpp_list, const size_t &index)
 {
     const auto &mutation = rcpp_list[index];
@@ -848,17 +848,17 @@ void get_mutation_spec(
                " is not an mutation specification");
 }
 
-std::map<SIDSpec, std::string> get_mutation_lists(
+CLONES::map<SIDSpec, std::string> get_mutation_lists(
     const std::string &mutant_name, std::list<SIDSpec> &c_sids,
     std::list<CLONES::Mutations::CNA> &c_cnas,
     std::list<CLONES::Mutations::DriverMutations::MutationType> &application_order,
     const CLONES::Mutations::DriverStorage &driver_storage,
-    const std::map<CLONES::Mutations::SID, std::string> &reverse_driver_storage,
+    const CLONES::map<CLONES::Mutations::SID, std::string> &reverse_driver_storage,
     const std::string &tumour_type, const Rcpp::List &rcpp_list)
 {
     const size_t list_size = static_cast<size_t>(rcpp_list.size());
 
-    std::map<SIDSpec, std::string> mutant_drivers;
+    CLONES::map<SIDSpec, std::string> mutant_drivers;
     for (size_t i = 0; i < list_size; ++i) {
         get_mutation_spec(mutant_name, c_sids, c_cnas, application_order, mutant_drivers,
                           driver_storage, reverse_driver_storage, tumour_type, rcpp_list,
@@ -987,9 +987,9 @@ inline std::ifstream::pos_type filesize(const std::filesystem::path &fasta_filen
 
 void retrieve_missing_references(
     const std::string &mutant_name,
-    const std::map<CLONES::Mutations::SID, std::string> &reverse_driver_storage,
+    const CLONES::map<CLONES::Mutations::SID, std::string> &reverse_driver_storage,
     const std::filesystem::path fasta_filename, std::list<SIDSpec> &SIDs,
-    std::map<SIDSpec, std::string> &mutant_drivers)
+    CLONES::map<SIDSpec, std::string> &mutant_drivers)
 {
     CLONES::UI::ProgressBar progress_bar(Rcpp::Rcout);
 
@@ -1196,7 +1196,7 @@ std::ostream &show_list(std::ostream &os, ITERATOR it, ITERATOR last,
 
 std::ostream &show_driver_mutations(
     std::ostream &os, const CLONES::Mutations::DriverMutations &driver_mutations,
-    const std::map<CLONES::Mutations::SID, std::string> &driver_reverse_map,
+    const CLONES::map<CLONES::Mutations::SID, std::string> &driver_reverse_map,
     const std::string &indent = "")
 {
     using namespace CLONES::Mutations;

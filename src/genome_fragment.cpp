@@ -19,8 +19,8 @@
 
 GenomeFragment::GenomeFragment(const std::string& reference_fragment,
                                const size_t& fragment_offset,
-                               const std::map<CLONES::Mutations::GenomicPosition, std::shared_ptr<CLONES::Mutations::SID>>& germline,
-                               const std::map<CLONES::Mutations::GenomicPosition, std::shared_ptr<CLONES::Mutations::SID>>& somatic,
+                               const CLONES::map<CLONES::Mutations::GenomicPosition, std::shared_ptr<CLONES::Mutations::SID>>& germline,
+                               const CLONES::map<CLONES::Mutations::GenomicPosition, std::shared_ptr<CLONES::Mutations::SID>>& somatic,
                                const size_t allele_id,
                                const CLONES::Mutations::GenomicPosition& begin_pos,
                                const size_t& size):
@@ -30,8 +30,8 @@ GenomeFragment::GenomeFragment(const std::string& reference_fragment,
 {}
 
 GenomeFragment::GenomeFragment(const std::string& reference,
-                               const std::map<CLONES::Mutations::GenomicPosition, std::shared_ptr<CLONES::Mutations::SID>>& germline,
-                               const std::map<CLONES::Mutations::GenomicPosition, std::shared_ptr<CLONES::Mutations::SID>>& somatic,
+                               const CLONES::map<CLONES::Mutations::GenomicPosition, std::shared_ptr<CLONES::Mutations::SID>>& germline,
+                               const CLONES::map<CLONES::Mutations::GenomicPosition, std::shared_ptr<CLONES::Mutations::SID>>& somatic,
                                const size_t allele_id,
                                const CLONES::Mutations::GenomicPosition& begin_pos,
                                const size_t& size):

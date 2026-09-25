@@ -46,22 +46,30 @@ reference:
 - title: "Tissue simulation interface"
   desc:  "Tissue simulation classes and methods"
   contents:
-  - annotate_forest
   - bbox_sampler
-  - get_species_colors
   - get_node_tour
   - load_sample_forest
   - load_forest
   - starts_with("SampleForest")
   - starts_with("TissueRectangle")
   - starts_with("TissueSimulation")
+  - recover_simulation
+  - -matches(".*_class")
+- title: "Simulation logics"
+  desc:  "Simulation logics"
+  contents:
+  - Expression
+  - Formula
+  - Variable
+- title: "Plotting tissue simulations"
+  desc: "Plotting tissue simulation graphical representations"
+  contents:
+  - get_species_colors
   - plot_firings
   - plot_muller
   - plot_state
   - plot_timeseries
   - plot_tissue
-  - recover_simulation
-  - -matches(".*_class")
 - title: "Mutation simulation interface"
   desc:  "Mutation simulation classes and methods"
   contents:
@@ -77,42 +85,43 @@ reference:
   - starts_with("Mutation")
   - starts_with("MutationEngine")
   - starts_with("PhylogeneticForest")
-  - plot_exposure_timeline
-  - plot_forest
-  - plot_sticks
   - SNV
   - WGD
   - -matches(".*_class")
+- title: "Plotting forests"
+  desc: "Plotting forest graphical representations"
+  contents:
+  - annotate_forest
+  - plot_exposure_timeline
+  - plot_forest
+  - plot_sticks
 - title: "Sequencing simulation interface"
   desc:  "Sequencing simulation methods"
   contents:
   - starts_with("BasicIlluminaSequencer")
   - starts_with("ErrorlessIlluminaSequencer")
   - label_mutations
+  - simulate_seq
+  - simulate_normal_seq
+  - seq_to_long
+  - -matches(".*_class")
+- title: "Plotting sequencing results"
+  desc: "Representing sequencing results"
+  contents:
   - plot_BAF
   - plot_DR
   - plot_VAF
   - plot_VAF_histogram
   - plot_VAF_marginals
-  - simulate_seq
-  - simulate_normal_seq
-  - seq_to_long
-  - -matches(".*_class")
-- title: "Simulation Logics"
-  desc:  "Simulation Logics"
-  contents:
-  - Expression
-  - Formula
-  - Variable
-- title: "Data Structure Examples"
-  desc:  "Methods providing data structure examples"
-  contents:
-  - available_examples
-  - example
-- title: "Video"
+- title: "Producing videos"
   desc:  "Producing videos of tissue evolutions"
   contents:
   - build_snapshot_video
   - get_forest_frame_gen
   - get_tissue_forest_frame_gen
   - get_tissue_frame_gen
+- title: "Data Structure Examples"
+  desc:  "Methods providing data structure examples"
+  contents:
+  - available_examples
+  - example

@@ -32,7 +32,7 @@ PhylogeneticForest::PhylogeneticForest() : CLONES::Mutations::PhylogeneticForest
 PhylogeneticForest::PhylogeneticForest(
     const CLONES::Mutations::PhylogeneticForest &orig,
     const GermlineSubject &germline_subject, const std::filesystem::path reference_path,
-    const std::map<CLONES::Mutations::SID, std::string> &driver_codes,
+    const CLONES::map<CLONES::Mutations::SID, std::string> &driver_codes,
     const TimedMutationalExposure &timed_SBS_exposures,
     const TimedMutationalExposure &timed_indel_exposures)
     : CLONES::Mutations::PhylogeneticForest{orig}, germline_subject{germline_subject},
@@ -46,7 +46,7 @@ PhylogeneticForest::PhylogeneticForest(
 PhylogeneticForest::PhylogeneticForest(
     CLONES::Mutations::PhylogeneticForest &&orig, const GermlineSubject &germline_subject,
     const std::filesystem::path reference_path,
-    const std::map<CLONES::Mutations::SID, std::string> &driver_codes,
+    const CLONES::map<CLONES::Mutations::SID, std::string> &driver_codes,
     const TimedMutationalExposure &timed_SBS_exposures,
     const TimedMutationalExposure &timed_indel_exposures)
     : CLONES::Mutations::PhylogeneticForest{std::move(orig)},
@@ -353,7 +353,7 @@ Rcpp::DataFrame PhylogeneticForest::get_sampled_cell_CNAs() const
 
 template <typename MUTATION_TYPE, typename R_MUTATION>
 Rcpp::List get_first_occurrence(
-    const std::map<MUTATION_TYPE, std::set<CLONES::Mutants::CellId>> &mutation_first_cells,
+    const CLONES::map<MUTATION_TYPE, std::set<CLONES::Mutants::CellId>> &mutation_first_cells,
     const CLONES::Mutations::GenomeMutations &germline, const R_MUTATION &mutation)
 {
     auto first_cell_it = mutation_first_cells.find(mutation);

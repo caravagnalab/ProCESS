@@ -73,7 +73,7 @@ GenomeMutations::get_alleles_covering_ref_region(const std::string& chromosome_n
     return somatic.get_alleles_containing(fragment_region);
 }
 
-std::pair<std::map<CLONES::Mutations::GenomicPosition, std::shared_ptr<CLONES::Mutations::SID>> const *,
+std::pair<CLONES::map<CLONES::Mutations::GenomicPosition, std::shared_ptr<CLONES::Mutations::SID>> const *,
           CLONES::Mutations::AlleleId>
 get_mutations_in_fragment(const CLONES::Mutations::GenomeMutations& mutations,
                           const CLONES::Mutations::ChromosomeId& chr_id,
@@ -98,8 +98,8 @@ get_mutations_in_fragment(const CLONES::Mutations::GenomeMutations& mutations,
     return {&(fragment_it->second.get_mutations()), src_allele_id};
 }
 
-std::pair<std::map<CLONES::Mutations::GenomicPosition, std::shared_ptr<CLONES::Mutations::SID>> const *,
-          std::map<CLONES::Mutations::GenomicPosition, std::shared_ptr<CLONES::Mutations::SID>> const *>
+std::pair<CLONES::map<CLONES::Mutations::GenomicPosition, std::shared_ptr<CLONES::Mutations::SID>> const *,
+          CLONES::map<CLONES::Mutations::GenomicPosition, std::shared_ptr<CLONES::Mutations::SID>> const *>
 get_mutations_in_fragment(const CLONES::Mutations::GenomeMutations& germline,
                           const CLONES::Mutations::GenomeMutations& somatic,
                           const CLONES::Mutations::ChromosomeId& chr_id,

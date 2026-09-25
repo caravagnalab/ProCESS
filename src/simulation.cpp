@@ -24,15 +24,15 @@
 
 #include "utility.hpp"
 
-const std::map<CLONES::Mutants::CellEventType, std::string> event2name = {
+const CLONES::map<CLONES::Mutants::CellEventType, std::string> event2name = {
     {CLONES::Mutants::CellEventType::DEATH, "death"},
     {CLONES::Mutants::CellEventType::DUPLICATION, "duplication"},
     {CLONES::Mutants::CellEventType::MUTATION, "mutation"},
     {CLONES::Mutants::CellEventType::DUP_AND_EPI_SWITCH, "switch"}
 };
 
-template<typename KEY, typename VALUE>
-std::map<VALUE, KEY> invert_map(const std::map<KEY, VALUE>& original)
+template<typename KEY, typename VALUE, typename COMPARE>
+std::map<VALUE, KEY> invert_map(const std::map<KEY, VALUE, COMPARE>& original)
 {
     std::map<VALUE, KEY> inverted;
 
@@ -97,7 +97,7 @@ inline const CLONES::Mutants::CellEventType& get_event_id(const std::string& eve
 
 const std::string&
 get_event_name(const CLONES::Mutants::CellEventType& event_id,
-               const std::map<CLONES::Mutants::CellEventType, std::string>& event2name)
+               const CLONES::map<CLONES::Mutants::CellEventType, std::string>& event2name)
 {
     auto event_it = event2name.find(event_id);
 
@@ -1615,10 +1615,10 @@ Rcpp::List TissueSimulation::get_counts() const
                              _["counts"] = counts, _["overall"] = overall);
 }
 
-std::map<CLONES::Mutants::SpeciesId, std::string>
+CLONES::map<CLONES::Mutants::SpeciesId, std::string>
 get_species_id2name(const CLONES::Mutants::Evolutions::Tissue &tissue)
 {
-    std::map<CLONES::Mutants::SpeciesId, std::string> id2name;
+    CLONES::map<CLONES::Mutants::SpeciesId, std::string> id2name;
     for (const auto &species : tissue) {
         id2name[species.get_id()] = species.get_name();
     }
@@ -1743,7 +1743,7 @@ inline void validate_non_empty_tissue(const CLONES::Mutants::Evolutions::Tissue 
 std::vector<std::string>
 get_newborn_mutants(const CLONES::Mutants::Evolutions::TissueSimulation& simulation)
 {
-    std::map<CLONES::Mutants::MutantId, size_t> mutant_sizes;
+    CLONES::map<CLONES::Mutants::MutantId, size_t> mutant_sizes;
     for (const auto& species : simulation.tissue()) {
         auto found = mutant_sizes.find(species.get_mutant_id());
         if (found != mutant_sizes.end()) {
@@ -2648,11 +2648,11 @@ void TissueSimulation::sample_cells(const SEXP &sample_name, const SEXP &lower_c
                         static_cast<size_t>(c_num_of_cells));
 }
 
-std::map<CLONES::Mutants::SpeciesId, size_t>
+CLONES::map<CLONES::Mutants::SpeciesId, size_t>
 count_cells_in(const CLONES::Mutants::Evolutions::Tissue &tissue, const uint16_t &init_x,
                const uint16_t &init_y, const uint16_t &width, const uint16_t &height)
 {
-    std::map<CLONES::Mutants::SpeciesId, size_t> counter;
+    CLONES::map<CLONES::Mutants::SpeciesId, size_t> counter;
     auto sizes = tissue.size();
 
     uint16_t x_max = std::min(static_cast<uint16_t>(init_x + width), sizes[0]);
@@ -2680,7 +2680,7 @@ count_cells_in(const CLONES::Mutants::Evolutions::Tissue &tissue, const uint16_t
     return counter;
 }
 
-inline std::map<CLONES::Mutants::SpeciesId, size_t>
+inline CLONES::map<CLONES::Mutants::SpeciesId, size_t>
 count_cells_in(const CLONES::Mutants::Evolutions::Tissue &tissue,
                const TissueRectangle &tumour_bounding_box, const uint16_t &grid_x,
                const uint16_t &grid_y, const uint16_t &width, const uint16_t &height)
@@ -2780,7 +2780,7 @@ struct SpeciesConstraint
     {}
 
     bool
-    is_satified(const std::map<CLONES::Mutants::SpeciesId, size_t> &num_of_cells) const
+    is_satified(const CLONES::map<CLONES::Mutants::SpeciesId, size_t> &num_of_cells) const
     {
         auto found = num_of_cells.find(species_id);
 
@@ -2854,7 +2854,7 @@ struct MutantConstraint
     {}
 
     bool
-    is_satified(const std::map<CLONES::Mutants::SpeciesId, size_t> &num_of_cells) const
+    is_satified(const CLONES::map<CLONES::Mutants::SpeciesId, size_t> &num_of_cells) const
     {
         size_t total{0};
 
@@ -2898,7 +2898,7 @@ get_mutant_constraints(const CLONES::Mutants::Evolutions::TissueSimulation &simu
     return mutant_constraints;
 }
 
-bool constraints_satisfied(const std::map<CLONES::Mutants::SpeciesId, size_t> &cell_counts,
+bool constraints_satisfied(const CLONES::map<CLONES::Mutants::SpeciesId, size_t> &cell_counts,
                            const std::list<SpeciesConstraint> &species_constraints,
                            const std::list<MutantConstraint> &mutant_constraints)
 {

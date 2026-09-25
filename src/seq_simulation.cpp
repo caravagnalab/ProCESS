@@ -51,7 +51,7 @@ get_descriptions(const std::set<CLONES::Mutations::Mutation::Nature> &nature_set
 
 void add_SNV_data(
     Rcpp::DataFrame &df,
-    const std::map<CLONES::Mutations::SID,
+    const CLONES::map<CLONES::Mutations::SID,
                    CLONES::Mutations::SequencingSimulations::SIDData> &mutations)
 {
     using namespace Rcpp;
@@ -93,7 +93,7 @@ void add_SNV_data(
 void add_wide_sample_statistics(
     Rcpp::DataFrame &df,
     const CLONES::Mutations::SequencingSimulations::SampleStatistics &sample_statistics,
-    const std::map<CLONES::Mutations::SID,
+    const CLONES::map<CLONES::Mutations::SID,
                    CLONES::Mutations::SequencingSimulations::SIDData> &mutations)
 {
     if (df.length() == 0) {
@@ -114,7 +114,7 @@ void add_wide_sample_statistics(
 
     size_t index{0};
     auto coverage_it = sample_statistics.get_coverage().begin();
-    std::less<GenomicPosition> come_before;
+    CLONES::order<GenomicPosition> come_before;
     for (const auto &[mutation, mutation_data] : mutations) {
 
         while (come_before(coverage_it->first, mutation)) {
@@ -143,12 +143,12 @@ void add_wide_sample_statistics(
     df.push_back(VAF, sample_name + ".VAF");
 }
 
-std::map<CLONES::Mutations::SID, CLONES::Mutations::SequencingSimulations::SIDData>
+CLONES::map<CLONES::Mutations::SID, CLONES::Mutations::SequencingSimulations::SIDData>
 get_active_mutations(const CLONES::Mutations::SequencingSimulations::SampleSetStatistics
                          &sample_set_statistics,
                      const bool &include_non_sequenced_mutations)
 {
-    std::map<CLONES::Mutations::SID, CLONES::Mutations::SequencingSimulations::SIDData>
+    CLONES::map<CLONES::Mutations::SID, CLONES::Mutations::SequencingSimulations::SIDData>
         active_mutations;
 
     for (const auto &[sample_name, sample_stats] : sample_set_statistics) {

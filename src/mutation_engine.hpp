@@ -45,7 +45,7 @@ class MutationEngine
     size_t driver_CNA_min_distance;
     std::string tumour_type;
 
-    std::map<SIDMut::SID, std::string> driver_codes;
+    CLONES::map<SIDMut::SID, std::string> driver_codes;
 
     CLONES::Mutations::ContextIndex<AbsGenotypePosition> context_index;
     CLONES::Mutations::RSIndex rs_index;
