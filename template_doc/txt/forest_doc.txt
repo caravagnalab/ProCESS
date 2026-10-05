@@ -156,3 +156,13 @@ NULL
 #' @seealso [load_forest()], <code>[${CLASS_TYPE}]</code>
 NULL
 
+#' @name ${CLASS_TYPE}$export_NHX
+#' @title Export NHX representation
+#' @description This method saves the NHX representation of a forest.
+#' @details See the
+#'   [NHX file specification](https://www.phylosoft.org/NHX/nhx.pdf).
+#' @param filename The path of the file in which the
+#'   NHX representation  must be saved.
+#' @seealso <code>[${CLASS_TYPE}]</code>
+NULL
+

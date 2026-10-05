@@ -108,6 +108,8 @@ class SampleForest : public CLONES::Mutants::DescendantForest
 
     void save(const std::string &filename, const bool quiet) const;
 
+    void export_NHX(const std::string &filename) const;
+
     static SampleForest load(const std::string &filename, const bool quiet);
 
     void show() const;

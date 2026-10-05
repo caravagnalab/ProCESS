@@ -759,6 +759,13 @@ void PhylogeneticForest::save(const std::string &filename, const bool quiet) con
                      progress_bar, "forest");
 }
 
+void PhylogeneticForest::export_NHX(const std::string &filename) const
+{
+    std::ofstream out{filename, std::ios::out | std::ios::trunc};
+
+    CLONES::Mutations::save_NHX(out, *this);
+}
+
 PhylogeneticForest PhylogeneticForest::load(const std::string &filename, const bool quiet)
 {
     if (!std::filesystem::exists(filename)) {

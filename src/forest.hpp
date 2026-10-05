@@ -64,10 +64,13 @@
                 "Get the forest sticks")                                            \
         .method("save",                                                             \
                 (void (ClassType::*)(const std::string &, const bool) const)        \
-                    &ClassType::save, "Save a sample forest")                       \
+                    &ClassType::save, "Save the forest")                            \
         .method("save",                                                             \
                 (void (ClassType::*)(const std::string &) const)                    \
-                    &ClassType::save, "Save a sample forest")                       \
+                    &ClassType::save, "Save the forest")                            \
+        .method("export_NHX",                                                       \
+                (void (ClassType::*)(const std::string &) const)                    \
+                    &ClassType::export_NHX, "Save the NHX representation")          \
         .method("show", &ClassType::show, "Describe the forest")                    \
 
 

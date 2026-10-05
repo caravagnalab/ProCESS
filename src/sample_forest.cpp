@@ -66,6 +66,13 @@ void SampleForest::save(const std::string &filename, const bool quiet) const
                      progress_bar, "forest");
 }
 
+void SampleForest::export_NHX(const std::string &filename) const
+{
+    std::ofstream out{filename, std::ios::out | std::ios::trunc};
+
+    CLONES::Mutants::save_NHX(out, *this);
+}
+
 SampleForest SampleForest::load(const std::string &filename, const bool quiet)
 {
     SampleForest forest;

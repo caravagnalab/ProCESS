@@ -197,6 +197,8 @@ class PhylogeneticForest : public CLONES::Mutations::PhylogeneticForest
 
     void save(const std::string &filename, const bool quiet) const;
 
+    void export_NHX(const std::string &filename) const;
+
     inline static PhylogeneticForest load(const std::string &filename)
     {
         return load(filename, false);
