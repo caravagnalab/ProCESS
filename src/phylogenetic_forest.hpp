@@ -37,7 +37,7 @@ class PhylogeneticForest : public CLONES::Mutations::PhylogeneticForest
     GermlineSubject germline_subject;
     std::filesystem::path reference_path;
 
-    std::map<CLONES::Mutations::SID, std::string> driver_codes;
+    CLONES::map<CLONES::Mutations::SID, std::string> driver_codes;
 
     using TimedMutationalExposure =
         std::map<CLONES::Time, CLONES::Mutations::MutationalExposure>;
@@ -48,20 +48,20 @@ class PhylogeneticForest : public CLONES::Mutations::PhylogeneticForest
     PhylogeneticForest(const CLONES::Mutations::PhylogeneticForest &orig,
                        const GermlineSubject &germline_subject,
                        const std::filesystem::path reference_path,
-                       const std::map<CLONES::Mutations::SID, std::string> &driver_codes,
+                       const CLONES::map<CLONES::Mutations::SID, std::string> &driver_codes,
                        const TimedMutationalExposure &timed_SBS_exposures,
                        const TimedMutationalExposure &timed_indel_exposures);
 
     PhylogeneticForest(CLONES::Mutations::PhylogeneticForest &&orig,
                        const GermlineSubject &germline_subject,
                        const std::filesystem::path reference_path,
-                       const std::map<CLONES::Mutations::SID, std::string> &driver_codes,
+                       const CLONES::map<CLONES::Mutations::SID, std::string> &driver_codes,
                        const TimedMutationalExposure &timed_SBS_exposures,
                        const TimedMutationalExposure &timed_indel_exposures);
 
     template<typename MUTATION_TYPE>
     std::map<CLONES::Mutants::CellId, size_t>
-    get_new_mutations(const std::map<MUTATION_TYPE, std::set<CLONES::Mutants::CellId>>& first_occurrences) const
+    get_new_mutations(const CLONES::map<MUTATION_TYPE, std::set<CLONES::Mutants::CellId>>& first_occurrences) const
     {
         std::map<CLONES::Mutants::CellId, size_t> new_mutations;
 
