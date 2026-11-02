@@ -510,7 +510,7 @@ Rcpp::List get_sequencer_data(SEXP &sequencer)
 Rcpp::List simulate_seq(const PhylogeneticForest &forest, SEXP &sequencer,
                         SEXP &reference_genome, SEXP &chromosome_ids,
                         const double &coverage, const int &read_size,
-                        const int &insert_size_mean, const int &insert_size_stddev,
+                        const double &insert_size_mean, const double &insert_size_stddev,
                         const std::string &output_dir, const bool &write_SAM,
                         const bool &update_SAM_dir, const SEXP &FACS_labelling_function,
                         const double &purity, const bool &with_normal_sample,
@@ -544,7 +544,8 @@ Rcpp::List simulate_seq(const PhylogeneticForest &forest, SEXP &sequencer,
         simulator = ReadSimulator<>(output_path, ref_genome, read_size, SAM_mode, false,
                                     template_name_prefix, c_seed);
     } else {
-        auto insert_size_dist = get_bin_dist(insert_size_mean, insert_size_stddev);
+        auto insert_size_dist = std::normal_distribution<double>(insert_size_mean,
+                                                                 insert_size_stddev);
 
         simulator = ReadSimulator<>(output_path, ref_genome, read_size, insert_size_dist,
                                     SAM_mode, false, template_name_prefix, c_seed);
@@ -596,7 +597,7 @@ Rcpp::List simulate_seq(const PhylogeneticForest &forest, SEXP &sequencer,
 Rcpp::List simulate_normal_seq(const PhylogeneticForest &forest, SEXP &sequencer,
                                SEXP &reference_genome, SEXP &chromosome_ids,
                                const double &coverage, const int &read_size,
-                               const int &insert_size_mean, const int &insert_size_stddev,
+                               const double &insert_size_mean, const double &insert_size_stddev,
                                const std::string &output_dir, const bool &write_SAM,
                                const bool &update_SAM_dir, const bool &with_preneoplastic,
                                const std::string &filename_prefix,
@@ -629,7 +630,8 @@ Rcpp::List simulate_normal_seq(const PhylogeneticForest &forest, SEXP &sequencer
         simulator = ReadSimulator<>(output_path, ref_genome, read_size, SAM_mode, false,
                                     template_name_prefix, c_seed);
     } else {
-        auto insert_size_dist = get_bin_dist(insert_size_mean, insert_size_stddev);
+        auto insert_size_dist = std::normal_distribution<double>(insert_size_mean,
+                                                                 insert_size_stddev);
 
         simulator = ReadSimulator<>(output_path, ref_genome, read_size, insert_size_dist,
                                     SAM_mode, false, template_name_prefix, c_seed);
