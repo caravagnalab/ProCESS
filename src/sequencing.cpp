@@ -151,11 +151,12 @@ RCPP_MODULE(Sequencing)
 //'   `NULL`, i.e., all the reference chromosomes).
 //' @param coverage The sequencing coverage (default: \eqn{10}).
 //' @param read_size The read size (default: \eqn{150}).
-//' @param insert_size_mean The insert size mean. Use 0 for single read
-//'   sequencing and any value greater than 0 for pair read sequencing
+//' @param insert_size_mean The insert size mean. Any value smaller than
+//'   the `read_size` produces single read sequencing. Any value
+//'   greater than `read_size` triggers pair read sequencing
 //'   (default: \eqn{0}).
 //' @param insert_size_stddev The insert size standard deviation.
-//'   (default: \eqn{10}).
+//'   (default: \eqn{100}).
 //' @param output_dir The SAM output directory (default:
 //'   `"ProCESS_SAM"`).
 //' @param write_SAM A Boolean flag to enable/disable SAM generation
@@ -220,7 +221,7 @@ RCPP_MODULE(Sequencing)
                  _["phylo_forest"], _["sequencer"] = R_NilValue,
                  _["reference_genome"] = R_NilValue, _["chromosomes"] = R_NilValue,
                  _["coverage"] = 10, _["read_size"] = 150, _["insert_size_mean"] = 0,
-                 _["insert_size_stddev"] = 10, _["output_dir"] = "ProCESS_SAM",
+                 _["insert_size_stddev"] = 100, _["output_dir"] = "ProCESS_SAM",
                  _["write_SAM"] = false, _["update_SAM"] = false, _["purity"] = 1,
                  _["with_normal_sample"] = true, _["pre_neoplastic_in_normal"] = false,
                  _["filename_prefix"] = "chr_", _["template_name_prefix"] = "r",

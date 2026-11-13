@@ -103,7 +103,7 @@ get_event_name(const CLONES::Mutants::CellEventType& event_id,
 
     if (event_it == event2name.end()) {
         Rcpp::stop("Unknown event identifier "
-                   + std::to_string(static_cast<uint>(event_id)) + ".");
+                   + std::to_string(static_cast<uint16_t>(event_id)) + ".");
     }
 
     return event_it->second;

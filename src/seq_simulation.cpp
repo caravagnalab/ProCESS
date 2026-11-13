@@ -421,27 +421,6 @@ CLONES::Mutations::SequencingSimulations::SampleSetStatistics simulate_seq(
     }
 }
 
-std::binomial_distribution<uint32_t> get_bin_dist(const int &insert_size_mean,
-                                                  const int &insert_size_stddev)
-{
-    double q =
-        static_cast<double>(insert_size_stddev * insert_size_stddev) / insert_size_mean;
-    double p = 1 - q;
-    if (p < 0) {
-        Rcpp::stop("The insert size mean (" + std::to_string(insert_size_mean) +
-                   ") must" + " be greater than or equal to its variance (" +
-                   std::to_string(insert_size_stddev) + "*" +
-                   std::to_string(insert_size_stddev) + "=" +
-                   std::to_string(insert_size_stddev * insert_size_stddev) + ").\n" +
-                   "Set the standard deviation and the variance by using " +
-                   "the optional parameter \"insert_size_stddev\".");
-    }
-
-    uint32_t t = static_cast<uint32_t>(insert_size_mean / p);
-
-    return std::binomial_distribution<uint32_t>(t, p);
-}
-
 template <typename SEQUENCER_CLASS>
 Rcpp::List extract_sequencer_data(SEXP &sequencer, const std::string &seq_class_name)
 {
@@ -511,7 +490,7 @@ Rcpp::List get_sequencer_data(SEXP &sequencer)
 Rcpp::List simulate_seq(const PhylogeneticForest &forest, SEXP &sequencer,
                         SEXP &reference_genome, SEXP &chromosome_ids,
                         const double &coverage, const int &read_size,
-                        const int &insert_size_mean, const int &insert_size_stddev,
+                        const double &insert_size_mean, const double &insert_size_stddev,
                         const std::string &output_dir, const bool &write_SAM,
                         const bool &update_SAM_dir,
                         const double &purity, const bool &with_normal_sample,
@@ -556,7 +535,8 @@ Rcpp::List simulate_seq(const PhylogeneticForest &forest, SEXP &sequencer,
         simulator = ReadSimulator<>(output_path, ref_genome, read_size, SAM_mode, false,
                                     template_name_prefix, c_seed);
     } else {
-        auto insert_size_dist = get_bin_dist(insert_size_mean, insert_size_stddev);
+        std::normal_distribution<double> insert_size_dist{insert_size_mean, 
+                                                          insert_size_stddev};
 
         simulator = ReadSimulator<>(output_path, ref_genome, read_size, insert_size_dist,
                                     SAM_mode, false, template_name_prefix, c_seed);
@@ -606,7 +586,7 @@ Rcpp::List simulate_seq(const PhylogeneticForest &forest, SEXP &sequencer,
 Rcpp::List simulate_normal_seq(const PhylogeneticForest &forest, SEXP &sequencer,
                                SEXP &reference_genome, SEXP &chromosome_ids,
                                const double &coverage, const int &read_size,
-                               const int &insert_size_mean, const int &insert_size_stddev,
+                               const double &insert_size_mean, const double &insert_size_stddev,
                                const std::string &output_dir, const bool &write_SAM,
                                const bool &update_SAM_dir,
                                const std::string &filename_prefix,
@@ -637,11 +617,12 @@ Rcpp::List simulate_normal_seq(const PhylogeneticForest &forest, SEXP &sequencer
 
     ReadSimulator<> simulator;
     auto c_seed = get_random_seed<int>(seed);
-    if (insert_size_mean == 0) {
+    if (insert_size_mean < 0) {
         simulator = ReadSimulator<>(output_path, ref_genome, read_size, SAM_mode, false,
                                     template_name_prefix, c_seed);
     } else {
-        auto insert_size_dist = get_bin_dist(insert_size_mean, insert_size_stddev);
+        std::normal_distribution<double> insert_size_dist{insert_size_mean, 
+                                                          insert_size_stddev};
 
         simulator = ReadSimulator<>(output_path, ref_genome, read_size, insert_size_dist,
                                     SAM_mode, false, template_name_prefix, c_seed);

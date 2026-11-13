@@ -262,7 +262,9 @@ samples.
 ```{r}
 # simulate the sequencing without normal sample and avoid progress bar
 seq_results <- simulate_seq(phylo_forest, coverage = 30,
-                            with_normal_sample = FALSE, quiet = TRUE)
+                            insert_size_mean = 350, insert_size_stddev = 100,
+                            read_size = 150, with_normal_sample = FALSE,
+                            quiet = TRUE)
 
 head(seq_results$mutations)
 ```
